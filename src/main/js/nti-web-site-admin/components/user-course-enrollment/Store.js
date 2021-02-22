@@ -1,9 +1,9 @@
-import {getService} from '@nti/web-client';
-import {Stores} from '@nti/lib-store';
-import {decodeFromURI} from '@nti/lib-ntiids';
+import { getService } from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
+import { decodeFromURI } from '@nti/lib-ntiids';
 
 export default class EnrollmentStore extends Stores.SimpleStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set('loading', false);
@@ -12,25 +12,27 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 		this.set('error', null);
 	}
 
-	get enrollment () {
+	get enrollment() {
 		return this.get('enrollment');
 	}
 
-	getEnrollment (service, enrollmentID) {
+	getEnrollment(service, enrollmentID) {
 		return service.getObject(enrollmentID).then(enrollment => {
 			return enrollment;
 		});
 	}
 
-	loadEnrollment (enrollmentID) {
+	loadEnrollment(enrollmentID) {
 		const decodedID = decodeFromURI(enrollmentID);
 
-		if (this.enrollment && decodedID === this.enrollment.getID()) { return; }
+		if (this.enrollment && decodedID === this.enrollment.getID()) {
+			return;
+		}
 
 		this.doLoad(decodedID);
 	}
 
-	async doLoad (enrollmentID) {
+	async doLoad(enrollmentID) {
 		this.set('enrollment', null);
 		this.set('course', null);
 		this.set('loading', true);

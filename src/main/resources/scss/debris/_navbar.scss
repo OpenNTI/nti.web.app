@@ -4,7 +4,8 @@
 	.branding {
 		cursor: pointer;
 		height: $header-height;
-		background: url(../images/elements/nav-asset.png) center center no-repeat;
+		background: url(../images/elements/nav-asset.png) center center
+			no-repeat;
 		background-size: cover !important;
 		width: 72px;
 		margin-right: 15px;
@@ -99,7 +100,12 @@
 					height: 70px;
 					width: 50px;
 
-					@include icon($rhp-search, $side: after, $top: 50%, $left: 50%);
+					@include icon(
+						$rhp-search,
+						$side: after,
+						$top: 50%,
+						$left: 50%
+					);
 
 					&::after {
 						margin-top: -9px;
@@ -170,7 +176,8 @@
 		@include flexItem(0 1 100px);
 	}
 
-	.back-container, .icons {
+	.back-container,
+	.icons {
 		@include flexBasis(190px);
 	}
 
@@ -260,7 +267,7 @@
 			position: relative;
 
 			&::after {
-				content: "|";
+				content: '|';
 				position: absolute;
 				right: 0;
 				color: var(--tertiary-grey);
@@ -290,7 +297,11 @@
 		height: 24px;
 
 		&:hover {
-			@include icon($note-window-x_hover, $side: after, $position: absolute);
+			@include icon(
+				$note-window-x_hover,
+				$side: after,
+				$position: absolute
+			);
 		}
 	}
 }

@@ -1,163 +1,211 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.mixins.LikeFavoriteActions',
+	{
+		constructor: function () {
+			const me = this;
 
-module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', {
+			function onAfterRender() {
+				me.updateLikeAndFavoriteFromRecord();
 
-	constructor: function () {
-		const me = this;
+				if (me.liked) {
+					me.mon(me.liked, 'click', me.likeClicked, me);
+				}
+				if (me.favorites) {
+					me.mon(me.favorites, 'click', me.favoriteClicked, me);
+				}
 
-		function onAfterRender () {
-			me.updateLikeAndFavoriteFromRecord();
+				me.reflectLikeAndFavorite(me.getRecord());
+				me.listenForLikeAndFavoriteChanges(me.getRecord());
+				me.mun('destroy', 'tearDownLikeAndFavorite', me);
+				me.on('destroy', 'tearDownLikeAndFavorite', me);
+			}
 
-			if (me.liked) { me.mon(me.liked, 'click', me.likeClicked, me); }
-			if (me.favorites) { me.mon(me.favorites, 'click', me.favoriteClicked, me); }
+			if (this.rendered) {
+				onAfterRender();
+			} else {
+				this.on('afterrender', onAfterRender, this, { single: true });
+			}
+		},
 
-			me.reflectLikeAndFavorite(me.getRecord());
-			me.listenForLikeAndFavoriteChanges(me.getRecord());
-			me.mun('destroy', 'tearDownLikeAndFavorite', me);
-			me.on('destroy', 'tearDownLikeAndFavorite', me);
-		}
+		likeClicked: function (e) {
+			if (e && e.stopEvent) {
+				e.stopEvent();
+			}
+			var rec = this.getRecord();
+			if (!rec) {
+				console.warn('No record to like', this);
+				return;
+			}
+			rec.like(this);
+		},
 
-		if (this.rendered) {
-			onAfterRender();
-		} else {
-			this.on('afterrender', onAfterRender, this, {single: true});
-		}
-	},
+		favoriteClicked: function (e) {
+			if (e && e.stopEvent) {
+				e.stopEvent();
+			}
+			var rec = this.getRecord();
+			if (!rec) {
+				console.warn('No record to favorite', this);
+				return;
+			}
+			rec.favorite(this);
+		},
 
+		updateLikeAndFavoriteFromRecord: function (record) {
+			var rec = record || this.getRecord(),
+				fnName,
+				me = this;
 
-	likeClicked: function (e) {
-		if (e && e.stopEvent) {e.stopEvent();}
-		var rec = this.getRecord();
-		if (!rec) {
-			console.warn('No record to like', this);
-			return;
-		}
-		rec.like(this);
-	},
+			if (!rec) {
+				return;
+			}
 
+			if (rec.parent) {
+				if (me.favorites) {
+					me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
+					me.favorites.hide();
+				}
+				if (me.favoritesSpacer) {
+					me.favoritesSpacer.show();
+				}
+			}
 
-	favoriteClicked: function (e) {
-		if (e && e.stopEvent) {e.stopEvent();}
-		var rec = this.getRecord();
-		if (!rec) {
-			console.warn('No record to favorite', this);
-			return;
-		}
-		rec.favorite(this);
-	},
+			if (me.liked) {
+				fnName = rec.isLikeable() ? 'show' : 'hide';
+				me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
+			}
 
-
-	updateLikeAndFavoriteFromRecord: function (record) {
-		var rec = record || this.getRecord(), fnName,
-			me = this;
-
-		if (!rec) {return;}
-
-		if (rec.parent) {
 			if (me.favorites) {
-				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
-				me.favorites.hide();
+				fnName = rec.isFavoritable() ? 'show' : 'hide';
+				me.favorites
+					.setVisibilityMode(Ext.dom.Element.DISPLAY)
+					[fnName]();
 			}
-			if (me.favoritesSpacer) {
-				me.favoritesSpacer.show();
+		},
+
+		tearDownLikeAndFavorite: function () {
+			if (this.liked) {
+				this.mun(
+					this.liked,
+					'click',
+					function () {
+						this.getRecord().like(this);
+					},
+					this
+				);
+				this.liked.remove();
 			}
-		}
-
-		if (me.liked) {
-			fnName = rec.isLikeable() ? 'show' : 'hide';
-			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
-		}
-
-		if (me.favorites) {
-			fnName = rec.isFavoritable() ? 'show' : 'hide';
-			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
-		}
-
-	},
-
-
-	tearDownLikeAndFavorite: function () {
-		if (this.liked) {
-			this.mun(this.liked, 'click', function () { this.getRecord().like(this); }, this);
-			this.liked.remove();
-		}
-		if (this.favorites) {
-			this.mon(this.favorites, 'click', function () { this.getRecord().favorite(this); },this);
-			this.favorites.remove();
-		}
-
-		//Cleanup
-		delete this.liked;
-		delete this.favorites;
-		this.stopListeningForLikeAndFavoriteChanges(this.record);
-	},
-
-
-	getRecord: function () {
-		return this.record;
-	},
-
-
-	listenForLikeAndFavoriteChanges: function (record) {
-		if (!record) {return;}
-		record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
-		record.addObserverForField(this, 'liked', this.markAsLiked, this);
-		record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
-	},
-
-	stopListeningForLikeAndFavoriteChanges: function (record) {
-		if (!record) {return;}
-		record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
-		record.removeObserverForField(this, 'liked', this.markAsLiked, this);
-		record.removeObserverForField(this, 'LikeCount', this.updateLikeCount, this);
-	},
-
-
-	reflectLikeAndFavorite: function (record) {
-		this.updateLikeAndFavoriteFromRecord(record);
-		if (this.liked) {
-			this.updateLikeCount(record);
-			this.markAsLiked(record && record.isLiked());
-		}
-
-		if (this.favorites) {
-			this.markAsFavorited(record && record.isFavorited());
-		}
-	},
-
-
-	updateLikeCount: function (record) {
-		var c;
-		if (this.liked) {
-			record = record && record.isModel ? record : this.getRecord();
-			if (record) {
-				c = record.getFriendlyLikeCount();
-				this.liked.update(c);
-				this.liked[c > 0 ? 'addCls' : 'removeCls']('liked');
+			if (this.favorites) {
+				this.mon(
+					this.favorites,
+					'click',
+					function () {
+						this.getRecord().favorite(this);
+					},
+					this
+				);
+				this.favorites.remove();
 			}
-		}
-	},
 
+			//Cleanup
+			delete this.liked;
+			delete this.favorites;
+			this.stopListeningForLikeAndFavoriteChanges(this.record);
+		},
 
-	markAsLiked: function (field, value) {
-		var liked = value === undefined ? field : value,
-			method = liked ? 'addCls' : 'removeCls';
-		if (!this.liked) {
-			return;
-		}
-		this.liked[method]('on');
-		this.liked.set({'title': liked ? 'Liked' : 'Like'});
-	},
+		getRecord: function () {
+			return this.record;
+		},
 
+		listenForLikeAndFavoriteChanges: function (record) {
+			if (!record) {
+				return;
+			}
+			record.addObserverForField(
+				this,
+				'favorited',
+				this.markAsFavorited,
+				this
+			);
+			record.addObserverForField(this, 'liked', this.markAsLiked, this);
+			record.addObserverForField(
+				this,
+				'LikeCount',
+				this.updateLikeCount,
+				this
+			);
+		},
 
-	markAsFavorited: function (field, value) {
-		var favorited = value === undefined ? field : value,
-			method = favorited ? 'addCls' : 'removeCls';
-		if (!this.favorites) {
-			return;
-		}
-		this.favorites[method]('on');
-		this.favorites.set({'title': favorited ? 'Bookmarked' : 'Add to bookmarks'});
+		stopListeningForLikeAndFavoriteChanges: function (record) {
+			if (!record) {
+				return;
+			}
+			record.removeObserverForField(
+				this,
+				'favorited',
+				this.markAsFavorited,
+				this
+			);
+			record.removeObserverForField(
+				this,
+				'liked',
+				this.markAsLiked,
+				this
+			);
+			record.removeObserverForField(
+				this,
+				'LikeCount',
+				this.updateLikeCount,
+				this
+			);
+		},
+
+		reflectLikeAndFavorite: function (record) {
+			this.updateLikeAndFavoriteFromRecord(record);
+			if (this.liked) {
+				this.updateLikeCount(record);
+				this.markAsLiked(record && record.isLiked());
+			}
+
+			if (this.favorites) {
+				this.markAsFavorited(record && record.isFavorited());
+			}
+		},
+
+		updateLikeCount: function (record) {
+			var c;
+			if (this.liked) {
+				record = record && record.isModel ? record : this.getRecord();
+				if (record) {
+					c = record.getFriendlyLikeCount();
+					this.liked.update(c);
+					this.liked[c > 0 ? 'addCls' : 'removeCls']('liked');
+				}
+			}
+		},
+
+		markAsLiked: function (field, value) {
+			var liked = value === undefined ? field : value,
+				method = liked ? 'addCls' : 'removeCls';
+			if (!this.liked) {
+				return;
+			}
+			this.liked[method]('on');
+			this.liked.set({ title: liked ? 'Liked' : 'Like' });
+		},
+
+		markAsFavorited: function (field, value) {
+			var favorited = value === undefined ? field : value,
+				method = favorited ? 'addCls' : 'removeCls';
+			if (!this.favorites) {
+				return;
+			}
+			this.favorites[method]('on');
+			this.favorites.set({
+				title: favorited ? 'Bookmarked' : 'Add to bookmarks',
+			});
+		},
 	}
-});
+);

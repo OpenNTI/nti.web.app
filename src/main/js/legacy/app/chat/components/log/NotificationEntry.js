@@ -1,24 +1,30 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.chat.components.log.NotificationEntry',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.chat-notification-entry',
 
-module.exports = exports = Ext.define('NextThought.app.chat.components.log.NotificationEntry', {
-	extend: 'Ext.Component',
-	alias: 'widget.chat-notification-entry',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'log-notification-wrapper',
+				cn: [
+					{
+						cls: 'message',
+						html: '{message}',
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([{
-		cls: 'log-notification-wrapper',
-		cn: [{
-			cls: 'message',
-			html: '{message}'
-		}]
-	}]),
+		renderSelectors: {
+			message: '.message',
+		},
 
-	renderSelectors: {
-		message: '.message'
-	},
-
-	initComponent: function () {
-		this.callParent(arguments);
-		this.renderData.message = this.message;
+		initComponent: function () {
+			this.callParent(arguments);
+			this.renderData.message = this.message;
+		},
 	}
-});
+);

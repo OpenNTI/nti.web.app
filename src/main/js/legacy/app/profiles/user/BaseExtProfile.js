@@ -3,7 +3,7 @@ const Ext = require('@nti/extjs');
 const GroupsActions = require('legacy/app/groups/Actions');
 const GroupsStateStore = require('legacy/app/groups/StateStore');
 const NavigationActions = require('legacy/app/navigation/Actions');
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 
 require('legacy/mixins/Router');
 require('./components/activity/Index');
@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 	alias: 'widget.base-profile-user',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	cls: 'user-profile profile',
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 
 		this.bodyCmp = this.add({
 			xtype: 'container',
-			layout: 'card'
+			layout: 'card',
 		});
 
 		this.initRouter();
@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 		this.finalizeInit();
 
 		this.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this),
 		});
 	},
 
@@ -67,7 +67,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 		return this.activeEntity;
 	},
 
-
 	finalizeInit: function () {
 		window.saveProfile = this.saveProfile.bind(this);
 	},
@@ -84,11 +83,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 		var me = this,
 			lowerId = id.toLowerCase();
 
-
-		if (me.activeEntity && (me.activeEntity.get('Username') || '').toLowerCase() === lowerId) {
+		if (
+			me.activeEntity &&
+			(me.activeEntity.get('Username') || '').toLowerCase() === lowerId
+		) {
 			me.getUser = Promise.resolve(me.activeEntity);
 			me.isMe = isMe(me.activeEntity);
-		} else if (user && (user.get('Username') || '').toLowerCase() === lowerId) {
+		} else if (
+			user &&
+			(user.get('Username') || '').toLowerCase() === lowerId
+		) {
 			me.activeEntity = user;
 			me.isMe = isMe(me.activeEntity);
 			me.getUser = Promise.resolve(user);
@@ -98,7 +102,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 
 		return me.getUser;
 	},
-
 
 	getRouteTitle: function () {
 		return this.activeEntity.getName();
@@ -121,5 +124,5 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Base', {
 		}
 
 		return cmp;
-	}
+	},
 });

@@ -6,23 +6,23 @@ import ActiveSessions from '../ActiveSessions';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (Count) => {
+const getMockService = Count => {
 	return {
 		getCollection: () => {
 			return {
 				hasLink: () => true,
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		get: () => {
 			return Promise.resolve({
-				Count
+				Count,
 			});
-		}
+		},
 	};
 };
 
-const onBefore = (count) => {
+const onBefore = count => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(count));
 };
@@ -39,7 +39,7 @@ describe('Site admin dashboard widget active sessions (with 5 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveSessions/>);
+		const cmp = renderer.create(<ActiveSessions />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -56,7 +56,7 @@ describe('Site admin dashboard widget active sessions (with 0 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveSessions/>);
+		const cmp = renderer.create(<ActiveSessions />);
 
 		jest.runAllTimers();
 		await flushPromises();

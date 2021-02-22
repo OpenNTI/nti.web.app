@@ -2,111 +2,121 @@ const Ext = require('@nti/extjs');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const DiscussionRef = require('legacy/model/DiscussionRef');
 
 require('legacy/mixins/EllipsisText');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.parts.Discussion',
+	{
+		extend: 'Ext.Component',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
-	extend: 'Ext.Component',
+		alias: [
+			'widget.course-overview-discussion',
+			'widget.course-overview-discussionref',
+		],
 
-	alias: [
-		'widget.course-overview-discussion',
-		'widget.course-overview-discussionref'
-	],
+		mixins: {
+			EllipsisText: 'NextThought.mixins.EllipsisText',
+		},
 
-	mixins: {
-		EllipsisText: 'NextThought.mixins.EllipsisText'
-	},
+		ui: 'course',
+		cls: 'overview-discussion',
+		containerCls: 'discussions',
 
-	ui: 'course',
-	cls: 'overview-discussion',
-	containerCls: 'discussions',
-
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'image', style: {backgroundImage: 'url({icon})'}},
-		{ cls: 'meta', cn: [
-			{ cls: 'label', html: '{label}'},
-			{ cls: 'title', html: '{title}'},
-			{ cls: 'comments', html: '{sublabel}'}
-		]}
-	]),
-
-	listeners: {
-		click: {
-			element: 'el',
-			fn: 'onClick'
-		}
-	},
-
-	constructor: function (config) {
-		var n = config.node || {getAttribute: function (a) { return config[a];} },
-			i = config.locationInfo || {
-				root: config.course && config.course.getNonRenderableContentRoots()[0]
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'image', style: { backgroundImage: 'url({icon})' } },
+			{
+				cls: 'meta',
+				cn: [
+					{ cls: 'label', html: '{label}' },
+					{ cls: 'title', html: '{title}' },
+					{ cls: 'comments', html: '{sublabel}' },
+				],
 			},
-			icon = n.getAttribute('icon');
+		]),
 
-		if (icon) {
-			icon = this.getIcon(icon, i.root || '');
-		} else {
-			icon = DiscussionRef.defaultIcon;
-		}
+		listeners: {
+			click: {
+				element: 'el',
+				fn: 'onClick',
+			},
+		},
 
-		config.data = {
-			title: n.getAttribute('title'),
-			icon: icon,
-			ntiid: n.getAttribute('ntiid').split(' '),
-			label: n.getAttribute('label'),
-			comments: 0,
-			sublabel: 'Comment'
-		};
+		constructor: function (config) {
+			var n = config.node || {
+					getAttribute: function (a) {
+						return config[a];
+					},
+				},
+				i = config.locationInfo || {
+					root:
+						config.course &&
+						config.course.getNonRenderableContentRoots()[0],
+				},
+				icon = n.getAttribute('icon');
 
-		this.callParent([config]);
-	},
+			if (icon) {
+				icon = this.getIcon(icon, i.root || '');
+			} else {
+				icon = DiscussionRef.defaultIcon;
+			}
 
-	getIcon: function (icon, root) {
-		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
-			return Globals.getURL(icon);
-		}
-		else {
-			return Globals.getURL(root + icon);
-		}
-	},
+			config.data = {
+				title: n.getAttribute('title'),
+				icon: icon,
+				ntiid: n.getAttribute('ntiid').split(' '),
+				label: n.getAttribute('label'),
+				comments: 0,
+				sublabel: 'Comment',
+			};
 
-	getBundle: function () {
-		var container = this.up('content-view-container');
-		return container && container.currentBundle;
-	},
+			this.callParent([config]);
+		},
 
-	beforeRender: function () {
-		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {},this.data);
-		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
-		this.loadTopic(this.idsToLookup.shift());
-		this.WindowActions = WindowsActions.create();
-	},
+		getIcon: function (icon, root) {
+			if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
+				return Globals.getURL(icon);
+			} else {
+				return Globals.getURL(root + icon);
+			}
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
+		getBundle: function () {
+			var container = this.up('content-view-container');
+			return container && container.currentBundle;
+		},
 
-		this.ellipsisTitle();
-	},
+		beforeRender: function () {
+			this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, this.data);
+			this.idsToLookup = Ext.clone(this.data.ntiid) || [];
+			this.loadTopic(this.idsToLookup.shift());
+			this.WindowActions = WindowsActions.create();
+		},
 
-	ellipsisTitle: function () {
-		var title = this.el.down('.title');
+		afterRender: function () {
+			this.callParent(arguments);
 
-		if (title && title.dom) {
-			this.truncateText(title.dom);
-		}
-	},
+			this.ellipsisTitle();
+		},
 
-	loadTopic: function (ntiid) {
-		var parsedId = lazy.ParseUtils.parseNTIID(ntiid),
-			bundle = this.getBundle(),
-			e;
-		/*
+		ellipsisTitle: function () {
+			var title = this.el.down('.title');
+
+			if (title && title.dom) {
+				this.truncateText(title.dom);
+			}
+		},
+
+		loadTopic: function (ntiid) {
+			var parsedId = lazy.ParseUtils.parseNTIID(ntiid),
+				bundle = this.getBundle(),
+				e;
+			/*
 		* Here is a hack.  The crux of which is to supply context about the subinstance we are in
 		* when we resolving a topic. We do this primarily for instructors who may instruct multiple
 		* subinstances that contain this discussion although strickly speaking it coudl happen for any
@@ -122,54 +132,79 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		* the overview or content) we aren't going to have this in the stream right?  I think this manifests
 		* as course roulette but that is already a problem right?
 		*/
-		if (parsedId && (/^Topic:EnrolledCourse(Section|Root)$/).test(parsedId.specific.type)) {
-			if (bundle && bundle.getCourseCatalogEntry) {
-				e = bundle.getCourseCatalogEntry(); //this may not be filled in yet.
-				parsedId.specific.$$provider = ((e && e.get('ProviderUniqueID')) || '').replace(/[\W-]/g, '_');
-				ntiid = parsedId.toString();
-			} else {
-				console.warn('Did not get the thing we were expecting...', bundle);
+			if (
+				parsedId &&
+				/^Topic:EnrolledCourse(Section|Root)$/.test(
+					parsedId.specific.type
+				)
+			) {
+				if (bundle && bundle.getCourseCatalogEntry) {
+					e = bundle.getCourseCatalogEntry(); //this may not be filled in yet.
+					parsedId.specific.$$provider = (
+						(e && e.get('ProviderUniqueID')) ||
+						''
+					).replace(/[\W-]/g, '_');
+					ntiid = parsedId.toString();
+				} else {
+					console.warn(
+						'Did not get the thing we were expecting...',
+						bundle
+					);
+				}
 			}
-		}
 
-		Service.getObject(ntiid, this.onTopicResolved, this.onTopicResolveFailure, this, true);
-	},
+			Service.getObject(
+				ntiid,
+				this.onTopicResolved,
+				this.onTopicResolveFailure,
+				this,
+				true
+			);
+		},
 
-	onTopicResolved: function (topic) {
-		if (!/topic$/i.test(topic.get('Class'))) {
-			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
-		}
-		this.topic = topic;
+		onTopicResolved: function (topic) {
+			if (!/topic$/i.test(topic.get('Class'))) {
+				console.warn(
+					'Got something other than what we were expecting. Was expecting a Topic, got:',
+					topic
+				);
+			}
+			this.topic = topic;
 
-		if (topic.get('TopicCount') !== undefined) {
-			this.data.comments = topic.get('TopicCount');
-			this.data.sublabel = Ext.util.Format.plural(this.data.comments, 'Discussion');
-		}
-		else if (topic.get('PostCount') !== undefined) {
-			this.data.comments = topic.get('PostCount') || 0;
-			this.data.sublabel = Ext.util.Format.plural(this.data.comments, 'Comment');
-		}
+			if (topic.get('TopicCount') !== undefined) {
+				this.data.comments = topic.get('TopicCount');
+				this.data.sublabel = Ext.util.Format.plural(
+					this.data.comments,
+					'Discussion'
+				);
+			} else if (topic.get('PostCount') !== undefined) {
+				this.data.comments = topic.get('PostCount') || 0;
+				this.data.sublabel = Ext.util.Format.plural(
+					this.data.comments,
+					'Comment'
+				);
+			}
 
-		if (this.rendered) {
-			this.renderTpl.overwrite(this.el, this.data);
-			this.ellipsisTitle();
-		}
-	},
+			if (this.rendered) {
+				this.renderTpl.overwrite(this.el, this.data);
+				this.ellipsisTitle();
+			}
+		},
 
-	onTopicResolveFailure: function () {
-		console.warn('Could not load the topic object: ', arguments);
+		onTopicResolveFailure: function () {
+			console.warn('Could not load the topic object: ', arguments);
 
-		if (!Ext.isEmpty(this.idsToLookup)) {
-			this.loadTopic(this.idsToLookup.shift());
-		}
-	},
+			if (!Ext.isEmpty(this.idsToLookup)) {
+				this.loadTopic(this.idsToLookup.shift());
+			}
+		},
 
-	onClick: function () {
-		if (!this.topic) {
-			alert('An error occurred showing this discussion.');
-		}
-		else {
-			this.WindowActions.pushWindow(this.topic);
-		}
+		onClick: function () {
+			if (!this.topic) {
+				alert('An error occurred showing this discussion.');
+			} else {
+				this.WindowActions.pushWindow(this.topic);
+			}
+		},
 	}
-});
+);

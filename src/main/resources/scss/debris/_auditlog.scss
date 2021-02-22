@@ -23,8 +23,8 @@
 		.loading {
 			position: absolute;
 			color: var(--primary-grey);
-			line-height: 24px;//height of the spinner
-			padding-left: 30px;//width of the spinner + 6px
+			line-height: 24px; //height of the spinner
+			padding-left: 30px; //width of the spinner + 6px
 			top: 50%;
 			left: 50%;
 			margin-top: -12px;
@@ -70,7 +70,8 @@
 		@include flexItem(1 1 auto);
 	}
 
-	.username, .message {
+	.username,
+	.message {
 		font: normal 400 0.875em/1.36 var(--body-font-family);
 	}
 
@@ -106,7 +107,7 @@
 .audit-log-prompt {
 	.audit-log {
 		padding: 1em;
-		width: 807px;//1em + 775px + 1em
+		width: 807px; //1em + 775px + 1em
 	}
 }
 

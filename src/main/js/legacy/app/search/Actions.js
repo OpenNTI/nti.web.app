@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
+const { getService } = require('@nti/web-client');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const StoreUtils = require('legacy/util/Store');
 const ContextStateStore = require('legacy/app/context/StateStore');
 
 const SearchStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
-
 
 module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -34,15 +34,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			NTIID = location && location.NTIID,
 			currentNode = location && location.location;
 
-		function isValidSearchNTIID (ntiid) {
+		function isValidSearchNTIID(ntiid) {
 			var data = lazy.ParseUtils.parseNTIID(ntiid);
 
-			if (!data || (data.specific && data.specific.type === 'RelatedWorkRef')) { return false; }
+			if (
+				!data ||
+				(data.specific && data.specific.type === 'RelatedWorkRef')
+			) {
+				return false;
+			}
 
 			return true;
 		}
 
-		function isValidSearchNode (node) {
+		function isValidSearchNode(node) {
 			return node.tagName === 'topic';
 		}
 
@@ -57,16 +62,24 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		return NTIID;
 	},
 
-	async loadSearchPage (term, accepts, bundle, location, page, cachedHref) {
+	async loadSearchPage(term, accepts, bundle, location, page, cachedHref) {
 		var rootUrl = Service.getUserUnifiedSearchURL(),
-			url, params;
+			url,
+			params;
 
 		bundle = bundle && bundle.isModel ? bundle.getId() : bundle;
 		location = location && location.isModel ? location.getId() : location;
 
 		location = Globals.CONTENT_ROOT;
 
-		url = cachedHref || [rootUrl, encodeURIComponent(location), '/', encodeURIComponent(term)].join('');
+		url =
+			cachedHref ||
+			[
+				rootUrl,
+				encodeURIComponent(location),
+				'/',
+				encodeURIComponent(term),
+			].join('');
 
 		accepts = (accepts || []).map(function (mime) {
 			return 'application/vnd.nextthought.' + mime;
@@ -77,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			sortOrder: 'descending',
 			accept: accepts.join(','),
 			batchSize: this.PAGE_SIZE,
-			batchStart: (page - 1) * this.PAGE_SIZE
+			batchStart: (page - 1) * this.PAGE_SIZE,
 		};
 
 		if (accepts && accepts.length) {
@@ -90,30 +103,34 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 
 		let userList;
 
-		if(page === 1) {
+		if (page === 1) {
 			try {
 				const service = await getService();
 				const contacts = service.getContacts();
 				const searchResults = await contacts.search(term);
 
-
 				userList = {
 					TargetMimeType: this.USER_LIST_MIME_TYPE,
 					Class: 'User',
-					Items: searchResults
+					Items: searchResults,
 				};
 			} catch (e) {
 				//
 			}
 		}
 
-		return StoreUtils.loadBatch(url, cachedHref ? {} : params, null, null, true).then((result) =>{
-			if(result.Items && userList) {
+		return StoreUtils.loadBatch(
+			url,
+			cachedHref ? {} : params,
+			null,
+			null,
+			true
+		).then(result => {
+			if (result.Items && userList) {
 				result.Items.push(userList);
 			}
 			return result;
 		});
-
 	},
 
 	setSearchContext: function (term, silent) {
@@ -126,5 +143,5 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 
 	syncTerm: function (term) {
 		this.SearchStore.fireEvent('sync-term', term);
-	}
+	},
 });

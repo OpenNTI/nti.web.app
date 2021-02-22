@@ -8,139 +8,142 @@ require('./TimelineEditor');
 
 const Type = 'application/vnd.nextthought.ntitimeline';
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.timeline.Editor',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.content.Editor',
+		alias: 'widget.overview-editing-timeline',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-timeline',
+		statics: {
+			getHandledMimeTypes: function () {
+				return [Timeline.mimeType];
+			},
 
-	statics: {
-		getHandledMimeTypes: function () {
-			return [
-				Timeline.mimeType
-			];
+			getTypes: function () {
+				return [
+					{
+						title: 'Timeline',
+						advanced: true,
+						category: 'Timeline',
+						iconCls: 'timeline',
+						description: '',
+						editor: this,
+						isAvailable: async bundle => {
+							const available = await bundle.getAvailableContentSummary();
+
+							return available[Type];
+						},
+					},
+				];
+			},
 		},
 
-		getTypes: function () {
-			return [
-				{
-					title: 'Timeline',
-					advanced: true,
-					category: 'Timeline',
-					iconCls: 'timeline',
-					description: '',
-					editor: this,
-					isAvailable: async (bundle) => {
-						const available = await bundle.getAvailableContentSummary();
+		addFormCmp: function () {},
 
-						return available[Type];
-					}
-				}
-			];
-		}
-	},
+		showEditor: function () {
+			if (this.selectedItems || this.record) {
+				this.showTimelineEditor();
+			} else {
+				this.showTimelineList();
+			}
+		},
 
-	addFormCmp: function () {},
+		showTimelineEditor: function () {
+			if (this.timelineEditorCmp) {
+				this.timelineEditorCmp.destroy();
+				delete this.timelineEditorCmp;
+			}
 
-	showEditor: function () {
-		if (this.selectedItems || this.record) {
-			this.showTimelineEditor();
-		} else {
-			this.showTimelineList();
-		}
-	},
+			this.removeAll(true);
 
-	showTimelineEditor: function () {
-		if (this.timelineEditorCmp) {
-			this.timelineEditorCmp.destroy();
-			delete this.timelineEditorCmp;
-		}
-
-		this.removeAll(true);
-
-		this.editorCmp = this.add({
-			xtype: 'overview-editing-timeline-editor',
-			parentRecord: this.parentRecord,
-			record: this.record,
-			selectedItems: this.selectedItems,
-			rootRecord: this.rootRecord,
-			doClose: this.doClose,
-			showError: this.showError,
-			basePath: this.bundle && this.bundle.getContentRoots()[0],
-			enableSave: this.enableSave,
-			disableSave: this.disableSave
-		});
-
-		this.maybeEnableBack('Timeline');
-	},
-
-	showTimelineList: function () {
-		var me = this;
-
-		if (this.listCmp) {
-			this.listCmp.destroy();
-			delete this.listCmp;
-		}
-
-		if (this.editorCmp) {
-			this.editorCmp.destroy();
-			delete this.editorCmp;
-		}
-
-		this.maybeEnableBack(this.backText);
-		this.removeAll(true);
-
-		this.listCmp = this.add({
-			xtype: 'overview-editing-timeline-item-selection',
-			basePath: this.bundle && this.bundle.getContentRoots()[0],
-			onSelectionChanged: this.onDiscussionSelectionChange.bind(this)
-		});
-
-		me.bundle.getTimelineAssets()
-			.then(me.__sortTimelines.bind(me))
-			.then(function (items) {
-				me.listCmp.setSelectionItems(items);
+			this.editorCmp = this.add({
+				xtype: 'overview-editing-timeline-editor',
+				parentRecord: this.parentRecord,
+				record: this.record,
+				selectedItems: this.selectedItems,
+				rootRecord: this.rootRecord,
+				doClose: this.doClose,
+				showError: this.showError,
+				basePath: this.bundle && this.bundle.getContentRoots()[0],
+				enableSave: this.enableSave,
+				disableSave: this.disableSave,
 			});
-	},
 
-	__sortTimelines: function (items) {
-		return items;
-	},
+			this.maybeEnableBack('Timeline');
+		},
 
-	onDiscussionSelectionChange: function (selection) {
-		var length = selection.length;
+		showTimelineList: function () {
+			var me = this;
 
-		if (length === 0) {
-			this.disableSave();
-		} else {
-			this.selectedItems = selection;
-			this.enableSave();
-		}
-	},
+			if (this.listCmp) {
+				this.listCmp.destroy();
+				delete this.listCmp;
+			}
 
-	maybeEnableBack: function (text) {
-		if (!this.record && this.enableBack) {
-			this.enableBack(text);
-		}
-	},
+			if (this.editorCmp) {
+				this.editorCmp.destroy();
+				delete this.editorCmp;
+			}
 
-	onSave: function () {
-		var me = this;
-		if (!me.editorCmp) {
-			me.showTimelineEditor();
-			return Promise.reject(me.SWITCHED);
-		}
+			this.maybeEnableBack(this.backText);
+			this.removeAll(true);
 
-		me.disableSubmission();
-		return me.editorCmp.onSave()
-			.catch(function (reason) {
+			this.listCmp = this.add({
+				xtype: 'overview-editing-timeline-item-selection',
+				basePath: this.bundle && this.bundle.getContentRoots()[0],
+				onSelectionChanged: this.onDiscussionSelectionChange.bind(this),
+			});
+
+			me.bundle
+				.getTimelineAssets()
+				.then(me.__sortTimelines.bind(me))
+				.then(function (items) {
+					me.listCmp.setSelectionItems(items);
+				});
+		},
+
+		__sortTimelines: function (items) {
+			return items;
+		},
+
+		onDiscussionSelectionChange: function (selection) {
+			var length = selection.length;
+
+			if (length === 0) {
+				this.disableSave();
+			} else {
+				this.selectedItems = selection;
+				this.enableSave();
+			}
+		},
+
+		maybeEnableBack: function (text) {
+			if (!this.record && this.enableBack) {
+				this.enableBack(text);
+			}
+		},
+
+		onSave: function () {
+			var me = this;
+			if (!me.editorCmp) {
+				me.showTimelineEditor();
+				return Promise.reject(me.SWITCHED);
+			}
+
+			me.disableSubmission();
+			return me.editorCmp.onSave().catch(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});
-	},
+		},
 
-	onSaveFailure: function (reason) {
-		if (reason === this.SWITCHED) { return; }
+		onSaveFailure: function (reason) {
+			if (reason === this.SWITCHED) {
+				return;
+			}
 
-		this.callParent(arguments);
+			this.callParent(arguments);
+		},
 	}
-});
+);

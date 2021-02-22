@@ -1,14 +1,15 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-const {DateIcon} = require('@nti/web-calendar');
+const { wait } = require('@nti/lib-commons');
+const { DateIcon } = require('@nti/web-calendar');
 const { NewChatStore } = require('@nti/web-profiles');
 const { ChatSidebar } = require('@nti/web-profiles');
-const {getAppUsername, isFlag} = require('@nti/web-client');
+const { getAppUsername, isFlag } = require('@nti/web-client');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const GroupsStateStore = require('legacy/app/groups/StateStore');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
@@ -33,23 +34,33 @@ if (!newChat) {
 		cls: 'chat-gutter-window',
 
 		renderTpl: Ext.DomHelper.markup([
-			{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
-			{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
-			{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
-				{cls: 'profile-pic'}
-			]},
-			{cls: 'presence-gutter-entry show-contacts', 'data-qtip': 'Show Contacts'}
+			{
+				cls: 'presence-gutter-entry show-calendar',
+				'data-qtip': 'Show Calendar',
+			},
+			{ id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}'] },
+			{
+				cls: 'presence-gutter-entry other-contacts',
+				'data-qtip': 'Expand Contacts',
+				'data-badge': '0',
+				cn: [{ cls: 'profile-pic' }],
+			},
+			{
+				cls: 'presence-gutter-entry show-contacts',
+				'data-qtip': 'Show Contacts',
+			},
 		]),
 
-		getTargetEl: function () { return this.body; },
+		getTargetEl: function () {
+			return this.body;
+		},
 		childEls: ['body'],
 
 		renderSelectors: {
 			contactsButtonEl: '.show-contacts',
 			otherContactsEl: '.other-contacts',
-			showCalendarEl: '.show-calendar'
+			showCalendarEl: '.show-calendar',
 		},
-
 	};
 }
 
@@ -71,11 +82,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
-			'notify': this.handleWindowNotify.bind(this),
+			notify: this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this),
 			'presence-changed': this.updatePresence.bind(this),
-			'gutter-active': this.updateList.bind(this, this.store, this.store.data.items)
+			'gutter-active': this.updateList.bind(
+				this,
+				this.store,
+				this.store.data.items
+			),
 		});
 		this.otherContacts = [];
 		this.collapsedMessageCount = 0;
@@ -102,21 +117,21 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		store = new Ext.data.Store({
 			proxy: 'memory',
 			model: User,
-			data: onlineContactStore.getRange()
+			data: onlineContactStore.getRange(),
 		});
 
 		this.mon(onlineContactStore, {
-			'load': this.onOnlineContactAdd.bind(this),
-			'add': this.onOnlineContactAdd.bind(this),
-			'remove': this.onOnlineContactRemove.bind(this)
+			load: this.onOnlineContactAdd.bind(this),
+			add: this.onOnlineContactAdd.bind(this),
+			remove: this.onOnlineContactRemove.bind(this),
 		});
 
 		this.store = store;
 
 		this.mon(this.store, {
-			'load': this.updateList.bind(this),
-			'add': this.addContacts.bind(this),
-			'remove': this.removeContact.bind(this)
+			load: this.updateList.bind(this),
+			add: this.addContacts.bind(this),
+			remove: this.removeContact.bind(this),
 		});
 	},
 
@@ -124,19 +139,30 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var me = this;
 		this.callParent(arguments);
 		if (!newChat) {
-			this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
-			this.mon(this.otherContactsEl, 'click', this.showAllOnlineContacts.bind(this));
-			this.mon(this.showCalendarEl, 'click', this.showCalendar.bind(this));
+			this.mon(
+				this.contactsButtonEl,
+				'click',
+				this.goToContacts.bind(this)
+			);
+			this.mon(
+				this.otherContactsEl,
+				'click',
+				this.showAllOnlineContacts.bind(this)
+			);
+			this.mon(
+				this.showCalendarEl,
+				'click',
+				this.showCalendar.bind(this)
+			);
 			this.maybeUpdateOtherButton();
 			Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
 
-			if(Service.getCollection('Calendars')) {
+			if (Service.getCollection('Calendars')) {
 				this.dateIcon = Ext.widget('react', {
 					renderTo: this.showCalendarEl,
-					component: DateIcon
+					component: DateIcon,
 				});
-			}
-			else {
+			} else {
 				this.showCalendarEl.hide();
 			}
 		}
@@ -150,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	onDestroy: function () {
 		this.callParent(arguments);
 
-		if(this.dateIcon) {
+		if (this.dateIcon) {
 			this.dateIcon.destroy();
 			delete this.dateIcon;
 		}
@@ -168,19 +194,23 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 				users = isNTIID === false ? occupantsKey.split('_') : [],
 				o = Ext.Array.remove(users.slice(), $AppConfig.username);
 
-			if (o.length === 1 && me.store.find('Username', o[0], 0, false, false, true) === -1) {
+			if (
+				o.length === 1 &&
+				me.store.find('Username', o[0], 0, false, false, true) === -1
+			) {
 				// This is 1-1 chat, not a groupchat
-				UserRepository.getUser(o[0])
-					.then(function (u) {
-						// var p = u.getPresence();
-						me.store.add(u);
-					});
+				UserRepository.getUser(o[0]).then(function (u) {
+					// var p = u.getPresence();
+					me.store.add(u);
+				});
 			}
 		});
 	},
 
 	onResize: function () {
-		if (!this.isVisible()) { return; }
+		if (!this.isVisible()) {
+			return;
+		}
 
 		this.callParent(arguments);
 		this.updateList(this.store, this.store.data.items);
@@ -216,17 +246,26 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			var user = this.findEntryForUser(username),
 				nodeIndex;
 
-			if(user) {
+			if (user) {
 				user.setStatus(presence);
 			}
 			if (this.gutterList && this.gutterList.isVisible()) {
-				nodeIndex = this.store.find('Username', username, 0, false, false, true);
+				nodeIndex = this.store.find(
+					'Username',
+					username,
+					0,
+					false,
+					false,
+					true
+				);
 				if (nodeIndex > -1) {
 					this.gutterList.refreshNode(nodeIndex);
 				}
 			}
 		} else {
-			if (username === getAppUsername()) {return;}
+			if (username === getAppUsername()) {
+				return;
+			}
 			NewChatStore.updatePresence(username, presence.getName());
 		}
 	},
@@ -237,7 +276,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 	onOnlineContactRemove: function (store, record) {
 		// Make sure we don't remove a user with an active chat window.
-		var r = this.store.findRecord('Username', record.get('Username'), 0, false, false, true);
+		var r = this.store.findRecord(
+			'Username',
+			record.get('Username'),
+			0,
+			false,
+			false,
+			true
+		);
 		if (r && !this.hasActiveChat(r.get('Username'))) {
 			this.store.remove(r);
 		}
@@ -278,21 +324,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 					return true;
 				}
 
-				if(me.haveRoomForNewEntry()) {
+				if (me.haveRoomForNewEntry()) {
 					me.add({
 						xtype: 'chat-gutter-entry',
 						user: user,
-						openChatWindow: me.openChatWindow.bind(me)
+						openChatWindow: me.openChatWindow.bind(me),
 					});
-				}
-				else {
+				} else {
 					me.otherContacts.push(user);
 				}
 			});
 
 			me.maybeUpdateOtherButton();
 		} else {
-			const contacts = await Promise.all(users.map((user) => user.getInterfaceInstance()));
+			const contacts = await Promise.all(
+				users.map(user => user.getInterfaceInstance())
+			);
 			NewChatStore.addContacts(contacts);
 		}
 	},
@@ -300,7 +347,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	haveRoomForNewEntry: function (u) {
 		var gutterHeight = this.getHeight(),
 			gutterEntryHeight = 60,
-			maxEntryNumber = Math.floor((gutterHeight - this.ENTRY_BOTTOM_OFFSET) / gutterEntryHeight),
+			maxEntryNumber = Math.floor(
+				(gutterHeight - this.ENTRY_BOTTOM_OFFSET) / gutterEntryHeight
+			),
 			currentCount = this.query('chat-gutter-entry').length;
 
 		return maxEntryNumber > 0 ? currentCount < maxEntryNumber : true;
@@ -317,15 +366,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	openChatWindow: function (user, entry) {
-		if(this.onChatOpen) {
+		if (this.onChatOpen) {
 			this.onChatOpen();
 		}
 
-		var isVisible = user.associatedWindow && user.associatedWindow.isVisible();
+		var isVisible =
+			user.associatedWindow && user.associatedWindow.isVisible();
 		if (user.associatedWindow && !user.associatedWindow.isDestroyed) {
 			user.associatedWindow[isVisible ? 'hide' : 'show']();
-		}
-		else {
+		} else {
 			this.selectActiveUser(user);
 			this.ChatActions.startChat(user);
 		}
@@ -353,7 +402,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var d = this.getAnchorPointForUser(user),
 			entry = d && Ext.get(d);
 
-
 		if (entry && entry.hasCls('active')) {
 			entry.removeCls('active');
 			this.activeUser = null;
@@ -365,7 +413,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var entry = this.findEntryForUser(user);
 
 		user.set('unreadMessageCount', 0);
-		if(entry) {
+		if (entry) {
 			entry.clearUnreadCount();
 		}
 	},
@@ -374,29 +422,39 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
 			occupants = roomInfo && roomInfo.get('Occupants'),
-			me = this, user, username;
+			me = this,
+			user,
+			username;
 
-		occupants = Ext.Array.remove(occupants.slice(), $AppConfig.userObject.get('Username'));
+		occupants = Ext.Array.remove(
+			occupants.slice(),
+			$AppConfig.userObject.get('Username')
+		);
 		username = occupants[0];
 		if (!isGroupChat && username) {
 			// const entry = this.findEntryForUser(username);
 
 			// We want an exact match.
-			user = this.store.findRecord('Username', username, 0, false, false, true);
+			user = this.store.findRecord(
+				'Username',
+				username,
+				0,
+				false,
+				false,
+				true
+			);
 			if (user) {
 				user.associatedWindow = win;
 				win.on({
 					show: function () {
-						wait()
-							.then(function () {
-								me.adjustToExpandedChat(win);
-								me.selectActiveUser(user);
-							});
+						wait().then(function () {
+							me.adjustToExpandedChat(win);
+							me.selectActiveUser(user);
+						});
 					},
 					hide: function () {
-						wait()
-							.then(me.deselectActiveUser.bind(me, user));
-					}
+						wait().then(me.deselectActiveUser.bind(me, user));
+					},
 				});
 			}
 		}
@@ -421,8 +479,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var dom, entry;
 		if (this.gutterList && this.gutterList.isVisible()) {
 			dom = this.gutterList.getNode(user);
-		}
-		else {
+		} else {
 			entry = this.findEntryForUser(user);
 			dom = entry && entry.el && entry.el.dom;
 		}
@@ -431,17 +488,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	adjustToExpandedChat: function (win) {
-		if(!win) { return; }
+		if (!win) {
+			return;
+		}
 
-		if (this.gutterList && this.gutterList.el && this.gutterList.el.isVisible()) {
+		if (
+			this.gutterList &&
+			this.gutterList.el &&
+			this.gutterList.el.isVisible()
+		) {
 			win.addCls('gutter-list-open');
 			this.gutterList.on({
 				hide: function () {
 					win.removeCls('gutter-list-open');
-				}
+				},
 			});
-		}
-		else {
+		} else {
 			win.removeCls('gutter-list-open');
 		}
 	},
@@ -458,24 +520,25 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	onRoomExit: function (roomId) {
-		var user, entry, me = this;
+		var user,
+			entry,
+			me = this;
 
-		Service.getObject(roomId)
-			.then(function (roomInfo) {
-				var o = roomInfo.get('Occupants');
+		Service.getObject(roomId).then(function (roomInfo) {
+			var o = roomInfo.get('Occupants');
 
-				user = Ext.Array.remove(o.slice(), $AppConfig.username)[o];
-				entry = me.findEntryForUser(user);
-				user = me.store.findRecord('Username', user, 0, false, false, true);
-				if (entry) {
-					entry.clearUnreadCount();
-				}
+			user = Ext.Array.remove(o.slice(), $AppConfig.username)[o];
+			entry = me.findEntryForUser(user);
+			user = me.store.findRecord('Username', user, 0, false, false, true);
+			if (entry) {
+				entry.clearUnreadCount();
+			}
 
-				delete user.associatedWindow;
-				if (me.gutterList && me.gutterList.onRoomExit) {
-					me.gutterList.onRoomExit(roomInfo);
-				}
-			});
+			delete user.associatedWindow;
+			if (me.gutterList && me.gutterList.onRoomExit) {
+				me.gutterList.onRoomExit(roomInfo);
+			}
+		});
 	},
 
 	findEntryForUser: function (user) {
@@ -483,7 +546,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			result;
 
 		Ext.each(this.items.items, function (entry) {
-			if (entry.user && (entry.user.get('Username') === userName)) {
+			if (entry.user && entry.user.get('Username') === userName) {
 				result = entry;
 				return false;
 			}
@@ -493,17 +556,21 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	handleWindowNotify: function (win, msg) {
-		if(win && win.isVisible()) { return; }
+		if (win && win.isVisible()) {
+			return;
+		}
 
-		var entry, me = this, currentCount, userRec,
+		var entry,
+			me = this,
+			currentCount,
+			userRec,
 			sender = msg.isModel ? msg.get('Creator') : msg.Creator;
 
 		entry = this.findEntryForUser(sender);
 		newChat && NewChatStore.handleWindowNotify(sender);
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
-		}
-		else {
+		} else {
 			// If we have a user in our store but don't have an entry for them,
 			// it means they are already in the 'other contacts'.
 			// Go ahead and increment the message count of 'Other Contacts'.
@@ -513,22 +580,26 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 					me.incrementCollapsedMesssageCount();
 				}
 
-				userRec = this.store.findRecord('Username', sender, 0, false, false, true);
+				userRec = this.store.findRecord(
+					'Username',
+					sender,
+					0,
+					false,
+					false,
+					true
+				);
 				if (userRec) {
 					currentCount = userRec.get('unreadMessageCount') || 0;
 					currentCount += 1;
 					userRec.set('unreadMessageCount', currentCount);
 				}
-			}
-			else {
-				UserRepository.getUser(sender)
-					.then(function (u) {
-						me.store.add(u);
-						me.bindChatWindow(win);
-						wait()
-							.then(me.handleWindowNotify.bind(me, win, msg));
-					});
+			} else {
+				UserRepository.getUser(sender).then(function (u) {
+					me.store.add(u);
+					me.bindChatWindow(win);
+					wait().then(me.handleWindowNotify.bind(me, win, msg));
+				});
 			}
 		}
-	}
+	},
 });

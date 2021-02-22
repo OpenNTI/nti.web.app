@@ -2,8 +2,9 @@ const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const ObjectUtils = require('legacy/util/Object');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('./forums/DFLBoard');
 require('./forums/DFLForum');
@@ -13,18 +14,17 @@ require('legacy/mixins/ShareEntity');
 require('legacy/mixins/Avatar');
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
 		shareEntity: 'NextThought.mixins.ShareEntity',
-		Avatar: 'NextThought.mixins.Avatar'
+		Avatar: 'NextThought.mixins.Avatar',
 	},
 
 	statics: {
-		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png'
+		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png',
 	},
 
 	isFriendsList: true,
@@ -36,13 +36,18 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		{ name: 'friends', type: 'UserList' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'CompositeGravatars', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function (v, r) {return r.getName();}},
-		{ name: 'IsDynamicSharing', type: 'auto'},
-		{ name: 'about', type: 'string'},
+		{
+			name: 'displayName',
+			convert: function (v, r) {
+				return r.getName();
+			},
+		},
+		{ name: 'IsDynamicSharing', type: 'auto' },
+		{ name: 'about', type: 'string' },
 
 		//UI fields
-		{ name: 'avatarInitials', type: 'string', persist: false},
-		{ name: 'avatarBGColor', type: 'string', persist: false}
+		{ name: 'avatarInitials', type: 'string', persist: false },
+		{ name: 'avatarBGColor', type: 'string', persist: false },
 	],
 
 	constructor: function () {
@@ -53,21 +58,24 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		ObjectUtils.defineAttributes(this, {
 			isDFL: {
 				getter: this.mixins.shareEntity.isDynamicSharing,
-				setter: function () { throw new Error('readonly'); }
+				setter: function () {
+					throw new Error('readonly');
+				},
 			},
 
 			readableType: {
 				getter: this.mixins.shareEntity.getPresentationType,
-				setter: function () { throw new Error('readonly'); }
-			}
+				setter: function () {
+					throw new Error('readonly');
+				},
+			},
 		});
-
 	},
 
 	getAboutData: function () {
 		return {
 			displayName: this.getName(),
-			about: this.get('about')
+			about: this.get('about'),
 		};
 	},
 
@@ -75,7 +83,10 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		var id = this.get('Username');
 
 		if (id && this.getLink('Activity')) {
-			return '/group/' + (isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id));
+			return (
+				'/group/' +
+				(isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id))
+			);
 		}
 
 		return null;
@@ -92,19 +103,26 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			grid = Math.ceil(Math.sqrt(urls.length)),
 			avatarSize = canvas.width,
 			padding = grid > 1 ? 2 : 0,
-			imgSize = (avatarSize - ((grid - 1) * padding)) / grid,
+			imgSize = (avatarSize - (grid - 1) * padding) / grid,
 			offset = imgSize + padding;
 
 		ctx.imageSmoothingEnabled = true;
 
 		Ext.each(urls, function (url, idx) {
 			var i = new Image(),
-				col = idx % grid * offset,
+				col = (idx % grid) * offset,
 				row = Math.floor(idx / grid) * offset;
 			i.onload = function () {
-				ctx.drawImage(i,
-					0,	0,	i.width, i.height,	//source x,y,w,h
-					col, row, imgSize, imgSize		//dest	 x,y,w,h
+				ctx.drawImage(
+					i,
+					0,
+					0,
+					i.width,
+					i.height, //source x,y,w,h
+					col,
+					row,
+					imgSize,
+					imgSize //dest	 x,y,w,h
 				);
 			};
 			i.src = url;
@@ -112,14 +130,13 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 	},
 
 	getDefaultForum: function () {
-		return this.getForumList()
-			.then(function (forums) {
-				forums = forums.filter(function (forum) {
-					return forum.get('IsDefaultForum');
-				});
-
-				return forums[0];
+		return this.getForumList().then(function (forums) {
+			forums = forums.filter(function (forum) {
+				return forum.get('IsDefaultForum');
 			});
+
+			return forums[0];
+		});
 	},
 
 	getForumList: function (force) {
@@ -140,7 +157,9 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			.then(function (board) {
 				var content = board && board.getLink('contents');
 
-				return content ? Service.request(content) : Promise.reject('No Contents Link');
+				return content
+					? Service.request(content)
+					: Promise.reject('No Contents Link');
 			})
 			.then(function (response) {
 				var json = JSON.parse(response);
@@ -154,5 +173,5 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			});
 
 		return this.loadForumList;
-	}
+	},
 });

@@ -1,12 +1,14 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.overrides.container.Viewport',
+	{
+		override: 'Ext.container.Viewport',
 
-module.exports = exports = Ext.define('NextThought.overrides.container.Viewport', {
-	override: 'Ext.container.Viewport',
+		setSize: function () {},
 
-	setSize: function () {},
-
-	onRender: function () {
-		Ext.container.Container.prototype.onRender.apply(this, arguments);
+		onRender: function () {
+			Ext.container.Container.prototype.onRender.apply(this, arguments);
+		},
 	}
-});
+);

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.FilterMenuItem', {
 	extend: 'Ext.menu.CheckItem',
 	alias: 'widget.filter-menu-item',
@@ -11,18 +10,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenuItem', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'count', id: '{id}-countEl', html: '{count}' },
-		'{text}'
+		'{text}',
 	]),
 
 	config: {
-		count: 0
+		count: 0,
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble('checkchange');
 	},
-
 
 	beforeRender: function () {
 		this.callParent(arguments);
@@ -33,5 +31,5 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenuItem', {
 		if (this.rendered) {
 			this.countEl.update(c || '');
 		}
-	}
+	},
 });

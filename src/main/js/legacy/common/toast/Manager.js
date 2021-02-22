@@ -2,9 +2,7 @@ const Ext = require('@nti/extjs');
 
 require('./Window');
 
-
 module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
-
 	PADDING: 10,
 
 	/* @private */
@@ -61,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 		this.stack.push(toast);
 
 		toast.setPosition(size.width - (toast.width + 10), size.height);
-		toast.on('afterRender', this.popToast, this, {single: true});
+		toast.on('afterRender', this.popToast, this, { single: true });
 		toast.on('destroy', this.eatToast, this);
 		toast.show();
 
@@ -76,7 +74,9 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	measure: function (loaf) {
 		var padding = this.PADDING,
 			sum = 0;
-		Ext.each(loaf, function (o) {sum += (o.getHeight() + padding);});
+		Ext.each(loaf, function (o) {
+			sum += o.getHeight() + padding;
+		});
 		return sum;
 	},
 
@@ -87,21 +87,20 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 		}
 
 		var idx = Ext.Array.indexOf(this.stack, toast);
-		if (idx < 0) {return;}
+		if (idx < 0) {
+			return;
+		}
 
 		this.stack.splice(idx, 1);
 		this.adjustStack();
 	},
 
-
 	adjustStack: function () {
 		Ext.each(this.stack, this.popToast, this);
 	},
 
-
 	/* @private */
 	popToast: function (toast) {
-
 		var vp = Ext.dom.Element.getViewSize(),
 			left = vp.width - (toast.width + 10),
 			top = vp.height,
@@ -115,8 +114,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 
 		toast.animate({
 			duration: 400,
-			to: { top: top, left: left }
+			to: { top: top, left: left },
 		});
-	}
-
+	},
 }).create();

@@ -10,19 +10,21 @@ module.exports = exports = Ext.define(
 		statics: {
 			type: 'LTIExternalToolAsset',
 
-			canHandle (obj) {
-				return obj && obj.get && (obj.get('Class') === 'ExternalToolAsset');
-			}
+			canHandle(obj) {
+				return (
+					obj && obj.get && obj.get('Class') === 'ExternalToolAsset'
+				);
+			},
 		},
 
-		constructor (config) {
+		constructor(config) {
 			this.callParent(arguments);
 			Ext.applyIf(this, config || {});
 
 			this.PathActions = PathActions.create();
 		},
 
-		getCourseFor (obj) {
+		getCourseFor(obj) {
 			if (this.course) {
 				return Promise.resolve(this.course);
 			}
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		parse (obj, kind) {
+		parse(obj, kind) {
 			return this.getCourseFor(obj).then(course => {
 				let cmp;
 				if (kind === 'card') {
@@ -40,14 +42,14 @@ module.exports = exports = Ext.define(
 						xtype: 'context-relatedwork-card',
 						type: this.self.type,
 						content: obj,
-						course: course
+						course: course,
 					};
 				} else if (kind === 'list') {
 					cmp = Ext.widget('context-relatedwork-list', {
 						type: this.self.type,
 						content: obj,
 						course: course,
-						record: this.contextRecord
+						record: this.contextRecord,
 					});
 				} else {
 					cmp = Ext.widget('context-relatedwork-card', {
@@ -55,11 +57,11 @@ module.exports = exports = Ext.define(
 						content: obj,
 						course: course,
 						record: this.contextRecord,
-						doNavigate: this.doNavigate
+						doNavigate: this.doNavigate,
 					});
 				}
 				return cmp;
 			});
-		}
+		},
 	}
 );

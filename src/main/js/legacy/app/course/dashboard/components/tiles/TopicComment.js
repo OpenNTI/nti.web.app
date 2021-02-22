@@ -2,24 +2,25 @@ const Ext = require('@nti/extjs');
 
 require('./BaseCmp');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.dashboard.components.tiles.TopicComment',
+	{
+		extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
+		alias: 'widget.dashboard-topic-comment',
 
-module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.TopicComment', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
-	alias: 'widget.dashboard-topic-comment',
+		statics: {
+			HEIGHT: 300,
+		},
 
-	statics: {
-		HEIGHT: 300
-	},
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'label', html: 'Topic Comment' },
+			{ cls: 'title', html: '{title}' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: 'Topic Comment'},
-		{cls: 'title', html: '{title}'}
-	]),
-
-
-	getRenderData: function () {
-		return {
-			title: this.record.getBodyText()
-		};
+		getRenderData: function () {
+			return {
+				title: this.record.getBodyText(),
+			};
+		},
 	}
-});
+);

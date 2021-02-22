@@ -15,14 +15,16 @@ const getMockService = () => {
 						course: {
 							CatalogEntry: {
 								Title: 'course1',
-								getDefaultAssetRoot () { return 'testRoot'; }
-							}
-						}
+								getDefaultAssetRoot() {
+									return 'testRoot';
+								},
+							},
+						},
 					};
 				},
-				UserProfile: 'testUser'
+				UserProfile: 'testUser',
 			};
-		}
+		},
 	};
 };
 
@@ -43,7 +45,7 @@ describe('Site admin user course enrollment frame', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<Frame/>);
+		const cmp = renderer.create(<Frame />);
 
 		jest.runAllTimers();
 		await flushPromises();

@@ -1,26 +1,26 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const LibraryActions = require('legacy/app/library/Actions');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/model/Base');
 require('legacy/mixins/PresentationResources');
 require('legacy/mixins/DurationCache');
 
-
 module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
 
 	inheritableStatics: {
-		TOC_REQUESTS: {}
+		TOC_REQUESTS: {},
 	},
 
 	mixins: {
-		'PresentationResources': 'NextThought.mixins.PresentationResources',
-		'DurationCache': 'NextThought.mixins.DurationCache'
+		PresentationResources: 'NextThought.mixins.PresentationResources',
+		DurationCache: 'NextThought.mixins.DurationCache',
 	},
 
 	VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
@@ -29,26 +29,35 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	isContentPackage: true,
 
 	fields: [
-		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
+		{
+			name: 'Archive Last Modified',
+			type: 'date',
+			dateFormat: 'timestamp',
+		},
 		{ name: 'archive', type: 'string' },
 		{ name: 'index', type: 'string' },
 		{ name: 'index_jsonp', type: 'string' },
 		{ name: 'installable', type: 'bool' },
 		{ name: 'root', type: 'string' },
 		{ name: 'title', type: 'string' },
-		{ name: 'description', type: 'string'},
-		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator', defaultValue: ['Author Name Here']},
-		{ name: 'version', type: 'string'},
-		{ name: 'PlatformPresentationResources', type: 'auto'},
-		{ name: 'PresentationProperties', type: 'auto'},
-		{ name: 'path', type: 'string', defaultValue: ''},
-		{ name: 'sample', type: 'bool', defaultValue: false, persist: false},
+		{ name: 'description', type: 'string' },
+		{
+			name: 'author',
+			type: 'DCCreatorToAuthor',
+			mapping: 'DCCreator',
+			defaultValue: ['Author Name Here'],
+		},
+		{ name: 'version', type: 'string' },
+		{ name: 'PlatformPresentationResources', type: 'auto' },
+		{ name: 'PresentationProperties', type: 'auto' },
+		{ name: 'path', type: 'string', defaultValue: '' },
+		{ name: 'sample', type: 'bool', defaultValue: false, persist: false },
 		//for filtering
-		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
+		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false },
 
-		{ name: 'toc', type: 'auto', persist: false},
+		{ name: 'toc', type: 'auto', persist: false },
 		{ name: 'icon', type: 'string' },
-		{ name: 'thumb', type: 'string' }
+		{ name: 'thumb', type: 'string' },
 	],
 
 	constructor: function () {
@@ -69,21 +78,22 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		return this.get('icon');
 	},
 
-
-	update (targetBundle) {
+	update(targetBundle) {
 		const link = Service.getObjectURL(this.get('NTIID') || this.get('OID'));
 
-		return Service.getObjectRaw(link, this.get('MimeType'), true, targetBundle)
-			.then((response) => {
-				return this.syncWithResponse(response.responseText);
-			});
+		return Service.getObjectRaw(
+			link,
+			this.get('MimeType'),
+			true,
+			targetBundle
+		).then(response => {
+			return this.syncWithResponse(response.responseText);
+		});
 	},
 
-
-	shouldAllowTocLoad () {
+	shouldAllowTocLoad() {
 		return true;
 	},
-
 
 	getToc: function (status) {
 		var me = this,
@@ -93,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		if (me.self.TOC_REQUESTS[index + '-' + status]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
 		} else {
-			me.tocPromise = new Promise ((fulfill, reject) => {
+			me.tocPromise = new Promise((fulfill, reject) => {
 				if (this.shouldAllowTocLoad()) {
 					fulfill();
 				} else {
@@ -113,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 					return xml;
 				})
-				.catch((reason) => {
+				.catch(reason => {
 					delete me.self.TOC_REQUESTS[index + '-' + status];
 
 					return Promise.reject(reason);
@@ -130,14 +140,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 				me.set({
 					toc: xml,
 					NTIID: doc.getAttribute('ntiid'),
-					isCourse: doc.getAttribute('isCourse') === 'true'
+					isCourse: doc.getAttribute('isCourse') === 'true',
 				});
-			}).catch(e => {
+			})
+			.catch(e => {
 				if (e) {
 					throw e;
 				}
 			});
-
 
 		return me.tocPromise;
 	},
@@ -149,25 +159,29 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 			title: this.get('title'),
 			label: this.get('author'),
 			icon: this.get('icon'),
-			thumb: this.get('thumb')
+			thumb: this.get('thumb'),
 		};
 	},
 
 	fireNavigationEvent: function (eventSource) {
 		var id = this.get('NTIID');
 		return new Promise(function (fulfill, reject) {
-			var txn = window.history.beginTransaction('book-navigation-transaction-' + Globals.guidGenerator());
-			eventSource.fireEvent('set-last-location-or-root', id, function (ntiid, reader, error) {
-				if (error) {
-					txn.abort();
-					reject(error);
+			var txn = window.history.beginTransaction(
+				'book-navigation-transaction-' + Globals.guidGenerator()
+			);
+			eventSource.fireEvent(
+				'set-last-location-or-root',
+				id,
+				function (ntiid, reader, error) {
+					if (error) {
+						txn.abort();
+						reject(error);
+					} else {
+						fulfill();
+						txn.commit();
+					}
 				}
-				else {
-
-					fulfill();
-					txn.commit();
-				}
-			});
+			);
 		});
 	},
 
@@ -179,22 +193,29 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 			return '';
 		}
 
-		return Globals.getURL(root).concatPath('/presentation-assets/webapp/v1/');
+		return Globals.getURL(root).concatPath(
+			'/presentation-assets/webapp/v1/'
+		);
 	},
 
 	__cacheContentPreferences: function () {
 		var c = console;
-		Service.getPageInfo(this.get('NTIID'))
-			.then(undefined, c.error.bind(c));
+		Service.getPageInfo(this.get('NTIID')).then(undefined, c.error.bind(c));
 	},
 
 	__setImage: function () {
 		var me = this;
-		me.getImgAsset('landing').then(function (url) { me.set('icon', url); });
-		me.getImgAsset('thumb').then(function (url) { me.set('thumb', url); });
+		me.getImgAsset('landing').then(function (url) {
+			me.set('icon', url);
+		});
+		me.getImgAsset('thumb').then(function (url) {
+			me.set('thumb', url);
+		});
 	},
 
-	represents: function () {return false;},
+	represents: function () {
+		return false;
+	},
 
 	getReferenceSelector: function (type) {
 		type = lazy.ParseUtils.escapeId(type);
@@ -253,5 +274,5 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 				return [];
 			});
-	}
+	},
 });

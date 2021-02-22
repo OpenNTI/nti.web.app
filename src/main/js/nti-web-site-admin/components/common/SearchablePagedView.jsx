@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {ContextIndicator} from '@nti/web-search';
-import {List, Loading, EmptyState} from '@nti/web-commons';
+import { ContextIndicator } from '@nti/web-search';
+import { List, Loading, EmptyState } from '@nti/web-commons';
 
 import LoadMore from './LoadMore';
 import ErrorMessage from './ErrorMessage';
-
 
 export default class SearchablePagedView extends React.Component {
 	static propTypes = {
@@ -21,31 +20,35 @@ export default class SearchablePagedView extends React.Component {
 		loadNextPage: PropTypes.func,
 		renderItem: PropTypes.func.isRequired,
 		renderEmptyState: PropTypes.func,
-		getString: PropTypes.func.isRequired
-	}
+		getString: PropTypes.func.isRequired,
+	};
 
-
-	get getString () {
+	get getString() {
 		return this.props.getString;
 	}
 
-
 	onLoadMore = () => {
-		const {loadNextPage, hasNextPage, loadingNextPage} = this.props;
+		const { loadNextPage, hasNextPage, loadingNextPage } = this.props;
 
 		if (hasNextPage && !loadingNextPage && loadNextPage) {
 			loadNextPage();
 		}
-	}
+	};
 
-
-	render () {
-		const {loading, error, className} = this.props;
+	render() {
+		const { loading, error, className } = this.props;
 
 		return (
 			<div className={cx('site-admin-searchable-page-view', className)}>
-				<ContextIndicator className="context-indicator" backLabel={this.getString('backLabel')} />
-				{loading && (<div className="loading-mask"><Loading.Mask /></div>)}
+				<ContextIndicator
+					className="context-indicator"
+					backLabel={this.getString('backLabel')}
+				/>
+				{loading && (
+					<div className="loading-mask">
+						<Loading.Mask />
+					</div>
+				)}
 				{!loading && this.renderItems()}
 				{!loading && !error && this.renderLoadNext()}
 				{error && this.renderError()}
@@ -53,8 +56,8 @@ export default class SearchablePagedView extends React.Component {
 		);
 	}
 
-	renderItems () {
-		const {items, renderItem} = this.props;
+	renderItems() {
+		const { items, renderItem } = this.props;
 
 		if (!items || !items.length) {
 			return this.renderEmptyState();
@@ -63,44 +66,40 @@ export default class SearchablePagedView extends React.Component {
 		return (
 			<List.Unadorned>
 				{items.map((item, index) => {
-					return (
-						<li key={index}>
-							{renderItem(item)}
-						</li>
-					);
+					return <li key={index}>{renderItem(item)}</li>;
 				})}
 			</List.Unadorned>
 		);
 	}
 
+	renderEmptyState() {
+		const { getString } = this;
+		const { renderEmptyState, searchTerm } = this.props;
 
-	renderEmptyState () {
-		const {getString} = this;
-		const {renderEmptyState, searchTerm} = this.props;
+		if (renderEmptyState) {
+			return renderEmptyState();
+		}
 
-		if (renderEmptyState) { return renderEmptyState(); }
+		const header = searchTerm
+			? getString('emptySearch')
+			: getString('empty');
 
-		const header = searchTerm ? getString('emptySearch') : getString('empty');
+		return <EmptyState header={header} />;
+	}
+
+	renderLoadNext() {
+		const { hasNextPage, loadingNextPage } = this.props;
 
 		return (
-			<EmptyState header={header} />
+			<LoadMore
+				hasMore={hasNextPage}
+				loading={loadingNextPage}
+				onLoadMore={this.onLoadMore}
+			/>
 		);
 	}
 
-
-	renderLoadNext () {
-		const {hasNextPage, loadingNextPage} = this.props;
-
-		return (
-			<LoadMore hasMore={hasNextPage} loading={loadingNextPage} onLoadMore={this.onLoadMore} />
-		);
-	}
-
-	renderError () {
-		return (
-			<ErrorMessage>
-				{this.getString('error')}
-			</ErrorMessage>
-		);
+	renderError() {
+		return <ErrorMessage>{this.getString('error')}</ErrorMessage>;
 	}
 }

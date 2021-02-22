@@ -1,12 +1,12 @@
-import {Stores} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
-import {UserDataThreader, Models} from '@nti/lib-interfaces';
-import {isNTIID, decodeFromURI} from '@nti/lib-ntiids';
+import { Stores } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { UserDataThreader, Models } from '@nti/lib-interfaces';
+import { isNTIID, decodeFromURI } from '@nti/lib-ntiids';
 
 import BaseModel from 'legacy/model/Base';
 import RelatedWork from 'legacy/model/RelatedWork';
 
-async function resolveSurvey (ref, course) {
+async function resolveSurvey(ref, course) {
 	try {
 		const service = await getService();
 		const survey = await service.getObject(ref.target);
@@ -17,15 +17,17 @@ async function resolveSurvey (ref, course) {
 	}
 }
 
-async function resolvePageInfo (page, course) {
-	const id = isNTIID(page.href) ? page.href : (page['target-NTIID'] || page['Target-NTIID'] || page.getID());
+async function resolvePageInfo(page, course) {
+	const id = isNTIID(page.href)
+		? page.href
+		: page['target-NTIID'] || page['Target-NTIID'] || page.getID();
 
 	try {
 		const service = await getService();
 		const pageInfo = await service.getPageInfo(id, {
 			params: {
-				course: course.getID()
-			}
+				course: course.getID(),
+			},
 		});
 
 		return BaseModel.interfaceToModel(pageInfo);
@@ -34,14 +36,14 @@ async function resolvePageInfo (page, course) {
 			return resolveSurvey(page, course);
 		}
 
-
 		return page.isContent ? null : BaseModel.interfaceToModel(page);
 	}
 }
 
-
-async function resolveActiveObject (id) {
-	if (!id) { return null; }
+async function resolveActiveObject(id) {
+	if (!id) {
+		return null;
+	}
 
 	try {
 		const service = await getService();
@@ -53,10 +55,12 @@ async function resolveActiveObject (id) {
 	}
 }
 
-async function resolveActiveHash (hash) {
+async function resolveActiveHash(hash) {
 	const ntiid = isNTIID(hash) ? hash : decodeFromURI(hash);
 
-	if (!isNTIID(ntiid)) { return null; }
+	if (!isNTIID(ntiid)) {
+		return null;
+	}
 
 	try {
 		const service = await getService();
@@ -68,46 +72,56 @@ async function resolveActiveHash (hash) {
 	}
 }
 
-function getRootId (parents = [], page) {
+function getRootId(parents = [], page) {
 	for (let parent of parents) {
 		const id = parent.getID && parent.getID();
 
-		if (id) { return id; }
+		if (id) {
+			return id;
+		}
 	}
 
 	return page && page.getId();
 }
 
 export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore {
-
-	load () {
+	load() {
 		this.loadPage();
 		this.loadActiveObject();
 	}
 
-	async loadActiveObject () {
-		const {activeObjectId, activeHash} = this.binding;
+	async loadActiveObject() {
+		const { activeObjectId, activeHash } = this.binding;
 
-		if (activeObjectId === this.activeObjectId && activeHash === this.activeHash) { return; }
+		if (
+			activeObjectId === this.activeObjectId &&
+			activeHash === this.activeHash
+		) {
+			return;
+		}
 
 		this.activeObjectId = activeObjectId;
 		this.activeHash = activeHash;
 
 		try {
-			const activeObject = activeObjectId ? await resolveActiveObject(activeObjectId) : await resolveActiveHash(activeHash);
+			const activeObject = activeObjectId
+				? await resolveActiveObject(activeObjectId)
+				: await resolveActiveHash(activeHash);
 
 			this.set({
-				activeObject
+				activeObject,
 			});
 		} catch (e) {
 			//swallow
 		}
 	}
 
-	async loadPage () {
-		const {course, page, parents} = this.binding;
+	async loadPage() {
+		const { course, page, parents } = this.binding;
 
-		if (this.course === course && this.page === page) { return; }
+		if (this.course === course && this.page === page) {
+			return;
+		}
 
 		this.course = course;
 		this.page = page;
@@ -118,23 +132,28 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			bundle: null,
 			page: null,
 			notes: null,
-			notFound: false
+			notFound: false,
 		});
 
 		try {
 			const bundle = BaseModel.interfaceToModel(course);
 			const pageInfo = await resolvePageInfo(page, course);
 
-
-			if (!pageInfo || (isRelatedWork(pageInfo) && !isValidRelatedWork(pageInfo))) {
+			if (
+				!pageInfo ||
+				(isRelatedWork(pageInfo) && !isValidRelatedWork(pageInfo))
+			) {
 				this.set({
 					loading: false,
 					bundle,
-					notFound: true
+					notFound: true,
 				});
 			}
 
-			const contentPackage = pageInfo && pageInfo.getContentPackage ? await pageInfo.getContentPackage() : null;
+			const contentPackage =
+				pageInfo && pageInfo.getContentPackage
+					? await pageInfo.getContentPackage()
+					: null;
 
 			if (contentPackage) {
 				bundle.syncContentPackage(contentPackage);
@@ -145,21 +164,22 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 				bundle,
 				page: pageInfo,
 				rootId: getRootId(parents, pageInfo),
-				contentPackage
+				contentPackage,
 			});
 		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}
 
-
-	setNotes (notes) {
+	setNotes(notes) {
 		this.rawNotes = notes;
 
-		if (this.setNotesTimeout) { return; }
+		if (this.setNotesTimeout) {
+			return;
+		}
 
 		this.setNotesTimeout = setTimeout(() => {
 			delete this.setNotesTimeout;
@@ -167,8 +187,7 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 		}, 100);
 	}
 
-
-	async convertNotes (notes) {
+	async convertNotes(notes) {
 		try {
 			const converted = UserDataThreader.threadThreadables(
 				await Promise.all(
@@ -179,7 +198,7 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			).sort((a, b) => b.getLastModified() - a.getLastModified());
 
 			this.set({
-				notes: converted
+				notes: converted,
 			});
 		} catch (e) {
 			//swallow
@@ -187,20 +206,18 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 	}
 }
 
-
-function flatten (notes) {
-
+function flatten(notes) {
 	return flattenArray(
-		([
-			notes,
-			(notes || []).map(note => flatten(note.children))
-		])
-			.filter(Boolean)
+		[notes, (notes || []).map(note => flatten(note.children))].filter(
+			Boolean
+		)
 	);
 }
 
-function flattenArray (arr) {
-	if (typeof arr.flat === 'function') { return arr.flat(Infinity); }
+function flattenArray(arr) {
+	if (typeof arr.flat === 'function') {
+		return arr.flat(Infinity);
+	}
 
 	return arr.reduce((acc, val) => {
 		const flat = Array.isArray(val) ? flattenArray(val) : val;
@@ -209,14 +226,17 @@ function flattenArray (arr) {
 	}, []);
 }
 
-function isSurveyRef (pageInfo) {
+function isSurveyRef(pageInfo) {
 	return pageInfo instanceof Models.assessment.survey.SurveyReference;
 }
 
-function isRelatedWork (pageInfo) {
-	return pageInfo instanceof Models.content.RelatedWorkReference || pageInfo instanceof RelatedWork;
+function isRelatedWork(pageInfo) {
+	return (
+		pageInfo instanceof Models.content.RelatedWorkReference ||
+		pageInfo instanceof RelatedWork
+	);
 }
 
-function isValidRelatedWork (pageInfo) {
+function isValidRelatedWork(pageInfo) {
 	return isRelatedWork(pageInfo) && (pageInfo.href ?? pageInfo.getHref());
 }

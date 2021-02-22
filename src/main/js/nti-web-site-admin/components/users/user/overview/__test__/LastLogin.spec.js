@@ -8,13 +8,15 @@ describe('Site admin user overview last login', () => {
 	test('Basic render test', async () => {
 		const historicalSessions = [
 			{
-				SessionStartTime: new Date('10/30/2017').getTime() / 1000
-			}
+				SessionStartTime: new Date('10/30/2017').getTime() / 1000,
+			},
 		];
 
 		const user = {};
 
-		const cmp = renderer.create(<LastLogin user={user} historicalSessions={historicalSessions}/>);
+		const cmp = renderer.create(
+			<LastLogin user={user} historicalSessions={historicalSessions} />
+		);
 
 		const tree = cmp.toJSON();
 

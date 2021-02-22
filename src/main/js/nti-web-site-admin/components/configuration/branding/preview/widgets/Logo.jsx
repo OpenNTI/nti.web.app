@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import {Theme} from '@nti/web-commons';
+import { Theme } from '@nti/web-commons';
 
 import Avatar from '../../sections/library/preview/Avatar';
 import NotificationsIcon from '../../sections/library/preview/NotificationsIcon';
@@ -9,7 +9,7 @@ import styles from './Logo.css';
 
 const cx = x => styles[x];
 
-export default function Logo ({className, ...props}) {
+export default function Logo({ className, ...props }) {
 	return (
 		<div className={classnames(cx('root'), className)} {...props}>
 			<Theme.Asset name="assets.logo" className={cx('logo')} />

@@ -3,92 +3,96 @@ const Ext = require('@nti/extjs');
 require('../components/Current');
 require('./components/Collection');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.library.communities.Current',
+	{
+		extend: 'NextThought.app.library.components.Current',
+		alias: 'widget.library-current-communities',
+		layout: 'none',
+		title: 'Communities',
+		storeModel: 'NextThought.model.Community',
 
-module.exports = exports = Ext.define('NextThought.app.library.communities.Current', {
-	extend: 'NextThought.app.library.components.Current',
-	alias: 'widget.library-current-communities',
-	layout: 'none',
-	title: 'Communities',
-	storeModel: 'NextThought.model.Community',
-
-	statics: {
-		shouldShow: function () {
-			return Service.getCommunitiesList()
-				.then(function (communities) {
+		statics: {
+			shouldShow: function () {
+				return Service.getCommunitiesList().then(function (
+					communities
+				) {
 					return communities.length;
 				});
-		}
-	},
+			},
+		},
 
-	items: [],
+		items: [],
 
-	initComponent: function () {
-		this.callParent(arguments);
+		initComponent: function () {
+			this.callParent(arguments);
 
-		var siteCommunity = Service.get('SiteCommunity');
+			var siteCommunity = Service.get('SiteCommunity');
 
-		this.sorterFn = function (a, b) {
-			var aVal = a.getName(),
-				bVal = b.getName();
+			this.sorterFn = function (a, b) {
+				var aVal = a.getName(),
+					bVal = b.getName();
 
-			if (a.getId() === siteCommunity) {
-				return -1;
-			} else if (b.getId() === siteCommunity) {
-				return 1;
+				if (a.getId() === siteCommunity) {
+					return -1;
+				} else if (b.getId() === siteCommunity) {
+					return 1;
+				} else {
+					return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+				}
+			};
+
+			Service.getCommunitiesList().then(this.showCurrentItems.bind(this));
+		},
+
+		showCurrentItems: function (communities) {
+			if (communities.length > 8) {
+				this.showSeeAll();
 			} else {
-				return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+				this.hideSeeAll();
 			}
-		};
 
-		Service.getCommunitiesList()
-			.then(this.showCurrentItems.bind(this));
-	},
+			communities.sort(this.sorterFn);
 
-	showCurrentItems: function (communities) {
-		if (communities.length > 8) {
-			this.showSeeAll();
-		} else {
-			this.hideSeeAll();
-		}
+			this.showItems(communities.slice(0, 8));
+		},
 
-		communities.sort(this.sorterFn);
+		showItems: function (items) {
+			if (this.store) {
+				this.store.loadRecords(items);
+			} else {
+				this.store = new Ext.data.Store({
+					model: this.storeModel,
+					data: items,
+					sorters: [
+						{
+							sorterFn: this.sorterFn,
+						},
+					],
+				});
+			}
 
-		this.showItems(communities.slice(0, 8));
-	},
+			if (this.collection) {
+				this.remove(this.collection, true);
+			}
 
-	showItems: function (items) {
-		if (this.store) {
-			this.store.loadRecords(items);
-		} else {
-			this.store = new Ext.data.Store({
-				model: this.storeModel,
-				data: items,
-				sorters: [{
-					sorterFn: this.sorterFn
-				}]
+			this.collection = this.add({
+				xtype: 'library-communities-collection',
+				store: this.store,
+				navigate: this.navigate.bind(this),
 			});
-		}
+		},
 
-		if (this.collection) {
-			this.remove(this.collection, true);
-		}
+		onSeeAllClick: function () {
+			if (this.pushRoute) {
+				this.pushRoute('Communities', '/communities');
+			}
+		},
 
-		this.collection = this.add({
-			xtype: 'library-communities-collection',
-			store: this.store,
-			navigate: this.navigate.bind(this)
-		});
-	},
-
-	onSeeAllClick: function () {
-		if (this.pushRoute) {
-			this.pushRoute('Communities', '/communities');
-		}
-	},
-
-	navigate: function (community, el) {
-		if (this.navigateToCommunity) {
-			this.navigateToCommunity(community, el);
-		}
+		navigate: function (community, el) {
+			if (this.navigateToCommunity) {
+				this.navigateToCommunity(community, el);
+			}
+		},
 	}
-});
+);

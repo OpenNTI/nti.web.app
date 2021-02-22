@@ -1,9 +1,10 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
-function maybeAdd (stores, r) {
+function maybeAdd(stores, r) {
 	const found = stores.find(store => store === r);
 
 	if (!found) {
@@ -11,99 +12,118 @@ function maybeAdd (stores, r) {
 	}
 }
 
-module.exports = exports = Ext.define('NextThought.model.converters.Items', {
-	override: 'Ext.data.Types',
+module.exports = exports = Ext.define(
+	'NextThought.model.converters.Items',
+	{
+		override: 'Ext.data.Types',
 
-	/* converters for models which reference other models*/
-	SINGLEITEM: {
-		type: 'singleItem',
-		convert: function (v, r) {
-			if (v instanceof Object) {
-				v = !v ? null : lazy.ParseUtils.parseItems([v])[0];
+		/* converters for models which reference other models*/
+		SINGLEITEM: {
+			type: 'singleItem',
+			convert: function (v, r) {
+				if (v instanceof Object) {
+					v = !v ? null : lazy.ParseUtils.parseItems([v])[0];
+					if (v) {
+						maybeAdd(v.stores, r);
+						// v.stores.push(r);//make store updates bubble up to this owner record.
+					}
+					return v;
+				}
+
 				if (v) {
-					maybeAdd(v.stores, r);
-					// v.stores.push(r);//make store updates bubble up to this owner record.
+					console.warn('unexpected value', v);
 				}
-				return v;
-			}
-
-			if (v) { console.warn('unexpected value', v); }
-			return null;
+				return null;
+			},
+			sortType: 'none',
 		},
-		sortType: 'none'
-	},
 
-	ARRAYITEM: {
-		type: 'arrayItem',
-		convert: function (v, r) {
-			var result = null;
-			if (Ext.isArray(v)) {
-				result = lazy.ParseUtils.parseItems(v);
-				if (this.limit !== undefined && result.length > this.limit) {
-					// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
-					result = result.slice(0, this.limit);
+		ARRAYITEM: {
+			type: 'arrayItem',
+			convert: function (v, r) {
+				var result = null;
+				if (Ext.isArray(v)) {
+					result = lazy.ParseUtils.parseItems(v);
+					if (
+						this.limit !== undefined &&
+						result.length > this.limit
+					) {
+						// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
+						result = result.slice(0, this.limit);
+						result.forEach(function (a) {
+							if (a) {
+								maybeAdd(a.stores, r);
+								// a.stores.push(r);
+							}
+						});
+					} else {
+						result.forEach(function (a) {
+							if (a) {
+								maybeAdd(a.stores, r);
+								// a.stores.push(r);
+							}
+						});
+					}
+					return result;
+				}
+
+				if (v) {
+					console.warn('unexpected value', v);
+				}
+				return null;
+			},
+			sortType: 'none',
+		},
+
+		COLLECTIONITEM: {
+			type: 'collectionItem',
+			convert: function (v, r) {
+				var values = [],
+					keys = {},
+					key,
+					result;
+				if (v instanceof Object) {
+					for (key in v) {
+						if (v.hasOwnProperty(key) && v[key] instanceof Object) {
+							keys[key] = values.length;
+							values.push(v[key]);
+							if (
+								this.limit !== undefined &&
+								values.length > this.limit
+							) {
+								// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
+								values.pop();
+								delete keys[key];
+								break;
+							}
+						}
+					}
+					result = lazy.ParseUtils.parseItems(values);
 					result.forEach(function (a) {
 						if (a) {
 							maybeAdd(a.stores, r);
 							// a.stores.push(r);
 						}
 					});
+					result.INDEX_KEYMAP = keys;
+					return result;
 				}
-				else {
-					result.forEach(function (a) {
-						if (a) {
-							maybeAdd(a.stores, r);
-							// a.stores.push(r);
-						}
-					});
-				}
-				return result;
-			}
 
-			if (v) { console.warn('unexpected value', v); }
-			return null;
+				if (v) {
+					console.warn('unexpected value', v);
+				}
+				return null;
+			},
+			sortType: 'none',
 		},
-		sortType: 'none'
 	},
+	function () {
+		function set(o) {
+			o.sortType = Ext.data.SortTypes[o.sortType];
+		}
 
-	COLLECTIONITEM: {
-		type: 'collectionItem',
-		convert: function (v, r) {
-			var values = [], keys = {}, key, result;
-			if (v instanceof Object) {
-				for (key in v) {
-					if (v.hasOwnProperty(key) && v[key] instanceof Object) {
-						keys[key] = values.length;
-						values.push(v[key]);
-						if (this.limit !== undefined && values.length > this.limit) {
-							// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
-							values.pop();
-							delete keys[key];
-							break;
-						}
-					}
-				}
-				result = lazy.ParseUtils.parseItems(values);
-				result.forEach(function (a) {
-					if (a) {
-						maybeAdd(a.stores, r);
-						// a.stores.push(r);
-					}
-				});
-				result.INDEX_KEYMAP = keys;
-				return result;
-			}
-
-			if (v) { console.warn('unexpected value', v); }
-			return null;
-
-		},
-		sortType: 'none'
+		set(this.SINGLEITEM);
+		set(this.ARRAYITEM);
+		set(this.COLLECTIONITEM);
 	}
-}, function () {
-	function set (o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
-
-	set(this.SINGLEITEM);
-	set(this.ARRAYITEM);
-	set(this.COLLECTIONITEM);
-});
+);

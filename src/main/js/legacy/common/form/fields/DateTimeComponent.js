@@ -1,38 +1,41 @@
 const Ext = require('@nti/extjs');
-const {DateTimeField} = require('@nti/web-commons');
+const { DateTimeField } = require('@nti/web-commons');
 require('legacy/overrides/ReactHarness');
 
-module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeComponent', {
-	extend: 'NextThought.ReactHarness',
-	alias: 'widget.date-time-component',
+module.exports = exports = Ext.define(
+	'NextThought.common.form.fields.DateTimeComponent',
+	{
+		extend: 'NextThought.ReactHarness',
+		alias: 'widget.date-time-component',
 
-	cls: 'date-time-field',
+		cls: 'date-time-field',
 
-	constructor (config) {
-		this.callParent([{...config, component: DateTimeField}]);
-	},
+		constructor(config) {
+			this.callParent([{ ...config, component: DateTimeField }]);
+		},
 
-	selectDate (value) {
-		this.setProps({
-			value
-		});
-	},
+		selectDate(value) {
+			this.setProps({
+				value,
+			});
+		},
 
-	showDateError (error) {
-		this.setProps({
-			error
-		});
-	},
+		showDateError(error) {
+			this.setProps({
+				error,
+			});
+		},
 
-	disable () {
-		this.setProps({
-			disabled: true
-		});
-	},
+		disable() {
+			this.setProps({
+				disabled: true,
+			});
+		},
 
-	enable () {
-		this.setProps({
-			disabled: false
-		});
+		enable() {
+			this.setProps({
+				disabled: false,
+			});
+		},
 	}
-});
+);

@@ -2,23 +2,20 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.VideoRoll', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.videoroll',
 
-	fields: [
-		{name: 'Items', type: 'arrayItem'}
-	],
+	fields: [{ name: 'Items', type: 'arrayItem' }],
 
 	getItems: function () {
 		return this.get('Items');
 	},
 
 	addVideo: function (item) {
-		if(!this.get('Items')) {
-			this.set('Items',[]);
+		if (!this.get('Items')) {
+			this.set('Items', []);
 		}
 		return this.get('Items').push(item);
-	}
+	},
 });

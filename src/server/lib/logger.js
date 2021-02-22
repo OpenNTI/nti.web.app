@@ -4,24 +4,19 @@ const { default: Logger } = require('@nti/util-logger');
 const logger = Logger.get('server-side:app');
 
 module.exports = {
-
-	info () {
+	info() {
 		logger.info(...arguments);
 	},
 
-
-	error () {
+	error() {
 		logger.error(...arguments);
 	},
 
-
-	warn () {
+	warn() {
 		logger.warn(...arguments);
 	},
 
-
-	debug () {
+	debug() {
 		logger.debug(...arguments);
-	}
-
+	},
 };

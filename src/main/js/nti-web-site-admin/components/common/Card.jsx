@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 SiteAdminCard.propTypes = {
-	className: PropTypes.string
+	className: PropTypes.string,
 };
-export default function SiteAdminCard ({className, ...otherProps}) {
-	return (
-		<div className={cx('site-admin-card', className)} {...otherProps} />
-	);
+export default function SiteAdminCard({ className, ...otherProps }) {
+	return <div className={cx('site-admin-card', className)} {...otherProps} />;
 }

@@ -7,10 +7,8 @@ import Styles from './TimerIcon.css';
 const cx = classnames.bind(Styles);
 
 TimerIcon.propTypes = {
-	className: PropTypes.string
+	className: PropTypes.string,
 };
-export default function TimerIcon ({className, ...otherProps}) {
-	return (
-		<span className={cx('timer-icon', className)} {...otherProps} />
-	);
+export default function TimerIcon({ className, ...otherProps }) {
+	return <span className={cx('timer-icon', className)} {...otherProps} />;
 }

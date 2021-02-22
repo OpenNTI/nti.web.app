@@ -61,15 +61,17 @@ require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
 require('legacy/model/assessment/UsersCourseInquiryItem');
 require('legacy/model/assessment/UsersCourseInquiryItemResponse');
 
-const {guidGenerator} = require('legacy/util/Globals');
-
+const { guidGenerator } = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
-		'application/vnd.nextthought.ntiaudio': 'assessment-components-audio-clip',
-		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
-		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
+		'application/vnd.nextthought.ntiaudio':
+			'assessment-components-audio-clip',
+		'application/vnd.nextthought.contentsequence':
+			'assessment-components-sequence',
+		'application/vnd.nextthought.naqwordbank':
+			'assessment-components-wordbank',
 	},
 
 	contentComponents: [],
@@ -95,16 +97,21 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 			dom = this.parseDomString(dom);
 		}
 
-		function topLevelOnly (o) {
+		function topLevelOnly(o) {
 			var p = o.parentNode;
-			if (p && p.nodeName === 'OBJECT') { return false; }
+			if (p && p.nodeName === 'OBJECT') {
+				return false;
+			}
 			return p ? topLevelOnly(p) : true;
 		}
 
 		dom = Ext.getDom(dom);
 
 		var me = this,
-			objects = dom.querySelectorAll('object').toArray().filter(topLevelOnly);
+			objects = dom
+				.querySelectorAll('object')
+				.toArray()
+				.filter(topLevelOnly);
 
 		me.contentComponents = [];
 		me.contentComponentsToRender = [];
@@ -116,15 +123,19 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 				id = guidGenerator(),
 				added;
 			try {
-				added = me.addObject(type, {
-					renderTo: id,
-					domObject: object,
-					reader: me.reader,
-					record: me.part || me.question,
-					question: me.question,
-					questionId: me.question && me.question.getId(),
-					ownerCt: me
-				}, me.rendered && !dontRender);
+				added = me.addObject(
+					type,
+					{
+						renderTo: id,
+						domObject: object,
+						reader: me.reader,
+						record: me.part || me.question,
+						question: me.question,
+						questionId: me.question && me.question.getId(),
+						ownerCt: me,
+					},
+					me.rendered && !dontRender
+				);
 			} catch (e) {
 				added = true;
 			}
@@ -170,7 +181,8 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	 * @returns {bool} whether or not we have a component for the type
 	 */
 	addObject: function (type, config, create) {
-		var placeholderEl, parent,
+		var placeholderEl,
+			parent,
 			name = config.compName || (type && this.typeToComponent[type]);
 
 		if (!name) {
@@ -188,7 +200,6 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 				parent.insertBefore(placeholderEl.lastChild, placeholderEl);
 			}
 			parent.removeChild(placeholderEl);
-
 		} else {
 			//if we are suppose to wait just add the config to the toRender list
 			config.compName = name;
@@ -200,5 +211,5 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 
 	destroyContent: function () {
 		Ext.destroy(this.contentComponents);
-	}
+	},
 });

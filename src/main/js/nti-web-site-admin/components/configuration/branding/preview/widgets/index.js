@@ -1,4 +1,4 @@
-import {types} from '../../sections/assets/constants';
+import { types } from '../../sections/assets/constants';
 
 import FullLogo from './FullLogo';
 import Logo from './Logo';

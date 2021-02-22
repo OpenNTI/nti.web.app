@@ -9,12 +9,11 @@ require('./anchorables/DomContentRangeDescription');
 require('./anchorables/TranscriptRangeDescription');
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {
-		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent',
 	},
 
 	statics: {
@@ -25,9 +24,9 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 				prohibitReSharing: hl.get('prohibitReSharing'),
 				tags: hl.get('tags'),
 				selectedText: hl.get('selectedText'),
-				applicableRange: hl.get('applicableRange')
+				applicableRange: hl.get('applicableRange'),
 			});
-		}
+		},
 	},
 
 	isThreadable: true,
@@ -35,36 +34,54 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	isNoteModel: true,
 
 	fields: [
-		{ name: 'ReferencedByCount', type: 'int'},
-		{ name: 'inReplyTo', type: 'string', defaultValue: null},
+		{ name: 'ReferencedByCount', type: 'int' },
+		{ name: 'inReplyTo', type: 'string', defaultValue: null },
 		{ name: 'references', type: 'auto', defaultValue: [] },
-		{ name: 'AutoTags', type: 'Auto'},
-		{ name: 'tags', type: 'auto', defaultValue: []},
-		{ name: 'applicableRange', type: 'ContentRangeDescription'},
+		{ name: 'AutoTags', type: 'Auto' },
+		{ name: 'tags', type: 'auto', defaultValue: [] },
+		{ name: 'applicableRange', type: 'ContentRangeDescription' },
 		{ name: 'body', type: 'auto' },
 		{ name: 'title', type: 'auto' },
-		{ name: 'selectedText', type: 'string'},
+		{ name: 'selectedText', type: 'string' },
 		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },
 		{ name: 'prohibitReSharing', type: 'boolean' },
-		{ name: 'RecursiveLikeCount', type: 'int'},
+		{ name: 'RecursiveLikeCount', type: 'int' },
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'},
-		{ name: 'FavoriteGroupingField', defaultValue: 'Note', persist: false},
+		{
+			name: 'GroupingField',
+			mapping: 'Last Modified',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'Last Modified',
+		},
+		{
+			name: 'NotificationGroupingField',
+			mapping: 'CreatedTime',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'CreatedTime',
+		},
+		{ name: 'FavoriteGroupingField', defaultValue: 'Note', persist: false },
 
-		{ name: 'line', type: 'int', defaultValue: 0, persist: false},
-		{ name: 'pline', type: 'int', defaultValue: 0, persist: false},
-		{ name: 'ReplyCount', type: 'Synthetic', persist: false,
+		{ name: 'line', type: 'int', defaultValue: 0, persist: false },
+		{ name: 'pline', type: 'int', defaultValue: 0, persist: false },
+		{
+			name: 'ReplyCount',
+			type: 'Synthetic',
+			persist: false,
 			fn: function (r) {
 				if (r.placeholder) {
 					return r.countChildren();
 				}
 
 				return r.get('ReferencedByCount');
-			}
+			},
 		},
-		{ name: 'preview', type: 'Synthetic', persist: false,
+		{
+			name: 'preview',
+			type: 'Synthetic',
+			persist: false,
 			affectedBy: ['body', 'title'],
 			fn: function (r) {
 				if (r.placeholder) {
@@ -80,22 +97,24 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 					try {
 						r.afterEdit(['preview', 'GroupingField']);
 					} catch (e) {
-						console.error(e.stack || e.message || e);//setDirty is caught here...
+						console.error(e.stack || e.message || e); //setDirty is caught here...
 						// would be nice to figure out why the store doesn't have a group for this record. :/
 						// store/view destroyed?
 					}
-				},150);
+				}, 150);
 
 				return '';
 			},
-			fnSet: function (r) { delete r.data.$preview; return r.data.preview; }
+			fnSet: function (r) {
+				delete r.data.$preview;
+				return r.data.preview;
+			},
 		},
 
-
 		//We use these fields in the user-data panel
-		{ name: 'path', type: 'string', persist: false},
-		{ name: 'location', type: 'string', persist: false},
-		{ name: 'textBodyContent', type: 'auto', persist: false}
+		{ name: 'path', type: 'string', persist: false },
+		{ name: 'location', type: 'string', persist: false },
+		{ name: 'textBodyContent', type: 'auto', persist: false },
 	],
 
 	/*
@@ -115,12 +134,14 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	 */
 	getDescendants: function (callback, scope) {
 		var resultStore = PageItem.create(),
-			outstandingChildren = 0, me = this;
+			outstandingChildren = 0,
+			me = this;
 
-
-		function childFinished (childStore) {
+		function childFinished(childStore) {
 			if (childStore) {
-				resultStore.loadRecords(childStore.getRange(), {addRecords: true});
+				resultStore.loadRecords(childStore.getRange(), {
+					addRecords: true,
+				});
 			}
 			outstandingChildren--;
 
@@ -133,7 +154,10 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			if (Ext.isEmpty(this.children)) {
 				//A placeholder with no children
 				//that probably shouldn't happen
-				console.warn('Encountered a placeholder with no children when getting descendants', this.children);
+				console.warn(
+					'Encountered a placeholder with no children when getting descendants',
+					this.children
+				);
 				Ext.callback(callback, scope, [resultStore]);
 				return;
 			}
@@ -143,12 +167,11 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 				if (!child.placeholder) {
 					//Note we don't use add here.  PageItem overrides
 					//that to generate threads, which we don't really want
-					resultStore.loadRecords([child], {addRecords: true});
+					resultStore.loadRecords([child], { addRecords: true });
 				}
 				child.getDescendants(childFinished);
 			});
-		}
-		else {
+		} else {
 			me.loadReplies(callback, scope);
 		}
 	},
@@ -183,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			store.proxy.extraParams = params;
 		}
 
-		store.on('load', callback, me, {single: true, scope: scope});
+		store.on('load', callback, me, { single: true, scope: scope });
 		store.load({});
 	},
 
@@ -223,14 +246,23 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 	hasRepliesBeenLoaded: function (rec) {
 		if (!rec.placeholder) {
-			return rec.get('ReferencedByCount') === 0 || ((rec.children || []).length > 0);
+			return (
+				rec.get('ReferencedByCount') === 0 ||
+				(rec.children || []).length > 0
+			);
 		}
 
-		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
+		return Ext.Array.every(
+			rec.children || [],
+			rec.hasRepliesBeenLoaded,
+			this
+		);
 	},
 
 	isOnlyNonTextBodyParts: function (body) {
-		if (Ext.isEmpty(body)) { return false;}
+		if (Ext.isEmpty(body)) {
+			return false;
+		}
 		return Ext.Array.every(body, function (i) {
 			return typeof i !== 'string';
 		});
@@ -245,12 +277,15 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 		if (!Ext.isEmpty(t)) {
 			snip = Ext.String.ellipsis(t, max, false);
-		}else {
-
+		} else {
 			if (this.isOnlyNonTextBodyParts(body)) {
 				snip = '[Image]';
-			}else {
-				snip = Ext.String.ellipsis(this.simplifyTitle(body)[0], max, true);
+			} else {
+				snip = Ext.String.ellipsis(
+					this.simplifyTitle(body)[0],
+					max,
+					true
+				);
 			}
 		}
 
@@ -260,7 +295,8 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	resolveNotePreview: function (cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
-			snip, onlyObject;
+			snip,
+			onlyObject;
 
 		max = max || 36;
 		// NOTE: If there is a title set it.
@@ -268,17 +304,23 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		// If the note has no title, set a snippet of the body.
 		if (!Ext.isEmpty(t)) {
 			snip = Ext.String.ellipsis(t, max, false);
-		}
-		else if (!Ext.isEmpty(body)) {
+		} else if (!Ext.isEmpty(body)) {
 			onlyObject = this.isOnlyNonTextBodyParts(body);
 
 			if (onlyObject) {
 				t = 'Whiteboard';
 			}
-			this.compileBodyContent(function (html) {
-				snip = onlyObject ? html : ContentUtils.getHTMLSnippet(html, max);
-				Ext.callback(cb, null, [snip || html, t]);
-			}, null, null, null);
+			this.compileBodyContent(
+				function (html) {
+					snip = onlyObject
+						? html
+						: ContentUtils.getHTMLSnippet(html, max);
+					Ext.callback(cb, null, [snip || html, t]);
+				},
+				null,
+				null,
+				null
+			);
 
 			return;
 		} else {
@@ -306,8 +348,8 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 		Ext.each(body, function (c) {
 			if (Ext.isString(c)) {
-				text.push((d.innerHTML = c, d.textContent));
-			}else {
+				text.push(((d.innerHTML = c), d.textContent));
+			} else {
 				text.push(c);
 			}
 		});
@@ -318,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	countChildren: function () {
 		var sum = 0;
 
-		function allDescendants (rec) {
+		function allDescendants(rec) {
 			var i, child;
 			for (i = 0; i < (rec.children || []).length; i++) {
 				child = rec.children[i];
@@ -340,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			return rec.get('ReferencedByCount') + (rec.parent ? 1 : 0);
 		}
 
-		Ext.each((rec.children || []), function (a) {
+		Ext.each(rec.children || [], function (a) {
 			sum += rec.sumReferenceByCount(a);
 		});
 
@@ -348,7 +390,8 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	},
 
 	debugString: function () {
-		var bs = (this.get('body') || []).toString(), cs;
+		var bs = (this.get('body') || []).toString(),
+			cs;
 
 		if (this.placeholder) {
 			bs = '_';
@@ -358,7 +401,9 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			return '[' + bs + ']';
 		}
 
-		cs = Ext.Array.map(this.children, function (c) {return c.debugString();});
+		cs = Ext.Array.map(this.children, function (c) {
+			return c.debugString();
+		});
 
 		return '[' + bs + ' (' + cs.join(',') + ') ]';
 	},
@@ -368,9 +413,17 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			return this.get('RecursiveLikeCount') || 0;
 		}
 
-		return (this.children || []).reduce(function (sum, child) {
-			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount() || 0) : 0);
-		}, (this.isLiked() ? 1 : 0));
+		return (this.children || []).reduce(
+			function (sum, child) {
+				return (
+					sum +
+					(child.getTotalLikeCount
+						? child.getTotalLikeCount() || 0
+						: 0)
+				);
+			},
+			this.isLiked() ? 1 : 0
+		);
 	},
 
 	convertToPlaceholder: function () {
@@ -391,15 +444,18 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			inReplyTo: data.inReplyTo,
 			references: data.references,
 			style: data.style,
-			ReferencedByCount: data.ReferencedByCount
+			ReferencedByCount: data.ReferencedByCount,
 		});
 		me.resumeEvents();
 	},
 
 	getActivityItemConfig: function () {
 		return Promise.resolve({
-			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
-			verb: this.get('inReplyTo') ? 'said' : 'shared a note'
+			message: Ext.String.format(
+				'&ldquo;{0}&rdquo;',
+				Ext.String.ellipsis(this.getBodyText(), 50, true)
+			),
+			verb: this.get('inReplyTo') ? 'said' : 'shared a note',
 		});
-	}
+	},
 });

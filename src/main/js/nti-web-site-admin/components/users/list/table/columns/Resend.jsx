@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import ResendButton from '../ResendButton';
 
-export default function Resend ({item, store}) {
+export default function Resend({ item, store }) {
 	return store.getSelectedCount() ? null : (
 		<ResendButton items={[item]} store={store} />
 	);

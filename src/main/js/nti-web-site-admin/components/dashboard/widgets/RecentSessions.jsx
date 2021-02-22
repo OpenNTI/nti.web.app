@@ -1,10 +1,10 @@
 import './RecentSessions.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {DateTime, Loading, Avatar} from '@nti/web-commons';
-import {getService, User} from '@nti/web-client';
-import {getLink} from '@nti/lib-interfaces';
+import { scoped } from '@nti/lib-locale';
+import { DateTime, Loading, Avatar } from '@nti/web-commons';
+import { getService, User } from '@nti/web-client';
+import { getLink } from '@nti/lib-interfaces';
 
 const ANALYTICS = 'Analytics';
 const SESSIONS_LINK = 'sessions';
@@ -15,44 +15,51 @@ const LABELS = {
 	title: 'Recent Sessions',
 	name: 'Name',
 	value: '',
-	noItems: 'No sessions found'
+	noItems: 'No sessions found',
 };
 
-const t = scoped('nti-web-site-admins.components.dashboard.widgets.recentsessions', LABELS);
+const t = scoped(
+	'nti-web-site-admins.components.dashboard.widgets.recentsessions',
+	LABELS
+);
 
 class Item extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired
-	}
+		item: PropTypes.object.isRequired,
+	};
 
-	renderImg () {
+	renderImg() {
 		const { item } = this.props;
 
-		return <Avatar className="item-image" entity={item.user}/>;
+		return <Avatar className="item-image" entity={item.user} />;
 	}
 
-	getDurationString (duration) {
+	getDurationString(duration) {
 		const hours = Math.floor(duration / (60 * 60));
 		const minutes = Math.floor((duration - hours * 60 * 60) / 60);
-		const seconds = (duration - hours * 60 * 60 - minutes * 60);
+		const seconds = duration - hours * 60 * 60 - minutes * 60;
 
-		return (hours > 0 ? hours + 'h ' : '') + (minutes > 0 || hours > 0 ? minutes + 'm ' : '') + (seconds + 's');
+		return (
+			(hours > 0 ? hours + 'h ' : '') +
+			(minutes > 0 || hours > 0 ? minutes + 'm ' : '') +
+			(seconds + 's')
+		);
 	}
 
-	renderInfo () {
+	renderInfo() {
 		const { item } = this.props;
 
-		const duration = item.SessionEndTime ? this.getDurationString(item.SessionEndTime - item.SessionStartTime) : 'Ongoing';
+		const duration = item.SessionEndTime
+			? this.getDurationString(
+					item.SessionEndTime - item.SessionStartTime
+			  )
+			: 'Ongoing';
 
 		return (
 			<div className="info">
 				<div className="main-info">
-					<div className="name">
-						{item.user.alias}
-					</div>
-					<div className="duration">
-						{duration}
-					</div>
+					<div className="name">{item.user.alias}</div>
+					<div className="duration">{duration}</div>
 				</div>
 				<div className="start-time">
 					{DateTime.fromNow(item.SessionStartTime * 1000)}
@@ -61,36 +68,38 @@ class Item extends React.Component {
 		);
 	}
 
-	renderMobileIcon () {
+	renderMobileIcon() {
 		return (
 			<div className="mobile-icon">
-				<div className="top"/>
-				<div className="screen"/>
-				<div className="base"/>
+				<div className="top" />
+				<div className="screen" />
+				<div className="base" />
 			</div>
 		);
 	}
 
-	renderAppIcon () {
+	renderAppIcon() {
 		return (
 			<div className="app-icon">
-				<div className="screen"/>
-				<div className="base"/>
+				<div className="screen" />
+				<div className="base" />
 			</div>
 		);
 	}
 
-	renderValue () {
+	renderValue() {
 		const { item } = this.props;
 
 		return (
 			<div className="value">
-				{item.appType === 'mobile' ? this.renderMobileIcon() : this.renderAppIcon()}
+				{item.appType === 'mobile'
+					? this.renderMobileIcon()
+					: this.renderAppIcon()}
 			</div>
 		);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="item">
 				{this.renderImg()}
@@ -102,31 +111,31 @@ class Item extends React.Component {
 }
 
 export default class RecentSessions extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			loading: true,
-			pageNumber: 0
+			pageNumber: 0,
 		};
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		this.setState({ items: [] }, () => {
 			this.loadData();
 		});
 	}
 
-	resolveUser (userName) {
-		return User.resolve({entity: userName})
+	resolveUser(userName) {
+		return User.resolve({ entity: userName })
 			.then(user => user)
 			.catch(() => {
 				return {
-					alias: userName
+					alias: userName,
 				};
 			});
 	}
 
-	getDataWithUsers (items) {
+	getDataWithUsers(items) {
 		let requests = [];
 
 		items.forEach(u => {
@@ -136,30 +145,36 @@ export default class RecentSessions extends React.Component {
 		return Promise.all(requests).then(results => {
 			let newItems = [];
 
-			for(let i = 0; i < results.length; i++) {
-				newItems.push({...items[i], user: results[i]});
+			for (let i = 0; i < results.length; i++) {
+				newItems.push({ ...items[i], user: results[i] });
 			}
 
 			return newItems;
 		});
 	}
 
-	getAppType (session) {
-		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(session.userAgent) ) {
+	getAppType(session) {
+		if (
+			/android|blackberry|iphone|ipod|mobile|webos/i.test(
+				session.userAgent
+			)
+		) {
 			return 'mobile';
 		}
 
 		return 'app';
 	}
 
-	async loadData () {
-		try{
+	async loadData() {
+		try {
 			const service = await getService();
 			const sessionsCollection = service.getWorkspace(ANALYTICS);
 			const link = getLink(sessionsCollection, SESSIONS_LINK);
 			const sessions = await service.get(link + '?limit=' + LIMIT);
 
-			const resolvedItems = await this.getDataWithUsers(sessions.Items.slice(0, PAGE_SIZE));
+			const resolvedItems = await this.getDataWithUsers(
+				sessions.Items.slice(0, PAGE_SIZE)
+			);
 
 			this.setState({
 				loading: false,
@@ -167,37 +182,33 @@ export default class RecentSessions extends React.Component {
 				items: resolvedItems.map(x => {
 					return {
 						...x,
-						appType: this.getAppType(x)
+						appType: this.getAppType(x),
 					};
-				})
+				}),
 			});
-		}
-		catch (e) {
-			this.setState({loading: false, items: [], error: e});
+		} catch (e) {
+			this.setState({ loading: false, items: [], error: e });
 		}
 	}
 
-	renderHeader () {
+	renderHeader() {
 		return (
 			<div className="header">
-				<div className="title">
-					{t('title')}
-				</div>
+				<div className="title">{t('title')}</div>
 			</div>
 		);
 	}
 
 	renderItem = (item, index) => {
-		return <Item key={item.SessionStartTime} item={item}/>;
-	}
+		return <Item key={item.SessionStartTime} item={item} />;
+	};
 
-	renderItems () {
+	renderItems() {
 		const { items, loading } = this.state;
 
-		if(loading) {
-			return <Loading.Mask/>;
-		}
-		else if(items && items.length === 0) {
+		if (loading) {
+			return <Loading.Mask />;
+		} else if (items && items.length === 0) {
 			return <div className="no-items">{t('noItems')}</div>;
 		}
 
@@ -210,7 +221,7 @@ export default class RecentSessions extends React.Component {
 		);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="dashboard-list-widget recent-sessions">
 				{this.renderHeader()}

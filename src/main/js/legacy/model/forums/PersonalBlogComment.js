@@ -2,14 +2,20 @@ const Ext = require('@nti/extjs');
 
 require('./CommentPost');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.forums.PersonalBlogComment',
+	{
+		extend: 'NextThought.model.forums.CommentPost',
 
-module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogComment', {
-	extend: 'NextThought.model.forums.CommentPost',
+		isBlogComment: true,
 
-	isBlogComment: true,
-
-	fields: [
-		{ name: 'Deleted', type: 'boolean', persist: false},
-		{ name: 'FavoriteGroupingField', defaultValue: 'Thoughts', persist: false}
-	]
-});
+		fields: [
+			{ name: 'Deleted', type: 'boolean', persist: false },
+			{
+				name: 'FavoriteGroupingField',
+				defaultValue: 'Thoughts',
+				persist: false,
+			},
+		],
+	}
+);

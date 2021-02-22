@@ -1,12 +1,9 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
-
 	initRouter: function () {
 		this.__mimeMap = {};
 	},
-
 
 	/**
 	 * Add a handler for getting the route of an object that has the MimeType
@@ -46,11 +43,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 		});
 	},
 
-
 	addDefaultObjectHandler: function (handler) {
 		this.defaultObjectHandler = handler;
 	},
-
 
 	/**
 	 * Given an object return the mime type
@@ -62,7 +57,11 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 			return object;
 		}
 
-		return (object.get && object.get('MimeType')) || object.mimeType || (object.self && object.self.mimeType);
+		return (
+			(object.get && object.get('MimeType')) ||
+			object.mimeType ||
+			(object.self && object.self.mimeType)
+		);
 	},
 
 	/**
@@ -71,7 +70,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @returns {Promise}				  fulfills with handler's return
 	 */
 	handleObject: function (objectOrMimeType) {
-		var object = typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
+		var object =
+				typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
 			mimeType = this.__getMimeType(objectOrMimeType),
 			val;
 
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 			val = this.__mimeMap[mimeType].call(null, object);
 		} else if (this.defaultObjectHandler) {
 			val = this.defaultObjectHandler(object);
-		}else {
+		} else {
 			val = Promise.reject();
 		}
 
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 		return {
 			path: '',
 			isFull: false,
-			isAccessible: false
+			isAccessible: false,
 		};
-	}
+	},
 });

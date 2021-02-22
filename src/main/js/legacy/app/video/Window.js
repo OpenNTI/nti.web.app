@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 require('legacy/common/window/Window');
 require('./Panel');
 
-
 module.exports = exports = Ext.define('NextThought.app.video.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.video-window',
@@ -36,17 +35,19 @@ module.exports = exports = Ext.define('NextThought.app.video.Window', {
 			height: 480,
 			shim: false,
 			border: false,
-			layout: 'fit'
+			layout: 'fit',
 		});
 
-		config.items = [{
-			xtype: 'video',
-			src: config.src,
-			autobuffer: true,
-			autoplay: true,
-			controls: true
-		}];
+		config.items = [
+			{
+				xtype: 'video',
+				src: config.src,
+				autobuffer: true,
+				autoplay: true,
+				controls: true,
+			},
+		];
 
 		this.callParent([config]);
-	}
+	},
 });

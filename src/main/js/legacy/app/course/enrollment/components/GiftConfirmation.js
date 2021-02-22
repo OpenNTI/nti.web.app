@@ -1,157 +1,224 @@
 const Ext = require('@nti/extjs');
 
-const {getString, getFormattedString} = require('legacy/util/Localization');
+const { getString, getFormattedString } = require('legacy/util/Localization');
 
 require('legacy/common/form/fields/SimpleTextField');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.GiftConfirmation',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.enrollment-gift-confirmation',
+		cls: 'enrollment-gift-confirmation',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-gift-confirmation',
-	cls: 'enrollment-gift-confirmation',
+		giftInfoTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{
+					cn: [
+						'{{{NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt}}} ',
+						{
+							tag: 'tpl',
+							if: 'receiverEmail',
+							cn: [
+								'{{{NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy}}} ',
+								getString(
+									'NextThought.view.courseware.enrollment.GiftConfirmation.InstructionstoRedeem'
+								),
+							],
+						},
+						{
+							tag: 'tpl',
+							if: '!receiverEmail',
+							cn: [
+								'{{{NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy}}} ',
+								{
+									tag: 'p',
+									cls: 'bold',
+									html:
+										'{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}',
+								},
+							],
+						},
+					],
+				},
+			])
+		),
 
-	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cn: [
-			'{{{NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt}}} ',
-			{tag: 'tpl', 'if': 'receiverEmail', cn: [
-				'{{{NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy}}} ',
-				getString('NextThought.view.courseware.enrollment.GiftConfirmation.InstructionstoRedeem')
-			]},
-			{tag: 'tpl', 'if': '!receiverEmail', cn: [
-				'{{{NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy}}} ',
-				{tag: 'p', cls: 'bold', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}'}
-			]}
-		]}
-	])),
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'title', html: '{heading}' },
+			{ cls: 'gift-info', html: '{gift-info}' },
+			{ cls: 'prompt', html: '{prompt}' },
+			{
+				cls: 'support',
+				cn: [
+					'Please contact ',
+					{
+						tag: 'a',
+						href: '{{{gift-support.link}}}',
+						html: '{{{gift-support.label}}} ',
+					},
+					'if you have any issues.',
+				],
+			},
+			{
+				cls: 'token',
+				cn: [
+					{
+						tag: 'span',
+						cls: 'label',
+						html:
+							'{{{NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey}}}',
+					},
+					{ cls: 'token-text' },
+				],
+			},
+			{
+				cls: 'transaction',
+				cn: [
+					{
+						tag: 'span',
+						cls: 'label',
+						html:
+							'{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}',
+					},
+					{ cls: 'transaction-id' },
+				],
+			},
+			{ cls: 'iframe-container' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'title', html: '{heading}'},
-		{cls: 'gift-info', html: '{gift-info}'},
-		{cls: 'prompt', html: '{prompt}'},
-		{cls: 'support', cn: [
-			'Please contact ',
-			{tag: 'a', href: '{{{gift-support.link}}}', html: '{{{gift-support.label}}} '},
-			'if you have any issues.'
-		]},
-		{cls: 'token', cn: [
-			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey}}}'},
-			{cls: 'token-text'}
-		]},
-		{cls: 'transaction', cn: [
-			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}'},
-			{cls: 'transaction-id'}
-		]},
-		{cls: 'iframe-container'}
-	]),
+		renderSelectors: {
+			tokenEl: '.token .token-text',
+			transactionEl: '.transaction .transaction-id',
+			giftEl: '.gift-info',
+			promptEl: '.prompt',
+			iframeEl: '.iframe-container',
+		},
 
-	renderSelectors: {
-		tokenEl: '.token .token-text',
-		transactionEl: '.transaction .transaction-id',
-		giftEl: '.gift-info',
-		promptEl: '.prompt',
-		iframeEl: '.iframe-container'
-	},
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			var prompt = this.getPrompt();
 
-		var prompt = this.getPrompt();
+			this.renderData = Ext.apply(this.renderData || {}, {
+				heading: getString(
+					'NextThought.view.courseware.enrollment.GiftConfirmation.GiftSuccessful'
+				),
+				prompt: prompt,
+			});
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
+		afterRender: function () {
+			this.callParent(arguments);
 
-			heading: getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftSuccessful'),
-			prompt: prompt
-		});
-	},
+			var me = this;
 
-	afterRender: function () {
-		this.callParent(arguments);
+			me.tokenInput = Ext.widget('simpletext', {
+				inputType: 'text',
+				readOnly: true,
+				placeholder: 'Token',
+				renderTo: me.tokenEl,
+			});
 
-		var me = this;
+			me.transactionInput = Ext.widget('simpletext', {
+				inputType: 'text',
+				readOnly: true,
+				placeholder: getString(
+					'NextThought.view.courseware.enrollment.GiftConfirmation.TransID'
+				),
+				renderTo: me.transactionEl,
+			});
 
-		me.tokenInput = Ext.widget('simpletext', {
-			inputType: 'text',
-			readOnly: true,
-			placeholder: 'Token',
-			renderTo: me.tokenEl
-		});
+			me.on('destroy', function () {
+				me.tokenInput.destroy();
+				me.transactionInput.destroy();
+			});
+		},
 
-		me.transactionInput = Ext.widget('simpletext', {
-			inputType: 'text',
-			readOnly: true,
-			placeholder: getString('NextThought.view.courseware.enrollment.GiftConfirmation.TransID'),
-			renderTo: me.transactionEl
-		});
+		getPrompt: function (hasReceiver) {
+			var c = this.course,
+				start = c.get('StartDate'),
+				prompt;
 
-		me.on('destroy', function () {
-			me.tokenInput.destroy();
-			me.transactionInput.destroy();
-		});
-	},
+			prompt =
+				getFormattedString(
+					'NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline',
+					{
+						course: c.get('Title'),
+						date: Ext.Date.format(start, 'F j, Y'),
+					}
+				) + ' ';
 
-	getPrompt: function (hasReceiver) {
-		var c = this.course,
-			start = c.get('StartDate'),
-			prompt;
+			//prompt = prompt.replace('{course}', c.get('Title'));
+			//prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
 
-		prompt = getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline', {course: c.get('Title'), date: Ext.Date.format(start, 'F j, Y')}) + ' ';
+			if (hasReceiver) {
+				prompt += getString(
+					'NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated'
+				);
+			} else {
+				prompt += getString(
+					'NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed'
+				);
+			}
 
-		//prompt = prompt.replace('{course}', c.get('Title'));
-		//prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
+			return prompt;
+		},
 
-		if (hasReceiver) {
-			prompt += getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated');
-		} else {
-			prompt += getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed');
-		}
+		beforeShow: function () {
+			var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
+				receiverEmail =
+					purchaseAttempt && purchaseAttempt.get('Receiver'),
+				transactionId =
+					purchaseAttempt && purchaseAttempt.get('TransactionID'),
+				token =
+					purchaseAttempt && purchaseAttempt.get('RedemptionCode'),
+				thankYou =
+					purchaseAttempt &&
+					purchaseAttempt.get('VendorThankYouPage');
 
-		return prompt;
-	},
+			if (!this.rendered) {
+				return;
+			}
 
-	beforeShow: function () {
-		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
-			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
-			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
-			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode'),
-			thankYou = purchaseAttempt && purchaseAttempt.get('VendorThankYouPage');
+			if (transactionId) {
+				this.transactionInput.update(transactionId);
+			}
 
-		if (!this.rendered) { return; }
+			if (token) {
+				this.tokenInput.update(token);
+			}
 
-		if (transactionId) {
-			this.transactionInput.update(transactionId);
-		}
+			this.promptEl.update(this.getPrompt(receiverEmail));
 
-		if (token) {
-			this.tokenInput.update(token);
-		}
+			this.giftEl.dom.innerHTML = '';
 
-		this.promptEl.update(this.getPrompt(receiverEmail));
+			this.giftInfoTpl.append(this.giftEl, {
+				receiverEmail: receiverEmail,
+				senderEmail: purchaseAttempt && purchaseAttempt.get('Creator'),
+			});
 
-		this.giftEl.dom.innerHTML = '';
+			if (thankYou && thankYou.thankYouURL) {
+				this.addThankYouPage(thankYou.thankYouURL);
+			}
+		},
 
-		this.giftInfoTpl.append(this.giftEl, {
-			receiverEmail: receiverEmail,
-			senderEmail: purchaseAttempt && purchaseAttempt.get('Creator')
-		});
+		addThankYouPage: function (url) {
+			var container = this.iframeEl.dom,
+				existing = container.querySelector('iframe'),
+				iframe;
 
-		if (thankYou && thankYou.thankYouURL) {
-			this.addThankYouPage(thankYou.thankYouURL);
-		}
-	},
+			//Don't add the same frame twice
+			if (existing && existing.src === url) {
+				return;
+			}
 
-	addThankYouPage: function (url) {
-		var container = this.iframeEl.dom,
-			existing = container.querySelector('iframe'),
-			iframe;
+			container.innerHTML = '';
 
-		//Don't add the same frame twice
-		if (existing && existing.src === url) { return; }
+			iframe = document.createElement('iframe');
+			iframe.src = url;
 
-		container.innerHTML = '';
-
-		iframe = document.createElement('iframe');
-		iframe.src = url;
-
-		container.appendChild(iframe);
+			container.appendChild(iframe);
+		},
 	}
-});
+);

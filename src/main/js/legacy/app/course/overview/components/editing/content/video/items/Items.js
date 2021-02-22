@@ -6,147 +6,166 @@ const VideoRoll = require('legacy/model/VideoRoll');
 
 require('./Item');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.video.items.Items',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.overview-editing-video-items',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Items', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-video-items',
+		mixins: {
+			OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
+		},
 
-	mixins: {
-		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer'
-	},
+		cls: 'video-items',
+		layout: 'none',
+		items: [],
 
-	cls: 'video-items',
-	layout: 'none',
-	items: [],
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			var me = this,
+				parts = [
+					{ tag: 'span', cls: 'reorder', html: 'Drag to Reorder' },
+					{ tag: 'span', cls: 'add', html: '+ Add Videos' },
+				];
 
-		var me = this,
-			parts = [
-				{tag: 'span', cls: 'reorder', html: 'Drag to Reorder'},
-				{tag: 'span', cls: 'add', html: '+ Add Videos'}
-			];
+			me.headerCmp = me.add({
+				xtype: 'box',
+				autoEl: {
+					cls: 'video-items-header',
+					cn: parts,
+				},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: e => {
+							if (e.getTarget('.add') && this.onAddVideos) {
+								this.onAddVideos(
+									this.selectedItems,
+									(...args) => this.updateItem(...args)
+								);
+							}
+						},
+					},
+				},
+			});
 
-		me.headerCmp = me.add({
-			xtype: 'box',
-			autoEl: {
-				cls: 'video-items-header',
-				cn: parts
-			},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: e => {
-						if (e.getTarget('.add') && this.onAddVideos) {
-							this.onAddVideos(this.selectedItems, (...args) => this.updateItem(...args));
-						}
-					}
+			me.itemsCmp = me.add({
+				xtype: 'container',
+				cls: 'items-container',
+				layout: 'none',
+				items: [],
+			});
+
+			if (this.record && !this.selectedItems) {
+				this.selectedItems = this.getItemsFromRecord(this.record);
+			}
+
+			me.addItems(me.getItems());
+
+			me.setDataTransferHandler(Video.mimeType, {
+				onDrop: this.reorderVideo.bind(this),
+				isValid: DndOrderingContainer.hasMoveInfo,
+				effect: 'move',
+			});
+		},
+
+		updateItem(item) {
+			const updatedItem = item.isModel ? item.getData() : item;
+			const itemId = updatedItem.ntiid || updatedItem.NTIID;
+			const newItems = this.selectedItems.map(x => {
+				const id = x.ntiid || x.NTIID || x.internalId;
+
+				if (id === itemId) {
+					const links = x.get('Links');
+					updatedItem.Links = links;
+					Object.assign(x, {
+						data: updatedItem,
+						raw: updatedItem.Links.links,
+					});
 				}
-			}
-		});
 
-		me.itemsCmp = me.add({
-			xtype: 'container',
-			cls: 'items-container',
-			layout: 'none',
-			items: []
-		});
+				return x;
+			});
 
-		if (this.record && !this.selectedItems) {
-			this.selectedItems = this.getItemsFromRecord(this.record);
-		}
+			this.selectedItems = newItems;
+		},
 
-		me.addItems(me.getItems());
+		getDropzoneTarget: function () {
+			return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
+		},
 
-		me.setDataTransferHandler(Video.mimeType, {
-			onDrop: this.reorderVideo.bind(this),
-			isValid: DndOrderingContainer.hasMoveInfo,
-			effect: 'move'
-		});
-	},
+		getOrderingItems: function () {
+			var items =
+				this.itemsCmp &&
+				this.itemsCmp.items &&
+				this.itemsCmp.items.items;
 
-	updateItem (item) {
-		const updatedItem = item.isModel ? item.getData() : item;
-		const itemId = updatedItem.ntiid || updatedItem.NTIID;
-		const newItems = this.selectedItems.map(x => {
-			const id = x.ntiid || x.NTIID || x.internalId;
+			return items || [];
+		},
 
-			if (id === itemId) {
-				const links = x.get('Links');
-				updatedItem.Links = links;
-				Object.assign(x, {data: updatedItem, raw: updatedItem.Links.links});
+		getItemsFromRecord: function (record) {
+			if (record instanceof VideoRoll) {
+				return [...record.get('Items')];
 			}
 
-			return x;
-		});
+			return [record];
+		},
 
-		this.selectedItems = newItems;
-	},
+		getItems: function () {
+			return this.selectedItems;
+		},
 
-	getDropzoneTarget: function () {
-		return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
-	},
+		addItems: function (items) {
+			var me = this,
+				single = items.length === 1;
 
-	getOrderingItems: function () {
-		var items = this.itemsCmp && this.itemsCmp.items && this.itemsCmp.items.items;
+			me.disableOrderingContainer();
 
-		return items || [];
-	},
+			function removeItems(remove) {
+				me.addItems(
+					items.filter(function (item) {
+						return item.getId() !== remove.getId();
+					})
+				);
+			}
 
-	getItemsFromRecord: function (record) {
-		if (record instanceof VideoRoll) {
-			return [...record.get('Items')];
-		}
+			me.selectedItems = items;
 
-		return [record];
-	},
+			me.itemsCmp.removeAll(true);
 
-	getItems: function () {
-		return this.selectedItems;
-	},
+			me.itemsCmp.add(
+				items.map(function (item, index) {
+					return {
+						xtype: 'overview-editing-video-items-item',
+						item: item,
+						index: index,
+						removeItem: !single && removeItems.bind(me, item),
+					};
+				})
+			);
 
-	addItems: function (items) {
-		var me = this,
-			single = items.length === 1;
+			if (!single) {
+				me.enableOrderingContainer();
+			}
+		},
 
-		me.disableOrderingContainer();
+		reorderVideo: function (video, newIndex, moveInfo) {
+			var items = this.getItems(),
+				contains = items.filter(function (item) {
+					return item.getId() === video.getId();
+				}),
+				oldIndex = moveInfo.getIndex();
 
-		function removeItems (remove) {
-			me.addItems(items.filter(function (item) {
-				return item.getId() !== remove.getId();
-			}));
-		}
+			if (!contains) {
+				return Promise.resolve();
+			}
 
-		me.selectedItems = items;
+			items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
 
-		me.itemsCmp.removeAll(true);
+			this.addItems(items);
 
-		me.itemsCmp.add(items.map(function (item, index) {
-			return {
-				xtype: 'overview-editing-video-items-item',
-				item: item,
-				index: index,
-				removeItem: !single && removeItems.bind(me, item)
-			};
-		}));
-
-		if (!single) {
-			me.enableOrderingContainer();
-		}
-	},
-
-	reorderVideo: function (video, newIndex, moveInfo) {
-		var items = this.getItems(),
-			contains = items.filter(function (item) { return item.getId() === video.getId(); }),
-			oldIndex = moveInfo.getIndex();
-
-		if (!contains) { return Promise.resolve(); }
-
-		items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
-
-		this.addItems(items);
-
-		return Promise.resolve();
+			return Promise.resolve();
+		},
 	}
-});
+);

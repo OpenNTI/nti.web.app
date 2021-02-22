@@ -1,11 +1,12 @@
 const Ext = require('@nti/extjs');
-const {Events} = require('@nti/web-session');
+const { Events } = require('@nti/web-session');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const {getString} = require('legacy/util/Localization');
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
+const { getString } = require('legacy/util/Localization');
 const UserdataActions = require('legacy/app/userdata/Actions');
 const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
 const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
@@ -13,8 +14,6 @@ const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
 const BlogStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
-
-
 
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -28,7 +27,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 	__parseSharingInfo: function (sharingInfo) {
 		var entities = sharingInfo.entities,
-			newEntities = [], i,
+			newEntities = [],
+			i,
 			isPublic = false;
 
 		for (i = 0; i < entities.length; i++) {
@@ -41,13 +41,15 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 		return {
 			isPublic: isPublic,
-			entities: newEntities
+			entities: newEntities,
 		};
 	},
 
 	savePost: function (record, blog, title, tags, body, sharingInfo) {
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : PersonalBlogEntryPost.create(),
+			post = isEdit
+				? record.get('headline')
+				: PersonalBlogEntryPost.create(),
 			me = this;
 
 		sharingInfo = this.__parseSharingInfo(sharingInfo);
@@ -57,27 +59,38 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		const original = {
 			title: post.get('title'),
 			body: post.get('body'),
-			tags: post.get('tags')
+			tags: post.get('tags'),
 		};
 
 		post.set({
-			'title': title,
-			'body': body,
-			'tags': tags
+			title: title,
+			body: body,
+			tags: tags,
 		});
 
 		if (isEdit) {
 			//The title is both on the PseronalBlogEntryPost (headline)
 			//and the wrapping PersonalBlogEntry (if we have one)
-			record.set({'title': title});
+			record.set({ title: title });
 		}
 
-		return post.saveData({url: isEdit ? undefined : blog && blog.getLink('add')})
-			.then (response => {
-				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];
+		return post
+			.saveData({ url: isEdit ? undefined : blog && blog.getLink('add') })
+			.then(response => {
+				var entry = isEdit
+					? record
+					: lazy.ParseUtils.parseItems(response)[0];
 
-				entry.getInterfaceInstance()
-					.then(obj => Events.emit(isEdit ? Events.BLOG_ENTRY_UPDATED : Events.BLOG_ENTRY_CREATED, obj));
+				entry
+					.getInterfaceInstance()
+					.then(obj =>
+						Events.emit(
+							isEdit
+								? Events.BLOG_ENTRY_UPDATED
+								: Events.BLOG_ENTRY_CREATED,
+							obj
+						)
+					);
 
 				//the first argument is the record...problem is, it was a post, and the response from the server is
 				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
@@ -86,7 +99,9 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 				// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 				return entry;
 			})
-			.then(blogEntry => me.handleShareAndPublishState(blogEntry, sharingInfo))
+			.then(blogEntry =>
+				me.handleShareAndPublishState(blogEntry, sharingInfo)
+			)
 			.catch(reason => {
 				post.set(original);
 				this.onSaveFailure(reason);
@@ -120,17 +135,20 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		}
 
 		var isPublic = sharingInfo.isPublic,
-			resolveEntities, publish;
+			resolveEntities,
+			publish;
 
 		if (isPublic) {
-			resolveEntities = UserRepository.getUser(sharingInfo.entities)
-				.then(function (users) {
-					return users.map(function (u) { return u.get('NTIID'); });
-				});
+			resolveEntities = UserRepository.getUser(sharingInfo.entities).then(
+				function (users) {
+					return users.map(function (u) {
+						return u.get('NTIID');
+					});
+				}
+			);
 		} else {
 			resolveEntities = Promise.resolve(sharingInfo.entities);
 		}
-
 
 		if (blogEntry.isPublished() !== isPublic) {
 			publish = new Promise(function (fulfill) {
@@ -141,26 +159,28 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			publish = Promise.resolve();
 		}
 
+		return Promise.all([resolveEntities, publish])
+			.then(function (results) {
+				return results[0];
+			})
+			.then(function (entities) {
+				var name = isPublic ? 'tags' : 'sharedWith',
+					object = isPublic ? blogEntry.get('headline') : blogEntry,
+					action = isPublic
+						? Ext.Array.merge
+						: function (a) {
+								return a;
+						  };
 
-		return Promise.all([
-			resolveEntities,
-			publish
-		]).then(function (results) {
-			return results[0];
-		}).then(function (entities) {
-			var name = isPublic ? 'tags' : 'sharedWith',
-				object = isPublic ? blogEntry.get('headline') : blogEntry,
-				action = isPublic ? Ext.Array.merge : function (a) { return a; };
+				object.set(name, action(entities, object.get(name)));
 
-			object.set(name, action(entities, object.get(name)));
-
-			return new Promise(function (fulfill) {
-				object.save({callback: fulfill});
+				return new Promise(function (fulfill) {
+					object.save({ callback: fulfill });
+				});
+			})
+			.then(function () {
+				return blogEntry;
 			});
-		}).then(function () {
-			return blogEntry;
-		});
-
 	},
 
 	saveBlogComment: function (record, blogPost, valueObject) {
@@ -170,14 +190,23 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		const originalBody = commentPost.get('body');
 		commentPost.set('body', valueObject.body);
 
-		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
+		return commentPost
+			.saveData({
+				url: isEdit ? undefined : blogPost && blogPost.getLink('add'),
+			})
 			.then(function (response) {
-				var rec = isEdit ? commentPost : lazy.ParseUtils.parseItems(response)[0];
+				var rec = isEdit
+					? commentPost
+					: lazy.ParseUtils.parseItems(response)[0];
 
-				rec.getInterfaceInstance()
-					.then((obj) => {
-						Events.emit(isEdit ? Events.BLOG_COMMENT_UPDATED : Events.BLOG_COMMENT_CREATED, obj);
-					});
+				rec.getInterfaceInstance().then(obj => {
+					Events.emit(
+						isEdit
+							? Events.BLOG_COMMENT_UPDATED
+							: Events.BLOG_COMMENT_CREATED,
+						obj
+					);
+				});
 
 				if (!isEdit) {
 					blogPost.set('PostCount', blogPost.get('PostCount') + 1);
@@ -192,40 +221,68 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			});
 	},
 
-
-	onSaveFailure (response) {
-		let msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown');
+	onSaveFailure(response) {
+		let msg = getString(
+			'NextThought.view.profiles.parts.BlogEditor.unknown'
+		);
 
 		if (response && response.responseText) {
 			const error = Ext.decode(response.responseText, true) || {};
 			if (error.code === 'TooLong') {
-				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
-			}
-			else if (error.code === 'MaxFileSizeUploadLimitError') {
-				let maxSize = FilePicker.getHumanReadableFileSize(error.max_bytes),
-					currentSize = FilePicker.getHumanReadableFileSize(error.provided_bytes);
-				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-			}
-			else if (error.code === 'MaxAttachmentsExceeded') {
-				msg = error.message + ' Max Number of files: ' + error.constraint;
+				msg = getString(
+					'NextThought.view.profiles.parts.BlogEditor.longtitle'
+				);
+			} else if (error.code === 'MaxFileSizeUploadLimitError') {
+				let maxSize = FilePicker.getHumanReadableFileSize(
+						error.max_bytes
+					),
+					currentSize = FilePicker.getHumanReadableFileSize(
+						error.provided_bytes
+					);
+				msg =
+					error.message +
+					' Max File Size: ' +
+					maxSize +
+					'. Your uploaded file size: ' +
+					currentSize;
+			} else if (error.code === 'MaxAttachmentsExceeded') {
+				msg =
+					error.message + ' Max Number of files: ' + error.constraint;
 			}
 		}
 
-		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
+		alert({
+			title: getString(
+				'NextThought.view.profiles.parts.BlogEditor.error'
+			),
+			msg: msg,
+			icon: 'warning-red',
+		});
 	},
 
-
 	deleteBlogPost: function (record) {
-		var idToDestroy, me = this;
+		var idToDestroy,
+			me = this;
 
-		function maybeDeleteFromStore (id, store) {
+		function maybeDeleteFromStore(id, store) {
 			var r;
 
 			if (store) {
-				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
+				r = store.findRecord(
+					'NTIID',
+					idToDestroy,
+					0,
+					false,
+					true,
+					true
+				);
 
 				if (!r) {
-					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);
+					console.warn(
+						'Could not remove, the store did not have item with id: ' +
+							idToDestroy,
+						r
+					);
 					return;
 				}
 
@@ -235,18 +292,26 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		}
 
 		if (!record.get('href')) {
-			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
+			record.set(
+				'href',
+				record.getLink('contents').replace(/\/contents$/, '') ||
+					'no-luck'
+			);
 		}
 
 		idToDestroy = record.get('NTIID');
 
-
 		return new Promise(function (fulfill, reject) {
 			record.destroy({
 				success: function () {
-					Events.emit(Events.BLOG_ENTRY_DELETED, {NTIID: record.getId()});
+					Events.emit(Events.BLOG_ENTRY_DELETED, {
+						NTIID: record.getId(),
+					});
 
-					me.UserDataActions.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+					me.UserDataActions.applyToStoresThatWantItem(
+						maybeDeleteFromStore,
+						record
+					);
 
 					//Delete anything left that we know of
 					Ext.StoreManager.each(function (s) {
@@ -260,8 +325,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 				failure: function () {
 					alert('Sorry, could not delete that');
 					reject();
-				}
+				},
 			});
 		});
-	}
+	},
 });

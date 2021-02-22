@@ -8,20 +8,17 @@ const Globals = require('legacy/util/Globals');
 require('../components/Default');
 require('../components/cards/Slide');
 
-
 module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 	statics: {
 		type: 'slide',
 
 		canHandle: function (obj) {
 			return obj && (obj.Class === 'Slide' || obj instanceof Slide);
-		}
+		},
 	},
 
 	contextTpl: Ext.DomHelper.markup([
-		{cls: 'image-wrap', cn: [
-			{tag: 'img', src: '{image}'}
-		]}
+		{ cls: 'image-wrap', cn: [{ tag: 'img', src: '{image}' }] },
 	]),
 
 	constructor: function (config) {
@@ -38,8 +35,9 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 			return Promise.resolve();
 		}
 
-		return this.MediaActions.loadSlidedeck(slidedeckId)
-			.then(this.MediaActions.getBasePath.bind(this.MediaActions));
+		return this.MediaActions.loadSlidedeck(slidedeckId).then(
+			this.MediaActions.getBasePath.bind(this.MediaActions)
+		);
 	},
 
 	parse: function (slide, kind) {
@@ -55,11 +53,17 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 			})
 			.then(function (root) {
 				const slideImage = slide.get('image');
-				const image = Globals.ROOT_URL_PATTERN.test(slideImage) ? slideImage : (root || '') + slideImage;
+				const image = Globals.ROOT_URL_PATTERN.test(slideImage)
+					? slideImage
+					: (root || '') + slideImage;
 
 				var dom = new Ext.XTemplate(me.contextTpl).apply({ image }),
-					cmp, config;
-				dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
+					cmp,
+					config;
+				dom = Ext.DomHelper.createDom({
+					cls: 'content-launcher',
+					html: dom,
+				});
 
 				if (kind === 'card' || kind === 'list') {
 					config = {
@@ -68,29 +72,27 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 						containerId: me.container,
 						record: me.record || me.contextRecord,
 						doNavigate: me.doNavigate,
-						type: kind
+						type: kind,
 					};
 
 					if (kind === 'card') {
-						cmp = Ext.apply(config, {xtype: 'context-slide-card'});
-					}
-					else {
+						cmp = Ext.apply(config, {
+							xtype: 'context-slide-card',
+						});
+					} else {
 						cmp = Ext.widget('context-slide-card', config);
 					}
-
-
-				}
-				else {
+				} else {
 					cmp = Ext.widget('context-default', {
 						snippet: dom,
 						fullContext: dom,
 						containerId: me.container,
 						record: me.record || me.contextRecord,
-						doNavigate: me.doNavigate
+						doNavigate: me.doNavigate,
 					});
 				}
 
 				return Promise.resolve(cmp);
 			});
-	}
+	},
 });

@@ -6,19 +6,19 @@ import CoursesTable from '../CoursesTable';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfCourses) => {
+const getMockService = numberOfCourses => {
 	return {
-		getCollection: (name) => {
+		getCollection: name => {
 			return {
 				hasLink: () => true,
 				getLink: () => 'mockLink',
-				accepts: []
+				accepts: [],
 			};
 		},
 		getBatch: () => {
 			let Items = [];
 
-			for(let i = 0; i < numberOfCourses; i++) {
+			for (let i = 0; i < numberOfCourses; i++) {
 				const index = i + 1;
 
 				Items.push({
@@ -31,26 +31,26 @@ const getMockService = (numberOfCourses) => {
 						getStartDate: () => new Date('10/30/2017'),
 						getEndDate: () => new Date('11/25/2017'),
 						getDefaultAssetRoot: () => 'testRoot',
-						TotalEnrolledCount: i
-					}
+						TotalEnrolledCount: i,
+					},
 				});
 			}
 
 			return Promise.resolve({
 				Total: numberOfCourses,
 				BatchPage: 1,
-				Items
+				Items,
 			});
 		},
 		getWorkspace: () => {
 			return {
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfCourses) => {
+const onBefore = numberOfCourses => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfCourses));
 };
@@ -67,7 +67,7 @@ describe('Site admin content course list (with no items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<CoursesTable/>);
+		const cmp = renderer.create(<CoursesTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -84,7 +84,7 @@ describe('Site admin content course list (with 5 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<CoursesTable/>);
+		const cmp = renderer.create(<CoursesTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -101,7 +101,7 @@ describe('Site admin content course list (with 25 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<CoursesTable/>);
+		const cmp = renderer.create(<CoursesTable />);
 
 		jest.runAllTimers();
 		await flushPromises();

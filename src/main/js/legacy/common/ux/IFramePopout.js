@@ -4,7 +4,6 @@ const ContentProxy = require('../../proxy/JSONP');
 
 require('../window/Window');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.iframe-lightbox',
@@ -31,17 +30,19 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 			destroy: function () {
 				Ext.TaskManager.stop(me.task);
 				Ext.EventManager.removeResizeListener(me.syncSize, me);
-			}
+			},
 		});
 
 		this.add({
 			xtype: 'box',
 			itemId: 'content',
-			cls: 'content loading'
+			cls: 'content loading',
 		});
 
-		ContentProxy.get(this.src)
-			.then(this.setContent.bind(this), this.noContent.bind(this));
+		ContentProxy.get(this.src).then(
+			this.setContent.bind(this),
+			this.noContent.bind(this)
+		);
 
 		me.task = {
 			scope: me,
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 					Ext.getBody().dom.removeChild(m);
 					Ext.getBody().appendChild(m);
 				}
-			}
+			},
 		};
 		Ext.TaskManager.start(me.task);
 	},
@@ -62,14 +63,18 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 		this.getComponent('content')
 			.addCls('empty-state')
 			.removeCls('loading')
-			.update(Ext.DomHelper.markup([
-				'Oops! There was an error.',
-				{ cls: 'sub', html: 'Try again at a later time.'}
-			]));
+			.update(
+				Ext.DomHelper.markup([
+					'Oops! There was an error.',
+					{ cls: 'sub', html: 'Try again at a later time.' },
+				])
+			);
 	},
 
 	setContent: function (content) {
-		var c, dom = document.createElement('HTML'); dom.innerHTML = content;
+		var c,
+			dom = document.createElement('HTML');
+		dom.innerHTML = content;
 		content = dom.querySelector('BODY').innerHTML;
 
 		c = this.getComponent('content');
@@ -93,17 +98,29 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 
 	syncSize: function () {
 		this.setSize(
-			Math.floor(Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)),
-			Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
+			Math.floor(
+				Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)
+			),
+			Math.floor(
+				Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)
+			)
+		);
 		this.center();
 	},
 
 	afterRender: function () {
 		this.callParent(arguments);
-		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
-			scope: this,
-			click: this.close
-		});
+		this.mon(
+			Ext.DomHelper.append(
+				this.el,
+				{ cls: 'close', 'data-qtip': 'close' },
+				true
+			),
+			{
+				scope: this,
+				click: this.close,
+			}
+		);
 	},
 
 	setPosition: function () {},
@@ -120,7 +137,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 			myWidth = this.getWidth(),
 			viewHeight = Ext.Element.getViewportHeight(),
 			viewWidth = Ext.Element.getViewportWidth(),
-			top, left;
+			top,
+			left;
 
 		top = (viewHeight - myHeight) / 2;
 		left = (viewWidth - myWidth) / 2;
@@ -130,5 +148,5 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 
 		dom.style.top = top + 'px';
 		dom.style.left = left + 'px';
-	}
+	},
 });

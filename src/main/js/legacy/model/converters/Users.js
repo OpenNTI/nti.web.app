@@ -2,105 +2,126 @@ const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.converters.Users',
+	{
+		override: 'Ext.data.Types',
 
-module.exports = exports = Ext.define('NextThought.model.converters.Users', {
-	override: 'Ext.data.Types',
-
-	USERLIST: {
-		type: 'UserList',
-		convert: function (v/*, record*/) {
-			var a = arguments,
-				u = [];
-			try {
-				if (v) {
-					Ext.each(v, function (o) {
-						var p = typeof o === 'string' ? o : ((o.get && o.get('Username')) || o.Username);
-						if (!p) {
-							console.warn('WARNING: Could not handle Object: ', o, a);
-						}
-						else {
-							u.push(p);
-						}
-					});
+		USERLIST: {
+			type: 'UserList',
+			convert: function (v /*, record*/) {
+				var a = arguments,
+					u = [];
+				try {
+					if (v) {
+						Ext.each(v, function (o) {
+							var p =
+								typeof o === 'string'
+									? o
+									: (o.get && o.get('Username')) ||
+									  o.Username;
+							if (!p) {
+								console.warn(
+									'WARNING: Could not handle Object: ',
+									o,
+									a
+								);
+							} else {
+								u.push(p);
+							}
+						});
+					}
+				} catch (e) {
+					console.error(
+						'USERLIST: Parsing Error: ',
+						e.message,
+						e.stack
+					);
+					u = v;
 				}
-			}
-			catch (e) {
-				console.error('USERLIST: Parsing Error: ', e.message, e.stack);
-				u = v;
-			}
 
-			return u;
+				return u;
+			},
+			sortType: 'none',
 		},
-		sortType: 'none'
-	},
 
-	AVATARURL: {
-		type: 'AvatarURL',
-		sortType: 'asUCString',
-		convert: function convert (v, rec) {
-			var re = convert.re = (convert.re || /https/i), url,
-				needsSecure = re.test(window.location.protocol) || $AppConfig.forceSSL;
+		AVATARURL: {
+			type: 'AvatarURL',
+			sortType: 'asUCString',
+			convert: function convert(v, rec) {
+				var re = (convert.re = convert.re || /https/i),
+					url,
+					needsSecure =
+						re.test(window.location.protocol) ||
+						$AppConfig.forceSSL;
 
-			function secure (value, i, a) {
-				if (!value) {
+				function secure(value, i, a) {
+					if (!value) {
+						return value;
+					}
+
+					value = value
+						.replace('www.gravatar.com', 'secure.gravatar.com')
+						.replace('http:', 'https:');
+
+					if (a) {
+						a[i] = value;
+					}
+
 					return value;
 				}
 
-				value = value.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
+				function maybeSecure(value, i, a) {
+					if (needsSecure) {
+						value = secure(value, i, a);
+					}
 
-				if (a) {
-					a[i] = value;
+					// //preload
+					// (new Image()).src = value;
+					return value;
 				}
 
-				return value;
-			}
+				if (v && v === '@@avatar') {
+					url = Globals.trimRoute($AppConfig['server-path']).split(
+						'/'
+					);
 
-			function maybeSecure (value, i, a) {
-
-				if (needsSecure) {
-					value = secure(value, i, a);
+					url.push('users', rec.get('Username'), '@@avatar');
+					return url.join('/');
 				}
 
-				// //preload
-				// (new Image()).src = value;
-				return value;
-			}
+				if (!v) {
+					return null;
+				}
 
-			if (v && v === '@@avatar') {
-				url = Globals.trimRoute($AppConfig['server-path']).split('/');
+				if (!Array.isArray(v)) {
+					v = maybeSecure(v);
+				} else {
+					Ext.each(v, maybeSecure);
+				}
 
-				url.push('users', rec.get('Username'), '@@avatar');
-				return url.join('/');
-			}
+				return v;
+			},
+		},
 
-			if (!v) {
-				return null;
-			}
-
-			if (!Array.isArray(v)) {
-				v = maybeSecure(v);
-			} else {
-				Ext.each(v, maybeSecure);
-			}
-
-			return v;
-		}
+		AVATARURLLIST: {
+			type: 'AvatarURLList',
+			sortType: 'asUCString',
+			convert: function convert(v, rec) {
+				Ext.each(v, function (o, i, a) {
+					a[i] = Ext.data.Types.AVATARURL.convert(o, rec);
+				});
+				return v;
+			},
+		},
 	},
-
-	AVATARURLLIST: {
-		type: 'AvatarURLList',
-		sortType: 'asUCString',
-		convert: function convert (v, rec) {
-			Ext.each(v, function (o, i, a) {
-				a[i] = Ext.data.Types.AVATARURL.convert(o, rec);
-			});
-			return v;
+	function () {
+		function set(o) {
+			o.sortType = Ext.data.SortTypes[o.sortType];
 		}
-	}
-},function () {
-	function set (o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 
-	set(this.USERLIST);
-	set(this.AVATARURL);
-	set(this.AVATARURLLIST);
-});
+		set(this.USERLIST);
+		set(this.AVATARURL);
+		set(this.AVATARURLLIST);
+	}
+);

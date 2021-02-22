@@ -1,10 +1,10 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {searchable, contextual} from '@nti/web-search';
-import {Table, EmptyState, Loading} from '@nti/web-commons';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { searchable, contextual } from '@nti/web-search';
+import { Table, EmptyState, Loading } from '@nti/web-commons';
 
 import ListItem from './ListItem';
 
@@ -15,19 +15,19 @@ const DEFAULT_TEXT = {
 	loading: 'Loading',
 	emptyHeader: 'This folder is empty.',
 	emptyMessage: 'Click the button above to create a new reading.',
-	readings: 'Readings'
+	readings: 'Readings',
 };
 
 const t = scoped('nti-course-resources.readings.View', DEFAULT_TEXT);
 
-function sortOnTitle (a, b) {
+function sortOnTitle(a, b) {
 	return (a.title || '').localeCompare(b.title);
 }
 
 const tableClasses = {
 	className: 'course-resources-readings ascending',
 	headerClassName: 'course-resources-header',
-	bodyClassName: 'course-resources-body'
+	bodyClassName: 'course-resources-body',
 };
 
 const columnClasses = {
@@ -35,12 +35,12 @@ const columnClasses = {
 	desc: 'sort-desc',
 	inactive: 'sort-inactive',
 	active: 'sort-active',
-	default: 'sort-default'
+	default: 'sort-default',
 };
 
-function getReadings (course) {
-	const {ContentPackageBundle} = course || {};
-	const {ContentPackages} = ContentPackageBundle || {};
+function getReadings(course) {
+	const { ContentPackageBundle } = course || {};
+	const { ContentPackages } = ContentPackageBundle || {};
 
 	return (ContentPackages || []).filter(x => x.isRenderable);
 }
@@ -49,73 +49,90 @@ class Readings extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
 		gotoResource: PropTypes.func,
-		searchTerm: PropTypes.string
-	}
+		searchTerm: PropTypes.string,
+	};
 
 	renderItem = (item, cols) => {
 		return (
-			<ListItem reading={item} gotoResource={this.props.gotoResource} columns={cols} />
+			<ListItem
+				reading={item}
+				gotoResource={this.props.gotoResource}
+				columns={cols}
+			/>
 		);
-	}
+	};
 
-	filter = (title) =>  {
+	filter = title => {
 		const { searchTerm } = this.props;
 
 		return searchTerm ? new RegExp(searchTerm, 'i').test(title) : true;
-	}
+	};
 
-	render () {
+	render() {
 		const { course } = this.props;
 
 		const loading = !course;
-		const readings = getReadings(course).filter((x) => this.filter(x.title));
+		const readings = getReadings(course).filter(x => this.filter(x.title));
 
 		const columns = [
 			{
 				name: 'name',
-				classes: {name: 'name', ...columnClasses},
+				classes: { name: 'name', ...columnClasses },
 				display: t('name'),
-				sortFn: sortOnTitle
+				sortFn: sortOnTitle,
 			},
 			{
 				name: 'publish',
-				classes: {name: 'publish', ...columnClasses},
+				classes: { name: 'publish', ...columnClasses },
 				display: t('publish'),
 				sortFn: (a, b) => {
-					const {isPublished:aPublished} = a;
-					const {isPublished:bPublished} = b;
+					const { isPublished: aPublished } = a;
+					const { isPublished: bPublished } = b;
 
-					return aPublished && !bPublished ? 1 : aPublished === bPublished ? sortOnTitle(a, b) : -1;
-				}
+					return aPublished && !bPublished
+						? 1
+						: aPublished === bPublished
+						? sortOnTitle(a, b)
+						: -1;
+				},
 			},
 			{
 				name: 'modified',
-				classes: {name: 'last-modified', ...columnClasses},
+				classes: { name: 'last-modified', ...columnClasses },
 				display: t('lastModified'),
 				sortFn: (a, b) => {
 					const aModified = a.getLastModified();
 					const bModified = b.getLastModified();
 
-					return aModified < bModified ? -1 : aModified === bModified ? 0 : 1;
-				}
-			}
+					return aModified < bModified
+						? -1
+						: aModified === bModified
+						? 0
+						: 1;
+				},
+			},
 		];
 
 		return (
 			<div className="nti-web-course-resources">
-				{
-					readings.length !== 0 ?
-						(<Table.ListTable classes={tableClasses} items={readings} columns={columns} renderItem={this.renderItem}	/>) :
-						loading ?
-							(<Loading.Mask message={t('loading')} />) :
-							(<EmptyState header={t('emptyHeader')} subHeader={t('emptyMessage')}/>)
-				}
+				{readings.length !== 0 ? (
+					<Table.ListTable
+						classes={tableClasses}
+						items={readings}
+						columns={columns}
+						renderItem={this.renderItem}
+					/>
+				) : loading ? (
+					<Loading.Mask message={t('loading')} />
+				) : (
+					<EmptyState
+						header={t('emptyHeader')}
+						subHeader={t('emptyMessage')}
+					/>
+				)}
 			</div>
 		);
 	}
 }
 
-export default decorate(Readings, [
-	searchable(),
-	contextual(t('readings')),
-]);
+export default decorate(Readings, [searchable(), contextual(t('readings'))]);

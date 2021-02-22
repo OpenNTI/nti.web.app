@@ -1,21 +1,23 @@
-import {Stores} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
 
 export default class SharedUserStore extends Stores.SimpleStore {
 	static Singleton = true;
 
-	static markDirty () {
+	static markDirty() {
 		this.getStore().SeatLimits = null;
 	}
 
 	#SeatLimits = null;
 
-	async loadSeatLimits () {
+	async loadSeatLimits() {
 		const REL = 'SeatLimit';
 		try {
 			const workspace = (await getService()).getWorkspace('Global');
 
-			if (!workspace || !workspace.hasLink(REL)) { throw new Error('No Seat Limit'); }
+			if (!workspace || !workspace.hasLink(REL)) {
+				throw new Error('No Seat Limit');
+			}
 
 			const resp = await workspace.fetchLink(REL);
 
@@ -26,20 +28,19 @@ export default class SharedUserStore extends Stores.SimpleStore {
 		} catch {
 			this.#SeatLimits = false;
 		} finally {
-			this.emit('change', {type: 'SeatLimits'});
+			this.emit('change', { type: 'SeatLimits' });
 		}
 	}
 
-	get SeatLimits () {
+	get SeatLimits() {
 		if (this.#SeatLimits == null) {
 			this.#SeatLimits = this.loadSeatLimits();
 		}
 		return this.#SeatLimits instanceof Promise ? null : this.#SeatLimits;
 	}
 
-	set SeatLimits (v) {
+	set SeatLimits(v) {
 		this.#SeatLimits = null;
-		this.emit('change', {type: 'SeatLimits'});
+		this.emit('change', { type: 'SeatLimits' });
 	}
-
 }

@@ -1,13 +1,14 @@
 const Ext = require('@nti/extjs');
 const CatalogView = require('@nti/web-catalog');
-const {getService} = require('@nti/web-client');
+const { getService } = require('@nti/web-client');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const {getString} = require('legacy/util/Localization');
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
+const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
@@ -22,14 +23,13 @@ const CATEGORY_NAME = /\/([^/]*)\/?/;
 
 const URI_PART = /^uri/;
 
-
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.catalog-component',
 	id: 'catalog-component',
 
 	mixins: {
-		Route: 'NextThought.mixins.Router'
+		Route: 'NextThought.mixins.Router',
 	},
 
 	layout: 'none',
@@ -46,13 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
-
-	onRouteActivate () {
+	onRouteActivate() {
 		clearTimeout(this.routeDeactivateTimeout);
 	},
 
-
-	onRouteDeactivate () {
+	onRouteDeactivate() {
 		clearTimeout(this.routeDeactivateTimeout);
 
 		this.routeDeactivateTimeout = setTimeout(() => {
@@ -63,20 +61,20 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		}, 100);
 	},
 
-
-	onDestroy () {
+	onDestroy() {
 		if (this.availableWin) {
 			this.availableWin.destroy();
 		}
 	},
 
-
-	showCatalog (route) {
+	showCatalog(route) {
 		const baseroute = this.getBaseRoute();
 		const categoryMatch = route.path.match(CATEGORY_NAME);
 
-		this.category = categoryMatch[1] !== 'nti-course-catalog-entry' ? categoryMatch[1] : '';
-
+		this.category =
+			categoryMatch[1] !== 'nti-course-catalog-entry'
+				? categoryMatch[1]
+				: '';
 
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
@@ -85,11 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				xtype: 'react',
 				component: CatalogView,
 				baseroute: baseroute,
-				getRouteFor: (obj) => {
+				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
-						return `${this.category || '.'}/nti-course-catalog-entry/${obj.getID()}`;
+						return `${
+							this.category || '.'
+						}/nti-course-catalog-entry/${obj.getID()}`;
 					}
-				}
+				},
 			});
 		}
 		const title = this.getTitleFromRoute(route.path);
@@ -99,14 +99,12 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		return this.maybeShowCatalogEntry(route, this.category);
 	},
 
-	getTitleFromRoute (route) {
+	getTitleFromRoute(route) {
 		if (route === '/') {
 			return 'Catalog';
-		}
-		else if (route === '/purchased' || route === '/redeem') {
+		} else if (route === '/purchased' || route === '/redeem') {
 			return route[1].toUpperCase() + route.substr(2);
-		}
-		else if (route === '/.nti_other') {
+		} else if (route === '/.nti_other') {
 			return 'OTHERS';
 		}
 
@@ -114,30 +112,28 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		return decodeTitle.substr(1).toUpperCase();
 	},
 
-	setUpNavigation (baseroute, path) {
+	setUpNavigation(baseroute, path) {
 		const navigation = this.getNavigation();
 
-
 		navigation.updateTitle('Catalog');
-
 
 		const tabs = [
 			{
 				text: getString('NextThought.view.library.View.course'),
 				route: '/',
-				active: !PURCHASED_ACTIVE.test(path) && !REDEEM_ACTIVE.test(path)
+				active:
+					!PURCHASED_ACTIVE.test(path) && !REDEEM_ACTIVE.test(path),
 			},
 			{
 				text: 'History',
 				route: '/purchased',
-				active: PURCHASED_ACTIVE.test(path) && path.length !== 1
+				active: PURCHASED_ACTIVE.test(path) && path.length !== 1,
 			},
 			{
 				text: 'Redeem',
 				route: '/redeem',
-				active: REDEEM_ACTIVE.test(path) && path.length !== 1
-			}
-
+				active: REDEEM_ACTIVE.test(path) && path.length !== 1,
+			},
 		];
 
 		navigation.setTabs(tabs);
@@ -149,15 +145,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			hideBranding: true,
 			onBack: () => {
 				this.pushRootRoute('Library', '/library');
-			}
+			},
 		});
 	},
-
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
-				bodyView: this
+				bodyView: this,
 			});
 		}
 
@@ -168,19 +163,21 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.pushRoute(title, route, subroute);
 	},
 
-
-	loadCatalogEntry (param, rest) {
+	loadCatalogEntry(param, rest) {
 		if (rest === 'paymentcomplete') {
-			const enrolledURL = Service.getCollection('EnrolledCourses', 'Courses').href;
+			const enrolledURL = Service.getCollection(
+				'EnrolledCourses',
+				'Courses'
+			).href;
 
-			return Service.request(`${enrolledURL}?batchSize=1&batchStart=0`)
-				.then(resp => {
-					const item = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
+			return Service.request(
+				`${enrolledURL}?batchSize=1&batchStart=0`
+			).then(resp => {
+				const item = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
 
-					return item.get('CatalogEntry');
-				});
+				return item.get('CatalogEntry');
+			});
 		}
-
 
 		if (isNTIID(param)) {
 			return getService()
@@ -188,21 +185,19 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				.then(catalog => lazy.ParseUtils.parseItems(catalog)[0]);
 		}
 
-
 		if (URI_PART.test(param)) {
 			const href = decodeURIComponent(param).replace('uri:', '');
 
-			return Service.request(href)
-				.then(raw => lazy.ParseUtils.parseItems(raw)[0]);
-
+			return Service.request(href).then(
+				raw => lazy.ParseUtils.parseItems(raw)[0]
+			);
 		}
 
 		throw new Error('Unable to resole catalog');
 	},
 
-
-	async maybeShowCatalogEntry (route, category) {
-		const {path} = route;
+	async maybeShowCatalogEntry(route, category) {
+		const { path } = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
 
 		if (!matches) {
@@ -217,26 +212,31 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		const [param, ...parts] = matches[2].split('/');
 		const rest = parts.join('/');
 
-
 		this.__loadTask = this.__loadTask || {};
 
 		if (this.__loadTask[param]) {
 			return;
 		}
 
-		this.__loadTask[param] = this.loadCatalogEntry(param, rest).catch(() => { alert('Unable to find course.'); });
+		this.__loadTask[param] = this.loadCatalogEntry(param, rest).catch(
+			() => {
+				alert('Unable to find course.');
+			}
+		);
 
 		const catalogEntry = await this.__loadTask[param];
 
 		delete this.__loadTask[param];
 
-		if (!catalogEntry) {return;}
+		if (!catalogEntry) {
+			return;
+		}
 
 		this.availableWin = Ext.widget('library-available-courses-window', {
 			isSingle: true,
 			doClose: () => {
 				this.pushRoute('', category || '/');
-			}
+			},
 		});
 
 		this.availableWin.pushRoute = (title, pushedRoute) => {
@@ -245,21 +245,27 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 			const allowNavRequest = this.availableWin.allowNavigation();
 
-			if(allowNavRequest && allowNavRequest.then) {
+			if (allowNavRequest && allowNavRequest.then) {
 				allowNavRequest.then(() => {
-					this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+					this.availableWin.handleRoute(
+						`${encodeForURI(catalogEntry.getId())}/${pushedRest}`,
+						{ course: catalogEntry }
+					);
 				});
-			}
-			else if(allowNavRequest) {
-				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+			} else if (allowNavRequest) {
+				this.availableWin.handleRoute(
+					`${encodeForURI(catalogEntry.getId())}/${pushedRest}`,
+					{ course: catalogEntry }
+				);
 			}
 		};
 
-		this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
+		this.availableWin.handleRoute(
+			`${encodeForURI(catalogEntry.getId())}/${rest}`,
+			{ course: catalogEntry }
+		);
 		this.availableWin.show();
 
-		this.availableWin.el.setStyle({'z-index': 1});
-
-
-	}
+		this.availableWin.el.setStyle({ 'z-index': 1 });
+	},
 });

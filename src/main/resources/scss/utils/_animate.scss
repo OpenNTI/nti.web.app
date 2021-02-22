@@ -1,11 +1,16 @@
 //Animate Mixin Plugin
 
-@mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration:null) {
+@mixin animate(
+	$name: fadeIn,
+	$duration: 1s,
+	$delay: 0.2s,
+	$function: ease,
+	$mode: both,
+	$iteration: null
+) {
 	@if $iteration==null {
 		//
-	}
-
-	@else {
+	} @else {
 		@include experimental(animation-iteration-count, $iteration);
 		@include experimental(animation-direction, normal);
 	}
@@ -51,33 +56,63 @@
 }
 
 @include keyframes(fadeInMask) {
-	0% { opacity: 0; }
-	100% { opacity: 0.5; }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0.5;
+	}
 }
 
 @include keyframes(loadingellipse) {
-	25% { width: 0; }
-	50% { width: 0.466667em; }
-	75% { width: 0.933333em; }
-	100% { width: 1.4em; }
+	25% {
+		width: 0;
+	}
+	50% {
+		width: 0.466667em;
+	}
+	75% {
+		width: 0.933333em;
+	}
+	100% {
+		width: 1.4em;
+	}
 }
 
 @include keyframes(rotate) {
-	from { @include experimental(transform, rotate(0deg)); }
-	to { @include experimental(transform, rotate(360deg)); }
+	from {
+		@include experimental(transform, rotate(0deg));
+	}
+	to {
+		@include experimental(transform, rotate(360deg));
+	}
 }
 
 @include keyframes(pulsate) {
-	0% { opacity: 0.5; }
-	33% { opacity: 1; }
-	66% { opacity: 0.5; }
-	100% { opacity: 1; }
+	0% {
+		opacity: 0.5;
+	}
+	33% {
+		opacity: 1;
+	}
+	66% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @include keyframes(pulse) {
-	0% { @include experimental(transform, scale(1)); }
-	50% { @include experimental(transform, scale(1.1)); }
-	100% { @include experimental(transform, scale(1)); }
+	0% {
+		@include experimental(transform, scale(1));
+	}
+	50% {
+		@include experimental(transform, scale(1.1));
+	}
+	100% {
+		@include experimental(transform, scale(1));
+	}
 }
 
 @include keyframes(pulseIn) {
@@ -135,13 +170,21 @@
 }
 
 @include keyframes(fadeIn) {
-	0% { opacity: 0; }
-	100% { opacity: 1; }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @include keyframes(fadeOut) {
-	0% { opacity: 1; }
-	100% { opacity: 0; }
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
 @include keyframes(bounce) {
@@ -156,9 +199,16 @@
 
 		@include experimental(transform, translateY(0));
 	}
-	80%, 100% { @include experimental(transform, translateY(0)); }
-	40% { @include experimental(transform, translateY(6px)); }
-	60% { @include experimental(transform, translateY(3px)); }
+	80%,
+	100% {
+		@include experimental(transform, translateY(0));
+	}
+	40% {
+		@include experimental(transform, translateY(6px));
+	}
+	60% {
+		@include experimental(transform, translateY(3px));
+	}
 }
 
 @include keyframes(bounceInRight) {
@@ -173,8 +223,12 @@
 
 		@include experimental(transform, translateX(-30px));
 	}
-	80% { @include experimental(transform, translateX(10px)); }
-	100% { @include experimental(transform, translateX(0)); }
+	80% {
+		@include experimental(transform, translateX(10px));
+	}
+	100% {
+		@include experimental(transform, translateX(0));
+	}
 }
 
 @include keyframes(fadeInDown) {
@@ -276,9 +330,23 @@
 }
 
 @include keyframes(shake) {
-	0%, 100% { @include experimental(transform, translateX(0)); }
-	10%, 30%, 50%, 70%, 90% { @include experimental(transform, translateX(-10px)); }
-	20%, 40%, 60%, 80% { @include experimental(transform, translateX(10px)); }
+	0%,
+	100% {
+		@include experimental(transform, translateX(0));
+	}
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		@include experimental(transform, translateX(-10px));
+	}
+	20%,
+	40%,
+	60%,
+	80% {
+		@include experimental(transform, translateX(10px));
+	}
 }
 
 @include keyframes(rollIn) {
@@ -296,21 +364,37 @@
 }
 
 @include keyframes(FullScreenSlideInRight) {
-	0% { @include experimental(transform, translate3d(100%, 0, 0)); }
-	100% { @include experimental(transform, translateX(0)); }
+	0% {
+		@include experimental(transform, translate3d(100%, 0, 0));
+	}
+	100% {
+		@include experimental(transform, translateX(0));
+	}
 }
 
 @include keyframes(FullScreenSlideOutRight) {
-	0% { @include experimental(transform, translateX(0)); }
-	100% { @include experimental(transform, translateX(100%)); }
+	0% {
+		@include experimental(transform, translateX(0));
+	}
+	100% {
+		@include experimental(transform, translateX(100%));
+	}
 }
 
 @include keyframes(FullScreenSlideInLeft) {
-	0% { @include experimental(transform, translateX(-100%)); }
-	100% { @include experimental(transform, translateX(0)); }
+	0% {
+		@include experimental(transform, translateX(-100%));
+	}
+	100% {
+		@include experimental(transform, translateX(0));
+	}
 }
 
 @include keyframes(FullScreenSlideOutLeft) {
-	0% { @include experimental(transform, translateX(0)); }
-	100% { @include experimental(transform, translateX(-100%)); }
+	0% {
+		@include experimental(transform, translateX(0));
+	}
+	100% {
+		@include experimental(transform, translateX(-100%));
+	}
 }

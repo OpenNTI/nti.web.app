@@ -11,9 +11,11 @@ const getMockService = () => {
 		getObject: () => {
 			return {
 				title: 'abc',
-				getDefaultAssetRoot () { return 'testRoot'; }
+				getDefaultAssetRoot() {
+					return 'testRoot';
+				},
 			};
-		}
+		},
 	};
 };
 
@@ -34,7 +36,7 @@ describe.skip('Site admin user book frame test', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<Frame bookID="book1"/>);
+		const cmp = renderer.create(<Frame bookID="book1" />);
 
 		jest.runAllTimers();
 		await flushPromises();

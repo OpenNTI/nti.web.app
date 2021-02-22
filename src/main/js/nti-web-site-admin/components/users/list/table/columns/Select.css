@@ -1,10 +1,10 @@
-
 .select-column {
 	width: 70px;
 }
 
 .row-selected {
-	&, & ~ td {
+	&,
+	& ~ td {
 		background-color: rgba(63, 179, 246, 0.05);
 	}
 }

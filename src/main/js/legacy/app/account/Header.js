@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.account.Header', {
 	extend: 'Ext.Component',
@@ -11,18 +11,21 @@ module.exports = exports = Ext.define('NextThought.app.account.Header', {
 			cls: 'account-header-view',
 			cn: [
 				'{user:avatar}',
-				{cls: 'text', cn: [
-					{cls: 'title', html: '{title}'},
-					{cls: 'detail', html: '{detail}'}
-				]}
-			]
-		}
+				{
+					cls: 'text',
+					cn: [
+						{ cls: 'title', html: '{title}' },
+						{ cls: 'detail', html: '{detail}' },
+					],
+				},
+			],
+		},
 	]),
 
 	renderSelectors: {
 		img: '.account-header-view .avatar img',
 		title: '.text .title',
-		detail: '.text .detail'
+		detail: '.text .detail',
 	},
 
 	updateRenderData: function () {
@@ -30,10 +33,14 @@ module.exports = exports = Ext.define('NextThought.app.account.Header', {
 		// if (this.icon === 'alert'){
 		// 	iconURL = Ext.BLANK_IMAGE_URL;
 		// }
-		this.renderData = Ext.apply(this.renderData || {},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			user: $AppConfig.userObject,
-			title: this.title || getString('NextThought.view.account.Header.title'),
-			detail: this.detail || getString('NextThought.view.account.Header.detail')
+			title:
+				this.title ||
+				getString('NextThought.view.account.Header.title'),
+			detail:
+				this.detail ||
+				getString('NextThought.view.account.Header.detail'),
 		});
 	},
 
@@ -65,6 +72,5 @@ module.exports = exports = Ext.define('NextThought.app.account.Header', {
 		// 	this.el.down('.avatar').addCls('alert');
 		// 	this.el.down('.avatar img').remove();
 		// }
-
-	}
+	},
 });

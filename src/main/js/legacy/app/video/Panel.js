@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video',
@@ -14,8 +13,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 				controls: true,
 				bodyStyle: 'background-color:#000;color:#fff',
 				html: '',
-				suggestChromeFrame: false
-			})]);
+				suggestChromeFrame: false,
+			}),
+		]);
 
 		this.on({
 			scope: this,
@@ -27,20 +27,21 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 				if (this.video) {
 					this.video.setSize(width, height);
 				}
-			}
+			},
 		});
 	},
 
 	videoRender: function () {
 		var fallback = '',
 			size = this.getSize(),
-			cfg, i, len;
+			cfg,
+			i,
+			len;
 
 		if (this.fallbackHTML) {
 			fallback = this.fallbackHTML;
-		}
-		else {
-			fallback = 'Your browser doesn\'t support html5 video. ';
+		} else {
+			fallback = "Your browser doesn't support html5 video. ";
 
 			if (Ext.isIE && this.suggestChromeFrame) {
 				/* chromeframe requires that your site have a special tag in the header
@@ -57,16 +58,23 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 		}
 
 		/* match the video size to the panel dimensions */
-		cfg = Ext.copyTo({
-			tag: 'video',
-			width: size.width,
-			height: size.height
-		},
-		this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
+		cfg = Ext.copyTo(
+			{
+				tag: 'video',
+				width: size.width,
+				height: size.height,
+			},
+			this,
+			'poster,start,loopstart,loopend,playcount,autobuffer,loop'
+		);
 
 		/* just having the params exist enables them */
-		if (this.autoplay) { cfg.autoplay = 1; }
-		if (this.controls) { cfg.controls = 1; }
+		if (this.autoplay) {
+			cfg.autoplay = 1;
+		}
+		if (this.controls) {
+			cfg.controls = 1;
+		}
 
 		/* handle multiple sources */
 		if (Ext.isArray(this.src)) {
@@ -74,24 +82,22 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 
 			for (i = 0, len = this.src.length; i < len; i++) {
 				if (!Ext.isObject(this.src[i])) {
-					throw new Error('source list passed to video panel must be an array of objects');
+					throw new Error(
+						'source list passed to video panel must be an array of objects'
+					);
 				}
 
-				cfg.children.push(
-					Ext.applyIf({tag: 'source'}, this.src[i])
-				);
+				cfg.children.push(Ext.applyIf({ tag: 'source' }, this.src[i]));
 			}
 
 			cfg.children.push({
-				html: fallback
+				html: fallback,
 			});
-
 		} else {
 			cfg.src = this.src;
 			cfg.html = fallback;
 		}
 
 		this.video = this.body.createChild(cfg);
-	}
-
+	},
 });

@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .admin-dashboard-widgets {
 	.recent-sessions {
@@ -42,7 +42,8 @@
 						min-width: 40px;
 					}
 
-					.start-time, .duration {
+					.start-time,
+					.duration {
 						font-size: 12px;
 						color: var(--tertiary-grey);
 					}

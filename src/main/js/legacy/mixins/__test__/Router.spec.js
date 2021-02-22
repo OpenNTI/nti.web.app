@@ -4,40 +4,39 @@ require('legacy/mixins/Router');
 
 const stub = (a, b, c) => jest.spyOn(a, b).mockImplementation(c || (() => {}));
 
-describe ('Router mixin tests', () => {
-	describe ('Path Router Tests', () => {
+describe('Router mixin tests', () => {
+	describe('Path Router Tests', () => {
 		var router;
 
-		beforeEach (() => {
+		beforeEach(() => {
 			router = NextThought.mixins.Router.create({});
 		});
 
-
-		test ('trimRoute works correctly', () => {
+		test('trimRoute works correctly', () => {
 			var url = router.trimRoute('/root/path1/path2/');
 
 			expect(url).toEqual('root/path1/path2');
 		});
 
-		describe ('Adding a route gets put into the right place', () => {
-			beforeEach (() => {
+		describe('Adding a route gets put into the right place', () => {
+			beforeEach(() => {
 				router.__routeMap = {};
 			});
 
-			test ('it two sub routes', () => {
+			test('it two sub routes', () => {
 				var a = '/root',
 					b = '/root/path1',
 					c = '/root/path2';
 
-				function fn1 () {
+				function fn1() {
 					console.log('root');
 				}
 
-				function fn2 () {
+				function fn2() {
 					console.log('rooot path 1');
 				}
 
-				function fn3 () {
+				function fn3() {
 					console.log('root path 2');
 				}
 
@@ -50,20 +49,20 @@ describe ('Router mixin tests', () => {
 				expect(router.__routeMap.root.path2.handler).toBe(fn3);
 			});
 
-			test ('variable route', () => {
+			test('variable route', () => {
 				var a = '/root',
 					b = '/root/:test',
 					c = '/root/:test/path1';
 
-				function fn1 () {
+				function fn1() {
 					console.log('root');
 				}
 
-				function fn2 () {
+				function fn2() {
 					console.log('root :test');
 				}
 
-				function fn3 () {
+				function fn3() {
 					console.log('root :test path1');
 				}
 
@@ -77,7 +76,7 @@ describe ('Router mixin tests', () => {
 				expect(router.__routeMap.root['@var'].path1.handler).toBe(fn3);
 			});
 
-			test ('route collision', () => {
+			test('route collision', () => {
 				var err,
 					a = '/root/path1',
 					b = '/root/path1';
@@ -99,13 +98,16 @@ describe ('Router mixin tests', () => {
 				router.__routeMap = {};
 			});
 
-			test ('sub routes get called correclty', () => {
+			test('sub routes get called correclty', () => {
 				var a = '/root/',
 					b = '/root/path/:test/path1/',
 					c = '/root/path/:test/path2/:foo',
-					path, params, subRoute, precache;
+					path,
+					params,
+					subRoute,
+					precache;
 
-				function fn (route, subroute) {
+				function fn(route, subroute) {
 					path = route.path;
 					params = route.params;
 					subRoute = subroute;
@@ -123,30 +125,32 @@ describe ('Router mixin tests', () => {
 				expect(subRoute).toBe('/subPath1');
 				expect(precache).toEqual({});
 
-				router.handleRoute('/root/path/a/path1/subPath1/subPath2', {foo: 'bar'});
+				router.handleRoute('/root/path/a/path1/subPath1/subPath2', {
+					foo: 'bar',
+				});
 
 				expect(path).toBe('/root/path/a/path1/subPath1/subPath2');
-				expect(params).toEqual({test: 'a'});
+				expect(params).toEqual({ test: 'a' });
 				expect(subRoute).toBe('/subPath1/subPath2');
-				expect(precache).toEqual({foo: 'bar'});
+				expect(precache).toEqual({ foo: 'bar' });
 
 				router.handleRoute('root/path/b/path2/c/subPath2/subPath3');
 
 				expect(path).toBe('/root/path/b/path2/c/subPath2/subPath3');
-				expect(params).toEqual({test: 'b', foo: 'c'});
+				expect(params).toEqual({ test: 'b', foo: 'c' });
 				expect(subRoute).toBe('/subPath2/subPath3');
 				expect(precache).toEqual({});
 			});
 
-			test ('default route handler gets called', () => {
+			test('default route handler gets called', () => {
 				var a = '/root/',
 					called = '';
 
-				function fn () {
+				function fn() {
 					called = 'root';
 				}
 
-				function defFn () {
+				function defFn() {
 					called = 'default';
 				}
 
@@ -162,11 +166,11 @@ describe ('Router mixin tests', () => {
 				expect(called).toEqual('default');
 			});
 
-			test ('default route path gets called', () => {
+			test('default route path gets called', () => {
 				var a = '/root/',
 					called = '';
 
-				function fn () {
+				function fn() {
 					called = 'root';
 				}
 
@@ -187,7 +191,7 @@ describe ('Router mixin tests', () => {
 				//application controller, so fake that out here
 				testCtrl = {
 					pushRootRoute: () => {},
-					replaceRootRoute: () => {}
+					replaceRootRoute: () => {},
 				};
 
 				parent = NextThought.mixins.Router.create({});
@@ -195,16 +199,26 @@ describe ('Router mixin tests', () => {
 				second = NextThought.mixins.Router.create({});
 
 				parent.currentRoute = 'first';
-				parent.getRouteTitle = () => { return 'parent'; };
+				parent.getRouteTitle = () => {
+					return 'parent';
+				};
 
-				parent.pushRootRoute = function (title, url) { testCtrl.pushRootRoute(title, url); };
-				parent.replaceRootRoute = function (title, url) { testCtrl.replaceRootRoute(title, url); };
+				parent.pushRootRoute = function (title, url) {
+					testCtrl.pushRootRoute(title, url);
+				};
+				parent.replaceRootRoute = function (title, url) {
+					testCtrl.replaceRootRoute(title, url);
+				};
 
 				first.currentRoute = 'second';
-				first.getRouteTitle = () => { return 'first'; };
+				first.getRouteTitle = () => {
+					return 'first';
+				};
 
 				second.currentRoute = 'foo';
-				second.getRouteTitle = () => { return 'second'; };
+				second.getRouteTitle = () => {
+					return 'second';
+				};
 
 				parent.addChildRouter(first);
 				first.addChildRouter(second);
@@ -217,30 +231,52 @@ describe ('Router mixin tests', () => {
 				spyOn(first, 'replaceRoute').and.callThrough();
 			});
 
-			test ('pushRoute', () => {
+			test('pushRoute', () => {
 				second.pushRoute('second', 'third');
 
-				expect(first.pushRoute).toHaveBeenCalledWith('second - first', 'second/third', expect.any(Object));
-				expect(parent.pushRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', expect.any(Object));
+				expect(first.pushRoute).toHaveBeenCalledWith(
+					'second - first',
+					'second/third',
+					expect.any(Object)
+				);
+				expect(parent.pushRoute).toHaveBeenCalledWith(
+					'second - first - parent',
+					'first/second/third',
+					expect.any(Object)
+				);
 			});
 
-			test ('replaceRoute', () => {
+			test('replaceRoute', () => {
 				second.replaceRoute('second', 'third');
 
-				expect(first.replaceRoute).toHaveBeenCalledWith('second - first', 'second/third', expect.any(Object));
-				expect(parent.replaceRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', expect.any(Object));
+				expect(first.replaceRoute).toHaveBeenCalledWith(
+					'second - first',
+					'second/third',
+					expect.any(Object)
+				);
+				expect(parent.replaceRoute).toHaveBeenCalledWith(
+					'second - first - parent',
+					'first/second/third',
+					expect.any(Object)
+				);
 			});
 
-			test ('pushRootRoute', () => {
+			test('pushRootRoute', () => {
 				second.pushRootRoute('second', 'third');
 
-				expect(testCtrl.pushRootRoute).toHaveBeenCalledWith('second', 'third');
+				expect(testCtrl.pushRootRoute).toHaveBeenCalledWith(
+					'second',
+					'third'
+				);
 			});
 
-			test ('replaceRootRoute', () => {
+			test('replaceRootRoute', () => {
 				second.replaceRootRoute('second', 'third');
 
-				expect(testCtrl.replaceRootRoute).toHaveBeenCalledWith('second', 'third');
+				expect(testCtrl.replaceRootRoute).toHaveBeenCalledWith(
+					'second',
+					'third'
+				);
 			});
 		});
 	});
@@ -252,18 +288,20 @@ describe ('Router mixin tests', () => {
 			router = NextThought.mixins.Router.create();
 		});
 
-
-		test ('Correct handler gets called', () => {
-			var obj = { handler: () => {}},
+		test('Correct handler gets called', () => {
+			var obj = { handler: () => {} },
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create();
 
 			spyOn(obj, 'handler');
 
-			router.addObjectHandler([
-				NextThought.model.Note.mimeType,
-				NextThought.model.PageInfo.mimeType
-			], obj.handler);
+			router.addObjectHandler(
+				[
+					NextThought.model.Note.mimeType,
+					NextThought.model.PageInfo.mimeType,
+				],
+				obj.handler
+			);
 
 			router.handleObject(note);
 
@@ -274,8 +312,8 @@ describe ('Router mixin tests', () => {
 			expect(obj.handler).toHaveBeenCalledWith(page);
 		});
 
-		test ('Navigate to Object calls parent', function (done) {
-			var obj = {parent: () => {}, child: () => {}},
+		test('Navigate to Object calls parent', function (done) {
+			var obj = { parent: () => {}, child: () => {} },
 				// first = false, second = false,
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create(),
@@ -286,14 +324,21 @@ describe ('Router mixin tests', () => {
 			spyOn(obj, 'parent').and.callThrough();
 			spyOn(obj, 'child').and.callThrough();
 
-			child.addObjectHandler(NextThought.model.PageInfo.mimeType, obj.child);
-
-			router.addObjectHandler([
+			child.addObjectHandler(
 				NextThought.model.PageInfo.mimeType,
-				NextThought.model.Note.mimeType
-			], obj.parent);
+				obj.child
+			);
 
-			child.navigateToObject(page)
+			router.addObjectHandler(
+				[
+					NextThought.model.PageInfo.mimeType,
+					NextThought.model.Note.mimeType,
+				],
+				obj.parent
+			);
+
+			child
+				.navigateToObject(page)
 				.then(() => {
 					expect(obj.child).toHaveBeenCalledWith(page);
 					expect(obj.parent).not.toHaveBeenCalled();

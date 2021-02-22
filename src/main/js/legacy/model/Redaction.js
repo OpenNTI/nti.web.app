@@ -4,16 +4,14 @@ require('legacy/model/Base');
 require('legacy/model/Highlight');
 require('legacy/model/anchorables/DomContentRangeDescription');
 
-
 module.exports = exports = Ext.define('NextThought.model.Redaction', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {
-		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent',
 	},
 
 	statics: {
-
 		DEFAULT_TEXT: '<big>***</big>',
 
 		createFromHighlight: function (hl, block) {
@@ -26,20 +24,20 @@ module.exports = exports = Ext.define('NextThought.model.Redaction', {
 				applicableRange: hl.get('applicableRange'),
 				replacementContent: this.DEFAULT_TEXT,
 				// style: block? 'block':'inline',
-				redactionExplanation: block ? 'Why was this redacted?' : null
+				redactionExplanation: block ? 'Why was this redacted?' : null,
 			});
-		}
+		},
 	},
 
 	fields: [
-		{ name: 'AutoTags', type: 'Auto'},
-		{ name: 'applicableRange', type: 'ContentRangeDescription'},
+		{ name: 'AutoTags', type: 'Auto' },
+		{ name: 'applicableRange', type: 'ContentRangeDescription' },
 		{ name: 'prohibitReSharing', type: 'boolean' },
-		{ name: 'replacementContent', type: 'string'},
-		{ name: 'redactionExplanation', type: 'string'},
-		{ name: 'selectedText', type: 'string'},
-		{ name: 'sharedWith', type: 'UserList'},
-		{ name: 'style', type: 'string'},
-		{ name: 'tags', type: 'Auto'}
-	]
+		{ name: 'replacementContent', type: 'string' },
+		{ name: 'redactionExplanation', type: 'string' },
+		{ name: 'selectedText', type: 'string' },
+		{ name: 'sharedWith', type: 'UserList' },
+		{ name: 'style', type: 'string' },
+		{ name: 'tags', type: 'Auto' },
+	],
 });

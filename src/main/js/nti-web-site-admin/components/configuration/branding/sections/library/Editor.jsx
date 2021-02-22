@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
-import {ObjectUtils} from '@nti/lib-commons';
-import {Theme} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { ObjectUtils } from '@nti/lib-commons';
+import { Theme } from '@nti/web-commons';
 
-import {BRAND_COLOR, THEME} from '../../constants';
+import { BRAND_COLOR, THEME } from '../../constants';
 
 import BrandColor from './BrandColor';
 import ThemeToggle from './theme-toggle';
@@ -14,18 +14,21 @@ import ThemeOptions from './ThemeOptions';
 import styles from './Editor.css';
 
 const cx = classnames.bind(styles);
-const t = scoped('nti-web-site-admin.components.advanced.branding.sections.library.Editor', {
-	libraryTheme: 'Library Theme',
-	brandingColor: 'Branding Color',
-	searchBar: 'Search Bar',
-	navIcons: 'Nav Icons'
-});
+const t = scoped(
+	'nti-web-site-admin.components.advanced.branding.sections.library.Editor',
+	{
+		libraryTheme: 'Library Theme',
+		brandingColor: 'Branding Color',
+		searchBar: 'Search Bar',
+		navIcons: 'Nav Icons',
+	}
+);
 
 const BG_PATH = 'library.background';
 const SEARCH_PATH = 'library.navigation.search';
 const ICON_PATH = 'library.navigation.icon';
 
-export default function Editor ({onChange}) {
+export default function Editor({ onChange }) {
 	const theme = Theme.useTheme();
 	const themeValues = theme.getValues();
 
@@ -40,17 +43,44 @@ export default function Editor ({onChange}) {
 	return (
 		<div className={cx('editor-bar')}>
 			<div className={cx('editor-root')}>
-				<InputContainer label={t('libraryTheme')} className={cx('input')}>
-					<ThemeToggle onChange={value => change(`${THEME}.${BG_PATH}`)(value ? 'light' : 'dark')} checked={lightMode} />
+				<InputContainer
+					label={t('libraryTheme')}
+					className={cx('input')}
+				>
+					<ThemeToggle
+						onChange={value =>
+							change(`${THEME}.${BG_PATH}`)(
+								value ? 'light' : 'dark'
+							)
+						}
+						checked={lightMode}
+					/>
 				</InputContainer>
-				<InputContainer label={t('brandingColor')} className={cx('input')}>
-					<BrandColor onChange={color => change(BRAND_COLOR)(color.hex.toString())} />
+				<InputContainer
+					label={t('brandingColor')}
+					className={cx('input')}
+				>
+					<BrandColor
+						onChange={color =>
+							change(BRAND_COLOR)(color.hex.toString())
+						}
+					/>
 				</InputContainer>
 				<InputContainer label={t('searchBar')} className={cx('input')}>
-					<ThemeOptions value={search} onChange={value => change(`${THEME}.${SEARCH_PATH}`)(value)} />
+					<ThemeOptions
+						value={search}
+						onChange={value =>
+							change(`${THEME}.${SEARCH_PATH}`)(value)
+						}
+					/>
 				</InputContainer>
 				<InputContainer label={t('navIcons')} className={cx('input')}>
-					<ThemeOptions value={icon} onChange={value => change(`${THEME}.${ICON_PATH}`)(value)} />
+					<ThemeOptions
+						value={icon}
+						onChange={value =>
+							change(`${THEME}.${ICON_PATH}`)(value)
+						}
+					/>
 				</InputContainer>
 			</div>
 		</div>
@@ -58,5 +88,5 @@ export default function Editor ({onChange}) {
 }
 
 Editor.propTypes = {
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
 };

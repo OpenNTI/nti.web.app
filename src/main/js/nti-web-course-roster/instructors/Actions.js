@@ -1,7 +1,7 @@
 import path from 'path';
 
-import {dispatch} from '@nti/lib-dispatcher';
-import {getService} from '@nti/web-client';
+import { dispatch } from '@nti/lib-dispatcher';
+import { getService } from '@nti/web-client';
 
 import {
 	LOADING,
@@ -15,51 +15,52 @@ import {
 	EDITOR_REMOVED,
 	USERS_LOADED,
 	USER_UPDATING,
-	USER_UPDATED
+	USER_UPDATED,
 } from './Constants';
 
-const EMPTY_BATCH = {Items: []};
+const EMPTY_BATCH = { Items: [] };
 
 let SEARCH_LOCK;
 
-function loadBatch (link) {
-	return link ?
-		getService().then(s => s.getBatch(link)).catch(() => EMPTY_BATCH) :
-		Promise.resolve(EMPTY_BATCH);
+function loadBatch(link) {
+	return link
+		? getService()
+				.then(s => s.getBatch(link))
+				.catch(() => EMPTY_BATCH)
+		: Promise.resolve(EMPTY_BATCH);
 }
 
-function loadInstructors (course) {
-	return loadBatch(course.getLink('Instructors'))
-		.then((batch) => {
-			dispatch(INSTRUCTORS_LOADED, batch.Items.filter(x => x));
-		});
+function loadInstructors(course) {
+	return loadBatch(course.getLink('Instructors')).then(batch => {
+		dispatch(
+			INSTRUCTORS_LOADED,
+			batch.Items.filter(x => x)
+		);
+	});
 }
 
-function loadEditors (course) {
-	return loadBatch(course.getLink('Editors'))
-		.then((batch) => {
-			dispatch(EDITORS_LOADED, batch.Items.filter(x => x));
-		});
+function loadEditors(course) {
+	return loadBatch(course.getLink('Editors')).then(batch => {
+		dispatch(
+			EDITORS_LOADED,
+			batch.Items.filter(x => x)
+		);
+	});
 }
 
-function clearErrors () {
+function clearErrors() {
 	dispatch(ERROR, null);
 }
 
-export function loadManagers (course) {
+export function loadManagers(course) {
 	dispatch(LOADING);
 
-	Promise.all([
-		loadInstructors(course),
-		loadEditors(course)
-	])
-		.then(() => {
-			dispatch(USERS_LOADED, null);
-		});
+	Promise.all([loadInstructors(course), loadEditors(course)]).then(() => {
+		dispatch(USERS_LOADED, null);
+	});
 }
 
-
-export function searchUsers (term) {
+export function searchUsers(term) {
 	const lock = Date.now();
 	SEARCH_LOCK = lock;
 
@@ -72,105 +73,106 @@ export function searchUsers (term) {
 
 	getService()
 		.then(s => s.getContacts())
-		.then((contacts) => {
-			return contacts.search(term, false, true)
-				.then((results) => {
-					if (lock !== SEARCH_LOCK) {
-						return;
-					}
+		.then(contacts => {
+			return contacts.search(term, false, true).then(results => {
+				if (lock !== SEARCH_LOCK) {
+					return;
+				}
 
-					const users = results.filter(entity => entity.isUser );
+				const users = results.filter(entity => entity.isUser);
 
-					dispatch(USERS_LOADED, users);
-				});
+				dispatch(USERS_LOADED, users);
+			});
 		});
 }
 
-
-export function addInstructor (permissions, course) {
-	if (permissions.isInstructor) { return; }
+export function addInstructor(permissions, course) {
+	if (permissions.isInstructor) {
+		return;
+	}
 
 	const link = course.getLink('Instructors');
-	const {user} = permissions;
+	const { user } = permissions;
 
 	clearErrors();
 	dispatch(USER_UPDATING, user);
 
 	getService()
-		.then(service => service.post(link, {user: user.getID()}))
+		.then(service => service.post(link, { user: user.getID() }))
 		.then(() => {
 			dispatch(USER_UPDATED, user);
 			dispatch(INSTRUCTOR_ADDED, user);
 		})
-		.catch((err) => {
+		.catch(err => {
 			dispatch(USER_UPDATED, user);
 			dispatch(ERROR, err);
 		});
 }
 
-
-export function removeInstructor (permissions, course) {
-	if (!permissions.isInstructor) { return; }
+export function removeInstructor(permissions, course) {
+	if (!permissions.isInstructor) {
+		return;
+	}
 
 	const link = course.getLink('Instructors');
-	const {user} = permissions;
+	const { user } = permissions;
 
 	clearErrors();
 	dispatch(USER_UPDATING, user);
 
-
 	getService()
-		.then((service) => service.delete(path.join(link, user.getID())))
+		.then(service => service.delete(path.join(link, user.getID())))
 		.then(() => {
 			dispatch(USER_UPDATED, user);
 			dispatch(INSTRUCTOR_REMOVED, user);
 		})
-		.catch((err) => {
+		.catch(err => {
 			dispatch(USER_UPDATED, user);
 			dispatch(ERROR, err);
 		});
 }
 
-
-export function addEditor (permissions, course) {
-	if (permissions.isEditor) { return; }
+export function addEditor(permissions, course) {
+	if (permissions.isEditor) {
+		return;
+	}
 
 	const link = course.getLink('Editors');
-	const {user} = permissions;
+	const { user } = permissions;
 
 	clearErrors();
 	dispatch(USER_UPDATING, user);
 
 	getService()
-		.then(service => service.post(link, {user: user.getID()}))
+		.then(service => service.post(link, { user: user.getID() }))
 		.then(() => {
 			dispatch(USER_UPDATED, user);
 			dispatch(EDITOR_ADDED, user);
 		})
-		.catch((err) => {
+		.catch(err => {
 			dispatch(USER_UPDATED, user);
 			dispatch(ERROR, err);
 		});
 }
 
-
-export function removeEditor (permissions, course) {
-	if (!permissions.isEditor) { return; }
+export function removeEditor(permissions, course) {
+	if (!permissions.isEditor) {
+		return;
+	}
 
 	const link = course.getLink('Editors');
-	const {user} = permissions;
+	const { user } = permissions;
 
 	clearErrors();
 	dispatch(USER_UPDATING, user);
 
-
 	getService()
-		.then((service) => service.delete(path.join(link, user.getID())))
+		.then(service => service.delete(path.join(link, user.getID())))
 		.then(() => {
 			dispatch(USER_UPDATED, user);
 			dispatch(EDITOR_REMOVED, user);
 		})
-		.catch((err) => {
+		.catch(err => {
 			dispatch(USER_UPDATED, user);
 			dispatch(ERROR, err);
 		});

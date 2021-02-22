@@ -1,109 +1,109 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.library.components.Current',
+	{
+		extend: 'Ext.container.Container',
 
-module.exports = exports = Ext.define('NextThought.app.library.components.Current', {
-	extend: 'Ext.container.Container',
+		layout: 'none',
+		cls: 'current-collection',
+		title: '',
+		addText: 'Add',
+		seeAllText: 'See All',
 
-	layout: 'none',
-	cls: 'current-collection',
-	title: '',
-	addText: 'Add',
-	seeAllText: 'See All',
+		getTargetEl: function () {
+			return this.body;
+		},
 
-	getTargetEl: function () {
-		return this.body;
-	},
+		childEls: ['body'],
+		getDockedItems: function () {
+			return [];
+		},
 
-	childEls: ['body'],
-	getDockedItems: function () { return []; },
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'header',
+				cn: [
+					{ cls: 'title', html: '{title}' },
+					{ cls: 'add hidden', html: '{add}' },
+					{ cls: 'space' },
+					{ cls: 'see-all hidden', html: '{seeAll}' },
+				],
+			},
+			{
+				id: '{id}-body',
+				cls: 'body-container',
+				cn: ['{%this.renderContainer(out,values)%}'],
+			},
+		]),
 
+		renderSelectors: {
+			addEl: '.header .add',
+			seeAllEl: '.header .see-all',
+		},
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', cn: [
-			{cls: 'title', html: '{title}'},
-			{cls: 'add hidden', html: '{add}'},
-			{cls: 'space'},
-			{cls: 'see-all hidden', html: '{seeAll}'}
-		]},
-		{ id: '{id}-body', cls: 'body-container',
-			cn: ['{%this.renderContainer(out,values)%}'] }
-	]),
+		beforeRender: function () {
+			this.callParent(arguments);
 
+			this.renderData = Ext.apply(this.renderData || {}, {
+				title: this.title,
+				add: this.addText,
+				seeAll: this.seeAllText,
+			});
+		},
 
-	renderSelectors: {
-		addEl: '.header .add',
-		seeAllEl: '.header .see-all'
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
+			var me = this;
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			me.mon(me.el, 'click', function (e) {
+				if (e.getTarget('.add')) {
+					me.onAddClick();
+				} else if (e.getTarget('.see-all')) {
+					me.onSeeAllClick();
+				}
+			});
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title,
-			add: this.addText,
-			seeAll: this.seeAllText
-		});
-	},
+		onAddClick: function () {},
 
+		onSeeAllClick: function () {},
 
-	afterRender: function () {
-		this.callParent(arguments);
-
-		var me = this;
-
-		me.mon(me.el, 'click', function (e) {
-			if (e.getTarget('.add')) {
-				me.onAddClick();
-			} else if (e.getTarget('.see-all')) {
-				me.onSeeAllClick();
+		showSeeAll: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.showSeeAll.bind(this));
+				return;
 			}
-		});
-	},
 
+			this.seeAllEl.removeCls('hidden');
+		},
 
-	onAddClick: function () {},
+		hideSeeAll: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.hideSeeAll.bind(this));
+				return;
+			}
 
+			this.seeAllEl.addCls('hidden');
+		},
 
-	onSeeAllClick: function () {},
+		showAdd: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.showAdd.bind(this));
+				return;
+			}
 
+			this.addEl.removeCls('hidden');
+		},
 
-	showSeeAll: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.showSeeAll.bind(this));
-			return;
-		}
+		hideAdd: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.hideAdd.bind(this));
+				return;
+			}
 
-		this.seeAllEl.removeCls('hidden');
-	},
-
-
-	hideSeeAll: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.hideSeeAll.bind(this));
-			return;
-		}
-
-		this.seeAllEl.addCls('hidden');
-	},
-
-
-	showAdd: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.showAdd.bind(this));
-			return;
-		}
-
-		this.addEl.removeCls('hidden');
-	},
-
-
-	hideAdd: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.hideAdd.bind(this));
-			return;
-		}
-
-		this.addEl.addCls('hidden');
+			this.addEl.addCls('hidden');
+		},
 	}
-});
+);

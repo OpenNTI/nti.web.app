@@ -2,75 +2,82 @@ const Ext = require('@nti/extjs');
 
 const UserdataActions = require('legacy/app/userdata/Actions');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.contentviewer.components.PageWidgets',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.content-page-widgets',
+		ui: 'content-page-widgets',
+		cls: 'content-page-widgets',
 
-module.exports = exports = Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
-	extend: 'Ext.Component',
-	alias: 'widget.content-page-widgets',
-	ui: 'content-page-widgets',
-	cls: 'content-page-widgets',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'meta',
+				cn: [
+					{
+						cls: 'controls',
+						cn: [
+							{ cls: 'favorite' }, //,
+							//	  { cls: 'like' }
+						],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'meta',
-			cn: [
-				{
-					cls: 'controls',
-					cn: [
-						{ cls: 'favorite' }//,
-						//	  { cls: 'like' }
-					]
-				}
-			]
-		}
-	]),
+		renderSelectors: {
+			meta: '.meta',
+			favorite: '.meta .controls .favorite',
+			like: '.meta .controls .like',
+		},
 
-	renderSelectors: {
-		meta: '.meta',
-		favorite: '.meta .controls .favorite',
-		like: '.meta .controls .like'
-	},
+		listeners: {
+			favorite: { click: 'onFavoriteClick' },
+		},
 
-	listeners: {
-		favorite: {'click': 'onFavoriteClick'}
-	},
+		onBookmark: function (r) {
+			var currentNTIID = this.reader.getLocation().NTIID;
 
-	onBookmark: function (r) {
-		var currentNTIID = this.reader.getLocation().NTIID;
+			if (currentNTIID !== r.get('ContainerId')) {
+				console.error(
+					'Got a bookmark',
+					r,
+					'but we are on page',
+					currentNTIID
+				);
+				return;
+			}
 
+			this.bookmarkModel = r;
+			this.favorite.addCls('on');
+		},
 
-		if (currentNTIID !== r.get('ContainerId')) {
-			console.error('Got a bookmark', r, 'but we are on page', currentNTIID);
-			return;
-		}
+		onFavoriteClick: function () {
+			if (this.bookmarkModel) {
+				this.bookmarkModel.destroy();
+				this.clearBookmark();
+				return;
+			}
 
-		this.bookmarkModel = r;
-		this.favorite.addCls('on');
-	},
+			var actions = UserdataActions.create(),
+				location = this.reader.getLocation();
 
-	onFavoriteClick: function () {
-		if (this.bookmarkModel) {
-			this.bookmarkModel.destroy();
-			this.clearBookmark();
-			return;
-		}
+			actions
+				.saveNewBookmark(location.NTIID)
+				.then(this.onBookmark.bind(this));
+		},
 
-		var actions = UserdataActions.create(),
-			location = this.reader.getLocation();
+		clearBookmark: function () {
+			this.favorite.removeCls('on');
+			delete this.bookmarkModel;
+		},
 
-		actions.saveNewBookmark(location.NTIID)
-			.then(this.onBookmark.bind(this));
-	},
+		hideControls: function () {
+			this.hide();
+		},
 
-	clearBookmark: function () {
-		this.favorite.removeCls('on');
-		delete this.bookmarkModel;
-	},
-
-	hideControls: function () {
-		this.hide();
-	},
-
-	showControls: function () {
-		this.show();
+		showControls: function () {
+			this.show();
+		},
 	}
-});
+);

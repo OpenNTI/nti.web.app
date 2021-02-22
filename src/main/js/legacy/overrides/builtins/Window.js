@@ -1,14 +1,16 @@
 const Ext = require('@nti/extjs');
 
-
-module.exports = exports = Ext.define('NextThought.overrides.builtins.Window', {});
+module.exports = exports = Ext.define(
+	'NextThought.overrides.builtins.Window',
+	{}
+);
 
 (function () {
-	function getRequestAnimationFrame () {
+	function getRequestAnimationFrame() {
 		var names = [
 				'webkitRequestAnimationFrame',
 				'mozRequestAnimationFrame',
-				'msRequestAnimationFrame'
+				'msRequestAnimationFrame',
 			],
 			request;
 
@@ -28,4 +30,4 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Window', {
 	if (!window.requestAnimationFrame) {
 		window.requestAnimationFrame = getRequestAnimationFrame;
 	}
-}());
+})();

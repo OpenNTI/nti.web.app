@@ -23,14 +23,19 @@
 	}
 
 	&:not(.open) {
-		.enroll { display: none; }
+		.enroll {
+			display: none;
+		}
 	}
 
 	.col-left {
 		.label {
 			color: var(--tertiary-grey);
 			text-transform: uppercase;
-			font: { size: 0.45em; weight: 600; }
+			font: {
+				size: 0.45em;
+				weight: 600;
+			}
 		}
 	}
 
@@ -120,7 +125,10 @@
 	:not(.outline-row) > .label {
 		color: var(--tertiary-grey);
 		text-transform: uppercase;
-		font: { size: 0.7em; weight: 600; }
+		font: {
+			size: 0.7em;
+			weight: 600;
+		}
 
 		padding-right: 1em;
 
@@ -248,11 +256,16 @@
 			}
 
 			.value {
-				font: { size:1.2em; weight: 300; }
+				font: {
+					size: 1.2em;
+					weight: 300;
+				}
 
 				&:not(.open) {
 					.open,
-					.enroll-for-credit a { display: none; }
+					.enroll-for-credit a {
+						display: none;
+					}
 				}
 
 				.enroll-for-credit {
@@ -354,7 +367,10 @@
 		padding: 15px 5px;
 	}
 
-	a,a:link,a:visited,a:active {
+	a,
+	a:link,
+	a:visited,
+	a:active {
 		color: var(--primary-blue);
 		text-decoration: none;
 	}
@@ -381,7 +397,10 @@
 	.heading {
 		color: var(--tertiary-grey);
 		text-transform: uppercase;
-		font: { size: 0.7em; weight: 600; }
+		font: {
+			size: 0.7em;
+			weight: 600;
+		}
 	}
 
 	.foot {
@@ -397,7 +416,7 @@
 			font-weight: 500;
 			padding-left: 30px;
 
-			@include icon($circle-check-green,$top: 1em);
+			@include icon($circle-check-green, $top: 1em);
 		}
 
 		.edit {
@@ -521,7 +540,9 @@
 		}
 	}
 
-	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first { cursor: default; }
+	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first {
+		cursor: default;
+	}
 }
 
 .course-details {
@@ -600,7 +621,9 @@
 
 		.x-component-course-info {
 			box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
-			&.gutter { display: none; }
+			&.gutter {
+				display: none;
+			}
 		}
 	}
 
@@ -642,7 +665,8 @@
 		}
 	}
 
-	.enroll-card, .gift-card {
+	.enroll-card,
+	.gift-card {
 		background-color: var(--panel-background);
 		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
 	}
@@ -656,7 +680,8 @@
 			display: block;
 		}
 
-		.redeem, .give {
+		.redeem,
+		.give {
 			padding: 0 15px 0 10px;
 			height: 40px;
 			display: none;
@@ -679,7 +704,13 @@
 				text-transform: uppercase;
 			}
 
-			@include icon($arrow-next_hover, $side: after, $left: auto, $right: 5px, $top: 10px);
+			@include icon(
+				$arrow-next_hover,
+				$side: after,
+				$left: auto,
+				$right: 5px,
+				$top: 10px
+			);
 		}
 
 		.give {
@@ -693,7 +724,8 @@
 	}
 
 	.enroll-card {
-		.enroll-option, .drop:not(.button) {
+		.enroll-option,
+		.drop:not(.button) {
 			padding: 15px;
 			font: normal 300 1em/1 var(--body-font-family);
 			color: var(--primary-grey);
@@ -714,13 +746,16 @@
 			}
 		}
 
-		.info, .warning, .seats {
+		.info,
+		.warning,
+		.seats {
 			font-size: 0.9em;
 			line-height: 1.8em;
 			font-weight: 300;
 		}
 
-		.warning, .seats.full {
+		.warning,
+		.seats.full {
 			color: var(--primary-red);
 		}
 
@@ -771,7 +806,12 @@
 			&.enrolled {
 				padding-right: 40px;
 
-				@include icon($ico_enrollment_circhlecheck, $top: 20px, $right: 10px, $left: auto);
+				@include icon(
+					$ico_enrollment_circhlecheck,
+					$top: 20px,
+					$right: 10px,
+					$left: auto
+				);
 
 				.title {
 					width: 100%;
@@ -839,12 +879,16 @@
 				display: none;
 			}
 
-			&.pending, &.rejected, &.enrolled {
+			&.pending,
+			&.rejected,
+			&.enrolled {
 				.title {
 					color: var(--primary-red);
 					width: 100%;
 
-					span { display: none; }
+					span {
+						display: none;
+					}
 				}
 
 				.price {
@@ -856,12 +900,15 @@
 				color: var(--primary-grey);
 			}
 
-			&.rejected, &.pending {
+			&.rejected,
+			&.pending {
 				background-color: rgba(243, 82, 82, 0.05);
 			}
 
 			&.full {
-				.title span { display: none; }
+				.title span {
+					display: none;
+				}
 			}
 
 			&.checkbox.full {
@@ -935,7 +982,8 @@
 	}
 }
 
-.complete-enrollment-layer, .welcome-card {
+.complete-enrollment-layer,
+.welcome-card {
 	background: var(--secondary-green);
 	opacity: 0.97;
 	position: absolute;
@@ -962,7 +1010,8 @@
 				display: block;
 				width: 117px;
 				height: 117px;
-				background: url('../images/icons/circle-check-white-green-large.png') no-repeat;
+				background: url('../images/icons/circle-check-white-green-large.png')
+					no-repeat;
 				top: -125px;
 				left: 43%;
 			}
@@ -1003,14 +1052,16 @@
 						top: 5px;
 						left: 0;
 						right: auto;
-						background: url('../images/icons/circle-check-white-22.png') no-repeat;
+						background: url('../images/icons/circle-check-white-22.png')
+							no-repeat;
 						height: 22px;
 						width: 22px;
 					}
 
 					&.completed {
 						&::before {
-							background: url('../images/icons/circle-check-white-green-small.png') no-repeat;
+							background: url('../images/icons/circle-check-white-green-small.png')
+								no-repeat;
 						}
 					}
 				}
@@ -1052,7 +1103,8 @@
 		.congrats-container {
 			.congrats {
 				&::after {
-					background: url('../images/platform.ou.edu/ou_janux_white.png') no-repeat;
+					background: url('../images/platform.ou.edu/ou_janux_white.png')
+						no-repeat;
 					width: 315px;
 					height: 94px;
 					left: 35%;

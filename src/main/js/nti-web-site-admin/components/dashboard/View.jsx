@@ -12,40 +12,36 @@ import RecentSessions from './widgets/RecentSessions';
 const { ActiveDays, ActiveUsers } = Widgets;
 
 export default class View extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {};
 	}
 
-	renderWidgets () {
+	renderWidgets() {
 		return (
 			<RouterView.WithTitle title="Dashboard">
 				<div className="admin-dashboard-widgets">
 					<div className="widget-row">
-						<ActiveSessions/>
-						<PopularCourses/>
-						<ActiveUsers/>
+						<ActiveSessions />
+						<PopularCourses />
+						<ActiveUsers />
 					</div>
 					<div className="widget-row">
-						<ActiveTimes/>
+						<ActiveTimes />
 						<div>
-							<RecentlyCreatedUsers/>
-							<RecentSessions/>
+							<RecentlyCreatedUsers />
+							<RecentSessions />
 						</div>
 					</div>
 					<div className="widget-row">
-						<ActiveDays/>
+						<ActiveDays />
 					</div>
 				</div>
 			</RouterView.WithTitle>
 		);
 	}
 
-	render () {
-		return (
-			<div className="admin-dashboard">
-				{this.renderWidgets()}
-			</div>
-		);
+	render() {
+		return <div className="admin-dashboard">{this.renderWidgets()}</div>;
 	}
 }

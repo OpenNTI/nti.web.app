@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 	//must be mixed into a model
 
@@ -9,7 +8,6 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 	OLD_SYSTEM_CREATOR: 'zope.security.management.system_user',
 
 	isGroup: true,
-
 
 	//As of 2/28/2013 no new objects should be coming back
 	//with these system creators.  The creator must be a valid
@@ -22,20 +20,22 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 		return this.SYSTEM_CREATOR === c || this.OLD_SYSTEM_CREATOR === c;
 	},
 
-
 	//A method that can be used to detect if this is the old system created 'Everyone' group.
 	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
 	isEveryone: function () {
 		//FIXME: No one should be calling this anymore. See why it's happening. It should only be for data that we have in	local. Needs cleaning!
 		// console.warn('No one should be calling isEveryone anymore. See why it\'s happening.');//This is happening now so hide the warning
-		return (!this.get('Creator') || this.isSystem()) && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
+		return (
+			(!this.get('Creator') || this.isSystem()) &&
+			this.EVERYONE_USERNAME === this.get('Username').toLowerCase()
+		);
 	},
-
 
 	getName: function () {
-		return this.get('alias') || this.get('realname') || this.get('Username');
+		return (
+			this.get('alias') || this.get('realname') || this.get('Username')
+		);
 	},
-
 
 	getFriends: function () {
 		var f = (this.get('friends') || []).slice();
@@ -45,11 +45,9 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 		return f;
 	},
 
-
 	getFriendCount: function () {
 		return (this.get('friends') || []).length;
 	},
-
 
 	addFriend: function (username) {
 		var list = (this.get('friends') || []).slice();
@@ -60,19 +58,15 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 		return this;
 	},
 
-
 	removeFriend: function (username) {
 		var list = (this.get('friends') || []).slice();
 		this.set('friends', Ext.Array.remove(list, username));
 		return this;
 	},
 
-
 	hasFriend: function (username) {
 		return Ext.Array.contains(this.get('friends'), username);
 	},
-
-
 
 	hasOnline: function () {
 		var l = this.get('friends') || [],
@@ -89,6 +83,5 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 		});
 
 		return ret;
-	}
-
+	},
 });

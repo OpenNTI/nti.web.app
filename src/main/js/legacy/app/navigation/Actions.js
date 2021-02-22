@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const PageInfo = require('legacy/model/PageInfo');
 
 const ContextStateStore = require('../context/StateStore');
 
 const NavigationStateStore = require('./StateStore');
-
 
 require('legacy/common/Actions');
 
@@ -52,8 +52,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 						var i;
 						//iterate backwards
 						for (i = context.length - 1; i >= 0; i--) {
-							if (context[i].cmp && context[i].cmp.navigateToObject) {
-								context[i].cmp.navigateToObject(obj, newFragment)
+							if (
+								context[i].cmp &&
+								context[i].cmp.navigateToObject
+							) {
+								context[i].cmp
+									.navigateToObject(obj, newFragment)
 									.then(function () {
 										Ext.getBody().el.unmask();
 									});
@@ -64,7 +68,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 						//Ext.getBody().el.unmask()
 					})
 					.catch(function (reason) {
-						console.error('Failed to navigate to href: ', href, reason);
+						console.error(
+							'Failed to navigate to href: ',
+							href,
+							reason
+						);
 						alert('Unable to navigate to link.');
 						Ext.getBody().el.unmask();
 					});
@@ -73,13 +81,17 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 				try {
 					window.open(href, '_blank');
 				} catch (er) {
-					console.error('Unable to open ', href, ' with target _blank.', Globals.getError(er));
+					console.error(
+						'Unable to open ',
+						href,
+						' with target _blank.',
+						Globals.getError(er)
+					);
 				}
 			}
 
 			return true;
 		},
-
 
 		navigateToCardTarget: function (data, silent, callback, bundle) {
 			var ntiid = data.ntiid,
@@ -87,37 +99,62 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 				DH = Ext.DomHelper,
 				s = encodeURIComponent('Pages(' + ntiid + ')'),
 				u = encodeURIComponent($AppConfig.username),
-				context = this.getContext(), i;
+				context = this.getContext(),
+				i;
 
 			const pi = PageInfo.create({
 				ID: ntiid,
 				NTIID: ntiid,
 				content: DH.markup([
-					{tag: 'head', cn: [
-						{tag: 'title', html: data.title},
-						{tag: 'meta', name: 'icon', content: data.thumbnail}
-					]},
-					{tag: 'body', cn: {
-						cls: 'page-contents no-padding',
-						cn: Ext.applyIf({
-							tag: 'object',
-							cls: 'nticard' + postfix,
-							type: 'application/vnd.nextthought.nticard' + postfix,
-							'data-ntiid': ntiid,
-							html: DH.markup([
-								{tag: 'img', src: data.thumbnail},
-								{tag: 'span', cls: 'description', html: data.description}
-							])
-						}, data.asDomSpec())
-					}}
+					{
+						tag: 'head',
+						cn: [
+							{ tag: 'title', html: data.title },
+							{
+								tag: 'meta',
+								name: 'icon',
+								content: data.thumbnail,
+							},
+						],
+					},
+					{
+						tag: 'body',
+						cn: {
+							cls: 'page-contents no-padding',
+							cn: Ext.applyIf(
+								{
+									tag: 'object',
+									cls: 'nticard' + postfix,
+									type:
+										'application/vnd.nextthought.nticard' +
+										postfix,
+									'data-ntiid': ntiid,
+									html: DH.markup([
+										{ tag: 'img', src: data.thumbnail },
+										{
+											tag: 'span',
+											cls: 'description',
+											html: data.description,
+										},
+									]),
+								},
+								data.asDomSpec()
+							),
+						},
+					},
 				]),
 				Links: [
 					{
 						Class: 'Link',
-						href: '/dataserver2/users/' + u + '/' + s + '/UserGeneratedData',
-						rel: 'UserGeneratedData'
-					}
-				]
+						href:
+							'/dataserver2/users/' +
+							u +
+							'/' +
+							s +
+							'/UserGeneratedData',
+						rel: 'UserGeneratedData',
+					},
+				],
 			});
 
 			for (i = context.length - 1; i >= 0; i--) {
@@ -126,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 					break;
 				}
 			}
-		}
+		},
 	},
 
 	constructor: function () {
@@ -147,7 +184,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	updateNavBar: function (config) {
 		this.store.updateNavBar(config);
 	},
-
 
 	/**
 	 * the active object to set the background from
@@ -191,36 +227,37 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 			htmlEl;
 
 		if (messageCmp) {
-			messageCmp.onceRendered
-				.then(() => {
-					this.store.fireMessageBarOpen();
+			messageCmp.onceRendered.then(() => {
+				this.store.fireMessageBarOpen();
 
-					messageCmp.setIcon(cfg.iconCls);
-					messageCmp.setMessage(cfg.message);
-					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));
-					messageCmp.closeHandler = () => {
-						setTimeout(() => {
-							this.store.fireMessageBarClose();
-						}, 100);
+				messageCmp.setIcon(cfg.iconCls);
+				messageCmp.setMessage(cfg.message);
+				Ext.each(
+					cfg.buttons || [],
+					messageCmp.addButton.bind(messageCmp)
+				);
+				messageCmp.closeHandler = () => {
+					setTimeout(() => {
+						this.store.fireMessageBarClose();
+					}, 100);
 
-						if (cfg.closeHandler) {
-							cfg.closeHandler();
-						}
-					};
-
-					htmlEl = Ext.query('.x-viewport')[0];
-					if (htmlEl) {
-						Ext.fly(htmlEl).addCls('msg-bar-open');
-						messageCmp.fireOpenedEvent();
+					if (cfg.closeHandler) {
+						cfg.closeHandler();
 					}
+				};
 
-					// if (id) {
-					//	this.store.putMessageBarItemIntoSession(id, cfg);
-					// }
-				});
+				htmlEl = Ext.query('.x-viewport')[0];
+				if (htmlEl) {
+					Ext.fly(htmlEl).addCls('msg-bar-open');
+					messageCmp.fireOpenedEvent();
+				}
+
+				// if (id) {
+				//	this.store.putMessageBarItemIntoSession(id, cfg);
+				// }
+			});
 		}
 	},
-
 
 	closeMessageBar: function () {
 		var messageCmp = Ext.getCmp('message-bar');
@@ -230,5 +267,5 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		}
 
 		this.store.fireMessageBarClose();
-	}
+	},
 });

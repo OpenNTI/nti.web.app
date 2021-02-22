@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.common.menus.LabeledSeparator',
+	{
+		extend: 'Ext.menu.Separator',
+		alias: 'widget.labeledseparator',
 
-module.exports = exports = Ext.define('NextThought.common.menus.LabeledSeparator', {
-	extend: 'Ext.menu.Separator',
-	alias: 'widget.labeledseparator',
-
-	renderTpl: [
-		'<div class="label"><span>{text}</span></div>'
-	]
-});
+		renderTpl: ['<div class="label"><span>{text}</span></div>'],
+	}
+);

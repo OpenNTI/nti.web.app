@@ -1,4 +1,3 @@
-
 canvas.x-component-course-assessment {
 	& + .label {
 		top: 14px;
@@ -140,7 +139,12 @@ canvas.x-component-course-assessment {
 							border-bottom-width: 0;
 						}
 
-						@include icon($radio-button-16, $side: before, $top: 11px, $left: 10px);
+						@include icon(
+							$radio-button-16,
+							$side: before,
+							$top: 11px,
+							$left: 10px
+						);
 
 						&::after {
 							content: '';
@@ -186,7 +190,8 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-due-date-editor {
-	.inline-publish-editor > .label, .inline-due-date-editor > .label {
+	.inline-publish-editor > .label,
+	.inline-due-date-editor > .label {
 		font-size: 0.875em;
 		line-height: 14px;
 		color: var(--primary-grey);
@@ -240,7 +245,8 @@ canvas.x-component-course-assessment {
 		border-top: 1px solid #d9d9d9;
 		overflow: hidden;
 
-		.save, .cancel {
+		.save,
+		.cancel {
 			float: right;
 			line-height: 40px;
 			padding: 0 1.75em;
@@ -267,7 +273,9 @@ canvas.x-component-course-assessment {
 				display: none;
 			}
 
-			.publish-label, .schedule-label, .draft-label {
+			.publish-label,
+			.schedule-label,
+			.draft-label {
 				font-size: 0.875rem;
 				font-weight: 300;
 			}
@@ -474,7 +482,10 @@ canvas.x-component-course-assessment {
 	}
 
 	&.course-assessment-activity {
-		overflow: { x: hidden; y: auto; }
+		overflow: {
+			x: hidden;
+			y: auto;
+		}
 
 		color: var(--primary-grey);
 		padding: 10px 30px;
@@ -517,7 +528,7 @@ canvas.x-component-course-assessment {
 
 				time {
 					float: right;
-					width: 5em;//allow this to line up as if it were a 'left aligned column'.
+					width: 5em; //allow this to line up as if it were a 'left aligned column'.
 					color: var(--tertiary-grey);
 					font: normal 300 1em/3 var(--body-font-family);
 				}
@@ -529,7 +540,9 @@ canvas.x-component-course-assessment {
 		}
 
 		.more {
-			&.hidden { visibility: hidden; }
+			&.hidden {
+				visibility: hidden;
+			}
 
 			display: block;
 			font: normal 600 0.7em/2 var(--body-font-family);
@@ -604,21 +617,30 @@ canvas.x-component-course-assessment {
 		@include icon($check_gray, $top: 22px, $left: 25px);
 
 		&.no_submit {
-			&, &:hover, &.selected { cursor: default !important; }
+			&,
+			&:hover,
+			&.selected {
+				cursor: default !important;
+			}
 		}
 
 		&.closed {
-			&, &:hover, &.selected {
+			&,
+			&:hover,
+			&.selected {
 				cursor: default !important;
 				background: none !important;
 			}
 
-			.name, .points, &::after {
+			.name,
+			.points,
+			&::after {
 				opacity: 0.5;
 			}
 		}
 
-		&:not(.editor-open):hover, &.selected {
+		&:not(.editor-open):hover,
+		&.selected {
 			background: #fafafa;
 
 			.report {
@@ -627,8 +649,12 @@ canvas.x-component-course-assessment {
 		}
 
 		&.completed {
-			.status time.completed { display: block; }
-			.status time.due { display: none; }
+			.status time.completed {
+				display: block;
+			}
+			.status time.due {
+				display: none;
+			}
 
 			&:not(.failed):not(.no-completion)::after {
 				@include sprite($check_green);
@@ -678,8 +704,12 @@ canvas.x-component-course-assessment {
 				color: var(--primary-red);
 			}
 
-			.completed { display: none; }
-			.due { display: block; }
+			.completed {
+				display: none;
+			}
+			.due {
+				display: block;
+			}
 		}
 
 		.timed {
@@ -712,13 +742,13 @@ canvas.x-component-course-assessment {
 
 		.report {
 			display: none;
-			top: 22px;//60/2 - 16/2
+			top: 22px; //60/2 - 16/2
 			right: 31px;
 
-			@include icon($reports-gray_hover, $position:absolute);
+			@include icon($reports-gray_hover, $position: absolute);
 
 			&:hover {
-				@include icon($reports-blue_hover, $position:absolute);
+				@include icon($reports-blue_hover, $position: absolute);
 			}
 		}
 
@@ -772,7 +802,10 @@ canvas.x-component-course-assessment {
 				&::after {
 					content: '';
 
-					@include arrow($pointFrom: top, $color: var(--tertiary-grey));
+					@include arrow(
+						$pointFrom: top,
+						$color: var(--tertiary-grey)
+					);
 
 					margin-top: 2px;
 				}
@@ -836,7 +869,8 @@ canvas.x-component-course-assessment {
 		}
 	}
 
-	.x-menu-item.x-menu-item-checked, .x-menu-item.x-menu-item-unchecked {
+	.x-menu-item.x-menu-item-checked,
+	.x-menu-item.x-menu-item-unchecked {
 		padding: 0 15px;
 		line-height: 30px;
 
@@ -858,11 +892,23 @@ canvas.x-component-course-assessment {
 		padding-left: 40px;
 
 		&.x-menu-item-unchecked {
-			@include icon($checkbox-light-unchecked, $position: relative, $side: before, $top: 5px, $left: 15px);
+			@include icon(
+				$checkbox-light-unchecked,
+				$position: relative,
+				$side: before,
+				$top: 5px,
+				$left: 15px
+			);
 		}
 
 		&.x-menu-item-checked {
-			@include icon($checkbox-light-checked, $position: relative, $side: before, $top: 5px, $left: 15px);
+			@include icon(
+				$checkbox-light-checked,
+				$position: relative,
+				$side: before,
+				$top: 5px,
+				$left: 15px
+			);
 		}
 	}
 }
@@ -871,7 +917,8 @@ canvas.x-component-course-assessment {
 	font-size: 0.875em;
 }
 
-.course-assessment-header, .course-assessment-admin {
+.course-assessment-header,
+.course-assessment-admin {
 	.admin-list-header {
 		background: var(--quad-grey);
 		position: relative;
@@ -882,13 +929,15 @@ canvas.x-component-course-assessment {
 		}
 
 		&.disabled {
-			.page, .controls {
+			.page,
+			.controls {
 				opacity: 0.6;
 				pointer-events: none;
 			}
 
 			.assignment {
-				.meta, .extras {
+				.meta,
+				.extras {
 					span.link {
 						opacity: 0.6;
 						cursor: default;
@@ -935,7 +984,10 @@ canvas.x-component-course-assessment {
 
 				span {
 					display: inline-block;
-					&.link { color: var(--primary-blue); cursor: pointer; }
+					&.link {
+						color: var(--primary-blue);
+						cursor: pointer;
+					}
 
 					&::before {
 						content: '\00B7';
@@ -997,7 +1049,9 @@ canvas.x-component-course-assessment {
 			position: absolute;
 			right: 15px;
 
-			.request, .export, .settings {
+			.request,
+			.export,
+			.settings {
 				display: inline-block;
 				cursor: pointer;
 				width: 42px;
@@ -1011,26 +1065,56 @@ canvas.x-component-course-assessment {
 			}
 
 			.request {
-				@include icon($mail, $position: relative, $top: 10px, $left: 10px);
+				@include icon(
+					$mail,
+					$position: relative,
+					$top: 10px,
+					$left: 10px
+				);
 
 				&:hover {
-					@include icon($mail_hover, $position: relative, $top: 10px, $left: 10px);
+					@include icon(
+						$mail_hover,
+						$position: relative,
+						$top: 10px,
+						$left: 10px
+					);
 				}
 			}
 
 			.export {
-				@include icon($download, $position: relative, $top: 8px, $left: 10px);
+				@include icon(
+					$download,
+					$position: relative,
+					$top: 8px,
+					$left: 10px
+				);
 
 				&:hover {
-					@include icon($download_hover, $position: relative, $top: 8px, $left: 10px);
+					@include icon(
+						$download_hover,
+						$position: relative,
+						$top: 8px,
+						$left: 10px
+					);
 				}
 			}
 
 			.settings {
-				@include icon($settings-28x17, $position: relative, $top: 9px, $left: 10px);
+				@include icon(
+					$settings-28x17,
+					$position: relative,
+					$top: 9px,
+					$left: 10px
+				);
 
 				&:hover {
-					@include icon($settings-28x17_hover, $position: relative, $top: 9px, $left: 10px);
+					@include icon(
+						$settings-28x17_hover,
+						$position: relative,
+						$top: 9px,
+						$left: 10px
+					);
 				}
 			}
 		}
@@ -1077,12 +1161,26 @@ canvas.x-component-course-assessment {
 					}
 				}
 
-				@include icon($mv-dropdown-arrow_hover, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+				@include icon(
+					$mv-dropdown-arrow_hover,
+					$position: relative,
+					$side: after,
+					$top: 16px,
+					$left: auto,
+					$right: 15px
+				);
 
 				&:hover {
 					color: var(--primary-grey);
 
-					@include icon($mv-dropdown-arrow, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+					@include icon(
+						$mv-dropdown-arrow,
+						$position: relative,
+						$side: after,
+						$top: 16px,
+						$left: auto,
+						$right: 15px
+					);
 				}
 			}
 		}
@@ -1183,7 +1281,7 @@ canvas.x-component-course-assessment {
 
 		.controls {
 			top: 50%;
-			margin-top: -19px;//(36 + 2)/2 for the border
+			margin-top: -19px; //(36 + 2)/2 for the border
 		}
 
 		.page {
@@ -1205,7 +1303,8 @@ canvas.x-component-course-assessment {
 	}
 
 	.button {
-		&[href=""], &.hidden {
+		&[href=''],
+		&.hidden {
 			display: none;
 
 			& ~ .column-names {
@@ -1265,19 +1364,25 @@ canvas.x-component-course-assessment {
 
 		&:empty {
 			color: var(--tertiary-grey);
-			&::after { content: 'No Action Items'; }
+			&::after {
+				content: 'No Action Items';
+			}
 		}
 
 		& > div {
 			color: var(--primary-blue);
 			display: inline-block;
-			&.overdue { color: var(--primary-red); }
+			&.overdue {
+				color: var(--primary-red);
+			}
 
 			&::before {
 				content: '\00B7';
 				margin: 0.5em;
 			}
-			&:first-of-type::before { content: none; }
+			&:first-of-type::before {
+				content: none;
+			}
 		}
 	}
 
@@ -1350,7 +1455,10 @@ canvas.x-component-course-assessment {
 		input {
 			width: 56%;
 			border-width: 0 1px 0 0;
-			border-right: { style: solid; color: #dcdcdc; }
+			border-right: {
+				style: solid;
+				color: #dcdcdc;
+			}
 		}
 
 		.dropdown {
@@ -1370,7 +1478,12 @@ canvas.x-component-course-assessment {
 				top: 2em;
 				right: 1.5em;
 
-				@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
+				@include arrow(
+					$pointFrom: top,
+					$width: 8px,
+					$height: 5px,
+					$color: var(--secondary-grey)
+				);
 			}
 		}
 	}
@@ -1384,7 +1497,8 @@ canvas.x-component-course-assessment {
 	font: normal 500 0.875em/3.5em var(--body-font-family);
 	display: flex;
 
-	&.disabled, .disabled & {
+	&.disabled,
+	.disabled & {
 		opacity: 0.6;
 		pointer-events: none;
 	}
@@ -1407,7 +1521,12 @@ canvas.x-component-course-assessment {
 		cursor: pointer;
 		padding-left: 50px;
 
-		@include icon($notepad_active_white, $side: 'before', $top: 15px, $left: 26px);
+		@include icon(
+			$notepad_active_white,
+			$side: 'before',
+			$top: 15px,
+			$left: 26px
+		);
 	}
 
 	input {
@@ -1433,7 +1552,12 @@ canvas.x-component-course-assessment {
 	.dropmenu {
 		cursor: pointer;
 
-		@include icon($arrow-course-dropdown-light, $top:1.5em, $left:auto, $right:1em);
+		@include icon(
+			$arrow-course-dropdown-light,
+			$top: 1.5em,
+			$left: auto,
+			$right: 1em
+		);
 
 		&:hover {
 			color: var(--primary-grey);
@@ -1461,7 +1585,7 @@ canvas.x-component-course-assessment {
 	.search {
 		padding-left: 3em;
 
-		@include icon($rhp-search, $top:1.1em, $left:1.5em);
+		@include icon($rhp-search, $top: 1.1em, $left: 1.5em);
 
 		&:hover {
 			color: var(--primary-grey);
@@ -1472,7 +1596,9 @@ canvas.x-component-course-assessment {
 			box-shadow: none;
 		}
 
-		input:invalid ~ .clear { display: none; }
+		input:invalid ~ .clear {
+			display: none;
+		}
 
 		.clear {
 			cursor: pointer;
@@ -1502,11 +1628,15 @@ canvas.x-component-course-assessment {
 			&.x-menu-item-checked {
 				color: white !important;
 				background: var(--primary-blue) !important;
-				box-shadow:
-					inset 0 0 1px 1px var(--border-blue),
+				box-shadow: inset 0 0 1px 1px var(--border-blue),
 					inset 3px 0 0 0 var(--border-blue);
 
-				@include icon($arrow-course-dropdown-white, $top:1.5em, $left:auto, $right:1em);
+				@include icon(
+					$arrow-course-dropdown-white,
+					$top: 1.5em,
+					$left: auto,
+					$right: 1em
+				);
 
 				&.x-menu-item-active {
 					background: var(--primary-blue) !important;
@@ -1547,7 +1677,12 @@ canvas.x-component-course-assessment {
 					left: auto;
 					background: none;
 
-					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
+					@include arrow(
+						$pointFrom: top,
+						$width: 8px,
+						$height: 5px,
+						$color: var(--secondary-grey)
+					);
 				}
 			}
 
@@ -1585,14 +1720,17 @@ canvas.x-component-course-assessment {
 	}
 
 	.scrollzone {
-		overflow: { x: hidden; y: auto; }
+		overflow: {
+			x: hidden;
+			y: auto;
+		}
 
-		position: absolute;//avoid ext's anchor layout
+		position: absolute; //avoid ext's anchor layout
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		margin-top: 50px;//toolbar
+		margin-top: 50px; //toolbar
 	}
 
 	.x-container.grouping > .header {
@@ -1628,7 +1766,8 @@ canvas.x-component-course-assessment {
 	}
 }
 
-.assignment-reader, .course-assessment-header {
+.assignment-reader,
+.course-assessment-header {
 	.component-overlay {
 		& > .x-panel {
 			.x-docked {
@@ -1690,7 +1829,12 @@ canvas.x-component-course-assessment {
 						height: 100%;
 						display: block;
 
-						@include animate(pulsate, $duration: 3s, $delay: 0.1s, $iteration: 1);
+						@include animate(
+							pulsate,
+							$duration: 3s,
+							$delay: 0.1s,
+							$iteration: 1
+						);
 					}
 				}
 			}
@@ -1836,7 +1980,7 @@ canvas.x-component-course-assessment {
 }
 
 .course-assessment-header {
-	font-size: 16px;//force a base em size
+	font-size: 16px; //force a base em size
 
 	&.assignment-item {
 		.toolbar {
@@ -1954,7 +2098,8 @@ canvas.x-component-course-assessment {
 				}
 			}
 
-			.up, .down {
+			.up,
+			.down {
 				cursor: pointer;
 				display: inline-block;
 				vertical-align: middle;
@@ -1993,8 +2138,8 @@ canvas.x-component-course-assessment {
 			text-transform: uppercase;
 
 			.header {
-				margin-top: 59px !important;//yuck
-				margin-bottom: -59px !important;//yuck
+				margin-top: 59px !important; //yuck
+				margin-bottom: -59px !important; //yuck
 				min-height: 1px;
 			}
 
@@ -2012,7 +2157,8 @@ canvas.x-component-course-assessment {
 					line-height: 59px;
 				}
 
-				.up, .down {
+				.up,
+				.down {
 					height: 60px;
 
 					&::after {
@@ -2090,7 +2236,7 @@ canvas.x-component-course-assessment {
 					size: cover;
 					position: center center;
 					repeat: no-repeat;
-				};
+				}
 
 				& + .wrap {
 					margin: 1.6rem 20px 0 135px;
@@ -2171,7 +2317,8 @@ canvas.x-component-course-assessment {
 				}
 			}
 
-			.grade, .predicted {
+			.grade,
+			.predicted {
 				width: 15em;
 				font-size: 0.8em;
 				position: relative;
@@ -2232,7 +2379,12 @@ canvas.x-component-course-assessment {
 							top: 1.8em;
 							right: 1.5em;
 
-							@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
+							@include arrow(
+								$pointFrom: top,
+								$width: 8px,
+								$height: 5px,
+								$color: var(--secondary-grey)
+							);
 						}
 					}
 				}
@@ -2263,7 +2415,11 @@ canvas.x-component-course-assessment {
 					position: relative;
 					max-width: 100%;
 
-					@include presence-style-sudo($x:-1em, $y:0.3em, $xSide:'right');
+					@include presence-style-sudo(
+						$x: -1em,
+						$y: 0.3em,
+						$xSide: 'right'
+					);
 
 					div {
 						max-width: 100%;
@@ -2288,7 +2444,10 @@ canvas.x-component-course-assessment {
 				}
 
 				span {
-					&.link { color: var(--primary-blue); cursor: pointer; }
+					&.link {
+						color: var(--primary-blue);
+						cursor: pointer;
+					}
 
 					&::before {
 						content: '\00B7';
@@ -2366,8 +2525,10 @@ canvas.x-component-course-assessment {
 }
 
 .nti-header {
-
-	.grade { float: left; box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff; }
+	.grade {
+		float: left;
+		box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff;
+	}
 
 	.performance {
 		width: 545px;
@@ -2391,7 +2552,8 @@ canvas.x-component-course-assessment {
 		}
 	}
 
-	.grade-value, .assignments-completed {
+	.grade-value,
+	.assignments-completed {
 		position: absolute;
 		top: 3.125em;
 		left: 30px;
@@ -2410,7 +2572,9 @@ canvas.x-component-course-assessment {
 
 // Grid Styles
 
-.x-container-course-assessment.grade > .body { margin-top: 0; }
+.x-container-course-assessment.grade > .body {
+	margin-top: 0;
+}
 
 .student-assignment-overview,
 .course-assessment-admin {
@@ -2425,7 +2589,9 @@ canvas.x-component-course-assessment {
 
 .x-grid-body {
 	.x-grid-row .x-grid-cell {
-		.late, .ontime, .incomplete {
+		.late,
+		.ontime,
+		.incomplete {
 			font-weight: 600;
 		}
 

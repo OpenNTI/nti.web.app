@@ -1,21 +1,22 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.overviewgroup.Preview',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.overview-editing-overviewgroup-preview',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Preview', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-overviewgroup-preview',
+		cls: 'overview-group-title',
 
-	cls: 'overview-group-title',
+		renderTpl: '{title:htmlEncode}',
 
-	renderTpl: '{title:htmlEncode}',
+		beforeRender: function () {
+			this.callParent(arguments);
 
-
-	beforeRender: function () {
-		this.callParent(arguments);
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.group.get('title'),
-			color: this.group.get('accentColor')
-		});
+			this.renderData = Ext.apply(this.renderData || {}, {
+				title: this.group.get('title'),
+				color: this.group.get('accentColor'),
+			});
+		},
 	}
-});
+);

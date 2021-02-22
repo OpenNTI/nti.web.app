@@ -1,87 +1,92 @@
 const Ext = require('@nti/extjs');
 
-var Localization =
-module.exports = exports = Ext.define('NextThought.util.Localization', {
+var Localization = (module.exports = exports = Ext.define(
+	'NextThought.util.Localization',
+	{
+		formatRe: /\{([^{]+)\}/g,
 
-	formatRe: /\{([^{]+)\}/g,
+		constructor: function () {
+			this.callParent(arguments);
 
-	constructor: function () {
-		this.callParent(arguments);
+			this.getString = this.getString.bind(this);
+			this.getFormattedString = this.getFormattedString.bind(this);
+		},
 
-		this.getString = this.getString.bind(this);
-		this.getFormattedString = this.getFormattedString.bind(this);
-	},
+		getExternalizedString: function (key, defaultValue, noKey) {
+			var v =
+				(window.NTIStrings || {})[key] ||
+				defaultValue ||
+				(!noKey && key) ||
+				'';
 
+			if (v instanceof Array) {
+				v = v[Math.floor(Math.random() * 100) % v.length];
+			}
 
-	getExternalizedString: function (key, defaultValue, noKey) {
-		var v = (window.NTIStrings || {})[key] || defaultValue || (!noKey && key) || '';
+			return v;
+		},
 
-		if (v instanceof Array) {
-			v = v[Math.floor(Math.random() * 100) % v.length];
-		}
+		formatExternalString: function (key, values, dontUseKey) {
+			var string = this.getExternalizedString(
+				key,
+				dontUseKey ? null : key,
+				true
+			);
 
-		return v;
-	},
+			if (!values) {
+				return string;
+			}
 
+			return string.replace(this.formatRe, function (m, i) {
+				return values[i] || m;
+			});
+		},
 
-	formatExternalString: function (key, values, dontUseKey) {
-		var string = this.getExternalizedString(key, dontUseKey ? null : key, true);
+		pluralizeString: function (count, key, noNum) {
+			var forms = (window.NTIStrings.PluralForms || {})[key],
+				i,
+				s;
 
-		if (!values) {
-			return string;
-		}
+			if (!forms) {
+				//console.error('Pluralizing a string we dont have forms for', key, count);
+				return this.oldPlural.apply(Ext.util.Format, arguments);
+			}
 
-		return string.replace(this.formatRe, function (m, i) {
-			return values[i] || m;
-		});
-	},
+			if (forms.rule) {
+				i = forms.rule(count);
+			} else {
+				i = forms.ranges[count];
+				i = i !== undefined ? i : forms.ranges[undefined];
+			}
 
-	pluralizeString: function (count, key, noNum) {
-		var forms = (window.NTIStrings.PluralForms || {})[key], i,
-			s;
+			if (i === undefined) {
+				console.error('No form for count', key, count);
+				return key;
+			}
 
-		if (!forms) {
-			//console.error('Pluralizing a string we dont have forms for', key, count);
-			return this.oldPlural.apply(Ext.util.Format, arguments);
-		}
+			s = forms.forms[i] || key;
 
-		if (forms.rule) {
-			i = forms.rule(count);
-		} else {
-			i = forms.ranges[count];
-			i = i !== undefined ? i : forms.ranges[undefined];
-		}
+			if (noNum) {
+				s = s.replace('{#}', '');
+				return s.trim();
+			}
 
-		if (i === undefined) {
-			console.error('No form for count', key, count);
-			return key;
-		}
+			if (s === key) {
+				return count + ' ' + s;
+			}
 
-		s = forms.forms[i] || key;
+			return s.replace('{#}', count);
+		},
 
-		if (noNum) {
-			s = s.replace('{#}', '');
-			return s.trim();
-		}
+		getString: function () {
+			return this.getExternalizedString.apply(this, arguments);
+		},
 
-		if (s === key) {
-			return count + ' ' + s;
-		}
-
-		return s.replace('{#}', count);
-	},
-
-
-	getString: function () {
-		return this.getExternalizedString.apply(this, arguments);
-	},
-
-
-	getFormattedString: function () {
-		return this.formatExternalString.apply(this, arguments);
+		getFormattedString: function () {
+			return this.formatExternalString.apply(this, arguments);
+		},
 	}
-
-}).create();
+).create());
 
 window.getString = Localization.getString.bind(Localization);
 window.getFormattedString = Localization.getFormattedString.bind(Localization);

@@ -6,35 +6,35 @@ import RecentlyCreatedUsers from '../RecentlyCreatedUsers';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfUsers) => {
+const getMockService = numberOfUsers => {
 	return {
 		Items: [
 			{
 				hasLink: () => true,
-				getLink: () => 'mockLink'
-			}
+				getLink: () => 'mockLink',
+			},
 		],
 		getBatch: () => {
 			let Items = [];
 
-			for(let i = 0; i < numberOfUsers; i++) {
+			for (let i = 0; i < numberOfUsers; i++) {
 				const index = i + 1;
 
 				Items.push({
 					alias: 'user' + index,
-					getCreatedTime: () => new Date('10/30/2018')
+					getCreatedTime: () => new Date('10/30/2018'),
 				});
 			}
 
 			return Promise.resolve({
 				Items,
-				Total: Items.length
+				Total: Items.length,
 			});
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfUsers) => {
+const onBefore = numberOfUsers => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfUsers));
 };
@@ -51,7 +51,7 @@ describe('Site admin dashboard widget recently created users (5 users total)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers/>);
+		const cmp = renderer.create(<RecentlyCreatedUsers />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -68,7 +68,7 @@ describe('Site admin dashboard widget recently created users (3 users total)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers/>);
+		const cmp = renderer.create(<RecentlyCreatedUsers />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -85,7 +85,7 @@ describe('Site admin dashboard widget recently created users (no users)', () => 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers/>);
+		const cmp = renderer.create(<RecentlyCreatedUsers />);
 
 		jest.runAllTimers();
 		await flushPromises();

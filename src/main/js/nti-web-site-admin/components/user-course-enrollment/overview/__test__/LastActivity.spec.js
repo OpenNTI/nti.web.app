@@ -7,10 +7,10 @@ import LastActivity from '../LastActivity';
 describe('Site admin user course enrollment overview last activity widget', () => {
 	test('Basic render test', async () => {
 		const enrollment = {
-			getLastSeenTime: () => new Date('10/30/2017')
+			getLastSeenTime: () => new Date('10/30/2017'),
 		};
 
-		const cmp = renderer.create(<LastActivity enrollment={enrollment}/>);
+		const cmp = renderer.create(<LastActivity enrollment={enrollment} />);
 
 		const tree = cmp.toJSON();
 

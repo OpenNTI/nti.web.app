@@ -2,85 +2,94 @@ const Ext = require('@nti/extjs');
 
 require('./BaseInput');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.parts.Checkbox',
+	{
+		extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+		alias: 'widget.enrollment-checkbox',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Checkbox', {
-	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-	alias: 'widget.enrollment-checkbox',
+		cls: 'enrollment-input dark full checkbox',
 
-	cls: 'enrollment-input dark full checkbox',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				tag: 'input',
+				id: '{id}-{name}',
+				type: 'checkbox',
+				name: '{name}',
+			},
+			{ tag: 'label', cls: '{cls}', for: '{id}-{name}', html: '{text}' },
+			{ cls: 'help', html: '{help}' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{tag: 'input', id: '{id}-{name}', type: 'checkbox', name: '{name}'},
-		{tag: 'label', cls: '{cls}', 'for': '{id}-{name}', html: '{text}'},
-		{cls: 'help', html: '{help}'}
-	]),
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, {
+				name: this.name || 'enrollment-checkbox',
+				text: this.text,
+				cls: (this.text || '').length > 60 ? 'long' : '',
+				help: this.help,
+			});
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			name: this.name || 'enrollment-checkbox',
-			text: this.text,
-			cls: (this.text || '').length > 60 ? 'long' : '',
-			help: this.help
-		});
-	},
+		setValue: function (value) {
+			var input;
 
+			if (!this.rendered) {
+				this.startingvalue = value;
+				return;
+			}
 
-	setValue: function (value) {
-		var input;
+			value = value || value === 'Y';
 
-		if (!this.rendered) {
-			this.startingvalue = value;
-			return;
-		}
+			input = this.el.down('input[type=checkbox]');
 
-		value = value || value === 'Y';
+			if (input) {
+				input.dom.checked = value;
+				this.changed();
+			}
+		},
 
-		input = this.el.down('input[type=checkbox]');
+		getValue: function (force) {
+			if (!this.el || (!force && this.doNotSend)) {
+				return;
+			}
 
-		if (input) {
-			input.dom.checked = value;
-			this.changed();
-		}
-	},
+			var check = this.el.down('input[type=checkbox]'),
+				isChecked = check.is(':checked'),
+				value = {};
 
+			if (!this.name) {
+				return;
+			}
 
-	getValue: function (force) {
-		if (!this.el || (!force && this.doNotSend)) { return; }
+			if (isChecked) {
+				value[this.name] = this.useChar ? 'Y' : true;
+			} else {
+				value[this.name] = this.useChar ? 'N' : false;
+			}
 
-		var check = this.el.down('input[type=checkbox]'),
-			isChecked = check.is(':checked'),
-			value = {};
+			return value;
+		},
 
-		if (!this.name) { return; }
+		isEmpty: function () {
+			if (!this.rendered) {
+				return true;
+			}
 
-		if (isChecked) {
-			value[this.name] = this.useChar ? 'Y' : true;
-		} else {
-			value[this.name] = this.useChar ? 'N' : false;
-		}
+			return false;
+		},
 
-		return value;
-	},
+		addError: function () {
+			var label = this.el.down('label');
 
-	isEmpty: function () {
-		if (!this.rendered) { return true; }
+			label.addCls('error');
+		},
 
-		return false;
-	},
+		removeError: function () {
+			var label = this.el.down('label');
 
-
-	addError: function () {
-		var label = this.el.down('label');
-
-		label.addCls('error');
-	},
-
-
-	removeError: function () {
-		var label = this.el.down('label');
-
-		label.removeCls('error');
+			label.removeCls('error');
+		},
 	}
-});
+);

@@ -1,12 +1,13 @@
 const Path = require('path');
 
 const Ext = require('@nti/extjs');
-const {scoped} = require('@nti/lib-locale');
+const { scoped } = require('@nti/lib-locale');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const PageSource = require('legacy/util/PageSource');
 const PagedPageSource = require('legacy/util/PagedPageSource');
 const User = require('legacy/model/User');
@@ -18,209 +19,231 @@ require('./components/Assignment');
 require('./components/editing/AssignmentEditor');
 
 const t = scoped('nti-web-app.course.assessment.Index', {
-	title: 'Assignments'
+	title: 'Assignments',
 });
 
-module.exports = exports = Ext.define('NextThought.app.course.assessment.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-container',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.assessment.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.course-assessment-container',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	layout: 'card',
-	title: t('title'),
+		layout: 'card',
+		title: t('title'),
 
-	statics: {
-		showTab: function (bundle) {
-			return bundle && bundle.getWrapper && bundle.shouldShowAssignments();
-		}
-	},
+		statics: {
+			showTab: function (bundle) {
+				return (
+					bundle &&
+					bundle.getWrapper &&
+					bundle.shouldShowAssignments()
+				);
+			},
+		},
 
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.initRouter();
 
-		this.initRouter();
+			this.addRoute('/', this.showAssignments.bind(this));
+			this.addRoute('/notifications', this.showNotifications.bind(this));
+			this.addRoute('/performance', this.showPerformance.bind(this));
 
-		this.addRoute('/', this.showAssignments.bind(this));
-		this.addRoute('/notifications', this.showNotifications.bind(this));
-		this.addRoute('/performance', this.showPerformance.bind(this));
+			this.addRoute('/:assignment', this.showAssignment.bind(this));
+			this.addRoute('/:assignment/edit', this.editAssignment.bind(this));
+			this.addRoute(
+				'/:assignment/students',
+				this.showStudentsForAssignment.bind(this)
+			);
+			this.addRoute(
+				'/performance/:student',
+				this.showAssignmentsForStudent.bind(this)
+			);
+			this.addRoute(
+				'/performance/:student/:assignment',
+				this.showAssignmentForStudent.bind(this)
+			);
+			this.addRoute(
+				'/:assignment/students/:student',
+				this.showStudentForAssignment.bind(this)
+			);
 
-		this.addRoute('/:assignment', this.showAssignment.bind(this));
-		this.addRoute('/:assignment/edit', this.editAssignment.bind(this));
-		this.addRoute('/:assignment/students', this.showStudentsForAssignment.bind(this));
-		this.addRoute('/performance/:student', this.showAssignmentsForStudent.bind(this));
-		this.addRoute('/performance/:student/:assignment', this.showAssignmentForStudent.bind(this));
-		this.addRoute('/:assignment/students/:student', this.showStudentForAssignment.bind(this));
+			this.addDefaultRoute('/');
 
-		this.addDefaultRoute('/');
+			this.addObjectHandler(
+				Assignment.mimeType,
+				this.getAssignmentRoute.bind(this)
+			);
 
-		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
+			this.add({
+				xtype: 'course-assessment',
+				title: t('title'),
+				root: this,
+				changeRoute: this.changeRoute.bind(this),
+			});
 
-		this.add({
-			xtype: 'course-assessment',
-			title: t('title'),
-			root: this,
-			changeRoute: this.changeRoute.bind(this)
-		});
+			this.addChildRouter(this.getView());
 
-		this.addChildRouter(this.getView());
+			this.on('deactivate', this.closeAssignment.bind(this));
+		},
 
-		this.on('deactivate', this.closeAssignment.bind(this));
-	},
+		getRouteStateKey: function () {
+			if (this.currentBundle) {
+				return this.currentBundle.getId() + '-assessment';
+			}
+		},
 
+		onRouteActivate() {
+			const active = this.getLayout().getActiveItem();
 
-	getRouteStateKey: function () {
-		if (this.currentBundle) {
-			return this.currentBundle.getId() + '-assessment';
-		}
-	},
+			this.unmask();
 
+			if (active && active.onRouteActivate) {
+				active.onRouteActivate();
+			}
+		},
 
-	onRouteActivate () {
-		const active = this.getLayout().getActiveItem();
+		onRouteDeactivate() {
+			const active = this.getLayout().getActiveItem();
 
-		this.unmask();
+			this.mask();
 
-		if (active && active.onRouteActivate) {
-			active.onRouteActivate();
-		}
-	},
+			if (active && active.onRouteDeactivate) {
+				active.onRouteDeactivate();
+			}
+		},
 
+		onActivate: function () {
+			this.setTitle(t('title'));
+		},
 
-	onRouteDeactivate () {
-		const active = this.getLayout().getActiveItem();
+		closeAssignment: function () {
+			var view = this.getView();
 
-		this.mask();
+			this.getLayout().setActiveItem(view);
 
-		if (active && active.onRouteDeactivate) {
-			active.onRouteDeactivate();
-		}
-	},
-
-	onActivate: function () {
-		this.setTitle(t('title'));
-	},
-
-
-	closeAssignment: function () {
-		var view = this.getView();
-
-		this.getLayout().setActiveItem(view);
-
-		if (this.assignment) {
-			this.assignment.destroy();
-		}
-
-		if (this.assignmentEditor) {
-			this.assignmentEditor.destroy();
-			delete this.assignmentEditor;
-		}
-	},
-
-
-	getRouteTitle: function () {
-		return t('title');
-	},
-
-
-	getView: function () {
-		return this.down('course-assessment');
-	},
-
-
-	bundleChanged: function (bundle) {
-		var view = this.getView();
-
-		this.currentBundle = bundle;
-
-		return view.bundleChanged(bundle);
-	},
-
-
-	showReader: function (config) {
-		if (this.assignment && !this.assignment.isDestroyed && this.assignment.isSameConfig(config)) {
-			this.getLayout().setActiveItem(this.assignment);
-			this.assignment.alignNavigation();
-			return;
-		}
-
-		if (this.assignment) {
-			if (this.assignment.reader && this.assignment.reader.el) {
-				this.assignment.reader.el.unmask();
+			if (this.assignment) {
+				this.assignment.destroy();
 			}
 
-			this.assignment.destroy();
-		}
+			if (this.assignmentEditor) {
+				this.assignmentEditor.destroy();
+				delete this.assignmentEditor;
+			}
+		},
 
-		if (this.assignmentEditor) {
-			this.assignmentEditor.destroy();
-		}
+		getRouteTitle: function () {
+			return t('title');
+		},
 
-		config.bundle = this.currentBundle;
-		config.handleNavigation = this.handleNavigation.bind(this);
+		getView: function () {
+			return this.down('course-assessment');
+		},
 
-		this.assignment = this.add({
-			xtype: 'course-assessment-assignment',
-			readerConfig: config,
-			setTitle: this.setTitle.bind(this),
-			onSubmission: this.onAssignmentSubmission.bind(this)
-		});
+		bundleChanged: function (bundle) {
+			var view = this.getView();
 
-		this.addChildRouter(this.assignment);
+			this.currentBundle = bundle;
 
-		this.getLayout().setActiveItem(this.assignment);
-	},
+			return view.bundleChanged(bundle);
+		},
 
+		showReader: function (config) {
+			if (
+				this.assignment &&
+				!this.assignment.isDestroyed &&
+				this.assignment.isSameConfig(config)
+			) {
+				this.getLayout().setActiveItem(this.assignment);
+				this.assignment.alignNavigation();
+				return;
+			}
 
-	showEditor (config) {
-		if (this.assignment) {
-			this.assignment.destroy();
-			delete this.assigmment;
-		}
-
-		this.assignmentEditor = this.add({
-			xtype: 'assignment-editor',
-			assignmentId: config.assignmentId,
-			assignments: config.assignments,
-			pageSource: config.pageSource,
-			assignment: config.assignment,
-			bundle: config.bundle,
-			clearRouteState: () => {
-				if (this.clearRouteState) {
-					this.clearRouteState();
+			if (this.assignment) {
+				if (this.assignment.reader && this.assignment.reader.el) {
+					this.assignment.reader.el.unmask();
 				}
-			},
-			gotoAssignments: () => {
-				this.pushRoute('Assignments', '/');
-			},
-			gotoAssignment: (NTIID, title) => {
-				this.pushRoute(title, Path.join(encodeForURI(NTIID), 'edit'));
-			},
-			previewAssignment: (NTIID, title) => {
-				this.pushRoute(title, Path.join(encodeForURI(NTIID)));
-			},
-			findAssignment: (id, update) =>
-				config.bundle.getAssignments()
-					.then(collection => update ? collection.fetchAssignment(id) : (collection.getItem(id) || Promise.reject('Not Found')))
-		});
 
-		this.addChildRouter(this.assignmentEditor);
+				this.assignment.destroy();
+			}
 
-		this.getLayout().setActiveItem(this.assignmentEditor);
-	},
+			if (this.assignmentEditor) {
+				this.assignmentEditor.destroy();
+			}
 
+			config.bundle = this.currentBundle;
+			config.handleNavigation = this.handleNavigation.bind(this);
 
-	onAssignmentSubmission: function (assignmentId, historyItemLink) {
-		var me = this,
-			view = me.getView();
+			this.assignment = this.add({
+				xtype: 'course-assessment-assignment',
+				readerConfig: config,
+				setTitle: this.setTitle.bind(this),
+				onSubmission: this.onAssignmentSubmission.bind(this),
+			});
 
-		const loaded = view.bundleLoaded || Promise.reject();
+			this.addChildRouter(this.assignment);
 
-		loaded
-			.then(() => {
+			this.getLayout().setActiveItem(this.assignment);
+		},
+
+		showEditor(config) {
+			if (this.assignment) {
+				this.assignment.destroy();
+				delete this.assigmment;
+			}
+
+			this.assignmentEditor = this.add({
+				xtype: 'assignment-editor',
+				assignmentId: config.assignmentId,
+				assignments: config.assignments,
+				pageSource: config.pageSource,
+				assignment: config.assignment,
+				bundle: config.bundle,
+				clearRouteState: () => {
+					if (this.clearRouteState) {
+						this.clearRouteState();
+					}
+				},
+				gotoAssignments: () => {
+					this.pushRoute('Assignments', '/');
+				},
+				gotoAssignment: (NTIID, title) => {
+					this.pushRoute(
+						title,
+						Path.join(encodeForURI(NTIID), 'edit')
+					);
+				},
+				previewAssignment: (NTIID, title) => {
+					this.pushRoute(title, Path.join(encodeForURI(NTIID)));
+				},
+				findAssignment: (id, update) =>
+					config.bundle
+						.getAssignments()
+						.then(collection =>
+							update
+								? collection.fetchAssignment(id)
+								: collection.getItem(id) ||
+								  Promise.reject('Not Found')
+						),
+			});
+
+			this.addChildRouter(this.assignmentEditor);
+
+			this.getLayout().setActiveItem(this.assignmentEditor);
+		},
+
+		onAssignmentSubmission: function (assignmentId, historyItemLink) {
+			var me = this,
+				view = me.getView();
+
+			const loaded = view.bundleLoaded || Promise.reject();
+
+			loaded.then(() => {
 				let assignmentCollection = view.assignmentCollection;
 
 				Service.request(historyItemLink)
@@ -230,7 +253,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					.then(function (history) {
 						const item = lazy.ParseUtils.parseItems(history)[0];
 
-						return Promise.all([Promise.resolve(item), item.resolveFullContainer()]);
+						return Promise.all([
+							Promise.resolve(item),
+							item.resolveFullContainer(),
+						]);
 					})
 					.then(function ([item, container]) {
 						var reader = me.assignment;
@@ -241,271 +267,290 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						return container;
 					})
-					.then(assignmentCollection.updateHistoryItem.bind(assignmentCollection, assignmentId))
+					.then(
+						assignmentCollection.updateHistoryItem.bind(
+							assignmentCollection,
+							assignmentId
+						)
+					)
 					.always(this.bundleChanged.bind(this, this.currentBundle));
 			});
-	},
+		},
 
+		showAssignment: function (route, subRoute) {
+			var me = this,
+				id = route.params.assignment,
+				assignmentLoad = route.precache.assignment,
+				view = this.getView();
 
-	showAssignment: function (route, subRoute) {
-		var me = this,
-			id = route.params.assignment,
-			assignmentLoad = route.precache.assignment,
-			view = this.getView();
+			const loaded = view.bundleLoaded || Promise.reject();
 
-		const loaded = view.bundleLoaded || Promise.reject();
+			id = decodeFromURI(id);
 
-		id = decodeFromURI(id);
-
-		return loaded
-			.then(() => {
+			return loaded.then(() => {
 				assignmentLoad = view.assignmentCollection.fetchAssignment(id);
 
-				if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
+				if (
+					this.assignment &&
+					this.assignment.reader &&
+					this.assignment.reader.el
+				) {
 					this.assignment.reader.el.mask('Loading...');
 				}
 
-				return Promise.all([
-					assignmentLoad,
-					view.getAssignmentList()
-				]).then(([assignment, assignments = [], enrollment]) => {
-					// let assignmentStart = assignment.get('availableBeginning');
-					let index, prev, next, path = [], pageSource;
+				return Promise.all([assignmentLoad, view.getAssignmentList()])
+					.then(([assignment, assignments = [], enrollment]) => {
+						// let assignmentStart = assignment.get('availableBeginning');
+						let index,
+							prev,
+							next,
+							path = [],
+							pageSource;
 
-					assignments.forEach(function (item, i) {
-						if (item.getId() === assignment.getId()) {
-							index = i;
+						assignments.forEach(function (item, i) {
+							if (item.getId() === assignment.getId()) {
+								index = i;
+							}
+						});
+						prev = index - 1;
+						next = index + 1;
+
+						if (prev >= 0) {
+							prev = assignments[prev];
+						} else {
+							prev = undefined;
+						}
+
+						if (next < assignments.length) {
+							next = assignments[next];
+						} else {
+							next = undefined;
+						}
+
+						path.push({
+							label: view.getAssignmentsTabLabel(),
+							title: view.getAssignmentsTabLabel(),
+							route: '/',
+						});
+
+						if (view.isAdmin) {
+							path.push({
+								label: assignment.get('title'),
+								title: assignment.get('title'),
+								route:
+									'/' +
+									encodeForURI(assignment.getId()) +
+									'/students',
+							});
+
+							path.push({
+								cls: 'locked',
+								label: $AppConfig.userObject.getName(),
+							});
+						} else {
+							path.push({
+								cls: 'locked',
+								label: assignment.get('title'),
+							});
+						}
+
+						pageSource = PageSource.create({
+							next: next && next.getId(),
+							nextTitle: next && next.get('title'),
+							previous: prev && prev.getId(),
+							previousTitle: prev && prev.get('title'),
+							currentIndex: index,
+							total: assignments.length,
+							getRoute: i => i && encodeForURI(i),
+						});
+
+						return {
+							path: path,
+							pageSource: pageSource,
+							assignment: assignment,
+							student: $AppConfig.userObject,
+							assignmentHistory: view.assignmentCollection.getHistoryItem(
+								assignment.getId()
+							),
+							instructorProspective: view.isAdmin,
+							fragment: route.hash,
+						};
+					})
+					.then(me.showReader.bind(me))
+					.then(function () {
+						if (
+							me.assignment &&
+							me.assignment.reader &&
+							me.assignment.reader.el
+						) {
+							me.assignment.reader.el.unmask();
 						}
 					});
+			});
+		},
+
+		editAssignment(route, subRoute) {
+			//TODO: pass more info about paging and bread crumbs and what not
+			const id = decodeFromURI(route.params.assignment);
+			const view = this.getView();
+
+			// if the route already has an assignment, mask the assignment listing to
+			// avoid confusion for long-loading assignment lists (if unmasked, Create assignment
+			// button is available and it isn't clear that the assignment is eventually being loaded)
+			if (route.params && route.params.assignment) {
+				view.mask('Loading...');
+
+				if (!view.assignmentsView) {
+					// if creating the first assignment in a course, we need to make
+					// sure the necessary views are created
+					view.addContentEditorViews();
+				}
+			}
+
+			return view
+				.getAssignmentList()
+				.then(assignments => {
+					let index = 0;
+					let prev = 0;
+					let next = 0;
+					let assignment;
+
+					view.unmask();
+
+					for (index; index < assignments.length; index++) {
+						let item = assignments[index];
+
+						if (item.getId() === id) {
+							assignment = item;
+							break;
+						}
+					}
+
 					prev = index - 1;
 					next = index + 1;
 
 					if (prev >= 0) {
 						prev = assignments[prev];
 					} else {
-						prev = undefined;
+						prev = null;
 					}
 
 					if (next < assignments.length) {
 						next = assignments[next];
 					} else {
-						next = undefined;
+						next = null;
 					}
 
-					path.push({
-						label: view.getAssignmentsTabLabel(),
-						title: view.getAssignmentsTabLabel(),
-						route: '/'
-					});
-
-					if (view.isAdmin) {
-						path.push({
-							label: assignment.get('title'),
-							title: assignment.get('title'),
-							route: '/' + encodeForURI(assignment.getId()) + '/students'
-						});
-
-						path.push({
-							cls: 'locked',
-							label: $AppConfig.userObject.getName()
-						});
-					} else {
-						path.push({
-							cls: 'locked',
-							label: assignment.get('title')
-						});
-					}
-
-					pageSource = PageSource.create({
+					let pageSource = {
 						next: next && next.getId(),
 						nextTitle: next && next.get('title'),
 						previous: prev && prev.getId(),
 						previousTitle: prev && prev.get('title'),
 						currentIndex: index,
 						total: assignments.length,
-						getRoute: (i) => i && encodeForURI(i)
-					});
+					};
+
+					if (assignment) {
+						this.setTitle(assignment.get('title'));
+					}
 
 					return {
-						path: path,
-						pageSource: pageSource,
-						assignment: assignment,
-						student: $AppConfig.userObject,
-						assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId()),
-						instructorProspective: view.isAdmin,
-						fragment: route.hash
+						assignmentId: id,
+						assignment:
+							assignment || (route.precache || {}).assignment,
+						bundle: this.currentBundle,
+						pageSource,
 					};
 				})
-					.then(me.showReader.bind(me))
-					.then(function () {
-						if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
-							me.assignment.reader.el.unmask();
-						}
-					});
-			});
+				.then(cfg => this.showEditor(cfg));
 
+			// this.showEditor({
+			// 	assignmentId: decodeFromURI(route.params.assignment)
+			// });
 
-	},
+			// return Promise.resolve();
+		},
 
+		showAssignments: function (route, subRoute) {
+			var view = this.getView();
 
-	editAssignment (route, subRoute) {
-		//TODO: pass more info about paging and bread crumbs and what not
-		const id = decodeFromURI(route.params.assignment);
-		const view = this.getView();
+			this.getLayout().setActiveItem(view);
 
-		// if the route already has an assignment, mask the assignment listing to
-		// avoid confusion for long-loading assignment lists (if unmasked, Create assignment
-		// button is available and it isn't clear that the assignment is eventually being loaded)
-		if(route.params && route.params.assignment) {
-			view.mask('Loading...');
+			this.closeAssignment();
 
-			if(!view.assignmentsView) {
-				// if creating the first assignment in a course, we need to make
-				// sure the necessary views are created
-				view.addContentEditorViews();
-			}
-		}
+			return view.showAssignments(route, subRoute);
+		},
 
-		return view.getAssignmentList()
-			.then((assignments) => {
-				let index = 0;
-				let prev = 0;
-				let next = 0;
-				let assignment;
+		showNotifications: function (route, subRoute) {
+			var view = this.getView();
 
-				view.unmask();
+			this.getLayout().setActiveItem(view);
 
-				for (index; index < assignments.length; index++) {
-					let item = assignments[index];
+			this.closeAssignment();
 
-					if (item.getId() === id) {
-						assignment = item;
-						break;
-					}
-				}
+			return view.showNotifications(route, subRoute);
+		},
 
-				prev = index - 1;
-				next = index + 1;
+		showPerformance: function (route, subRoute) {
+			var view = this.getView();
 
-				if (prev >= 0) {
-					prev = assignments[prev];
-				} else {
-					prev = null;
-				}
+			this.getLayout().setActiveItem(view);
 
-				if (next < assignments.length) {
-					next = assignments[next];
-				} else {
-					next = null;
-				}
+			this.closeAssignment();
 
-				let pageSource = {
-					next: next && next.getId(),
-					nextTitle: next && next.get('title'),
-					previous: prev && prev.getId(),
-					previousTitle: prev && prev.get('title'),
-					currentIndex: index,
-					total: assignments.length
-				};
+			return view.showPerformance(route, subRoute);
+		},
 
-				if(assignment) {
-					this.setTitle(assignment.get('title'));
-				}
+		showStudentsForAssignment: function (route, subRoute) {
+			var view = this.getView();
 
-				return {
-					assignmentId: id,
-					assignment: assignment || (route.precache || {}).assignment,
-					bundle: this.currentBundle,
-					pageSource
-				};
-			})
-			.then(cfg => this.showEditor(cfg));
+			this.getLayout().setActiveItem(view);
 
-		// this.showEditor({
-		// 	assignmentId: decodeFromURI(route.params.assignment)
-		// });
+			this.closeAssignment();
 
-		// return Promise.resolve();
-	},
+			return view.showStudentsForAssignment(route, subRoute);
+		},
 
+		showAssignmentsForStudent: function (route, subRoute) {
+			var view = this.getView();
 
-	showAssignments: function (route, subRoute) {
-		var view = this.getView();
+			this.getLayout().setActiveItem(view);
 
-		this.getLayout().setActiveItem(view);
+			this.closeAssignment();
 
-		this.closeAssignment();
+			return view.showAssignmentsForStudent(route, subRoute);
+		},
 
-		return view.showAssignments(route, subRoute);
-	},
+		__getHistoryItem: function (historyItem) {
+			const item =
+				historyItem &&
+				historyItem.getMostRecentHistoryItem &&
+				historyItem.getMostRecentHistoryItem();
+			return (item || historyItem).resolveFullItem();
+		},
 
+		__getHistoryItemContainer(item) {
+			return item.getHistoryItemContainer
+				? item.getHistoryItemContainer()
+				: item;
+		},
 
-	showNotifications: function (route, subRoute) {
-		var view = this.getView();
+		showStudentForAssignment: function (route, subRoute) {
+			var me = this,
+				view = this.getView(),
+				assignmentId = route.params.assignment,
+				studentId = route.params.student,
+				assignment = route.precache.assignment,
+				student = route.precache.student;
 
-		this.getLayout().setActiveItem(view);
+			const loaded = view.bundleLoaded || Promise.reject();
 
-		this.closeAssignment();
-
-		return view.showNotifications(route, subRoute);
-	},
-
-
-	showPerformance: function (route, subRoute) {
-		var view = this.getView();
-
-		this.getLayout().setActiveItem(view);
-
-		this.closeAssignment();
-
-		return view.showPerformance(route, subRoute);
-	},
-
-
-	showStudentsForAssignment: function (route, subRoute) {
-		var view = this.getView();
-
-		this.getLayout().setActiveItem(view);
-
-		this.closeAssignment();
-
-		return view.showStudentsForAssignment(route, subRoute);
-	},
-
-
-	showAssignmentsForStudent: function (route, subRoute) {
-		var view = this.getView();
-
-		this.getLayout().setActiveItem(view);
-
-		this.closeAssignment();
-
-		return view.showAssignmentsForStudent(route, subRoute);
-	},
-
-
-	__getHistoryItem: function (historyItem) {
-		const item = historyItem && historyItem.getMostRecentHistoryItem && historyItem.getMostRecentHistoryItem();
-		return (item || historyItem).resolveFullItem();
-	},
-
-	__getHistoryItemContainer (item) {
-		return item.getHistoryItemContainer ? item.getHistoryItemContainer() : item;
-	},
-
-	showStudentForAssignment: function (route, subRoute) {
-		var me = this,
-			view = this.getView(),
-			assignmentId = route.params.assignment,
-			studentId = route.params.student,
-			assignment = route.precache.assignment,
-			student = route.precache.student;
-
-		const loaded = view.bundleLoaded || Promise.reject();
-
-		return loaded
-			.then(() => {
-				if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+			return loaded.then(() => {
+				if (
+					me.assignment &&
+					me.assignment.reader &&
+					me.assignment.reader.el
+				) {
 					me.assignment.reader.el.mask('Loading...');
 				} else {
 					view.maybeMask();
@@ -514,22 +559,31 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				assignmentId = decodeFromURI(assignmentId);
 				studentId = User.getIdFromURIPart(studentId);
 
-				assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
-				student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
+				assignment =
+					assignment && assignment.getId() === assignmentId
+						? assignment
+						: view.assignmentCollection.getItem(assignmentId);
+				student =
+					student && student.getId() === studentId
+						? student
+						: UserRepository.getUser(studentId);
 
-				return Promise.all([
-					assignment,
-					student
-				])
+				return Promise.all([assignment, student])
 					.then(function (results) {
 						assignment = results[0];
 						student = results[1];
 
-						return view.getStudentListForAssignment(assignment, student.get('Username'));
+						return view.getStudentListForAssignment(
+							assignment,
+							student.get('Username')
+						);
 					})
 					.then(function (students) {
 						const params = students.proxy.extraParams || {};
-						var record, pageSource, path = [], load,
+						var record,
+							pageSource,
+							path = [],
+							load,
 							current = students.findBy(function (rec) {
 								var user = rec.get('User');
 
@@ -545,15 +599,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 								params.batchContainingUsernameFilterByScope = studentId;
 
 								students.on({
-									load: () => me.showStudentForAssignment(route, subRoute),
-									single: true
+									load: () =>
+										me.showStudentForAssignment(
+											route,
+											subRoute
+										),
+									single: true,
 								});
 
 								students.load();
 								return Promise.reject();
-							}
-							else {
-								console.error('Unable to get record for student');
+							} else {
+								console.error(
+									'Unable to get record for student'
+								);
 								delete params.batchContainingUsernameFilterByScope;
 
 								// Go back to the assignments list.
@@ -575,12 +634,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 								return rec ? rec.get('Alias') : '';
 							},
 							getRoute: function (rec) {
-								if (!rec) { return ''; }
+								if (!rec) {
+									return '';
+								}
 
 								var user = rec.get('User'),
 									id = user.getURLPart();
 
-								return encodeForURI(assignmentId) + '/students/' + id;
+								return (
+									encodeForURI(assignmentId) +
+									'/students/' +
+									id
+								);
 							},
 							fillInRecord: function (item) {
 								var user = item.get('User');
@@ -589,32 +654,36 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 									return item;
 								}
 
-								return UserRepository.getUser(user.Username || user)
-									.then(function (u) {
-										item.set('User', u);
+								return UserRepository.getUser(
+									user.Username || user
+								).then(function (u) {
+									item.set('User', u);
 
-										return item;
-									});
-							}
+									return item;
+								});
+							},
 						});
 
 						path.push({
 							label: view.getAssignmentsTabLabel(),
 							title: view.getAssignmentsTabLabel(),
-							route: '/'
+							route: '/',
 						});
 
 						path.push({
 							label: assignment.get('title'),
 							title: assignment.get('title'),
-							route: '/' + encodeForURI(assignment.getId()) + '/students',
+							route:
+								'/' +
+								encodeForURI(assignment.getId()) +
+								'/students',
 							precache: {
-								student: student
-							}
+								student: student,
+							},
 						});
 
 						path.push({
-							label: student.getName()
+							label: student.getName(),
 						});
 
 						return {
@@ -622,64 +691,83 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 							pageSource: pageSource.load(),
 							assignment: assignment,
 							student: student,
-							assignmentHistoryItemContainer: load
+							assignmentHistoryItemContainer: load,
 						};
 					})
 					.then(me.showReader.bind(me))
 					.always(function () {
-						if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+						if (
+							me.assignment &&
+							me.assignment.reader &&
+							me.assignment.reader.el
+						) {
 							me.assignment.reader.el.unmask();
 						}
 
 						view.maybeUnmask();
 					});
 			});
-	},
+		},
 
+		showAssignmentForStudent: function (route, subRoute) {
+			var me = this,
+				view = this.getView(),
+				assignmentId = route.params.assignment,
+				studentId = route.params.student,
+				assignment = route.precache.assignment,
+				student = route.precache.student;
 
-	showAssignmentForStudent: function (route, subRoute) {
-		var me = this,
-			view = this.getView(),
-			assignmentId = route.params.assignment,
-			studentId = route.params.student,
-			assignment = route.precache.assignment,
-			student = route.precache.student;
+			if (
+				me.assignment &&
+				me.assignment.reader &&
+				me.assignment.reader.el
+			) {
+				me.assignment.reader.el.mask('Loading...');
+			} else {
+				view.maybeMask();
+			}
 
-		if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
-			me.assignment.reader.el.mask('Loading...');
-		} else {
-			view.maybeMask();
-		}
+			const loaded = view.bundleLoaded || Promise.reject();
 
-		const loaded = view.bundleLoaded || Promise.reject();
-
-		return loaded
-			.then(() => {
+			return loaded.then(() => {
 				assignmentId = decodeFromURI(assignmentId);
 				studentId = User.getIdFromURIPart(studentId);
 
-				assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
-				student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
+				assignment =
+					assignment && assignment.getId() === assignmentId
+						? assignment
+						: view.assignmentCollection.getItem(assignmentId);
+				student =
+					student && student.getId() === studentId
+						? student
+						: UserRepository.getUser(studentId);
 
-				return Promise.all([
-					assignment,
-					student
-				])
+				return Promise.all([assignment, student])
 					.then(function (results) {
 						assignment = results[0];
 						student = results[1];
 
-						return view.getAssignmentListForStudent(student.get('Username'));
+						return view.getAssignmentListForStudent(
+							student.get('Username')
+						);
 					})
 					.then(function (assignments) {
-						var record, pageSource, path = [],
+						var record,
+							pageSource,
+							path = [],
 							current = assignments.findBy(function (rec) {
-								return rec.get('AssignmentId') === assignment.getId();
+								return (
+									rec.get('AssignmentId') ===
+									assignment.getId()
+								);
 							});
 
 						if (current < 0) {
 							console.error('Failed to find assignment');
-							me.pushRoute('Grades & Performance', '/performance');
+							me.pushRoute(
+								'Grades & Performance',
+								'/performance'
+							);
 							return Promise.reject();
 						}
 
@@ -689,24 +777,30 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 							store: assignments,
 							currentIndex: current,
 							getTitle: function (rec) {
-								if (!rec) { return ''; }
+								if (!rec) {
+									return '';
+								}
 
 								var id = rec.get('AssignmentId'),
-									assignment2 = view.assignmentCollection.getItem(id);
+									assignment2 = view.assignmentCollection.getItem(
+										id
+									);
 
 								if (assignment2) {
 									return assignment2.get('title');
 								}
 							},
 							getRoute: function (rec) {
-								if (!rec) { return ''; }
+								if (!rec) {
+									return '';
+								}
 
 								var id = rec.get('AssignmentId');
 
 								id = encodeForURI(id);
 
 								return 'performance/' + studentId + '/' + id;
-							}
+							},
 						});
 
 						path.push({
@@ -714,91 +808,97 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 							title: view.getGradesTabLabel(),
 							route: '/performance',
 							precache: {
-								student: student
-							}
+								student: student,
+							},
 						});
 
 						path.push({
 							label: student.getName(),
 							title: student.getName(),
-							route: '/performance/' + student.getURLPart()
+							route: '/performance/' + student.getURLPart(),
 						});
 
 						path.push({
-							label: assignment.get('title')
+							label: assignment.get('title'),
 						});
-
 
 						return {
 							path: path,
 							pageSource: pageSource.load(),
 							assignment: assignment,
-							assignmentHistoryItemContainer: me.__getHistoryItemContainer(record),
-							student: student
+							assignmentHistoryItemContainer: me.__getHistoryItemContainer(
+								record
+							),
+							student: student,
 						};
 					})
 					.then(me.showReader.bind(me))
 					.always(function () {
-						if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+						if (
+							me.assignment &&
+							me.assignment.reader &&
+							me.assignment.reader.el
+						) {
 							me.assignment.reader.el.unmask();
 						}
 
 						view.maybeUnmask();
 					});
 			});
-	},
+		},
 
+		onRoute: function (route, subRoute) {
+			var view = this.getView();
 
-	onRoute: function (route, subRoute) {
-		var view = this.getView();
+			this.getLayout().setActiveItem(view);
 
-		this.getLayout().setActiveItem(view);
+			return view.handleRoute(route.path, route.precache);
+		},
 
-		return view.handleRoute(route.path, route.precache);
-	},
+		getAssignmentRoute: function (obj) {
+			var id = obj.getId();
 
+			id = encodeForURI(id);
 
-	getAssignmentRoute: function (obj) {
-		var id = obj.getId();
+			return {
+				route: id,
+				title: obj.get('title'),
+				precache: {
+					assignment: obj,
+				},
+			};
+		},
 
-		id = encodeForURI(id);
+		changeRoute: function (title, route, precache) {
+			this.pushRoute(title, route || '/', precache);
+		},
 
-		return {
-			route: id,
-			title: obj.get('title'),
-			precache: {
-				assignment: obj
+		handleNavigation: function (title, route, precache, replace) {
+			if (!route) {
+				return;
 			}
-		};
-	},
 
+			if (replace) {
+				this.replaceRoute(title, route, precache);
+			} else {
+				this.pushRoute(title, route, precache);
+			}
+		},
 
-	changeRoute: function (title, route, precache) {
-		this.pushRoute(title, route || '/', precache);
-	},
+		getRouteForPath: function (path, assignment) {
+			var assignmentId = assignment.getAssignmentId
+					? assignment.getAssignmentId()
+					: assignment.getId(),
+				route;
 
-	handleNavigation: function (title, route, precache, replace) {
-		if (!route) { return; }
+			assignmentId = encodeForURI(assignmentId);
 
-		if (replace) {
-			this.replaceRoute(title, route, precache);
-		} else {
-			this.pushRoute(title, route, precache);
-		}
-	},
+			route = '/' + assignmentId;
 
-
-	getRouteForPath: function (path, assignment) {
-		var assignmentId = assignment.getAssignmentId ? assignment.getAssignmentId() : assignment.getId(),
-			route;
-
-		assignmentId = encodeForURI(assignmentId);
-
-		route = '/' + assignmentId;
-
-		return {
-			path: route,
-			isFull: true
-		};
+			return {
+				path: route,
+				isFull: true,
+			};
+		},
 	}
-});
+);

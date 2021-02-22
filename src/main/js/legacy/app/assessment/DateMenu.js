@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.assessment-date-menu',
@@ -16,22 +15,27 @@ module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 	defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menucheckitem',
-		plain: true
+		plain: true,
 	},
 
 	setResults: function (results) {
 		var items = [];
-		Ext.each(results, function (value, index) {
-			items.push(this.getMenuItem(value, (index === 0)));
-		}, this);
+		Ext.each(
+			results,
+			function (value, index) {
+				items.push(this.getMenuItem(value, index === 0));
+			},
+			this
+		);
 		this.removeAll(true);
 		this.add(items);
 	},
 
-
 	addResult: function (assessment) {
 		//check if there is already a menu item for this assessment
-		var alreadyExists = this.items.findBy(item => item.assessment === assessment);
+		var alreadyExists = this.items.findBy(
+			item => item.assessment === assessment
+		);
 
 		//if not create one
 		if (alreadyExists) {
@@ -41,22 +45,24 @@ module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 		}
 	},
 
-
 	getMenuItem: function (v, checked) {
 		return {
 			text: this.formatLabel(v),
 			assessment: v,
 			group: 'assessment-results',
-			checked: checked
+			checked: checked,
 		};
 	},
 
-
 	formatLabel: function (assessment) {
-		if (assessment) { return Ext.Date.format(assessment.get('Last Modified'), 'm/d/y g:ia'); }
+		if (assessment) {
+			return Ext.Date.format(
+				assessment.get('Last Modified'),
+				'm/d/y g:ia'
+			);
+		}
 		return '';
 	},
-
 
 	getSelectedText: function () {
 		return this.formatLabel(this.down('[checked=true]').assessment);
@@ -64,5 +70,5 @@ module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 
 	getSelectedAssessment: function (item) {
 		return (item || this.down('[checked=true]')).assessment;
-	}
+	},
 });

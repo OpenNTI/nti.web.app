@@ -5,11 +5,8 @@ const DataTransferStore = require('legacy/store/DataTransfer');
 
 const DndActions = require('./Actions');
 
-
-
 module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	constructor: function (config) {
-
 		if (config.getDragTarget) {
 			this.getDragTarget = config.getDragTarget;
 		} else {
@@ -23,7 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		this.onDragEnd = config.onDragEnd;
 
 		this.dropPlaceholderStyles = config.dropPlaceholderStyles;
-		this.ghostImageScale = config.ghostImageScale !== undefined ? config.ghostImageScale : 1;
+		this.ghostImageScale =
+			config.ghostImageScale !== undefined ? config.ghostImageScale : 1;
 
 		this.transferData = new DataTransferStore();
 
@@ -31,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 			dragStart: this.__dragStart.bind(this),
 			dragEnd: this.__dragEnd.bind(this),
 			handleMouseDown: this.__handleMouseDown.bind(this),
-			handleMouseUp: this.__handleMouseUp.bind(this)
+			handleMouseUp: this.__handleMouseUp.bind(this),
 		};
 
 		this.DnDActions = DndActions.create();
@@ -131,11 +129,13 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 
 	getPlaceholderStyles: function () {
 		var styles = this.dropPlaceholderStyles || {},
-			rect = this.getDragBoundingClientRect && this.getDragBoundingClientRect();
+			rect =
+				this.getDragBoundingClientRect &&
+				this.getDragBoundingClientRect();
 
 		if (rect) {
-			styles.width = styles.width || (rect.width * this.ghostImageScale);
-			styles.height = styles.height || (rect.height * this.ghostImageScale);
+			styles.width = styles.width || rect.width * this.ghostImageScale;
+			styles.height = styles.height || rect.height * this.ghostImageScale;
 		}
 
 		return styles;
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 			count[key] = value;
 			e.dataTransfer.setData(key, value);
 
-			if(Object.keys(count).length !== e.dataTransfer.types.length) {
+			if (Object.keys(count).length !== e.dataTransfer.types.length) {
 				throw new Error('Spec incompliance');
 			}
 		};
@@ -223,5 +223,5 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		if (el) {
 			el.classList.remove('dragging');
 		}
-	}
+	},
 });

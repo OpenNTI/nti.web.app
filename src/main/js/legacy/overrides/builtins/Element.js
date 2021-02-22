@@ -1,7 +1,6 @@
 /* eslint-disable strict */
 const Ext = require('@nti/extjs');
 
-
 /**
  * Add dataset support to elements
  * No globals, no overriding prototype with non-standard methods,
@@ -19,14 +18,16 @@ if (!Function.prototype.bind) {
 		'use strict';
 		if (typeof this !== 'function') {
 			// closest thing possible to the ECMAScript 5 internal IsCallable function
-			throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+			throw new TypeError(
+				'Function.prototype.bind - what is trying to be bound is not callable'
+			);
 		}
 
 		var aArgs = Array.prototype.slice.call(arguments, 1),
 			fToBind = this;
 
-		function FNOP () {}
-		function Bound () {
+		function FNOP() {}
+		function Bound() {
 			return fToBind.apply(
 				this instanceof FNOP && oThis ? this : oThis,
 				aArgs.concat(Array.prototype.slice.call(arguments))
@@ -54,7 +55,7 @@ if (!Function.prototype.bind) {
  *
  * Licensed under the X11/MIT License
  *	 See LICENSE.md
-*/
+ */
 
 /*! @source http://purl.eligrey.com/github/Xccessors/blob/master/xccessors-standard.js*/
 (function () {
@@ -67,37 +68,47 @@ if (!Function.prototype.bind) {
 		hasOwnProp = ObjectProto.hasOwnProperty;
 
 	if (defineGetter && defineSetter && lookupGetter && lookupSetter) {
-
 		if (!Object.defineProperty) {
 			Object.defineProperty = function (obj, prop, descriptor) {
-				if (arguments.length < 3) { // all arguments required
+				if (arguments.length < 3) {
+					// all arguments required
 					throw new TypeError('Arguments not optional');
 				}
 
 				prop += ''; // convert prop to string
 
 				if (hasOwnProp.call(descriptor, 'value')) {
-					if (!lookupGetter.call(obj, prop) && !lookupSetter.call(obj, prop)) {
+					if (
+						!lookupGetter.call(obj, prop) &&
+						!lookupSetter.call(obj, prop)
+					) {
 						// data property defined and no pre-existing accessors
 						obj[prop] = descriptor.value;
 					}
 
-					if ((hasOwnProp.call(descriptor, 'get') ||
-						hasOwnProp.call(descriptor, 'set')))
-					{
+					if (
+						hasOwnProp.call(descriptor, 'get') ||
+						hasOwnProp.call(descriptor, 'set')
+					) {
 						// descriptor has a value prop but accessor already exists
-						throw new TypeError('Cannot specify an accessor and a value');
+						throw new TypeError(
+							'Cannot specify an accessor and a value'
+						);
 					}
 				}
 
 				// can't switch off these features in ECMAScript 3
 				// so throw a TypeError if any are false
-				if (!(descriptor.writable && descriptor.enumerable &&
-					descriptor.configurable))
-				{
+				if (
+					!(
+						descriptor.writable &&
+						descriptor.enumerable &&
+						descriptor.configurable
+					)
+				) {
 					throw new TypeError(
 						'This implementation of Object.defineProperty does not support' +
-									' false for configurable, enumerable, or writable.'
+							' false for configurable, enumerable, or writable.'
 					);
 				}
 
@@ -114,7 +125,8 @@ if (!Function.prototype.bind) {
 
 		if (!Object.getOwnPropertyDescriptor) {
 			Object.getOwnPropertyDescriptor = function (obj, prop) {
-				if (arguments.length < 2) { // all arguments required
+				if (arguments.length < 2) {
+					// all arguments required
 					throw new TypeError('Arguments not optional.');
 				}
 
@@ -123,7 +135,7 @@ if (!Function.prototype.bind) {
 				var descriptor = {
 						configurable: true,
 						enumerable: true,
-						writable: true
+						writable: true,
 					},
 					getter = lookupGetter.call(obj, prop),
 					setter = lookupSetter.call(obj, prop);
@@ -132,7 +144,8 @@ if (!Function.prototype.bind) {
 					// property doesn't exist or is inherited
 					return descriptor;
 				}
-				if (!getter && !setter) { // not an accessor so return prop
+				if (!getter && !setter) {
+					// not an accessor so return prop
 					descriptor.value = obj[prop];
 					return descriptor;
 				}
@@ -164,13 +177,14 @@ if (!Function.prototype.bind) {
 			};
 		}
 	}
-}());
+})();
 
 // Begin dataset code
-if (!document.documentElement.dataset &&
+if (
+	!document.documentElement.dataset &&
 	// FF is empty while IE gives empty object
 	(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset') ||
-	!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
+		!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
 ) {
 	var propDescriptor = {
 		enumerable: true,
@@ -179,22 +193,33 @@ if (!document.documentElement.dataset &&
 			var i,
 				that = this,
 				HTML5DOMStringMap = {},
-				attrVal, attrName, propName,
+				attrVal,
+				attrName,
+				propName,
 				attribute,
 				attributes = this.attributes,
 				attsLength = attributes.length;
-			function toUpperCase (n0) { return n0.charAt(1).toUpperCase(); }
-			function getter () { return String(this); }
-			function setter (name, value) {
-				return (typeof value !== 'undefined') ?
-					this.setAttribute(name, value) : this.removeAttribute(name); }
+			function toUpperCase(n0) {
+				return n0.charAt(1).toUpperCase();
+			}
+			function getter() {
+				return String(this);
+			}
+			function setter(name, value) {
+				return typeof value !== 'undefined'
+					? this.setAttribute(name, value)
+					: this.removeAttribute(name);
+			}
 
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];
 				// Fix: This test really should allow any XML Name without
 				//			colons (and non-uppercase for XHTML)
-				if (attribute && attribute.name &&
-					(/^data-\w[\w-]*$/).test(attribute.name)) {
+				if (
+					attribute &&
+					attribute.name &&
+					/^data-\w[\w-]*$/.test(attribute.name)
+				) {
 					attrVal = attribute.value;
 					attrName = attribute.name;
 					// Change to CamelCase
@@ -203,20 +228,22 @@ if (!document.documentElement.dataset &&
 						Object.defineProperty(HTML5DOMStringMap, propName, {
 							enumerable: true,
 							get: getter.bind(attrVal || ''),
-							set: setter.bind(that, attrName)
+							set: setter.bind(that, attrName),
 						});
-					}
-					catch (e2) { // if accessors are not working
+					} catch (e2) {
+						// if accessors are not working
 						HTML5DOMStringMap[propName] = attrVal;
 					}
 				}
 			}
 			return HTML5DOMStringMap;
-		}
+		},
 	};
 
 	Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
 }
 
-
-module.exports = exports = Ext.define('NextThought.overrides.builtins.Element', {});
+module.exports = exports = Ext.define(
+	'NextThought.overrides.builtins.Element',
+	{}
+);

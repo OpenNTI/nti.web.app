@@ -8,11 +8,11 @@ describe('Site admin user course enrollment overview progress widget', () => {
 	test('Basic render test (percent = 55)', async () => {
 		const enrollment = {
 			CourseProgress: {
-				PercentageProgress: 0.55
-			}
+				PercentageProgress: 0.55,
+			},
 		};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment}/>);
+		const cmp = renderer.create(<Progress enrollment={enrollment} />);
 
 		const tree = cmp.toJSON();
 
@@ -21,10 +21,10 @@ describe('Site admin user course enrollment overview progress widget', () => {
 
 	test('Basic render test (no PercentageProgress)', async () => {
 		const enrollment = {
-			CourseProgress: {}
+			CourseProgress: {},
 		};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment}/>);
+		const cmp = renderer.create(<Progress enrollment={enrollment} />);
 
 		const tree = cmp.toJSON();
 
@@ -34,7 +34,7 @@ describe('Site admin user course enrollment overview progress widget', () => {
 	test('Basic render test (no CourseProgress)', async () => {
 		const enrollment = {};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment}/>);
+		const cmp = renderer.create(<Progress enrollment={enrollment} />);
 
 		const tree = cmp.toJSON();
 

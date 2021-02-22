@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-const {HREF} = require('@nti/lib-ntiids');
+const { HREF } = require('@nti/lib-ntiids');
 
 require('./Base');
-
 
 module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 	extend: 'NextThought.model.forums.Base',
@@ -16,31 +15,42 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'DCTitle', type: 'string' },
 		{ name: 'description', type: 'string' },
 		{ name: 'title', type: 'string' },
-		{ name: 'displayTitle', type: 'Synthetic', persist: false, fn: function (r) {
-			var title = r.get('title');
+		{
+			name: 'displayTitle',
+			type: 'Synthetic',
+			persist: false,
+			fn: function (r) {
+				var title = r.get('title');
 
-			r.HIDE_PREFIXS.every(function (pre) {
-				if (title.indexOf(pre) === 0) {
-					title = title.replace(pre, '');
-					title = title.trim();
+				r.HIDE_PREFIXS.every(function (pre) {
+					if (title.indexOf(pre) === 0) {
+						title = title.replace(pre, '');
+						title = title.trim();
 
-					return false;
-				}
+						return false;
+					}
 
-				return true;
-			});
+					return true;
+				});
 
-			return title;
-		}},
+				return title;
+			},
+		},
 		{ name: 'TopicCount', type: 'int', persist: false },
 		{ name: 'NewestDescendant', type: 'singleitem' },
-		{ name: 'NewestDescendantCreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultVale: new Date() },
-		{ name: 'ACL', type: 'auto'},
-		{ name: 'EmailNotifications', type: 'bool'},
-		{ name: 'IsDefaultForum', type: 'bool'}
+		{
+			name: 'NewestDescendantCreatedTime',
+			type: 'date',
+			persist: false,
+			dateFormat: 'timestamp',
+			defaultVale: new Date(),
+		},
+		{ name: 'ACL', type: 'auto' },
+		{ name: 'EmailNotifications', type: 'bool' },
+		{ name: 'IsDefaultForum', type: 'bool' },
 	],
 
-	getId () {
+	getId() {
 		if (this.get('IsDefaultForum')) {
 			//NOTE: the href in the data is getting resolved by the field client side, not matching what the server is sending
 			return HREF.encodeIdFrom(this.rawData.href);
@@ -55,19 +65,23 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 				stateKey: 'forum',
 				wantsItem: function (record) {
 					return record.get('ContainerId') === ntiid;
-				}
+				},
 			};
 
-		return this.callParent([idSuffix, Ext.apply(myConfig, cfg),
-			Ext.apply({
-				sortOn: 'NewestDescendantCreatedTime',
-				sortOrder: 'DESC'
-			},extraParams
-			)]);
+		return this.callParent([
+			idSuffix,
+			Ext.apply(myConfig, cfg),
+			Ext.apply(
+				{
+					sortOn: 'NewestDescendantCreatedTime',
+					sortOrder: 'DESC',
+				},
+				extraParams
+			),
+		]);
 	},
-
 
 	getTitle: function () {
 		return this.get('displayTitle');
-	}
+	},
 });

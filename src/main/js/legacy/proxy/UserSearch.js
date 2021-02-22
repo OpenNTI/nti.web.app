@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('./reader/Json');
 
-
 module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.usersearch',
@@ -12,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 	//default
 	reader: {
 		type: 'nti',
-		root: 'Items'
+		root: 'Items',
 	},
 
 	constructor: function (config) {
@@ -22,9 +21,9 @@ module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 	},
 
 	buildUrl: function (request) {
-		var me	= this,
-			qs	= request.params.query.split(','),
-			q	= Ext.String.trim(qs[qs.length - 1]);
+		var me = this,
+			qs = request.params.query.split(','),
+			q = Ext.String.trim(qs[qs.length - 1]);
 		request.url = Service.getUserSearchURL(q);
 		request.params = undefined;
 		me.reader.hasContainerId = true;
@@ -33,13 +32,18 @@ module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 
 	exception: function (proxy, resp, operation) {
 		try {
-			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
-		}
-		catch (e) {
+			Ext.callback(operation.failed, operation.scope, [
+				operation.records,
+				operation,
+			]);
+		} catch (e) {
 			console.error(e.message, e);
 		}
 		if (resp.status !== 404) {
-			console.error('Error searching for users, try again later', arguments);
+			console.error(
+				'Error searching for users, try again later',
+				arguments
+			);
 		}
-	}
+	},
 });

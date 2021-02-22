@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const DndDraggable = require('legacy/app/dnd/Draggable');
 
-
 /**
  * Handle adding and removing listeners for dropping actions
  *
@@ -24,10 +23,13 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 				ghostImageScale: this.ghostImageScale,
 				dropPlaceholderStyles: this.dropPlaceholderStyles,
 				getDragTarget: this.getDragTarget.bind(this),
-				getDragBoundingClientRect: this.getDragBoundingClientRect.bind(this),
-				getDragHandle: this.getDragHandle && this.getDragHandle.bind(this),
+				getDragBoundingClientRect: this.getDragBoundingClientRect.bind(
+					this
+				),
+				getDragHandle:
+					this.getDragHandle && this.getDragHandle.bind(this),
 				onDragStart: this.onDragStart && this.onDragStart.bind(this),
-				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this)
+				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this),
 			});
 		}
 	},
@@ -46,7 +48,10 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		this.initDragging();
 
 		if (!this.rendered) {
-			this.on('afterrender', this.Draggable.enableDragging.bind(this.Draggable));
+			this.on(
+				'afterrender',
+				this.Draggable.enableDragging.bind(this.Draggable)
+			);
 		} else {
 			this.Draggable.enableDragging();
 		}
@@ -56,7 +61,10 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		this.initDragging();
 
 		if (!this.rendered) {
-			this.on('afterrender', this.Draggable.disableDragging.bind(this.Draggable));
+			this.on(
+				'afterrender',
+				this.Draggable.disableDragging.bind(this.Draggable)
+			);
 		} else {
 			this.Draggable.disableDragging();
 		}
@@ -69,5 +77,5 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		this.initDragging();
 
 		this.Draggable.setDataTransfer(key, value);
-	}
+	},
 });

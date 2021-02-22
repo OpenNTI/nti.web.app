@@ -16,7 +16,8 @@
 }
 
 .search-results {
-	.search-result, .control-item {
+	.search-result,
+	.control-item {
 		background-color: #fafafa;
 		margin-bottom: 10px;
 	}
@@ -49,8 +50,8 @@
 			.loading {
 				position: absolute;
 				color: var(--primary-grey);
-				line-height: 24px;//height of the spinner
-				padding-left: 30px;//width of the spinner + 6px
+				line-height: 24px; //height of the spinner
+				padding-left: 30px; //width of the spinner + 6px
 				top: 50%;
 				left: 50%;
 				margin-top: -12px;
@@ -75,7 +76,12 @@
 			@include icon($search-reading, $top: 18px, $left: 50px);
 		}
 
-		&.topic, &.note, &.topic-comment, &.thought, &.thought-comment, &.chat {
+		&.topic,
+		&.note,
+		&.topic-comment,
+		&.thought,
+		&.thought-comment,
+		&.chat {
 			@include icon($comment-small-dark_hover, $top: 18px, $left: 50px);
 		}
 
@@ -190,7 +196,13 @@
 				padding: 10px 25px 10px 15px;
 				box-shadow: 0 1px 0 0 rgba(151, 151, 151, 0.19);
 
-				@include icon($mv-dropdown-arrow_hover, $side: after, $top: 14px, $left: auto, $right: 20px);
+				@include icon(
+					$mv-dropdown-arrow_hover,
+					$side: after,
+					$top: 14px,
+					$left: auto,
+					$right: 20px
+				);
 
 				&::after {
 					transform: rotate(-90deg);
@@ -198,18 +210,26 @@
 				}
 
 				&:hover {
-					@include icon($mv-dropdown-arrow, $side: after, $top: 14px, $left: auto, $right: 20px);
+					@include icon(
+						$mv-dropdown-arrow,
+						$side: after,
+						$top: 14px,
+						$left: auto,
+						$right: 20px
+					);
 				}
 
 				&:last-of-type {
 					box-shadow: none;
 				}
 
-				hit, .term {
+				hit,
+				.term {
 					font-style: normal;
 					background: #fcff13;
 					display: inline;
-					box-shadow: 0 0 0 2px #fcff13, 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
+					box-shadow: 0 0 0 2px #fcff13,
+						1px 1px 2px 2px rgba(0, 0, 0, 0.2);
 				}
 			}
 		}
@@ -283,7 +303,13 @@
 				border-left: none;
 				background-color: #595959;
 
-				@include icon($search-white-16x16, $side: after, $position: absolute, $top: 9px, $left: 9px);
+				@include icon(
+					$search-white-16x16,
+					$side: after,
+					$position: absolute,
+					$top: 9px,
+					$left: 9px
+				);
 			}
 		}
 
@@ -305,7 +331,8 @@
 			right: 0;
 			top: 0;
 			position: absolute;
-			background: url(../images/elements/search-nib.png) left center no-repeat;
+			background: url(../images/elements/search-nib.png) left center
+				no-repeat;
 			width: 20px;
 			height: 36px;
 		}
@@ -319,7 +346,13 @@
 			background-color: white;
 			border-left: 1px solid #e7e7e7;
 
-			@include icon($search, $side: after, $position: absolute, $top: 9px, $left: 9px);
+			@include icon(
+				$search,
+				$side: after,
+				$position: absolute,
+				$top: 9px,
+				$left: 9px
+			);
 
 			&::after {
 				opacity: 0.7;

@@ -67,13 +67,15 @@
 			}
 		}
 
-		&:not(.lesson),&.out-of-view {
+		&:not(.lesson),
+		&.out-of-view {
 			.date {
 				display: none !important;
 			}
 		}
 
-		&.selected,&:hover {
+		&.selected,
+		&:hover {
 			.date {
 				display: block;
 			}
@@ -113,7 +115,8 @@
 			font: normal 700 0.6em/1.2em var(--body-font-family);
 			text-transform: uppercase;
 
-			&.start, &.course {
+			&.start,
+			&.course {
 				display: inline-block;
 				padding: 0.2em;
 			}
@@ -138,7 +141,7 @@
 			style: solid;
 			color: #ededed;
 			width: 0 0 1px 0;
-		};
+		}
 
 		&:hover {
 			z-index: 2;
@@ -151,14 +154,9 @@
 			//			-29px 1px 0 1px #cfcfcf,
 			//			 29px 1px 0 1px #cfcfcf;
 
-			box-shadow:
-				-26px 0 0 0 #f0f0f0,
-				-26px 1px 0 0 #f0f0f0,
-				30px 1px 0 0 #f0f0f0,
-				30px 0 0 0 #f0f0f0,
-				-30px 0 0 1px #cfcfcf,
-				-30px 1px 0 1px #cfcfcf,
-				30px 0 0 1px #cfcfcf,
+			box-shadow: -26px 0 0 0 #f0f0f0, -26px 1px 0 0 #f0f0f0,
+				30px 1px 0 0 #f0f0f0, 30px 0 0 0 #f0f0f0, -30px 0 0 1px #cfcfcf,
+				-30px 1px 0 1px #cfcfcf, 30px 0 0 1px #cfcfcf,
 				30px 1px 0 1px #cfcfcf;
 		}
 
@@ -180,7 +178,7 @@
 		@include icon($survey, $side: after, $top: 50%, $left: 18px);
 
 		&::after {
-			margin-top: -27px;//54/2
+			margin-top: -27px; //54/2
 		}
 
 		.meta {
@@ -203,7 +201,8 @@
 				color: var(--tertiary-grey);
 			}
 
-			.responses:not(:empty)::before, .report:not(:empty)::before {
+			.responses:not(:empty)::before,
+			.report:not(:empty)::before {
 				content: '\b7';
 				margin: 0 0.5em;
 			}
@@ -368,7 +367,7 @@
 			position: absolute;
 			left: 15px;
 			top: 50%;
-			margin-top: -37px;//75/2
+			margin-top: -37px; //75/2
 		}
 
 		.tally-box {
@@ -447,7 +446,7 @@
 			position: absolute;
 			right: 15px;
 			top: 38px; // 50%; //NTI-874 - without the expected coordinate root, 50% is not always desired... Make this px
-			margin-top: -18px;//37 / 2
+			margin-top: -18px; //37 / 2
 			z-index: 1;
 		}
 
@@ -457,7 +456,11 @@
 			}
 
 			.assignment-box {
-				@include icon($assignment_due, $position: static, $side:'before');
+				@include icon(
+					$assignment_due,
+					$position: static,
+					$side: 'before'
+				);
 				//@include icon($assignment_due, $side:'before'); // <-- NTI-874 - position doesn't seem to be needed... but the least invasive change is above. (changing the start buttons top from % to px);
 
 				&::before {
@@ -483,7 +486,8 @@
 		}
 	}
 
-	&.overview-videos, &.overview-video {
+	&.overview-videos,
+	&.overview-video {
 		&.video-roll {
 			margin: 10px 0;
 		}
@@ -510,7 +514,12 @@
 			}
 
 			&.viewed {
-				@include icon($circle-check-white-small, $top: 7px, $left: auto, $right: 58px);
+				@include icon(
+					$circle-check-white-small,
+					$top: 7px,
+					$left: auto,
+					$right: 58px
+				);
 
 				&::after {
 					z-index: 2;
@@ -554,7 +563,10 @@
 					}
 
 					&.x-masked {
-						.ctr, .play { display: none; }
+						.ctr,
+						.play {
+							display: none;
+						}
 					}
 				}
 
@@ -656,7 +668,9 @@
 						color: #fff;
 
 						.video-row {
-							.comments, .viewed, .required-value {
+							.comments,
+							.viewed,
+							.required-value {
 								color: #aaeafc;
 							}
 						}
@@ -667,7 +681,11 @@
 							padding-left: 35px;
 							position: relative;
 
-							@include icon($circle-check-white-small, $top: 10px, $left: 12px);
+							@include icon(
+								$circle-check-white-small,
+								$top: 10px,
+								$left: 12px
+							);
 
 							.viewed {
 								display: block;
@@ -688,15 +706,18 @@
 							width: 0 0 1px 0;
 						}
 
-						background-image: none !important;//prevent the inline-style from applying
+						background-image: none !important; //prevent the inline-style from applying
 
-						.comments,.label {
+						.comments,
+						.label {
 							@include ellipse();
 
 							overflow: hidden;
 						}
 
-						.comments, .viewed, .required-value {
+						.comments,
+						.viewed,
+						.required-value {
 							font: normal 700 0.6em/1.3em var(--body-font-family);
 							color: var(--secondary-grey);
 							text-transform: uppercase;
@@ -728,7 +749,8 @@
 	}
 }
 
-.overview-group, .overview-section {
+.overview-group,
+.overview-section {
 	clear: both;
 
 	h2 {
@@ -740,7 +762,7 @@
 		span {
 			position: relative;
 			display: inline-block;
-			background: #ce78e0;//additional/default
+			background: #ce78e0; //additional/default
 			padding: 0 1em 0 4.15em;
 			overflow: hidden;
 			max-width: 100%;
@@ -776,11 +798,11 @@
 		}
 
 		&.required span {
-			background: #f9824e;//required
+			background: #f9824e; //required
 		}
 
 		&.session-overview span {
-			background: #f9824e;//session-overview
+			background: #f9824e; //session-overview
 		}
 	}
 
@@ -830,7 +852,9 @@
 
 .content-link,
 .content-card {
-	a .thumbnail { @include icon($extern-link,$top:0,$left:auto,$right:0); }
+	a .thumbnail {
+		@include icon($extern-link, $top: 0, $left: auto, $right: 0);
+	}
 
 	&:hover a .thumbnail::after {
 		@include sprite($extern-link_hover);

@@ -1,78 +1,84 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.parts.BaseInput',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.enrollment-baseinput',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.BaseInput', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-baseinput',
+		cls: 'enrollment-input-container',
 
-	cls: 'enrollment-input-container',
+		initComponent: function () {
+			var events = [
+				'changed',
+				'reveal-item',
+				'hide-item',
+				'maybe-hide-item',
+				'viewLicense',
+				'prohibited',
+			];
 
-	initComponent: function () {
-		var events = ['changed', 'reveal-item', 'hide-item', 'maybe-hide-item', 'viewLicense', 'prohibited'];
+			if (this.focusEvent) {
+				events.push(this.focusEvent);
+			}
 
-		if (this.focusEvent) {
-			events.push(this.focusEvent);
-		}
+			this.enableBubble(events);
 
-		this.enableBubble(events);
+			if (Ext.isString(this.reveals)) {
+				this.reveals = {
+					name: this.reveals,
+				};
+			}
+		},
 
-		if (Ext.isString(this.reveals)) {
-			this.reveals = {
-				name: this.reveals
-			};
-		}
+		afterRender: function () {
+			this.callParent(arguments);
+			this.setUpChangeMonitors();
 
-	},
+			if (this.reveals && !this.reveals.ifNotEmpty) {
+				this.fireEvent('hide-item', this.reveals.name);
+			}
 
+			if (this.hides) {
+				this.fireEvent('hide-item', this.hides);
+			}
 
-	afterRender: function () {
-		this.callParent(arguments);
-		this.setUpChangeMonitors();
+			if (this.startingvalue) {
+				this.setValue(this.startingvalue, this.startingvaluename);
+			}
 
-		if (this.reveals && !this.reveals.ifNotEmpty) {
-			this.fireEvent('hide-item', this.reveals.name);
-		}
+			this.addCls(this.otherCls);
 
-		if (this.hides) {
-			this.fireEvent('hide-item', this.hides);
-		}
+			this.el.set({
+				'data-fieldname': this.name,
+			});
+		},
 
-		if (this.startingvalue) {
-			this.setValue(this.startingvalue, this.startingvaluename);
-		}
+		setUpChangeMonitors: function () {
+			this.mon(this.el, 'click', 'changed');
+		},
 
-		this.addCls(this.otherCls);
+		changed: function (e) {
+			var me = this,
+				anchor = e && e.getTarget && e.getTarget('a[data-event]'),
+				parent = me.up('[changed]');
 
-		this.el.set({
-			'data-fieldname': this.name
-		});
-	},
+			if (anchor) {
+				me.fireEvent(anchor.getAttribute('data-event'), anchor);
+				e.stopEvent();
+				return false;
+			}
 
+			this.removeError();
 
-	setUpChangeMonitors: function () {
-		this.mon(this.el, 'click', 'changed');
-	},
-
-
-	changed: function (e) {
-		var me = this,
-			anchor = e && e.getTarget && e.getTarget('a[data-event]'),
-			parent = me.up('[changed]');
-
-		if (anchor) {
-			me.fireEvent(anchor.getAttribute('data-event'), anchor);
-			e.stopEvent();
-			return false;
-		}
-
-		this.removeError();
-
-		wait()
-			.then(function () {
-
+			wait().then(function () {
 				if (me.reveals) {
-					if (me.reveals.ifNotEmpty && !me.isEmpty() && me.isCorrect()) {
+					if (
+						me.reveals.ifNotEmpty &&
+						!me.isEmpty() &&
+						me.isCorrect()
+					) {
 						me.fireEvent('reveal-item', me.reveals.name);
 					} else if (me.reveals.ifNotEmpty && !me.isEmpty()) {
 						me.fireEvent('hide-item', me.reveals.name);
@@ -82,7 +88,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 						me.fireEvent('hide-item', me.reveals.name);
 					}
 				}
-
 
 				if (me.validateOnChange) {
 					me.isValid();
@@ -101,39 +106,53 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				}
 
 				if (parent) {
-					parent.changed(me.name, me.getValue(true)[me.name], me.doNotStore, me.sets);
+					parent.changed(
+						me.name,
+						me.getValue(true)[me.name],
+						me.doNotStore,
+						me.sets
+					);
 				}
 			});
-	},
+		},
 
-	//override these
-	isEmpty: function () { return false; },
-	addError: function () {},
-	removeError: function () {},
-	setValue: function () {},
+		//override these
+		isEmpty: function () {
+			return false;
+		},
+		addError: function () {},
+		removeError: function () {},
+		setValue: function () {},
 
-	isValid: function () {
-		//if we are required and empty we aren't
-		var isValid = this.required ? !this.isEmpty() : true;
+		isValid: function () {
+			//if we are required and empty we aren't
+			var isValid = this.required ? !this.isEmpty() : true;
 
-		if (!isValid) {
-			this.addError();
-		}
+			if (!isValid) {
+				this.addError();
+			}
 
-		return isValid;
-	},
+			return isValid;
+		},
 
-	isCorrect: function () {
-		//if we don't have a correct value, we can't be incorrect
-		if (this.correct === undefined) { return true; }
-		//if we don't have an el we can't have any answers so we can't be correct
-		if (!this.el) { return false; }
+		isCorrect: function () {
+			//if we don't have a correct value, we can't be incorrect
+			if (this.correct === undefined) {
+				return true;
+			}
+			//if we don't have an el we can't have any answers so we can't be correct
+			if (!this.el) {
+				return false;
+			}
 
-		var value = this.getValue(true);
+			var value = this.getValue(true);
 
-		//if we don't have a value, we can't be correct
-		if (!value) { return false; }
+			//if we don't have a value, we can't be correct
+			if (!value) {
+				return false;
+			}
 
-		return value[this.name] === this.correct;
+			return value[this.name] === this.correct;
+		},
 	}
-});
+);

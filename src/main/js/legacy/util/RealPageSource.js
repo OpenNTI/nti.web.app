@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-const {encodeForURI} = require('@nti/lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.util.RealPageSource', {
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
 
-	constructor (config) {
+	constructor(config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this);
@@ -25,68 +25,58 @@ module.exports = exports = Ext.define('NextThought.util.RealPageSource', {
 		}
 	},
 
-
-	getPageNumber () {
+	getPageNumber() {
 		return this.page;
 	},
 
-
-	getTotal () {
+	getTotal() {
 		return this.pages[this.pages.length - 1];
 	},
 
-
-	getAllPages () {
+	getAllPages() {
 		return this.pages;
 	},
 
-
-	hasNext () {
+	hasNext() {
 		return !!this.next;
 	},
 
-
-	hasPrevious () {
+	hasPrevious() {
 		return !!this.previous;
 	},
 
-
-	getNext () {
+	getNext() {
 		return this.getRoute ? this.getRoute(this.next) : this.next;
 	},
 
-
-	getPrevious () {
+	getPrevious() {
 		return this.getRoute ? this.getRoute(this.previous) : this.previous;
 	},
 
-
-	getNextTitle () {
+	getNextTitle() {
 		return this.nextTitle;
 	},
 
-
-	getPreviousTitle () {
+	getPreviousTitle() {
 		return this.previousTitle;
 	},
 
+	getNextPrecache() {},
+	getPreviousPrecache() {},
 
-	getNextPrecache () {},
-	getPreviousPrecache () {},
-
-
-	getRouteForPage (pageNumber) {
-		const page = this.realPageIndex && this.realPageIndex['real-pages'][pageNumber];
+	getRouteForPage(pageNumber) {
+		const page =
+			this.realPageIndex && this.realPageIndex['real-pages'][pageNumber];
 
 		if (!page) {
-			return {title: '', href: ''};
+			return { title: '', href: '' };
 		}
 
-		const {NavNTIID} = page;
+		const { NavNTIID } = page;
 		const parts = NavNTIID.split('#');
 
 		parts[0] = encodeForURI(parts[0]);
 
-		return {title: '', href: parts.join('#')};
-	}
+		return { title: '', href: parts.join('#') };
+	},
 });

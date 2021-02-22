@@ -5,132 +5,131 @@ require('../../../../../stream/List');
 require('./Page');
 require('./events/Empty');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.activity.parts.Stream',
+	{
+		extend: 'NextThought.app.stream.List',
+		alias: 'widget.profile-user-activity-stream',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
-	extend: 'NextThought.app.stream.List',
-	alias: 'widget.profile-user-activity-stream',
+		userChanged: function (user) {
+			var joined;
 
+			this.user = user;
 
-	userChanged: function (user) {
-		var joined;
+			if (this.hasInitialWidget() && this.rendered) {
+				joined = this.down('joined-event');
 
-		this.user = user;
-
-		if (this.hasInitialWidget() && this.rendered) {
-			joined = this.down('joined-event');
-
-			if (joined && joined.setUser) {
-				joined.setUser(this.user);
+				if (joined && joined.setUser) {
+					joined.setUser(this.user);
+				}
 			}
-		}
 
-		if (this.emptyCmp) {
-			this.emptyCmp.setUser(this.user);
-		}
-	},
-
-
-	initialWidgetConfig: function () {
-		return { xtype: 'joined-event', username: this.user };
-	},
-
-
-	hasInitialWidget: function () {
-		return !!this.down('joined-event');
-	},
-
-
-	getPageConfig: function (items) {
-		return {
-			xtype: 'profile-stream-page',
-			records: items,
-			user: this.user,
-			navigateToObject: this.navigateToObject.bind(this)
-		};
-	},
-
-
-	loadBatch: function (batch) {
-		this.currentBatch = batch;
-		if (batch.Items.length) {
-			this.removeEmpty();
-			this.fillInItems(batch.Items);
-		} else if (batch.isFirst && this.getPageCount() === 0) {
-			this.onEmpty(batch);
-		}
-
-		if (batch.isLast) {
-			this.onDone(this.StreamSource);
-			this.isOnLastBatch = true;
-		}
-	},
-
-
-	fillInItems () {
-		this.callParent(arguments);
-
-		const listContainer = this.PAGES[0];
-		if (listContainer && listContainer.items.getCount() === 0) {
-			this.onEmpty(this.currentBatch);
-		}
-	},
-
-
-	onDone: function (streamSource) {
-		var config = this.initialWidgetConfig();
-
-		if (this.shouldAddJoinedEvent(streamSource)) {
-			if (!this.hasInitialWidget()) {
-				this.joinedCmp = this.add(config);
+			if (this.emptyCmp) {
+				this.emptyCmp.setUser(this.user);
 			}
-		} else if (this.joinedCmp) {
-			this.joinedCmp.destroy();
-		}
-	},
+		},
 
+		initialWidgetConfig: function () {
+			return { xtype: 'joined-event', username: this.user };
+		},
 
-	onEmpty: function (batch) {
-		var cmp = this.getGroupContainer(),
-			hasFilters = this.hasFiltersApplied(batch);
+		hasInitialWidget: function () {
+			return !!this.down('joined-event');
+		},
 
-		if (!this.emptyCmp) {
-			this.emptyCmp = cmp.add({
-				xtype: 'profile-activity-part-empty',
-				hasFilters: hasFilters,
-				user: this.user
-			});
-		}
-	},
+		getPageConfig: function (items) {
+			return {
+				xtype: 'profile-stream-page',
+				records: items,
+				user: this.user,
+				navigateToObject: this.navigateToObject.bind(this),
+			};
+		},
 
+		loadBatch: function (batch) {
+			this.currentBatch = batch;
+			if (batch.Items.length) {
+				this.removeEmpty();
+				this.fillInItems(batch.Items);
+			} else if (batch.isFirst && this.getPageCount() === 0) {
+				this.onEmpty(batch);
+			}
 
-	hasFiltersApplied: function (batch) {
-		var s = this.StreamSource;
+			if (batch.isLast) {
+				this.onDone(this.StreamSource);
+				this.isOnLastBatch = true;
+			}
+		},
 
-		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
-			return true;
-		}
+		fillInItems() {
+			this.callParent(arguments);
 
-		if (!batch && s) {
-			return (s.extraParams && s.extraParams.value) || (s.accepts && s.accepts.value) || (s.filters && s.filters.value);
-		}
+			const listContainer = this.PAGES[0];
+			if (listContainer && listContainer.items.getCount() === 0) {
+				this.onEmpty(this.currentBatch);
+			}
+		},
 
-		return false;
-	},
+		onDone: function (streamSource) {
+			var config = this.initialWidgetConfig();
 
+			if (this.shouldAddJoinedEvent(streamSource)) {
+				if (!this.hasInitialWidget()) {
+					this.joinedCmp = this.add(config);
+				}
+			} else if (this.joinedCmp) {
+				this.joinedCmp.destroy();
+			}
+		},
 
-	shouldAddJoinedEvent: function (source) {
-		var extra = source && source.extraParams,
-			createdTime = this.user && this.user.get('CreatedTime'),
-			inSeconds = (createdTime && createdTime.getTime()) / 1000;
+		onEmpty: function (batch) {
+			var cmp = this.getGroupContainer(),
+				hasFilters = this.hasFiltersApplied(batch);
 
-		if (extra && extra.batchAfter && !isNaN(inSeconds)) {
-			return inSeconds > extra.batchAfter;
-		}
+			if (!this.emptyCmp) {
+				this.emptyCmp = cmp.add({
+					xtype: 'profile-activity-part-empty',
+					hasFilters: hasFilters,
+					user: this.user,
+				});
+			}
+		},
 
-		if (source.accepts && source.accepts.value) {
+		hasFiltersApplied: function (batch) {
+			var s = this.StreamSource;
+
+			if (
+				batch &&
+				batch.FilteredTotalItemCount !== batch.TotalItemCount
+			) {
+				return true;
+			}
+
+			if (!batch && s) {
+				return (
+					(s.extraParams && s.extraParams.value) ||
+					(s.accepts && s.accepts.value) ||
+					(s.filters && s.filters.value)
+				);
+			}
+
 			return false;
-		}
+		},
 
-		return true;
+		shouldAddJoinedEvent: function (source) {
+			var extra = source && source.extraParams,
+				createdTime = this.user && this.user.get('CreatedTime'),
+				inSeconds = (createdTime && createdTime.getTime()) / 1000;
+
+			if (extra && extra.batchAfter && !isNaN(inSeconds)) {
+				return inSeconds > extra.batchAfter;
+			}
+
+			if (source.accepts && source.accepts.value) {
+				return false;
+			}
+
+			return true;
+		},
 	}
-});
+);

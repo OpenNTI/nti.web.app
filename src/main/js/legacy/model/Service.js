@@ -1,30 +1,28 @@
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
+const { getService } = require('@nti/web-client');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+	.get('ParseUtils', () => require('legacy/util/Parsing'));
 
 const Community = require('./Community');
 
 require('legacy/model/Base');
 require('legacy/model/PageInfo');
 
-const {guidGenerator, getURL} = Globals;
-
-
+const { guidGenerator, getURL } = Globals;
 
 module.exports = exports = Ext.define('NextThought.model.Service', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'Class',
 
 	fields: [
-		{ name: 'Items', type: 'auto', defaultValue: {Items: []}},
-		{ name: 'Class', type: 'string', defaultValue: 'Service'},
-		{ name: 'SiteCommunity', type: 'string'},
-		{ name: 'CapabilityList', type: 'auto'}
+		{ name: 'Items', type: 'auto', defaultValue: { Items: [] } },
+		{ name: 'Class', type: 'string', defaultValue: 'Service' },
+		{ name: 'SiteCommunity', type: 'string' },
+		{ name: 'CapabilityList', type: 'auto' },
 	],
 
 	request: function (urlOrConfig) {
@@ -37,12 +35,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			delete urlOrConfig.returnResponse;
 		}
 
-		const {stack} = Error();
+		const { stack } = Error();
 		return new Promise(function (fulfill, reject) {
-			function resolve (q, s, r) {
+			function resolve(q, s, r) {
 				var value = r.responseText;
 				if (!s) {
-					const asPlain = (txt) => {
+					const asPlain = txt => {
 						try {
 							return JSON.parse(txt).message;
 						} catch (e) {
@@ -52,11 +50,20 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 						}
 					};
 
-					const e = new Error(`${r.status}: ${r.statusText}\n${asPlain(r.responseText)}`);
-					reject(Object.assign(e, r, {
-						stack: e.stack + '\n' + String(stack).split('\n').slice(1).join('\n'),
-						status: r.status
-					}));
+					const e = new Error(
+						`${r.status}: ${r.statusText}\n${asPlain(
+							r.responseText
+						)}`
+					);
+					reject(
+						Object.assign(e, r, {
+							stack:
+								e.stack +
+								'\n' +
+								String(stack).split('\n').slice(1).join('\n'),
+							status: r.status,
+						})
+					);
 					return;
 				}
 
@@ -68,28 +75,30 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			}
 
 			if (Ext.isString(urlOrConfig)) {
-				Ext.apply(cfg, {url: urlOrConfig});
+				Ext.apply(cfg, { url: urlOrConfig });
 			} else {
 				Ext.apply(cfg, urlOrConfig);
 			}
 
-			cfg.callback = Ext.Function.createSequence(resolve, cfg.callback, null);
+			cfg.callback = Ext.Function.createSequence(
+				resolve,
+				cfg.callback,
+				null
+			);
 
 			Ext.Ajax.request(cfg);
 		});
 	},
 
-
 	requestDelete: function (url) {
-		return this.request({url: url, method: 'DELETE'});
+		return this.request({ url: url, method: 'DELETE' });
 	},
-
 
 	post: function (urlOrConfig, data) {
 		var config;
 		if (Ext.isString(urlOrConfig)) {
 			config = {
-				url: urlOrConfig
+				url: urlOrConfig,
 			};
 		} else {
 			config = urlOrConfig;
@@ -101,8 +110,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.request(config);
 	},
 
-
-	postMultiPartData (url, data, onProgress) {
+	postMultiPartData(url, data, onProgress) {
 		const me = this;
 
 		return new Promise(function (fulfill, reject) {
@@ -112,8 +120,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-
-	putMultiPartData (url, data, onProgress) {
+	putMultiPartData(url, data, onProgress) {
 		const me = this;
 
 		return new Promise(function (fulfill, reject) {
@@ -123,8 +130,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-
-	__buildXHR (url, method, onProgress, success, failure) {
+	__buildXHR(url, method, onProgress, success, failure) {
 		let xhr = new XMLHttpRequest(),
 			progress = onProgress ? onProgress.bind(this) : () => {};
 
@@ -142,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				} else {
 					failure({
 						status: xhr.status,
-						responseText: xhr.responseText
+						responseText: xhr.responseText,
 					});
 				}
 			}
@@ -153,25 +159,37 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return xhr;
 	},
 
-
 	postAndExit: function (url, data) {
 		var id = guidGenerator(),
 			tpl = new Ext.XTemplate(
-				Ext.DomHelper.markup({tag: 'form', id: id, action: url, method: 'POST', cn: {
-					tag: 'tpl', foreach: '.', cn: {tag: 'input', type: 'hidden', name: '{$}', value: '{.}'}}}));
+				Ext.DomHelper.markup({
+					tag: 'form',
+					id: id,
+					action: url,
+					method: 'POST',
+					cn: {
+						tag: 'tpl',
+						foreach: '.',
+						cn: {
+							tag: 'input',
+							type: 'hidden',
+							name: '{$}',
+							value: '{.}',
+						},
+					},
+				})
+			);
 
 		tpl.append(Ext.getBody(), data).submit();
 	},
-
 
 	put: function (url, data) {
 		return this.request({
 			url: url,
 			method: 'PUT',
-			jsonData: data
+			jsonData: data,
 		});
 	},
-
 
 	getUserSearchURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
@@ -179,9 +197,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		if (!l) {
 			return null;
 		}
-		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
+		return getURL(
+			this.forceTrailingSlash(l) +
+				(username ? encodeURIComponent(username) : '')
+		);
 	},
-
 
 	getResolveUserURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
@@ -190,9 +210,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
+		return getURL(
+			this.forceTrailingSlash(l) +
+				(username ? encodeURIComponent(username) : '')
+		);
 	},
-
 
 	getBulkResolveUserURL: function () {
 		var w = this.getWorkspace('Global') || {},
@@ -204,20 +226,21 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
-
 	getHighlightColors: function () {
 		return [
-			{name: 'yellow', color: 'EDE619'},
-			{name: 'green', color: '4CE67F'},
-			{name: 'blue', color: '3FB3F6'},
-			{name: 'blackout', color: '000000'},
+			{ name: 'yellow', color: 'EDE619' },
+			{ name: 'green', color: '4CE67F' },
+			{ name: 'blue', color: '3FB3F6' },
+			{ name: 'blackout', color: '000000' },
 		];
 	},
 
-
 	getUserUnifiedSearchURL: function () {
 		var w = this.getWorkspace($AppConfig.username) || {},
-			l = this.getLinkFrom(w.Links || [], Globals.USER_UNIFIED_SEARCH_REL);
+			l = this.getLinkFrom(
+				w.Links || [],
+				Globals.USER_UNIFIED_SEARCH_REL
+			);
 
 		if (!l) {
 			return null;
@@ -226,17 +249,14 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
-
 	getPurchasableItemURL: function () {
 		//Until we get this hung off some workspace
 		return getURL('/dataserver2/store/get_purchasables');
 	},
 
-
 	getStoreActivationURL: function () {
 		return getURL('/dataserver2/store/redeem_purchase_code');
 	},
-
 
 	forceTrailingSlash: function (uri) {
 		if (uri.charAt(uri.length - 1) === '/') {
@@ -246,9 +266,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return uri + '/';
 	},
 
-
 	getLinkFrom: function (links, rel) {
-		var i = links.length - 1, o;
+		var i = links.length - 1,
+			o;
 		for (i; i >= 0; i--) {
 			o = links[i] || {};
 			if (o.rel === rel) {
@@ -259,10 +279,10 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return null;
 	},
 
-
 	getWorkspace: function (name) {
 		var items = this.get('Items') || [],
-			i, workspace = null;
+			i,
+			workspace = null;
 
 		for (i in items) {
 			if (items.hasOwnProperty(i)) {
@@ -276,18 +296,21 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return workspace;
 	},
 
-
-	getWorkspaceLink (name, rel) {
+	getWorkspaceLink(name, rel) {
 		const workspace = this.getWorkspace(name);
 
-		return workspace && workspace.Links && this.getLinkFrom(workspace.Links, rel);
+		return (
+			workspace &&
+			workspace.Links &&
+			this.getLinkFrom(workspace.Links, rel)
+		);
 	},
-
 
 	getLibrary: function (name) {
 		var libs = this.getWorkspace('Library') || {},
 			items = libs.Items || [],
-			i, library = null;
+			i,
+			library = null;
 
 		for (i in items) {
 			if (items.hasOwnProperty(i)) {
@@ -301,11 +324,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return library;
 	},
 
-
 	getMainLibrary: function () {
 		return this.getLibrary('Main') || {};
 	},
-
 
 	/**
 	 *
@@ -318,7 +339,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		Ext.each(this.get('Items') || [], function (workspace) {
 			var items = workspace.Items || [],
-				i, item;
+				i,
+				item;
 
 			for (i in items) {
 				if (items.hasOwnProperty(i)) {
@@ -340,11 +362,13 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Ext.clone(collection);
 	},
 
-
 	getCollection: function (title, workspaceName) {
-		var workspace = this.getWorkspace(workspaceName || $AppConfig.username) || {},
+		var workspace =
+				this.getWorkspace(workspaceName || $AppConfig.username) || {},
 			items = workspace.Items || [],
-			i, item, collection = null;
+			i,
+			item,
+			collection = null;
 
 		for (i in items) {
 			if (items.hasOwnProperty(i)) {
@@ -355,12 +379,10 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					break;
 				}
 			}
-
 		}
 
 		return Ext.clone(collection);
 	},
-
 
 	getObjectURL: function (ntiid, field) {
 		var f = '',
@@ -369,33 +391,44 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			f = Ext.String.format('/++fields++{0}', field);
 		}
 
-		return getURL(Ext.String.format('{0}/{1}{2}',
-			collection.href || '',
-			encodeURIComponent(ntiid || ''),
-			f));
+		return getURL(
+			Ext.String.format(
+				'{0}/{1}{2}',
+				collection.href || '',
+				encodeURIComponent(ntiid || ''),
+				f
+			)
+		);
 	},
-
 
 	getContainerUrl: function (ntiid, type) {
 		var pid = 'Pages(' + ntiid + ')',
 			u = $AppConfig.userObject.get('href').split('?')[0];
 
-		return getURL(Ext.String.format('{0}/{1}/{2}', u, encodeURIComponent(pid || ''), type || ''));
+		return getURL(
+			Ext.String.format(
+				'{0}/{1}/{2}',
+				u,
+				encodeURIComponent(pid || ''),
+				type || ''
+			)
+		);
 	},
-
 
 	urlWithQueryParams: function (base, obj) {
 		if (!Ext.isObject(obj)) {
 			return base;
 		}
 
-		return [base, Ext.Object.toQueryString(obj)].join(base.indexOf('?') < 0 ? '?' : '&');
+		return [base, Ext.Object.toQueryString(obj)].join(
+			base.indexOf('?') < 0 ? '?' : '&'
+		);
 	},
 
-
 	getObjectRaw: function (url, mime, forceMime, targetBundle) {
-		var headers = {}, opts = {},
-			params = {type: mime};
+		var headers = {},
+			opts = {},
+			params = { type: mime };
 
 		if (!url || (Ext.isObject(url) && !url.url)) {
 			return Promise.reject('No URL');
@@ -430,9 +463,16 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					//we call the failure callback
 					if (s) {
 						if (mime && forceMime) {
-							contentType = resp.getResponseHeader('Content-Type');
+							contentType = resp.getResponseHeader(
+								'Content-Type'
+							);
 							if (contentType && contentType.indexOf(mime) < 0) {
-								reason = 'Requested with an explicit accept value of ' + mime + ' but got ' + contentType + '.	Rejecting.';
+								reason =
+									'Requested with an explicit accept value of ' +
+									mime +
+									' but got ' +
+									contentType +
+									'.	Rejecting.';
 								console.error(reason, arguments);
 								return reject(reason);
 							}
@@ -441,7 +481,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 						return fulfill(resp);
 					}
 					reject([req, resp]);
-				}
+				},
 			};
 
 			Ext.apply(request, opts);
@@ -449,10 +489,10 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-
 	dropPageInfosForPrefix: function (prefix) {
 		var url = this.getObjectURL(prefix),
-			k, o = this.pageInfoCache;
+			k,
+			o = this.pageInfoCache;
 
 		for (k in o) {
 			if (o.hasOwnProperty(k)) {
@@ -463,21 +503,18 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		}
 	},
 
-
 	FAKE_PUBLISH_COMMUNITY_NAME: 'client:publish',
-
 
 	getFakePublishCommunity: function () {
 		if (!this.__fakePublishCommunity) {
 			this.__fakePublishCommunity = Community.create({
 				Username: this.FAKE_PUBLISH_COMMUNITY_NAME,
-				alias: 'Public'
+				alias: 'Public',
 			});
 		}
 
 		return this.__fakePublishCommunity;
 	},
-
 
 	isFakePublishCommunity: function (community) {
 		community = community.isModel ? community.get('Username') : community;
@@ -485,9 +522,10 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return community === this.FAKE_PUBLISH_COMMUNITY_NAME;
 	},
 
-
 	getGroupsMap: function () {
-		if (this.__loadUserGroups) { return this.__loadUserGroups; }
+		if (this.__loadUserGroups) {
+			return this.__loadUserGroups;
+		}
 
 		var collection = this.getCollection('Groups'),
 			href = collection && collection.href;
@@ -496,25 +534,25 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			return Promise.resolve([]);
 		}
 
-		this.__loadUserGroups = Service.request(href)
-			.then(function (response) {
-				var json = JSON.parse(response),
-					items = json.Items,
-					keys = Object.keys(items) || [];
+		this.__loadUserGroups = Service.request(href).then(function (response) {
+			var json = JSON.parse(response),
+				items = json.Items,
+				keys = Object.keys(items) || [];
 
-				keys.forEach(function (key) {
-					items[key] = lazy.ParseUtils.parseItems(items[key])[0];
-				});
-
-				return json.Items;
+			keys.forEach(function (key) {
+				items[key] = lazy.ParseUtils.parseItems(items[key])[0];
 			});
+
+			return json.Items;
+		});
 
 		return this.__loadUserGroups;
 	},
 
-
 	getCommunitiesMap: function () {
-		if (this.__loadUserCommunities) { return this.__loadUserCommunities; }
+		if (this.__loadUserCommunities) {
+			return this.__loadUserCommunities;
+		}
 
 		var collection = this.getCollection('Communities'),
 			href = collection && collection.href;
@@ -523,56 +561,55 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			return Promise.resolve([]);
 		}
 
-		this.__loadUserCommunities = Service.request(href)
-			.then(function (response) {
-				var json = JSON.parse(response),
-					items = json.Items,
-					keys = Object.keys(items) || [];
+		this.__loadUserCommunities = Service.request(href).then(function (
+			response
+		) {
+			var json = JSON.parse(response),
+				items = json.Items,
+				keys = Object.keys(items) || [];
 
-				keys.forEach(function (key) {
-					items[key] = lazy.ParseUtils.parseItems(items[key])[0];
-				});
-
-				return items;
+			keys.forEach(function (key) {
+				items[key] = lazy.ParseUtils.parseItems(items[key])[0];
 			});
+
+			return items;
+		});
 
 		return this.__loadUserCommunities;
 	},
 
-
 	getGroupsList: function () {
-		return this.getGroupsMap()
-			.then(function (items) {
-				var keys = Object.keys(items);
+		return this.getGroupsMap().then(function (items) {
+			var keys = Object.keys(items);
 
-				return keys.map(function (key) {
-					return items[key];
-				});
+			return keys.map(function (key) {
+				return items[key];
 			});
+		});
 	},
-
 
 	getCommunitiesList: function () {
-		return this.getCommunitiesMap()
-			.then(function (items) {
-				var keys = Object.keys(items);
+		return this.getCommunitiesMap().then(function (items) {
+			var keys = Object.keys(items);
 
-				return keys.map(function (key) {
-					return items[key];
-				});
+			return keys.map(function (key) {
+				return items[key];
 			});
+		});
 	},
 
-
 	getPageInfo: function (ntiid, success, failure, scope, targetBundle) {
-		var url, me = this,
-			cache = me.pageInfoCache = me.pageInfoCache || {},
+		var url,
+			me = this,
+			cache = (me.pageInfoCache = me.pageInfoCache || {}),
 			params = targetBundle ? { course: targetBundle.getId() } : {},
 			mime = 'application/vnd.nextthought.pageinfo';
 
 		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return Promise.reject(new Error(`Bad PageInfo NTIID: ${JSON.stringify(ntiid)}`));
+			return Promise.reject(
+				new Error(`Bad PageInfo NTIID: ${JSON.stringify(ntiid)}`)
+			);
 		}
 
 		if (!cache.listeningForInvalidations) {
@@ -580,13 +617,18 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				destroyable: true,
 				beforerequest: function (connection, options) {
 					var method = options.method,
-						uri = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
+						uri =
+							options.url &&
+							options.url.replace(
+								/\/\+\+fields\+\+sharingPreference$/,
+								''
+							);
 
 					if (method !== 'GET' && cache[uri]) {
 						console.debug('Invalidate cache at url' + uri);
 						delete cache[uri];
 					}
-				}
+				},
 			});
 		}
 
@@ -605,8 +647,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		//objects back so request them at a special view to influence cache logic
 		//url = this.appendTypeView(url, 'pageinfo+json');
 
-
-		function onSuccess (resp) {
+		function onSuccess(resp) {
 			var pageInfos = lazy.ParseUtils.parseItems(resp.responseText),
 				//We claim success but the damn browsers like to give the wrong object
 				//type from cache.	They don't seem to listen to Vary: Accept or any
@@ -614,30 +655,34 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				pageInfo = pageInfos.first();
 
 			if (pageInfo && pageInfo.get('MimeType') !== mime) {
-				console.warn('Received an unknown object when requesting PageInfo.	Treating as failure', resp);
+				console.warn(
+					'Received an unknown object when requesting PageInfo.	Treating as failure',
+					resp
+				);
 				return Promise.reject([{}, resp]);
 			}
 
-			pageInfos.forEach(function (p) { (p || {}).originalNTIIDRequested = ntiid; });
+			pageInfos.forEach(function (p) {
+				(p || {}).originalNTIIDRequested = ntiid;
+			});
 
-			me.UserDataActions = me.UserDataActions || lazy.UserDataActions.create();
+			me.UserDataActions =
+				me.UserDataActions || lazy.UserDataActions.create();
 
 			me.UserDataActions.updatePreferences(pageInfos);
-			Ext.callback(success, scope, pageInfos);//back-compat
+			Ext.callback(success, scope, pageInfos); //back-compat
 			return pageInfo;
 		}
 
-
-		function onFailure (reason) {
+		function onFailure(reason) {
 			if (!Ext.isArray(reason)) {
 				reason = [reason];
 			}
 			reason[0].ntiid = ntiid;
-			Ext.callback(failure, scope, reason);//back-compat
+			Ext.callback(failure, scope, reason); //back-compat
 			//don't let this 'catch' the failure...let the promise continue to reject.
 			return Promise.reject(reason[1] || reason[0]);
 		}
-
 
 		// function cacheWrapper (resp) {
 		// 	if (resp.status === 200) {
@@ -652,23 +697,23 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		// 	return resp;
 		// }
 
-
 		// if (cache.hasOwnProperty(url)) {
 		//	return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
 		// }
 
-		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
-		// .then(cacheWrapper)
-			.then(onSuccess)
-			.catch(onFailure);
+		return (
+			this.getObjectRaw({ url: url, ntiid: ntiid }, mime + '+json', true)
+				// .then(cacheWrapper)
+				.then(onSuccess)
+				.catch(onFailure)
+		);
 	},
-
 
 	getPathToObjectLink: function (id) {
 		var collection = this.getCollection('LibraryPath', 'Global'),
 			url = collection && collection.href,
 			params = {
-				ObjectId: id
+				ObjectId: id,
 			};
 
 		if (!url) {
@@ -680,12 +725,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return url;
 	},
 
-
-	getObjectOfType (ntiid, mime, forceMime, targetBundle) {
+	getObjectOfType(ntiid, mime, forceMime, targetBundle) {
 		const url = this.getObjectURL(ntiid);
 
 		return this.getObjectRaw(url, mime, forceMime, targetBundle)
-			.then((resp) => {
+			.then(resp => {
 				return lazy.ParseUtils.parseItems(resp.responseText)[0];
 			})
 			.catch(() => {
@@ -693,19 +737,20 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			});
 	},
 
-
 	getObject: function (ntiid, success, failure, scope, safe, targetBundle) {
 		var result;
 
 		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return Promise.reject(new Error(`Bad Object NTIID: ${JSON.stringify(ntiid)}`));
+			return Promise.reject(
+				new Error(`Bad Object NTIID: ${JSON.stringify(ntiid)}`)
+			);
 		}
 
 		result = getService()
 			.then(service => service.getObjectURL(ntiid))
 			.then(url => this.getObjectRaw(url, null, false, targetBundle))
-			.then((resp) => {
+			.then(resp => {
 				try {
 					return lazy.ParseUtils.parseItems(resp.responseText)[0];
 				} catch (e) {
@@ -714,7 +759,6 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					}
 				}
 			});
-
 
 		//for backwards compat. Deprecate the callbacks.
 		result
@@ -731,11 +775,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return result;
 	},
 
-
 	getObjectWithinBundle: function (ntiid, bundle) {
 		return this.getObject(ntiid, null, null, null, false, bundle);
 	},
-
 
 	getObjects: function (ntiids, success, failure, scope, safe) {
 		var me = this;
@@ -743,42 +785,52 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			ntiids = [ntiids];
 		}
 
-		function model (o) {
+		function model(o) {
 			return o && o.isModel ? o : null;
 		}
 
-		return Promise.all(ntiids.map(function (n) {
-			return me.getObject(n, null, null, null, safe);
-		}))
-			.always(function (results) {
-				if (!Ext.isArray(results)) {results = [results];}
-				results = results.map(model);
-				Ext.callback(success, scope, [results]);
-				return results;
-			});
-
+		return Promise.all(
+			ntiids.map(function (n) {
+				return me.getObject(n, null, null, null, safe);
+			})
+		).always(function (results) {
+			if (!Ext.isArray(results)) {
+				results = [results];
+			}
+			results = results.map(model);
+			Ext.callback(success, scope, [results]);
+			return results;
+		});
 	},
 
-
 	getSupportLinks: function () {
-		var aboutLink = getString('NextThought.view.menus.Settings.about.href', null, true) || 'http://nextthought.com';
-		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail', null, true) || null;
+		var aboutLink =
+			getString(
+				'NextThought.view.menus.Settings.about.href',
+				null,
+				true
+			) || 'http://nextthought.com';
+		var supportEmailLink =
+			getString(
+				'NextThought.view.menus.Settings.supportEmail',
+				null,
+				true
+			) || null;
 
 		this.supportLinks = this.supportLinks || {};
 
 		return Ext.applyIf(this.supportLinks, {
 			about: aboutLink,
 			termsOfService: 'about:blank',
-			supportEmail: supportEmailLink
+			supportEmail: supportEmailLink,
 		});
 	},
 
-
 	overrideServiceLink: function (link, value) {
-		var o = {}; o[link] = value || undefined;
+		var o = {};
+		o[link] = value || undefined;
 		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
 	},
-
 
 	__resolveBoards: function (link, community) {
 		return Service.request(link)
@@ -802,7 +854,6 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			});
 	},
 
-
 	getRootBoardLink: function () {
 		var collection = this.getCollection('Boards', $AppConfig.username),
 			links = collection && collection.Links,
@@ -810,7 +861,6 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return link;
 	},
-
 
 	resolveRootBoards: function () {
 		var me = this,
@@ -823,102 +873,102 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		communities = $AppConfig.userObject.getCommunities();
 
-		return Promise.all(communities.map(function (community) {
-			var url = community.getLink('DiscussionBoard');
+		return Promise.all(
+			communities.map(function (community) {
+				var url = community.getLink('DiscussionBoard');
 
-			if (!url) {
-				return Promise.resolve([]);
-			}
+				if (!url) {
+					return Promise.resolve([]);
+				}
 
-			return me.__resolveBoards(url, community);
-		})).then(function (results) {
-			return results.reduce(function (a, b) { return a.concat(b); }, []);
+				return me.__resolveBoards(url, community);
+			})
+		).then(function (results) {
+			return results.reduce(function (a, b) {
+				return a.concat(b);
+			}, []);
 		});
 	},
 
 	//region capability shortcuts
 	/*
-		 *	The following methods are for deciding when things can or cannot happen
-		 */
-
+	 *	The following methods are for deciding when things can or cannot happen
+	 */
 
 	canUploadAvatar: function () {
 		return this.hasCapability('nti.platform.customization.avatar_upload');
 	},
 
-
 	canBlog: function () {
 		return this.hasCapability('nti.platform.blogging.createblogentry');
 	},
-
 
 	canChat: function () {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
 
-
 	canShare: function () {
 		return this.hasCapability('nti.platform.p2p.sharing');
 	},
-
 
 	canFriend: function () {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
-
 	canHaveForum: function () {
 		return this.hasCapability('nti.platform.forums.communityforums');
 	},
 
-
 	canChangePassword: function () {
-		return this.hasCapability('nti.platform.customization.can_change_password');
+		return this.hasCapability(
+			'nti.platform.customization.can_change_password'
+		);
 	},
-
 
 	//Removed crazy filter logic after consoluting Greg and Jason on 1/16/2014. -cutz
 	canCreateDynamicGroups: function () {
 		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
 	},
 
-
 	canDoAdvancedEditing: function () {
 		return this.hasCapability('nti.platform.courseware.advanced_editing');
 	},
-
 
 	hasCapability: function (c) {
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
 
-
 	canCanvasURL: function () {
-		var coll = Service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
+		var coll = Service.getCollectionFor(
+			'application/vnd.nextthought.canvasurlshape',
+			'Pages'
+		);
 		return !!coll;
 	},
-
 
 	canEmbedVideo: function () {
-		var coll = Service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
+		var coll = Service.getCollectionFor(
+			'application/vnd.nextthought.embeddedvideo',
+			'Pages'
+		);
 		return !!coll;
 	},
-
 
 	canShareRedaction: function () {
 		return false;
 	},
 
-
 	canRedact: function () {
-		var coll = Service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
+		var coll = Service.getCollectionFor(
+			'application/vnd.nextthought.redaction',
+			'Pages'
+		);
 		return !!coll;
 	},
-
 
 	//endregion
 	canWorkspaceBlog: function () {
 		return Boolean(Service.getCollection('Blog'));
-	}
+	},
 });

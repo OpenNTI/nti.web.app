@@ -7,41 +7,46 @@ require('./Body');
 require('./Sidebar');
 require('./parts/NewPost');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.group.components.activity.Index',
+	{
+		extend: 'NextThought.app.profiles.user.components.activity.Index',
+		alias: 'widget.profile-group-activity',
 
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Index', {
-	extend: 'NextThought.app.profiles.user.components.activity.Index',
-	alias: 'widget.profile-group-activity',
+		cls: 'activity-page',
+		layout: 'none',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		items: [
+			{ xtype: 'profile-group-activity-body' },
+			{ xtype: 'profile-group-activity-sidebar' },
+		],
 
-	cls: 'activity-page',
-	layout: 'none',
+		initChildComponentRefs: function () {
+			this.streamCmp = this.down('profile-group-activity-body');
+			this.sidebarCmp = this.down('profile-group-activity-sidebar');
+			this.membershipCmp = this.down(
+				'profile-group-membership-condensed'
+			);
 
-	items: [
-		{xtype: 'profile-group-activity-body'},
-		{xtype: 'profile-group-activity-sidebar'}
-	],
+			this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(
+				this
+			);
+		},
 
-	initChildComponentRefs: function () {
-		this.streamCmp = this.down('profile-group-activity-body');
-		this.sidebarCmp = this.down('profile-group-activity-sidebar');
-		this.membershipCmp = this.down('profile-group-membership-condensed');
+		onAddedToParentRouter: function () {
+			var me = this;
 
-		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
-	},
+			this.membershipCmp.gotoSeeAll = function () {
+				me.gotoMembership();
+			};
+		},
 
-	onAddedToParentRouter: function () {
-		var me = this;
-
-		this.membershipCmp.gotoSeeAll = function () {
-			me.gotoMembership();
-		};
-	},
-
-	navigateToActivityItem: function (item, monitors) {
-		this.Router.root.attemptToNavigateToObject(item, monitors);
+		navigateToActivityItem: function (item, monitors) {
+			this.Router.root.attemptToNavigateToObject(item, monitors);
+		},
 	}
-});
+);

@@ -2,90 +2,95 @@ const Ext = require('@nti/extjs');
 
 require('./BaseInput');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.parts.Textarea',
+	{
+		extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+		alias: 'widget.enrollment-textarea',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Textarea', {
-	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-	alias: 'widget.enrollment-textarea',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'input-container enrollment-input text {required} {size}',
+				cn: [{ tag: 'textarea', placeholder: '{placeholder}' }],
+			},
+			{
+				tag: 'tpl',
+				if: 'help',
+				cn: [
+					{
+						cls: 'help',
+						cn: [{ cls: 'information', html: '{help}' }],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'input-container enrollment-input text {required} {size}', cn: [
-			{tag: 'textarea', placeholder: '{placeholder}'}
-		]},
-		{tag: 'tpl', 'if': 'help', cn: [
-			{cls: 'help', cn: [
-				{cls: 'information', html: '{help}'}
-			]}
-		]}
-	]),
+		renderSelectors: {
+			textareaEl: '.input-container textarea',
+		},
 
-	renderSelectors: {
-		textareaEl: '.input-container textarea'
-	},
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, {
+				required: this.required ? 'required' : '',
+				size: this.size,
+				help: this.help,
+				placeholder: this.placeholder,
+			});
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			required: this.required ? 'required' : '',
-			size: this.size,
-			help: this.help,
-			placeholder: this.placeholder
-		});
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
+			if (this.focusEvent) {
+				this.mon(
+					this.textareaEl,
+					'focus',
+					this.fireEvent.bind(this, this.focusEvent)
+				);
+			}
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
+		setUpChangeMonitors: function () {
+			if (this.textareaEl) {
+				this.mon(this.textareaEl, 'keyup', 'changed');
+			}
+		},
 
-		if (this.focusEvent) {
-			this.mon(this.textareaEl, 'focus', this.fireEvent.bind(this, this.focusEvent));
-		}
-	},
+		addError: function () {
+			this.addCls('error');
+		},
 
+		removeError: function () {
+			this.removeCls('error');
+		},
 
-	setUpChangeMonitors: function () {
-		if (this.textareaEl) {
-			this.mon(this.textareaEl, 'keyup', 'changed');
-		}
-	},
+		isEmpty: function () {
+			return !this.textareaEl || !this.textareaEl.getValue();
+		},
 
+		setValue: function (value) {
+			if (!this.rendered) {
+				this.startingValue = value;
+			} else {
+				this.textareaEl.el.dom.value = value;
+			}
+		},
 
-	addError: function () {
-		this.addCls('error');
-	},
+		getValue: function () {
+			var value = {},
+				val;
 
+			if (this.textareaEl) {
+				val = this.textareaEl.getValue();
+			}
 
-	removeError: function () {
-		this.removeCls('error');
-	},
+			if (val) {
+				value[this.name] = val;
+			}
 
-
-	isEmpty: function () {
-		return !this.textareaEl || !this.textareaEl.getValue();
-	},
-
-
-	setValue: function (value) {
-		if (!this.rendered) {
-			this.startingValue = value;
-		} else {
-			this.textareaEl.el.dom.value = value;
-		}
-	},
-
-
-	getValue: function () {
-		var value = {},
-			val;
-
-		if (this.textareaEl) {
-			val = this.textareaEl.getValue();
-		}
-
-		if (val) {
-			value[this.name] = val;
-		}
-
-		return value;
+			return value;
+		},
 	}
-});
+);

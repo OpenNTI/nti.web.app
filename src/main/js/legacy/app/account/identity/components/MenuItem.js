@@ -4,86 +4,111 @@ const SettingsWindow = require('../../settings/Window');
 
 require('legacy/mixins/ProfileLinks');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.account.identity.components.MenuItem',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.account-menuitem',
 
-module.exports = exports = Ext.define('NextThought.app.account.identity.components.MenuItem', {
-	extend: 'Ext.Component',
-	alias: 'widget.account-menuitem',
+		mixins: {
+			eableProfiles: 'NextThought.mixins.ProfileLinks',
+		},
 
-	mixins: {
-		eableProfiles: 'NextThought.mixins.ProfileLinks'
-	},
+		cls: 'account-menu-item',
 
-	cls: 'account-menu-item',
+		renderTpl: Ext.DomHelper.markup([
+			'{user:avatar}',
+			{
+				cls: 'content',
+				cn: [
+					{ cls: 'username', html: '{user:displayName}' },
+					{
+						cls: 'links',
+						cn: [
+							{
+								cls: 'profile',
+								html:
+									'{{{NextThought.view.account.MenuItem.profile}}}',
+							},
+							{
+								cls: 'account',
+								html:
+									'{{{NextThought.view.account.MenuItem.account}}}',
+							},
+						],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		'{user:avatar}',
-		{cls: 'content', cn: [
-			{cls: 'username', html: '{user:displayName}'},
-			{cls: 'links', cn: [
-				{cls: 'profile', html: '{{{NextThought.view.account.MenuItem.profile}}}'},
-				{cls: 'account', html: '{{{NextThought.view.account.MenuItem.account}}}'}
-			]}
-		]}
-	]),
+		renderSelectors: {
+			avatarEl: '.avatar',
+			nameEl: '.username',
+			profileEl: '.content .links .profile',
+			accountEl: '.content .links .account',
+		},
 
-	renderSelectors: {
-		avatarEl: '.avatar',
-		nameEl: '.username',
-		profileEl: '.content .links .profile',
-		accountEl: '.content .links .account'
-	},
+		listeners: {
+			accountEl: {
+				click: 'showAccount',
+			},
+		},
 
-	listeners: {
-		accountEl: {
-			'click': 'showAccount'
-		}
-	},
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, {
+				user: $AppConfig.userObject,
+			});
+			this.monitorUser($AppConfig.userObject);
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {user: $AppConfig.userObject});
-		this.monitorUser($AppConfig.userObject);
-	},
+		monitorUser: function (user) {
+			var me = this,
+				m = {
+					scope: this,
+					destroyable: true,
+					changed: function (r) {
+						var name = r.getName(),
+							profile =
+								me.avatarEl &&
+								me.avatarEl.down('.profile.avatar-pic');
 
-	monitorUser: function (user) {
-		var me = this,
-			m = {
-				scope: this,
-				destroyable: true,
-				'changed': function (r) {
-					var name = r.getName(),
-						profile = me.avatarEl && me.avatarEl.down('.profile.avatar-pic');
+						if (!me.avatarEl || !me.nameEl) {
+							return;
+						}
 
-					if (!me.avatarEl || !me.nameEl) { return; }
+						if (profile) {
+							profile.setStyle({
+								backgroundImage:
+									'url(' + r.get('avatarURL') + ')',
+							});
+						}
 
-					if (profile) {
-						profile.setStyle({backgroundImage: 'url(' + r.get('avatarURL') + ')'});
-					}
+						this.nameEl.update(name);
 
-					this.nameEl.update(name);
+						me.monitorUser(r !== user ? r : null);
+					},
+				};
 
-					me.monitorUser((r !== user) ? r : null);
-				}
-			};
+			if (user) {
+				Ext.destroy(me.userMonitor);
+				me.userMonitor = me.mon(user, m);
+				me.user = user;
+			}
+		},
 
-		if (user) {
-			Ext.destroy(me.userMonitor);
-			me.userMonitor = me.mon(user, m);
-			me.user = user;
-		}
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			this.enableProfileClicks(this.profileEl);
+		},
 
-		this.enableProfileClicks(this.profileEl);
-	},
+		showAccount: function () {
+			var win = SettingsWindow.create();
 
-	showAccount: function () {
-		var win = SettingsWindow.create();
-
-		win.show();
-		win.center();
+			win.show();
+			win.center();
+		},
 	}
-});
+);

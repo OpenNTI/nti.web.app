@@ -1,18 +1,18 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Socket = require('legacy/proxy/Socket');
 const ObjectUtils = require('legacy/util/Object');
 const ModelService = require('legacy/model/Service');
 const PreferenceManager = require('legacy/preference/Manager');
-const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
 // const AccountActions = require('legacy/app/account/Actions');
-const lazy = require('legacy/util/lazy-require')
-	.get('AccountActions', ()=> require('legacy/app/account/Actions'));
+const lazy = require('legacy/util/lazy-require').get('AccountActions', () =>
+	require('legacy/app/account/Actions')
+);
 
 require('legacy/common/StateStore');
-
 
 module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		//Make sure the session is still valid when the window is focused
 		this.mon(Ext.get(window), {
-			focus: '__validateSession'
+			focus: '__validateSession',
 		});
 	},
 
@@ -47,16 +47,18 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	__validateSession: function () {
 		// console.debug('Validating Session');
 
-		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
+		var v =
+			this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
 
 		if (v !== this.sessionId && this.sessionStarted) {
 			Socket.tearDownSocket();
 
 			alert({
 				title: 'Alert',
-				msg: 'You\'re using the application in another tab. This session has been invalidated.',
+				msg:
+					"You're using the application in another tab. This session has been invalidated.",
 				closable: false,
-				buttons: {}
+				buttons: {},
 			});
 		}
 	},
@@ -81,7 +83,9 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		if (fakeService.getLinkFrom(links, 'account.profile.needs.updated')) {
 			this.actions['show-coppa-window'] = true;
-		} else if (fakeService.getLinkFrom(links, 'state-bounced-contact-email')) {
+		} else if (
+			fakeService.getLinkFrom(links, 'state-bounced-contact-email')
+		) {
 			this.actions['bounced-contact'] = true;
 		} else if (fakeService.getLinkFrom(links, 'state-bounced-email')) {
 			this.actions['bounced-email'] = true;
@@ -90,7 +94,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 
 		if (fakeService.getLinkFrom(links, 'RegistrationSurvey')) {
-			this.actions['submit-registration'] = fakeService.getLinkFrom(links, 'RegistrationSurvey');
+			this.actions['submit-registration'] = fakeService.getLinkFrom(
+				links,
+				'RegistrationSurvey'
+			);
 		}
 	},
 
@@ -106,9 +113,15 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		if (this.actions['show-coppa-window']) {
 			AccountActions.maybeShowCoppaWindow();
 		} else if (this.actions['bounced-contact']) {
-			AccountActions.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
+			AccountActions.showEmailRecoveryWindow(
+				'contact_email',
+				'state-bounced-contact-email'
+			);
 		} else if (this.actions['bounced-email']) {
-			AccountActions.showEmailRecoveryWindow('email', 'state-bounced-email');
+			AccountActions.showEmailRecoveryWindow(
+				'email',
+				'state-bounced-email'
+			);
 		}
 
 		if (this.actions['confirm-birthday-coppa']) {
@@ -122,7 +135,9 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
-			AccountActions.showWelcomePage(user.getLink('content.initial_welcome_page'));
+			AccountActions.showWelcomePage(
+				user.getLink('content.initial_welcome_page')
+			);
 		}
 
 		if (this.__shouldShowContentFor('irb_html')) {
@@ -131,11 +146,15 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
 		if (this.__shouldShowContentFor('content.initial_tos_page')) {
-			AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
+			AccountActions.showNewTermsOfService(
+				user.getLink('content.initial_tos_page')
+			);
 		}
 
 		if (this.actions['submit-registration']) {
-			AccountActions.showRegistrationForm(this.actions['submit-registration']);
+			AccountActions.showRegistrationForm(
+				this.actions['submit-registration']
+			);
 		}
 	},
 
@@ -146,11 +165,14 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	onLogin: function () {
 		var me = this;
 
-		Promise.all(this.onLoginActions.map(function (action) { action.call(null); }))
+		Promise.all(
+			this.onLoginActions.map(function (action) {
+				action.call(null);
+			})
+		)
 			.then(this.fireEvent.bind(this, 'login-ready'))
 			.then(function () {
-				wait()
-					.then(me.takeImmediateAction.bind(me));
+				wait().then(me.takeImmediateAction.bind(me));
 			});
 	},
 
@@ -162,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		$AppConfig.userObject = UserRepository.cacheUser(user, true);
 
 		$AppConfig.Preferences = PreferenceManager.create({
-			href: user.get('href').split('?')[0] + '/++preferences++'
+			href: user.get('href').split('?')[0] + '/++preferences++',
 		});
 
 		ObjectUtils.defineAttributes($AppConfig, {
@@ -176,25 +198,28 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 					return null;
 				},
-				setter: function () { throw new Error( 'readonly' ); }
-			}
+				setter: function () {
+					throw new Error('readonly');
+				},
+			},
 		});
 	},
 
-
-	setService (doc) {
+	setService(doc) {
 		this.__serviceDoc = doc;
 		this.fireEvent('service-doc-set');
 	},
 
-	getService () {
-		if (this.__serviceDoc) { return Promise.resolve(this.__serviceDoc); }
+	getService() {
+		if (this.__serviceDoc) {
+			return Promise.resolve(this.__serviceDoc);
+		}
 
-		return new Promise((fulfill) => {
+		return new Promise(fulfill => {
 			this.on({
 				single: true,
-				'service-doc-set': () => fulfill(this.__serviceDoc)
+				'service-doc-set': () => fulfill(this.__serviceDoc),
 			});
 		});
-	}
+	},
 });

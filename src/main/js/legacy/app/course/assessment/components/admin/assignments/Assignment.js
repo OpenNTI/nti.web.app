@@ -1,10 +1,10 @@
 require('./Assignment.scss');
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
-const {scoped} = require('@nti/lib-locale');
+const { scoped } = require('@nti/lib-locale');
 
-const {getString, getFormattedString} = require('legacy/util/Localization');
+const { getString, getFormattedString } = require('legacy/util/Localization');
 const User = require('legacy/model/User');
 
 require('legacy/common/ux/FilterMenu');
@@ -13,818 +13,956 @@ require('legacy/util/Parsing');
 require('../ListHeader');
 require('../PagedGrid');
 
-scoped('nti-web-app.course.assessment.components.admin.assignments.Assignment', {
-	root: 'Assignment'
-});
+scoped(
+	'nti-web-app.course.assessment.components.admin.assignments.Assignment',
+	{
+		root: 'Assignment',
+	}
+);
 
-module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-admin-assignments-item',
-	stateKey: 'admin-assignment-students',
-	ui: 'course-assessment',
-	cls: 'course-assessment-header assignment-item',
-	layout: 'none',
-	componentLayout: 'customtemplate',
-	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
-	pathRoot: 'Assignment',
-
-	renderTpl: Ext.DomHelper.markup([
-		//toolbar
-		{
-			cls: 'toolbar',
-			cn: [
-				{ cls: 'right controls', cn: [
-					{ cls: 'page', cn: [
-						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' {{{NextThought.view.courseware.assessment.assignments.admin.Assignment.of}}} ']},
-						{tag: 'tpl', 'if': '!page', cn: ['{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.total}}} ']},
-						{tag: 'span', cls: 'total', html: '{total}'}
-					] },
-					{ cls: 'up {noPrev:boolStr("disabled")}' },
-					{ cls: 'down {noNext:boolStr("disabled")}' }
-				] },
-				//path (bread crumb)
-				{
-					cls: 'assignment-breadcrumb-path',
-					cn: [
-						{ tag: 'span', cls: 'path part root', html: '{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}'},
-						' / ',
-						{ tag: 'span', cls: 'path part current', html: '{pathBranch:htmlEncode}'}
-					]
-				}
-			]
+module.exports = exports = Ext.define(
+	'NextThought.app.course.assessment.components.admin.assignments.Assignment',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.course-assessment-admin-assignments-item',
+		stateKey: 'admin-assignment-students',
+		ui: 'course-assessment',
+		cls: 'course-assessment-header assignment-item',
+		layout: 'none',
+		componentLayout: 'customtemplate',
+		childEls: ['body'],
+		getTargetEl: function () {
+			return this.body;
 		},
-		{ id: '{id}-body', cls: 'x-panel-body body', cn: ['{%this.renderContainer(out,values)%}'] }
-	]),
+		pathRoot: 'Assignment',
 
-	renderSelectors: {
-		toolbarEl: '.toolbar',
-		rootPathEl: '.toolbar .path.part.root',
-		previousEl: '.toolbar .controls .up',
-		nextEl: '.toolbar .controls .down',
-		totalEl: '.toolbar .controls .page .total',
-		changeDateEl: '.header .controls .email',
-		filtersEl: '.header span.filters',
-		avatarEl: '.header span.toggle-avatar',
-		reportsEl: '.header .controls .reports',
-		pagerEl: '.header .pager-wrapper'
-	},
+		renderTpl: Ext.DomHelper.markup([
+			//toolbar
+			{
+				cls: 'toolbar',
+				cn: [
+					{
+						cls: 'right controls',
+						cn: [
+							{
+								cls: 'page',
+								cn: [
+									{
+										tag: 'tpl',
+										if: 'page',
+										cn: [
+											{ tag: 'span', html: '{page}' },
+											' {{{NextThought.view.courseware.assessment.assignments.admin.Assignment.of}}} ',
+										],
+									},
+									{
+										tag: 'tpl',
+										if: '!page',
+										cn: [
+											'{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.total}}} ',
+										],
+									},
+									{
+										tag: 'span',
+										cls: 'total',
+										html: '{total}',
+									},
+								],
+							},
+							{ cls: 'up {noPrev:boolStr("disabled")}' },
+							{ cls: 'down {noNext:boolStr("disabled")}' },
+						],
+					},
+					//path (bread crumb)
+					{
+						cls: 'assignment-breadcrumb-path',
+						cn: [
+							{
+								tag: 'span',
+								cls: 'path part root',
+								html:
+									'{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}',
+							},
+							' / ',
+							{
+								tag: 'span',
+								cls: 'path part current',
+								html: '{pathBranch:htmlEncode}',
+							},
+						],
+					},
+				],
+			},
+			{
+				id: '{id}-body',
+				cls: 'x-panel-body body',
+				cn: ['{%this.renderContainer(out,values)%}'],
+			},
+		]),
 
-	listeners: {
-		rootPathEl: { click: 'fireGoUp' },
-		previousEl: { click: 'firePreviousEvent' },
-		nextEl: { click: 'fireNextEvent' }
-	},
+		renderSelectors: {
+			toolbarEl: '.toolbar',
+			rootPathEl: '.toolbar .path.part.root',
+			previousEl: '.toolbar .controls .up',
+			nextEl: '.toolbar .controls .down',
+			totalEl: '.toolbar .controls .page .total',
+			changeDateEl: '.header .controls .email',
+			filtersEl: '.header span.filters',
+			avatarEl: '.header span.toggle-avatar',
+			reportsEl: '.header .controls .reports',
+			pagerEl: '.header .pager-wrapper',
+		},
 
-	items: [
-		{xtype: 'course-assessment-admin-listheader'},
-		{
-			xtype: 'course-admin-paged-grid',
-			cls: 'student-assignment-overview admin-paged-grid',
-			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
-			columnOverrides: {
-				Student: {padding: '0 0 0 30'},
-				Grade: {
-					text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
-					componentCls: 'score',
-					tdCls: 'text score',
-					width: 110,
-					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-						{cls: 'gradebox', cn: [
-							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
-							{ tag: 'tpl', 'if': 'this.isGradeExcused(values)', cn: [
+		listeners: {
+			rootPathEl: { click: 'fireGoUp' },
+			previousEl: { click: 'firePreviousEvent' },
+			nextEl: { click: 'fireNextEvent' },
+		},
+
+		items: [
+			{ xtype: 'course-assessment-admin-listheader' },
+			{
+				xtype: 'course-admin-paged-grid',
+				cls: 'student-assignment-overview admin-paged-grid',
+				columnOrder: [
+					'Student',
+					'Username',
+					'Completed',
+					'Grade',
+					'Feedback',
+					'Submission',
+				],
+				columnOverrides: {
+					Student: { padding: '0 0 0 30' },
+					Grade: {
+						text: getString(
+							'NextThought.view.courseware.assessment.admin.Grid.score'
+						),
+						componentCls: 'score',
+						tdCls: 'text score',
+						width: 110,
+						tpl: new Ext.XTemplate(
+							Ext.DomHelper.markup([
 								{
-									tag: 'span', cls: 'grade-excused',
-									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
-								}
-							]},
-							{ tag: 'tpl', 'if': 'this.hasTotalPoints(values) && !this.isGradeExcused(values)', cn: [
-								{
-									tag: 'span', cls: 'total-points',
-									html: '/ {[this.getTotalPoints(values)]}'
-								}
-							]}
-						]}
-					]), {
-						getGrade: function (values) {
-							var historyItem = values.HistoryItemSummary,
-								grade = historyItem && historyItem.get('Grade'),
-								gradeVals = (grade && grade.getValues()) || {};
+									cls: 'gradebox',
+									cn: [
+										{
+											tag: 'input',
+											size: 3,
+											tabindex: '1',
+											type: 'text',
+											value: '{[this.getGrade(values)]}',
+										},
+										{
+											tag: 'tpl',
+											if: 'this.isGradeExcused(values)',
+											cn: [
+												{
+													tag: 'span',
+													cls: 'grade-excused',
+													html: getFormattedString(
+														'NextThought.view.courseware.assessment.admin.Grid.excused'
+													),
+												},
+											],
+										},
+										{
+											tag: 'tpl',
+											if:
+												'this.hasTotalPoints(values) && !this.isGradeExcused(values)',
+											cn: [
+												{
+													tag: 'span',
+													cls: 'total-points',
+													html:
+														'/ {[this.getTotalPoints(values)]}',
+												},
+											],
+										},
+									],
+								},
+							]),
+							{
+								getGrade: function (values) {
+									var historyItem = values.HistoryItemSummary,
+										grade =
+											historyItem &&
+											historyItem.get('Grade'),
+										gradeVals =
+											(grade && grade.getValues()) || {};
 
-							return gradeVals.value || '';
-						},
+									return gradeVals.value || '';
+								},
 
-						isGradeExcused: function (values) {
-							var historyItem = values.HistoryItemSummary,
-								grade = historyItem && historyItem.get('Grade');
+								isGradeExcused: function (values) {
+									var historyItem = values.HistoryItemSummary,
+										grade =
+											historyItem &&
+											historyItem.get('Grade');
 
-							return grade && grade.get('IsExcused');
-						},
+									return grade && grade.get('IsExcused');
+								},
 
-						hasTotalPoints: (values) => {
-							const {HistoryItemSummary:historyItem} = values;
-							const item = historyItem.get('item');
+								hasTotalPoints: values => {
+									const {
+										HistoryItemSummary: historyItem,
+									} = values;
+									const item = historyItem.get('item');
 
-							return item && !!item.get('total_points');
-						},
+									return item && !!item.get('total_points');
+								},
 
-						getTotalPoints: (values) => {
-							const {HistoryItemSummary:historyItem} = values;
-							const item = historyItem.get('item');
+								getTotalPoints: values => {
+									const {
+										HistoryItemSummary: historyItem,
+									} = values;
+									const item = historyItem.get('item');
 
-							return item && item.get('total_points');
-						}
-					}
-					)
-				}
+									return item && item.get('total_points');
+								},
+							}
+						),
+					},
+				},
+			},
+			{
+				xtype: 'filter-menupanel',
+				searchPlaceHolderText: getString(
+					'NextThought.view.courseware.assessment.assignments.admin.Assignment.search'
+				),
+				filters: [
+					{
+						text: getString(
+							'NextThought.view.courseware.assessment.assignments.admin.Assignment.enrolled'
+						),
+						filter: 'ForCredit',
+					},
+					{
+						text: getString(
+							'NextThought.view.courseware.assessment.assignments.admin.Assignment.open'
+						),
+						filter: 'Open',
+					},
+				],
+			},
+		],
+
+		constructor: function (config) {
+			this.items = Ext.clone(this.items);
+			this.callParent(arguments);
+		},
+
+		initComponent: function () {
+			this._masked = 0;
+			this.callParent(arguments);
+
+			var me = this,
+				pageHeader = me.down('course-assessment-admin-listheader'),
+				grid = me.down('grid');
+
+			me.filterMenu = this.down('filter-menupanel');
+
+			me.mon(me.filterMenu, {
+				filter: 'doFilter',
+				search: { fn: 'doSearch', buffer: 450 },
+			});
+
+			me.store = me.assignments.getAssignmentHistory(me.assignment);
+
+			me.mon(me.store, {
+				beforeload: 'mask',
+				load: 'onStoreLoad',
+			});
+
+			grid.bindStore(me.store);
+			grid.dueDate = me.assignment.getDueDate();
+			grid.beforeEdit = me.setDisabled.bind(me);
+			grid.afterEdit = me.setEnabled.bind(me);
+
+			me.mon(grid, {
+				'load-page': me.loadPage.bind(me),
+				sortchange: me.changeSort.bind(me),
+				itemclick: me.onItemClick.bind(me),
+			});
+
+			//if there is a completed column but no parts on the assignment
+			//hide the completed column
+			if (me.assignment.isEmpty()) {
+				grid.hideColumn('Completed');
 			}
-		},
-		{
-			xtype: 'filter-menupanel',
-			searchPlaceHolderText: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.search'),
-			filters: [
-				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.enrolled'), filter: 'ForCredit'},
-				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.open'), filter: 'Open'}
-			]
-		}
-	],
 
-	constructor: function (config) {
-		this.items = Ext.clone(this.items);
-		this.callParent(arguments);
-	},
-
-	initComponent: function () {
-		this._masked = 0;
-		this.callParent(arguments);
-
-		var me = this,
-			pageHeader = me.down('course-assessment-admin-listheader'),
-			grid = me.down('grid');
-
-		me.filterMenu = this.down('filter-menupanel');
-
-		me.mon(me.filterMenu, {
-			filter: 'doFilter',
-			search: {fn: 'doSearch', buffer: 450}
-		});
-
-		me.store = me.assignments.getAssignmentHistory(me.assignment);
-
-		me.mon(me.store, {
-			beforeload: 'mask',
-			load: 'onStoreLoad'
-		});
-
-		grid.bindStore(me.store);
-		grid.dueDate = me.assignment.getDueDate();
-		grid.beforeEdit = me.setDisabled.bind(me);
-		grid.afterEdit = me.setEnabled.bind(me);
-
-		me.mon(grid, {
-			'load-page': me.loadPage.bind(me),
-			'sortchange': me.changeSort.bind(me),
-			'itemclick': me.onItemClick.bind(me)
-		});
-
-		//if there is a completed column but no parts on the assignment
-		//hide the completed column
-		if (me.assignment.isEmpty()) {
-			grid.hideColumn('Completed');
-		}
-
-		$AppConfig.Preferences.getPreference('Gradebook')
-			.then(function (value) {
+			$AppConfig.Preferences.getPreference('Gradebook').then(function (
+				value
+			) {
 				pageHeader.setAvatarToggle(!value.get('hide_avatars'));
 			});
 
-		if (me.student) {
-			me.store.proxy.extraParams = Ext.apply(me.store.proxy.extraParams || {}, {
-				batchContainingUsernameFilterByScope: me.student
+			if (me.student) {
+				me.store.proxy.extraParams = Ext.apply(
+					me.store.proxy.extraParams || {},
+					{
+						batchContainingUsernameFilterByScope: me.student,
+					}
+				);
+			}
+
+			me.pageHeader = pageHeader;
+
+			me.pageHeader.setAssignment(me.assignment);
+			me.pageHeader.bindStore(me.store);
+
+			me.mon(pageHeader, {
+				'toggle-avatars': 'toggleAvatars',
+				'page-change': function () {
+					me.mon(me.store, {
+						single: true,
+						load: grid.scrollToTop.bind(grid),
+					});
+				},
+				'load-page': me.loadPage.bind(me),
+				'set-page-size': me.setPageSize.bind(me),
 			});
-		}
+		},
 
-		me.pageHeader = pageHeader;
+		restoreState: function (state, fromAfterRender) {
+			//if this is coming form after render and we've already restored
+			//a state don't overwrite it. The main reason this is here is so
+			//if they hit the back button the component is already rendered with
+			//a state so we want to override it, but if we are coming from after
+			//render we don't want to override a previous state.
+			if (fromAfterRender && this.stateRestored) {
+				return Promise.resolve();
+			}
 
-		me.pageHeader.setAssignment(me.assignment);
-		me.pageHeader.bindStore(me.store);
+			state.currentPage = state.currentPage || 1;
 
-		me.mon(pageHeader, {
-			'toggle-avatars': 'toggleAvatars',
-			'page-change': function () {
-				me.mon(me.store, {
-					single: true,
-					'load': grid.scrollToTop.bind(grid)
-				});
-			},
-			'load-page': me.loadPage.bind(me),
-			'set-page-size': me.setPageSize.bind(me)
-		});
-	},
+			this.currentState = state || {};
+			this.stateRestored = true;
 
-	restoreState: function (state, fromAfterRender) {
-		//if this is coming form after render and we've already restored
-		//a state don't overwrite it. The main reason this is here is so
-		//if they hit the back button the component is already rendered with
-		//a state so we want to override it, but if we are coming from after
-		//render we don't want to override a previous state.
-		if (fromAfterRender && this.stateRestored) {
+			return this.applyState(this.currentState);
+		},
+
+		/**
+		 * If the store has already loaded and the record for the students is there don't do anything
+		 * otherwise load the store to that student
+		 *
+		 * @param  {Object} state	state to restore
+		 * @param  {string} student id of the student to restore to
+		 * @returns {Promise}		 fulfills once the store is loaded with the student
+		 */
+		restoreStudent: function (state, student) {
+			if (!this.initialLoad) {
+				this.student = student;
+
+				return this.restoreState(state);
+			}
+
+			var record;
+
+			record = this.store.findBy(function (rec) {
+				var user = rec.get('User');
+
+				return student === User.getIdFromRaw(user);
+			});
+
+			if (record < 0) {
+				this.student = student;
+				return this.applyState(state);
+			}
+
 			return Promise.resolve();
-		}
+		},
 
-		state.currentPage = state.currentPage || 1;
+		beforeRender: function () {
+			this.callParent(arguments);
 
-		this.currentState = state || {};
-		this.stateRestored = true;
+			this.pathBranch = this.assignmentTitle;
 
-		return this.applyState(this.currentState);
-	},
+			this.renderData = Ext.apply(this.renderData || {}, {
+				pathRoot: this.pathRoot,
+				pathBranch: this.pathBranch,
+				page: this.pageSource.getPageNumber(),
+				noPrev: !this.pageSource.hasPrevious(),
+				noNext: !this.pageSource.hasNext(),
+			});
+		},
 
-	/**
-	 * If the store has already loaded and the record for the students is there don't do anything
-	 * otherwise load the store to that student
-	 *
-	 * @param  {Object} state	state to restore
-	 * @param  {string} student id of the student to restore to
-	 * @returns {Promise}		 fulfills once the store is loaded with the student
-	 */
-	restoreStudent: function (state, student) {
-		if (!this.initialLoad) {
-			this.student = student;
+		afterRender: function () {
+			this.callParent(arguments);
 
-			return this.restoreState(state);
-		}
+			this.el.query('a.button').forEach(this._setupButtons);
 
-		var record;
+			if (this._masked) {
+				this._showMask();
+			}
 
-		record = this.store.findBy(function (rec) {
-			var user = rec.get('User');
+			this.syncFilterToUI(true);
 
-			return student === User.getIdFromRaw(user);
-		});
+			this.onPagerUpdate();
 
-		if (record < 0) {
-			this.student = student;
-			return this.applyState(state);
-		}
+			this.mon(this.pageHeader, {
+				showFilters: this.onFiltersClicked.bind(this),
+				goToRawAssignment: this.goToRawAssignment.bind(this),
+				editAssignment: this.editAssignment.bind(this),
+			});
 
-		return Promise.resolve();
-	},
+			if (!this.stateRestored) {
+				//bump this to the next event pump so the restore state has a change to be called
+				wait().then(this.restoreState.bind(this, {}, true));
+			}
+		},
 
-	beforeRender: function () {
-		this.callParent(arguments);
+		syncFilterToUI: function (firstPass) {
+			if (!this.rendered) {
+				this.on(
+					'afterrender',
+					this.syncFilterToUI.bind(this, firstPass)
+				);
+				return;
+			}
 
-		this.pathBranch = this.assignmentTitle;
+			var filter = this.store.getEnrollmentScope(),
+				search = this.searchTerm;
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			pathRoot: this.pathRoot,
-			pathBranch: this.pathBranch,
-			page: this.pageSource.getPageNumber(),
-			noPrev: !this.pageSource.hasPrevious(),
-			noNext: !this.pageSource.hasNext()
-		});
-	},
+			this.updateColumns(filter);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			this.filterMenu.setState(filter, search || '');
 
-		this.el.query('a.button').forEach(this._setupButtons);
+			this.updateFilterCount();
 
-		if (this._masked) {
-			this._showMask();
-		}
+			if (firstPass) {
+				this.filterMenu.initialState = filter;
+				this.maybeSwitch();
+			}
+		},
 
-		this.syncFilterToUI(true);
+		maybeSwitch: function () {
+			var menu = this.filterMenu,
+				store = this.store,
+				item = menu.down('[checked]'),
+				initial = menu.initialState;
 
-		this.onPagerUpdate();
+			function loaded(s) {
+				if (!s.getCount()) {
+					item = menu.down('filter-menu-item:not([checked])');
 
-		this.mon(this.pageHeader, {
-			'showFilters': this.onFiltersClicked.bind(this),
-			'goToRawAssignment': this.goToRawAssignment.bind(this),
-			'editAssignment': this.editAssignment.bind(this)
-		});
-
-		if (!this.stateRestored) {
-			//bump this to the next event pump so the restore state has a change to be called
-			wait().then(this.restoreState.bind(this, {}, true));
-		}
-	},
-
-	syncFilterToUI: function (firstPass) {
-		if (!this.rendered) {
-			this.on('afterrender', this.syncFilterToUI.bind(this, firstPass));
-			return;
-		}
-
-		var filter = this.store.getEnrollmentScope(),
-			search = this.searchTerm;
-
-		this.updateColumns(filter);
-
-		this.filterMenu.setState(filter, search || '');
-
-		this.updateFilterCount();
-
-		if (firstPass) {
-			this.filterMenu.initialState = filter;
-			this.maybeSwitch();
-		}
-	},
-
-	maybeSwitch: function () {
-		var menu = this.filterMenu,
-			store = this.store,
-			item = menu.down('[checked]'),
-			initial = menu.initialState;
-
-		function loaded (s) {
-			if (!s.getCount()) {
-				item = menu.down('filter-menu-item:not([checked])');
-
-				if (item) {
-					item.setChecked(true);
+					if (item) {
+						item.setChecked(true);
+					}
 				}
 			}
-		}
 
-		if (item && item.filter === initial) {
-			if (!store.loading && store.loaded) {
-				loaded(store);
-			} else {
-				store.on({single: true, load: loaded});
+			if (item && item.filter === initial) {
+				if (!store.loading && store.loaded) {
+					loaded(store);
+				} else {
+					store.on({ single: true, load: loaded });
+				}
 			}
-		}
-	},
+		},
 
-	_setupButtons: function (el) {
-		var tip = el.textContent;
+		_setupButtons: function (el) {
+			var tip = el.textContent;
 
-		Ext.fly(el).set({
-			title: tip,
-			'data-qtip': tip
-		});
-	},
+			Ext.fly(el).set({
+				title: tip,
+				'data-qtip': tip,
+			});
+		},
 
-	toggleAvatarsClicked: function (e) {
-		this.toggleAvatars(!e.getTarget('.enabled'));
-	},
+		toggleAvatarsClicked: function (e) {
+			this.toggleAvatars(!e.getTarget('.enabled'));
+		},
 
-	toggleAvatars: function (show) {
-		if (!this.rendered) {
-			this.on('afterrender', this.toggleAvatars.bind(this, show));
-			return;
-		}
+		toggleAvatars: function (show) {
+			if (!this.rendered) {
+				this.on('afterrender', this.toggleAvatars.bind(this, show));
+				return;
+			}
 
-		this[show ? 'removeCls' : 'addCls']('hide-avatars');
+			this[show ? 'removeCls' : 'addCls']('hide-avatars');
 
-		$AppConfig.Preferences.getPreference('Gradebook')
-			.then(function (value) {
+			$AppConfig.Preferences.getPreference('Gradebook').then(function (
+				value
+			) {
 				value.set('hide_avatars', !show);
 				value.save();
 			});
-	},
+		},
 
-	updateFilterCount: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.updateFilterCount.bind(this));
-			return;
-		}
-
-		this.pageHeader.updateFilterCount(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
-	},
-
-	onPagerUpdate: function () {
-		if (!this.rendered) {
-			this.on({afterrender: 'onPagerUpdate', single: true});
-			return;
-		}
-
-		if (this.pageSource.hasNext()) {
-			this.nextEl.removeCls('disabled');
-		}
-
-		if (this.pageSource.hasPrevious()) {
-			this.previousEl.removeCls('disabled');
-		}
-
-		this.totalEl.update(this.pageSource.getTotal());
-	},
-
-	_showMask: function () {
-		var me = this,
-			el = me.el;
-
-		me._maskIn = setTimeout(function () {
-			var gridMask = (me.down('gridview') || {}).loadMask;
-
-			if (gridMask && !gridMask.isDestroyed) {
-				gridMask.addCls('masked-mask');
+		updateFilterCount: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.updateFilterCount.bind(this));
+				return;
 			}
 
-			if (el && el.dom) {
-				el.mask(getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.loading'), 'loading', true);
-			}
-		}, 1);
-	},
+			this.pageHeader.updateFilterCount(
+				this.filterMenu.getFilterLabel(this.store.getTotalCount())
+			);
+		},
 
-	mask: function () {
-		this._masked++;
-
-		if (this.rendered) {
-			this._showMask();
-		}
-	},
-
-	unmask: function () {
-		this._masked--;
-
-		var gridMask = (this.down('gridview') || {}).loadMask;
-
-		if (this._masked <= 0) {
-			this._masked = 0;
-
-			clearTimeout(this._maskIn);
-
-			if (gridMask && !gridMask.isDestroyed && gridMask.removeCls) {
-				gridMask.removeCls('masked-mask');
+		onPagerUpdate: function () {
+			if (!this.rendered) {
+				this.on({ afterrender: 'onPagerUpdate', single: true });
+				return;
 			}
 
-			if (this.el && this.el.dom) {
-				this.el.unmask();
+			if (this.pageSource.hasNext()) {
+				this.nextEl.removeCls('disabled');
 			}
-		}
-	},
 
-	scrollToRecord: function (record) {
-		var grid = this.down('grid'),
-			index = this.store.indexOf(record),
-			node = grid && index >= 0 && grid.view.getNodeByRecord(record);
-
-		node = node && Ext.get(node);
-
-		if (node) {
-			node.scrollIntoView(grid.view.el, false);
-		}
-	},
-
-	refresh: function () {
-		var grid = this.down('grid');
-
-		grid.view.refresh();
-	},
-
-	getStoreState: function () {
-		var store = this.store,
-			sorters = this.store.sorters && this.store.sorters.items,
-			sorter = (sorters && sorters[0]) || {},
-			params = store.proxy.extraParams;
-
-		return {
-			currentPage: store.currentPage,
-			pageSize: store.pageSize,
-			searchTerm: params.search || '',
-			filter: params.filter || '',
-			sort: {
-				prop: sorter.property || '',
-				direction: sorter.direction || ''
+			if (this.pageSource.hasPrevious()) {
+				this.previousEl.removeCls('disabled');
 			}
-		};
-	},
 
-	isSameState: function (state) {
-		var storeState = this.getStoreState(),
-			isEqual = true;
+			this.totalEl.update(this.pageSource.getTotal());
+		},
 
-		if (state.pageSize && state.pageSize !== storeState.pageSize) {
-			isEqual = false;
-		} else if (state.currentPage !== storeState.currentPage) {
-			isEqual = false;
-		} else if ((state.searchTerm || '') !== storeState.searchTerm) {
-			isEqual = false;
-		} else if (state.filter !== storeState.filter) {
-			isEqual = false;
-		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
-			isEqual = false;
-		} else if ((state.student && state.student !== this.student) || (!state.student && this.student)) {
-			isEqual = false;
-		}
+		_showMask: function () {
+			var me = this,
+				el = me.el;
 
-		return isEqual;
-	},
+			me._maskIn = setTimeout(function () {
+				var gridMask = (me.down('gridview') || {}).loadMask;
 
-	setDisabled: function () {
-		var grid = this.down('grid');
+				if (gridMask && !gridMask.isDestroyed) {
+					gridMask.addCls('masked-mask');
+				}
 
-		this.stateDisabled = true;
-		if (this.toolbarEl) {
-			this.toolbarEl.addCls('disabled');
-		}
+				if (el && el.dom) {
+					el.mask(
+						getString(
+							'NextThought.view.courseware.assessment.assignments.admin.Assignment.loading'
+						),
+						'loading',
+						true
+					);
+				}
+			}, 1);
+		},
 
-		this.pageHeader.setDisabled();
-		grid.setDisabled();
-		this.fireEvent('state-enabled');
-	},
+		mask: function () {
+			this._masked++;
 
-	setEnabled: function () {
-		var grid = this.down('grid');
-
-		delete this.stateDisabled;
-		if (this.toolbarEl) {
-			this.toolbarEl.removeCls('disabled');
-		}
-
-		this.pageHeader.setEnabled();
-		grid.setEnabled();
-		this.fireEvent('state-enabled');
-	},
-
-	applyState: function (state) {
-		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
-		if (this.applyingState) { return Promise.resolve(); }
-
-		if (this.isSameState(state) && this.initialLoad) {
-			this.refresh();
-			return Promise.resolve();
-		}
-
-		var me = this,
-			store = me.store,
-			params = store.proxy.extraParams || {};
-
-		me.applyingState = true;
-		me.setDisabled();
-
-		if (!state || state.filter) {
-			params.filter = me.currentFilter = state.filter || 'ForCredit';
-		} else {
-			delete params.filter;
-		}
-
-		state = state || {};
-
-		if (state.pageSize) {
-			store.setPageSize(state.pageSize);
-		}
-
-		if (state.sort && state.sort.prop) {
-			store.sort(state.sort.prop, state.sort.direction, null, false);
-		}
-
-		if (state.searchTerm) {
-			params.search = state.searchTerm;
-		} else {
-			delete params.search;
-		}
-
-		if (this.student) {
-			if (params.filter === 'All') {
-				params.batchContainingUsername = this.student;
+			if (this.rendered) {
+				this._showMask();
 			}
-			else {
-				params.batchContainingUsernameFilterByScope = this.student;
+		},
+
+		unmask: function () {
+			this._masked--;
+
+			var gridMask = (this.down('gridview') || {}).loadMask;
+
+			if (this._masked <= 0) {
+				this._masked = 0;
+
+				clearTimeout(this._maskIn);
+
+				if (gridMask && !gridMask.isDestroyed && gridMask.removeCls) {
+					gridMask.removeCls('masked-mask');
+				}
+
+				if (this.el && this.el.dom) {
+					this.el.unmask();
+				}
 			}
-		}
+		},
 
-		return new Promise(function (fulfill, reject) {
-			me.mon(store, {
-				single: true,
-				'records-filled-in': function () {
-					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
-					delete store.proxy.extraParams.batchContainingUsername;
-					delete me.student;
+		scrollToRecord: function (record) {
+			var grid = this.down('grid'),
+				index = this.store.indexOf(record),
+				node = grid && index >= 0 && grid.view.getNodeByRecord(record);
 
-					me.currentPage = store.getCurrentPage();
-					me.maybeSwitch();
-					me.initialLoad = true;
-					me.unmask();
+			node = node && Ext.get(node);
 
-					if (state.searchTerm) {
-						me.setSearch(state.searchTerm);
-					}
+			if (node) {
+				node.scrollIntoView(grid.view.el, false);
+			}
+		},
 
-					delete me.applyingState;
-					me.setEnabled();
+		refresh: function () {
+			var grid = this.down('grid');
 
-					me.syncFilterToUI();
+			grid.view.refresh();
+		},
 
-					fulfill();
+		getStoreState: function () {
+			var store = this.store,
+				sorters = this.store.sorters && this.store.sorters.items,
+				sorter = (sorters && sorters[0]) || {},
+				params = store.proxy.extraParams;
+
+			return {
+				currentPage: store.currentPage,
+				pageSize: store.pageSize,
+				searchTerm: params.search || '',
+				filter: params.filter || '',
+				sort: {
+					prop: sorter.property || '',
+					direction: sorter.direction || '',
+				},
+			};
+		},
+
+		isSameState: function (state) {
+			var storeState = this.getStoreState(),
+				isEqual = true;
+
+			if (state.pageSize && state.pageSize !== storeState.pageSize) {
+				isEqual = false;
+			} else if (state.currentPage !== storeState.currentPage) {
+				isEqual = false;
+			} else if ((state.searchTerm || '') !== storeState.searchTerm) {
+				isEqual = false;
+			} else if (state.filter !== storeState.filter) {
+				isEqual = false;
+			} else if (
+				state.sort &&
+				(state.sort.prop !== storeState.sort.prop ||
+					state.sort.direction !== storeState.sort.direction)
+			) {
+				isEqual = false;
+			} else if (
+				(state.student && state.student !== this.student) ||
+				(!state.student && this.student)
+			) {
+				isEqual = false;
+			}
+
+			return isEqual;
+		},
+
+		setDisabled: function () {
+			var grid = this.down('grid');
+
+			this.stateDisabled = true;
+			if (this.toolbarEl) {
+				this.toolbarEl.addCls('disabled');
+			}
+
+			this.pageHeader.setDisabled();
+			grid.setDisabled();
+			this.fireEvent('state-enabled');
+		},
+
+		setEnabled: function () {
+			var grid = this.down('grid');
+
+			delete this.stateDisabled;
+			if (this.toolbarEl) {
+				this.toolbarEl.removeCls('disabled');
+			}
+
+			this.pageHeader.setEnabled();
+			grid.setEnabled();
+			this.fireEvent('state-enabled');
+		},
+
+		applyState: function (state) {
+			//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
+			if (this.applyingState) {
+				return Promise.resolve();
+			}
+
+			if (this.isSameState(state) && this.initialLoad) {
+				this.refresh();
+				return Promise.resolve();
+			}
+
+			var me = this,
+				store = me.store,
+				params = store.proxy.extraParams || {};
+
+			me.applyingState = true;
+			me.setDisabled();
+
+			if (!state || state.filter) {
+				params.filter = me.currentFilter = state.filter || 'ForCredit';
+			} else {
+				delete params.filter;
+			}
+
+			state = state || {};
+
+			if (state.pageSize) {
+				store.setPageSize(state.pageSize);
+			}
+
+			if (state.sort && state.sort.prop) {
+				store.sort(state.sort.prop, state.sort.direction, null, false);
+			}
+
+			if (state.searchTerm) {
+				params.search = state.searchTerm;
+			} else {
+				delete params.search;
+			}
+
+			if (this.student) {
+				if (params.filter === 'All') {
+					params.batchContainingUsername = this.student;
+				} else {
+					params.batchContainingUsernameFilterByScope = this.student;
+				}
+			}
+
+			return new Promise(function (fulfill, reject) {
+				me.mon(store, {
+					single: true,
+					'records-filled-in': function () {
+						delete store.proxy.extraParams
+							.batchContainingUsernameFilterByScope;
+						delete store.proxy.extraParams.batchContainingUsername;
+						delete me.student;
+
+						me.currentPage = store.getCurrentPage();
+						me.maybeSwitch();
+						me.initialLoad = true;
+						me.unmask();
+
+						if (state.searchTerm) {
+							me.setSearch(state.searchTerm);
+						}
+
+						delete me.applyingState;
+						me.setEnabled();
+
+						me.syncFilterToUI();
+
+						fulfill();
+					},
+				});
+
+				if (
+					params.batchContainingUsernameFilterByScope ||
+					params.batchContainingUsername
+				) {
+					store.load();
+				} else if (state.currentPage) {
+					store.loadPage(parseInt(state.currentPage, 10));
+				} else {
+					store.loadPage(1);
 				}
 			});
+		},
 
-			if (params.batchContainingUsernameFilterByScope || params.batchContainingUsername) {
-				store.load();
-			} else if (state.currentPage) {
-				store.loadPage(parseInt(state.currentPage, 10));
-			} else {
-				store.loadPage(1);
+		onStoreLoad: function () {
+			this.syncFilterToUI();
+			this.unmask();
+			this.alignNavigation();
+
+			return;
+		},
+
+		updateColumns: function (filter) {
+			var grid = this.down('grid');
+
+			if (filter === 'ForCredit') {
+				grid.showColumn('Username');
+			} else if (filter === 'Open') {
+				grid.hideColumn('Username');
 			}
-		});
-	},
+		},
 
-	onStoreLoad: function () {
-		this.syncFilterToUI();
-		this.unmask();
-		this.alignNavigation();
+		onFiltersClicked: function (el) {
+			if (this.applyingState || this.stateDisabled) {
+				return;
+			}
 
-		return;
-	},
+			this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
+		},
 
-	updateColumns: function (filter) {
-		var grid = this.down('grid');
+		setSearch: function (str) {
+			this.searchTerm = str;
+			this.filterMenu.setSearch(str);
+		},
 
-		if (filter === 'ForCredit') {
-			grid.showColumn('Username');
-		} else if (filter === 'Open') {
-			grid.hideColumn('Username');
-		}
-	},
-
-	onFiltersClicked: function (el) {
-		if (this.applyingState || this.stateDisabled) {
-			return;
-		}
-
-		this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
-	},
-
-	setSearch: function (str) {
-		this.searchTerm = str;
-		this.filterMenu.setSearch(str);
-	},
-
-	doSearch: function (str) {
-		this.down('grid').getSelectionModel().deselectAll(true);
-		this.searchTerm = str;
-		this.updateFilter();
-	},
-
-	doFilter: function (filter) {
-		this.updateColumns(filter);
-		try {
+		doSearch: function (str) {
 			this.down('grid').getSelectionModel().deselectAll(true);
-			this.currentFilter = filter;
+			this.searchTerm = str;
 			this.updateFilter();
-		} catch (e) {
-			console.log('Meh');
-		}
-	},
+		},
 
-	updateFilter: function () {
-		var state = this.currentState || {},
-			newPage = state.currentPage !== this.currentPage;
+		doFilter: function (filter) {
+			this.updateColumns(filter);
+			try {
+				this.down('grid').getSelectionModel().deselectAll(true);
+				this.currentFilter = filter;
+				this.updateFilter();
+			} catch (e) {
+				console.log('Meh');
+			}
+		},
 
-		if (this.stateDisabled) {
-			this.on({single: true, 'state-enabled': 'updateFilter'});
-			return;
-		}
+		updateFilter: function () {
+			var state = this.currentState || {},
+				newPage = state.currentPage !== this.currentPage;
 
-		if (this.currentFilter) {
-			state.filter = this.currentFilter;
-		} else {
-			delete state.filter;
-		}
+			if (this.stateDisabled) {
+				this.on({ single: true, 'state-enabled': 'updateFilter' });
+				return;
+			}
 
-		if (this.searchTerm) {
-			state.searchTerm = this.searchTerm;
-		} else {
-			delete state.searchTerm;
-		}
+			if (this.currentFilter) {
+				state.filter = this.currentFilter;
+			} else {
+				delete state.filter;
+			}
 
-		if (this.currentPage) {
-			if (!newPage) { this.currentPage = 1; }
-			state.currentPage = this.currentPage;
-		} else {
-			delete state.currentPage;
-		}
+			if (this.searchTerm) {
+				state.searchTerm = this.searchTerm;
+			} else {
+				delete state.searchTerm;
+			}
 
-		if (this.pageSize) {
-			state.pageSize = this.pageSize;
-		} else {
-			delete state.pageSize;
-		}
+			if (this.currentPage) {
+				if (!newPage) {
+					this.currentPage = 1;
+				}
+				state.currentPage = this.currentPage;
+			} else {
+				delete state.currentPage;
+			}
 
-		if (this.sort && this.sort.prop) {
-			state.sort = this.sort;
-		} else {
-			delete state.sort;
-		}
+			if (this.pageSize) {
+				state.pageSize = this.pageSize;
+			} else {
+				delete state.pageSize;
+			}
 
-		this.currentState = state;
+			if (this.sort && this.sort.prop) {
+				state.sort = this.sort;
+			} else {
+				delete state.sort;
+			}
 
-		if (newPage) {
-			this.pushRouteState(state);
-		} else {
-			this.replaceRouteState(state);
-		}
-	},
+			this.currentState = state;
 
-	loadPage: function (page) {
-		this.currentPage = page;
+			if (newPage) {
+				this.pushRouteState(state);
+			} else {
+				this.replaceRouteState(state);
+			}
+		},
 
-		this.updateFilter();
-	},
+		loadPage: function (page) {
+			this.currentPage = page;
 
-	setPageSize: function (size) {
-		this.pageSize = size;
-
-		this.updateFilter();
-	},
-
-	changeSort: function (ct, column, direction) {
-		if (this.applyingState || this.stateDisabled) { return false; }
-
-		var prop = column.sortOn || column.dataIndex;
-
-		if (prop) {
-			this.sort = {
-				prop: prop,
-				direction: direction
-			};
-		} else {
-			this.sort = {};
-		}
-
-		if (!this.applyingState) {
 			this.updateFilter();
-		}
+		},
 
-		return false;
-	},
+		setPageSize: function (size) {
+			this.pageSize = size;
 
-	fireGoUp: function () {
-		this.pushRoute('', '/');
-	},
+			this.updateFilter();
+		},
 
-	firePreviousEvent: function (e) {
-		if (e.getTarget('.disabled')) {
-			e.stopEvent();
-			return;
-		}
+		changeSort: function (ct, column, direction) {
+			if (this.applyingState || this.stateDisabled) {
+				return false;
+			}
 
-		var prev = this.pageSource.getPrevious(),
-			title = this.pageSource.getNextTitle();
+			var prop = column.sortOn || column.dataIndex;
 
-		prev = encodeForURI(prev);
+			if (prop) {
+				this.sort = {
+					prop: prop,
+					direction: direction,
+				};
+			} else {
+				this.sort = {};
+			}
 
-		this.pushRoute(title, prev + '/students');
-	},
+			if (!this.applyingState) {
+				this.updateFilter();
+			}
 
-	fireNextEvent: function (e) {
-		if (e.getTarget('.disabled')) {
-			e.stopEvent();
-			return;
-		}
+			return false;
+		},
 
-		var next = this.pageSource.getNext(),
-			title = this.pageSource.getNextTitle();
+		fireGoUp: function () {
+			this.pushRoute('', '/');
+		},
 
-		next = encodeForURI(next);
+		firePreviousEvent: function (e) {
+			if (e.getTarget('.disabled')) {
+				e.stopEvent();
+				return;
+			}
 
-		this.pushRoute(title, next + '/students');
-	},
+			var prev = this.pageSource.getPrevious(),
+				title = this.pageSource.getNextTitle();
 
-	onItemClick: function (v, record) {
-		var selModel = v.getSelectionModel(),
-			selection = selModel && selModel.selection,
-			dataIndex = selection && selection.columnHeader.dataIndex;
+			prev = encodeForURI(prev);
 
+			this.pushRoute(title, prev + '/students');
+		},
 
-		if (dataIndex !== 'Grade') {
-			wait(100)
-				.then(() => {
+		fireNextEvent: function (e) {
+			if (e.getTarget('.disabled')) {
+				e.stopEvent();
+				return;
+			}
+
+			var next = this.pageSource.getNext(),
+				title = this.pageSource.getNextTitle();
+
+			next = encodeForURI(next);
+
+			this.pushRoute(title, next + '/students');
+		},
+
+		onItemClick: function (v, record) {
+			var selModel = v.getSelectionModel(),
+				selection = selModel && selModel.selection,
+				dataIndex = selection && selection.columnHeader.dataIndex;
+
+			if (dataIndex !== 'Grade') {
+				wait(100).then(() => {
 					this.fireGoToAssignment(selModel, record);
 				});
-		}
-	},
+			}
+		},
 
-	fireGoToAssignment: function (v, record, pageSource) {
-		var student = record.get('User'),
-			historyItem = record.get('HistoryItemSummary');
+		fireGoToAssignment: function (v, record, pageSource) {
+			var student = record.get('User'),
+				historyItem = record.get('HistoryItemSummary');
 
-		if (typeof student === 'string' || !student.isModel) {
-			console.error('Unable to show assignment for student', student.getName(), this.assignment.get('title'));
-			return;
-		}
+			if (typeof student === 'string' || !student.isModel) {
+				console.error(
+					'Unable to show assignment for student',
+					student.getName(),
+					this.assignment.get('title')
+				);
+				return;
+			}
 
-		this.showStudentForAssignment(student, this.assignment, historyItem);
-	},
+			this.showStudentForAssignment(
+				student,
+				this.assignment,
+				historyItem
+			);
+		},
 
-	goToRawAssignment: function () {
-		var title = this.assignment.get('title'),
-			id = this.assignment.getId();
+		goToRawAssignment: function () {
+			var title = this.assignment.get('title'),
+				id = this.assignment.getId();
 
-		id = encodeForURI(id);
+			id = encodeForURI(id);
 
-		this.pushRoute(title, id, {assignment: this.assignment});
-	},
+			this.pushRoute(title, id, { assignment: this.assignment });
+		},
 
+		editAssignment() {
+			const title = this.assignment.get('title');
+			let id = this.assignment.getId();
 
-	editAssignment () {
-		const title = this.assignment.get('title');
-		let id = this.assignment.getId();
+			id = encodeForURI(id);
 
-		id = encodeForURI(id);
-
-		this.pushRoute(title, id + '/edit/', {assignment: this.assignment});
+			this.pushRoute(title, id + '/edit/', {
+				assignment: this.assignment,
+			});
+		},
 	}
-});
+);

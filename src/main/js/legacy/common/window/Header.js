@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.nti-window-header',
@@ -23,34 +22,33 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		'</div>',
 
 		'<span>{title}</span>',
-		'</div>'
+		'</div>',
 	],
 
 	/**
-	* @cfg {Object} tools
-	*
-	* A dictionary of tools dictionaries.
-	*
-	* Ex:
-	*
-	* { whiteboard: { handler: function(){}, scope: this, tip: 'tool tip' } }
-	*
-	* A null scope will resolve to this components' parent (the window)
-	*
-	* A string value for the handler will resolve to a property name inside the scope: Ex: scope[handler]
-	*
-	* The key will be the tool's class and will always be like img.tool.x where x is the tool's key in the dictionary.
-	* The generated HTML will look something like this:
-	*
-	* <img src="..." class="tool x" alt="tool tip"/>
-	*/
+	 * @cfg {Object} tools
+	 *
+	 * A dictionary of tools dictionaries.
+	 *
+	 * Ex:
+	 *
+	 * { whiteboard: { handler: function(){}, scope: this, tip: 'tool tip' } }
+	 *
+	 * A null scope will resolve to this components' parent (the window)
+	 *
+	 * A string value for the handler will resolve to a property name inside the scope: Ex: scope[handler]
+	 *
+	 * The key will be the tool's class and will always be like img.tool.x where x is the tool's key in the dictionary.
+	 * The generated HTML will look something like this:
+	 *
+	 * <img src="..." class="tool x" alt="tool tip"/>
+	 */
 
 	renderSelectors: {
 		textEl: 'span',
 		closeEl: 'img.tool.close',
-		minimizeEl: 'img.tool.minimize'
+		minimizeEl: 'img.tool.minimize',
 	},
-
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -66,10 +64,9 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title,
 			tools: tools,
-			hasTools: tools.length === 0 ? '' : 'has-tools'
+			hasTools: tools.length === 0 ? '' : 'has-tools',
 		});
 	},
-
 
 	addTools: function (tools) {
 		var me = this,
@@ -78,19 +75,20 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		if (!me.rendered) {
 			Ext.Object.each(tools, function (tool, info) {
 				if (!me.renderSelectors[tool]) {
-					me.tools[tool] = info;//merge it in
-					me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
-					rd.tools.push({tool: tool, tip: info.tip});
+					me.tools[tool] = info; //merge it in
+					me.renderSelectors[tool] = Ext.String.format(
+						'img.tool.{0}',
+						tool
+					);
+					rd.tools.push({ tool: tool, tip: info.tip });
 					rd.hasTools = 'has-tools';
 				}
 			});
-		}
-		else {
+		} else {
 			Ext.Error.raise('not implemented yet');
 			//			this.applyToolHandlers();
 		}
 	},
-
 
 	applyToolHandlers: function () {
 		var me = this;
@@ -108,17 +106,14 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		});
 	},
 
-
 	update: function (text) {
 		this.title = text;
 		if (this.textEl) {
 			this.textEl.update(text);
-		}
-		else {
+		} else {
 			this.renderData.title = text;
 		}
 	},
-
 
 	getTitle: function () {
 		if (this.textEl) {
@@ -126,7 +121,6 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		}
 		return this.renderData.title;
 	},
-
 
 	afterRender: function () {
 		var me = this;
@@ -143,5 +137,5 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 		}
 
 		me.applyToolHandlers();
-	}
+	},
 });

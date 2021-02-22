@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DialogButtons} from '@nti/web-commons';
+import { DialogButtons } from '@nti/web-commons';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
+import { scoped } from '@nti/lib-locale';
 
 import styles from './Controls.css';
 
 const cx = classnames.bind(styles);
 const t = scoped('nti-web-app.admin.branding.Controls', {
 	preview: 'Preview and Apply',
-	cancel: 'Cancel'
+	cancel: 'Cancel',
 });
 
 const f = fn => e => {
@@ -18,7 +18,7 @@ const f = fn => e => {
 	fn(e);
 };
 
-export default function Controls ({onPreview, onCancel}) {
+export default function Controls({ onPreview, onCancel }) {
 	const buttons = [
 		{
 			label: t('cancel'),
@@ -27,11 +27,9 @@ export default function Controls ({onPreview, onCancel}) {
 		{
 			label: t('preview'),
 			onClick: f(onPreview),
-		}
+		},
 	];
-	return (
-		<DialogButtons flat buttons={buttons} className={cx('apply')} />
-	);
+	return <DialogButtons flat buttons={buttons} className={cx('apply')} />;
 }
 
 Controls.propTypes = {

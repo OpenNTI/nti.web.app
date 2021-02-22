@@ -6,10 +6,10 @@ import View from '../View';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfBooks) => {
+const getMockService = numberOfBooks => {
 	let Items = [];
 
-	for(let i = 0; i < numberOfBooks; i++) {
+	for (let i = 0; i < numberOfBooks; i++) {
 		const index = i + 1;
 
 		Items.push({
@@ -17,24 +17,26 @@ const getMockService = (numberOfBooks) => {
 				getPresentationProperties: () => {
 					return {
 						label: 'Book' + index,
-						title: 'book' + index
+						title: 'book' + index,
 					};
 				},
-				getDefaultAssetRoot () { return 'testRoot'; }
-			}
+				getDefaultAssetRoot() {
+					return 'testRoot';
+				},
+			},
 		});
 	}
 
 	return {
 		getBatch: () => {
 			return {
-				Items
+				Items,
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfBooks) => {
+const onBefore = numberOfBooks => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfBooks));
 };
@@ -52,10 +54,10 @@ describe('Site admin user book list test (5 books)', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			getLink: () => 'mockLink'
+			getLink: () => 'mockLink',
 		};
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -73,10 +75,10 @@ describe('Site admin user book list test (no books)', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			getLink: () => 'mockLink'
+			getLink: () => 'mockLink',
 		};
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();

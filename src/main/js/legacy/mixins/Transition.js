@@ -1,20 +1,18 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-
+const { wait } = require('@nti/lib-commons');
 
 module.exports = exports = Ext.define('NextThought.mixins.Transition', {
-
 	statics: {
 		LIST_ADD: {
 			cls: 'list-add',
 			scrollIntoView: true,
-			removeWhenDone: false
+			removeWhenDone: false,
 		},
 
 		LIST_REMOVE: {
 			cls: 'list-remove',
-			removeWhenDone: true
-		}
+			removeWhenDone: true,
+		},
 	},
 
 	/**
@@ -26,13 +24,15 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	__getTransitionEndEventName: function (el) {
 		var i,
 			transitions = {
-				'transition': 'transitionend',
-				'OTransition': 'otransitionend', // oTransitionEnd in very old Opera
-				'MozTransition': 'transitionend',
-				'WebkitTransition': 'webkitTransitionEnd'
+				transition: 'transitionend',
+				OTransition: 'otransitionend', // oTransitionEnd in very old Opera
+				MozTransition: 'transitionend',
+				WebkitTransition: 'webkitTransitionEnd',
 			};
 
-		if (!this.el) { return; }
+		if (!this.el) {
+			return;
+		}
 
 		for (i in transitions) {
 			if (transitions.hasOwnProperty(i) && el.style[i] !== undefined) {
@@ -42,7 +42,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	},
 
 	applyTransition: function (transition) {
-		if (!transition) { return; }
+		if (!transition) {
+			return;
+		}
 
 		this.addCls(['transition', transition.cls, 'before']);
 
@@ -53,27 +55,24 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 		}
 	},
 
-
 	__doTransition: function (transition) {
 		var el = this.el && this.el.dom,
 			eventName = this.__getTransitionEndEventName(el),
 			cleanUp = this.__afterTransition.bind(this, transition);
 
 		if (eventName) {
-			el.addEventListener(eventName, function transitionEnd () {
+			el.addEventListener(eventName, function transitionEnd() {
 				cleanUp();
 
 				el.removeEventListener(eventName, transitionEnd);
 			});
 		} else {
-			wait(5000)
-				.then(cleanUp);
+			wait(5000).then(cleanUp);
 		}
 
 		this.addCls('after');
 		this.removeCls('before');
 	},
-
 
 	__afterTransition: function (transition) {
 		if (transition.removeWhenDone) {
@@ -81,5 +80,5 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 		} else {
 			this.removeCls(['transition', transition.cls, 'after']);
 		}
-	}
+	},
 });

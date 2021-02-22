@@ -4,90 +4,99 @@ const UserRepository = require('legacy/cache/UserRepository');
 const NTIFormat = require('legacy/util/Format');
 // const NavActions = require('legacy/app/navigation/Actions');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.notifications.components.types.Base',
+	{
+		extend: 'Ext.Component',
 
-module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Base', {
-	extend: 'Ext.Component',
+		//the mime type this item renders
+		statics: {
+			mimeType: '',
+		},
 
-	//the mime type this item renders
-	statics: {
-		mimeType: ''
-	},
+		showCreator: true,
+		wording: '',
+		itemCls: '',
 
-	showCreator: true,
-	wording: '',
-	itemCls: '',
+		cls: 'item-container',
 
-	cls: 'item-container',
+		titleTpl: Ext.DomHelper.createTemplate({
+			tag: 'span',
+			cls: 'title',
+			html: '{name:htmlEncode}',
+		}).compile(),
 
-	titleTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'title', html: '{name:htmlEncode}'}).compile(),
+		renderTpl: Ext.DomHelper.markup({
+			cls:
+				'item notification {hidden:boolStr("x-hidden")} {previewCls} {itemCls}',
+			cn: [
+				{ cls: 'icon-wrapper' },
+				{ cls: 'username' },
+				{
+					tag: 'span',
+					cls: 'wrapper',
+					cn: [
+						{ tag: 'span', cls: 'wording' },
+						{
+							tag: 'time',
+							cls: 'time',
+							datetime: '{datetime}',
+							html: '{time:ago()}',
+						},
+					],
+				},
+			],
+		}),
 
-	renderTpl: Ext.DomHelper.markup({
-		cls: 'item notification {hidden:boolStr("x-hidden")} {previewCls} {itemCls}',
-		cn: [
-			{cls: 'icon-wrapper'},
-			{cls: 'username'},
-			{tag: 'span', cls: 'wrapper', cn: [
-				{tag: 'span', cls: 'wording'},
-				{tag: 'time', cls: 'time', datetime: '{datetime}', html: '{time:ago()}'}
-			]}
-		]
-	}),
+		renderSelectors: {
+			itemEl: '.item',
+			iconEl: '.icon-wrapper',
+			usernameEl: '.username',
+			wordingEl: '.wording',
+			bodyEl: '.body',
+			timeEl: '.time',
+		},
 
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		itemEl: '.item',
-		iconEl: '.icon-wrapper',
-		usernameEl: '.username',
-		wordingEl: '.wording',
-		bodyEl: '.body',
-		timeEl: '.time'
-	},
+			var time = this.getDisplayTime();
 
+			this.renderData = Ext.apply(this.renderData || {}, {
+				hidden: false,
+				previewCls: this.showCreator ? 'preview' : 'link',
+				itemCls: this.itemCls,
+				datetime: Ext.util.Format.date(time, 'c'),
+				time: time,
+			});
+		},
 
-	beforeRender: function () {
-		this.callParent(arguments);
+		afterRender: function () {
+			this.callParent(arguments);
 
-		var time = this.getDisplayTime();
+			this.fillInData();
+			this.fillInWording();
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			hidden: false,
-			previewCls: this.showCreator ? 'preview' : 'link',
-			itemCls: this.itemCls,
-			datetime: Ext.util.Format.date(time, 'c'),
-			time: time
-		});
-	},
+			this.mon(this.el, 'click', this.onClicked.bind(this));
+		},
 
+		onClicked: function () {
+			this.navigateToItem(this.record);
+			// const target = this.record.get('Item') || this.record;
+			// NavActions.navigateToHref(target.getId());
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
+		fillInData: function () {
+			var me = this,
+				creator = me.record.get('Creator');
 
-		this.fillInData();
-		this.fillInWording();
-
-		this.mon(this.el, 'click', this.onClicked.bind(this));
-	},
-
-
-	onClicked: function () {
-		this.navigateToItem(this.record);
-		// const target = this.record.get('Item') || this.record;
-		// NavActions.navigateToHref(target.getId());
-	},
-
-
-	fillInData: function () {
-		var me = this,
-			creator = me.record.get('Creator');
-
-		function updateAvatar (user) {
-			if (me.iconEl) {
-				me.iconEl.update(NTIFormat.avatar(user));
+			function updateAvatar(user) {
+				if (me.iconEl) {
+					me.iconEl.update(NTIFormat.avatar(user));
+				}
 			}
-		}
 
-		UserRepository.getUser(creator)
-			.then(function (user) {
+			UserRepository.getUser(creator).then(function (user) {
 				updateAvatar(user);
 				me.mon(user, 'avatarChanged', updateAvatar.bind(me, user));
 
@@ -95,27 +104,26 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 					me.usernameEl.update(user.getName());
 				}
 			});
-	},
+		},
 
+		fillInWording: function () {
+			if (this.wordingEl && this.wordingEl.dom) {
+				this.wordingEl.dom.innerHTML = this.wording;
+			}
+		},
 
-	fillInWording: function () {
-		if (this.wordingEl && this.wordingEl.dom) {
-			this.wordingEl.dom.innerHTML = this.wording;
-		}
-	},
+		getDisplayTime: function () {
+			var time = this.record.get('EventTime');
 
+			if (!time || time.getTime() === 0) {
+				time = this.record.get('CreatedTime');
+			}
 
-	getDisplayTime: function () {
-		var time = this.record.get('EventTime');
+			if (!time || time.getTime() === 0) {
+				time = this.record.get('Last Modified');
+			}
 
-		if (!time || time.getTime() === 0) {
-			time = this.record.get('CreatedTime');
-		}
-
-		if (!time || time.getTime() === 0) {
-			time = this.record.get('Last Modified');
-		}
-
-		return time;
+			return time;
+		},
 	}
-});
+);

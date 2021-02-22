@@ -1,134 +1,133 @@
 const Ext = require('@nti/extjs');
 
 const WindowsActions = require('legacy/app/windows/Actions');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const {isMe} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
+const { isMe } = require('legacy/util/Globals');
 
 require('legacy/app/blog/Window');
 require('./parts/Stream');
 require('./parts/NewPost');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.activity.Body',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.profile-user-activity-body',
+		layout: 'none',
+		cls: 'activity',
 
+		items: [
+			{ xtype: 'profile-user-newpost' },
+			{ xtype: 'profile-user-activity-stream' },
+		],
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Body', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-user-activity-body',
-	layout: 'none',
-	cls: 'activity',
+		initComponent: function () {
+			this.callParent(arguments);
 
-	items: [
-		{xtype: 'profile-user-newpost'},
-		{xtype: 'profile-user-activity-stream'}
-	],
+			this.setUpComponents();
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.WindowActions = WindowsActions.create();
 
-		this.setUpComponents();
+			this.activityCmp.navigateToObject = this.navigateToActivityItem.bind(
+				this
+			);
+			this.newPostCmp.onNewPost = this.onNewPost.bind(this);
 
-		this.WindowActions = WindowsActions.create();
+			this.newPostCmp.hide();
 
-		this.activityCmp.navigateToObject = this.navigateToActivityItem.bind(this);
-		this.newPostCmp.onNewPost = this.onNewPost.bind(this);
-
-		this.newPostCmp.hide();
-
-		this.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
-		});
-	},
-
-
-	getStreamCmp () {
-		return this.activityCmp;
-	},
-
-
-	onActivate: function () {
-		this.activityCmp.fireEvent('activate');
-	},
-
-
-	onDeactivate: function () {
-		this.activityCmp.fireEvent('deactivate');
-	},
-
-
-	setUpComponents: function () {
-		this.newPostCmp = this.down('profile-user-newpost');
-		this.activityCmp = this.down('profile-user-activity-stream');
-	},
-
-
-	onNewPost: function () {
-		if (this.postContainer && this.postContainer.getLink('add')) {
-			this.WindowActions.showWindow('new-blog', null, this.newPostCmp.el.dom, {afterSave: this.onPostSaved.bind(this)}, {
-				blog: this.postContainer
+			this.on({
+				activate: this.onActivate.bind(this),
+				deactivate: this.onDeactivate.bind(this),
 			});
-		}
-	},
+		},
 
+		getStreamCmp() {
+			return this.activityCmp;
+		},
 
-	onPostSaved: function (record) {
-		var store = this.activityCmp && this.activityCmp.store;
+		onActivate: function () {
+			this.activityCmp.fireEvent('activate');
+		},
 
-		if (store) {
-			store.insert(0, record);
-		}
-	},
+		onDeactivate: function () {
+			this.activityCmp.fireEvent('deactivate');
+		},
 
+		setUpComponents: function () {
+			this.newPostCmp = this.down('profile-user-newpost');
+			this.activityCmp = this.down('profile-user-activity-stream');
+		},
 
-	userChanged: function (entity) {
-		this.activeEntity = entity;
+		onNewPost: function () {
+			if (this.postContainer && this.postContainer.getLink('add')) {
+				this.WindowActions.showWindow(
+					'new-blog',
+					null,
+					this.newPostCmp.el.dom,
+					{ afterSave: this.onPostSaved.bind(this) },
+					{
+						blog: this.postContainer,
+					}
+				);
+			}
+		},
 
-		var me = this,
-			collection = Service.getCollection('Blog'),
-			href = collection && collection.href;
+		onPostSaved: function (record) {
+			var store = this.activityCmp && this.activityCmp.store;
 
-		// Update the activityCmp with the new user entity.
-		this.activityCmp.userChanged(entity);
+			if (store) {
+				store.insert(0, record);
+			}
+		},
 
-		if (!href || !isMe(entity) || !Service.canBlog()) {
-			me.newPostCmp.hide();
-			return Promise.resolve();
-		}
+		userChanged: function (entity) {
+			this.activeEntity = entity;
 
-		return Service.request(href)
-			.then(function (resp) {
-				return lazy.ParseUtils.parseItems(resp)[0];
-			})
-			.then(function (blog) {
-				me.postContainer = blog;
+			var me = this,
+				collection = Service.getCollection('Blog'),
+				href = collection && collection.href;
 
-				if (blog.getLink('add')) {
-					me.newPostCmp.show();
-				} else {
-					me.newPostCmp.hide();
-				}
-			});
-	},
+			// Update the activityCmp with the new user entity.
+			this.activityCmp.userChanged(entity);
 
+			if (!href || !isMe(entity) || !Service.canBlog()) {
+				me.newPostCmp.hide();
+				return Promise.resolve();
+			}
 
-	setStreamSource: function (store, entity) {
-		this.activityCmp.setStreamSource(store, entity);
-	},
+			return Service.request(href)
+				.then(function (resp) {
+					return lazy.ParseUtils.parseItems(resp)[0];
+				})
+				.then(function (blog) {
+					me.postContainer = blog;
 
+					if (blog.getLink('add')) {
+						me.newPostCmp.show();
+					} else {
+						me.newPostCmp.hide();
+					}
+				});
+		},
 
-	setStreamParams: function (params) {
-		this.activityCmp.setStreamParams(params);
-	},
+		setStreamSource: function (store, entity) {
+			this.activityCmp.setStreamSource(store, entity);
+		},
 
+		setStreamParams: function (params) {
+			this.activityCmp.setStreamParams(params);
+		},
 
-	fetchNewItems: function () {
-		return this.activityCmp.fetchNewItems();
-	},
+		fetchNewItems: function () {
+			return this.activityCmp.fetchNewItems();
+		},
 
-
-	navigateToActivityItem: function (item, monitors) {
-		if (this.navigateToObject) {
-			this.navigateToObject(item, monitors);
-		}
+		navigateToActivityItem: function (item, monitors) {
+			if (this.navigateToObject) {
+				this.navigateToObject(item, monitors);
+			}
+		},
 	}
-});
+);

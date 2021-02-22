@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .course-instructors-permission-list-item {
 	display: flex;
@@ -40,7 +40,8 @@
 		}
 	}
 
-	.instructor-container, .editor-container {
+	.instructor-container,
+	.editor-container {
 		flex: 0 0 60px;
 		text-align: center;
 

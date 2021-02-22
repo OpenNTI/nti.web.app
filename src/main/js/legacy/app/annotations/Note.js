@@ -2,19 +2,16 @@ const Ext = require('@nti/extjs');
 
 require('./Highlight');
 
-
 module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	extend: 'NextThought.app.annotations.Highlight',
 	alias: 'widget.note',
 
 	isNote: true,
 
-
 	constructor: function (config) {
 		this.callParent(arguments);
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
 	},
-
 
 	onDestroy: function () {
 		var children = this.getRecord().children || [];
@@ -26,7 +23,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 		return this.callParent(arguments);
 	},
 
-
 	attachRecord: function (record) {
 		this.mon(record, 'convertedToPlaceholder', 'requestRender');
 		var r = this.getRecord();
@@ -35,7 +31,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 		}
 		this.callParent(arguments);
 	},
-
 
 	render: function () {
 		var y;
@@ -50,7 +45,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 			y = -1;
 		}
 
-
 		return y;
-	}
+	},
 });

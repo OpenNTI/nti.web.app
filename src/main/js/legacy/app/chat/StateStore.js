@@ -1,14 +1,15 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-const {User} = require('@nti/web-commons');
+const { wait } = require('@nti/lib-commons');
+const { User } = require('@nti/web-commons');
 
 const Toaster = require('legacy/common/toast/Manager');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const Socket = require('legacy/proxy/Socket');
 const RoomInfo = require('legacy/model/RoomInfo');
-const {isMe} = require('legacy/util/Globals');
-const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+const { isMe } = require('legacy/util/Globals');
+const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
 
 require('legacy/common/StateStore');
 
@@ -33,16 +34,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 		me.didSetMySelfOffline = true;
 
-		wait(5000)
-			.then(function () {
-				me.didSetMySelfOffline = false;
-			});
+		wait(5000).then(function () {
+			me.didSetMySelfOffline = false;
+		});
 	},
 
 	getPresenceOf: function (user) {
-		var username = (user && user.isModel) ? user.get('Username') : user;
+		var username = user && user.isModel ? user.get('Username') : user;
 
-		if (!username) { return; }
+		if (!username) {
+			return;
+		}
 
 		return this.PRESENCE_MAP[username];
 	},
@@ -72,7 +74,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 				oldPresence = this.PRESENCE_MAP[username];
 
 				//if we didn't trigger being offline and our old presence was online alert the user
-				if (!this.didSetMySelfOffline && oldPresence && oldPresence.isOnline()) {
+				if (
+					!this.didSetMySelfOffline &&
+					oldPresence &&
+					oldPresence.isOnline()
+				) {
 					console.log('Set offline in another session');
 					this.didSetMySelfOffline = false;
 
@@ -82,28 +88,31 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 					this.__offlineToast = Toaster.makeToast({
 						id: 'revertToast',
-						message: 'You are currently unavailable because you went offline in another session.',
+						message:
+							'You are currently unavailable because you went offline in another session.',
 						buttons: [
 							{
-								label: 'Okay'
+								label: 'Okay',
 							},
 							{
 								label: 'Set to available',
 								callback: function () {
-									presence.set({type: 'available', show: 'chat'});
+									presence.set({
+										type: 'available',
+										show: 'chat',
+									});
 									changePresence(presence);
-								}
-							}
-						]
+								},
+							},
+						],
 					});
 				}
 			}
 		}
 
-		presence.getInterfaceInstance()
-			.then((instance) => {
-				User.Presence.Store.setPresenceFor(username, instance);
-			});
+		presence.getInterfaceInstance().then(instance => {
+			User.Presence.Store.setPresenceFor(username, instance);
+		});
 
 		this.PRESENCE_MAP[username] = presence;
 
@@ -121,20 +130,21 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	notify: function (win, msg) {
-		var creator = msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
+		var creator =
+			msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
 		if (!isMe(creator)) {
 			this.fireEvent('notify', win, msg);
 		}
 	},
 
 	getChatWindow: function (roomInfo) {
-		var rIsString = (typeof roomInfo === 'string'),
-			w, occupantsKey;
+		var rIsString = typeof roomInfo === 'string',
+			w,
+			occupantsKey;
 
 		if (!rIsString && roomInfo) {
 			occupantsKey = roomInfo.getOccupantsKey();
-		}
-		else if (rIsString) {
+		} else if (rIsString) {
 			occupantsKey = this.ROOM_USER_MAP[roomInfo];
 		}
 
@@ -155,12 +165,19 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 		}
 
 		if (occupantsKey !== oldRoom.getOccupantsKey()) {
-			console.warn('Chat room occupants key are not identical. New key: ',
-				occupantsKey, ' and old key: ', oldRoom.getOccupantsKey());
+			console.warn(
+				'Chat room occupants key are not identical. New key: ',
+				occupantsKey,
+				' and old key: ',
+				oldRoom.getOccupantsKey()
+			);
 		}
 
 		// Delete the old cache
-		console.debug('deleting the cache for the old room info: ', oldRoom.getId());
+		console.debug(
+			'deleting the cache for the old room info: ',
+			oldRoom.getId()
+		);
 		me.removeSessionObject(occupantsKey);
 
 		// Change the roomInfo to the new one.
@@ -188,8 +205,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 	getAllChatWindows: function () {
 		var wins = [];
-		for(var k in this.CHAT_WIN_MAP) {
-			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
+		for (var k in this.CHAT_WIN_MAP) {
+			if (this.CHAT_WIN_MAP.hasOwnProperty(k)) {
 				wins.push(this.CHAT_WIN_MAP[k]);
 			}
 		}
@@ -208,10 +225,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 * @returns {NextThought.model.RoomInfo} RoomInfo
 	 */
 	existingRoom: function (users, roomId) {
-		var allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
+		var allUsers = Ext.Array.unique(
+				users.slice().concat($AppConfig.userObject.get('Username'))
+			),
 			occupantsKey = Ext.Array.sort(allUsers).join('_');
 
-		console.debug('Checking for existing room for occupants key: ', occupantsKey, ' and roomInfo id: ', roomId);
+		console.debug(
+			'Checking for existing room for occupants key: ',
+			occupantsKey,
+			' and roomInfo id: ',
+			roomId
+		);
 		return this.getRoomInfoFromSession(occupantsKey);
 	},
 
@@ -225,7 +249,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 			key = roomInfo.getOccupantsKey();
 
 		roomData.originalOccupants = roomInfo.getOriginalOccupants();
-		console.debug('****** caching roomInfo: ', roomInfo.getId(), ' to: ', key);
+		console.debug(
+			'****** caching roomInfo: ',
+			roomInfo.getId(),
+			' to: ',
+			key
+		);
 
 		this.setSessionObject(roomData, key);
 	},
@@ -271,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	isPersistantRoomId: function (id) {
-		return (/meetingroom/i).test(id);
+		return /meetingroom/i.test(id);
 	},
 
 	isOccupantsKeyAccepted: function (id) {
@@ -304,7 +333,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 	getAllOccupantsKeyAccepted: function () {
 		var accepted = this.getSessionObject('roomIdsAccepted') || {},
-			pairs = [], key;
+			pairs = [],
+			key;
 
 		for (key in accepted) {
 			if (accepted.hasOwnProperty(key)) {
@@ -328,8 +358,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 				m = new RoomInfo(json);
 				m.setOriginalOccupants(json.originalOccupants);
 				return m;
-			}
-			catch (e) {
+			} catch (e) {
 				console.warn('Item in session storage is not a roomInfo', json);
 			}
 		}
@@ -337,7 +366,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	getAllRoomInfosFromSession: function () {
-		var roomInfos = [], ri, key, chats;
+		var roomInfos = [],
+			ri,
+			key,
+			chats;
 
 		chats = this.getSessionObject();
 
@@ -381,10 +413,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 	getTranscriptIdForRoomInfo: function (roomInfo) {
 		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
-		return this.buildTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
+		return this.buildTranscriptId(
+			id,
+			$AppConfig.username.replace('-', '_'),
+			'Transcript'
+		);
 	},
 
 	getTranscripts: function () {
 		return this.__transcriptStore;
-	}
+	},
 });

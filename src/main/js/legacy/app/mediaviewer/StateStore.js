@@ -4,79 +4,82 @@ const UserdataActions = require('../userdata/Actions');
 
 require('legacy/common/StateStore');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.mediaviewer.StateStore',
+	{
+		extend: 'NextThought.common.StateStore',
+		obj_map: {},
+		cmpMap: {},
+		DEFAULT_SHARING: {},
 
-module.exports = exports = Ext.define('NextThought.app.mediaviewer.StateStore', {
-	extend: 'NextThought.common.StateStore',
-	'obj_map': {},
-	cmpMap: {},
-	DEFAULT_SHARING: {},
+		constructor: function () {
+			this.callParent(arguments);
+			this.UserDataActions = UserdataActions.create();
+		},
 
-	constructor: function () {
-		this.callParent(arguments);
-		this.UserDataActions = UserdataActions.create();
-	},
+		cacheTranscriptObject: function (id, content) {
+			this['obj_map'][id] = content;
+		},
 
-	cacheTranscriptObject: function (id, content) {
-		this['obj_map'][id] = content;
-	},
+		getTranscriptObject: function (id) {
+			return this['obj_map'][id];
+		},
 
-	getTranscriptObject: function (id) {
-		return this['obj_map'][id];
-	},
+		addComponentForStore: function (cmp, store) {
+			var id = store && store.getId ? store.getId() : store,
+				v = this.cmpMap[id] || [];
 
-	addComponentForStore: function (cmp, store) {
-		var id = store && store.getId ? store.getId() : store,
-			v = this.cmpMap[id] || [];
+			v.push(cmp);
+			this.cmpMap[id] = v;
+		},
 
-		v.push(cmp);
-		this.cmpMap[id] = v;
-	},
+		getComponentsForStore: function (store) {
+			var id = store && store.getId ? store.getId() : store;
+			return this.cmpMap[id] || [];
+		},
 
-	getComponentsForStore: function (store) {
-		var id = store && store.getId ? store.getId() : store;
-		return this.cmpMap[id] || [];
-	},
-
-	getContext: function (cmp) {
-		if (!this.pageContextMap) {
-			this.pageContextMap = {};
-		}
-
-		if (cmp) {
-			var c = this.pageContextMap;
-
-			if (!c.hasOwnProperty(cmp.id)) {
-				cmp.on('destroy', function () {
-					delete c[cmp.id];
-				});
+		getContext: function (cmp) {
+			if (!this.pageContextMap) {
+				this.pageContextMap = {};
 			}
 
-			c[cmp.id] = c[cmp.id] || {};
+			if (cmp) {
+				var c = this.pageContextMap;
 
-			return c[cmp.id];
-		}
+				if (!c.hasOwnProperty(cmp.id)) {
+					cmp.on('destroy', function () {
+						delete c[cmp.id];
+					});
+				}
 
-		return this.currentContext;
-	},
+				c[cmp.id] = c[cmp.id] || {};
 
-	cacheSharingPreferences: function (ntiid, prefs) {
-		this.DEFAULT_SHARING[ntiid] = prefs;
-	},
+				return c[cmp.id];
+			}
 
-	getSharingPreferences: function (ntiid, currentBundle) {
-		var prefs = this.DEFAULT_SHARING[ntiid],
-			me = this;
+			return this.currentContext;
+		},
 
-		if (prefs) {
-			return Promise.resolve(prefs);
-		}
+		cacheSharingPreferences: function (ntiid, prefs) {
+			this.DEFAULT_SHARING[ntiid] = prefs;
+		},
 
-		return new Promise(function (fulfill) {
-			me.UserDataActions.getPreferences(ntiid, currentBundle)
-				.then(preferences => {
-					me.cacheSharingPreferences(ntiid, preferences);
-					fulfill(preferences);
-				});
-		});
+		getSharingPreferences: function (ntiid, currentBundle) {
+			var prefs = this.DEFAULT_SHARING[ntiid],
+				me = this;
+
+			if (prefs) {
+				return Promise.resolve(prefs);
+			}
+
+			return new Promise(function (fulfill) {
+				me.UserDataActions.getPreferences(ntiid, currentBundle).then(
+					preferences => {
+						me.cacheSharingPreferences(ntiid, preferences);
+						fulfill(preferences);
+					}
+				);
+			});
+		},
 	}
-});
+);

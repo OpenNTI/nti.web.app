@@ -7,19 +7,28 @@ const SearchUtils = require('legacy/util/Search');
 
 require('../Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
-		{name: 'isGroupHeader', type: 'boolean', persist: false, defaultValue: false},
-		{name: 'groupName', type: 'string', persist: false},
+		{
+			name: 'isGroupHeader',
+			type: 'boolean',
+			persist: false,
+			defaultValue: false,
+		},
+		{ name: 'groupName', type: 'string', persist: false },
 		//View only
-		{name: 'matches', type: 'int', persist: false, defaultValue: 0},
-		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
+		{ name: 'matches', type: 'int', persist: false, defaultValue: 0 },
+		{
+			name: 'searchTerm',
+			type: 'string',
+			persist: false,
+			defaultValue: '',
+		},
 	],
 
-	constructor () {
+	constructor() {
 		this.callParent(arguments);
 
 		Object.defineProperties(this, {
@@ -46,20 +55,29 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		store = Ext.getStore(id);
 
 		if (!store) {
-			store = NTI.create(Ext.apply({
-				storeId: id,
-				url: this.getLink('contents')
-			}, cfg || {}));
+			store = NTI.create(
+				Ext.apply(
+					{
+						storeId: id,
+						url: this.getLink('contents'),
+					},
+					cfg || {}
+				)
+			);
 
 			UserDataStore.addStore(store);
 		}
 
 		store.proxy.extraParams = Ext.apply(
 			store.proxy.extraParams || {},
-			Ext.apply({
-				sortOn: 'createdTime',
-				sortOrder: 'descending'
-			}, extraParams));
+			Ext.apply(
+				{
+					sortOn: 'createdTime',
+					sortOrder: 'descending',
+				},
+				extraParams
+			)
+		);
 
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
@@ -77,15 +95,20 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 	},
 
 	getMatchCount: function (term) {
-		if (!term) { return 0; }
+		if (!term) {
+			return 0;
+		}
 
 		var me = this,
 			re = SearchUtils.getRegExCache(term),
-			count = 0, terms = me.searchProps || [];
+			count = 0,
+			terms = me.searchProps || [];
 
-		if (!re) { return 0; }
+		if (!re) {
+			return 0;
+		}
 
-		function getMatches (val) {
+		function getMatches(val) {
 			if (Ext.isString(val)) {
 				count += (val.match(re) || []).length;
 			} else if (Ext.isArray(val)) {
@@ -113,8 +136,8 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		}
 
 		this.set({
-			'matches': count,
-			'searchTerm': term
+			matches: count,
+			searchTerm: term,
 		});
-	}
+	},
 });

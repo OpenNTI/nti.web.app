@@ -17,7 +17,6 @@ const MediaviewerStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
 
-
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
@@ -45,7 +44,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	getPageStore: function (id, ctx) {
-		if (!ctx || !id) { return false; }
+		if (!ctx || !id) {
+			return false;
+		}
 
 		return ctx.currentPageStores[id];
 	},
@@ -59,8 +60,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	loadUserData: function (cmps, reader) {
-		var cid, me = this, loaded;
-		const unregisteredCmp = cmps.filter(c => c.unregisteredNoteContainer === true)[0];
+		var cid,
+			me = this,
+			loaded;
+		const unregisteredCmp = cmps.filter(
+			c => c.unregisteredNoteContainer === true
+		)[0];
 		const unregisteredNotes = [];
 
 		loaded = Ext.Array.map(cmps, function (cmp) {
@@ -71,12 +76,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 			if (cid) {
 				me.initPageStores(cmp);
-				p = me.loadAnnotations(cmp, cid)
+				p = me
+					.loadAnnotations(cmp, cid)
 					.then(function (store) {
 						var o = reader && reader.noteOverlay;
 
 						if (o && o.registerGutterRecords) {
-							o.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
+							o.registerGutterRecords(
+								store,
+								store.getRange(),
+								cmp,
+								note => unregisteredNotes.push({ note, store })
+							);
 							return Promise.resolve();
 						}
 
@@ -90,30 +101,32 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			return p || Promise.reject();
 		});
 
-		Promise.all(loaded)
-			.then(() => {
-				const o = reader && reader.noteOverlay;
-				const seen = {};
+		Promise.all(loaded).then(() => {
+			const o = reader && reader.noteOverlay;
+			const seen = {};
 
-				if (!unregisteredCmp || !o || !o.registerOrphanedRecord) { return; }
+			if (!unregisteredCmp || !o || !o.registerOrphanedRecord) {
+				return;
+			}
 
-				for (let unregistered of unregisteredNotes) {
-					const {note, store} = unregistered;
-					const id = note && note.getId();
+			for (let unregistered of unregisteredNotes) {
+				const { note, store } = unregistered;
+				const id = note && note.getId();
 
-					if (id && !seen[id]) {
-						o.registerOrphanedRecord(store, note, unregisteredCmp);
-						seen[id] = true;
-					}
+				if (id && !seen[id]) {
+					o.registerOrphanedRecord(store, note, unregisteredCmp);
+					seen[id] = true;
 				}
-			});
-
+			}
+		});
 
 		return loaded;
 	},
 
-	realignNotes (cmps, overlay) {
-		const unregisteredCmp = cmps.filter(c => c.unregisteredNoteContainer)[0];
+	realignNotes(cmps, overlay) {
+		const unregisteredCmp = cmps.filter(
+			c => c.unregisteredNoteContainer
+		)[0];
 		const unregisteredNotes = [];
 		const seen = {};
 
@@ -121,15 +134,21 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			const store = cmp.userDataStore;
 
 			if (store) {
-				overlay.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
+				overlay.registerGutterRecords(
+					store,
+					store.getRange(),
+					cmp,
+					note => unregisteredNotes.push({ note, store })
+				);
 			}
-
 		}
 
-		if (!unregisteredCmp) { return; }
+		if (!unregisteredCmp) {
+			return;
+		}
 
 		for (let unregistered of unregisteredNotes) {
-			const {note, store} = unregistered;
+			const { note, store } = unregistered;
 			const id = note && note.getId();
 
 			if (id && !seen[id]) {
@@ -141,25 +160,30 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 	loadAnnotations: function (cmp, containerId) {
 		var context = this.MediaUserDataStore.getContext(cmp),
-			store, me = this, parentContext = this.UserDataStore.getContext(cmp.ownerCt);
+			store,
+			me = this,
+			parentContext = this.UserDataStore.getContext(cmp.ownerCt);
 
 		me.MediaUserDataStore.addComponentForStore(cmp, containerId);
 		return new Promise(function (fulfill, reject) {
 			if (me.hasPageStore(containerId, context)) {
 				store = me.getPageStore(containerId);
 				fulfill(store);
-			}
-			else {
+			} else {
 				store = me.__buildPageStore(containerId);
 				me.addPageStore(containerId, store, context);
-				me.UserDataActions.addPageStore(containerId, store, parentContext);
+				me.UserDataActions.addPageStore(
+					containerId,
+					store,
+					parentContext
+				);
 				cmp.bindToStore(store);
 
 				store.on({
-					'load': function (s) {
+					load: function (s) {
 						fulfill(s);
 					},
-					single: true
+					single: true,
 				});
 
 				store.load();
@@ -168,7 +192,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	__buildPageStore: function (containerId) {
-		var props = {}, object;
+		var props = {},
+			object;
 
 		if (Ext.isObject(containerId)) {
 			object = containerId;
@@ -180,13 +205,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			});
 		}
 
-		var url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+		var url = Service.getContainerUrl(
+				containerId,
+				Globals.USER_GENERATED_DATA
+			),
 			store = PageItem.make(url, containerId, true);
 
 		store.doesNotParticipateWithFlattenedPage = true;
 		Ext.apply(store.proxy.extraParams, {
 			accept: Note.mimeType,
-			filter: 'TopLevel'
+			filter: 'TopLevel',
 		});
 
 		Ext.apply(store, props || {});
@@ -203,7 +231,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return new Promise(function (fulfill, reject) {
 			me.loadRawTranscript(transcript)
 				.then(function (c) {
-					var parser = new WebvttTranscript({ input: c, ignoreLFs: true }),
+					var parser = new WebvttTranscript({
+							input: c,
+							ignoreLFs: true,
+						}),
 						cueList = parser.parseWebVTT();
 
 					fulfill(cueList);
@@ -220,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			jsonpUrl = transcript.get('jsonpUrl'),
 			url = transcript.get('url');
 
-		function fixURL (href, basePath) {
+		function fixURL(href, basePath) {
 			if (Globals.ROOT_URL_PATTERN.test(href)) {
 				href = Globals.getURL(href);
 			} else if (!Globals.HOST_PREFIX_PATTERN.test(href)) {
@@ -250,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 				failure: function () {
 					console.log('FAILURE Loading Transcripts: ', arguments);
 					reject(arguments);
-				}
+				},
 			});
 		});
 	},
@@ -264,7 +295,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return new Promise(function (fulfill, reject) {
 			me.PathActions.getPathToObject(obj)
 				.then(function (path) {
-					var course = path[0], p;
+					var course = path[0],
+						p;
 					if (course) {
 						p = course.getContentRoots()[0];
 					}
@@ -291,7 +323,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 	buildSlidedeckPlaylist: function (slidedeck) {
 		var videos = {},
-			transcripts = {}, me = this, promises,
+			transcripts = {},
+			me = this,
+			promises,
 			slideStore;
 
 		if (!slidedeck || !(slidedeck instanceof Slidedeck)) {
@@ -301,44 +335,61 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		slideStore = new Ext.data.Store({
 			proxy: 'memory',
 			model: 'NextThought.model.Slide',
-			data: slidedeck.get('Slides') || []
+			data: slidedeck.get('Slides') || [],
 		});
 
 		this.setSlideDocContent(slidedeck, slideStore);
 
-		promises = Ext.Array.map(slidedeck.get('Videos'), function (slidevideo) {
-			var transcript;
+		promises = Ext.Array.map(
+			slidedeck.get('Videos'),
+			function (slidevideo) {
+				var transcript;
 
-			return new Promise(function (fulfill) {
-				Service.getObject(slidevideo.video_ntiid)
-					.then(function (video) {
+				return new Promise(function (fulfill) {
+					Service.getObject(slidevideo.video_ntiid).then(function (
+						video
+					) {
 						var obj = video.raw || video.getData();
 						video = PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
 
-						return me.PathActions.getPathToObject(slidedeck)
-							.then(function (path) {
-								var course = path[0], basePath;
+						return me.PathActions.getPathToObject(slidedeck).then(
+							function (path) {
+								var course = path[0],
+									basePath;
 								if (course) {
 									basePath = course.getContentRoots()[0];
 								}
 
-								transcript = TranscriptItem.fromVideo(video, basePath);
+								transcript = TranscriptItem.fromVideo(
+									video,
+									basePath
+								);
 								transcripts[slidevideo.NTIID] = transcript;
-								me.fixSlideImagesPath(slideStore.getRange(), basePath, path);
+								me.fixSlideImagesPath(
+									slideStore.getRange(),
+									basePath,
+									path
+								);
 								fulfill();
-							});
+							}
+						);
 					});
-			});
-		});
+				});
+			}
+		);
 
-
-		return new	Promise( function (fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Promise.all(promises)
 				.then(me.__fixSlideContainer.bind(me, slidedeck, slideStore))
 				.then(function () {
-					var items = me.buildSlidedeckComponents(slideStore, videos, transcripts),
-						vids = [], k;
+					var items = me.buildSlidedeckComponents(
+							slideStore,
+							videos,
+							transcripts
+						),
+						vids = [],
+						k;
 
 					for (k in videos) {
 						if (videos.hasOwnProperty(k)) {
@@ -346,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 						}
 					}
 
-					fulfill({videos: vids, items: items});
+					fulfill({ videos: vids, items: items });
 				});
 		});
 	},
@@ -355,26 +406,26 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		var me = this;
 
 		return new Promise(function (fulfill) {
-			me.__getSlidedeckContainer(slidedeck)
-				.then(function (containerId) {
-					slideStore.each(function (slide) {
-						slide.set('ContainerId', containerId);
-					});
-					fulfill();
+			me.__getSlidedeckContainer(slidedeck).then(function (containerId) {
+				slideStore.each(function (slide) {
+					slide.set('ContainerId', containerId);
 				});
+				fulfill();
+			});
 		});
 	},
 
 	__getSlidedeckContainer: function (slidedeck) {
 		var me = this;
 		return new Promise((fulfill, reject) => {
-			me.PathActions.getPathToObject(slidedeck)
-				.then(path => {
-					var last = path && path.last();
-					if (!last) { reject(); }
+			me.PathActions.getPathToObject(slidedeck).then(path => {
+				var last = path && path.last();
+				if (!last) {
+					reject();
+				}
 
-					fulfill(last.getId());
-				});
+				fulfill(last.getId());
+			});
 		});
 	},
 
@@ -398,12 +449,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 		return Promise.all([
 			Service.request(link),
-			me.LibraryActions.findContentPackage(contentPackage)
+			me.LibraryActions.findContentPackage(contentPackage),
 		]).then(function (results) {
 			let xml = results[0];
 			// const content = results[1];
 
-			xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+			xml = new DOMParser().parseFromString(xml, 'text/xml');
 
 			if (xml.querySelector('parsererror')) {
 				return Promise.resolve('');
@@ -413,7 +464,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	parseSlideDocFragments: function (containerId, slideStore, doc) {
-		var slideFrags = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', doc),
+		var slideFrags = Ext.DomQuery.select(
+				'object[type="application/vnd.nextthought.slide"]',
+				doc
+			),
 			fragsMap = {};
 
 		Ext.each(slideFrags, function (dom) {
@@ -431,7 +485,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	buildSlidedeckComponents: function (slideStore, videosMap, transcriptsMap) {
-		var isTitle = true, items = [];
+		var isTitle = true,
+			items = [];
 
 		slideStore.each(function (slide) {
 			var vid = slide.get('video-id'),
@@ -443,7 +498,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			if (video && isTitle) {
 				items.push({
 					xtype: 'video-title-component',
-					video: video
+					video: video,
 				});
 
 				isTitle = false;
@@ -454,8 +509,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 				slide: slide,
 				layout: {
 					type: 'vbox',
-					align: 'stretch'
-				}
+					align: 'stretch',
+				},
 			});
 
 			if (t) {
@@ -471,12 +526,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 					transcript: t,
 					layout: {
 						type: 'vbox',
-						align: 'stretch'
-					}
+						align: 'stretch',
+					},
 				});
 			}
 		}, this);
 
 		return items;
-	}
+	},
 });

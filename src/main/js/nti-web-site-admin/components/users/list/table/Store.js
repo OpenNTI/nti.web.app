@@ -1,7 +1,7 @@
-import {Stores, Mixins} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
-import {decorate, URL} from '@nti/lib-commons';
-import {mixin} from '@nti/lib-decorators';
+import { Stores, Mixins } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { decorate, URL } from '@nti/lib-commons';
+import { mixin } from '@nti/lib-decorators';
 
 import SharedStore from '../SharedStore';
 
@@ -10,10 +10,12 @@ import Selectable from './Selectable';
 const PAGE_SIZE = 20;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
-const canDeactivateUsers = (service) => Boolean(service.Items.filter(w => w.hasLink('BatchDeactivate'))[0]);
-const canActivateUsers = (service) => Boolean(service.Items.filter(w => w.hasLink('BatchReactivate'))[0]);
+const canDeactivateUsers = service =>
+	Boolean(service.Items.filter(w => w.hasLink('BatchDeactivate'))[0]);
+const canActivateUsers = service =>
+	Boolean(service.Items.filter(w => w.hasLink('BatchReactivate'))[0]);
 
-async function bulkActivation (users, rel) {
+async function bulkActivation(users, rel) {
 	const service = await getService();
 	const workspace = service.Items.filter(x => x.hasLink(rel))[0];
 
@@ -23,7 +25,7 @@ async function bulkActivation (users, rel) {
 	await workspace.postToLink(
 		rel,
 		{
-			usernames: users.map(u => u.Username)
+			usernames: users.map(u => u.Username),
 		},
 		true
 	);
@@ -31,28 +33,30 @@ async function bulkActivation (users, rel) {
 }
 
 class UserListStore extends Stores.BoundStore {
+	StatefulProperties = ['sortProperty', 'sortDirection', 'pageNumber'];
 
-	StatefulProperties = ['sortProperty', 'sortDirection', 'pageNumber']
-
-	constructor () {
+	constructor() {
 		super();
 
 		this.set({
 			items: null,
-			loading: true
+			loading: true,
 		});
 	}
 
-	async addAdmin (users) {
+	async addAdmin(users) {
 		const service = await getService();
 
 		try {
-			await this.changeRoleForUsers(users.map(u=>u.Username), service, false);
-		}
-		catch (e) {
+			await this.changeRoleForUsers(
+				users.map(u => u.Username),
+				service,
+				false
+			);
+		} catch (e) {
 			this.set({
 				error: e.Message || e,
-				loading: false
+				loading: false,
 			});
 
 			return;
@@ -61,16 +65,19 @@ class UserListStore extends Stores.BoundStore {
 		this.load();
 	}
 
-	async removeAdmin (users) {
+	async removeAdmin(users) {
 		const service = await getService();
 
 		try {
-			await this.changeRoleForUsers(users.map(u=>u.Username), service, true);
-		}
-		catch (e) {
+			await this.changeRoleForUsers(
+				users.map(u => u.Username),
+				service,
+				true
+			);
+		} catch (e) {
 			this.set({
 				error: e.Message || e,
-				loading: false
+				loading: false,
 			});
 
 			return;
@@ -79,25 +86,28 @@ class UserListStore extends Stores.BoundStore {
 		this.load();
 	}
 
-	changeRoleForUsers (users, service, removing) {
-		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
+	changeRoleForUsers(users, service, removing) {
+		const siteAdminsLink = service
+			.getWorkspace('SiteAdmin')
+			.getLink('SiteAdmins');
 
 		this.set('loading', true);
 
-		if(removing) {
+		if (removing) {
 			const params = {
-				users: users.join(',')
+				users: users.join(','),
 			};
 
 			URL.appendQueryParams(siteAdminsLink, params);
-			return service.delete(URL.appendQueryParams(siteAdminsLink, params));
-		}
-		else {
+			return service.delete(
+				URL.appendQueryParams(siteAdminsLink, params)
+			);
+		} else {
 			return service.post(siteAdminsLink, { users: users.join(',') });
 		}
 	}
 
-	async deactivateUsers (users) {
+	async deactivateUsers(users) {
 		this.set('loading', true);
 
 		try {
@@ -107,13 +117,12 @@ class UserListStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set({
 				error: e.Message || e,
-				loading: false
+				loading: false,
 			});
 		}
-
 	}
 
-	async activateUsers (users) {
+	async activateUsers(users) {
 		this.set('loading', true);
 
 		try {
@@ -123,31 +132,32 @@ class UserListStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set({
 				error: e.Message || e,
-				loading: false
+				loading: false,
 			});
 		}
 	}
 
-	loadPage (pageNumber) {
+	loadPage(pageNumber) {
 		this.set('pageNumber', pageNumber);
 
 		this.load();
 	}
 
-	getLink (service) {
-		if(this.filter === 'admin') {
+	getLink(service) {
+		if (this.filter === 'admin') {
 			const adminWorkspace = service.getWorkspace('SiteAdmin');
 
-			if(!adminWorkspace) {
+			if (!adminWorkspace) {
 				throw new Error(ACCESS_FORBIDDEN);
 			}
 
 			return adminWorkspace.getLink('SiteAdmins');
-		}
-		else {
-			const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+		} else {
+			const userWorkspace = service.Items.filter(x =>
+				x.hasLink('SiteUsers')
+			)[0];
 
-			if(!userWorkspace) {
+			if (!userWorkspace) {
 				throw new Error(ACCESS_FORBIDDEN);
 			}
 
@@ -155,24 +165,26 @@ class UserListStore extends Stores.BoundStore {
 		}
 	}
 
-	applySearchTerm (term) {
+	applySearchTerm(term) {
 		this.setImmediate({
 			searchTerm: term,
-			pageNumber: 0
+			pageNumber: 0,
 		});
 	}
 
-	async load () {
-		if (this.isBufferingSearch) { return; }
+	async load() {
+		if (this.isBufferingSearch) {
+			return;
+		}
 
 		this.set('loading', true);
 
-		if(this.searchTerm && this.searchTerm.length < 3) {
+		if (this.searchTerm && this.searchTerm.length < 3) {
 			this.set({
 				items: [],
 				numPages: 1,
 				currentSearchTerm: '',
-				loading: false
+				loading: false,
 			});
 
 			return;
@@ -185,7 +197,7 @@ class UserListStore extends Stores.BoundStore {
 		try {
 			const link = this.getLink(service);
 
-			if(!link) {
+			if (!link) {
 				throw new Error(ACCESS_FORBIDDEN);
 			}
 
@@ -198,7 +210,7 @@ class UserListStore extends Stores.BoundStore {
 			params.sortOn = sortOn || 'createdTime';
 			params.sortOrder = sortDirection || 'descending';
 
-			if(pageNumber) {
+			if (pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
 
 				params.batchStart = batchStart;
@@ -215,13 +227,13 @@ class UserListStore extends Stores.BoundStore {
 				params.deactivated = 'true';
 			}
 
-			if(this.searchTerm) {
+			if (this.searchTerm) {
 				params.searchTerm = this.searchTerm;
 			}
 
 			const siteUsers = await service.getBatch(link, params);
 
-			if(this.searchTerm !== searchTerm) {
+			if (this.searchTerm !== searchTerm) {
 				// a new search term has been entered since we performed the load
 				return;
 			}
@@ -236,18 +248,24 @@ class UserListStore extends Stores.BoundStore {
 				pageNumber: siteUsers.BatchPage,
 				currentSearchTerm: this.searchTerm,
 				loading: false,
-				items: siteUsers.Items
+				items: siteUsers.Items,
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			this.set({
 				loading: false,
-				error: e.message || 'Could not load learners'
+				error: e.message || 'Could not load learners',
 			});
 		}
 	}
 }
 
 export default decorate(UserListStore, [
-	mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
+	mixin(
+		Selectable,
+		Mixins.Stateful,
+		Mixins.BatchPaging,
+		Mixins.Searchable,
+		Mixins.Sortable,
+		Mixins.Filterable
+	),
 ]);

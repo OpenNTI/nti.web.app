@@ -2,77 +2,91 @@ const Ext = require('@nti/extjs');
 
 const PromptActions = require('legacy/app/prompt/Actions');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.controls.Edit',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.overview-editing-controls-edit',
+		promptName: 'overview-editing',
+		name: 'Edit',
+		cls: 'nt-button edit',
+		renderTpl: '{name}',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls-edit',
-	promptName: 'overview-editing',
-	name: 'Edit',
-	cls: 'nt-button edit',
-	renderTpl: '{name}',
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
-
-		if (this.record && !this.record.getLink('edit')) {
-			this.hide();
-		} else {
-			this.PromptActions = PromptActions.create();
-
-			this.renderData = Ext.apply(this.renderData || {}, {
-				name: this.name
-			});
-		}
-	},
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		if (this.color) {
-			this.addCls(this.color);
-		}
-
-		this.mon(this.el, 'click', this.handleClick.bind(this));
-	},
-
-	handleClick: function (e) {
-		if (e.getTarget('.disabled')) { return; }
-
-		if (Service.canDoAdvancedEditing() && e.shiftKey && e.altKey) {
-			if (this.record) {
-				console.log('EDIT:\n%s\nORDERED CONTENTS:\n%s', this.record.getLink('edit'), this.record.getLink('ordered-contents'));
+			if (this.record && !this.record.getLink('edit')) {
+				this.hide();
 			} else {
-				console.log('Record is undefined.');
+				this.PromptActions = PromptActions.create();
+
+				this.renderData = Ext.apply(this.renderData || {}, {
+					name: this.name,
+				});
 			}
-			return;
-		}
+		},
 
-		if (this.onPromptOpen) {
-			this.onPromptOpen();
-		}
+		afterRender: function () {
+			this.callParent(arguments);
 
-		this.PromptActions.prompt(this.promptName, {record: this.record, parent: this.parentRecord, root: this.root, bundle: this.bundle, outlineNode: this.outlineNode})
-			.then(this.onPromptSuccess.bind(this))
-			.catch(this.onPromptCancel.bind(this));
-	},
+			if (this.color) {
+				this.addCls(this.color);
+			}
 
-	onPromptSuccess: function (action) {
-		if (this.afterSave) {
-			this.afterSave();
-		}
+			this.mon(this.el, 'click', this.handleClick.bind(this));
+		},
 
-		if (this.onPromptClose) {
-			this.onPromptClose(true);
-		}
-	},
+		handleClick: function (e) {
+			if (e.getTarget('.disabled')) {
+				return;
+			}
 
-	onPromptCancel: function (reason) {
-		if (this.onPromptClose) {
-			this.onPromptClose(false);
-		}
+			if (Service.canDoAdvancedEditing() && e.shiftKey && e.altKey) {
+				if (this.record) {
+					console.log(
+						'EDIT:\n%s\nORDERED CONTENTS:\n%s',
+						this.record.getLink('edit'),
+						this.record.getLink('ordered-contents')
+					);
+				} else {
+					console.log('Record is undefined.');
+				}
+				return;
+			}
 
-		if (reason === PromptActions.DELETED && this.onDelete) {
-			this.onDelete();
-		}
+			if (this.onPromptOpen) {
+				this.onPromptOpen();
+			}
+
+			this.PromptActions.prompt(this.promptName, {
+				record: this.record,
+				parent: this.parentRecord,
+				root: this.root,
+				bundle: this.bundle,
+				outlineNode: this.outlineNode,
+			})
+				.then(this.onPromptSuccess.bind(this))
+				.catch(this.onPromptCancel.bind(this));
+		},
+
+		onPromptSuccess: function (action) {
+			if (this.afterSave) {
+				this.afterSave();
+			}
+
+			if (this.onPromptClose) {
+				this.onPromptClose(true);
+			}
+		},
+
+		onPromptCancel: function (reason) {
+			if (this.onPromptClose) {
+				this.onPromptClose(false);
+			}
+
+			if (reason === PromptActions.DELETED && this.onDelete) {
+				this.onDelete();
+			}
+		},
 	}
-});
+);

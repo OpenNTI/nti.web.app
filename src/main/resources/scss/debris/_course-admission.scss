@@ -189,7 +189,12 @@
 			&.enabled.number {
 				color: var(--secondary-grey);
 
-				@include icon($check_progress, $side: after, $top: 13px, $left: 11px);
+				@include icon(
+					$check_progress,
+					$side: after,
+					$top: 13px,
+					$left: 11px
+				);
 
 				&::before {
 					border-color: var(--secondary-grey);
@@ -358,7 +363,13 @@
 		margin-bottom: 0;
 		position: relative;
 
-		@include icon($gift, $position: relative, $right: 13px, $top: 5px, $left: auto);
+		@include icon(
+			$gift,
+			$position: relative,
+			$right: 13px,
+			$top: 5px,
+			$left: auto
+		);
 
 		.label {
 			color: #52b85f;
@@ -382,12 +393,12 @@
 			background-color: #f7fdf8;
 
 			&:hover {
-				input[type=checkbox]:not(:checked) + label::after {
+				input[type='checkbox']:not(:checked) + label::after {
 					left: 0;
 				}
 			}
 
-			input[type=checkbox] + label {
+			input[type='checkbox'] + label {
 				padding-left: 25px;
 				color: #52b85f;
 
@@ -400,11 +411,11 @@
 				}
 			}
 
-			input[type=checkbox]:checked + label::after {
+			input[type='checkbox']:checked + label::after {
 				left: 0;
 			}
 
-			input[type=checkbox]:focus + label {
+			input[type='checkbox']:focus + label {
 				box-shadow: none;
 			}
 		}
@@ -646,11 +657,11 @@
 				}
 
 				.enrollment-input.checkbox {
-					input[type=checkbox]:focus + label {
+					input[type='checkbox']:focus + label {
 						box-shadow: none;
 					}
 
-					input[type=checkbox]:checked + label::before {
+					input[type='checkbox']:checked + label::before {
 						display: none;
 					}
 				}
@@ -663,20 +674,30 @@
 						color: var(--tertiary-grey);
 
 						&.checkbox {
-							input[type=checkbox]:focus + label {
+							input[type='checkbox']:focus + label {
 								box-shadow: none;
 							}
 
-							input[type=checkbox]:checked + label {
-								@include icon($checkbox-14, $top: 13px, $left: 18px);
+							input[type='checkbox']:checked + label {
+								@include icon(
+									$checkbox-14,
+									$top: 13px,
+									$left: 18px
+								);
 
 								&::before {
 									display: none;
 								}
 							}
 
-							&:hover input[type=checkbox]:not(:checked) + label {
-								@include icon($checkbox-14, $top: 13px, $left: 18px);
+							&:hover
+								input[type='checkbox']:not(:checked)
+								+ label {
+								@include icon(
+									$checkbox-14,
+									$top: 13px,
+									$left: 18px
+								);
 							}
 						}
 					}
@@ -768,7 +789,7 @@
 					}
 				}
 
-				input[type=text] {
+				input[type='text'] {
 					box-shadow: none;
 					font-size: 14px;
 					font-weight: 500;
@@ -793,12 +814,12 @@
 					}
 				}
 
-				input[type=radio] {
+				input[type='radio'] {
 					opacity: 0;
 					position: absolute;
 				}
 
-				input[type=radio] + label {
+				input[type='radio'] + label {
 					min-height: 40px;
 					padding: 10px 15px 10px 45px;
 					display: block;
@@ -811,8 +832,12 @@
 					}
 				}
 
-				input[type=radio]:checked + label {
-					@include icon($radio-button-16_active, $top: 12px, $left: 18px);
+				input[type='radio']:checked + label {
+					@include icon(
+						$radio-button-16_active,
+						$top: 12px,
+						$left: 18px
+					);
 
 					&::before {
 						content: '';
@@ -825,22 +850,26 @@
 					}
 				}
 
-				&:hover input[type=radio]:not(:checked) + label {
-					@include icon($radio-button-16_hover, $top: 12px, $left: 18px);
+				&:hover input[type='radio']:not(:checked) + label {
+					@include icon(
+						$radio-button-16_hover,
+						$top: 12px,
+						$left: 18px
+					);
 				}
 
 				&:not(.error) {
-					input[type=radio]:focus + label {
+					input[type='radio']:focus + label {
 						box-shadow: inset 0 0 0 1px var(--primary-blue);
 					}
 				}
 
 				&.error {
-					input[type=radio]:focus + label {
+					input[type='radio']:focus + label {
 						box-shadow: inset 0 0 0 1px var(--primary-red);
 					}
 
-					input[type=radio]:not(:checked) + label {
+					input[type='radio']:not(:checked) + label {
 						background-color: var(--quad-grey);
 					}
 				}
@@ -873,12 +902,12 @@
 					}
 				}
 
-				input[type=checkbox] {
+				input[type='checkbox'] {
 					opacity: 0;
 					position: absolute;
 				}
 
-				input[type=checkbox] + label {
+				input[type='checkbox'] + label {
 					min-height: 40px;
 					padding: 10px 15px 10px 46px;
 					display: block;
@@ -897,7 +926,7 @@
 					@include icon($checkbox-14, $top: 13px, $left: 18px);
 				}
 
-				input[type=checkbox]:checked + label {
+				input[type='checkbox']:checked + label {
 					@include icon($checkbox-14_active, $top: 13px, $left: 18px);
 
 					&.long::after {
@@ -915,7 +944,7 @@
 					}
 				}
 
-				&:hover input[type=checkbox]:not(:checked) + label {
+				&:hover input[type='checkbox']:not(:checked) + label {
 					@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
 
 					&.long::after {
@@ -923,7 +952,7 @@
 					}
 				}
 
-				input[type=checkbox]:focus + label {
+				input[type='checkbox']:focus + label {
 					box-shadow: inset 0 0 0 1px var(--primary-blue);
 				}
 			}
@@ -931,7 +960,7 @@
 			&.date-input {
 				input {
 					position: relative;
-					height: 40px;//because IE sucks.
+					height: 40px; //because IE sucks.
 				}
 
 				input:focus {
@@ -952,7 +981,8 @@
 				}
 			}
 
-			&.text, &.select {
+			&.text,
+			&.select {
 				input {
 					box-shadow: none;
 					border-radius: 0;
@@ -1274,7 +1304,8 @@
 		}
 	}
 
-	.token, .transaction {
+	.token,
+	.transaction {
 		margin-top: 1em;
 		overflow: hidden;
 
@@ -1391,7 +1422,8 @@
 	}
 }
 
-.payment-verification, .enroll-for-credit-confirmation {
+.payment-verification,
+.enroll-for-credit-confirmation {
 	.subscribe-container {
 		position: absolute;
 		bottom: 0;
@@ -1417,12 +1449,12 @@
 		clear: both;
 		cursor: pointer;
 
-		input[type=checkbox] {
+		input[type='checkbox'] {
 			opacity: 0;
 			position: absolute;
 		}
 
-		input[type=checkbox] + label {
+		input[type='checkbox'] + label {
 			min-height: 40px;
 			padding: 10px 15px 10px 46px;
 			display: block;
@@ -1441,7 +1473,7 @@
 			@include icon($checkbox-14, $top: 13px, $left: 18px);
 		}
 
-		input[type=checkbox]:checked + label {
+		input[type='checkbox']:checked + label {
 			@include icon($checkbox-14_active, $top: 13px, $left: 18px);
 
 			&.long::after {
@@ -1459,7 +1491,7 @@
 			}
 		}
 
-		&:hover input[type=checkbox]:not(:checked) + label {
+		&:hover input[type='checkbox']:not(:checked) + label {
 			@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
 
 			&.long::after {
@@ -1467,7 +1499,7 @@
 			}
 		}
 
-		input[type=checkbox]:focus + label {
+		input[type='checkbox']:focus + label {
 			box-shadow: inset 0 0 0 1px var(--primary-blue);
 		}
 	}
@@ -1497,7 +1529,9 @@
 		right: 275px;
 	}
 
-	.payment-info, .billing-info, .gift-info {
+	.payment-info,
+	.billing-info,
+	.gift-info {
 		position: relative;
 		float: left;
 		margin: 20px 380px 0 0;

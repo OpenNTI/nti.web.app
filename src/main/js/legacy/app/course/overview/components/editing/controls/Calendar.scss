@@ -13,7 +13,8 @@
 				width: 10px;
 				//FIXME: don't reference icons from /src/resources/images (Assets should be local to the component being
 				// styled and assets should be shared by reusing the component... do define your components wisely.)
-				background: url(../../../../../../../../resources/images/icons/dropdown-am-pm-icon.png) no-repeat center;
+				background: url(../../../../../../../../resources/images/icons/dropdown-am-pm-icon.png)
+					no-repeat center;
 			}
 		}
 	}

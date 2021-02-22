@@ -6,11 +6,23 @@ module.exports = exports = Ext.define('NextThought.model.TranscriptSummary', {
 	addMimeTypeToRoute: true,
 
 	fields: [
-		{ name: 'RoomInfo', type: 'singleItem'},
+		{ name: 'RoomInfo', type: 'singleItem' },
 		{ name: 'Contributors', type: 'auto' },
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
+		{
+			name: 'GroupingField',
+			mapping: 'Last Modified',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'Last Modified',
+		},
+		{
+			name: 'NotificationGroupingField',
+			mapping: 'CreatedTime',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'CreatedTime',
+		},
 	],
 
 	//	isThreadable: true,
@@ -18,9 +30,8 @@ module.exports = exports = Ext.define('NextThought.model.TranscriptSummary', {
 	getId: function () {
 		try {
 			return this.get('RoomInfo').getId();
-		}
-		catch (e) {
+		} catch (e) {
 			return null;
 		}
-	}
+	},
 });

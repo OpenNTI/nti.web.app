@@ -3,14 +3,12 @@
 const path = require('path');
 const logger = require('./logger');
 
-
 const HANDLERS = {
-	handleLibraryPathRedirects: /^\/library/i
+	handleLibraryPathRedirects: /^\/library/i,
 };
 
 exports = module.exports = {
-
-	register (express, config) {
+	register(express, config) {
 		this.basepath = config.basepath;
 
 		express.use((req, res, next) => {
@@ -32,7 +30,7 @@ exports = module.exports = {
 		});
 	},
 
-	handleLibraryPathRedirects (query, res, next) {
+	handleLibraryPathRedirects(query, res, next) {
 		/* From:
 		 * /app/library/courses/available/NTI-CourseInfo-iLed_iLed_001/...
 		 *
@@ -43,12 +41,17 @@ exports = module.exports = {
 		let pattern = /library\/courses\/available\/(.*)/;
 		let parts = query.match(pattern);
 		if (parts) {
-			let url = path.join(this.basepath, 'catalog', 'nti-course-catalog-entry', parts[1]);
+			let url = path.join(
+				this.basepath,
+				'catalog',
+				'nti-course-catalog-entry',
+				parts[1]
+			);
 			logger.info('redirecting to: %s', url);
 			res.redirect(url);
 			return;
 		}
 
 		next();
-	}
+	},
 };

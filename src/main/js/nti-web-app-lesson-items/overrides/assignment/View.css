@@ -6,12 +6,18 @@
 	padding: 0 0 20px;
 }
 
-.assignment-view :global(.reader-container.navigation-panel > .body-view > .x-component .toolbar-container .header) {
+.assignment-view
+	:global(.reader-container.navigation-panel
+		> .body-view
+		> .x-component
+		.toolbar-container
+		.header) {
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 }
 
-.assignment-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
+.assignment-view
+	:global(.reader-container.navigation-panel .center .x-reader-pane) {
 	margin-top: 0;
 }
 
@@ -19,7 +25,9 @@
 	display: none;
 }
 
-.assignment-view :global(.assignment-reader.out-side-submission-buffer .x-panel-assessment.question::before) {
+.assignment-view
+	:global(.assignment-reader.out-side-submission-buffer
+		.x-panel-assessment.question::before) {
 	content: '';
 	position: absolute;
 	background: #fdfdfd;
@@ -31,7 +39,8 @@
 	z-index: 10;
 }
 
-.assignment-view :global(.assignment-reader.out-side-submission-buffer .submission-panel) {
+.assignment-view
+	:global(.assignment-reader.out-side-submission-buffer .submission-panel) {
 	pointer-events: none;
 	opacity: 0.5;
 }

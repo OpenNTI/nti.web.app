@@ -1,15 +1,15 @@
 /*eslint no-undef:1*/
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const StoreUtils = require('legacy/util/Store');
 const NTI = require('legacy/store/NTI');
 
 const Board = require('./Board');
 require('./CommentPost');
 require('./Base');
-
 
 module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 	extend: 'NextThought.model.forums.Base',
@@ -28,10 +28,12 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 			const store = NTI.create({
 				storeId: id,
 				data: data,
-				sorters: [{
-					property: 'CreatedTime',
-					direction: 'DESC'
-				}]
+				sorters: [
+					{
+						property: 'CreatedTime',
+						direction: 'DESC',
+					},
+				],
 			});
 
 			StoreUtils.fillInUsers(store);
@@ -54,19 +56,21 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 			});
 
 			return board;
-		}
+		},
 	},
 
 	fields: [
 		{ name: 'ForumCount', type: 'int', persist: false },
-		{ name: 'title', type: 'auto', persist: false}
+		{ name: 'title', type: 'auto', persist: false },
 	],
 
 	getTitle: function () {
 		return this.get('title');
 	},
 
-	hasForumList: function () { return true; },
+	hasForumList: function () {
+		return true;
+	},
 
 	/**
 	 * See CourseInstance getForumList for more details the structure this is returning
@@ -79,20 +83,26 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		return Service.request(content)
 			.then(function (json) {
 				json = (json && JSON.parse(json)) || {};
-				json.Items = json.Items && lazy.ParseUtils.parseItems(json.Items);
+				json.Items =
+					json.Items && lazy.ParseUtils.parseItems(json.Items);
 
-				var store = Board.buildContentsStoreFromData(me.getContentsStoreId(), json.Items);
+				var store = Board.buildContentsStoreFromData(
+					me.getContentsStoreId(),
+					json.Items
+				);
 
-				return [{
-					title: '',
-					board: me,
-					store: store
-				}];
+				return [
+					{
+						title: '',
+						board: me,
+						store: store,
+					},
+				];
 			})
 			.catch(function (response) {
 				console.error('failed to load board contents: ', response);
 
 				return {};
 			});
-	}
+	},
 });

@@ -5,20 +5,23 @@ const LTIExternalToolAssetRef = require('legacy/model/LTIExternalToolAsset');
 require('../../../parts/LTIExternalToolAsset');
 require('../ListItem');
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.ListItem', {
-	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-	alias: 'widget.overview-editing-ltiexternaltoolasset-listitem',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.ListItem',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.content.ListItem',
+		alias: 'widget.overview-editing-ltiexternaltoolasset-listitem',
 
-	statics: {
-		getSupported: function () {
-			return LTIExternalToolAssetRef.mimeType;
-		}
-	},
+		statics: {
+			getSupported: function () {
+				return LTIExternalToolAssetRef.mimeType;
+			},
+		},
 
-	canEdit: true,
+		canEdit: true,
 
-	getPreviewType: function () {
-		return 'course-overview-ltiexternaltoolasset';
-	},
-
-});
+		getPreviewType: function () {
+			return 'course-overview-ltiexternaltoolasset';
+		},
+	}
+);

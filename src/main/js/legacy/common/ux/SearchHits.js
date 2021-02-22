@@ -5,31 +5,35 @@ const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
 
 require('legacy/util/Search');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 	alias: 'widget.search-hits',
-	mixins: {observable: 'Ext.util.Observable'},
+	mixins: { observable: 'Ext.util.Observable' },
 
-	constructor (config) {
+	constructor(config) {
 		this.mixins.observable.constructor.call(this);
 		Ext.apply(this, {
 			hit: config.hit,
-			phraseSearch: (config.ps || false),
+			phraseSearch: config.ps || false,
 			ownerCmp: config.owner,
-			container: config.owner && config.owner.getInsertionPoint('innerCt').dom
+			container:
+				config.owner && config.owner.getInsertionPoint('innerCt').dom,
 		});
 
 		this.mon(this.ownerCmp, {
 			scope: this,
-			'navigateComplete': 'cleanup',
-			'sync-height' : 'reLayout'
+			navigateComplete: 'cleanup',
+			'sync-height': 'reLayout',
 		});
 
 		this.insertSearchHitsOverlay();
 	},
 
-	insertSearchHitsOverlay () {
-		const container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls: 'searchHit-overlay' }, true);
+	insertSearchHitsOverlay() {
+		const container = Ext.DomHelper.append(
+			this.ownerCmp.getInsertionPoint('innerCt'),
+			{ cls: 'searchHit-overlay' },
+			true
+		);
 		if (Ext.isIE) {
 			container.on('click', e => {
 				const el = Ext.fly(e.target);
@@ -44,11 +48,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		this.showAllHits();
 	},
 
-	removeOverlay () {
+	removeOverlay() {
 		try {
 			Ext.fly(this.searchHitsOverlay).remove();
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e);
 		}
 	},
@@ -61,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 	//across varying scroll positions.	Really what we are trying to cache here
 	//are the ranges because they take some cycles to calculate. We could move the caching
 	//of ranges into ownerCmp but I'm not sure that makes sense.  Need to ponder some options
-	getRanges () {
-		function anyRangesCollapsed (ranges) {
+	getRanges() {
+		function anyRangesCollapsed(ranges) {
 			let collapsed = false;
 			Ext.each(ranges, range => {
 				Ext.each(range.ranges, actualRange => {
@@ -87,42 +90,49 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		return this.ranges;
 	},
 
-	showAllHits () {
+	showAllHits() {
 		this.renderRanges(this.getRanges());
 	},
 
-	entriesToAppend (rangeInfo, toAppend) {
+	entriesToAppend(rangeInfo, toAppend) {
 		const rangesToRender = rangeInfo.ranges;
-		const adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {};
+		const adjustments =
+			this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {};
 
 		if (!rangesToRender) {
 			return toAppend;
 		}
 		Ext.each(rangesToRender, sel => {
-			const redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
+			const redactionAction = TextRangeFinderUtils.getRedactionActionSpan(
+				sel
+			);
 			if (redactionAction) {
 				redactionAction.addCls('searchHitInside');
 				sel.getClientRects = () => {
 					const b = redactionAction.getBox();
-					return [{
-						bottom: b.bottom,
-						top: b.y + adjustments.top || 0,
-						left: b.x + adjustments.left || 0,
-						right: b.right,
-						height: b.height,
-						width: b.width
-					}];
+					return [
+						{
+							bottom: b.bottom,
+							top: b.y + adjustments.top || 0,
+							left: b.x + adjustments.left || 0,
+							right: b.right,
+							height: b.height,
+							width: b.width,
+						},
+					];
 				};
 				sel.getBoundingClientRect = null;
 				sel.noOverlay = true;
 			}
 
-			if (!sel.getClientRects) {sel.getClientRects = () => [];}
+			if (!sel.getClientRects) {
+				sel.getClientRects = () => [];
+			}
 
 			const rects = sel.getBoundingClientRect
-			//Safari's version of WebKit has a bad ClientRect that is offset from the reset of the rects...so prefer
-			//getBoundingClientRect. So, only fall back to getClientRects if there isn't a getBoundingClientRect.
-				? sel.getBoundingClientRect()
+				? //Safari's version of WebKit has a bad ClientRect that is offset from the reset of the rects...so prefer
+				  //getBoundingClientRect. So, only fall back to getClientRects if there isn't a getBoundingClientRect.
+				  sel.getBoundingClientRect()
 				: RectUtils.merge(sel.getClientRects(), null);
 
 			Ext.each(rects, range => {
@@ -135,8 +145,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 							height: range.height + 'px',
 							width: range.width + 'px',
 							top: (range.top + adjustments.top || 0) + 'px',
-							left: (range.left + adjustments.left || 0) + 'px'
-						}});
+							left: (range.left + adjustments.left || 0) + 'px',
+						},
+					});
 				}
 			});
 
@@ -145,13 +156,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 			//churn.  Maybe showing these things a secion at a time as the page scrolls
 			//is best
 			return toAppend.length <= 100;
-
 		});
 
 		return toAppend;
 	},
 
-	renderRanges (rangesToRender) {
+	renderRanges(rangesToRender) {
 		const toAppend = [];
 
 		Ext.each(rangesToRender, rangeInfo => {
@@ -161,13 +171,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		Ext.DomHelper.append(this.searchHitsOverlay, toAppend, true);
 	},
 
-	reLayout () {
+	reLayout() {
 		console.log('Relaying out search hit overlays');
 		this.removeOverlay();
 		this.insertSearchHitsOverlay();
 	},
 
-	cleanup () {
+	cleanup() {
 		this.removeOverlay();
 		delete this.hit;
 		delete this.regex;
@@ -175,5 +185,5 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		delete this.appRanges;
 		this.clearListeners();
 		this.clearManagedListeners();
-	}
+	},
 });

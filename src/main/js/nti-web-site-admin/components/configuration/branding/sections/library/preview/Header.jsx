@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme} from '@nti/web-commons';
+import { Theme } from '@nti/web-commons';
 
 import Avatar from './Avatar';
 import NotificationsIcon from './NotificationsIcon';
@@ -10,14 +10,16 @@ import SearchBar from './SearchBar';
 
 const cx = classnames.bind(styles);
 
-export default function PreviewHeader () {
+export default function PreviewHeader() {
 	const color = Theme.useThemeProperty('navigation.backgroundColor');
-	const hex = (color && color.isColor) ? color.hex.toString() : color;
-	const props = hex ? {
-		style: {
-			backgroundColor: hex
-		}
-	} : {};
+	const hex = color && color.isColor ? color.hex.toString() : color;
+	const props = hex
+		? {
+				style: {
+					backgroundColor: hex,
+				},
+		  }
+		: {};
 
 	return (
 		<div className={cx('root')} {...props}>
@@ -36,13 +38,14 @@ PreviewHeader.propTypes = {
 		navigation: PropTypes.shape({
 			backgroundColor: PropTypes.oneOfType([
 				PropTypes.string, // css color string
-				PropTypes.shape({ // @nti/lib-commons Color
+				PropTypes.shape({
+					// @nti/lib-commons Color
 					isColor: PropTypes.bool,
 					hex: PropTypes.shape({
-						toString: PropTypes.func.isRequired
-					})
+						toString: PropTypes.func.isRequired,
+					}),
 				}),
-			])
-		})
-	})
+			]),
+		}),
+	}),
 };

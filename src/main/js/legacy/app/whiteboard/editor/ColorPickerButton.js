@@ -2,50 +2,58 @@ const Ext = require('@nti/extjs');
 
 require('./ColorPicker');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.whiteboard.editor.ColorPickerButton',
+	{
+		extend: 'Ext.button.Button',
+		alias: 'widget.color-picker-button',
+		scale: 'large',
+		cls: 'color',
+		ui: 'button',
+		baseCls: 'whiteboard-color',
+		menuAlign: 't-b?',
+		menu: { xtype: 'color-picker' },
 
-module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPickerButton', {
-	extend: 'Ext.button.Button',
-	alias: 'widget.color-picker-button',
-	scale: 'large',
-	cls: 'color',
-	ui: 'button',
-	baseCls: 'whiteboard-color',
-	menuAlign: 't-b?',
-	menu: {xtype: 'color-picker'},
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.palette = this.menu.down('color-palette');
+			this.mon(this.menu, {
+				scope: this,
+				select: this.selectHandler,
+			});
+			this.setValue(this.value);
+		},
 
-		this.palette = this.menu.down('color-palette');
-		this.mon(this.menu, {
-			scope: this,
-			select: this.selectHandler
-		});
-		this.setValue(this.value);
-	},
+		selectHandler: function (palette, value) {
+			this.setValue(value);
+		},
 
-	selectHandler: function (palette,value) {
-		this.setValue(value);
-	},
+		getValue: function () {
+			return this.value || 'NONE';
+		},
 
-	getValue: function () {
-		return this.value || 'NONE';
-	},
+		setValue: function (color) {
+			var me = this,
+				found = false;
+			Ext.each(this.palette.colors, function (c) {
+				if (c.value === color) {
+					found = true;
+					me.addCls(c.name);
+				} else {
+					me.removeCls(c.name);
+				}
+			});
 
-	setValue: function (color) {
-		var me = this, found = false;
-		Ext.each(this.palette.colors, function (c) {
-			if (c.value === color) { found = true; me.addCls(c.name); }
-			else { me.removeCls(c.name); }
-		});
+			if (found || !color) {
+				me.value = color || 'NONE';
+			} else {
+				Ext.Error.raise(
+					Ext.String.format('The color "{0}" is invalid', color)
+				);
+			}
 
-		if (found || !color) {
-			me.value = color || 'NONE';
-		}
-		else {
-			Ext.Error.raise(Ext.String.format('The color "{0}" is invalid', color));
-		}
-
-		return this;
+			return this;
+		},
 	}
-});
+);

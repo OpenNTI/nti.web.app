@@ -6,147 +6,160 @@ const styles = require('./Index.css');
 
 require('./components/Settings');
 
-
 const knockOut = styles.knockout;
 const noKnockOut = styles['no-knockout'];
 
-module.exports = exports = Ext.define('NextThought.app.account.identity.Index', {
-	extend: 'Ext.Component',
-	alias: 'widget.identity',
-	cls: `identity x-menu ${styles.identity}`,
+module.exports = exports = Ext.define(
+	'NextThought.app.account.identity.Index',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.identity',
+		cls: `identity x-menu ${styles.identity}`,
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', tabindex: '0', 'aria-label': '{user:displayName}', role: 'button' ,cn: [
-			'{user:avatar}',
-			{cls: 'presence'}
-		]}
-	]),
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'profile-pic',
+				'data-qtip': '{user:displayName}',
+				tabindex: '0',
+				'aria-label': '{user:displayName}',
+				role: 'button',
+				cn: ['{user:avatar}', { cls: 'presence' }],
+			},
+		]),
 
-	renderSelectors: {
-		avatar: '.profile-pic',
-		presence: '.profile-pic .presence',
-		name: '.name'
-	},
+		renderSelectors: {
+			avatar: '.profile-pic',
+			presence: '.profile-pic .presence',
+			name: '.name',
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
+		initComponent: function () {
+			this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			user: $AppConfig.userObject
-		});
+			this.renderData = Ext.apply(this.renderData || {}, {
+				user: $AppConfig.userObject,
+			});
 
-		this.menu = Ext.widget({xtype: 'settings-menu', ownerCt: this, setMenuClosed: this.setMenuClosed.bind(this)});
+			this.menu = Ext.widget({
+				xtype: 'settings-menu',
+				ownerCt: this,
+				setMenuClosed: this.setMenuClosed.bind(this),
+			});
 
-		this.on('destroy', 'destroy', this.menu);
-		this.monitorUser($AppConfig.userObject);
-	},
+			this.on('destroy', 'destroy', this.menu);
+			this.monitorUser($AppConfig.userObject);
+		},
 
-	setTheme (theme = {}, knockout) {
-		if (knockout) {
-			this.addCls(knockOut);
-			this.removeCls(noKnockOut);
-		} else if (knockout === false) {
-			this.removeCls(knockOut);
-			this.addCls(noKnockOut);
-		} else {
-			this.removeCls(knockOut);
-			this.removeCls(noKnockOut);
-		}
-	},
+		setTheme(theme = {}, knockout) {
+			if (knockout) {
+				this.addCls(knockOut);
+				this.removeCls(noKnockOut);
+			} else if (knockout === false) {
+				this.removeCls(knockOut);
+				this.addCls(noKnockOut);
+			} else {
+				this.removeCls(knockOut);
+				this.removeCls(noKnockOut);
+			}
+		},
 
-	monitorUser: function (user) {
-		var me = this,
-			m = {
-				scope: this,
-				destroyable: true,
-				'changed': function (r) {
-					var profile = me.avatar && me.avatar.down('.avatar-pic'),
-						a;
+		monitorUser: function (user) {
+			var me = this,
+				m = {
+					scope: this,
+					destroyable: true,
+					changed: function (r) {
+						var profile =
+								me.avatar && me.avatar.down('.avatar-pic'),
+							a;
 
-					if (profile) {
-						a = NTIFormat.avatar(r);
-						profile.dom.innerHTML = a;
-						profile.dom.setAttribute('aria-hidden', 'true');
-						profile.set({'data-qtip': r.getName()});
-					}
+						if (profile) {
+							a = NTIFormat.avatar(r);
+							profile.dom.innerHTML = a;
+							profile.dom.setAttribute('aria-hidden', 'true');
+							profile.set({ 'data-qtip': r.getName() });
+						}
 
-					me.monitorUser((r !== user) ? r : null);
-				}
-			};
+						me.monitorUser(r !== user ? r : null);
+					},
+				};
 
-		if (user) {
-			Ext.destroy(me.userMonitor);
-			me.userMonitor = me.mon(user, m);
-			me.user = user;
-		}
+			if (user) {
+				Ext.destroy(me.userMonitor);
+				me.userMonitor = me.mon(user, m);
+				me.user = user;
+			}
 
-		if (me.presence && me.user) {
-			me.presence.set({cls: 'presence ' + me.user.getPresence().getName()});
-		}
-	},
+			if (me.presence && me.user) {
+				me.presence.set({
+					cls: 'presence ' + me.user.getPresence().getName(),
+				});
+			}
+		},
 
-	afterRender: function () {
-		var me = this;
+		afterRender: function () {
+			var me = this;
 
-		this.callParent(arguments);
-		this.monitorUser(me.user);
+			this.callParent(arguments);
+			this.monitorUser(me.user);
 
-		this.mon(this.el, {
-			'click': 'toggleMenu'
-			//TODO: do we want to hide this on mouse out, or just on click?
-			// 'mouseout': 'startToHideMenu'
-		});
+			this.mon(this.el, {
+				click: 'toggleMenu',
+				//TODO: do we want to hide this on mouse out, or just on click?
+				// 'mouseout': 'startToHideMenu'
+			});
 
-		this.mon(this.menu, {
-			// 'mouseenter': 'cancelHideShowEvents',
-			'show': this.addCls.bind(this, 'menu-showing'),
-			'hide': this.removeCls.bind(this, 'menu-showing')
-		});
+			this.mon(this.menu, {
+				// 'mouseenter': 'cancelHideShowEvents',
+				show: this.addCls.bind(this, 'menu-showing'),
+				hide: this.removeCls.bind(this, 'menu-showing'),
+			});
 
-		if (Ext.is.iOS) {
-			//TODO: I don't think these are needed any more
-			// // Prevent the save/copy image menu from appearing
-			// this.el.down('img').setStyle('-webkit-touch-callout', 'none');
-			// // Prevent the status menu from appearing after a click
-			// this.el.down('img').dom.addEventListener('click', function(e) {
-			//	me.cancelHideShowEvents();
-			//	Ext.defer(function() {
-			//		me.cancelHideShowEvents();
-			//	},50);
-			// });
-		}
-	},
+			if (Ext.is.iOS) {
+				//TODO: I don't think these are needed any more
+				// // Prevent the save/copy image menu from appearing
+				// this.el.down('img').setStyle('-webkit-touch-callout', 'none');
+				// // Prevent the status menu from appearing after a click
+				// this.el.down('img').dom.addEventListener('click', function(e) {
+				//	me.cancelHideShowEvents();
+				//	Ext.defer(function() {
+				//		me.cancelHideShowEvents();
+				//	},50);
+				// });
+			}
+		},
 
-	onMenuShow: function () {
-		this.menu.show();
-	},
+		onMenuShow: function () {
+			this.menu.show();
+		},
 
-	onMenuHide: function () {
-		this.menu.hide();
-	},
+		onMenuHide: function () {
+			this.menu.hide();
+		},
 
-	cancelHideShowEvents: function () {
-		clearTimeout(this.hideTimeout);
-	},
+		cancelHideShowEvents: function () {
+			clearTimeout(this.hideTimeout);
+		},
 
-	toggleMenu: function () {
-		if (this.menu.isVisible()) {
-			this.setMenuClosed();
-		} else {
-			// clearTimeout(this.hideTimeout);
-			this.setMenuOpen();
-		}
-	},
+		toggleMenu: function () {
+			if (this.menu.isVisible()) {
+				this.setMenuClosed();
+			} else {
+				// clearTimeout(this.hideTimeout);
+				this.setMenuOpen();
+			}
+		},
 
-	startToHideMenu: function () {
-		var me = this;
+		startToHideMenu: function () {
+			var me = this;
 
-		this.cancelHideShowEvents();
+			this.cancelHideShowEvents();
 
-		if (!Ext.is.iPad || this.menu.isHidden()) {
-			this.hideTimeout = setTimeout(function () {
-				me.menu.hide();
-			}, 500);
-		}
+			if (!Ext.is.iPad || this.menu.isHidden()) {
+				this.hideTimeout = setTimeout(function () {
+					me.menu.hide();
+				}, 500);
+			}
+		},
 	}
-});
+);

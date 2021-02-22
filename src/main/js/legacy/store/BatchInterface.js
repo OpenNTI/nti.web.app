@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const StoreUtils = require('legacy/util/Store');
 
-
 /**
  * An interface to interact with batches that come back from the server,
  * specifically around paging using the links provided.
@@ -10,74 +9,72 @@ const StoreUtils = require('legacy/util/Store');
  * @class NextThought.store.BatchInterface
  * @author andrew.ligon@nextthought.com (Andrew Ligon)
  */
-const BatchInterface =
-module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
-	/**
-	 * @memberOf NextThought.store.BatchInterface#
-	 *
-	 * @param {Object} config - values to set up the batch interface with
-	 * @param {string} config.url - the url of the batch
-	 * @param {Object} config.params - the params to send
-	 * @returns {void}
-	 */
-	constructor: function (config) {
-		this.callParent(arguments);
+const BatchInterface = (module.exports = exports = Ext.define(
+	'NextThought.store.BatchInterface',
+	{
+		/**
+		 * @memberOf NextThought.store.BatchInterface#
+		 *
+		 * @param {Object} config - values to set up the batch interface with
+		 * @param {string} config.url - the url of the batch
+		 * @param {Object} config.params - the params to send
+		 * @returns {void}
+		 */
+		constructor: function (config) {
+			this.callParent(arguments);
 
-		if (!config.url) {
-			throw new Error('No url given to batch interface');
-		}
+			if (!config.url) {
+				throw new Error('No url given to batch interface');
+			}
 
-		this.url = config.url;
-		this.params = config.params || {};
+			this.url = config.url;
+			this.params = config.params || {};
 
-		this.batchSize = this.params.batchSize;
+			this.batchSize = this.params.batchSize;
 
-		this.__nextLink = config.nextLink;
-		this.__previousLink = config.previousLink;
+			this.__nextLink = config.nextLink;
+			this.__previousLink = config.previousLink;
 
-		if (config.getNextConfig) {
-			this.getNextConfig = config.getNextConfig.bind(this);
-		}
+			if (config.getNextConfig) {
+				this.getNextConfig = config.getNextConfig.bind(this);
+			}
 
-		if (config.getPreviousConfig) {
-			this.getPreviousConfig = config.getPreviousConfig.bind(this);
-		}
-	},
+			if (config.getPreviousConfig) {
+				this.getPreviousConfig = config.getPreviousConfig.bind(this);
+			}
+		},
 
+		/**
+		 * Given a url and params, get a batch from the server
+		 *
+		 * @memberOf NextThought.store.BatchInterface#
+		 *
+		 * @param  {string} url - url of the batch
+		 * @param  {string} params - params to send back
+		 * @returns {Promise} - fulfills with the response from the server
+		 */
+		__loadBatch: function (url, params) {
+			if (!url) {
+				return Promise.resolve({
+					href: 'Bad Batch',
+					isBad: true,
+					Items: [],
+				});
+			}
 
-	/**
-	 * Given a url and params, get a batch from the server
-	 *
-	 * @memberOf NextThought.store.BatchInterface#
-	 *
-	 * @param  {string} url - url of the batch
-	 * @param  {string} params - params to send back
-	 * @returns {Promise} - fulfills with the response from the server
-	 */
-	__loadBatch: function (url, params) {
-		if (!url) {
-			return Promise.resolve({
-				href: 'Bad Batch',
-				isBad: true,
-				Items: []
-			});
-		}
+			return StoreUtils.loadBatch(url, params);
+		},
 
-		return StoreUtils.loadBatch(url, params);
-	},
+		getBatch: function (force) {
+			var me = this,
+				url = me.getUrl(),
+				params = me.getParams();
 
+			if (!me.__load || force) {
+				me.__load = this.__loadBatch(url, params);
+			}
 
-	getBatch: function (force) {
-		var me = this,
-			url = me.getUrl(),
-			params = me.getParams();
-
-		if (!me.__load || force) {
-			me.__load = this.__loadBatch(url, params);
-		}
-
-		return me.__load
-			.then(function (batch) {
+			return me.__load.then(function (batch) {
 				var next = Service.getLinkFrom(batch.Links || [], 'batch-next'),
 					prev = Service.getLinkFrom(batch.Links || [], 'batch-prev');
 
@@ -93,60 +90,54 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 
 				return batch;
 			});
-	},
+		},
 
+		getItems: function (force) {
+			var me = this;
 
-	getItems: function (force) {
-		var me = this;
-
-		return me.getBatch(force)
-			.then(function (batch) {
+			return me.getBatch(force).then(function (batch) {
 				return batch.Items;
 			});
-	},
+		},
 
+		getParams: function () {
+			var params = this.params;
 
-	getParams: function () {
-		var params = this.params;
+			params = params || {};
 
-		params = params || {};
+			return params;
+		},
 
-		return params;
-	},
+		getUrl: function () {
+			return this.url;
+		},
 
+		getNextConfig: function (current) {
+			var link = Service.getLinkFrom(current.Links || [], 'batch-next');
 
-	getUrl: function () {
-		return this.url;
-	},
+			return link && { url: link };
+		},
 
+		getPreviousConfig: function (current) {
+			var link = Service.getLinkFrom(
+				current.Links || [],
+				'batch-previous'
+			);
 
-	getNextConfig: function (current) {
-		var link = Service.getLinkFrom(current.Links || [], 'batch-next');
+			return link && { url: link };
+		},
 
-		return link && {url: link};
-	},
+		__buildBatch: function (config) {
+			config.getNextConfig = this.getNextConfig;
+			config.getPreviousConfig = this.getPreviousConfig;
 
+			return BatchInterface.create(config);
+		},
 
-	getPreviousConfig: function (current) {
-		var link = Service.getLinkFrom(current.Links || [], 'batch-previous');
+		getNextBatch: function () {
+			var me = this;
 
-		return link && {url: link};
-	},
-
-
-	__buildBatch: function (config) {
-		config.getNextConfig = this.getNextConfig;
-		config.getPreviousConfig = this.getPreviousConfig;
-
-		return BatchInterface.create(config);
-	},
-
-
-	getNextBatch: function () {
-		var me = this;
-
-		return me.getBatch()
-			.then(function (batch) {
+			return me.getBatch().then(function (batch) {
 				var config = me.getNextConfig(batch);
 
 				if (!config) {
@@ -157,14 +148,12 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 
 				return me.__buildBatch(config);
 			});
-	},
+		},
 
+		getPreviousBatch: function () {
+			var me = this;
 
-	getPreviousBatch: function () {
-		var me = this;
-
-		return me.getBatch()
-			.then(function (batch) {
+			return me.getBatch().then(function (batch) {
 				var config = me.getPreviousConfig(batch);
 
 				if (!config) {
@@ -175,26 +164,25 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 
 				return me.__buildBatch(config);
 			});
-	},
+		},
 
+		fetchNewItems: function () {
+			let now = new Date();
 
-	fetchNewItems: function () {
-		let now = new Date();
+			if (!this.lastLoaded || this.lastLoaded >= now) {
+				return Promise.resolve([]);
+			}
 
-		if (!this.lastLoaded || this.lastLoaded >= now) {
-			return Promise.resolve([]);
-		}
+			let url = this.getUrl();
+			let params = this.getParams();
 
-		let url = this.getUrl();
-		let params = this.getParams();
+			params.batchAfter = Math.floor(this.lastLoaded.getTime() / 1000);
 
-		params.batchAfter = Math.floor(this.lastLoaded.getTime() / 1000);
-
-		return this.__loadBatch(url, params)
-			.then((batch) =>{
+			return this.__loadBatch(url, params).then(batch => {
 				this.lastLoaded = new Date();
 
 				return batch.Items;
 			});
+		},
 	}
-});
+));

@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
@@ -13,7 +13,6 @@ require('./log/Moderated');
 require('./log/Content');
 require('./log/Info');
 
-
 module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-log-view',
@@ -23,17 +22,20 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 
 	layout: {
 		type: 'auto',
-		reserveScrollbar: false
+		reserveScrollbar: false,
 	},
 
-	defaults: {border: false},
+	defaults: { border: false },
 
 	getMessageQuery: function (id) {
-		return Ext.String.format('{0}[messageId={1}]', this.entryType, IdCache.getIdentifier(id));
+		return Ext.String.format(
+			'{0}[messageId={1}]',
+			this.entryType,
+			IdCache.getIdentifier(id)
+		);
 	},
 
 	initComponent: function () {
-
 		this.entryType = this.entryType || 'chat-log-entry';
 		this.moderated = !!this.moderated;
 		// if (this.moderated) {
@@ -95,13 +97,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 	onScroll: function () {
-		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight),
+		var me = this,
+			scrollVal = Math.abs(
+				me.el.dom.scrollHeight -
+					me.el.dom.scrollTop -
+					me.el.dom.offsetHeight
+			),
 			minOffset = 50;
 
-		if ((me.previousScroll > me.el.dom.scrollTop) && scrollVal > minOffset) {
+		if (me.previousScroll > me.el.dom.scrollTop && scrollVal > minOffset) {
 			this.shouldAllowScrollingOnAdd = false;
-		}
-		else if (!this.shouldAllowScrollingOnAdd && scrollVal < minOffset) {
+		} else if (!this.shouldAllowScrollingOnAdd && scrollVal < minOffset) {
 			this.shouldAllowScrollingOnAdd = true;
 		}
 
@@ -124,44 +130,60 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	approve: function () {
 		var a = [];
 
-		Ext.each(this.query(this.entryType), function (f) {
-			if (f.getValue()) {
-				a.push(f.message.get('ID'));
-			}
-		}, this);
+		Ext.each(
+			this.query(this.entryType),
+			function (f) {
+				if (f.getValue()) {
+					a.push(f.message.get('ID'));
+				}
+			},
+			this
+		);
 
 		this.fireEvent('approve', a);
 	},
 
 	reject: function () {
-		Ext.each(this.query(this.entryType), function (f) {
-			if (f.getValue()) {this.remove(f); }
-		}, this);
+		Ext.each(
+			this.query(this.entryType),
+			function (f) {
+				if (f.getValue()) {
+					this.remove(f);
+				}
+			},
+			this
+		);
 	},
 
 	removeMessage: function (msg) {
-		var c, m = this.down(this.getMessageQuery(msg.getId()));
+		var c,
+			m = this.down(this.getMessageQuery(msg.getId()));
 		if (m) {
 			c = m.ownerCt;
 			c.remove(m);
-			if (c.xtype !== 'chat-log-view' && c.items.getCount() === 0) {c.destroy();}
+			if (c.xtype !== 'chat-log-view' && c.items.getCount() === 0) {
+				c.destroy();
+			}
 		}
-
 	},
 
 	addContentMessage: function (msg) {
 		this.add({
 			xtype: 'chat-content-log-entry',
-			message: msg
+			message: msg,
 		});
 	},
 
 	insertTranscript: function (m) {
 		var messages = m.get('Messages');
 		messages.sort(Globals.SortModelsBy('Last Modified', null, null));
-		Ext.each(messages, function (msg) {
-			this.addMessage(msg);
-		}, this);
+		Ext.each(
+			messages,
+			function (msg) {
+				this.addMessage(msg);
+			},
+			this
+		);
 	},
 
 	failedToLoadTranscript: function () {
@@ -173,8 +195,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
 			mStat = msg.get('Status'),
-			me = this, o, img;
-		if (!id) {console.warn('This message has no NTIID, cannot be targeted!', msg);}
+			me = this,
+			o,
+			img;
+		if (!id) {
+			console.warn('This message has no NTIID, cannot be targeted!', msg);
+		}
 
 		this.clearChatStatusNotifications();
 		if (m) {
@@ -192,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 				m = this.add({
 					xtype: this.entryType,
 					message: new MessageInfo(),
-					messageId: IdCache.getIdentifier(rid)
+					messageId: IdCache.getIdentifier(rid),
 				});
 			}
 		}
@@ -207,12 +233,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		o = m.add({
 			xtype: this.entryType,
 			message: msg,
-			messageId: IdCache.getIdentifier(msg.getId())
+			messageId: IdCache.getIdentifier(msg.getId()),
 		});
 
 		// Scroll the chat log down after adding the element
 		// and after any images load
-		function scrollChatLog () {
+		function scrollChatLog() {
 			if (o.el && me.el && me.shouldAllowScrollingOnAdd) {
 				me.el.scroll('down', Infinity);
 			}
@@ -226,9 +252,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 	prepareMessagesBeforeAdd: function (messages) {
-		var m = [], me = this, lastTimeStamp;
-
-
+		var m = [],
+			me = this,
+			lastTimeStamp;
 
 		(messages || []).forEach(function (msg) {
 			var newMsgTime = msg.get('CreatedTime'),
@@ -238,25 +264,34 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 			if (lastTimeStamp) {
 				// Check if the incoming message is within 5 mins from the previous message. If not, print the last timestamp.
 				// Time interval is arbitrary; we can make it whatever we want.
-				intervalTimeStamp = Ext.Date.add(lastTimeStamp, Ext.Date.MINUTE, 5);
-				if (!Ext.Date.between(newMsgTime, lastTimeStamp, intervalTimeStamp)) {
+				intervalTimeStamp = Ext.Date.add(
+					lastTimeStamp,
+					Ext.Date.MINUTE,
+					5
+				);
+				if (
+					!Ext.Date.between(
+						newMsgTime,
+						lastTimeStamp,
+						intervalTimeStamp
+					)
+				) {
 					m.push({
 						xtype: 'chat-notification-entry',
-						message: stamp
+						message: stamp,
 					});
 				}
-			}
-			else {
+			} else {
 				m.push({
 					xtype: 'chat-notification-entry',
-					message: stamp
+					message: stamp,
 				});
 			}
 
 			m.push({
 				xtype: me.entryType,
 				message: msg,
-				messageId: IdCache.getIdentifier(msg.getId())
+				messageId: IdCache.getIdentifier(msg.getId()),
 			});
 
 			lastTimeStamp = newMsgTime;
@@ -266,9 +301,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 	addBulkMessages: function (messages) {
-		var m, win, lastItem, me = this;
+		var m,
+			win,
+			lastItem,
+			me = this;
 
-		function scroll () {
+		function scroll() {
 			if (lastItem && lastItem.el) {
 				lastItem.el.scrollIntoView(me.el);
 			}
@@ -285,8 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		if (win) {
 			if (win.isVisible()) {
 				wait().then(scroll);
-			}
-			else {
+			} else {
 				win.on('show', scroll);
 			}
 		}
@@ -294,40 +331,43 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 
 	insertBulkMessages: function (index, messages) {
 		var m = this.prepareMessagesBeforeAdd(messages) || [],
-			lastItem, me = this, lastIndex;
+			lastItem,
+			me = this,
+			lastIndex;
 		if (!Ext.isEmpty(m)) {
 			this.insert(index, m);
 			lastIndex = m.length;
 
 			// Wait is needed to make sure we account
 			// for whether the load more history button is added or not.
-			wait(10)
-				.then(function () {
-					lastItem = me.items.items[lastIndex] || me.items.items.last();
-					if (lastItem) {
-						lastItem.onceRendered
-							.then(function () {
-								wait()
-									.then(function () {
-										lastItem.el.scrollIntoView(me.el);
-									});
-							});
-					}
-				});
+			wait(10).then(function () {
+				lastItem = me.items.items[lastIndex] || me.items.items.last();
+				if (lastItem) {
+					lastItem.onceRendered.then(function () {
+						wait().then(function () {
+							lastItem.el.scrollIntoView(me.el);
+						});
+					});
+				}
+			});
 		}
 	},
 
 	clearChatStatusNotifications: function () {
-		var ns = this.query('chat-notification-status'), me = this;
-		Ext.each(ns, function (n) { me.remove(n); });
+		var ns = this.query('chat-notification-status'),
+			me = this;
+		Ext.each(ns, function (n) {
+			me.remove(n);
+		});
 	},
 
 	shouldAddTimestampBeforeMessage: function (msg) {
 		var newMsgTime = msg.get('CreatedTime'),
-			lastTimeStamp, intervalTimeStamp,
-			stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'),//shouldn't this be the previous message's time?
-
-			message = (this.query('chat-log-entry[message]') || []).last() || {};//defensive ...make sure we always have a value.
+			lastTimeStamp,
+			intervalTimeStamp,
+			stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'), //shouldn't this be the previous message's time?
+			message =
+				(this.query('chat-log-entry[message]') || []).last() || {}; //defensive ...make sure we always have a value.
 
 		message = message.message;
 
@@ -348,7 +388,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	addStatusNotification: function (state) {
 		var o = this.add({
 			xtype: 'chat-notification-status',
-			message: state
+			message: state,
 		});
 
 		if (o.el && this.el && this.shouldAllowScrollingOnAdd) {
@@ -360,7 +400,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		//we are going to add then scroll to
 		var o = this.add({
 			xtype: 'chat-notification-entry',
-			message: msg
+			message: msg,
 		});
 
 		if (o.el && this.el && this.shouldAllowScrollingOnAdd) {
@@ -369,19 +409,28 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 	showInputStateNotifications: function (changes) {
-		if (!Ext.isArray(changes)) { return; }
+		if (!Ext.isArray(changes)) {
+			return;
+		}
 		var me = this;
 		Ext.each(changes, function (change) {
-			UserRepository.getUser(change.user, function (u) {
-				var name = u.getName(),
-					state = change.state === 'composing' ? 'typing' : change.state,
-					txt = name + ' is ' + state + '...';//TODO: find a way to put this into external strings
-				if (change.state === 'paused') {
-					this.clearChatStatusNotifications();
-				}else {
-					me.addStatusNotification(txt);
-				}
-			}, me);
+			UserRepository.getUser(
+				change.user,
+				function (u) {
+					var name = u.getName(),
+						state =
+							change.state === 'composing'
+								? 'typing'
+								: change.state,
+						txt = name + ' is ' + state + '...'; //TODO: find a way to put this into external strings
+					if (change.state === 'paused') {
+						this.clearChatStatusNotifications();
+					} else {
+						me.addStatusNotification(txt);
+					}
+				},
+				me
+			);
 		});
 	},
 
@@ -426,5 +475,5 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		Ext.each(this.el.query('.control.checked'), function (d) {
 			Ext.fly(d).removeCls('checked');
 		});
-	}
+	},
 });

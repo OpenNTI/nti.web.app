@@ -1,70 +1,96 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
-module.exports = exports = Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-info-outline-open-course',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.info.components.OpenCourseInfo',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.course-info-outline-open-course',
 
-	//<editor-fold desc="Config">
+		//<editor-fold desc="Config">
 
-	ui: 'course-info',
-	cls: 'open-course-info',
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'foot', cn: [
-			{ cls: 'edit', html: 'Edit'},
-			{ cls: 'registered', html: '{registered}' }
-		] }
-	]),
+		ui: 'course-info',
+		cls: 'open-course-info',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'foot',
+				cn: [
+					{ cls: 'edit', html: 'Edit' },
+					{ cls: 'registered', html: '{registered}' },
+				],
+			},
+		]),
 
-	config: {
-		info: null
-	},
+		config: {
+			info: null,
+		},
 
-	renderSelectors: {
-		editLink: '.edit'
-	},
+		renderSelectors: {
+			editLink: '.edit',
+		},
 
-	beforeRender: function () {
-		const credits = this.info && this.info.get('awardable_credits');
+		beforeRender: function () {
+			const credits = this.info && this.info.get('awardable_credits');
 
-		let noCreditMsg = getString('course-info.open-course-widget.not-for-credit', '', true).replace(/\u200B/ig, '');
+			let noCreditMsg = getString(
+				'course-info.open-course-widget.not-for-credit',
+				'',
+				true
+			).replace(/\u200B/gi, '');
 
-		if(credits && credits.length > 0) {
-			noCreditMsg = null;
-		}
-
-		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
-		this.renderData = Ext.apply(this.renderData || {}, {
-			'heading': getString('course-info.open-course-widget.heading', '', true).replace(/\u200B/ig, ''),
-			'message': getString('course-info.open-course-widget.message', '', true).replace(/\u200B/ig, ''),
-			'pointfree': getString('course-info.open-course-widget.free-to-anyone', '', true).replace(/\u200B/ig, ''),
-			'nocredit': noCreditMsg,
-			'registered': getString('course-info.open-course-widget.registered', '', true).replace(/\u200B/ig, '')
-		});
-
-		this.on({
-			editLink: {
-				click: {
-					fn: 'showEnrollWindow',
-					scope: this
-				}
+			if (credits && credits.length > 0) {
+				noCreditMsg = null;
 			}
-		});
 
-		return this.callParent(arguments);
-	},
+			this.addCls((this.enrollmentStatus || 'open').toLowerCase());
+			this.renderData = Ext.apply(this.renderData || {}, {
+				heading: getString(
+					'course-info.open-course-widget.heading',
+					'',
+					true
+				).replace(/\u200B/gi, ''),
+				message: getString(
+					'course-info.open-course-widget.message',
+					'',
+					true
+				).replace(/\u200B/gi, ''),
+				pointfree: getString(
+					'course-info.open-course-widget.free-to-anyone',
+					'',
+					true
+				).replace(/\u200B/gi, ''),
+				nocredit: noCreditMsg,
+				registered: getString(
+					'course-info.open-course-widget.registered',
+					'',
+					true
+				).replace(/\u200B/gi, ''),
+			});
 
-	//</editor-fold>
+			this.on({
+				editLink: {
+					click: {
+						fn: 'showEnrollWindow',
+						scope: this,
+					},
+				},
+			});
 
-	showEnrollWindow: function () {
-		var me = this;
-		me.fireEvent('show-enrollment', me.getInfo());
+			return this.callParent(arguments);
+		},
 
-		// me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
-		//	if (!enrolled) {
-		//		me.fireEvent('go-to-library', me);
-		//	}
-		// });
+		//</editor-fold>
+
+		showEnrollWindow: function () {
+			var me = this;
+			me.fireEvent('show-enrollment', me.getInfo());
+
+			// me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
+			//	if (!enrolled) {
+			//		me.fireEvent('go-to-library', me);
+			//	}
+			// });
+		},
 	}
-});
+);

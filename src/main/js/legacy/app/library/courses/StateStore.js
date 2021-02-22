@@ -1,8 +1,9 @@
 const Ext = require('@nti/extjs');
 const AppDispatcher = require('@nti/lib-dispatcher').default;
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
 
 const ALL_COURSES = 'AllCourses';
@@ -13,542 +14,594 @@ const CURRENT = 'Current';
 const UPCOMING = 'Upcoming';
 const ARCHIVED = 'Archived';
 
-module.exports = exports = Ext.define('NextThought.app.library.courses.StateStore', {
-	extend: 'NextThought.common.StateStore',
+module.exports = exports = Ext.define(
+	'NextThought.app.library.courses.StateStore',
+	{
+		extend: 'NextThought.common.StateStore',
 
-	FAVORITE_ENROLLED_COURSES: [],
-	FAVORITE_ADMIN_COURSES: [],
+		FAVORITE_ENROLLED_COURSES: [],
+		FAVORITE_ADMIN_COURSES: [],
 
-	COURSE_ITEMS: {},
-	COURSE_LOADING_MAP: {},
-	COURSE_LOADED_MAP: {},
+		COURSE_ITEMS: {},
+		COURSE_LOADING_MAP: {},
+		COURSE_LOADED_MAP: {},
 
-	TOTAL_ADMIN: 0,
-	TOTAL_ENROLLED: 0,
+		TOTAL_ADMIN: 0,
+		TOTAL_ENROLLED: 0,
 
-	getEnrolledCourses: function () { return this.__getAllForLevel(ENROLLED_COURSES); },
+		getEnrolledCourses: function () {
+			return this.__getAllForLevel(ENROLLED_COURSES);
+		},
 
+		getAdminCourses: function () {
+			return this.__getAllForLevel(ADMINISTERED_COURSES);
+		},
 
-	getAdminCourses: function () { return this.__getAllForLevel(ADMINISTERED_COURSES); },
+		getAllCourses: function () {
+			return this.__getAllForLevel(ALL_COURSES);
+		},
 
+		getFavoriteAdminCourses() {
+			return this.FAVORITE_ADMIN_COURSES;
+		},
 
-	getAllCourses: function () { return this.__getAllForLevel(ALL_COURSES); },
+		getFavoriteEnrolledCourses() {
+			return this.FAVORITE_ENROLLED_COURSES;
+		},
 
-
-	getFavoriteAdminCourses () {
-		return this.FAVORITE_ADMIN_COURSES;
-	},
-
-
-	getFavoriteEnrolledCourses () {
-		return this.FAVORITE_ENROLLED_COURSES;
-	},
-
-
-	__getAllForLevel (courseLevel) {
-		if(!this.COURSE_ITEMS && !this.COURSE_ITEMS[courseLevel]) {
-			return [];
-		}
-
-		let total = [];
-
-		for(var key in this.COURSE_ITEMS[courseLevel]) {
-			if(this.COURSE_ITEMS[courseLevel][key]) {
-				total = total.concat(this.COURSE_ITEMS[courseLevel][key]);
-			}
-		}
-
-		return total;
-	},
-
-
-	getTotalEnrolledCourses () {
-		return this.TOTAL_ENROLLED;
-	},
-
-
-	getTotalAdminCourses () {
-		return this.TOTAL_ADMIN;
-	},
-
-
-	addCourse (course) {
-		// TODO: Add courses. How do we get the course end date to put in the correct partition?
-	},
-
-	__updateCoursesEnrollmentState: function (courses) {
-		var me = this;
-
-		(courses || []).forEach(function (course) {
-			var precached = course.getCourseCatalogEntry(),
-				ntiid = precached.getId(),
-				catalog = me.findCourseForNtiid(ntiid),
-				isOpen = course.isOpen(),
-				isAdmin = course instanceof CourseInstanceAdministrativeRole;
-
-			if (catalog) {
-				catalog.set('enrolled', precached.get('enrolled'));
-				catalog.set('EnrollmentOptions', precached.get('EnrollmentOptions'));
-				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
+		__getAllForLevel(courseLevel) {
+			if (!this.COURSE_ITEMS && !this.COURSE_ITEMS[courseLevel]) {
+				return [];
 			}
 
-			if (precached) {
-				precached.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
-			}
-		});
-	},
-
-
-	setFavoriteEnrolledCourses (courses) {
-		this.FAVORITE_ENROLLED_COURSES = courses;
-		this.__updateCoursesEnrollmentState(courses);
-		this.fireEvent('favorite-enrolled-courses-set', this.FAVORITE_ENROLLED_COURSES);
-	},
-
-
-	setFavoriteAdminCourses (courses) {
-		this.FAVORITE_ADMIN_COURSES = courses;
-		this.__updateCoursesEnrollmentState(courses);
-		this.fireEvent('favorite-admin-courses-set', this.FAVORITE_ADMIN_COURSES);
-	},
-
-
-	setAllCourses: function (courses) {
-		this.fireEvent('all-courses-set', courses);
-	},
-
-
-	setTotalAdminCount (count) {
-		this.TOTAL_ADMIN = count;
-	},
-
-
-	setTotalEnrolledCount (count) {
-		this.TOTAL_ENROLLED = count;
-	},
-
-
-	updatedAvailableCourses: function () {
-		this.fireEvent('update-available-courses');
-	},
-
-
-	setAllCoursesLink: function (link) {
-		this['all_courses_link'] = link;
-	},
-
-
-	getAllCoursesLink: function (link) {
-		return this['all_courses_link'];
-	},
-
-
-	hasAllCoursesLink: function () {
-		return !!this['all_courses_link'];
-	},
-
-
-	__getCoursesOfType: function (courseLevel, courseType) {
-		return this.COURSE_ITEMS[courseLevel] && this.COURSE_ITEMS[courseLevel][courseType];
-	},
-
-	getAllCurrentCourses: function () {
-		return this.__getCoursesOfType(ALL_COURSES, CURRENT);
-	},
-
-	getAllArchivedCourses: function () {
-		return this.__getCoursesOfType(ALL_COURSES, ARCHIVED);
-	},
-
-	getAllUpcomingCourses: function () {
-		return this.__getCoursesOfType(ALL_COURSES, UPCOMING);
-	},
-
-	getCurrentEnrolledCourses: function () {
-		return this.__getCoursesOfType(ENROLLED_COURSES, CURRENT);
-	},
-
-	getArchivedEnrolledCourses: function () {
-		return this.__getCoursesOfType(ENROLLED_COURSES, ARCHIVED);
-	},
-
-	getUpcomingEnrolledCourses: function () {
-		return this.__getCoursesOfType(ENROLLED_COURSES, UPCOMING);
-	},
-
-	getCurrentAdminCourses: function () {
-		return this.__getCoursesOfType(ADMINISTERED_COURSES, CURRENT);
-	},
-
-	getArchivedAdminCourses: function () {
-		return this.__getCoursesOfType(ADMINISTERED_COURSES, ARCHIVED);
-	},
-
-	getUpcomingAdminCourses: function () {
-		return this.__getCoursesOfType(ADMINISTERED_COURSES, UPCOMING);
-	},
-
-	__findIn: function (list, fn) {
-		var i, item = null;
-
-		for (i = 0; i < list.length; i++) {
-			if (fn.call(null, list[i])) {
-				item = list[i];
-				break;
-			}
-		}
-
-		return item;
-	},
-
-	__findInAsync: async function (list, fn) {
-		var i, item = null;
-
-		for (i = 0; i < list.length; i++) {
-			if (await fn.call(null, list[i])) {
-				item = list[i];
-				break;
-			}
-		}
-
-		return item;
-	},
-
-
-	__findAllIn: function (list, fn) {
-		return list.reduce(function (acc, item) {
-			if (fn.call(null, item)) {
-				acc.push(item);
-			}
-
-			return acc;
-		}, []);
-	},
-
-
-	findCourseBy: function (fn) {
-		var enrolled = this.__getAllForLevel(ENROLLED_COURSES) || [],
-			admin = this.__getAllForLevel(ADMINISTERED_COURSES) || [],
-			course;
-
-		course = this.__findIn(admin, fn);
-
-		if (!course) {
-			course = this.__findIn(enrolled, fn);
-		}
-
-		return course;
-	},
-
-
-	findCoursesBy: function (fn) {
-		var enrolled = this.__findAllIn(this.__getAllForLevel(ENROLLED_COURSES) || [], fn),
-			admin = this.__findAllIn(this.__getAllForLevel(ADMINISTERED_COURSES) || [], fn);
-
-		return admin.concat(enrolled);
-	},
-
-
-	findEnrollmentForCourse: function (courseOrNtiid) {
-		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid,
-			me = this;
-
-		function fn (rec) {
-			var catalog = rec.getCourseCatalogEntry(),
-				match = catalog.getId() === ntiid || catalog.get('OID') === ntiid;
-
-			match = match || catalog.get('CourseEntryNTIID') === ntiid;
-			return match;
-		}
-
-		const enrolled = me.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
-
-		return enrolled ? enrolled : me.__findIn(me.FAVORITE_ENROLLED_COURSES, fn);
-	},
-
-	findCourseForNtiid: function (ntiid) {
-		function fn (rec) {
-			//if ntiid is my id or my oid
-			var match = rec.getId() === ntiid || rec.get('OID') === ntiid;
-			//
-			match = match || rec.get('CourseEntryNTIID') === ntiid;
-			return match;
-		}
-
-		return this.__findIn(this.__getAllForLevel(ALL_COURSES), fn);
-	},
-
-
-	findCourseInstance: function (ntiid) {
-		function fn (rec) {
-			var instance = rec.get('Links').getRelLink('CourseInstance').ntiid;
-
-			return instance === ntiid || rec.get('NTIID') === ntiid;
-		}
-
-		var enrollment = this.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
-
-		if (!enrollment) {
-			enrollment = this.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), fn);
-		}
-
-		return enrollment && enrollment.getCourseInstance();
-	},
-
-
-	findCourseInstanceByPriority: async function (fn) {
-		var priorities = {},
-			keys = [],
-			result = [];
-
-		async function find (enrollment) {
-			var instance = await enrollment.getCourseInstance(),
-				priority = fn.call(null, instance, enrollment);
-
-			if (priority && priority > 0) {
-				if (priorities[priority]) {
-					priorities[priority].push(instance);
-				} else {
-					keys.push(priority);
-					priorities[priority] = [instance];
+			let total = [];
+
+			for (var key in this.COURSE_ITEMS[courseLevel]) {
+				if (this.COURSE_ITEMS[courseLevel][key]) {
+					total = total.concat(this.COURSE_ITEMS[courseLevel][key]);
 				}
 			}
 
-			return false;
-		}
+			return total;
+		},
 
+		getTotalEnrolledCourses() {
+			return this.TOTAL_ENROLLED;
+		},
 
-		await this.__findInAsync(this.__getAllForLevel(ENROLLED_COURSES), find);
-		await this.__findInAsync(this.__getAllForLevel(ADMINISTERED_COURSES), find);
+		getTotalAdminCourses() {
+			return this.TOTAL_ADMIN;
+		},
 
-		keys.sort();
+		addCourse(course) {
+			// TODO: Add courses. How do we get the course end date to put in the correct partition?
+		},
 
-		keys.forEach(function (key) {
-			result = result.concat(priorities[key]);
-		});
+		__updateCoursesEnrollmentState: function (courses) {
+			var me = this;
 
-		return result;
-	},
+			(courses || []).forEach(function (course) {
+				var precached = course.getCourseCatalogEntry(),
+					ntiid = precached.getId(),
+					catalog = me.findCourseForNtiid(ntiid),
+					isOpen = course.isOpen(),
+					isAdmin =
+						course instanceof CourseInstanceAdministrativeRole;
 
+				if (catalog) {
+					catalog.set('enrolled', precached.get('enrolled'));
+					catalog.set(
+						'EnrollmentOptions',
+						precached.get('EnrollmentOptions')
+					);
+					catalog.updateEnrollmentState(
+						course.get('RealEnrollmentStatus') ||
+							course.get('Status'),
+						isOpen,
+						isAdmin
+					);
+				}
 
-	__containsNTIID: function (rec, prefix) {
-		var match = false;
-
-		rec.getContentPackages().every(function (contentPackage) {
-			var id = contentPackage.get('NTIID');
-
-			match = match || (prefix && prefix === lazy.ParseUtils.ntiidPrefix(id));
-		});
-
-		return match;
-	},
-
-
-	findForNTIID: function (id) {
-		var me = this,
-			prefix = lazy.ParseUtils.ntiidPrefix(id),
-			course;
-
-		function fn (rec) {
-			const instId = rec.get('Links').getRelLink('CourseInstance').ntiid;
-			console.log(instId);
-			//if the id is my id or oid
-			let match = instId === id;// || instOID === id;
-			let courseCatalog = rec.getCourseCatalogEntry();
-
-			match = match || (courseCatalog && courseCatalog.getId() === id);
-
-			match = match || rec.get('CourseEntryNTIID') === id;
-
-			return match || me.__containsNTIID(rec, prefix);
-		}
-
-		course = me.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
-
-		if (!course) {
-			course = me.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), fn);
-		}
-
-		if (course) {
-			return course.getCourseInstance();
-		}
-
-		return Promise.reject();
-	},
-
-
-	getMostRecentEnrollmentCourse: function () {
-		var enrolledCourses = this.getEnrolledCourses() || [],
-			enrollment = enrolledCourses[0];
-
-		enrolledCourses.forEach(function (e) {
-			if (e.get('CreatedTime') > enrollment.get('CreatedTime')) {
-				enrollment = e;
-			}
-		});
-
-		return enrollment && enrollment.getCourseCatalogEntry();
-	},
-
-
-	hasCourse: function (course) {
-		var ntiid = course.get('NTIID');
-
-		var found = this.findCourseBy(function (enrollment) {
-			var instanceId = enrollment.get('Links').getRelLink('CourseInstance').ntiid || '',
-				enrollmentId = enrollment.get('NTIID') || '';
-
-			return instanceId === ntiid || enrollmentId === ntiid;
-		});
-
-		return !!found;
-	},
-
-	/**
-	 * Return all courses in the same catalog family
-	 * @param  {string} familyId id of the catalog family to search for
-	 * @returns {Course} list of courses in the same catalog family
-	 */
-	findForCatalogFamily: function (familyId) {
-		return this.findCoursesBy(function (course) {
-			var cce = course.getCourseCatalogEntry();
-			return cce.isInFamily(familyId);
-		});
-	},
-
-
-	isTypeLoading (courseLevel, courseType) {
-		return(this.COURSE_LOADING_MAP[courseLevel] && this.COURSE_LOADING_MAP[courseLevel][courseType]);
-	},
-
-
-	setTypeLoading (courseLevel, courseType) {
-		if(!this.COURSE_LOADING_MAP[courseLevel]) {
-			this.COURSE_LOADING_MAP[courseLevel] = {};
-		}
-
-		this.COURSE_LOADING_MAP[courseLevel][courseType] = true;
-	},
-
-
-	setTypeLoaded (courseLevel, courseType) {
-		if(!this.COURSE_LOADED_MAP[courseLevel]) {
-			this.COURSE_LOADED_MAP[courseLevel] = {};
-		}
-
-		this.COURSE_LOADED_MAP[courseLevel][courseType] = true;
-
-		delete this.COURSE_LOADING_MAP[courseLevel][courseType];
-		this.fireEvent(courseLevel.toLowerCase() + '-' + courseType.toLowerCase() + '-loaded');
-	},
-
-
-	onceTypeLoaded (courseLevel, courseType, force) {
-		if (this.COURSE_LOADED_MAP[courseLevel] && this.COURSE_LOADED_MAP[courseLevel][courseType] && !force) {
-			return Promise.resolve(this);
-		}
-
-		delete this.COURSE_LOADED_MAP[courseLevel][courseType];
-
-		this.fireEvent('load-' + courseLevel + '-' + courseType);
-
-		const event = courseLevel.toLowerCase() + '-' + courseType.toLowerCase() + '-loaded';
-
-		return new Promise((fulfill) => {
-			this.on({
-				single: true,
-				[event]: () => fulfill(this)
+				if (precached) {
+					precached.updateEnrollmentState(
+						course.get('RealEnrollmentStatus') ||
+							course.get('Status'),
+						isOpen,
+						isAdmin
+					);
+				}
 			});
-		});
-	},
+		},
 
-	__updateEnrollment (items) {
-		items.forEach((item) => {
-			const enrollmentStatus = item.get('LegacyEnrollmentStatus');
+		setFavoriteEnrolledCourses(courses) {
+			this.FAVORITE_ENROLLED_COURSES = courses;
+			this.__updateCoursesEnrollmentState(courses);
+			this.fireEvent(
+				'favorite-enrolled-courses-set',
+				this.FAVORITE_ENROLLED_COURSES
+			);
+		},
 
-			const enrolled = enrollmentStatus ? true : false;
-			const isOpen = enrollmentStatus && enrollmentStatus === 'Open';
-			const isAdmin = item.get('IsAdmin');
+		setFavoriteAdminCourses(courses) {
+			this.FAVORITE_ADMIN_COURSES = courses;
+			this.__updateCoursesEnrollmentState(courses);
+			this.fireEvent(
+				'favorite-admin-courses-set',
+				this.FAVORITE_ADMIN_COURSES
+			);
+		},
 
-			if(item.updateEnrollmentState) {
-				item.updateEnrollmentState(item.get('RealEnrollmentStatus') || enrollmentStatus, isOpen, isAdmin);
+		setAllCourses: function (courses) {
+			this.fireEvent('all-courses-set', courses);
+		},
+
+		setTotalAdminCount(count) {
+			this.TOTAL_ADMIN = count;
+		},
+
+		setTotalEnrolledCount(count) {
+			this.TOTAL_ENROLLED = count;
+		},
+
+		updatedAvailableCourses: function () {
+			this.fireEvent('update-available-courses');
+		},
+
+		setAllCoursesLink: function (link) {
+			this['all_courses_link'] = link;
+		},
+
+		getAllCoursesLink: function (link) {
+			return this['all_courses_link'];
+		},
+
+		hasAllCoursesLink: function () {
+			return !!this['all_courses_link'];
+		},
+
+		__getCoursesOfType: function (courseLevel, courseType) {
+			return (
+				this.COURSE_ITEMS[courseLevel] &&
+				this.COURSE_ITEMS[courseLevel][courseType]
+			);
+		},
+
+		getAllCurrentCourses: function () {
+			return this.__getCoursesOfType(ALL_COURSES, CURRENT);
+		},
+
+		getAllArchivedCourses: function () {
+			return this.__getCoursesOfType(ALL_COURSES, ARCHIVED);
+		},
+
+		getAllUpcomingCourses: function () {
+			return this.__getCoursesOfType(ALL_COURSES, UPCOMING);
+		},
+
+		getCurrentEnrolledCourses: function () {
+			return this.__getCoursesOfType(ENROLLED_COURSES, CURRENT);
+		},
+
+		getArchivedEnrolledCourses: function () {
+			return this.__getCoursesOfType(ENROLLED_COURSES, ARCHIVED);
+		},
+
+		getUpcomingEnrolledCourses: function () {
+			return this.__getCoursesOfType(ENROLLED_COURSES, UPCOMING);
+		},
+
+		getCurrentAdminCourses: function () {
+			return this.__getCoursesOfType(ADMINISTERED_COURSES, CURRENT);
+		},
+
+		getArchivedAdminCourses: function () {
+			return this.__getCoursesOfType(ADMINISTERED_COURSES, ARCHIVED);
+		},
+
+		getUpcomingAdminCourses: function () {
+			return this.__getCoursesOfType(ADMINISTERED_COURSES, UPCOMING);
+		},
+
+		__findIn: function (list, fn) {
+			var i,
+				item = null;
+
+			for (i = 0; i < list.length; i++) {
+				if (fn.call(null, list[i])) {
+					item = list[i];
+					break;
+				}
 			}
 
-			item.set('enrolled', enrolled || isAdmin);
-			item.set('isOpen', isOpen);
-		});
-	},
+			return item;
+		},
 
-	setCoursesByType (courseLevel, courseType, items) {
-		if(!this.COURSE_ITEMS[courseLevel]) {
-			this.COURSE_ITEMS[courseLevel] = {};
-		}
+		__findInAsync: async function (list, fn) {
+			var i,
+				item = null;
 
-		this.__updateEnrollment(items);
+			for (i = 0; i < list.length; i++) {
+				if (await fn.call(null, list[i])) {
+					item = list[i];
+					break;
+				}
+			}
 
-		this.COURSE_ITEMS[courseLevel][courseType] = items;
-	},
+			return item;
+		},
 
+		__findAllIn: function (list, fn) {
+			return list.reduce(function (acc, item) {
+				if (fn.call(null, item)) {
+					acc.push(item);
+				}
 
-	isFavoritesLoading () {
-		return this.favoritesLoading;
-	},
+				return acc;
+			}, []);
+		},
 
+		findCourseBy: function (fn) {
+			var enrolled = this.__getAllForLevel(ENROLLED_COURSES) || [],
+				admin = this.__getAllForLevel(ADMINISTERED_COURSES) || [],
+				course;
 
-	setFavoritesLoading () {
-		this.favoritesLoading = true;
-	},
+			course = this.__findIn(admin, fn);
 
+			if (!course) {
+				course = this.__findIn(enrolled, fn);
+			}
 
-	setFavoritesLoaded () {
-		this.favoritesLoaded = true;
-		delete this.favoritesLoading;
-		this.fireEvent('favorites-loaded');
-	},
+			return course;
+		},
 
+		findCoursesBy: function (fn) {
+			var enrolled = this.__findAllIn(
+					this.__getAllForLevel(ENROLLED_COURSES) || [],
+					fn
+				),
+				admin = this.__findAllIn(
+					this.__getAllForLevel(ADMINISTERED_COURSES) || [],
+					fn
+				);
 
-	onceFavoritesLoaded (force) {
-		if (this.favoritesLoaded && !force) {
-			return Promise.resolve(this);
-		}
+			return admin.concat(enrolled);
+		},
 
-		delete this.favoritesLoaded;
+		findEnrollmentForCourse: function (courseOrNtiid) {
+			var ntiid =
+					courseOrNtiid && courseOrNtiid.isModel
+						? courseOrNtiid.getId()
+						: courseOrNtiid,
+				me = this;
 
-		this.fireEvent('load-favorites');
+			function fn(rec) {
+				var catalog = rec.getCourseCatalogEntry(),
+					match =
+						catalog.getId() === ntiid ||
+						catalog.get('OID') === ntiid;
 
-		return new Promise((fulfill) => {
-			this.on({
-				single: true,
-				'favorites-loaded': () => fulfill(this)
+				match = match || catalog.get('CourseEntryNTIID') === ntiid;
+				return match;
+			}
+
+			const enrolled = me.__findIn(
+				this.__getAllForLevel(ENROLLED_COURSES),
+				fn
+			);
+
+			return enrolled
+				? enrolled
+				: me.__findIn(me.FAVORITE_ENROLLED_COURSES, fn);
+		},
+
+		findCourseForNtiid: function (ntiid) {
+			function fn(rec) {
+				//if ntiid is my id or my oid
+				var match = rec.getId() === ntiid || rec.get('OID') === ntiid;
+				//
+				match = match || rec.get('CourseEntryNTIID') === ntiid;
+				return match;
+			}
+
+			return this.__findIn(this.__getAllForLevel(ALL_COURSES), fn);
+		},
+
+		findCourseInstance: function (ntiid) {
+			function fn(rec) {
+				var instance = rec.get('Links').getRelLink('CourseInstance')
+					.ntiid;
+
+				return instance === ntiid || rec.get('NTIID') === ntiid;
+			}
+
+			var enrollment = this.__findIn(
+				this.__getAllForLevel(ENROLLED_COURSES),
+				fn
+			);
+
+			if (!enrollment) {
+				enrollment = this.__findIn(
+					this.__getAllForLevel(ADMINISTERED_COURSES),
+					fn
+				);
+			}
+
+			return enrollment && enrollment.getCourseInstance();
+		},
+
+		findCourseInstanceByPriority: async function (fn) {
+			var priorities = {},
+				keys = [],
+				result = [];
+
+			async function find(enrollment) {
+				var instance = await enrollment.getCourseInstance(),
+					priority = fn.call(null, instance, enrollment);
+
+				if (priority && priority > 0) {
+					if (priorities[priority]) {
+						priorities[priority].push(instance);
+					} else {
+						keys.push(priority);
+						priorities[priority] = [instance];
+					}
+				}
+
+				return false;
+			}
+
+			await this.__findInAsync(
+				this.__getAllForLevel(ENROLLED_COURSES),
+				find
+			);
+			await this.__findInAsync(
+				this.__getAllForLevel(ADMINISTERED_COURSES),
+				find
+			);
+
+			keys.sort();
+
+			keys.forEach(function (key) {
+				result = result.concat(priorities[key]);
 			});
-		});
-	},
 
+			return result;
+		},
 
-	beforeDropCourse () {
-		this.fireEvent('dropping-course');
-	},
+		__containsNTIID: function (rec, prefix) {
+			var match = false;
 
+			rec.getContentPackages().every(function (contentPackage) {
+				var id = contentPackage.get('NTIID');
 
-	afterDropCourse () {
-		this.fireEvent('dropped-course');
-	},
+				match =
+					match ||
+					(prefix && prefix === lazy.ParseUtils.ntiidPrefix(id));
+			});
 
-	onDropCourseError () {
-		this.fireEvent('dropped-error');
-	},
+			return match;
+		},
 
-	beforeAddCourse () {
-		this.fireEvent('adding-course');
-	},
+		findForNTIID: function (id) {
+			var me = this,
+				prefix = lazy.ParseUtils.ntiidPrefix(id),
+				course;
 
+			function fn(rec) {
+				const instId = rec.get('Links').getRelLink('CourseInstance')
+					.ntiid;
+				console.log(instId);
+				//if the id is my id or oid
+				let match = instId === id; // || instOID === id;
+				let courseCatalog = rec.getCourseCatalogEntry();
 
-	afterAddCourse () {
-		AppDispatcher.handleRequestAction({
-			type: 'Course-Enrollment-Changed',
-			data: {}
-		});
+				match =
+					match || (courseCatalog && courseCatalog.getId() === id);
 
-		this.fireEvent('added-course');
+				match = match || rec.get('CourseEntryNTIID') === id;
+
+				return match || me.__containsNTIID(rec, prefix);
+			}
+
+			course = me.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
+
+			if (!course) {
+				course = me.__findIn(
+					this.__getAllForLevel(ADMINISTERED_COURSES),
+					fn
+				);
+			}
+
+			if (course) {
+				return course.getCourseInstance();
+			}
+
+			return Promise.reject();
+		},
+
+		getMostRecentEnrollmentCourse: function () {
+			var enrolledCourses = this.getEnrolledCourses() || [],
+				enrollment = enrolledCourses[0];
+
+			enrolledCourses.forEach(function (e) {
+				if (e.get('CreatedTime') > enrollment.get('CreatedTime')) {
+					enrollment = e;
+				}
+			});
+
+			return enrollment && enrollment.getCourseCatalogEntry();
+		},
+
+		hasCourse: function (course) {
+			var ntiid = course.get('NTIID');
+
+			var found = this.findCourseBy(function (enrollment) {
+				var instanceId =
+						enrollment.get('Links').getRelLink('CourseInstance')
+							.ntiid || '',
+					enrollmentId = enrollment.get('NTIID') || '';
+
+				return instanceId === ntiid || enrollmentId === ntiid;
+			});
+
+			return !!found;
+		},
+
+		/**
+		 * Return all courses in the same catalog family
+		 * @param  {string} familyId id of the catalog family to search for
+		 * @returns {Course} list of courses in the same catalog family
+		 */
+		findForCatalogFamily: function (familyId) {
+			return this.findCoursesBy(function (course) {
+				var cce = course.getCourseCatalogEntry();
+				return cce.isInFamily(familyId);
+			});
+		},
+
+		isTypeLoading(courseLevel, courseType) {
+			return (
+				this.COURSE_LOADING_MAP[courseLevel] &&
+				this.COURSE_LOADING_MAP[courseLevel][courseType]
+			);
+		},
+
+		setTypeLoading(courseLevel, courseType) {
+			if (!this.COURSE_LOADING_MAP[courseLevel]) {
+				this.COURSE_LOADING_MAP[courseLevel] = {};
+			}
+
+			this.COURSE_LOADING_MAP[courseLevel][courseType] = true;
+		},
+
+		setTypeLoaded(courseLevel, courseType) {
+			if (!this.COURSE_LOADED_MAP[courseLevel]) {
+				this.COURSE_LOADED_MAP[courseLevel] = {};
+			}
+
+			this.COURSE_LOADED_MAP[courseLevel][courseType] = true;
+
+			delete this.COURSE_LOADING_MAP[courseLevel][courseType];
+			this.fireEvent(
+				courseLevel.toLowerCase() +
+					'-' +
+					courseType.toLowerCase() +
+					'-loaded'
+			);
+		},
+
+		onceTypeLoaded(courseLevel, courseType, force) {
+			if (
+				this.COURSE_LOADED_MAP[courseLevel] &&
+				this.COURSE_LOADED_MAP[courseLevel][courseType] &&
+				!force
+			) {
+				return Promise.resolve(this);
+			}
+
+			delete this.COURSE_LOADED_MAP[courseLevel][courseType];
+
+			this.fireEvent('load-' + courseLevel + '-' + courseType);
+
+			const event =
+				courseLevel.toLowerCase() +
+				'-' +
+				courseType.toLowerCase() +
+				'-loaded';
+
+			return new Promise(fulfill => {
+				this.on({
+					single: true,
+					[event]: () => fulfill(this),
+				});
+			});
+		},
+
+		__updateEnrollment(items) {
+			items.forEach(item => {
+				const enrollmentStatus = item.get('LegacyEnrollmentStatus');
+
+				const enrolled = enrollmentStatus ? true : false;
+				const isOpen = enrollmentStatus && enrollmentStatus === 'Open';
+				const isAdmin = item.get('IsAdmin');
+
+				if (item.updateEnrollmentState) {
+					item.updateEnrollmentState(
+						item.get('RealEnrollmentStatus') || enrollmentStatus,
+						isOpen,
+						isAdmin
+					);
+				}
+
+				item.set('enrolled', enrolled || isAdmin);
+				item.set('isOpen', isOpen);
+			});
+		},
+
+		setCoursesByType(courseLevel, courseType, items) {
+			if (!this.COURSE_ITEMS[courseLevel]) {
+				this.COURSE_ITEMS[courseLevel] = {};
+			}
+
+			this.__updateEnrollment(items);
+
+			this.COURSE_ITEMS[courseLevel][courseType] = items;
+		},
+
+		isFavoritesLoading() {
+			return this.favoritesLoading;
+		},
+
+		setFavoritesLoading() {
+			this.favoritesLoading = true;
+		},
+
+		setFavoritesLoaded() {
+			this.favoritesLoaded = true;
+			delete this.favoritesLoading;
+			this.fireEvent('favorites-loaded');
+		},
+
+		onceFavoritesLoaded(force) {
+			if (this.favoritesLoaded && !force) {
+				return Promise.resolve(this);
+			}
+
+			delete this.favoritesLoaded;
+
+			this.fireEvent('load-favorites');
+
+			return new Promise(fulfill => {
+				this.on({
+					single: true,
+					'favorites-loaded': () => fulfill(this),
+				});
+			});
+		},
+
+		beforeDropCourse() {
+			this.fireEvent('dropping-course');
+		},
+
+		afterDropCourse() {
+			this.fireEvent('dropped-course');
+		},
+
+		onDropCourseError() {
+			this.fireEvent('dropped-error');
+		},
+
+		beforeAddCourse() {
+			this.fireEvent('adding-course');
+		},
+
+		afterAddCourse() {
+			AppDispatcher.handleRequestAction({
+				type: 'Course-Enrollment-Changed',
+				data: {},
+			});
+
+			this.fireEvent('added-course');
+		},
 	}
-});
+);

@@ -1,38 +1,42 @@
 const Ext = require('@nti/extjs');
-const {encodeForURI, isNTIID} = require('@nti/lib-ntiids');
+const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 require('./Membership');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.membership.parts.Communities',
+	{
+		extend:
+			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		alias: 'widget.profile-user-membership-communities',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Communities', {
-	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
-	alias: 'widget.profile-user-membership-communities',
+		cls: 'memberships full communities four-column',
+		title: 'Communities',
+		profileRouteRoot: '/community',
 
-	cls: 'memberships full communities four-column',
-	title: 'Communities',
-	profileRouteRoot: '/community',
+		entryTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'entry',
+				'data-route': '{route}',
+				cn: ['{community:avatar}', { cls: 'name', html: '{name}' }],
+			})
+		),
 
-	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', 'data-route': '{route}', cn: [
-			'{community:avatar}',
-			{cls: 'name', html: '{name}'}
-		]
-	})),
+		setUser(user, isMe) {
+			this.removeAll();
 
-
-	setUser (user, isMe) {
-		this.removeAll();
-
-		user.getCommunityMembership()
-			.then(communities => {
+			user.getCommunityMembership().then(communities => {
 				if (communities.length) {
-					communities.map(community => {
-						const id = community.getId();
-						return {
-							community: community,
-							name: community.getName(),
-							route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
-						};
-					})
+					communities
+						.map(community => {
+							const id = community.getId();
+							return {
+								community: community,
+								name: community.getName(),
+								route: isNTIID(id)
+									? encodeForURI(id)
+									: encodeURIComponent(id),
+							};
+						})
 						.forEach(c => this.addEntry(c));
 				} else if (isMe) {
 					//TODO: change this text
@@ -41,5 +45,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					this.showEmptyText('This user has no public communities');
 				}
 			});
+		},
 	}
-});
+);

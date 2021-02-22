@@ -6,18 +6,18 @@ import BooksTable from '../BooksTable';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfBooks) => {
+const getMockService = numberOfBooks => {
 	return {
 		getCollection: () => {
 			return {
 				hasLink: () => true,
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		getBatch: () => {
 			let titles = [];
 
-			for(let i = 0; i < numberOfBooks; i++) {
+			for (let i = 0; i < numberOfBooks; i++) {
 				const index = i + 1;
 
 				titles.push('id' + index);
@@ -26,26 +26,26 @@ const getMockService = (numberOfBooks) => {
 			return Promise.resolve({
 				Total: numberOfBooks,
 				BatchPage: 1,
-				titles
+				titles,
 			});
 		},
 		getWorkspace: () => {
 			return {
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
-		getObject: (id) => {
+		getObject: id => {
 			return {
 				title: id,
 				getID: () => id,
 				getCreatedTime: () => new Date('10/30/2017'),
-				getDefaultAssetRoot: () => 'testRoot'
+				getDefaultAssetRoot: () => 'testRoot',
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfBooks) => {
+const onBefore = numberOfBooks => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfBooks));
 };
@@ -62,7 +62,7 @@ describe('Site admin content book list (with no items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<BooksTable/>);
+		const cmp = renderer.create(<BooksTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -79,7 +79,7 @@ describe('Site admin content book list (with 5 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<BooksTable/>);
+		const cmp = renderer.create(<BooksTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -96,7 +96,7 @@ describe('Site admin content book list (with 25 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<BooksTable/>);
+		const cmp = renderer.create(<BooksTable />);
 
 		jest.runAllTimers();
 		await flushPromises();

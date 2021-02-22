@@ -7,30 +7,31 @@ const ContentnodeEditor = require('../contentnode/Editor');
 
 require('../../creation/ChildCreation');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+		alias: 'widget.overview-editing-outlinenode-childcreation',
+		title: 'Lesson',
+		saveText: 'Add to Unit',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-outlinenode-childcreation',
-	title: 'Lesson',
-	saveText: 'Add to Unit',
+		statics: {
+			getHandledMimeTypes: function () {
+				return [CourseOutlineNode.mimeType];
+			},
 
-	statics: {
-		getHandledMimeTypes: function () {
-			return [
-				CourseOutlineNode.mimeType
-			];
+			getEditors: function () {
+				return [
+					ContentnodeEditor,
+					//I think this was meant to be:
+					// OutlinenodeEditor
+				];
+			},
 		},
 
-		getEditors: function () {
-			return [
-				ContentnodeEditor
-				//I think this was meant to be:
-				// OutlinenodeEditor
-			];
-		}
-	},
-
-	setUpTypeList: function () {
-		this.callParent(arguments);
+		setUpTypeList: function () {
+			this.callParent(arguments);
+		},
 	}
-});
+);

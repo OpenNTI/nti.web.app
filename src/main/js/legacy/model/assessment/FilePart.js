@@ -1,17 +1,26 @@
 const Ext = require('@nti/extjs');
 require('./Part');
-const {FileType: {FileSetDescriptor: FileSet}} = require('@nti/lib-commons');
+const {
+	FileType: { FileSetDescriptor: FileSet },
+} = require('@nti/lib-commons');
 
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
-		{ name: 'AllowedExtentions', mapping: 'allowed_extensions', type: 'auto'},
-		{ name: 'AllowedMimeTypes', mapping: 'allowed_mime_types', type: 'auto'},
-		{ name: 'MaxFileSize', mapping: 'max_file_size', type: 'int'}
+		{
+			name: 'AllowedExtentions',
+			mapping: 'allowed_extensions',
+			type: 'auto',
+		},
+		{
+			name: 'AllowedMimeTypes',
+			mapping: 'allowed_mime_types',
+			type: 'auto',
+		},
+		{ name: 'MaxFileSize', mapping: 'max_file_size', type: 'int' },
 	],
-
 
 	isFileAcceptable: function (file) {
 		var size = this.__checkSize(file && file.size),
@@ -20,48 +29,53 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 				this.get('AllowedMimeTypes') || ['*/*']
 			),
 			type = fileSet.matches(file),
-			r = this.reasons = [];
+			r = (this.reasons = []);
 
 		if (!type) {
 			const allowedList = this.getExtensionDisplayList();
-			const accepts = allowedList !== '' ? 'You can only upload ' + allowedList + '. ' : '';
+			const accepts =
+				allowedList !== ''
+					? 'You can only upload ' + allowedList + '. '
+					: '';
 			const message = 'The file selected is not acceptable. ' + accepts;
-			r.push({message, code: 'FileTypeError'});
+			r.push({ message, code: 'FileTypeError' });
 		}
 
 		if (!size) {
 			const currentSize = FilePicker.getHumanReadableFileSize(file.size);
-			const maxSize = FilePicker.getHumanReadableFileSize(this.get('MaxFileSize'));
-			const message = 'Your file exceeds the maximum file size. Max File Size: ' + maxSize + '. Uploaded File Size: ' + currentSize;
-			r.push({message, code: 'MaxFileSizeUploadLimitError'});
+			const maxSize = FilePicker.getHumanReadableFileSize(
+				this.get('MaxFileSize')
+			);
+			const message =
+				'Your file exceeds the maximum file size. Max File Size: ' +
+				maxSize +
+				'. Uploaded File Size: ' +
+				currentSize;
+			r.push({ message, code: 'MaxFileSizeUploadLimitError' });
 		}
 
 		return size && type;
 	},
-
 
 	__checkSize: function (size) {
 		var max = this.get('MaxFileSize') || Infinity;
 		return size < max && size > 0;
 	},
 
-
-	getExtensionDisplayList () {
+	getExtensionDisplayList() {
 		let extensions = (this.get('AllowedExtentions') || []).slice();
 		if (extensions.length > 1) {
 			let p2 = extensions.splice(-1);
 			extensions = extensions.join(', ') + ' or ' + p2[0];
-		}
-		else if (extensions.length === 1) {
+		} else if (extensions.length === 1) {
 			extensions = extensions[0];
 			if (extensions[0] === '*' || extensions[0] === '*.*') {
 				extensions = '';
 			}
-		}
-		else {
+		} else {
 			extensions = '';
 		}
 
 		return extensions;
-	}
+	},
 });

@@ -1,16 +1,16 @@
 import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {LinkTo} from '@nti/web-routing';
-import {decorate} from '@nti/lib-commons';
-import {Loading, Layouts} from '@nti/web-commons';
-import {scoped} from '@nti/lib-locale';
+import { LinkTo } from '@nti/web-routing';
+import { decorate } from '@nti/lib-commons';
+import { Loading, Layouts } from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
 
 import Store from './Store';
 import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
-	back: 'Back to People'
+	back: 'Back to People',
 };
 
 const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
@@ -25,53 +25,48 @@ class SiteAdminUserView extends React.Component {
 		loading: PropTypes.bool,
 		store: PropTypes.object,
 
-		children: PropTypes.node
-	}
+		children: PropTypes.node,
+	};
 
-
-	get store () {
+	get store() {
 		return this.props.store;
 	}
 
-
-	componentDidUpdate (oldProps) {
-		const {userID: newID} = this.props;
-		const {userID: oldID} = oldProps;
+	componentDidUpdate(oldProps) {
+		const { userID: newID } = this.props;
+		const { userID: oldID } = oldProps;
 
 		if (newID !== oldID) {
 			this.store.loadUser(newID);
 		}
 	}
 
-
-	componentDidMount () {
-		const {userID} = this.props;
+	componentDidMount() {
+		const { userID } = this.props;
 
 		this.store.loadUser(userID);
 	}
 
-
-	componentWillUnmount () {
-		const {user} = this.props;
+	componentWillUnmount() {
+		const { user } = this.props;
 
 		this.store.unloadUser(user);
 	}
 
-	render () {
-		const {loading} = this.props;
+	render() {
+		const { loading } = this.props;
 
 		return (
 			<div className="site-admin-user-view">
 				{loading && this.renderHeader()}
-				{loading && (<Loading.Mask />)}
+				{loading && <Loading.Mask />}
 				{!loading && this.renderUser()}
 			</div>
 		);
-
 	}
 
-	renderUser () {
-		const {user, hasBooks, hasCourses, children} = this.props;
+	renderUser() {
+		const { user, hasBooks, hasCourses, children } = this.props;
 
 		if (!user) {
 			return null;
@@ -81,19 +76,22 @@ class SiteAdminUserView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar user={user} hasBooks={hasBooks} hasCourses={hasCourses}/>
+					<NavBar
+						user={user}
+						hasBooks={hasBooks}
+						hasCourses={hasCourses}
+					/>
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
-					{React.Children.map(children, (item) => {
-						return React.cloneElement(item, {user});
+					{React.Children.map(children, item => {
+						return React.cloneElement(item, { user });
 					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>
 		);
 	}
 
-
-	renderHeader () {
+	renderHeader() {
 		return (
 			<div className="header">
 				<LinkTo.Path to="../..">
@@ -105,7 +103,11 @@ class SiteAdminUserView extends React.Component {
 	}
 }
 
-
 export default decorate(SiteAdminUserView, [
-	Store.connect({user: 'user', loading: 'loading', hasBooks: 'hasBooks', hasCourses: 'hasCourses'})
+	Store.connect({
+		user: 'user',
+		loading: 'loading',
+		hasBooks: 'hasBooks',
+		hasCourses: 'hasCourses',
+	}),
 ]);

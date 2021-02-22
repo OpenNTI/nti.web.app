@@ -11,7 +11,7 @@ require('legacy/mixins/Scrolling');
 module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	mixins: {
 		Scrolling: 'NextThought.mixins.Scrolling',
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
 
 	constructor: function (config) {
@@ -38,19 +38,18 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 			dragEnter: this.__dragEnter.bind(this),
 			dragLeave: this.__dragLeave.bind(this),
 			dragOver: this.__dragOver.bind(this),
-			drop: this.__dragDrop.bind(this)
+			drop: this.__dragDrop.bind(this),
 		};
 
 		this.transferHandlers = {};
 
 		this.mon(this.DnDStore, {
 			'drag-start': this.__onDragStart.bind(this),
-			'drag-end': this.__onDragEnd.bind(this)
+			'drag-end': this.__onDragEnd.bind(this),
 		});
 	},
 
 	__setOrRemoveDropListeners: function (remove) {
-
 		this.isEnabled = !remove;
 
 		var target = this.getDropzoneTarget(),
@@ -119,29 +118,34 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		const cacheKey = keys.join(',');
 		const cache = this.dthCache || (this.dthCache = {});
 
+		return (
+			cache[cacheKey] ||
+			(cache[cacheKey] =
+				(console.log('Calculating Handlers....'),
+				keys.reduce(function (acc, key) {
+					var handler = handlers[key];
 
-		return cache[cacheKey] || (cache[cacheKey] = (
-			console.log('Calculating Handlers....'),
-			keys.reduce(function (acc, key) {
-				var handler = handlers[key];
+					//If there is no data for this handler
+					if (!dataTransfer.containsType(key)) {
+						return acc;
+					}
 
-				//If there is no data for this handler
-				if (!dataTransfer.containsType(key)) { return acc; }
+					if (!handler.isValid || handler.isValid(dataTransfer)) {
+						acc.push(handler);
+					}
 
-				if (!handler.isValid || handler.isValid(dataTransfer)) {
-					acc.push(handler);
-				}
-
-				return acc;
-			}, [])
-		));
+					return acc;
+				}, [])))
+		);
 	},
 
 	__onDragStart: function () {
-		var scrollingParent = this.findScrollableParent(this.getDropzoneTarget());
+		var scrollingParent = this.findScrollableParent(
+			this.getDropzoneTarget()
+		);
 
 		if (scrollingParent) {
-			this.scrollingParent = new Scrolling({el: scrollingParent});
+			this.scrollingParent = new Scrolling({ el: scrollingParent });
 			this.scrollingParent.scrollWhenDragNearEdges();
 		}
 
@@ -168,11 +172,13 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	__isValidDrop: function (dataTransfer) {
 		var dndInfo = dataTransfer.getData(DndInfo.mimeType);
 
-		return !!dndInfo;//TODO: maybe check the source and version number
+		return !!dndInfo; //TODO: maybe check the source and version number
 	},
 
 	__getEffectForHandlers: function (handlers) {
-		var effect, handler, i = 0;
+		var effect,
+			handler,
+			i = 0;
 
 		handler = handlers[i];
 
@@ -189,13 +195,20 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (!e.dataTransfer) { return; }
+		if (!e.dataTransfer) {
+			return;
+		}
 
 		var el = this.getDropzoneTarget(),
-			dataTransfer = new DataTransferStore({dataTransfer: e.dataTransfer}),
+			dataTransfer = new DataTransferStore({
+				dataTransfer: e.dataTransfer,
+			}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer);
 
-		this.dragEnterCounter = this.__makePositiveOrZero(this.dragEnterCounter, 0);
+		this.dragEnterCounter = this.__makePositiveOrZero(
+			this.dragEnterCounter,
+			0
+		);
 
 		this.dragEnterCounter += 1;
 
@@ -216,7 +229,10 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 
 		var el = this.getDropzoneTarget();
 
-		this.dragEnterCounter = this.__makePositiveOrZero(this.dragEnterCounter, 1);
+		this.dragEnterCounter = this.__makePositiveOrZero(
+			this.dragEnterCounter,
+			1
+		);
 
 		this.dragEnterCounter -= 1;
 
@@ -235,9 +251,13 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (!e.dataTransfer) { return; }
+		if (!e.dataTransfer) {
+			return;
+		}
 
-		var dataTransfer = new DataTransferStore({dataTransfer: e.dataTransfer}),
+		var dataTransfer = new DataTransferStore({
+				dataTransfer: e.dataTransfer,
+			}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		if (!this.__isValidTransfer(dataTransfer)) {
@@ -257,7 +277,9 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		e.preventDefault();
 		e.stopPropagation();
 
-		var dataTransfer = new DataTransferStore({dataTransfer: e.dataTransfer});
+		var dataTransfer = new DataTransferStore({
+			dataTransfer: e.dataTransfer,
+		});
 
 		if (this.scrollingParent) {
 			this.scrollingParent.unscrollWhenDragNearEdges();
@@ -280,7 +302,10 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 
 		//TODO: look at that to do when there is more than one handler for a drop...
 		keys.forEach(function (key) {
-			var data = dataTransfer.getModel(key) || dataTransfer.getJSON(key) || dataTransfer.getData(key);
+			var data =
+				dataTransfer.getModel(key) ||
+				dataTransfer.getJSON(key) ||
+				dataTransfer.getData(key);
 
 			if (data) {
 				handlers[key](data, dataTransfer, e);
@@ -291,5 +316,5 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	__makePositiveOrZero: function (value, defaultValue) {
 		value = value ?? defaultValue;
 		return value < 0 ? defaultValue : value;
-	}
+	},
 });

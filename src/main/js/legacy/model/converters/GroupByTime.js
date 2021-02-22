@@ -1,111 +1,146 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.converters.GroupByTime',
+	{},
+	function () {
+		Ext.data.Types.GROUPBYTIME = {
+			type: 'groupByTime',
+			sortType: Ext.data.SortTypes.asUCString,
 
-module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime', {}, function () {
-	Ext.data.Types.GROUPBYTIME = {
-		type: 'groupByTime',
-		sortType: Ext.data.SortTypes.asUCString,
+			DAY: 86400, //seconds in a day
+			WEEK: 604800, //seconds in a week
 
-		DAY: 86400,//seconds in a day
-		WEEK: 604800, //seconds in a week
+			groupForElapsedTime: function (n, v) {
+				var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
+					oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
+					twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
+					oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
+					twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
+					threeWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -3 * 7),
+					//fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
+					oneMonthAgo = Ext.Date.add(now, Ext.Date.MONTH, -1),
+					twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
+					oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1),
+					weekday,
+					nextWeekday;
 
-		groupForElapsedTime: function (n, v) {
-			var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
-				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
-				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
-				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
-				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
-				threeWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -3 * 7),
-				//fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
-				oneMonthAgo = Ext.Date.add(now, Ext.Date.MONTH, -1),
-				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
-				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1),
-				weekday, nextWeekday;
+				function between(date, start, end) {
+					var t = date.getTime();
+					return start.getTime() < t && t <= end.getTime();
+				}
 
+				v = new Date(v.getFullYear(), v.getMonth(), v.getDate());
 
-			function between (date, start, end) {
-				var t = date.getTime();
-				return start.getTime() < t && t <= end.getTime();
-			}
+				//We take inspiration from outlook here.  Despite being a terrible piece of
+				//software it actually does this well.	Today, Yesterday, Wed, tue, ..., Last week,
+				//two weeks ago, three weeks ago, last month, this year, last year
 
+				if (between(v, oneDayAgo, now)) {
+					return now;
+				} //Today
 
-			v = new Date(v.getFullYear(), v.getMonth(), v.getDate());
+				if (between(v, twoDaysAgo, oneDayAgo)) {
+					return oneDayAgo;
+				} //Yesterday
 
-			//We take inspiration from outlook here.  Despite being a terrible piece of
-			//software it actually does this well.	Today, Yesterday, Wed, tue, ..., Last week,
-			//two weeks ago, three weeks ago, last month, this year, last year
+				if (between(v, oneWeekAgo, twoDaysAgo)) {
+					nextWeekday = twoDaysAgo;
 
-			if (between(v, oneDayAgo, now)) { return now; }//Today
+					do {
+						weekday = nextWeekday;
+						nextWeekday = Ext.Date.add(weekday, Ext.Date.DAY, -1);
+						if (between(v, nextWeekday, weekday)) {
+							return weekday;
+						}
+					} while (weekday > oneWeekAgo);
+				}
 
-			if (between(v, twoDaysAgo, oneDayAgo)) { return oneDayAgo; }//Yesterday
+				if (between(v, twoWeeksAgo, oneWeekAgo)) {
+					return oneWeekAgo;
+				} //Last Week
 
-			if (between(v, oneWeekAgo, twoDaysAgo)) {
-				nextWeekday = twoDaysAgo;
+				if (between(v, threeWeeksAgo, twoWeeksAgo)) {
+					return twoWeeksAgo;
+				} // Two Weeks ago
 
-				do {
-					weekday = nextWeekday;
-					nextWeekday = Ext.Date.add(weekday, Ext.Date.DAY, -1);
-					if (between(v, nextWeekday, weekday)) {
-						return weekday;
-					}
-				} while (weekday > oneWeekAgo);
+				if (between(v, oneMonthAgo, threeWeeksAgo)) {
+					return threeWeeksAgo;
+				} // Three Weeks ago
 
-			}
+				if (between(v, twoMonthsAgo, oneMonthAgo)) {
+					return oneMonthAgo;
+				} // Last Month
 
-			if (between(v, twoWeeksAgo, oneWeekAgo)) { return oneWeekAgo; }//Last Week
+				if (between(v, oneYearAgo, twoMonthsAgo)) {
+					return oneYearAgo;
+				} // This Year
 
-			if (between(v, threeWeeksAgo, twoWeeksAgo)) { return twoWeeksAgo; }// Two Weeks ago
+				return new Date(0); //Older
+			},
 
-			if (between(v, oneMonthAgo, threeWeeksAgo)) { return threeWeeksAgo; }// Three Weeks ago
+			groupTitle: function (groupValue, defaultValue, forceNow) {
+				var d = (forceNow || new Date()).setHours(0, 0, 0, 0),
+					c,
+					now = new Date(d),
+					tollerance = 0.0099;
 
-			if (between(v, twoMonthsAgo, oneMonthAgo)) { return oneMonthAgo; }// Last Month
+				function under(x, i) {
+					var dx = i - x;
+					dx = dx > 0 && dx < tollerance; //account for DST shifts
+					return x < i && !dx;
+				}
 
-			if (between(v, oneYearAgo, twoMonthsAgo)) { return oneYearAgo; }// This Year
+				if (!groupValue) {
+					return defaultValue;
+				}
 
-			return new Date(0); //Older
-		},
+				d = (d - groupValue.getTime()) / 1000;
 
-		groupTitle: function (groupValue, defaultValue, forceNow) {
-			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d),
-				tollerance = 0.0099;
+				if (groupValue.getTime() === 0) {
+					return 'Older';
+				}
 
-			function under (x, i) {
-				var dx = (i - x);
-				dx = dx > 0 && dx < tollerance;//account for DST shifts
-				return x < i && !dx;
-			}
+				if (d <= 0) {
+					return defaultValue;
+				} //Today
 
-			if (!groupValue) {
-				return defaultValue;
-			}
+				c = d / this.DAY;
+				if (under(c, 2)) {
+					return 'Yesterday';
+				}
+				if (under(c, 7)) {
+					return Ext.Date.format(groupValue, 'l');
+				} //Sunday, Monday, Tuesday, etc...
 
-			d = (d - groupValue.getTime()) / 1000;
+				c = d / this.WEEK;
 
-			if (groupValue.getTime() === 0) { return 'Older'; }
+				if (under(c, 2)) {
+					return 'Last week';
+				}
+				if (under(c, 3)) {
+					return '2 weeks ago';
+				}
+				if (under(c, 4)) {
+					return '3 weeks ago';
+				}
 
-			if (d <= 0) { return defaultValue; }//Today
+				if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) {
+					return 'This year';
+				}
 
-			c = d / this.DAY;
-			if (under(c, 2)) { return 'Yesterday'; }
-			if (under(c, 7)) { return Ext.Date.format(groupValue, 'l'); }//Sunday, Monday, Tuesday, etc...
+				return 'Last month';
+			},
 
-			c = d / this.WEEK;
+			convert: function (r, o) {
+				if (!r && this.mapping) {
+					r = o.get(this.mapping);
+				}
 
-			if (under(c, 2)) { return 'Last week'; }
-			if (under(c, 3)) { return '2 weeks ago'; }
-			if (under(c, 4)) { return '3 weeks ago'; }
-
-			if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) { return 'This year'; }
-
-			return 'Last month';
-		},
-
-		convert: function (r, o) {
-			if (!r && this.mapping) { r = o.get(this.mapping); }
-
-			var now = new Date(),
-				v = Ext.isDate(r) ? r : new Date(r * 1000);
-			return this.type.groupForElapsedTime(now, v);
-		}
-	};
-});
+				var now = new Date(),
+					v = Ext.isDate(r) ? r : new Date(r * 1000);
+				return this.type.groupForElapsedTime(now, v);
+			},
+		};
+	}
+);

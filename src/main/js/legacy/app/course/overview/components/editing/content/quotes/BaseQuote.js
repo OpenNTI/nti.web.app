@@ -6,12 +6,13 @@ const QUOTE_COMPLETED = 'inapp-quote-done';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.quotes.BaseQuote',
 	{
-		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+		extend:
+			'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-base-quote',
 
 		cls: '',
 
-		initComponent () {
+		initComponent() {
 			this.callParent(arguments);
 
 			let onPostMessage = this.onPostMessage.bind(this);
@@ -23,23 +24,27 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		onPostMessage (event) {
+		onPostMessage(event) {
 			if (event.data === QUOTE_COMPLETED) {
 				this.doBack();
 			}
 		},
 
-		showEditor () {
+		showEditor() {
 			this.showItemEditor();
 		},
 
-		showItemEditor () {
+		showItemEditor() {
 			if (this.itemEditorCmp) {
 				this.itemEditorCmp.destroy();
 				delete this.itemEditorCmp;
 			}
 			let u = $AppConfig.userObject;
-			let firstName = u.get('FirstName') || u.get('FullName') || u.get('realname') || '';
+			let firstName =
+				u.get('FirstName') ||
+				u.get('FullName') ||
+				u.get('realname') ||
+				'';
 			let email = u.get('email');
 			let clientSite = $AppConfig.siteName;
 
@@ -48,8 +53,10 @@ module.exports = exports = Ext.define(
 				cls: styles['quote-iframe'],
 				autoEl: {
 					tag: 'iframe',
-					src: `${this.hubspotPageUrl}?firstname=${firstName}${email ? `&email=${email}` : ''}&client_site_name=${clientSite}`
-				}
+					src: `${this.hubspotPageUrl}?firstname=${firstName}${
+						email ? `&email=${email}` : ''
+					}&client_site_name=${clientSite}`,
+				},
 			});
 		},
 	}

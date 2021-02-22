@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const DatePicker = require('legacy/common/form/fields/DatePicker');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
@@ -9,25 +9,22 @@ const Progress = require('legacy/common/form/fields/Progress');
 const URLCmp = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
 
-
 module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	extend: 'Ext.Component',
 	alias: 'widget.common-form',
 
 	statics: {
-
 		__getMessages: function () {
 			this.__errorMessages = this.__errorMessages || new ErrorMessages();
 
 			return this.__errorMessages;
 		},
 
-
 		getMessageForError: function (errors) {
 			var message = this.__getMessages();
 
 			return message.getMessageForErrors(errors);
-		}
+		},
 	},
 
 	/**
@@ -40,16 +37,18 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	cls: 'form-container',
 
 	INPUT_TYPES: {
-		group: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'group {name}'
-		})),
-
+		group: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'group {name}',
+			})
+		),
 
 		text: {
 			append: function (el, data, returnEl) {
 				var tpl,
 					config = {
-						cls: 'field {name}', cn: []
+						cls: 'field {name}',
+						cn: [],
 					},
 					input = {
 						tag: 'input',
@@ -58,14 +57,14 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						name: '{name}',
 						placeholder: '{placeholder}',
 						value: '{value:htmlEncode}',
-						tabindex: '1'
+						tabindex: '1',
 					};
 
 				if (data.displayName) {
 					config.cn.push({
 						tag: 'label',
-						'for': '{name}',
-						html: '{displayName}'
+						for: '{name}',
+						html: '{displayName}',
 					});
 				}
 
@@ -80,13 +79,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				config.cn.push(input);
 
 				config.cn.push({
-					cls: 'msg'
+					cls: 'msg',
 				});
 
 				tpl = new Ext.XTemplate(Ext.DomHelper.markup(config));
 
 				return tpl.append(el, data, returnEl);
-			}
+			},
 		},
 		// text: new Ext.XTemplate(Ext.DomHelper.markup({
 		//	cls: 'field {name}', cn: [
@@ -106,7 +105,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			append: function (el, data, returnEl) {
 				var tpl,
 					config = {
-						cls: 'field {name}', cn: []
+						cls: 'field {name}',
+						cn: [],
 					},
 					input = {
 						tag: 'textarea',
@@ -116,14 +116,14 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						placeholder: '{placeholder}',
 						value: '{value:htmlEncode}',
 						html: '{value}',
-						tabindex: '1'
+						tabindex: '1',
 					};
 
 				if (data.displayName) {
 					config.cn.push({
 						tag: 'label',
-						'for': '{name}',
-						html: '{displayName}'
+						for: '{name}',
+						html: '{displayName}',
 					});
 				}
 
@@ -138,13 +138,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				config.cn.push(input);
 
 				config.cn.push({
-					cls: 'msg'
+					cls: 'msg',
 				});
 
 				tpl = new Ext.XTemplate(Ext.DomHelper.markup(config));
 
 				return tpl.append(el, data, returnEl);
-			}
+			},
 		},
 
 		// textarea: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -161,65 +161,138 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		//	]
 		// })),
 
-		url: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name} url', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]}
-			]
-		})),
+		url: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'field {name} url',
+				cn: [
+					{
+						tag: 'tpl',
+						if: 'displayName',
+						cn: [
+							{
+								tag: 'label',
+								for: '{name}',
+								html: '{displayName}',
+							},
+						],
+					},
+				],
+			})
+		),
 
-		image: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name} image', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]}
-			]
-		})),
+		image: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'field {name} image',
+				cn: [
+					{
+						tag: 'tpl',
+						if: 'displayName',
+						cn: [
+							{
+								tag: 'label',
+								for: '{name}',
+								html: '{displayName}',
+							},
+						],
+					},
+				],
+			})
+		),
 
-		file: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name} file', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]}
-			]
-		})),
+		file: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'field {name} file',
+				cn: [
+					{
+						tag: 'tpl',
+						if: 'displayName',
+						cn: [
+							{
+								tag: 'label',
+								for: '{name}',
+								html: '{displayName}',
+							},
+						],
+					},
+				],
+			})
+		),
 
-		date: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name}', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]}
-			]
-		})),
+		date: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'field {name}',
+				cn: [
+					{
+						tag: 'tpl',
+						if: 'displayName',
+						cn: [
+							{
+								tag: 'label',
+								for: '{name}',
+								html: '{displayName}',
+							},
+						],
+					},
+				],
+			})
+		),
 
-		saveprogress: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'save-progress'
-		})),
+		saveprogress: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'save-progress',
+			})
+		),
 
-		hidden: new Ext.XTemplate(Ext.DomHelper.markup([
-			{tag: 'input', type: 'hidden', 'name': '{name}', value: '{value}'}
-		])),
+		hidden: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{
+					tag: 'input',
+					type: 'hidden',
+					name: '{name}',
+					value: '{value}',
+				},
+			])
+		),
 
-		submit: new Ext.XTemplate(Ext.DomHelper.markup([
-			{tag: 'input', type: 'submit', value: '{text}', cls: '{cls}'}
-		])),
+		submit: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{ tag: 'input', type: 'submit', value: '{text}', cls: '{cls}' },
+			])
+		),
 
-		emailtoken: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name}', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]}
-			]
-		}))
+		emailtoken: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'field {name}',
+				cn: [
+					{
+						tag: 'tpl',
+						if: 'displayName',
+						cn: [
+							{
+								tag: 'label',
+								for: '{name}',
+								html: '{displayName}',
+							},
+						],
+					},
+				],
+			})
+		),
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}'}
+		{
+			tag: 'form',
+			cls: 'common-form',
+			enctype: '{enctype}',
+			autocomplete: '{autocomplete}',
+			novalidate: true,
+			name: '{name}',
+		},
 	]),
 
 	renderSelectors: {
-		formEl: 'form'
+		formEl: 'form',
 	},
 
 	beforeRender: function () {
@@ -234,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			enctype: this.enctype || 'multipart/form-data',
 			autocomplete: this.autocomplete || 'off',
-			name: this.formName || 'form'
+			name: this.formName || 'form',
 		});
 	},
 
@@ -257,9 +330,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		me.onFormChange();
 
-		if(!me.noFocus) {
-			wait()
-				.then(me.focusField.bind(me));
+		if (!me.noFocus) {
+			wait().then(me.focusField.bind(me));
 		}
 	},
 
@@ -274,30 +346,35 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	enableSubmission () {
-		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+	enableSubmission() {
+		let submit =
+			this.el &&
+			this.el.dom &&
+			this.el.dom.querySelector('input[type=submit]');
 
 		if (submit) {
 			submit.removeAttribute('disabled');
 		}
 	},
 
-
-	disableSubmission () {
-		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+	disableSubmission() {
+		let submit =
+			this.el &&
+			this.el.dom &&
+			this.el.dom.querySelector('input[type=submit]');
 
 		if (submit) {
 			submit.setAttribute('disabled', 'disabeled');
 		}
 	},
 
-
 	focusField: function (name) {
-		var field = name ? {name: name} : this.getFirstField(),
+		var field = name ? { name: name } : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
-		if (input && input.focus) { input.focus(); }
+		if (input && input.focus) {
+			input.focus();
+		}
 	},
 
 	buildInputs: function (schema, el) {
@@ -322,7 +399,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		schema.value = this.defaultValues[schema.name];
 		inputEl = tpl.append(el, schema, true);
 
-
 		if (type === 'group') {
 			this.buildInputs(schema.inputs, inputEl);
 		} else if (type === 'image') {
@@ -346,7 +422,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		var dom = inputEl.dom;
 
 		if (schema.maxlength) {
-			dom.addEventListener('keyup', this.checkMaxLength.bind(this, schema, dom));
+			dom.addEventListener(
+				'keyup',
+				this.checkMaxLength.bind(this, schema, dom)
+			);
 		}
 
 		dom.addEventListener('keyup', this.onFormChange.bind(this));
@@ -358,7 +437,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			defaultValues: this.defaultValues,
 			schema: schema,
 			renderTo: inputEl,
-			onChange: this.onFormChange.bind(this)
+			onChange: this.onFormChange.bind(this),
 		});
 
 		this.componentMap[schema.name] = cmp;
@@ -380,21 +459,23 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		this.__buildComponent(URLCmp, schema, inputEl);
 	},
 
-	buildTagInput (schema, inputEl) {
+	buildTagInput(schema, inputEl) {
 		this.__buildComponent(EmailTokenField, schema, inputEl);
 	},
 
 	buildSaveProgress: function (schema, inputEl) {
 		this.saveProgressCmp = Progress.create({
 			schema: schema,
-			renderTo: inputEl
+			renderTo: inputEl,
 		});
 
 		this.saveProgressCmp.hide();
 	},
 
 	getFirstField: function (schema) {
-		var first, field, i = 0;
+		var first,
+			field,
+			i = 0;
 
 		schema = schema || this.schema;
 
@@ -414,7 +495,11 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	getInputForField: function (name) {
-		return this.__getComponent(name) || this.__getInput(name) || this.__getTextarea();
+		return (
+			this.__getComponent(name) ||
+			this.__getInput(name) ||
+			this.__getTextarea()
+		);
 	},
 
 	__getComponent: function (name) {
@@ -422,11 +507,16 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	__getInput: function (name) {
-		return this.el && this.el.dom.querySelector('input[name="' + name + '"]');
+		return (
+			this.el && this.el.dom.querySelector('input[name="' + name + '"]')
+		);
 	},
 
 	__getTextarea: function (name) {
-		return this.el && this.el.dom.querySelector('textarea[name="' + name + '"]');
+		return (
+			this.el &&
+			this.el.dom.querySelector('textarea[name="' + name + '"]')
+		);
 	},
 
 	/**
@@ -444,7 +534,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		var vals = this.getValues(),
 			key = e && e.keyCode;
 
-		if (this.onChange && (key !== Ext.EventObject.ENTER)) {
+		if (this.onChange && key !== Ext.EventObject.ENTER) {
 			this.onChange(vals);
 		}
 
@@ -505,7 +595,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
 			field = inputEl || textarea,
-			error, hasErrors = false;
+			error,
+			hasErrors = false;
 
 		if (cmp) {
 			if (cmp.getErrors) {
@@ -523,24 +614,22 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			}
 		});
 
-
 		return hasErrors && error;
 	},
 
-
-	__getErrorForField (field) {
+	__getErrorForField(field) {
 		let value = field.value;
 		let error = {};
 
-		if (field.required && !(value.trim().length)) {
+		if (field.required && !value.trim().length) {
 			error.missing = true;
 		}
 
-		error.missing = error.missing || field.validity && field.validity.valueMissing;
+		error.missing =
+			error.missing || (field.validity && field.validity.valueMissing);
 
 		return error;
 	},
-
 
 	__componentsEmpty: function () {
 		var components = this.componentMap,
@@ -626,13 +715,18 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			newValues = this.getValues(),
 			oldValues = this.defaultValues;
 
-		function reducer (acc, part) {
+		function reducer(acc, part) {
 			var oldValue = oldValues[part.name],
 				newValue = newValues[part.name];
 
 			if (part.type === 'group') {
 				part.inputs.reduce(reducer, acc);
-			} else if (sendAllValues || oldValue !== newValue || part.type === 'hidden' || part.keep === true) {
+			} else if (
+				sendAllValues ||
+				oldValue !== newValue ||
+				part.type === 'hidden' ||
+				part.keep === true
+			) {
 				//If the newValue is undefined assume that means null it out,
 				//so set it explicitly to null so the value makes it to the server
 				acc[part.name] = newValue === undefined ? null : newValue;
@@ -650,11 +744,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			keys = Object.keys(components),
 			formData;
 
-		if (!form) { return; }
+		if (!form) {
+			return;
+		}
 
 		formData = new FormData(form);
 
-		keys.forEach((key) => {
+		keys.forEach(key => {
 			var cmp = components[key];
 
 			if (cmp.appendToFormData) {
@@ -682,7 +778,9 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	onSubmitProgress: function (e) {
-		if (!this.saveProgressCmp) { return; }
+		if (!this.saveProgressCmp) {
+			return;
+		}
 
 		this.saveProgressCmp.setProgress(e.loaded, e.total);
 	},
@@ -703,7 +801,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				} else {
 					failure({
 						status: xhr.status,
-						responseText: xhr.responseText
+						responseText: xhr.responseText,
 					});
 				}
 			}
@@ -764,23 +862,31 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 
 		if (hasFiles) {
-			submit = me.__submitFormData(me.getFormData(), url, me.method || 'POST');
+			submit = me.__submitFormData(
+				me.getFormData(),
+				url,
+				me.method || 'POST'
+			);
 		} else {
-			submit = me.__submitJSON(me.getChangedValues(), url, me.method || 'POST');
+			submit = me.__submitJSON(
+				me.getChangedValues(),
+				url,
+				me.method || 'POST'
+			);
 		}
-
 
 		return submit
 			.then(function (results) {
 				if (progress) {
-					return progress.stop()
-						.then(function () {
-							me.removeCls('saving');
-							return results;
-						});
+					return progress.stop().then(function () {
+						me.removeCls('saving');
+						return results;
+					});
 				}
 
-				if(me.onSuccess) { me.onSuccess(results); }
+				if (me.onSuccess) {
+					me.onSuccess(results);
+				}
 
 				me.el.unmask();
 				return results;
@@ -790,17 +896,18 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 					progress.showError();
 					me.removeCls('saving');
 				} else {
-					if(me.el && me.el.unmask) {  me.el.unmask(); }
+					if (me.el && me.el.unmask) {
+						me.el.unmask();
+					}
 				}
 
-				if(me.onError) {
+				if (me.onError) {
 					me.onError(reason);
 				}
 
 				return Promise.reject(reason);
 			});
 	},
-
 
 	doSubmit: function () {
 		var submit;
@@ -814,7 +921,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return submit;
 	},
 
-
 	submitToRecord: function (record, silent) {
 		var link = record.getLink('edit'),
 			values = this.getChangedValues();
@@ -823,15 +929,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			return Promise.reject('No Edit Link');
 		}
 
-		return this.submitTo(link)
-			.then(function (response) {
-				record.set(values);
-				record.syncWithResponse(response, silent);
+		return this.submitTo(link).then(function (response) {
+			record.set(values);
+			record.syncWithResponse(response, silent);
 
-				return record;
-			});
+			return record;
+		});
 	},
-
 
 	showErrorOn: function (name, reason) {
 		var cmp = this.__getComponent(name),
@@ -865,7 +969,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
 	setPlaceholder: function (name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
@@ -881,7 +984,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			textarea.setAttribute('placeholder', value);
 		}
 	},
-
 
 	setValue: function (name, value) {
 		var cmp = this.__getComponent(name),
@@ -899,7 +1001,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
 	formSubmit: function (e) {
 		e.preventDefault();
 
@@ -908,5 +1009,5 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		} else {
 			this.doSubmit();
 		}
-	}
+	},
 });

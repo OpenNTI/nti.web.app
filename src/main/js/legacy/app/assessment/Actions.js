@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-const {Events} = require('@nti/web-session');
-const {scoped} = require('@nti/lib-locale');
+const { Events } = require('@nti/web-session');
+const { scoped } = require('@nti/lib-locale');
 
 const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
 const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');
@@ -18,39 +18,39 @@ const t = scoped('nti-web-app.assessment.Actions', {
 		errors: {
 			alreadySubmitted: {
 				title: 'This assignment has already been submitted',
-				msg: 'Clicking OK will reload the assignment and show the submission',
-				button: 'OK'
+				msg:
+					'Clicking OK will reload the assignment and show the submission',
+				button: 'OK',
 			},
 			pastDue: {
 				title: 'This assignment is past due',
-				msg: 'You can continue to view this assignment, but it cannot be submitted.',
-				button: 'OK'
+				msg:
+					'You can continue to view this assignment, but it cannot be submitted.',
+				button: 'OK',
 			},
 			conflict: {
 				title: 'This assignment has changed',
 				msg: 'Clicking OK will reload the assignment.',
-				button: 'OK'
+				button: 'OK',
 			},
 			unavailable: {
 				title: 'This assignment is no longer available',
 				msg: 'Clicking OK will exit the assignment.',
-				button: 'OK'
+				button: 'OK',
 			},
 			deletion: {
 				title: 'This assignment no longer exists',
 				msg: 'Clicking OK will exit the assignment.',
-				button: 'OK'
+				button: 'OK',
 			},
 			fileupload: {
 				title: 'A file upload question has changed',
 				msg: 'Clicking OK will reload the assignment.',
-				button: 'OK'
-			}
-		}
-	}
+				button: 'OK',
+			},
+		},
+	},
 });
-
-
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -61,16 +61,26 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		this.ContextStore = ContextStateStore.getInstance();
 	},
 
-	__getDataForSubmission: function (questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
-		var key, value, qData,
-			endTimeStamp = (new Date()).getTime(),
+	__getDataForSubmission: function (
+		questionSet,
+		submissionData,
+		containerId,
+		startTime,
+		questionCls,
+		questionMime,
+		questionId
+	) {
+		var key,
+			value,
+			qData,
+			endTimeStamp = new Date().getTime(),
 			//in seconds
 			duration = (endTimeStamp - startTime) / 1000,
 			data = {
 				ContainerId: containerId,
 				questionSetId: questionSet.getId(),
 				questions: [],
-				CreatorRecordedEffortDuration: duration
+				CreatorRecordedEffortDuration: duration,
 			};
 
 		for (key in submissionData) {
@@ -78,11 +88,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				value = submissionData[key];
 
 				qData = {
-					'Class': questionCls,
+					Class: questionCls,
 					MimeType: questionMime,
 					ContainerId: containerId,
 					NTIID: key,
-					parts: value
+					parts: value,
 				};
 
 				qData[questionId] = key;
@@ -94,7 +104,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-	__getDataForQuestionSubmission: function (questionSet, submissionData, containerId, startTime) {
+	__getDataForQuestionSubmission: function (
+		questionSet,
+		submissionData,
+		containerId,
+		startTime
+	) {
 		return this.__getDataForSubmission(
 			questionSet,
 			submissionData,
@@ -106,7 +121,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		);
 	},
 
-	__getDataForSurveySubmission: function (survey, submissionData, containerId, startTime) {
+	__getDataForSurveySubmission: function (
+		survey,
+		submissionData,
+		containerId,
+		startTime
+	) {
 		var data = this.__getDataForSubmission(
 			survey,
 			submissionData,
@@ -125,22 +145,36 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-	gradeAssessment: function (questionSet, submissionData, container, startTime) {
-		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, container.NTIID, startTime),
+	gradeAssessment: function (
+		questionSet,
+		submissionData,
+		container,
+		startTime
+	) {
+		var data = this.__getDataForQuestionSubmission(
+				questionSet,
+				submissionData,
+				container.NTIID,
+				startTime
+			),
 			qsetSubmission;
 
 		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
 
-		const coursePagesLink = container.currentBundle && container.currentBundle.getLink('Pages');
+		const coursePagesLink =
+			container.currentBundle && container.currentBundle.getLink('Pages');
 
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
-				url: questionSet.getLink('PracticeSubmission') || coursePagesLink,
+				url:
+					questionSet.getLink('PracticeSubmission') ||
+					coursePagesLink,
 				callback: function () {},
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
-					questionSet.getInterfaceInstance()
+					questionSet
+						.getInterfaceInstance()
 						.then(q => Events.emit(Events.ASSESSMENT_SUBMITTED, q));
 
 					fulfill(result);
@@ -149,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					console.error('FAIL', arguments);
 					alert('There was a problem grading your quiz.');
 					reject();
-				}
+				},
 			});
 		});
 	},
@@ -158,19 +192,29 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return Service.getObjectURL(id);
 	},
 
-
-	getAssessmentSubmissionURL (id, bundle) {
+	getAssessmentSubmissionURL(id, bundle) {
 		return (bundle && bundle.getAssessmentURL(id)) || this.getObjectURL(id);
 	},
 
-	getInquirySubmissionURL (id, bundle) {
+	getInquirySubmissionURL(id, bundle) {
 		return (bundle && bundle.getInquiriesURL(id)) || this.getObjectURL(id);
 	},
 
-
-	submitSurvey: function (survey, submissionData, containerId, startTime, bundle) {
-		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
-			surveySubmission, me = this;
+	submitSurvey: function (
+		survey,
+		submissionData,
+		containerId,
+		startTime,
+		bundle
+	) {
+		var data = this.__getDataForSurveySubmission(
+				survey,
+				submissionData,
+				containerId,
+				startTime
+			),
+			surveySubmission,
+			me = this;
 
 		surveySubmission = AssessmentSurveySubmission.create(data);
 
@@ -186,21 +230,33 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleSurveyConflictError(survey);
-					}  else {
+					} else {
 						console.error('Failed to submit survey: ', arguments);
 						alert('There was a problem submitting your survey.');
 					}
 					reject(err);
-				}
+				},
 			});
 		});
 	},
 
-	submitAssignment: function (questionSet, submissionData, containerId, startTime, bundle) {
-		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
+	submitAssignment: function (
+		questionSet,
+		submissionData,
+		containerId,
+		startTime,
+		bundle
+	) {
+		var data = this.__getDataForQuestionSubmission(
+				questionSet,
+				submissionData,
+				containerId,
+				startTime
+			),
 			assignment = questionSet && questionSet.associatedAssignment,
 			assignmentId = assignment.getId(),
-			qsetSubmission, assignmentSubmission;
+			qsetSubmission,
+			assignmentSubmission;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
@@ -209,25 +265,45 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			assignmentId: assignmentId,
 			parts: [qsetSubmission],
 			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
-			version: assignment.get('version')
+			version: assignment.get('version'),
 		});
 
 		if (assignment && assignment.getLink('PracticeSubmission')) {
-			return this.doSubmitAssignment(assignmentSubmission, assignment, true);
+			return this.doSubmitAssignment(
+				assignmentSubmission,
+				assignment,
+				true
+			);
 		} else {
-			return this.doSubmitAssignment(assignmentSubmission, assignment, false, bundle);
+			return this.doSubmitAssignment(
+				assignmentSubmission,
+				assignment,
+				false,
+				bundle
+			);
 		}
 	},
 
-	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission, bundle) {
+	doSubmitAssignment: function (
+		assignmentSubmission,
+		assignment,
+		isPracticeSubmission,
+		bundle
+	) {
 		const assignmentId = assignment.getId();
 		const me = this;
-		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getAssessmentSubmissionURL(assignmentId, bundle);
+		const link = isPracticeSubmission
+			? assignment.getLink('PracticeSubmission')
+			: me.getAssessmentSubmissionURL(assignmentId, bundle);
 		let responseJSON;
 
-		assignmentSubmission.getProxy().on('exception', (proxy, response) => {
-			responseJSON = Ext.JSON.decode(response.responseText, true);
-		}, this);
+		assignmentSubmission.getProxy().on(
+			'exception',
+			(proxy, response) => {
+				responseJSON = Ext.JSON.decode(response.responseText, true);
+			},
+			this
+		);
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
@@ -235,19 +311,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				success: function (self, op) {
 					var pendingAssessment = op.getResultSet().records[0],
 						result = pendingAssessment.get('parts')[0],
-						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
+						itemLink = pendingAssessment.getLink(
+							'AssignmentHistoryItem'
+						);
 
 					assignment.setHistoryLink(itemLink);
 
-					assignment.getInterfaceInstance()
+					assignment
+						.getInterfaceInstance()
 						.then(a => Events.emit(Events.ASSIGNMENT_SUBMITTED, a));
-
 
 					fulfill({
 						result: result,
 						itemLink: itemLink,
 						assignmentId: assignmentId,
-						isPracticeSubmission
+						isPracticeSubmission,
 					});
 				},
 				failure: function (rec, resp) {
@@ -255,22 +333,43 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
-					} else if (err && (err.status === 404 || err.status === 403)) {
+					} else if (
+						err &&
+						(err.status === 404 || err.status === 403)
+					) {
 						me.handleDeletionError(assignment);
-					} else if (err && err.status === 422 && responseJSON && responseJSON.field === 'filename') {
+					} else if (
+						err &&
+						err.status === 422 &&
+						responseJSON &&
+						responseJSON.field === 'filename'
+					) {
 						me.handleFileUploadError(assignment);
 					} else {
-						alert('There was a problem submitting your assignment.');
+						alert(
+							'There was a problem submitting your assignment.'
+						);
 					}
 					reject(err);
-				}
+				},
 			});
 		});
 	},
 
-	saveProgress: function (questionSet, submissionData, startTime, onSubmitted) {
-		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
-			qsetSubmission, assignmentSubmission,
+	saveProgress: function (
+		questionSet,
+		submissionData,
+		startTime,
+		onSubmitted
+	) {
+		var data = this.__getDataForQuestionSubmission(
+				questionSet,
+				submissionData,
+				'',
+				startTime
+			),
+			qsetSubmission,
+			assignmentSubmission,
 			assignment = questionSet.associatedAssignment;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
@@ -280,12 +379,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			assignmentId: assignment.getId(),
 			parts: [qsetSubmission],
 			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
-			version: assignment.get('version')
+			version: assignment.get('version'),
 		});
 
-		return this.doSaveProgress(assignmentSubmission, assignment, onSubmitted);
+		return this.doSaveProgress(
+			assignmentSubmission,
+			assignment,
+			onSubmitted
+		);
 	},
-
 
 	doSaveProgress: function (assignmentSubmission, assignment, onSubmitted) {
 		const url = assignment && assignment.getLink('Savepoint');
@@ -309,28 +411,37 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
 					} else if (err && err.status === 403) {
-						if(err.responseJson && err.responseJson.code === 'SubmissionPastDueDateError') {
+						if (
+							err.responseJson &&
+							err.responseJson.code ===
+								'SubmissionPastDueDateError'
+						) {
 							me.handlePastDueError(assignment);
-						}
-						else {
+						} else {
 							me.handleUnavailableError(assignment);
 						}
 					} else if (err && err.status === 404) {
 						me.handleDeletionError(assignment);
 					} else if (err && err.status === 422) {
-						if (err.responseJson && err.responseJson.code === 'MissingMetadataAttemptInProgressError') {
-							me.handleNoAttemptInProgress(assignment, onSubmitted);
+						if (
+							err.responseJson &&
+							err.responseJson.code ===
+								'MissingMetadataAttemptInProgressError'
+						) {
+							me.handleNoAttemptInProgress(
+								assignment,
+								onSubmitted
+							);
 						}
 					}
 
 					fulfill(err);
-				}
+				},
 			});
 		});
 	},
 
-
-	handleNoAttemptInProgress (assignment, onSubmitted) {
+	handleNoAttemptInProgress(assignment, onSubmitted) {
 		Ext.MessageBox.alert({
 			title: t('assignments.errors.alreadySubmitted.title'),
 			msg: t('assignments.errors.alreadySubmitted.msg'),
@@ -339,34 +450,34 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.alreadySubmitted.button')
+					text: t('assignments.errors.alreadySubmitted.button'),
+				},
+			},
+			fn: button => {
+				if (button === 'yes' && assignment) {
+					assignment.updateFromServer().then(async () => {
+						try {
+							const history = await assignment.getHistory();
+							const pendingAssessment = history.get(
+								'pendingAssessment'
+							);
+							const result = pendingAssessment.get('parts')[0];
+
+							if (onSubmitted) {
+								onSubmitted({
+									result,
+									itemLink: assignment.getLink('History'),
+									assignmentId: assignment.getId(),
+								});
+							}
+						} catch (e) {
+							//swallow
+						}
+					});
 				}
 			},
-			fn: (button) => {
-				if (button === 'yes' && assignment) {
-					assignment.updateFromServer()
-						.then(async () => {
-							try {
-								const history = await assignment.getHistory();
-								const pendingAssessment = history.get('pendingAssessment');
-								const result = pendingAssessment.get('parts')[0];
-
-								if (onSubmitted) {
-									onSubmitted({
-										result,
-										itemLink: assignment.getLink('History'),
-										assignmentId: assignment.getId()
-									});
-								}
-							} catch (e) {
-								//swallow
-							}
-						});
-				}
-			}
 		});
 	},
-
 
 	handlePastDueError: function (assignment) {
 		Ext.MessageBox.alert({
@@ -377,12 +488,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.pastDue.button')
-				}
+					text: t('assignments.errors.pastDue.button'),
+				},
 			},
-			fn: function (button) {
-
-			}
+			fn: function (button) {},
 		});
 	},
 
@@ -395,20 +504,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.conflict.button')
-				}
+					text: t('assignments.errors.conflict.button'),
+				},
 			},
 			fn: function (button) {
 				if (button === 'yes' && assignment) {
-					assignment.updateFromServer()
-						.then(function () {
-							assignment.fireEvent('refresh');
-						});
+					assignment.updateFromServer().then(function () {
+						assignment.fireEvent('refresh');
+					});
 				}
-			}
+			},
 		});
 	},
-
 
 	handleSurveyConflictError: function (survey) {
 		Ext.MessageBox.alert({
@@ -419,22 +526,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
-				}
+					text: 'OK',
+				},
 			},
 			fn: function (button) {
 				if (button === 'yes' && survey) {
-					survey.updateFromServer()
-						.then(function () {
-							survey.fireEvent('refresh');
-						});
+					survey.updateFromServer().then(function () {
+						survey.fireEvent('refresh');
+					});
 				}
-			}
+			},
 		});
 	},
 
-
-	handleUnavailableError (assignment) {
+	handleUnavailableError(assignment) {
 		Ext.MessageBox.alert({
 			title: t('assignments.errors.unavailable.title'),
 			msg: t('assignments.errors.unavailable.msg'),
@@ -443,17 +548,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.unavailable.button')
-				}
+					text: t('assignments.errors.unavailable.button'),
+				},
 			},
 			fn: function (button) {
 				if (button === 'yes' && assignment) {
 					assignment.fireEvent('deleted');
 				}
-			}
+			},
 		});
 	},
-
 
 	handleDeletionError: function (assignment) {
 		Ext.MessageBox.alert({
@@ -464,14 +568,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.deletion.button')
-				}
+					text: t('assignments.errors.deletion.button'),
+				},
 			},
 			fn: function (button) {
 				if (button === 'yes' && assignment) {
 					assignment.fireEvent('deleted');
 				}
-			}
+			},
 		});
 	},
 
@@ -484,35 +588,40 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: t('assignments.errors.fileupload.button')
-				}
+					text: t('assignments.errors.fileupload.button'),
+				},
 			},
 			fn: function (button) {
 				if (button === 'yes' && assignment) {
-					assignment.updateFromServer()
-						.then(function () {
-							assignment.fireEvent('refresh');
-						});
+					assignment.updateFromServer().then(function () {
+						assignment.fireEvent('refresh');
+					});
 				}
-			}
+			},
 		});
 	},
 
-	checkAnswer: function (question, answerValues, startTime, canSubmitIndividually) {
-		var endTimestamp = (new Date()).getTime(),
+	checkAnswer: function (
+		question,
+		answerValues,
+		startTime,
+		canSubmitIndividually
+	) {
+		var endTimestamp = new Date().getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
 			// SelfAssessments (and maybe assignments) could be re-submitted.
 			duration = (endTimestamp - startTime) / 1000,
 			readerContext = this.ContextStore.getReaderLocation(),
-			containerId = canSubmitIndividually ? question.getId() : readerContext.NTIID,
+			containerId = canSubmitIndividually
+				? question.getId()
+				: readerContext.NTIID,
 			submission = AssessmentQuestionSubmission.create({
 				ContainerId: containerId,
 				questionId: question.getId(),
 				parts: answerValues,
-				CreatorRecordedEffortDuration: duration
+				CreatorRecordedEffortDuration: duration,
 			});
-
 
 		return new Promise(function (fulfill, reject) {
 			submission.save({
@@ -524,13 +633,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
-				}
+				},
 			});
 		});
 	},
 
-	submitPoll: function (poll, answerValues, startTime, canSubmitIndividually, bundle) {
-		var endTimeStamp = (new Date()).getTime(),
+	submitPoll: function (
+		poll,
+		answerValues,
+		startTime,
+		canSubmitIndividually,
+		bundle
+	) {
+		var endTimeStamp = new Date().getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
 			// SelfAssessments (and maybe assignments) could be re-submitted.
@@ -543,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				questionId: poll.getId(),
 				parts: answerValues,
 				CreatorRecordedEffortDuration: duration,
-				version: poll.get('version')
+				version: poll.get('version'),
 			});
 
 		return new Promise((fulfill, reject) => {
@@ -557,8 +672,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
-				}
+				},
 			});
 		});
-	}
+	},
 });

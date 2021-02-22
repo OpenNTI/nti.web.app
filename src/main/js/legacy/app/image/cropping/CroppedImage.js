@@ -2,41 +2,39 @@ const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.image.cropping.CroppedImage',
+	{
+		constructor: function (config) {
+			this.blob = config.blob;
+			this.name = config.name;
 
-module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedImage', {
-	constructor: function (config) {
-		this.blob = config.blob;
-		this.name = config.name;
+			this.urlObject = Globals.getURLObject();
+		},
 
-		this.urlObject = Globals.getURLObject();
-	},
+		getName: function () {
+			return this.name;
+		},
 
+		getBlob: function () {
+			return this.blob;
+		},
 
-	getName: function () {
-		return this.name;
-	},
+		getURL: function () {
+			if (!this.url && this.urlObject) {
+				this.url = this.urlObject.createObjectURL(this.blob);
+			}
 
+			return this.url;
+		},
 
-	getBlob: function () {
-		return this.blob;
-	},
+		cleanUp: function () {
+			if (this.url && this.urlObject) {
+				this.urlObject.revokeObjectURL(this.url);
+				delete this.url;
+			}
 
-
-	getURL: function () {
-		if (!this.url && this.urlObject) {
-			this.url = this.urlObject.createObjectURL(this.blob);
-		}
-
-		return this.url;
-	},
-
-
-	cleanUp: function () {
-		if (this.url && this.urlObject) {
-			this.urlObject.revokeObjectURL(this.url);
-			delete this.url;
-		}
-
-		delete this.blob;
+			delete this.blob;
+		},
 	}
-});
+);

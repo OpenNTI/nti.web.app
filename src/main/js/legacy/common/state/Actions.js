@@ -7,7 +7,6 @@ const StateStateStore = require('./StateStore');
 
 require('../Actions');
 
-
 module.exports = exports = Ext.define('NextThought.common.state.Actions', {
 	extend: 'NextThought.common.Actions',
 
@@ -17,7 +16,9 @@ module.exports = exports = Ext.define('NextThought.common.state.Actions', {
 		this.LoginStore = LoginStateStore.getInstance();
 		this.StateStore = StateStateStore.getInstance();
 
-		if (this.StateStore.loaded) { return; }
+		if (this.StateStore.loaded) {
+			return;
+		}
 
 		if ($AppConfig.username) {
 			this.onLogin();
@@ -32,5 +33,5 @@ module.exports = exports = Ext.define('NextThought.common.state.Actions', {
 
 	setState: function (key, state) {
 		this.StateStore.setState(key, state);
-	}
+	},
 });

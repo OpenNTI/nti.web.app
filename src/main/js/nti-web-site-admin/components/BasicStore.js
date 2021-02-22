@@ -6,7 +6,7 @@ import Connector from '@nti/lib-store-connector';
 const Instance = Symbol('Instance');
 
 export default class BasicStore extends EventEmitter {
-	static getInstance () {
+	static getInstance() {
 		const Store = this;
 
 		this[Instance] = this[Instance] || new Store();
@@ -14,40 +14,37 @@ export default class BasicStore extends EventEmitter {
 		return this[Instance];
 	}
 
-	static connect (propMap, storeProp = 'store') {
+	static connect(propMap, storeProp = 'store') {
 		const store = this.getInstance();
 		const extraProps = {
-			[storeProp]: store
+			[storeProp]: store,
 		};
 
 		return function (component) {
-			function StoreConnector (props) {
-				return React.createElement(component, {...extraProps, ...props});
+			function StoreConnector(props) {
+				return React.createElement(component, {
+					...extraProps,
+					...props,
+				});
 			}
 
-			return Connector.connect(
-				store,
-				StoreConnector,
-				propMap
-			);
+			return Connector.connect(store, StoreConnector, propMap);
 		};
 	}
 
-	get (key) {
+	get(key) {
 		return this[key];
 	}
 
-	emitChange (type) {
-		this.emit('change', {type});
+	emitChange(type) {
+		this.emit('change', { type });
 	}
 
-
-	addChangeListener (fn) {
+	addChangeListener(fn) {
 		this.addListener('change', fn);
 	}
 
-
-	removeChangeListener (fn) {
+	removeChangeListener(fn) {
 		this.removeListener('change', fn);
 	}
 }

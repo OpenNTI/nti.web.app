@@ -2,21 +2,21 @@ const Ext = require('@nti/extjs');
 
 const B64 = require('legacy/util/Base64');
 
-function prefix (v) {
+function prefix(v) {
 	if (!prefix.val) {
 		prefix.val = B64.encode($AppConfig.username).concat('-');
 	}
 	return prefix.val.concat(v);
 }
 
-
-function AbstractStorage (storage, noPrefix) {
+function AbstractStorage(storage, noPrefix) {
 	this.currentVersion = 2;
-	if (!storage
-		|| !typeof storage.removeItem === 'function'
-		|| !typeof storage.setItem === 'function'
-		|| !typeof storage.getItem === 'function'
-		|| !typeof storage.clear === 'function'
+	if (
+		!storage ||
+		!typeof storage.removeItem === 'function' ||
+		!typeof storage.setItem === 'function' ||
+		!typeof storage.getItem === 'function' ||
+		!typeof storage.clear === 'function'
 	) {
 		Ext.Error.raise('Given storage object does not implement Storage api');
 	}
@@ -35,40 +35,42 @@ function AbstractStorage (storage, noPrefix) {
 }
 
 Object.assign(AbstractStorage.prototype, {
-	prefix (v) {return v;},
+	prefix(v) {
+		return v;
+	},
 
-
-	setItem (key, value) {
+	setItem(key, value) {
 		return this.set(key, value);
 	},
 
-
-	getItem (key) {
+	getItem(key) {
 		return this.get(key);
 	},
 
-
-	set (key, value) {
+	set(key, value) {
 		let old = this.get(key);
 		let encKey = this.prefix(key);
 		let encVal = Ext.encode(value);
 
 		try {
 			this.backingStore.setItem(encKey, encVal);
-		}
-		catch (e) {
+		} catch (e) {
 			this.removeAll();
 			try {
 				this.backingStore.setItem(encKey, encVal);
 			} catch (er) {
-				console.error('Trouble setting a value in storage: %o', er, key, value);
+				console.error(
+					'Trouble setting a value in storage: %o',
+					er,
+					key,
+					value
+				);
 			}
 		}
 		return old;
 	},
 
-
-	get (key) {
+	get(key) {
 		//Migrate:
 		let old = this.backingStore.getItem(key);
 		if (old && this.prefix(key) !== key) {
@@ -83,8 +85,7 @@ Object.assign(AbstractStorage.prototype, {
 		}
 	},
 
-
-	getProperty (key, property, defaultValue) {
+	getProperty(key, property, defaultValue) {
 		let o = this.get(key) || {};
 
 		property = property.split('/');
@@ -97,8 +98,7 @@ Object.assign(AbstractStorage.prototype, {
 		return (o && o[property[0]]) || defaultValue;
 	},
 
-
-	updateProperty (key, property, value) {
+	updateProperty(key, property, value) {
 		let o = this.get(key) || {};
 		let v = o;
 
@@ -108,7 +108,7 @@ Object.assign(AbstractStorage.prototype, {
 			//comment this loop out if property-paths are causing problems.
 			while (o && property.length > 1) {
 				let p = property.shift();
-				o = (o[p] = (o[p] || {}));//ensure the path exits
+				o = o[p] = o[p] || {}; //ensure the path exits
 			}
 
 			o[property[0]] = value;
@@ -118,37 +118,46 @@ Object.assign(AbstractStorage.prototype, {
 
 			return this.set(key, v);
 		} catch (e) {
-			console.warn('Storage property did not get set.', arguments, e.stack || e.message || e);
+			console.warn(
+				'Storage property did not get set.',
+				arguments,
+				e.stack || e.message || e
+			);
 		}
 	},
 
-
-	removeProperty (key, property) {
+	removeProperty(key, property) {
 		return this.updateProperty(key, property, undefined);
 	},
 
-
-	remove (key) {
+	remove(key) {
 		this.backingStore.removeItem(key);
 	},
 
-
-	removeAll () {
+	removeAll() {
 		this.backingStore.clear();
-	}
-
+	},
 });
-
 
 const fallback = {
 	data: {},
-	removeItem (k) {delete this.data[k];},
-	setItem (k, v) {this.data[k] = v; /*console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');*/},
-	getItem (k) {return this.data[k];},
-	clear () {this.data = {};}
+	removeItem(k) {
+		delete this.data[k];
+	},
+	setItem(k, v) {
+		this.data[
+			k
+		] = v; /*console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');*/
+	},
+	getItem(k) {
+		return this.data[k];
+	},
+	clear() {
+		this.data = {};
+	},
 };
 
-function isStorageSupported (storage) {
+function isStorageSupported(storage) {
 	let testKey = 'test';
 	try {
 		storage.setItem(testKey, '1');
@@ -163,12 +172,18 @@ let ss, ls;
 try {
 	ss = global.sessionStorage;
 	ls = global.localStorage;
-	if (!isStorageSupported(ss)) { ss = null; }
-	if (!isStorageSupported(ls)) { ls = ss; }
+	if (!isStorageSupported(ss)) {
+		ss = null;
+	}
+	if (!isStorageSupported(ls)) {
+		ls = ss;
+	}
 } catch (e) {
-	console.error('Could not acces browser storage %o', e.stack || e.message || e);
+	console.error(
+		'Could not acces browser storage %o',
+		e.stack || e.message || e
+	);
 }
-
 
 const TemporaryStorage = new AbstractStorage(ss || fallback, true);
 const PersistentStorage = new AbstractStorage(ls || fallback);
@@ -177,12 +192,11 @@ Object.assign(exports, {
 	TemporaryStorage,
 	PersistentStorage,
 
-	getLocalStorage () {
+	getLocalStorage() {
 		return PersistentStorage;
 	},
 
-
-	getSessionStorage () {
+	getSessionStorage() {
 		return TemporaryStorage;
-	}
+	},
 });

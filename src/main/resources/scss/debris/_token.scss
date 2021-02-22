@@ -1,4 +1,3 @@
-
 .x-component-tokens {
 	position: relative;
 	overflow: hidden;
@@ -33,7 +32,10 @@
 		color: var(--secondary-grey);
 		vertical-align: middle;
 
-		&.person, &.public, &.group, &.list {
+		&.person,
+		&.public,
+		&.group,
+		&.list {
 			&::after {
 				content: '';
 				position: absolute;
@@ -43,7 +45,11 @@
 			}
 		}
 
-		&.person { &::after { display: none; } }
+		&.person {
+			&::after {
+				display: none;
+			}
+		}
 
 		&.public {
 			padding-left: 22px !important;
@@ -75,7 +81,8 @@
 			}
 		}
 
-		.value,.x {
+		.value,
+		.x {
 			position: relative;
 			display: inline-block;
 			vertical-align: middle;
@@ -145,7 +152,7 @@
 
 			.x-ie10 &,
 			.x-ie & {
-				height: 30px;//for IE
+				height: 30px; //for IE
 				bottom: inherit;
 				width: 100%;
 			}
@@ -187,7 +194,9 @@
 				.token:hover {
 					padding: 0 10px 0 10px;
 					margin: 3px 3px 3px 0;
-					.x { display: none; }
+					.x {
+						display: none;
+					}
 				}
 
 				.plus {

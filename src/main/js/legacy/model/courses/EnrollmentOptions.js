@@ -2,59 +2,66 @@ const Ext = require('@nti/extjs');
 
 require('../Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.courses.EnrollmentOptions',
+	{
+		extend: 'NextThought.model.Base',
+		mimeType: 'application/vnd.nextthought.courseware.enrollmentoptions',
 
-module.exports = exports = Ext.define('NextThought.model.courses.EnrollmentOptions', {
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.courseware.enrollmentoptions',
+		fields: [
+			{
+				name: 'Items',
+				type: 'auto',
+				converter: function (v) {
+					return Ext.clone(v);
+				},
+			},
+		],
 
-	fields: [
-		{name: 'Items', type: 'auto', converter: function (v) {
-			return Ext.clone(v);
-		}}
-	],
+		getType: function (name) {
+			var items = this.get('Items');
 
+			return items[name];
+		},
 
-	getType: function (name) {
-		var items = this.get('Items');
+		setType: function (name, option) {
+			var items = this.get('Items');
 
-		return items[name];
-	},
+			items[name] = option;
 
-	setType: function (name, option) {
-		var items = this.get('Items');
+			this.set('Items', items);
+		},
 
-		items[name] = option;
+		/**
+		 * For now, a course is droppable when we have an explicit open enrollment. Otherwise, it's not.
+		 * @returns {boolean} whether it's droppable or not.
+		 */
+		isDroppable: function () {
+			var items = this.get('Items') || {};
 
-		this.set('Items', items);
-	},
-
-	/**
-	 * For now, a course is droppable when we have an explicit open enrollment. Otherwise, it's not.
-	 * @returns {boolean} whether it's droppable or not.
-	 */
-	isDroppable: function () {
-		var items = this.get('Items') || {};
-
-		if (!items['OpenEnrollment'] || items['OpenEnrollment'].IsEnrolled !== true) {
-			return false;
-		}
-
-		return true;
-	},
-
-
-	isEnrollable () {
-		const items = this.get('Items') || {};
-		const types = Object.keys(items);
-
-		for (let name of types) {
-			const option = items[name];
-
-			if (option.IsAvailable) {
-				return true;
+			if (
+				!items['OpenEnrollment'] ||
+				items['OpenEnrollment'].IsEnrolled !== true
+			) {
+				return false;
 			}
-		}
 
-		return false;
+			return true;
+		},
+
+		isEnrollable() {
+			const items = this.get('Items') || {};
+			const types = Object.keys(items);
+
+			for (let name of types) {
+				const option = items[name];
+
+				if (option.IsAvailable) {
+					return true;
+				}
+			}
+
+			return false;
+		},
 	}
-});
+);

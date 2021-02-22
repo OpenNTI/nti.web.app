@@ -1,111 +1,121 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.controls.Visibility',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.overview-editing-controls-visibility',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Visibility', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls-visibility',
+		cls: 'nt-button visibility',
 
-	cls: 'nt-button visibility',
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'title', html: 'Visibility:' },
+			{ cls: 'scope', cn: [{ cls: 'text' }] },
+			{
+				cls: 'menu-container',
+				cn: [
+					{
+						cls: 'options',
+						cn: [
+							{
+								tag: 'tpl',
+								for: 'options',
+								cn: [
+									{
+										cls: 'option',
+										html: '{.}',
+										'data-scope': '{.}',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'title', html: 'Visibility:'},
-		{cls: 'scope', cn: [
-			{cls: 'text'}
-		]},
-		{cls: 'menu-container', cn: [{
-			cls: 'options', cn: [
-				{tag: 'tpl', 'for': 'options', cn: [
-					{cls: 'option', html: '{.}', 'data-scope': '{.}'}
-				]}
-			]}
-		]}
-	]),
+		renderSelectors: {
+			scopeEl: '.scope',
+			textEl: '.scope .text',
+			menuContainer: '.menu-container',
+			optionEl: '.options .option',
+		},
 
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		scopeEl: '.scope',
-		textEl: '.scope .text',
-		menuContainer: '.menu-container',
-		optionEl: '.options .option'
-	},
+			this.renderData = Ext.apply(this.renderData || {}, {
+				options: this.schema ? this.schema.choices : [],
+			});
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
+			var selection;
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.mon(this.scopeEl, 'click', this.toggleMenu.bind(this));
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			options: this.schema ? this.schema.choices : []
-		});
-	},
+			if (this.defaultValue) {
+				this.textEl.update(this.getDefaultValue());
+				this.selected = this.defaultValue;
+				selection = this.el.down(
+					'.option[data-scope=' + this.defaultValue + ']'
+				);
+				this.selectOption(selection);
+			}
 
+			this.mon(
+				this.el.select('.option'),
+				'click',
+				this.onVisibilityChange.bind(this)
+			);
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
-		var selection;
+		onVisibilityChange: function (e) {
+			var target = e.target,
+				scope = target && target.getAttribute('data-scope');
 
-		this.mon(this.scopeEl, 'click', this.toggleMenu.bind(this));
+			this.selectOption(target);
+			this.scopeEl.update(scope);
+			this.selected = scope;
+			if (this.onChange) {
+				this.onChange(this);
+			}
 
-		if (this.defaultValue) {
-			this.textEl.update(this.getDefaultValue());
-			this.selected = this.defaultValue;
-			selection = this.el.down('.option[data-scope=' + this.defaultValue + ']');
-			this.selectOption(selection);
-		}
+			this.toggleMenu();
+		},
 
-		this.mon(this.el.select('.option'), 'click', this.onVisibilityChange.bind(this));
-	},
+		selectOption: function (item) {
+			var current = this.el.down('.option.selected'),
+				newItem = item && Ext.fly(item);
 
+			if (current) {
+				current.removeCls('selected');
+			}
 
-	onVisibilityChange: function (e) {
-		var target = e.target,
-			scope = target && target.getAttribute('data-scope');
+			if (newItem) {
+				Ext.fly(newItem).addCls('selected');
+			}
+		},
 
-		this.selectOption(target);
-		this.scopeEl.update(scope);
-		this.selected = scope;
-		if (this.onChange) {
-			this.onChange(this);
-		}
+		getDefaultValue: function () {
+			return this.defaultValue || 'everyone';
+		},
 
-		this.toggleMenu();
-	},
+		getValue: function () {
+			return { visibility: this.selected || null };
+		},
 
+		getChangedValues: function () {
+			if (this.defaultValue && this.defaultValue === this.selected) {
+				return {};
+			} else {
+				return { visibility: this.selected };
+			}
+		},
 
-	selectOption: function (item) {
-		var current = this.el.down('.option.selected'),
-			newItem = item && Ext.fly(item);
-
-		if (current) {
-			current.removeCls('selected');
-		}
-
-		if (newItem) {
-			Ext.fly(newItem).addCls('selected');
-		}
-	},
-
-
-	getDefaultValue: function () {
-		return this.defaultValue || 'everyone';
-	},
-
-
-	getValue: function () {
-		return {visibility: this.selected || null};
-	},
-
-
-	getChangedValues: function () {
-		if (this.defaultValue && this.defaultValue === this.selected) {
-			return {};
-		}
-		else {
-			return {visibility: this.selected};
-		}
-	},
-
-
-	toggleMenu: function () {
-		this.menuContainer.toggleCls('open');
+		toggleMenu: function () {
+			this.menuContainer.toggleCls('open');
+		},
 	}
-});
+);

@@ -1,28 +1,45 @@
-
 .account-view {
 	color: var(--secondary-grey);
-	font: { size: 16px; style: normal; weight: 4; }
+	font: {
+		size: 16px;
+		style: normal;
+		weight: 4;
+	}
 
 	line-height: 25px;
 
 	@include side-panel-view-title;
 
-	.view-title { margin-bottom: 10px; }
+	.view-title {
+		margin-bottom: 10px;
+	}
 
 	.item {
 		display: block;
 		min-height: 25px;
 		margin-left: 20px;
 
-		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover { color: var(--secondary-grey); } }
-		.x-mask { display: none; }
+		&.x-item-disabled {
+			opacity: 0.5;
+			cursor: default;
+			&:hover {
+				color: var(--secondary-grey);
+			}
+		}
+		.x-mask {
+			display: none;
+		}
 	}
 
 	a.item {
 		cursor: pointer;
 
-		&:hover { color: var(--tertiary-grey); }
-		&:active { color: #424242; }
+		&:hover {
+			color: var(--tertiary-grey);
+		}
+		&:active {
+			color: #424242;
+		}
 
 		&:last-of-type {
 			margin-bottom: 50px;
@@ -66,7 +83,7 @@
 			}
 
 			&.loading {
-				@include loadingSpinner($top:40%, $left: 100px);
+				@include loadingSpinner($top: 40%, $left: 100px);
 			}
 
 			.name {

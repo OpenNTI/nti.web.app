@@ -6,22 +6,24 @@ import ChangeRole from '../ChangeRole';
 
 const SAMPLE_USERS = [
 	{
-		'Username': 'user1',
-		getID: () => 'user1'
+		Username: 'user1',
+		getID: () => 'user1',
 	},
 	{
-		'Username': 'user2',
-		getID: () => 'user2'
-	}
+		Username: 'user2',
+		getID: () => 'user2',
+	},
 ];
 
 describe('Site admin user table change role test', () => {
 	test('Test learner list', () => {
-		const changeRoleCmp = renderer.create(<ChangeRole
-			addAdmin={()=>{}}
-			removeAdmin={()=>{}}
-			selectedUsers={SAMPLE_USERS}
-		/>);
+		const changeRoleCmp = renderer.create(
+			<ChangeRole
+				addAdmin={() => {}}
+				removeAdmin={() => {}}
+				selectedUsers={SAMPLE_USERS}
+			/>
+		);
 
 		const tree = changeRoleCmp.toJSON();
 
@@ -30,12 +32,14 @@ describe('Site admin user table change role test', () => {
 	});
 
 	test('Test admin list', () => {
-		const changeRoleCmp = renderer.create(<ChangeRole
-			addAdmin={()=>{}}
-			removeAdmin={()=>{}}
-			selectedUsers={SAMPLE_USERS}
-			removing
-		/>);
+		const changeRoleCmp = renderer.create(
+			<ChangeRole
+				addAdmin={() => {}}
+				removeAdmin={() => {}}
+				selectedUsers={SAMPLE_USERS}
+				removing
+			/>
+		);
 
 		const tree = changeRoleCmp.toJSON();
 

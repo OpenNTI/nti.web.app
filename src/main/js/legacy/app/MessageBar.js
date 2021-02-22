@@ -1,29 +1,37 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.message-bar',
 	cls: 'message-bar',
 
 	inheritableStatics: {
-		dontShow: {}	},
+		dontShow: {},
+	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'remember', html: '{{{NextThought.view.MessageBar.remember}}}'},
+		{ cls: 'remember', html: '{{{NextThought.view.MessageBar.remember}}}' },
 		'{message}',
-		{tag: 'a', cls: 'dismiss', href: '#', html: '{{{NextThought.view.MessageBar.dismiss}}}'}
+		{
+			tag: 'a',
+			cls: 'dismiss',
+			href: '#',
+			html: '{{{NextThought.view.MessageBar.dismiss}}}',
+		},
 	]),
 
 	renderSelectors: {
 		closeEl: 'a.dismiss',
-		rememberEl: '.remember'
+		rememberEl: '.remember',
 	},
 
 	constructor: function (cfg) {
 		var messageType = cfg.messageType || '';
 
-		if (this.self.dontShow[messageType] || !Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))) {
+		if (
+			this.self.dontShow[messageType] ||
+			!Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))
+		) {
 			return null;
 		}
 		this.callParent(arguments);
@@ -34,7 +42,9 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 		if (Ext.isObject(this.message)) {
 			this.message = Ext.DomHelper.markup(this.message);
 		}
-		this.renderData = Ext.apply(this.renderData || {}, {message: this.message});
+		this.renderData = Ext.apply(this.renderData || {}, {
+			message: this.message,
+		});
 	},
 
 	afterRender: function () {
@@ -44,7 +54,9 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 	},
 
 	remember: function () {
-		this.self.dontShow[this.messageType] = !this.self.dontShow[this.messageType];
+		this.self.dontShow[this.messageType] = !this.self.dontShow[
+			this.messageType
+		];
 		this.rememberEl[this.self.dontShow ? 'addCls' : 'removeCls']('checked');
-	}
+	},
 });

@@ -10,8 +10,5 @@ module.exports = exports = Ext.define('NextThought.model.CalendarEventRef', {
 		mimeType: 'application/vnd.nextthought.nticalendareventref',
 	},
 
-	fields: [
-		{name: 'CalendarEvent', type: 'object'}
-	]
-
+	fields: [{ name: 'CalendarEvent', type: 'object' }],
 });

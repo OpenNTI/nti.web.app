@@ -4,7 +4,7 @@ const Commons = require('@nti/web-commons');
 
 const ChatOverrides = require('nti-web-chat-overrides');
 const DiscussionOverrides = require('nti-web-discussion-overrides');
-const {IEAlert} = require('nti-web-react-components');
+const { IEAlert } = require('nti-web-react-components');
 
 require('./MessageBox');
 require('./MessageBar');
@@ -21,17 +21,17 @@ DiscussionOverrides.setupOverrides();
 
 Commons.Layouts.Responsive.setWebappContext();
 
-Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
+Commons.Prompt.Manager.setAllowedExternalFocus(target => {
 	const el = target && Ext.get(target);
 
-	return el && (
-		el.findParent('.window-container') ||
-		el.findParent('.search-field') ||
-		el.findParent('.prompt-container') ||
-		el.findParent('.recovery-email-view')
+	return (
+		el &&
+		(el.findParent('.window-container') ||
+			el.findParent('.search-field') ||
+			el.findParent('.prompt-container') ||
+			el.findParent('.recovery-email-view'))
 	);
 });
-
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
@@ -51,18 +51,35 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	initComponent: function () {
 		this.callParent();
 
-		this.body = this.add({xtype: 'main-views', id: 'view'});
-		this.add({xtype: 'main-navigation', id: 'nav'});
-		this.add({xtype: 'chats-view', id: 'chat-window', navigateToObject: (obj) => this.body.attemptToNavigateToObject(obj)});
+		this.body = this.add({ xtype: 'main-views', id: 'view' });
+		this.add({ xtype: 'main-navigation', id: 'nav' });
+		this.add({
+			xtype: 'chats-view',
+			id: 'chat-window',
+			navigateToObject: obj => this.body.attemptToNavigateToObject(obj),
+		});
 
-		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
+		this.el = Ext.DomHelper.insertFirst(
+			Ext.getBody(),
+			{ cls: 'viewport' },
+			true
+		);
 		this.renderTo = this.el;
 
-		Ext.createByAlias('widget.windows-view', {xtype: 'windows-view', id: 'window', renderTo: Ext.getBody()});
-		Ext.createByAlias('widget.prompt-view', {xtype: 'prompt-view', id: 'prompt', renderTo: Ext.getBody()});
+		Ext.createByAlias('widget.windows-view', {
+			xtype: 'windows-view',
+			id: 'window',
+			renderTo: Ext.getBody(),
+		});
+		Ext.createByAlias('widget.prompt-view', {
+			xtype: 'prompt-view',
+			id: 'prompt',
+			renderTo: Ext.getBody(),
+		});
 
 		window['nti-sticky-top-offset'] = () => {
-			return document.documentElement.className.indexOf('msg-bar-open') >= 0
+			return document.documentElement.className.indexOf('msg-bar-open') >=
+				0
 				? 110
 				: 70;
 		};
@@ -84,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			Ext.getBody().on({
 				touchstart: this.onTouchStart,
 				touchmove: this.onTouchMove,
-				touchend: this.onTouchEnd
+				touchend: this.onTouchEnd,
 			});
 		}
 	},
@@ -96,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				width: 'right',
 				height: 'bottom',
 				widthp: 'left',
-				heightp: 'top'
+				heightp: 'top',
 			};
 
 		Ext.Object.each(Ext.getScrollbarSize(), function (k, v) {
@@ -106,20 +123,35 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				var style = document.createElement('style');
 				style.type = 'text/css';
 				style.innerHTML = [
-					'.scroll-pos-' + map[k] + ' { ' + map[k + 'p'] + ':-' + v + 'px !important; } ',
-					'.scroll-margin-' + map[k] + ' { margin-' + map[k] + ':' + v + 'px !important; } ',
-					'.scroll-padding-' + map[k] + ' { padding-' + map[k] + ':' + v + 'px !important; } '
+					'.scroll-pos-' +
+						map[k] +
+						' { ' +
+						map[k + 'p'] +
+						':-' +
+						v +
+						'px !important; } ',
+					'.scroll-margin-' +
+						map[k] +
+						' { margin-' +
+						map[k] +
+						':' +
+						v +
+						'px !important; } ',
+					'.scroll-padding-' +
+						map[k] +
+						' { padding-' +
+						map[k] +
+						':' +
+						v +
+						'px !important; } ',
 				].join(' \r\n ');
 
 				document.getElementsByTagName('head')[0].appendChild(style);
-
 			}
 		});
 
-
 		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 		this.onWindowResize();
-
 
 		if (Ext.is.iOS) {
 			//this.setupTablet();
@@ -129,16 +161,19 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			//keep element under body from shrinking. Can cause the screen to go white
 			Ext.defer(function () {
 				me.el.setStyle('min-height', me.el.getHeight() + 'px');
-			},1000);
-
+			}, 1000);
 
 			//Adjust the height to get rid of the odd white bar at the bottom
 			//Edit: the top bar is getting cut off a little bit
 			console.log(Ext.get(Ext.query('.viewport')[0]).getHeight());
 			Ext.defer(function () {
-				Ext.get(Ext.query('.viewport')[0]).setHeight(window.outerHeight);
-				Ext.get('view').setHeight(window.outerHeight - Ext.get('nav').getHeight());
-			},500);
+				Ext.get(Ext.query('.viewport')[0]).setHeight(
+					window.outerHeight
+				);
+				Ext.get('view').setHeight(
+					window.outerHeight - Ext.get('nav').getHeight()
+				);
+			}, 500);
 		}
 	},
 
@@ -160,23 +195,65 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 		// Dispatch mouseenter
 		mouseEnterEvent = document.createEvent('MouseEvents');
-		mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
-			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseEnterEvent.initMouseEvent(
+			'mouseenter',
+			true,
+			true,
+			window,
+			0,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseEnterEvent);
 
 		// Dispatch mouseover
 		mouseOverEvent = document.createEvent('MouseEvents');
-		mouseOverEvent.initMouseEvent('mouseover', true, true, window,
-			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseOverEvent.initMouseEvent(
+			'mouseover',
+			true,
+			true,
+			window,
+			0,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseOverEvent);
 
 		// Dispatch mousedown
 		mouseDownEvent = document.createEvent('MouseEvents');
-		mouseDownEvent.initMouseEvent('mousedown', true, true, window,
-			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseDownEvent.initMouseEvent(
+			'mousedown',
+			true,
+			true,
+			window,
+			1,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseDownEvent);
 	},
 
@@ -204,7 +281,11 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 		//Don't scroll page if dragging an element in quiz
 		currTarget = Ext.get(touch.target);
-		if (currTarget && (currTarget.hasCls('draggable-area') || currTarget.up('.draggable-area'))) {
+		if (
+			currTarget &&
+			(currTarget.hasCls('draggable-area') ||
+				currTarget.up('.draggable-area'))
+		) {
 			e.preventDefault();
 		}
 
@@ -218,12 +299,10 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				if (scrollableElement.isScrollable()) {
 					cont = false;
 					break;
-				}
-				else {
+				} else {
 					if (scrollableElement.parent()) {
 						scrollableElement = scrollableElement.parent();
-					}
-					else {
+					} else {
 						return;
 					}
 				}
@@ -239,32 +318,88 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 		// Dispatch mousemove
 		mouseMoveEvent = document.createEvent('MouseEvents');
-		mouseMoveEvent.initMouseEvent('mousemove', true, true, window,
-			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseMoveEvent.initMouseEvent(
+			'mousemove',
+			true,
+			true,
+			window,
+			1,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseMoveEvent);
 
 		// Dispatch leave/enter events if moving onto a different element
 		if (changedTouch && changedTouch.target !== touch.target) {
 			// Dispatch mouseleave
 			mouseLeaveEvent = document.createEvent('MouseEvents');
-			mouseLeaveEvent.initMouseEvent('mouseleave', true, true, window,
-				0, changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
-				false, false, false, false, 0, null);
+			mouseLeaveEvent.initMouseEvent(
+				'mouseleave',
+				true,
+				true,
+				window,
+				0,
+				changedTouch.screenX,
+				changedTouch.screenY,
+				changedTouch.clientX,
+				changedTouch.clientY,
+				false,
+				false,
+				false,
+				false,
+				0,
+				null
+			);
 			changedTouch.target.dispatchEvent(mouseLeaveEvent);
 
 			// Dispatch mouseout
 			mouseOutEvent = document.createEvent('MouseEvents');
-			mouseOutEvent.initMouseEvent('mouseout', true, true, window,
-				0, changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
-				false, false, false, false, 0, null);
+			mouseOutEvent.initMouseEvent(
+				'mouseout',
+				true,
+				true,
+				window,
+				0,
+				changedTouch.screenX,
+				changedTouch.screenY,
+				changedTouch.clientX,
+				changedTouch.clientY,
+				false,
+				false,
+				false,
+				false,
+				0,
+				null
+			);
 			changedTouch.target.dispatchEvent(mouseOutEvent);
 
 			// Dispatch mouseenter
 			mouseEnterEvent = document.createEvent('MouseEvents');
-			mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
-				0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-				false, false, false, false, 0, null);
+			mouseEnterEvent.initMouseEvent(
+				'mouseenter',
+				true,
+				true,
+				window,
+				0,
+				touch.screenX,
+				touch.screenY,
+				touch.clientX,
+				touch.clientY,
+				false,
+				false,
+				false,
+				false,
+				0,
+				null
+			);
 			touch.target.dispatchEvent(mouseEnterEvent);
 		}
 	},
@@ -284,26 +419,66 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			return;
 		}
 
-
-
 		mouseUpEvent = document.createEvent('MouseEvents');
-		mouseUpEvent.initMouseEvent('mouseup', true, true, window,
-			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseUpEvent.initMouseEvent(
+			'mouseup',
+			true,
+			true,
+			window,
+			1,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseUpEvent);
 
 		// Dispatch mouseleave
 		mouseLeaveEvent = document.createEvent('MouseEvents');
-		mouseLeaveEvent.initMouseEvent('mouseleave', true, true, window,
-			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseLeaveEvent.initMouseEvent(
+			'mouseleave',
+			true,
+			true,
+			window,
+			0,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseLeaveEvent);
 
 		// Dispatch mouseout
 		mouseOutEvent = document.createEvent('MouseEvents');
-		mouseOutEvent.initMouseEvent('mouseout', true, true, window,
-			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
+		mouseOutEvent.initMouseEvent(
+			'mouseout',
+			true,
+			true,
+			window,
+			0,
+			touch.screenX,
+			touch.screenY,
+			touch.clientX,
+			touch.clientY,
+			false,
+			false,
+			false,
+			false,
+			0,
+			null
+		);
 		touch.target.dispatchEvent(mouseOutEvent);
 
 		//Touching on edit whiteboard while keyboard is up isn't clicking, so make sure it gets clicked.
@@ -313,41 +488,65 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			// Dispatch click if touch lasted a half second or less in duration
 			if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
 				clickEvent = document.createEvent('MouseEvents');
-				clickEvent.initMouseEvent('click', true, true, window,
-					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-					false, false, false, false, 0, null);
+				clickEvent.initMouseEvent(
+					'click',
+					true,
+					true,
+					window,
+					1,
+					touch.screenX,
+					touch.screenY,
+					touch.clientX,
+					touch.clientY,
+					false,
+					false,
+					false,
+					false,
+					0,
+					null
+				);
 				touch.target.dispatchEvent(clickEvent);
 			}
 		}
-
 	},
 
 	lockOrientation: function () {
-		var optWindow, me = this;
+		var optWindow,
+			me = this;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
 		 * if they rotate back to landscape, destroy screen*/
-		window.addEventListener('orientationchange', function () {
-			if (optWindow) {
-				optWindow.destroy();
-				optWindow = null;
-			}
-			if (Math.abs(window.orientation) !== 90) {
-				optWindow = me.createPortraitOrientationScreen();
-				const iframe = optWindow.el.down('iframe');
-				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
-					e.preventDefault();
-				});
-				optWindow.show();
-			}
-		}, true);
+		window.addEventListener(
+			'orientationchange',
+			function () {
+				if (optWindow) {
+					optWindow.destroy();
+					optWindow = null;
+				}
+				if (Math.abs(window.orientation) !== 90) {
+					optWindow = me.createPortraitOrientationScreen();
+					const iframe = optWindow.el.down('iframe');
+					iframe.el.dom.contentWindow.addEventListener(
+						'touchstart',
+						function (e) {
+							e.preventDefault();
+						}
+					);
+					optWindow.show();
+				}
+			},
+			true
+		);
 
 		if (Math.abs(window.orientation) !== 90) {
 			optWindow = this.createPortraitOrientationScreen();
 			const iframe = optWindow.el.down('iframe');
-			iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
-				e.preventDefault();
-			});
+			iframe.el.dom.contentWindow.addEventListener(
+				'touchstart',
+				function (e) {
+					e.preventDefault();
+				}
+			);
 
 			optWindow.show();
 		}
@@ -382,9 +581,9 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto'
-				}
-			}
+					style: 'overflow-x: hidden; overflow-y:auto',
+				},
+			},
 		});
 		return optWindow;
 	},
@@ -399,8 +598,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		try {
 			z = DetectZoom.zoom();
 			// console.debug('Zoom:', z);
-		}
-		catch (e) {
+		} catch (e) {
 			console.error('Detect Zoom failed to load');
 		}
 
@@ -411,10 +609,10 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				Ext.widget('message-bar', {
 					renderTo: Ext.getBody(),
 					messageType: 'zoom',
-					message: 'Your browser\'s current zoom setting is not fully supported. Please reset it to the default zoom.'
+					message:
+						"Your browser's current zoom setting is not fully supported. Please reset it to the default zoom.",
 				});
-			}
-			else {
+			} else {
 				//todo: Find another way to do this: (probably move it into the bar itself)
 				currentBar = Ext.ComponentQuery.query('message-bar');
 				if (!Ext.isEmpty(currentBar)) {
@@ -422,5 +620,5 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				}
 			}
 		}
-	}
+	},
 });

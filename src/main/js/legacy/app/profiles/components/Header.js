@@ -2,103 +2,120 @@ const Ext = require('@nti/extjs');
 
 require('legacy/mixins/Router');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.components.Header',
+	{
+		extend: 'Ext.Component',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.components.Header', {
-	extend: 'Ext.Component',
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		buttonTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{
+					tag: 'tpl',
+					if: 'tip',
+					cn: [
+						{
+							cls: 'button {cls}',
+							'data-action': '{action}',
+							'data-qtip': '{tip}',
+							html: '{label}',
+						},
+					],
+				},
+				{
+					tag: 'tpl',
+					if: '!tip',
+					cn: [
+						{
+							cls: 'button {cls}',
+							'data-action': '{action}',
+							html: '{label}',
+						},
+					],
+				},
+			])
+		),
 
-	buttonTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', 'data-qtip': '{tip}', html: '{label}'}
-		]},
-		{tag: 'tpl', 'if': '!tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
-		]}
-	])),
+		tabTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'tab{[values.active ? " active" : ""]}',
+				'data-route': '{route}',
+				'data-title': '{label}',
+				html: '{label}',
+			})
+		),
 
+		renderTpl: Ext.DomHelper.markup({ cls: 'buttons' }, { cls: 'tabs' }),
 
-	tabTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'tab{[values.active ? " active" : ""]}', 'data-route': '{route}', 'data-title': '{label}', html: '{label}'
-	})),
+		renderSelectors: {
+			buttonsEl: '.buttons',
+			tabsEl: '.tabs',
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	renderTpl: Ext.DomHelper.markup(
-		{cls: 'buttons'},
-		{cls: 'tabs'}
-	),
+			if (!this.buttonsEl) {
+				this.addButton = function () {};
+				this.clearButtons = function () {};
+			} else {
+				this.mon(
+					this.buttonsEl,
+					'click',
+					this.onButtonClick.bind(this)
+				);
+			}
 
+			if (!this.tabsEl) {
+				this.addTab = function () {};
+				this.clearTabs = function () {};
+			} else {
+				this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
+			}
+		},
 
-	renderSelectors: {
-		buttonsEl: '.buttons',
-		tabsEl: '.tabs'
-	},
+		onButtonClick: function (e) {
+			if (e.getTarget('.disabled')) {
+				return;
+			}
 
+			var button = e.getTarget('.button'),
+				action = button && button.getAttribute('data-action');
 
-	afterRender: function () {
-		this.callParent(arguments);
+			if (action && this[action]) {
+				this[action](button, e);
+			}
+		},
 
-		if (!this.buttonsEl) {
-			this.addButton = function () {};
-			this.clearButtons = function () {};
-		} else {
-			this.mon(this.buttonsEl, 'click', this.onButtonClick.bind(this));
-		}
+		onTabClick: function (e) {
+			var tab = e.getTarget('.tab'),
+				route = tab && tab.getAttribute('data-route'),
+				title = tab && tab.getAttribute('data-title');
 
-		if (!this.tabsEl) {
-			this.addTab = function () {};
-			this.clearTabs = function () {};
-		} else {
-			this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
-		}
-	},
+			if (route) {
+				this.pushRoute(title, route);
+			}
+		},
 
+		addButton: function (data) {
+			data.tip = data.tip || '';
 
-	onButtonClick: function (e) {
-		if (e.getTarget('.disabled')) {
-			return;
-		}
+			this.buttonTpl.append(this.buttonsEl, data);
+		},
 
-		var button = e.getTarget('.button'),
-			action = button && button.getAttribute('data-action');
+		addTab: function (data) {
+			this.tabTpl.append(this.tabsEl, data);
+		},
 
-		if (action && this[action]) {
-			this[action](button, e);
-		}
-	},
+		clearButtons: function () {
+			this.buttonsEl.dom.innerHTML = '';
+		},
 
-
-	onTabClick: function (e) {
-		var tab = e.getTarget('.tab'),
-			route = tab && tab.getAttribute('data-route'),
-			title = tab && tab.getAttribute('data-title');
-
-		if (route) {
-			this.pushRoute(title, route);
-		}
-	},
-
-
-	addButton: function (data) {
-		data.tip = data.tip || '';
-
-		this.buttonTpl.append(this.buttonsEl, data);
-	},
-
-
-	addTab: function (data) {
-		this.tabTpl.append(this.tabsEl, data);
-	},
-
-
-	clearButtons: function () {
-		this.buttonsEl.dom.innerHTML = '';
-	},
-
-
-	clearTabs: function () {
-		this.tabsEl.dom.innerHTML = '';
+		clearTabs: function () {
+			this.tabsEl.dom.innerHTML = '';
+		},
 	}
-});
+);

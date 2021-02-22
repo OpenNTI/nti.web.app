@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-const {Presentation: PresentationAssets} = require('@nti/web-commons');
-const {Enrollment} = require('@nti/web-course');
-const {encodeForURI} = require('@nti/lib-ntiids');
+const { wait } = require('@nti/lib-commons');
+const { Presentation: PresentationAssets } = require('@nti/web-commons');
+const { Enrollment } = require('@nti/web-course');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const User = require('legacy/model/User');
-const {getString, getFormattedString} = require('legacy/util/Localization');
+const { getString, getFormattedString } = require('legacy/util/Localization');
 const AnalyticsUtil = require('legacy/util/Analytics');
-const {guidGenerator, isFeature} = require('legacy/util/Globals');
+const { guidGenerator, isFeature } = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const AccountActions = require('legacy/app/account/Actions');
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
@@ -18,620 +18,825 @@ const EnrollmentActions = require('./Actions');
 require('../info/components/Panel');
 require('legacy/overrides/ReactHarness');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.Details',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.course-enrollment-details',
+		cls: 'course-details',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-enrollment-details',
-	cls: 'course-details',
+		enrollmentCardTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{
+					cls: 'enroll-card',
+					cn: [
+						{
+							cls: 'enroll-option base {base.cls}',
+							'data-name': '{base.name}',
+							cn: [
+								{
+									cls: 'enrolled',
+									html:
+										'{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}',
+								},
+								{ cls: 'title', html: '{base.title}' },
+								{ cls: 'price', html: '{base.priceString}' },
+								{ cls: 'info', html: '{base.information}' },
+								{ cls: 'seats', html: '{base.seats}' },
+								{ cls: 'warning', html: '{base.warning}' },
+								{ cls: 'refund', html: '{base.refund}' },
+								{
+									tag: 'tpl',
+									for: 'base.links',
+									cn: [
+										{
+											tag: 'a',
+											cls: 'link',
+											href: '{href}',
+											target: '_blank',
+											html: '{text}',
+										},
+									],
+								},
+							],
+						},
+						{
+							tag: 'tpl',
+							for: 'addOns',
+							cn: [
+								{
+									cls: 'enroll-option addon {cls}',
+									'data-name': '{name}',
+									cn: [
+										{
+											cls: 'title',
+											cn: [
+												'{title}',
+												{
+													tag: 'span',
+													html: '({difference})',
+												},
+											],
+										},
+										{ cls: 'info', html: '{information}' },
+										{ cls: 'seats', html: '{seats}' },
+										{ cls: 'warning', html: '{warning}' },
+										{
+											tag: 'tpl',
+											for: 'links',
+											cn: [
+												{
+													tag: 'a',
+													cls: 'link',
+													href: '{href}',
+													target: '_blank',
+													html: '{text}',
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							cls: 'button {buttonCls}',
+							'data-name': '{buttonName}',
+							html: '{buttonText}',
+						},
+						{
+							tag: 'tpl',
+							if: 'drop',
+							cn: [
+								{
+									cls: 'drop',
+									cn: [
+										{
+											cls: 'title',
+											html:
+												'{{{NextThought.view.courseware.enrollment.Details.HowtoDrop}}}',
+										},
+										{ cls: 'info', html: '{drop}' },
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					cls: 'gift-card {gifts.giftClass}',
+					cn: [
+						{
+							cls: 'give {gifts.giveClass}',
+							cn: [
+								{
+									cls: 'title',
+									html:
+										'{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}',
+								},
+								{ cls: 'sub', html: '{gifts.giveTitle}' },
+							],
+						},
+						{
+							cls: 'redeem {gifts.redeemClass}',
+							cn: [
+								{
+									cls: 'title',
+									html:
+										'{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}',
+								},
+							],
+						},
+					],
+				},
+			])
+		),
 
-	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'enroll-card', cn: [
-			{cls: 'enroll-option base {base.cls}', 'data-name': '{base.name}', cn: [
-				{cls: 'enrolled', html: '{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}'},
-				{cls: 'title', html: '{base.title}'},
-				{cls: 'price', html: '{base.priceString}'},
-				{cls: 'info', html: '{base.information}'},
-				{cls: 'seats', html: '{base.seats}'},
-				{cls: 'warning', html: '{base.warning}'},
-				{cls: 'refund', html: '{base.refund}'},
-				{tag: 'tpl', 'for': 'base.links', cn: [
-					{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
-				]}
-			]},
-			{tag: 'tpl', 'for': 'addOns', cn: [
-				{cls: 'enroll-option addon {cls}', 'data-name': '{name}', cn: [
-					{cls: 'title', cn: [
-						'{title}',
-						{tag: 'span', html: '({difference})'}
-					]},
-					{cls: 'info', html: '{information}'},
-					{cls: 'seats', html: '{seats}'},
-					{cls: 'warning', html: '{warning}'},
-					{tag: 'tpl', 'for': 'links', cn: [
-						{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
-					]}
-				]}
-			]},
-			{cls: 'button {buttonCls}', 'data-name': '{buttonName}', html: '{buttonText}'},
-			{tag: 'tpl', 'if': 'drop', cn: [
-				{cls: 'drop', cn: [
-					{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.HowtoDrop}}}'},
-					{cls: 'info', html: '{drop}'}
-				]}
-			]}
-		]},
-		{cls: 'gift-card {gifts.giftClass}', cn: [
-			{cls: 'give {gifts.giveClass}', cn: [
-				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}'},
-				{cls: 'sub', html: '{gifts.giveTitle}'}
-			]},
-			{cls: 'redeem {gifts.redeemClass}', cn: [
-				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}'}
-			]}
-		]}
-	])),
+		enrollmentConfirmationTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup([
+				{
+					cls: 'complete-enrollment-layer',
+					cn: [
+						{
+							cls: 'congrats-container',
+							cn: [
+								{
+									cls: 'congrats',
+									cn: [
+										{
+											cls: 'title',
+											html:
+												'{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!',
+										},
+										{
+											cls: 'sub',
+											html:
+												'{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}',
+										},
+										{
+											cls: 'actions',
+											cn: [
+												{
+													tag: 'tpl',
+													if: 'isFirstLogin',
+													cn: [
+														{
+															tag: 'a',
+															cls:
+																'account-created completed',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}',
+														},
+														{
+															tag: 'a',
+															cls:
+																'enroll completed',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
+														},
+														{
+															tag: 'a',
+															cls:
+																'createProfile',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}',
+														},
+														{
+															tag: 'a',
+															cls:
+																'suggestContacts',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
+														},
+													],
+												},
+												{
+													tag: 'tpl',
+													if: '!isFirstLogin',
+													cn: [
+														{
+															tag: 'a',
+															cls:
+																'enroll completed',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
+														},
+														{
+															tag: 'a',
+															cls:
+																'suggestContacts',
+															html:
+																'{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+								{
+									cls: 'add-selection',
+									cn: [
+										{
+											tag: 'span',
+											html:
+												'{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}',
+										},
+										{
+											tag: 'span',
+											cn: [
+												{
+													tag: 'a',
+													cls: 'button add-course',
+													html:
+														'{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}',
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+			])
+		),
 
-	enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'complete-enrollment-layer', cn: [
-			{cls: 'congrats-container', cn: [
-				{cls: 'congrats', cn: [
-					{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!'},
-					{cls: 'sub', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}'},
-					{cls: 'actions', cn: [
-						{tag: 'tpl', 'if': 'isFirstLogin', cn: [
-							{tag: 'a', cls: 'account-created completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
-							{tag: 'a', cls: 'enroll completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
-							{tag: 'a', cls: 'createProfile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
-							{tag: 'a', cls: 'suggestContacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
-						]},
-						{tag: 'tpl', 'if': '!isFirstLogin', cn: [
-							{tag: 'a', cls: 'enroll completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
-							{tag: 'a', cls: 'suggestContacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
-						]}
-					]}
-				]},
-				{cls: 'add-selection', cn: [
-					{tag: 'span', html: '{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}'},
-					{tag: 'span', cn: [
-						{tag: 'a', cls: 'button add-course', html: '{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}'}
-					]}
-				]}
-			]}
-		]}
-	])),
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'left' },
+			{ cls: 'right enrollment', cn: [{ cls: 'enrollment-container' }] },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'left'},
-		{cls: 'right enrollment', cn: [
-			{cls: 'enrollment-container'}
-		]}
-	]),
+		renderSelectors: {
+			detailsEl: '.left',
+			cardsEl: '.enrollment',
+			cardsContainerEl: '.enrollment-container',
+		},
 
-	renderSelectors: {
-		detailsEl: '.left',
-		cardsEl: '.enrollment',
-		cardsContainerEl: '.enrollment-container'
-	},
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
-		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
+			this.useReactEnrollment = true; //isFeature('use-new-enrollment-card');
 
-		this.useReactEnrollment = true;//isFeature('use-new-enrollment-card');
+			AnalyticsUtil.startEvent(this.course.getId(), {
+				type: 'CourseCatalogView',
+				RootContextID: this.course.getId(),
+			});
 
-		AnalyticsUtil.startEvent(this.course.getId(), {
-			type: 'CourseCatalogView',
-			RootContextID: this.course.getId()
-		});
+			this.on('beforedeactivate', 'onBeforeDeactivate');
+			this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
+			this.CourseEnrollmentActions = EnrollmentActions.create();
+			this.CourseStore = CoursesStateStore.getInstance();
+			this.AccountActions = AccountActions.create();
 
-		this.on('beforedeactivate', 'onBeforeDeactivate');
-		this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
-		this.CourseEnrollmentActions = EnrollmentActions.create();
-		this.CourseStore = CoursesStateStore.getInstance();
-		this.AccountActions = AccountActions.create();
+			window.EnrollInOption = this.enrollInOption.bind(this);
+		},
 
-		window.EnrollInOption = this.enrollInOption.bind(this);
-	},
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, {
+				number: this.course.get('ProviderUniqueID'),
+				title: this.course.get('Title'),
+			});
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			number: this.course.get('ProviderUniqueID'),
-			title: this.course.get('Title')
-		});
-	},
+		stopClose: function () {
+			return this.changingEnrollment
+				? Promise.reject()
+				: Promise.resolve();
+		},
 
-	stopClose: function () {
-		return this.changingEnrollment ? Promise.reject() : Promise.resolve();
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			var me = this;
 
-		var me = this;
+			// a little gross but the window pushing logic doesn't provide a route, so this is the easiest way to
+			// check whether we are opening this window from a redemption
+			if (window.location.href.indexOf('redeem=1') > 0) {
+				me.addMask();
 
-		// a little gross but the window pushing logic doesn't provide a route, so this is the easiest way to
-		// check whether we are opening this window from a redemption
-		if(window.location.href.indexOf('redeem=1') > 0) {
-			me.addMask();
+				var fulfill = () => {
+					me.removeMask();
+					me.showMessage(
+						getFormattedString(
+							'NextThought.view.courseware.enrollment.Details.enrollmentSuccess',
+							{
+								course: me.course.get('Title'),
+							}
+						)
+					);
+				};
 
-			var fulfill = () => {
-				me.removeMask();
-				me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-					course: me.course.get('Title')
-				}));
-			};
+				var reject = () => {
+					// enrollment was still successful but updating the store wasn't.. should we do anything here?
+					me.removeMask();
+					me.showMessage(
+						getFormattedString(
+							'NextThought.view.courseware.enrollment.Details.enrollmentSuccess',
+							{
+								course: me.course.get('Title'),
+							}
+						)
+					);
+				};
 
-			var reject = () => {
-				// enrollment was still successful but updating the store wasn't.. should we do anything here?
-				me.removeMask();
-				me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-					course: me.course.get('Title')
-				}));
-			};
+				this.CourseEnrollmentActions.refreshEnrolledCourses(
+					fulfill,
+					reject
+				);
+			}
 
-			this.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
-		}
+			me.details = Ext.widget('course-info-panel', {
+				videoWidth: 642,
+				videoHeight: 360,
+				viewOnly: true,
+				renderTo: this.detailsEl,
+			});
 
-		me.details = Ext.widget('course-info-panel', {
-			videoWidth: 642,
-			videoHeight: 360,
-			viewOnly: true,
-			renderTo: this.detailsEl
-		});
+			me.details.setContent(me.course);
 
-		me.details.setContent(me.course);
+			me.on('destroy', 'destroy', me.details);
 
-		me.on('destroy', 'destroy', me.details);
+			me.updateEnrollmentCard();
 
-		me.updateEnrollmentCard();
+			if (!this.useReactEnrollment) {
+				me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
+			}
 
-		if (!this.useReactEnrollment) {
-			me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
-		}
-
-		me.course.getBackgroundImage()
-			.then(function (img) {
-				const resolved = img ? img : PresentationAssets.Asset.getDefaultURLForType('background');
+			me.course.getBackgroundImage().then(function (img) {
+				const resolved = img
+					? img
+					: PresentationAssets.Asset.getDefaultURLForType(
+							'background'
+					  );
 
 				me.el.setStyle({
-					backgroundImage: 'url(' + resolved + ')'
+					backgroundImage: 'url(' + resolved + ')',
 				});
 			});
-	},
+		},
 
-	/**
-	 * Restore to an enrollment option
-	 * @param  {string} type   name of the enrollment option
-	 * @param  {Array} config  array of configs for the option to parse
-	 * @returns {void}
-	 */
-	restoreEnrollmentOption: function (type, config) {
-		if (!this.rendered) {
-			this.on('afterrender', this.restoreEnrollmentOption.bind(this, type, config));
-			return;
-		}
-
-		if (!this.enrollmentOptions || Ext.Object.isEmpty(this.enrollmentOptions)) {
-			this.__stateToRestore = this.restoreEnrollmentOption.bind(this, type, config);
-			return;
-		}
-
-		var option, checkbox;
-
-		if (type === 'redeem') {
-			option = this.enrollmentOptions.GiftOption;
-
-			if (option && option.Redeemable) {
-				option.doEnrollment(this, 'redeem', config);
-				delete this.__stateToRestore;
+		/**
+		 * Restore to an enrollment option
+		 * @param  {string} type   name of the enrollment option
+		 * @param  {Array} config  array of configs for the option to parse
+		 * @returns {void}
+		 */
+		restoreEnrollmentOption: function (type, config) {
+			if (!this.rendered) {
+				this.on(
+					'afterrender',
+					this.restoreEnrollmentOption.bind(this, type, config)
+				);
+				return;
 			}
-		} else if (type === 'forcredit') {
-			option = this.enrollmentOptions.FiveminuteEnrollment;
 
-			if (option) {
-				checkbox = this.el.down('.addon.checkbox[data-name=FiveminuteEnrollment');
+			if (
+				!this.enrollmentOptions ||
+				Ext.Object.isEmpty(this.enrollmentOptions)
+			) {
+				this.__stateToRestore = this.restoreEnrollmentOption.bind(
+					this,
+					type,
+					config
+				);
+				return;
+			}
 
-				if (checkbox) {
-					this.updateSelectedEnrollment(checkbox);
+			var option, checkbox;
+
+			if (type === 'redeem') {
+				option = this.enrollmentOptions.GiftOption;
+
+				if (option && option.Redeemable) {
+					option.doEnrollment(this, 'redeem', config);
 					delete this.__stateToRestore;
 				}
+			} else if (type === 'forcredit') {
+				option = this.enrollmentOptions.FiveminuteEnrollment;
 
-			}
-		} else if (type === 'purchase') {
-			option = this.enrollmentOptions.StoreEnrollment;
+				if (option) {
+					checkbox = this.el.down(
+						'.addon.checkbox[data-name=FiveminuteEnrollment'
+					);
 
-			if (option) {
-				checkbox = this.el.down('.addon.checkbox[data-name=StoreEnrollment]');
+					if (checkbox) {
+						this.updateSelectedEnrollment(checkbox);
+						delete this.__stateToRestore;
+					}
+				}
+			} else if (type === 'purchase') {
+				option = this.enrollmentOptions.StoreEnrollment;
 
-				if (checkbox) {
-					this.updateSelectedEnrollment(checkbox);
-					delete this.__stateToRestore;
+				if (option) {
+					checkbox = this.el.down(
+						'.addon.checkbox[data-name=StoreEnrollment]'
+					);
+
+					if (checkbox) {
+						this.updateSelectedEnrollment(checkbox);
+						delete this.__stateToRestore;
+					}
 				}
 			}
-		}
-	},
+		},
 
-	onDestroy: function () {
-		this.callParent(arguments);
+		onDestroy: function () {
+			this.callParent(arguments);
 
-		if (this.reactEnrollmentCard) {
-			this.reactEnrollmentCard.destroy();
-			delete this.reactEnrollmentCard;
-		}
+			if (this.reactEnrollmentCard) {
+				this.reactEnrollmentCard.destroy();
+				delete this.reactEnrollmentCard;
+			}
 
-		AnalyticsUtil.stopEvent(this.course.getId(), 'CourseCatalogView');
-	},
+			AnalyticsUtil.stopEvent(this.course.getId(), 'CourseCatalogView');
+		},
 
-	onBeforeDeactivate: function () {
-		return !this.changingEnrollment;
-	},
+		onBeforeDeactivate: function () {
+			return !this.changingEnrollment;
+		},
 
-	addMask: function () {
-		try {
-			var maskEl = this.el && this.el.up('.body-container');
+		addMask: function () {
+			try {
+				var maskEl = this.el && this.el.up('.body-container');
+				if (maskEl) {
+					maskEl.mask('Loading...');
+				}
+			} catch (e) {
+				console.warn('Error masking. %o', e);
+			}
+		},
+
+		removeMask: function () {
+			var maskEl = this.el.up('.body-container'),
+				mask = maskEl && maskEl.down('.x-mask'),
+				maskMsg = maskEl && maskEl.down('.x-mask-msg');
+
+			if (mask) {
+				mask.addCls('removing');
+			}
+
+			if (maskMsg) {
+				maskMsg.addCls('removing');
+			}
+
 			if (maskEl) {
-				maskEl.mask('Loading...');
+				wait(1000).then(maskEl.unmask.bind(maskEl));
 			}
-		} catch (e) {
-			console.warn('Error masking. %o', e);
-		}
-	},
+		},
 
-	removeMask: function () {
-		var maskEl = this.el.up('.body-container'),
-			mask = maskEl && maskEl.down('.x-mask'),
-			maskMsg = maskEl && maskEl.down('.x-mask-msg');
+		__getOptionText: function (details, option) {
+			return option.Wording;
+		},
 
-		if (mask) {
-			mask.addCls('removing');
-		}
+		__addBaseOption: function (details, option) {
+			if (this.state.base) {
+				console.error('More than one base', details, option);
+				return;
+			}
 
-		if (maskMsg) {
-			maskMsg.addCls('removing');
-		}
+			this.state.base = this.__getOptionText(details, option);
+		},
 
-		if (maskEl) {
-			wait(1000).then(maskEl.unmask.bind(maskEl));
-		}
-	},
+		__addAddOnOption: function (details, option) {
+			var data = this.__getOptionText(details, option);
 
-	__getOptionText: function (details, option) {
-		return option.Wording;
-	},
+			if (option.Enrolled) {
+				this.state.base = data;
 
-	__addBaseOption: function (details, option) {
-		if (this.state.base) {
-			console.error('More than one base', details, option);
-			return;
-		}
+				delete this.state.addOns[data.name];
+			} else {
+				this.state.addOns[data.name] = data;
+			}
 
-		this.state.base = this.__getOptionText(details, option);
-	},
+			//since add ons do not block showing the card
+			//we may need to update what is there
+			this.__maybeUpdateCard(this.state);
+		},
 
-	__addAddOnOption: function (details, option) {
-		var data = this.__getOptionText(details, option);
+		/**
+		 * Given a base enrollment option, fetch all the data
+		 * @param  {Object} option option to load
+		 * @returns {Promise}	   fulfills when its loaded
+		 */
+		__addEnrollmentBase: function (option) {
+			var me = this,
+				loading;
 
-		if (option.Enrolled) {
-			this.state.base = data;
-
-			delete this.state.addOns[data.name];
-		} else {
-			this.state.addOns[data.name] = data;
-		}
-
-		//since add ons do not block showing the card
-		//we may need to update what is there
-		this.__maybeUpdateCard(this.state);
-	},
-
-	/**
-	 * Given a base enrollment option, fetch all the data
-	 * @param  {Object} option option to load
-	 * @returns {Promise}	   fulfills when its loaded
-	 */
-	__addEnrollmentBase: function (option) {
-		var me = this, loading;
-
-		if (option) {
-			loading = option.loaded
-				.then(function (data) {
+			if (option) {
+				loading = option.loaded.then(function (data) {
 					me.enrollmentOptions[data.Name] = data;
 
 					me.__addBaseOption(option, data);
 				});
-		} else {
-			loading = Promise.reject();
-		}
+			} else {
+				loading = Promise.reject();
+			}
 
-		return loading;
-	},
+			return loading;
+		},
 
-	/**
-	 * Given an enrollment option, fetch all the data for the option given
-	 * @param  {Object} option the enrollment details
-	 * @returns {Promise}		 resolved if the option is available, reject if not;
-	 */
-	__addEnrollmentOption: function (option) {
-		var me = this, loading;
+		/**
+		 * Given an enrollment option, fetch all the data for the option given
+		 * @param  {Object} option the enrollment details
+		 * @returns {Promise}		 resolved if the option is available, reject if not;
+		 */
+		__addEnrollmentOption: function (option) {
+			var me = this,
+				loading;
 
-		if (option) {
-			loading = option.loaded.then(function (data) {
-				me.enrollmentOptions[data.Name] = data;
+			if (option) {
+				loading = option.loaded.then(function (data) {
+					me.enrollmentOptions[data.Name] = data;
 
-				me.__addAddOnOption(option, data);
+					me.__addAddOnOption(option, data);
+				});
+			} else {
+				loading = Promise.reject();
+			}
+
+			return loading;
+		},
+
+		/**
+		 * Takes the enrollment details for the course and build the
+		 * data necessary to make the enrollment card
+		 * @param  {Object} details enrollment details
+		 * @returns {Promise}		 fulfills when its done, a rejection is not expected
+		 */
+		__onDetailsLoaded: function (details) {
+			var loading,
+				base,
+				addOns = [],
+				priority = this.CourseEnrollmentStore.getBasePriority(),
+				me = this;
+
+			function addBase(option, details2) {
+				details2.name = details2.name || option.name;
+
+				//if we are enrolled in an option it is the base
+				//and any other base is would be an add on
+				if (details2.IsEnrolled) {
+					addOns.push(base);
+					base = details2;
+					//if we don't already have a base option, it is by default
+				} else if (!base) {
+					base = details2;
+					//if we are enrolled in current base, we are an addon
+				} else if (base.IsEnrolled) {
+					addOns.push(details2);
+					//if the current base is a higher priority, we are an addon
+				} else if (priority[base.name] > priority[details2.name]) {
+					addOns.push(details2);
+					//otherwise the current base is an add on and we are the base
+				} else {
+					addOns.push(base);
+					base = details2;
+				}
+			}
+
+			//iterate through all the options and figure out which one
+			//should be the base and what the add ons should be
+			this.CourseEnrollmentStore.forEachOption(function (option) {
+				var optionDetails = details.Options[option.name];
+
+				//if we're not available stop here
+				if (!optionDetails.IsAvailable) {
+					return;
+				}
+
+				if (option.base || optionDetails.IsEnrolled) {
+					addBase(option, optionDetails);
+				} else {
+					addOns.push(option);
+				}
 			});
-		} else {
-			loading = Promise.reject();
-		}
 
-		return loading;
-	},
-
-	/**
-	 * Takes the enrollment details for the course and build the
-	 * data necessary to make the enrollment card
-	 * @param  {Object} details enrollment details
-	 * @returns {Promise}		 fulfills when its done, a rejection is not expected
-	 */
-	__onDetailsLoaded: function (details) {
-		var loading,
-			base, addOns = [],
-			priority = this.CourseEnrollmentStore.getBasePriority(),
-			me = this;
-
-		function addBase (option, details2) {
-			details2.name = details2.name || option.name;
-
-			//if we are enrolled in an option it is the base
-			//and any other base is would be an add on
-			if (details2.IsEnrolled) {
-				addOns.push(base);
-				base = details2;
-			//if we don't already have a base option, it is by default
-			} else if (!base) {
-				base = details2;
-			//if we are enrolled in current base, we are an addon
-			} else if (base.IsEnrolled) {
-				addOns.push(details2);
-			//if the current base is a higher priority, we are an addon
-			} else if (priority[base.name] > priority[details2.name]) {
-				addOns.push(details2);
-			//otherwise the current base is an add on and we are the base
-			} else {
-				addOns.push(base);
-				base = details2;
+			if (!base) {
+				return Promise.reject('No base enrollment found');
 			}
-		}
 
-		//iterate through all the options and figure out which one
-		//should be the base and what the add ons should be
-		this.CourseEnrollmentStore.forEachOption(function (option) {
-			var optionDetails = details.Options[option.name];
+			loading = me.__addEnrollmentBase(base);
 
-			//if we're not available stop here
-			if (!optionDetails.IsAvailable) { return; }
+			addOns = addOns.map(function (addOn) {
+				if (!addOn) {
+					return;
+				}
 
-			if (option.base || optionDetails.IsEnrolled) {
-				addBase(option, optionDetails);
-			} else {
-				addOns.push(option);
+				me.state.addOns[addOn.name] = {
+					name: addOn.name,
+					loading: true,
+				};
+
+				return me.__addEnrollmentOption(addOn);
+			});
+
+			Promise.all(addOns).then(function () {
+				if (me.__stateToRestore) {
+					me.__stateToRestore.call();
+				}
+			});
+
+			return loading;
+		},
+
+		__maybeUpdateCard: function (state) {
+			var me = this,
+				card = me.cardsContainerEl,
+				addOns = Object.keys(state.addOns || {});
+
+			//if the card is still loading there's no need to update
+			if (card.hasCls('loading')) {
+				return;
 			}
-		});
 
-		if (!base) {
-			return Promise.reject('No base enrollment found');
-		}
+			addOns.forEach(function (key) {
+				var el = card.down('.loading[data-name="' + key + '"]'),
+					obj = state.addOns[key] || {},
+					title = obj.title,
+					titleEl = el && el.down('.title'),
+					price = obj.price,
+					info = obj.information,
+					infoEl = el && el.down('.info'),
+					seats = obj.seats,
+					seatsEl = el && el.down('.seats'),
+					warning = obj.warning,
+					warningEl = el && el.down('.warning');
 
-		loading = me.__addEnrollmentBase(base);
+				if (!el) {
+					return;
+				}
 
-		addOns = addOns.map(function (addOn) {
-			if (!addOn) { return; }
+				el.removeCls('loading');
 
-			me.state.addOns[addOn.name] = {
-				name: addOn.name,
-				loading: true
+				if (obj.cls) {
+					el.addCls(obj.cls);
+				}
+
+				price = me.getPriceString(state.base.price, price);
+
+				if (title && titleEl) {
+					if (price) {
+						titleEl.update(title + '<span>(' + price + ')</span>');
+					} else {
+						titleEl.update(title);
+					}
+				}
+
+				if (info && infoEl) {
+					infoEl.update(info);
+				}
+
+				if (seats && seatsEl) {
+					seatsEl.update(seats);
+				}
+
+				if (warning && warningEl) {
+					warningEl.update(warning);
+				}
+			});
+		},
+
+		__buildCard: function (state) {
+			var data = {
+					base: state.base,
+					addOns: [],
+					buttonName: state.base.name,
+					buttonCls: this.getButtonCls(state.base),
+					buttonText: state.base.buttonText || '',
+					drop: state.base.drop,
+					gifts: state.gifts,
+				},
+				me = this,
+				addOns = Ext.Object.getValues(state.addOns);
+
+			addOns.forEach(function (addOn) {
+				addOn.difference = me.getPriceString(
+					state.base.price,
+					addOn.price
+				);
+
+				if (addOn.loading) {
+					addOn.cls = addOn.cls ? addOn.cls + ' loading' : 'loading';
+				}
+				data.addOns.push(addOn);
+			});
+
+			data.base.priceString = this.getPriceString(data.base.price);
+
+			me.enrollmentCardTpl.append(me.cardsContainerEl, data);
+			me.cardsContainerEl.removeCls('loading');
+		},
+
+		__buildCongratsCard: function () {
+			var isFirstTimer = $AppConfig.userObject.hasLink(
+					'first_time_logon'
+				),
+				data = {
+					firstName: Ext.String.capitalize(
+						$AppConfig.userObject.get('FirstName') ||
+							$AppConfig.userObject.getName()
+					),
+					isFirstLogin: isFirstTimer,
+				},
+				me = this;
+
+			me.el.setScrollTop(0);
+			me.el.addCls('has-overlay');
+			me.congratsLayerEl = Ext.get(
+				me.enrollmentConfirmationTpl.append(me.el, data)
+			);
+			me.mon(me.congratsLayerEl, 'click', 'congratsLayerClicked', me);
+
+			me.requiredActions = isFirstTimer
+				? ['createProfile', 'suggestContacts']
+				: ['suggestContacts'];
+			me.updateWindowButtons(me.requiredActions.first());
+		},
+
+		__showError: function () {},
+
+		/**
+		 * Updates the enrollment card to match the options available
+		 * to the user for this course
+		 *
+		 * @param {boolean} updateFromStore update the course from the available courses store
+		 * @returns {void}
+		 */
+		updateEnrollmentCard: function (updateFromStore) {
+			if (this.isDestroyed) {
+				return;
+			}
+
+			var me = this,
+				c;
+
+			if (updateFromStore && !this.useReactEnrollment) {
+				c = this.CourseStore.findCourseForNtiid(me.course.getId());
+				if (c) {
+					me.course = c;
+				}
+			}
+
+			if (this.useReactEnrollment) {
+				this.showNewEnrollmentCard(updateFromStore);
+				return;
+			}
+
+			me.cardsContainerEl.addCls('loading');
+			me.cardsContainerEl.dom.innerHTML = '';
+
+			//empty out the previous options
+			me.enrollmentOptions = {};
+
+			//start with an empty state
+			me.state = {
+				base: null,
+				addOns: {},
+				gifts: null,
 			};
 
-			return me.__addEnrollmentOption(addOn);
-		});
+			Promise.all([
+				me.CourseEnrollmentStore.getEnrollmentDetails(me.course),
+				me.CourseEnrollmentStore.getGiftDetails(me.course),
+			])
+				.then(function (results) {
+					var enrollment = results[0],
+						gift = results[1];
 
-		Promise.all(addOns)
-			.then(function () {
-				if (me.__stateToRestore) {
-					me.__stateToRestore.call();
-				}
-			});
+					me.enrollmentOptions.GiftOption = gift;
+					me.state.gifts = gift.Wording;
 
-		return loading;
-	},
+					return me.__onDetailsLoaded(enrollment);
+				})
+				.then(function () {
+					return me.state;
+				})
+				.catch(function (reason) {
+					console.error('Failed to load enrollment details', reason);
+					me.__showError();
+					return Promise.reject(); //keep the failure going
+				})
+				.then(me.__buildCard.bind(me))
+				.then(function () {
+					if (me.__stateToRestore) {
+						me.__stateToRestore.call();
+					}
+				});
+		},
 
-	__maybeUpdateCard: function (state) {
-		var me = this,
-			card = me.cardsContainerEl,
-			addOns = Object.keys(state.addOns || {});
-
-
-		//if the card is still loading there's no need to update
-		if (card.hasCls('loading')) { return; }
-
-		addOns.forEach(function (key) {
-			var el = card.down('.loading[data-name="' + key + '"]'),
-				obj = state.addOns[key] || {},
-				title = obj.title,
-				titleEl = el && el.down('.title'),
-				price = obj.price,
-				info = obj.information,
-				infoEl = el && el.down('.info'),
-				seats = obj.seats,
-				seatsEl = el && el.down('.seats'),
-				warning = obj.warning,
-				warningEl = el && el.down('.warning');
-
-			if (!el) { return; }
-
-			el.removeCls('loading');
-
-			if (obj.cls) {
-				el.addCls(obj.cls);
-			}
-
-			price = me.getPriceString(state.base.price, price);
-
-			if (title && titleEl) {
-				if (price) {
-					titleEl.update(title + '<span>(' + price + ')</span>');
-				} else {
-					titleEl.update(title);
-				}
-			}
-
-			if (info && infoEl) {
-				infoEl.update(info);
-			}
-
-			if (seats && seatsEl) {
-				seatsEl.update(seats);
-			}
-
-			if (warning && warningEl) {
-				warningEl.update(warning);
-			}
-		});
-	},
-
-	__buildCard: function (state) {
-		var data = {
-				base: state.base,
-				addOns: [],
-				buttonName: state.base.name,
-				buttonCls: this.getButtonCls(state.base),
-				buttonText: state.base.buttonText || '',
-				drop: state.base.drop,
-				gifts: state.gifts
-			},
-			me = this,
-			addOns = Ext.Object.getValues(state.addOns);
-
-		addOns.forEach(function (addOn) {
-			addOn.difference = me.getPriceString(state.base.price, addOn.price);
-
-			if (addOn.loading) {
-				addOn.cls = addOn.cls ? addOn.cls + ' loading' : 'loading';
-			}
-			data.addOns.push(addOn);
-		});
-
-		data.base.priceString = this.getPriceString(data.base.price);
-
-		me.enrollmentCardTpl.append(me.cardsContainerEl, data);
-		me.cardsContainerEl.removeCls('loading');
-
-	},
-
-	__buildCongratsCard: function () {
-		var isFirstTimer = $AppConfig.userObject.hasLink('first_time_logon'),
-			data = {
-				firstName: Ext.String.capitalize($AppConfig.userObject.get('FirstName') || $AppConfig.userObject.getName()),
-				isFirstLogin: isFirstTimer
-			},
-			me = this;
-
-		me.el.setScrollTop(0);
-		me.el.addCls('has-overlay');
-		me.congratsLayerEl = Ext.get(me.enrollmentConfirmationTpl.append(me.el, data));
-		me.mon(me.congratsLayerEl, 'click', 'congratsLayerClicked', me);
-
-		me.requiredActions = isFirstTimer ? ['createProfile', 'suggestContacts'] : ['suggestContacts'];
-		me.updateWindowButtons(me.requiredActions.first());
-	},
-
-	__showError: function () {
-
-	},
-
-	/**
-	 * Updates the enrollment card to match the options available
-	 * to the user for this course
-	 *
-	 * @param {boolean} updateFromStore update the course from the available courses store
-	 * @returns {void}
-	 */
-	updateEnrollmentCard: function (updateFromStore) {
-		if (this.isDestroyed) {
-			return;
-		}
-
-
-		var me = this, c;
-
-		if(updateFromStore && !this.useReactEnrollment) {
-			c = this.CourseStore.findCourseForNtiid(me.course.getId());
-			if (c) {
-				me.course = c;
-			}
-		}
-
-		if (this.useReactEnrollment) {
-			this.showNewEnrollmentCard(updateFromStore);
-			return;
-		}
-
-
-		me.cardsContainerEl.addCls('loading');
-		me.cardsContainerEl.dom.innerHTML = '';
-
-		//empty out the previous options
-		me.enrollmentOptions = {};
-
-		//start with an empty state
-		me.state = {
-			base: null,
-			addOns: {},
-			gifts: null
-		};
-
-		Promise.all([
-			me.CourseEnrollmentStore.getEnrollmentDetails(me.course),
-			me.CourseEnrollmentStore.getGiftDetails(me.course)
-		])
-			.then(function (results) {
-				var enrollment = results[0],
-					gift = results[1];
-
-				me.enrollmentOptions.GiftOption = gift;
-				me.state.gifts = gift.Wording;
-
-				return me.__onDetailsLoaded(enrollment);
-			})
-			.then(function () {
-				return me.state;
-			})
-			.catch(function (reason) {
-				console.error('Failed to load enrollment details', reason);
-				me.__showError();
-				return Promise.reject();//keep the failure going
-			})
-			.then(me.__buildCard.bind(me))
-			.then(function () {
-				if (me.__stateToRestore) {
-					me.__stateToRestore.call();
-				}
-			});
-	},
-
-
-	showNewEnrollmentCard (update) {
-		Promise.all([
-			this.course.getInterfaceInstance()
-				.then((catalogEntry) => {
-					if(update) {
-						return catalogEntry.refresh()
+		showNewEnrollmentCard(update) {
+			Promise.all([
+				this.course.getInterfaceInstance().then(catalogEntry => {
+					if (update) {
+						return catalogEntry
+							.refresh()
 							.then(entry => entry)
 							.catch(() => {
-								if(this.onDrop) {
+								if (this.onDrop) {
 									this.onDrop(true);
 								}
 							});
@@ -639,23 +844,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 					return catalogEntry;
 				}),
-			this.CourseEnrollmentStore.getEnrollmentDetails(this.course)
-				.then((enrollment) => {
-					const {Options} = enrollment;
+				this.CourseEnrollmentStore.getEnrollmentDetails(
+					this.course
+				).then(enrollment => {
+					const { Options } = enrollment;
 
 					return Promise.all(
-						Object.keys(Options)
-							.map((key) => {
-								const option = Options[key];
+						Object.keys(Options).map(key => {
+							const option = Options[key];
 
-								return option.loaded
-									.catch(() => null);
-							})
+							return option.loaded.catch(() => null);
+						})
 					);
 				}),
-			this.CourseEnrollmentStore.getGiftDetails(this.course)
-		])
-			.then(([catalogEntry, enrollment, gift]) => {
+				this.CourseEnrollmentStore.getGiftDetails(this.course),
+			]).then(([catalogEntry, enrollment, gift]) => {
 				if (this.reactEnrollmentCard) {
 					this.reactEnrollmentCard.destroy();
 					delete this.reactEnrollmentCard;
@@ -668,9 +871,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					component: Enrollment.Options,
 					catalogEntry,
 					getRouteFor: (option, context) => {
-						const isIMIS = option.MimeType === 'application/vnd.nextthought.courseware.ensyncimisexternalenrollmentoption';
-						const isEnrolled = option.MimeType === 'application/vnd.nextthought.courseware.courseinstanceenrollment';
-						const isAdmin = option.MimeType === 'application/vnd.nextthought.courseware.courseinstanceadministrativerole';
+						const isIMIS =
+							option.MimeType ===
+							'application/vnd.nextthought.courseware.ensyncimisexternalenrollmentoption';
+						const isEnrolled =
+							option.MimeType ===
+							'application/vnd.nextthought.courseware.courseinstanceenrollment';
+						const isAdmin =
+							option.MimeType ===
+							'application/vnd.nextthought.courseware.courseinstanceadministrativerole';
 
 						if (context === 'open' && (isEnrolled || isAdmin)) {
 							return () => this.openCourse(option);
@@ -681,19 +890,31 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 								return option.enrollmentURL;
 							}
 
-							return () => this.handleEnrollInOption(option, enrollment, gift);
+							return () =>
+								this.handleEnrollInOption(
+									option,
+									enrollment,
+									gift
+								);
 						}
 
 						if (context === 'drop') {
-							return () => this.handleDropOption(option, enrollment, gift);
+							return () =>
+								this.handleDropOption(option, enrollment, gift);
 						}
 
 						if (context === 'gift') {
-							return () => this.handleGiftOption(option, enrollment, gift);
+							return () =>
+								this.handleGiftOption(option, enrollment, gift);
 						}
 
 						if (context === 'redeem') {
-							return () => this.handleRedeemOption(option, enrollment, gift);
+							return () =>
+								this.handleRedeemOption(
+									option,
+									enrollment,
+									gift
+								);
 						}
 
 						if (context === 'get-acquainted') {
@@ -703,552 +924,670 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						if (context === 'complete-profile') {
 							return () => this.completeProfile();
 						}
-					}
+					},
 				});
 			});
-	},
+		},
 
-
-
-	handleEnrollInOption (option, availableOptions) {
-		for (let available of availableOptions) {
-			if (available && available.Name === option.Class) {
-				return this.doEnrollment(available);
-			}
-		}
-	},
-
-
-	handleDropOption (option, availableOptions) {
-		for (let available of availableOptions) {
-			if (available && available.Name === option.Class) {
-				return this.doDrop(available);
-			}
-		}
-	},
-
-
-	handleGiftOption (option, availableOptions, gift) {
-		if (gift) {
-			gift.doEnrollment(this, 'gift');
-		}
-	},
-
-
-	handleRedeemOption (option, availableOptions, gift) {
-		if (gift) {
-			gift.doEnrollment(this, 'redeem');
-		}
-	},
-
-	/**
-	 * takes the prices and returns the string we should show to the user
-	 *
-	 * @param  {number} base  the price of the base option
-	 * @param  {number} addOn the price of the addon
-	 * @returns {string}		  what we should show the user
-	 */
-	getPriceString: function (base, addOn) {
-		var price;
-
-		if (!addOn && base === null) {
-			return '';
-		}
-
-		base = base === 'Free' ? 0 : base;
-		addOn = addOn === 'Free' ? 0 : addOn;
-
-		//if no add on was passed
-		//get the string for the base
-		if (addOn === undefined) {
-			if (!base) {
-				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
-			} else {
-				price = getString('NextThought.view.courseware.enrollment.Details.DollarSign') + base;
-			}
-		//if is no base or its free (0)
-		} else if (!base) {
-			if (!addOn) {
-				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
-			} else {
-				price = getString('NextThought.view.courseware.enrollment.Details.DollarSign') + addOn;
-			}
-		} else {
-			if (!addOn) {
-				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
-			} else {
-				price = getString('NextThought.view.courseware.enrollment.Details.AddDollarSign') + Math.abs(addOn - base);
-			}
-		}
-
-		return price;
-	},
-
-	getButtonCls: function (option) {
-		var cls = 'free';
-
-		if (option.cls === 'enrolled') {
-			cls = 'drop';
-		} else if (option.price) {
-			cls = 'paid';
-		} else {
-			cls = 'free';
-		}
-
-		return cls;
-	},
-
-	showMessage: function (msg, isError, cursor) {
-		var me = this,
-			win = me.up('[showMsg]'),
-			guid = guidGenerator();
-
-		if (!win) {return;}//user closed window before we got here.
-
-		win.showMsg(msg, isError, false, guid, cursor);
-
-		Ext.destroy(me.__showMessageClickMonitor);
-		me.__showMessageClickMonitor = me.mon(win, {
-			destroyable: true,
-			single: true,
-			'message-clicked': function (msgId) {
-				if (msgId === guid) {
-					Ext.callback(me.msgClickHandler);
+		handleEnrollInOption(option, availableOptions) {
+			for (let available of availableOptions) {
+				if (available && available.Name === option.Class) {
+					return this.doEnrollment(available);
 				}
 			}
-		});
-	},
+		},
 
-	clearMessage: function () {
-		var win = this.up('[closeMsg]');
+		handleDropOption(option, availableOptions) {
+			for (let available of availableOptions) {
+				if (available && available.Name === option.Class) {
+					return this.doDrop(available);
+				}
+			}
+		},
 
-		if (win) {
-			win.closeMsg();
-			Ext.destroy(this.__showMessageClickMonitor);
-		}
-	},
+		handleGiftOption(option, availableOptions, gift) {
+			if (gift) {
+				gift.doEnrollment(this, 'gift');
+			}
+		},
 
-	/**
-	 * Handles a click on the enrollment card and calls the appropriate handler
-	 * @param  {Event} e the click event
-	 * @returns {boolean}   if the event was stopped
-	 */
-	handleEnrollmentClick: function (e) {
-		if (this.useReactEnrollment) { return; }
+		handleRedeemOption(option, availableOptions, gift) {
+			if (gift) {
+				gift.doEnrollment(this, 'redeem');
+			}
+		},
 
-		var checkbox = e.getTarget('.addon.checkbox'),
-			button = e.getTarget('.button'),
-			gift = e.getTarget('.gift-card'),
-			anchor = e.getTarget('a'), r;
+		/**
+		 * takes the prices and returns the string we should show to the user
+		 *
+		 * @param  {number} base  the price of the base option
+		 * @param  {number} addOn the price of the addon
+		 * @returns {string}		  what we should show the user
+		 */
+		getPriceString: function (base, addOn) {
+			var price;
 
-		if (checkbox) {
-			r = this.updateSelectedEnrollment(Ext.get(checkbox), e);
-		} else if (button) {
-			r = this.enrollmentClicked(Ext.get(button), e);
-		} else if (anchor) {
-			r = this.linkClicked(Ext.get(anchor), e);
-		} else if (gift) {
-			r = this.giftClicked(Ext.get(gift), e);
-		}
-
-		return r;
-	},
-
-	/**
-	 * Updates the cards and button toggling a addon
-	 * @param  {Ext.element} checkbox the addon element
-	 * @param  {Event} e		the click event
-	 * @returns {void}
-	 */
-	updateSelectedEnrollment: function (checkbox, e) {
-		//if the checkbox is full don't do anything
-		if (checkbox.hasCls('full')) { return; }
-
-		var me = this,
-			name = checkbox.getAttribute('data-name'),
-			baseEl = me.cardsContainerEl.down('.enroll-option.base:not(.enrolled)'),
-			button = me.cardsContainerEl.down('.button'),
-			titleEl = baseEl && baseEl.down('.title'),
-			priceEl = baseEl && baseEl.down('.price'),
-			refundEl = baseEl && baseEl.down('.refund'),
-			title, price, refund;
-
-		function fillInOption (option) {
-			title = option.title;
-			refund = option.refund;
-			price = me.getPriceString(option.price);
-
-			button.removeCls(['paid', 'free', 'drop']);
-			button.addCls(me.getButtonCls(option));
-			button.dom.setAttribute('data-name', option.name);
-			button.update(option.buttonText);
-
-			if (titleEl) {
-				titleEl.update(title);
+			if (!addOn && base === null) {
+				return '';
 			}
 
-			if (priceEl) {
-				priceEl.update(price);
+			base = base === 'Free' ? 0 : base;
+			addOn = addOn === 'Free' ? 0 : addOn;
+
+			//if no add on was passed
+			//get the string for the base
+			if (addOn === undefined) {
+				if (!base) {
+					price = getString(
+						'NextThought.view.courseware.enrollment.Details.PriceFree'
+					);
+				} else {
+					price =
+						getString(
+							'NextThought.view.courseware.enrollment.Details.DollarSign'
+						) + base;
+				}
+				//if is no base or its free (0)
+			} else if (!base) {
+				if (!addOn) {
+					price = getString(
+						'NextThought.view.courseware.enrollment.Details.PriceFree'
+					);
+				} else {
+					price =
+						getString(
+							'NextThought.view.courseware.enrollment.Details.DollarSign'
+						) + addOn;
+				}
+			} else {
+				if (!addOn) {
+					price = getString(
+						'NextThought.view.courseware.enrollment.Details.PriceFree'
+					);
+				} else {
+					price =
+						getString(
+							'NextThought.view.courseware.enrollment.Details.AddDollarSign'
+						) + Math.abs(addOn - base);
+				}
 			}
 
-			if (refundEl) {
-				refundEl.update(refund);
-			}
-		}
+			return price;
+		},
 
-		//if the checkbox already has a class of checked
-		//set it back to the base
-		if (checkbox.hasCls('checked')) {
-			fillInOption(me.state.base);
+		getButtonCls: function (option) {
+			var cls = 'free';
 
-			checkbox.removeCls('checked');
-		} else {
-			fillInOption(me.state.addOns[name]);
-
-			checkbox.addCls('checked');
-		}
-	},
-
-	/**
-	 * Handles anchors with hrefs that we are looking for
-	 * @param  {Ext.element} link the anchor that was clicked
-	 * @param  {Event} e	the click event
-	 * @returns {boolean}	  whether or not the event should be stopped
-	 */
-	linkClicked: function (link, e) {
-		var href = link.getAttribute('href'), r = true,
-			u = $AppConfig.userObject;
-
-		if (href === 'welcome') {
-			e.stopEvent();
-			this.AccountActions.showWelcomePage(u.getLink('content.permanent_welcome_page'));
-
-			r = false;
-		} else if (href === 'profile') {
-			if (e) {
-				e.stopEvent();
+			if (option.cls === 'enrolled') {
+				cls = 'drop';
+			} else if (option.price) {
+				cls = 'paid';
+			} else {
+				cls = 'free';
 			}
 
-			NavigationActions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
-				user: u
-			});
+			return cls;
+		},
 
-			r = false;
-		} else if (href === 'resubmit') {
-			e.stopEvent();
-			this.enrollInOption('FiveminuteEnrollment');
+		showMessage: function (msg, isError, cursor) {
+			var me = this,
+				win = me.up('[showMsg]'),
+				guid = guidGenerator();
 
-			r = false;
-		}
+			if (!win) {
+				return;
+			} //user closed window before we got here.
 
-		return r;
-	},
+			win.showMsg(msg, isError, false, guid, cursor);
 
-
-	launchWelcomeGuide () {
-		const u = $AppConfig.userObject;
-
-		this.AccountActions.showWelcomePage(u.getLink('content.permanent_welcome_page'));
-	},
-
-
-	completeProfile () {
-		const u = $AppConfig.userObject;
-
-		NavigationActions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
-			user: u
-		});
-	},
-
-
-	openCourse (course) {
-		NavigationActions.pushRootRoute(course.CatalogEntry.title, `course/${encodeForURI(course.getCourseID ? course.getCourseID() : course.NTIID)}`);
-	},
-
-	/**
-	 * Handles the button being clicked for enrolling/dropping
-	 * @param  {Ext.element} button the button element
-	 * @param  {Event} e	  the click event
-	 * @returns {void}
-	 */
-	enrollmentClicked: function (button, e) {
-		var me = this,
-			video = me.details.getVideo(),
-			name = button.getAttribute('data-name'),
-			option = me.enrollmentOptions[name];
-
-		if (!option) {
-			console.error('No enrollment option with that name', button);
-			return;
-		}
-
-		if (video) {
-			video.stopPlayback();
-		}
-
-		if (option.Enrolled && option.undoEnrollment) {
-			this.doDrop(option);
-		} else if (option.doEnrollment) {
-			this.doEnrollment(option);
-		}
-
-	},
-
-	doneEnrolling (success, changed) {
-		delete this.changingEnrollment;
-
-		if (success && changed) {
-			this.updateEnrollmentCard(true);
-		}
-
-		this.removeMask();
-	},
-
-
-	doEnrollment (option) {
-		const me = this;
-		const courseTitle = me.course.get('Title');
-		const win = this.up('window');
-
-		let action;
-
-		if (!option.doEnrollment) { return; }
-
-		if (option.lock) {
-			me.changingEnrollment = true;
-		}
-
-		action = option.doEnrollment(me);
-
-		if (action) {
-			me.addMask();
-			action
-				.then(function (changed) {
-					// TODO: We're not ready to show this yet.
-					if (isFeature('suggest-contacts')) {
-						me.__buildCongratsCard();
-					}
-					return changed;
-				})
-				.then(function (changed) {
-					me.fireEvent('enrolled-action', true);
-					me.msgClickHandler = function () {
-						var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
-						Promise.resolve(c)
-							.then(course => course.getCourseInstance())
-							.then(instance => {
-								instance.fireNavigationEvent(me);
-
-								if (win) {
-									win.close();
-								}
-							})
-							.catch(function (reason) {
-								alert('Unable to find course.');
-								console.error('Unable to find course.', reason);
-							});
-					};
-
-					if (!isFeature('suggest-contacts')) {
-						me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-							course: courseTitle
-						}));
-					} else {
-						me.clearMessage();
-					}
-
-					me.course.updateFromServer().then(() => {
-						if (me.onEnroll) {
-							me.doneEnrolling(true, changed);
-							me.onEnroll();
-						} else {
-							me.doneEnrolling(true, changed);
-						}
-					});
-				})
-				.catch(function (reason) {
-					if (reason === 409) {
-						console.error('failed to enroll in course', reason);
-						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
-					}
-					else {
-						me.doneEnrolling(false);
-					}
-				});
-		}
-	},
-
-	doDrop (option) {
-		const me = this;
-		const courseTitle = me.course.get('Title');
-
-		me.changingEnrollment = true;
-		Ext.Msg.show({
-			msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: courseTitle}),
-			title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
-			icon: 'warning-red',
-			buttons: {
-				primary: {
-					text: getString('NextThought.view.courseware.enrollment.Details.DropCourse'),
-					cls: 'caution',
-					handler: function () {
-						me.addMask();
-						option.undoEnrollment(me)
-							.then(function (changed) {
-								me.fireEvent('enrolled-action', false);
-								me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
-									course: courseTitle
-								}));
-
-								me.course.updateFromServer().then(() => {
-									if (me.onDrop) {
-										me.doneEnrolling(true, changed);
-										me.onDrop();
-									} else {
-										me.doneEnrolling(true, changed);
-									}
-								});
-							})
-							.catch(function (reason) {
-								var msg;
-
-								if (reason) {
-									if (reason.status === 404) {
-										msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
-									} else if (reason.status === 403) {
-										msg = reason.message || getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-									}
-								} else {
-									msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-								}
-
-								console.error('failed to drop course', reason);
-								//already dropped?? -- double check the string to make sure it's correct
-								me.showMessage(msg, true);
-								me.doneEnrolling(false);
-							});
+			Ext.destroy(me.__showMessageClickMonitor);
+			me.__showMessageClickMonitor = me.mon(win, {
+				destroyable: true,
+				single: true,
+				'message-clicked': function (msgId) {
+					if (msgId === guid) {
+						Ext.callback(me.msgClickHandler);
 					}
 				},
-				secondary: {
-					text: getString('NextThought.view.courseware.enrollment.Details.DropCancel'),
-					handler: me.doneEnrolling.bind(me, false)
+			});
+		},
+
+		clearMessage: function () {
+			var win = this.up('[closeMsg]');
+
+			if (win) {
+				win.closeMsg();
+				Ext.destroy(this.__showMessageClickMonitor);
+			}
+		},
+
+		/**
+		 * Handles a click on the enrollment card and calls the appropriate handler
+		 * @param  {Event} e the click event
+		 * @returns {boolean}   if the event was stopped
+		 */
+		handleEnrollmentClick: function (e) {
+			if (this.useReactEnrollment) {
+				return;
+			}
+
+			var checkbox = e.getTarget('.addon.checkbox'),
+				button = e.getTarget('.button'),
+				gift = e.getTarget('.gift-card'),
+				anchor = e.getTarget('a'),
+				r;
+
+			if (checkbox) {
+				r = this.updateSelectedEnrollment(Ext.get(checkbox), e);
+			} else if (button) {
+				r = this.enrollmentClicked(Ext.get(button), e);
+			} else if (anchor) {
+				r = this.linkClicked(Ext.get(anchor), e);
+			} else if (gift) {
+				r = this.giftClicked(Ext.get(gift), e);
+			}
+
+			return r;
+		},
+
+		/**
+		 * Updates the cards and button toggling a addon
+		 * @param  {Ext.element} checkbox the addon element
+		 * @param  {Event} e		the click event
+		 * @returns {void}
+		 */
+		updateSelectedEnrollment: function (checkbox, e) {
+			//if the checkbox is full don't do anything
+			if (checkbox.hasCls('full')) {
+				return;
+			}
+
+			var me = this,
+				name = checkbox.getAttribute('data-name'),
+				baseEl = me.cardsContainerEl.down(
+					'.enroll-option.base:not(.enrolled)'
+				),
+				button = me.cardsContainerEl.down('.button'),
+				titleEl = baseEl && baseEl.down('.title'),
+				priceEl = baseEl && baseEl.down('.price'),
+				refundEl = baseEl && baseEl.down('.refund'),
+				title,
+				price,
+				refund;
+
+			function fillInOption(option) {
+				title = option.title;
+				refund = option.refund;
+				price = me.getPriceString(option.price);
+
+				button.removeCls(['paid', 'free', 'drop']);
+				button.addCls(me.getButtonCls(option));
+				button.dom.setAttribute('data-name', option.name);
+				button.update(option.buttonText);
+
+				if (titleEl) {
+					titleEl.update(title);
+				}
+
+				if (priceEl) {
+					priceEl.update(price);
+				}
+
+				if (refundEl) {
+					refundEl.update(refund);
 				}
 			}
-		});
-	},
 
-	giftClicked: function (el, e) {
-		var give = e.getTarget('.give'),
-			redeem = e.getTarget('.redeem'),
-			option = this.enrollmentOptions.GiftOption;
+			//if the checkbox already has a class of checked
+			//set it back to the base
+			if (checkbox.hasCls('checked')) {
+				fillInOption(me.state.base);
 
-		if (give) {
-			option.doEnrollment(this, 'gift');
-		} else if (redeem) {
-			option.doEnrollment(this, 'redeem');
-		}
-	},
+				checkbox.removeCls('checked');
+			} else {
+				fillInOption(me.state.addOns[name]);
 
-	enrollInOption: function (name) {
-		var option = this.enrollmentOptions[name];
+				checkbox.addCls('checked');
+			}
+		},
 
-		if (option) {
-			option.doEnrollment(this);
-		}
-	},
+		/**
+		 * Handles anchors with hrefs that we are looking for
+		 * @param  {Ext.element} link the anchor that was clicked
+		 * @param  {Event} e	the click event
+		 * @returns {boolean}	  whether or not the event should be stopped
+		 */
+		linkClicked: function (link, e) {
+			var href = link.getAttribute('href'),
+				r = true,
+				u = $AppConfig.userObject;
 
-	congratsLayerClicked: function (el) {
-		var nextSelectionEl = el.getTarget('.add-course');
+			if (href === 'welcome') {
+				e.stopEvent();
+				this.AccountActions.showWelcomePage(
+					u.getLink('content.permanent_welcome_page')
+				);
 
-		if (nextSelectionEl) {
-			this.fireEvent('go-back');
-		}
-	},
-
-	suggestContacts: function (onComplete) {
-		var me = this, peersStore, c;
-
-		c = this.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
-		Promise.resolve(c)
-			.then(course => course.getCourseInstance())
-			.then(instance => {
-				if (instance && instance.getSuggestContacts) {
-					instance.getSuggestContacts()
-						.then(function (items) {
-							if (Ext.isEmpty(items)) { return Promise.reject(); }
-
-							var a = Ext.getStore('all-contacts-store');
-							peersStore = new Ext.data.Store({
-								model: User,
-								proxy: 'memory',
-								data: items,
-								filters: [
-									function (item) {
-										return !(a && a.contains(item.get('Username')));
-									}
-								]
-							});
-							me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
-							me.suggestContactsWin.show();
-							me.mon(me.suggestContactsWin, 'destroy', onComplete);
-							me.mon(me.suggestContactsWin, 'destroy', 'refresh');
-						})
-						.catch(function () {
-							me.mon(Ext.widget('oobe-contact-window'), 'destroy', onComplete);
-						});
+				r = false;
+			} else if (href === 'profile') {
+				if (e) {
+					e.stopEvent();
 				}
+
+				NavigationActions.pushRootRoute(
+					u.getName(),
+					u.getProfileUrl('about'),
+					{
+						user: u,
+					}
+				);
+
+				r = false;
+			} else if (href === 'resubmit') {
+				e.stopEvent();
+				this.enrollInOption('FiveminuteEnrollment');
+
+				r = false;
+			}
+
+			return r;
+		},
+
+		launchWelcomeGuide() {
+			const u = $AppConfig.userObject;
+
+			this.AccountActions.showWelcomePage(
+				u.getLink('content.permanent_welcome_page')
+			);
+		},
+
+		completeProfile() {
+			const u = $AppConfig.userObject;
+
+			NavigationActions.pushRootRoute(
+				u.getName(),
+				u.getProfileUrl('about'),
+				{
+					user: u,
+				}
+			);
+		},
+
+		openCourse(course) {
+			NavigationActions.pushRootRoute(
+				course.CatalogEntry.title,
+				`course/${encodeForURI(
+					course.getCourseID ? course.getCourseID() : course.NTIID
+				)}`
+			);
+		},
+
+		/**
+		 * Handles the button being clicked for enrolling/dropping
+		 * @param  {Ext.element} button the button element
+		 * @param  {Event} e	  the click event
+		 * @returns {void}
+		 */
+		enrollmentClicked: function (button, e) {
+			var me = this,
+				video = me.details.getVideo(),
+				name = button.getAttribute('data-name'),
+				option = me.enrollmentOptions[name];
+
+			if (!option) {
+				console.error('No enrollment option with that name', button);
+				return;
+			}
+
+			if (video) {
+				video.stopPlayback();
+			}
+
+			if (option.Enrolled && option.undoEnrollment) {
+				this.doDrop(option);
+			} else if (option.doEnrollment) {
+				this.doEnrollment(option);
+			}
+		},
+
+		doneEnrolling(success, changed) {
+			delete this.changingEnrollment;
+
+			if (success && changed) {
+				this.updateEnrollmentCard(true);
+			}
+
+			this.removeMask();
+		},
+
+		doEnrollment(option) {
+			const me = this;
+			const courseTitle = me.course.get('Title');
+			const win = this.up('window');
+
+			let action;
+
+			if (!option.doEnrollment) {
+				return;
+			}
+
+			if (option.lock) {
+				me.changingEnrollment = true;
+			}
+
+			action = option.doEnrollment(me);
+
+			if (action) {
+				me.addMask();
+				action
+					.then(function (changed) {
+						// TODO: We're not ready to show this yet.
+						if (isFeature('suggest-contacts')) {
+							me.__buildCongratsCard();
+						}
+						return changed;
+					})
+					.then(function (changed) {
+						me.fireEvent('enrolled-action', true);
+						me.msgClickHandler = function () {
+							var c = me.CourseStore.findCourseBy(
+								me.course.findByMyCourseInstance()
+							);
+							Promise.resolve(c)
+								.then(course => course.getCourseInstance())
+								.then(instance => {
+									instance.fireNavigationEvent(me);
+
+									if (win) {
+										win.close();
+									}
+								})
+								.catch(function (reason) {
+									alert('Unable to find course.');
+									console.error(
+										'Unable to find course.',
+										reason
+									);
+								});
+						};
+
+						if (!isFeature('suggest-contacts')) {
+							me.showMessage(
+								getFormattedString(
+									'NextThought.view.courseware.enrollment.Details.enrollmentSuccess',
+									{
+										course: courseTitle,
+									}
+								)
+							);
+						} else {
+							me.clearMessage();
+						}
+
+						me.course.updateFromServer().then(() => {
+							if (me.onEnroll) {
+								me.doneEnrolling(true, changed);
+								me.onEnroll();
+							} else {
+								me.doneEnrolling(true, changed);
+							}
+						});
+					})
+					.catch(function (reason) {
+						if (reason === 409) {
+							console.error('failed to enroll in course', reason);
+							me.showMessage(
+								getString(
+									'NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'
+								),
+								true
+							);
+						} else {
+							me.doneEnrolling(false);
+						}
+					});
+			}
+		},
+
+		doDrop(option) {
+			const me = this;
+			const courseTitle = me.course.get('Title');
+
+			me.changingEnrollment = true;
+			Ext.Msg.show({
+				msg: getFormattedString(
+					'NextThought.view.courseware.enrollment.Details.DropDetails',
+					{ course: courseTitle }
+				),
+				title: getString(
+					'NextThought.view.courseware.enrollment.Details.AreSure'
+				),
+				icon: 'warning-red',
+				buttons: {
+					primary: {
+						text: getString(
+							'NextThought.view.courseware.enrollment.Details.DropCourse'
+						),
+						cls: 'caution',
+						handler: function () {
+							me.addMask();
+							option
+								.undoEnrollment(me)
+								.then(function (changed) {
+									me.fireEvent('enrolled-action', false);
+									me.showMessage(
+										getFormattedString(
+											'NextThought.view.courseware.enrollment.Details.dropped',
+											{
+												course: courseTitle,
+											}
+										)
+									);
+
+									me.course.updateFromServer().then(() => {
+										if (me.onDrop) {
+											me.doneEnrolling(true, changed);
+											me.onDrop();
+										} else {
+											me.doneEnrolling(true, changed);
+										}
+									});
+								})
+								.catch(function (reason) {
+									var msg;
+
+									if (reason) {
+										if (reason.status === 404) {
+											msg = getString(
+												'NextThought.view.courseware.enrollment.Details.AlreadyDropped'
+											);
+										} else if (reason.status === 403) {
+											msg =
+												reason.message ||
+												getString(
+													'NextThought.view.courseware.enrollment.Details.ProblemDropping'
+												);
+										}
+									} else {
+										msg = getString(
+											'NextThought.view.courseware.enrollment.Details.ProblemDropping'
+										);
+									}
+
+									console.error(
+										'failed to drop course',
+										reason
+									);
+									//already dropped?? -- double check the string to make sure it's correct
+									me.showMessage(msg, true);
+									me.doneEnrolling(false);
+								});
+						},
+					},
+					secondary: {
+						text: getString(
+							'NextThought.view.courseware.enrollment.Details.DropCancel'
+						),
+						handler: me.doneEnrolling.bind(me, false),
+					},
+				},
 			});
-	},
+		},
 
-	showCreateProfile: function (onComplete) {
-		var me = this;
-		me.createProfileWin = Ext.widget('profile-create-window');
-		me.createProfileWin.show();
-		me.mon(me.createProfileWin, 'destroy', onComplete);
-	},
+		giftClicked: function (el, e) {
+			var give = e.getTarget('.give'),
+				redeem = e.getTarget('.redeem'),
+				option = this.enrollmentOptions.GiftOption;
 
-	onActionComplete: function (actionName) {
-		var me = this,
-			el = me.congratsLayerEl && me.congratsLayerEl.down('.' + actionName), nextAction;
+			if (give) {
+				option.doEnrollment(this, 'gift');
+			} else if (redeem) {
+				option.doEnrollment(this, 'redeem');
+			}
+		},
 
-		// Mark action as done
-		if (el) { el.addCls('completed'); }
-		Ext.Array.remove(me.requiredActions, actionName);
+		enrollInOption: function (name) {
+			var option = this.enrollmentOptions[name];
 
-		// Prepare for next action
-		nextAction = me.requiredActions.first();
-		if (nextAction) {
-			me.updateWindowButtons(nextAction);
-		} else {
-			me.updateWindowButtons('close', getString('NextThought.view.library.available.CourseWindow.Finished'));
-		}
-	},
+			if (option) {
+				option.doEnrollment(this);
+			}
+		},
 
-	updateWindowButtons: function (action, name) {
-		if (!action) { return; }
+		congratsLayerClicked: function (el) {
+			var nextSelectionEl = el.getTarget('.add-course');
 
-		var me = this;
-		me.getButtonCfg = function () {
-			return {
-				name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
-				action: action
+			if (nextSelectionEl) {
+				this.fireEvent('go-back');
+			}
+		},
+
+		suggestContacts: function (onComplete) {
+			var me = this,
+				peersStore,
+				c;
+
+			c = this.CourseStore.findCourseBy(
+				me.course.findByMyCourseInstance()
+			);
+			Promise.resolve(c)
+				.then(course => course.getCourseInstance())
+				.then(instance => {
+					if (instance && instance.getSuggestContacts) {
+						instance
+							.getSuggestContacts()
+							.then(function (items) {
+								if (Ext.isEmpty(items)) {
+									return Promise.reject();
+								}
+
+								var a = Ext.getStore('all-contacts-store');
+								peersStore = new Ext.data.Store({
+									model: User,
+									proxy: 'memory',
+									data: items,
+									filters: [
+										function (item) {
+											return !(
+												a &&
+												a.contains(item.get('Username'))
+											);
+										},
+									],
+								});
+								me.suggestContactsWin = Ext.widget(
+									'suggest-contacts-window',
+									{ store: peersStore }
+								);
+								me.suggestContactsWin.show();
+								me.mon(
+									me.suggestContactsWin,
+									'destroy',
+									onComplete
+								);
+								me.mon(
+									me.suggestContactsWin,
+									'destroy',
+									'refresh'
+								);
+							})
+							.catch(function () {
+								me.mon(
+									Ext.widget('oobe-contact-window'),
+									'destroy',
+									onComplete
+								);
+							});
+					}
+				});
+		},
+
+		showCreateProfile: function (onComplete) {
+			var me = this;
+			me.createProfileWin = Ext.widget('profile-create-window');
+			me.createProfileWin.show();
+			me.mon(me.createProfileWin, 'destroy', onComplete);
+		},
+
+		onActionComplete: function (actionName) {
+			var me = this,
+				el =
+					me.congratsLayerEl &&
+					me.congratsLayerEl.down('.' + actionName),
+				nextAction;
+
+			// Mark action as done
+			if (el) {
+				el.addCls('completed');
+			}
+			Ext.Array.remove(me.requiredActions, actionName);
+
+			// Prepare for next action
+			nextAction = me.requiredActions.first();
+			if (nextAction) {
+				me.updateWindowButtons(nextAction);
+			} else {
+				me.updateWindowButtons(
+					'close',
+					getString(
+						'NextThought.view.library.available.CourseWindow.Finished'
+					)
+				);
+			}
+		},
+
+		updateWindowButtons: function (action, name) {
+			if (!action) {
+				return;
+			}
+
+			var me = this;
+			me.getButtonCfg = function () {
+				return {
+					name:
+						name ||
+						getString(
+							'NextThought.view.library.available.CourseWindow.Continue'
+						),
+					action: action,
+				};
 			};
-		};
 
-		if (me.ownerCt && me.ownerCt.updateButtons) {
-			me.ownerCt.updateButtons();
-		}
-	},
+			if (me.ownerCt && me.ownerCt.updateButtons) {
+				me.ownerCt.updateButtons();
+			}
+		},
 
-	buttonClick: function (action) {
-		if (action === 'suggestContacts') {
-			this.suggestContacts(this.onActionComplete.bind(this, action));
-		}
-		else if (action === 'createProfile') {
-			this.showCreateProfile(this.onActionComplete.bind(this, action));
-		}
-		else {
-			console.error('Action: ', action, ' is NOT supported');
-		}
+		buttonClick: function (action) {
+			if (action === 'suggestContacts') {
+				this.suggestContacts(this.onActionComplete.bind(this, action));
+			} else if (action === 'createProfile') {
+				this.showCreateProfile(
+					this.onActionComplete.bind(this, action)
+				);
+			} else {
+				console.error('Action: ', action, ' is NOT supported');
+			}
+		},
 	}
-});
+);

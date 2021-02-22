@@ -6,36 +6,34 @@ const Anchors = require('./Anchors');
 const Globals = require('./Globals');
 const RectUtils = require('./Rects');
 
-
 module.exports = exports = Ext.define('NextThought.util.Ranges', {
-
-
-	nonContextWorthySelectors: [
-		'object:not([type*=nti])'
-	],
+	nonContextWorthySelectors: ['object:not([type*=nti])'],
 
 	customContextGathers: {
 		'object[type$=naquestion]': 'gatherQuestionContext',
-		'object[type$=ntivideo]': 'gatherVideoContext'
+		'object[type$=ntivideo]': 'gatherVideoContext',
 	},
-
 
 	saveRange: function (r) {
 		if (!r) {
 			return null;
 		}
-		return{
+		return {
 			startContainer: r.startContainer,
 			startOffset: r.startOffset,
 			endContainer: r.endContainer,
 			endOffset: r.endOffset,
-			collapsed: r.collapsed
+			collapsed: r.collapsed,
 		};
 	},
 
-
 	saveInputSelection: function (s) {
-		if (!s || !s.focusNode || !s.focusNode.firstChild || s.focusNode.firstChild.tagName !== 'INPUT') {
+		if (
+			!s ||
+			!s.focusNode ||
+			!s.focusNode.firstChild ||
+			s.focusNode.firstChild.tagName !== 'INPUT'
+		) {
 			return null;
 		}
 		var i = s.focusNode.firstChild;
@@ -43,10 +41,9 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return {
 			selectionStart: i.selectionStart,
 			selectionEnd: i.selectionEnd,
-			input: i
+			input: i,
 		};
 	},
-
 
 	restoreSavedRange: function (o) {
 		if (!o) {
@@ -59,13 +56,11 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			r = d.createRange();
 			r.setStart(o.startContainer, o.startOffset);
 			r.setEnd(o.endContainer, o.endOffset);
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e.message);
 		}
 		return r;
 	},
-
 
 	nodeIfObjectOrInObject: function (node) {
 		var selector = 'object';
@@ -78,14 +73,15 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return Ext.fly(node).up(selector);
 	},
 
-
-	rangeIfItemPropSpan: function (range/*, doc*/) {
+	rangeIfItemPropSpan: function (range /*, doc*/) {
 		/*
 		 * Special case for annototable images: We don't want to expand past the annototable img.
 		 * And since we usually expand by a given number of characters,
 		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
 		 */
-		var node = range.commonAncestorContainer, r, container,
+		var node = range.commonAncestorContainer,
+			r,
+			container,
 			markupSelector = '[itemprop~=nti-data-markupenabled]';
 
 		if (!node) {
@@ -94,22 +90,20 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 		if (Ext.fly(node).is(markupSelector)) {
 			container = node;
-		}
-		else {
+		} else {
 			container = Ext.fly(node).parent(markupSelector, true);
 		}
 
 		//If we are an annotatable image make sure we get the enclosing span so that it is
 		//annotatable in the note window.
 		if (container) {
-			console.log('we\'re inside a itemprop span.', container);
+			console.log("we're inside a itemprop span.", container);
 			r = document.createRange();
 			r.selectNode(container);
 			return r;
 		}
 		return null;
 	},
-
 
 	gatherQuestionContext: function (node) {
 		var contents = node.down('.naquestion');
@@ -118,7 +112,6 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		}
 		return null;
 	},
-
 
 	gatherVideoContext: function (node) {
 		var title, src, titleNode, sourceNode;
@@ -136,32 +129,36 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			}
 		}
 
-		return Ext.DomHelper.createDom({ cn: [
-			{html: title},
-			{
-				tag: 'img',
-				cls: 'video-thumbnail',
-				src: src
-			}
-		]});
+		return Ext.DomHelper.createDom({
+			cn: [
+				{ html: title },
+				{
+					tag: 'img',
+					cls: 'video-thumbnail',
+					src: src,
+				},
+			],
+		});
 	},
-
 
 	//How about a registry that maps the mimetype of the object
 	//to a handler that knows how to give contents
 	contentsForObjectTag: function (object) {
 		var node = null;
 
-		Ext.Object.each(this.customContextGathers, function (sel, fn) {
-			if (object.is(sel)) {
-				node = this[fn](object);
-			}
-			return !node;
-		}, this);
+		Ext.Object.each(
+			this.customContextGathers,
+			function (sel, fn) {
+				if (object.is(sel)) {
+					node = this[fn](object);
+				}
+				return !node;
+			},
+			this
+		);
 
 		return node || object.dom.cloneNode(true);
 	},
-
 
 	nodeThatIsEdgeOfRange: function (range, start) {
 		if (!range) {
@@ -197,7 +194,11 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			if (container.previousSibling) {
 				return container.previousSibling;
 			}
-			while (!container.previousSibling && container.parentNode && offset !== 0) {
+			while (
+				!container.previousSibling &&
+				container.parentNode &&
+				offset !== 0
+			) {
 				container = container.parentNode;
 			}
 
@@ -210,27 +211,37 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return container.childNodes.item(offset - 1);
 	},
 
-
 	coverAll: function (rangeA) {
 		var range = rangeA ? rangeA.cloneRange() : null,
-			start, end, newStart, newEnd;
+			start,
+			end,
+			newStart,
+			newEnd;
 
-		function test (c) {
-			return c.nodeType === Node.TEXT_NODE ||
-					Anchors.isNodeIgnored(c) ||
-					/^(a|b|i|u|img|li)$/i.test(c.tagName); // ||
+		function test(c) {
+			return (
+				c.nodeType === Node.TEXT_NODE ||
+				Anchors.isNodeIgnored(c) ||
+				/^(a|b|i|u|img|li)$/i.test(c.tagName)
+			); // ||
 			//c.childNodes.length === 1;
 		}
 
-		function walkOut (node, direction) {
+		function walkOut(node, direction) {
 			if (!node) {
 				return null;
 			}
 
 			var doc = node.ownerDocument,
-				walker = doc.createTreeWalker(doc, NodeFilter.SHOW_ALL, null, null),
+				walker = doc.createTreeWalker(
+					doc,
+					NodeFilter.SHOW_ALL,
+					null,
+					null
+				),
 				nextName = direction === 'start' ? 'previousNode' : 'nextNode',
-				temp, result;
+				temp,
+				result;
 
 			walker.currentNode = node;
 			temp = walker.currentNode;
@@ -264,17 +275,21 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return range;
 	},
 
-
 	expandRange: function (range, doc) {
-		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) ||
-					this.nodeIfObjectOrInObject(range.startContainer),
+		var object =
+				this.nodeIfObjectOrInObject(range.commonAncestorContainer) ||
+				this.nodeIfObjectOrInObject(range.startContainer),
 			r;
 
 		if (!object) {
-			if (range.startContainer === range.endContainer &&
+			if (
+				range.startContainer === range.endContainer &&
 				range.startContainer.nodeType !== Node.TEXT_NODE &&
-				range.startOffset + 1 === range.endOffset) {
-				object = this.nodeIfObjectOrInObject(range.startContainer.childNodes[range.startOffset]);
+				range.startOffset + 1 === range.endOffset
+			) {
+				object = this.nodeIfObjectOrInObject(
+					range.startContainer.childNodes[range.startOffset]
+				);
 			}
 		}
 
@@ -292,22 +307,22 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return this.clearNonContextualGarbage(r.cloneContents());
 	},
 
-
-	expandRangeGetNode: function (range, doc/*, dontClone*/) {
+	expandRangeGetNode: function (range, doc /*, dontClone*/) {
 		var tempDiv = doc.createElement('div'),
 			n = this.expandRange(range);
 		try {
 			tempDiv.appendChild(n);
-		}
-		catch (e) {
-			console.error('Could not clone range contents', Globals.getError(e));
+		} catch (e) {
+			console.error(
+				'Could not clone range contents',
+				Globals.getError(e)
+			);
 		}
 		//		if(!dontClone){
 		//			tempDiv = tempDiv.cloneNode(true);
 		//		}
 		return tempDiv;
 	},
-
 
 	expandRangeGetString: function (range, doc) {
 		var tempDiv, str;
@@ -318,9 +333,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		Ext.fly(tempDiv).destroy();
 
 		//return string clean of ids:
-		return str.replace(/\wid=".*?"/ig, '');
+		return str.replace(/\wid=".*?"/gi, '');
 	},
-
 
 	/**
 	 * Removes any nodes we don't want to show up in the context, for now that is assessment objects nodes, which have
@@ -338,7 +352,6 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return dom;
 	},
 
-
 	/**
 	 * Takes a range or a rangy range and returns the bounding rect
 	 * @param {Range} r - either a browser range or a rangy range
@@ -351,11 +364,12 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return r.getBoundingClientRect();
 	},
 
-
 	getSelectedNodes: function (range, doc) {
 		var walker,
-			sc = range.startContainer, ec = range.endContainer,
-			so = range.startOffset, eo = range.endOffset,
+			sc = range.startContainer,
+			ec = range.endContainer,
+			so = range.startOffset,
+			eo = range.endOffset,
 			nodes = [],
 			startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
 			endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
@@ -369,18 +383,18 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			range.commonAncestorContainer,
 			//Tell ESLint to ignore bitwise opperations
 			NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
-			null, false);
+			null,
+			false
+		);
 
 		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.
 		//Use a similar strategy as what is used in Anchors.js
 		if (walker.currentNode.nodeType === Node.TEXT_NODE) {
 			node = walker.currentNode;
-		}
-		else {
+		} else {
 			node = walker.nextNode();
 		}
 		while (node) {
-
 			if (node === endAt) {
 				break;
 			}
@@ -396,7 +410,6 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		return nodes;
 	},
 
-
 	/**
 	 *
 	 * @param {NextThought.model.anchorables.ContentRangeDescription} applicableRange The range.
@@ -405,7 +418,10 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * @param {string} containerId The container id.
 	 * @returns {Node} Context Node
 	 */
-	getContextAroundRange: function (applicableRange, doc/*, cleanRoot, containerId*/) {
+	getContextAroundRange: function (
+		applicableRange,
+		doc /*, cleanRoot, containerId*/
+	) {
 		var utils = applicableRange.isTimeRange ? AnchorResolver : Anchors,
 			range = utils.toDomRange.apply(utils, arguments);
 
@@ -414,7 +430,6 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		}
 		return null;
 	},
-
 
 	/**
 	 *
@@ -428,14 +443,18 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		//			node.setHTML('[...][...]');
 		//		  }
 
-		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
-		node.select('a[href]:not(.skip-anchor)').set({target: '_blank'});
-		node.select('a[href^=#]:not(.skip-anchor)').set({href: undefined, target: undefined});
-		node.select('a[href^=tag]').set({href: undefined, target: undefined});
+		node.select('[itemprop~=nti-data-markupenabled] a').addCls(
+			'skip-anchor'
+		);
+		node.select('a[href]:not(.skip-anchor)').set({ target: '_blank' });
+		node.select('a[href^=#]:not(.skip-anchor)').set({
+			href: undefined,
+			target: undefined,
+		});
+		node.select('a[href^=tag]').set({ href: undefined, target: undefined });
 
 		return node.dom;
 	},
-
 
 	/**
 	 * Gets the bounding rect of the provided range.  If the rect is zero
@@ -445,21 +464,38 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * @returns {Rect} A rect
 	 */
 	safeBoundingBoxForRange: function (r) {
-		var rect = r ? r.getBoundingClientRect(r) : null, node;
+		var rect = r ? r.getBoundingClientRect(r) : null,
+			node;
 		try {
-			if (rect && !r.collapsed && RectUtils.isZeroRect(rect) && r.toString() === '' && !Ext.isTextNode(r.startContainer)) {
-				console.log('No rect information...attempting to get selected node rect instead');
+			if (
+				rect &&
+				!r.collapsed &&
+				RectUtils.isZeroRect(rect) &&
+				r.toString() === '' &&
+				!Ext.isTextNode(r.startContainer)
+			) {
+				console.log(
+					'No rect information...attempting to get selected node rect instead'
+				);
 				node = r.startContainer.childNodes[r.startOffset];
 				rect = node.getBoundingClientRect();
-			}
-			else if (rect && !r.collapsed && RectUtils.isZeroRect(rect)) {
-				if (r.startContainer === r.endContainer && r.startContainer.nodeType !== Node.TEXT_NODE) {
+			} else if (rect && !r.collapsed && RectUtils.isZeroRect(rect)) {
+				if (
+					r.startContainer === r.endContainer &&
+					r.startContainer.nodeType !== Node.TEXT_NODE
+				) {
 					if (r.startOffset + 1 === r.endOffset) {
-						console.debug('No rect information... the range contains just one node, use that instead.');
+						console.debug(
+							'No rect information... the range contains just one node, use that instead.'
+						);
 						node = r.startContainer.childNodes[r.startOffset];
-					}
-					else if (r.startOffset === 0 && r.endOffset === r.endContainer.childNodes.length) {
-						console.debug('No rect information... the range contains all all contents of the object/doc, use the startContainer.');
+					} else if (
+						r.startOffset === 0 &&
+						r.endOffset === r.endContainer.childNodes.length
+					) {
+						console.debug(
+							'No rect information... the range contains all all contents of the object/doc, use the startContainer.'
+						);
 						node = r.startContainer;
 					}
 				}
@@ -467,15 +503,16 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			}
 
 			//if it is still the zero rect and the common ancestor is an object, use the ancestors bounding rect
-			if (RectUtils.isZeroRect(rect) && r.commonAncestorContainer && r.commonAncestorContainer.tagName === 'OBJECT') {
+			if (
+				RectUtils.isZeroRect(rect) &&
+				r.commonAncestorContainer &&
+				r.commonAncestorContainer.tagName === 'OBJECT'
+			) {
 				rect = r.commonAncestorContainer.getBoundingClientRect();
 			}
-		}
-		catch (er) {
+		} catch (er) {
 			console.warn(Globals.getError(er));
 		}
 		return rect;
-	}
-
-
+	},
 }).create();

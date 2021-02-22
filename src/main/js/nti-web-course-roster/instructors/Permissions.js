@@ -3,33 +3,41 @@ const INSTRUCTOR = Symbol('Instructor');
 const EDITOR = Symbol('Editor');
 
 export default class Permissions {
-	static setIsInstructor (permissions, isInstructor) {
-		return new Permissions(permissions.user, isInstructor, permissions.isEditor);
+	static setIsInstructor(permissions, isInstructor) {
+		return new Permissions(
+			permissions.user,
+			isInstructor,
+			permissions.isEditor
+		);
 	}
 
-	static setIsEditor (permissions, isEditor) {
-		return new Permissions(permissions.user, permissions.isInstructor, isEditor);
+	static setIsEditor(permissions, isEditor) {
+		return new Permissions(
+			permissions.user,
+			permissions.isInstructor,
+			isEditor
+		);
 	}
 
-	constructor (user, isInstructor, isEditor) {
+	constructor(user, isInstructor, isEditor) {
 		this[USER] = user;
 		this[INSTRUCTOR] = isInstructor;
 		this[EDITOR] = isEditor;
 	}
 
-	get id () {
+	get id() {
 		return this.user.getID();
 	}
 
-	get user () {
+	get user() {
 		return this[USER];
 	}
 
-	get isInstructor () {
+	get isInstructor() {
 		return this[INSTRUCTOR];
 	}
 
-	get isEditor () {
+	get isEditor() {
 		return this[EDITOR];
 	}
 }

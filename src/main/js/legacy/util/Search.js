@@ -2,12 +2,11 @@ const Ext = require('@nti/extjs');
 const XRegExp = require('xregexp');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {
-
-	ignoredWordsRe: /\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/ig,
+	ignoredWordsRe: /\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/gi,
 
 	splitWhitespaceRe: /\W+/,
 
-	trimRe: /^["'\s]+|["'\s]+$/ig,
+	trimRe: /^["'\s]+|["'\s]+$/gi,
 	trimPunctuationReStr: '[\\?!()"\'`{}\\[\\]:;,\\.\\^%&#\\*@$&\\+-<>=_~\\s]', //This matches the regex the DS uses
 
 	//keep a cache of regex generated
@@ -23,9 +22,15 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	getRegExCache: function (str, partial, wholeWordOnly) {
 		var re = this._regexcache[str];
 
-		if (re) { return re; }
+		if (re) {
+			return re;
+		}
 
-		return this._regexcache[str] = this.searchRe(str, partial, wholeWordOnly);
+		return (this._regexcache[str] = this.searchRe(
+			str,
+			partial,
+			wholeWordOnly
+		));
 	},
 
 	/*
@@ -34,32 +39,48 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * @return {RegExp}
 	 */
 	searchRe: function (string, partial, wholeWordOnly) {
-		var tokens, str, bound = partial ? '[^\\s\\)\\(\\.]*' : '';
+		var tokens,
+			str,
+			bound = partial ? '[^\\s\\)\\(\\.]*' : '';
 
 		str = string.replace(this.trimRe, '').replace(this.ignoredWordsRe, '');
-		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape);
+		tokens = Ext.Array.map(
+			str.split(this.splitWhitespaceRe),
+			RegExp.escape
+		);
 
 		if (wholeWordOnly) {
 			bound = '\\b';
 		}
 
 		tokens = Ext.Array.clean(tokens);
-		if (tokens.length === 0) { tokens.push(string); } //Avoid searching for an empty string.
+		if (tokens.length === 0) {
+			tokens.push(string);
+		} //Avoid searching for an empty string.
 
-		return new RegExp(['(', bound, '(', tokens.join('|'), ')', bound, ')'].join(''), 'ig');
+		return new RegExp(
+			['(', bound, '(', tokens.join('|'), ')', bound, ')'].join(''),
+			'ig'
+		);
 	},
 
 	contentRegexFromSearchTerm: function (term, isPhrase) {
-
 		if (isPhrase) {
-			term = XRegExp.replace(term, new XRegExp('\\p{^L}+([^\\]]|$)', 'g'), '\\p{^L}+$1');
-		}
-		else {
-			term = XRegExp.replace(term, new XRegExp('\\p{P}+', 'g'), '\\p{P}+');
+			term = XRegExp.replace(
+				term,
+				new XRegExp('\\p{^L}+([^\\]]|$)', 'g'),
+				'\\p{^L}+$1'
+			);
+		} else {
+			term = XRegExp.replace(
+				term,
+				new XRegExp('\\p{P}+', 'g'),
+				'\\p{P}+'
+			);
 		}
 		return term;
 
-	/*		//Do any regex escaping required
+		/*		//Do any regex escaping required
 		term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
 
 		//to make things like qoutes in the term match unicode apostrophe their
@@ -82,8 +103,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		return fragText.slice(match[0], match[1]);
 	},
 
-
-	extractTermFromMatch (match) {
+	extractTermFromMatch(match) {
 		const parts = match.split(this.MATCH_SPLIT_REGEX);
 
 		//With splitting on the em tags the odd items should be the terms between the tags
@@ -95,7 +115,6 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			return acc;
 		}, []);
 	},
-
 
 	contentRegexPartsForHit: function (hit) {
 		var fragments = hit.get('Fragments'),
@@ -109,9 +128,12 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			let fragTerms = [];
 
 			if (!fragment.Matches || fragment.Matches.length === 0) {
-				console.warn('No matches or text for fragment. Dropping', fragment);
+				console.warn(
+					'No matches or text for fragment. Dropping',
+					fragment
+				);
 			} else {
-				fragment.Matches.forEach((match) => {
+				fragment.Matches.forEach(match => {
 					let term = this.extractTermFromMatch(match);
 
 					if (term) {
@@ -134,9 +156,13 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		terms = this.contentRegexPartsForHit(hit);
 
 		if (!Ext.isEmpty(terms)) {
-			escapedParts = Ext.Array.map(terms, function (item) {
-				return this.contentRegexFromSearchTerm(item, phraseSearch);
-			}, this);
+			escapedParts = Ext.Array.map(
+				terms,
+				function (item) {
+					return this.contentRegexFromSearchTerm(item, phraseSearch);
+				},
+				this
+			);
 			combinedRegex = new XRegExp(escapedParts.join('|'), 'ig');
 		}
 
@@ -154,8 +180,11 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * at 1.  Example;	a fragment of "the brown fox" with a match corresponding to "brown" will
 	 * return the following: /(the )(brown)( fox)/
 	 */
-	contentRegexForFragment: function (fragment, phraseSearch/*, captureMatches*/) {
-		const {Matches: matches = []} = fragment;
+	contentRegexForFragment: function (
+		fragment,
+		phraseSearch /*, captureMatches*/
+	) {
+		const { Matches: matches = [] } = fragment;
 		let terms = [];
 
 		matches.forEach(match => {
@@ -166,12 +195,14 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			}
 		});
 
-		const escapedParts = Ext.Array.map(terms, (item) => {
-			return this.contentRegexFromSearchTerm(item, phraseSearch);
-		}, this);
+		const escapedParts = Ext.Array.map(
+			terms,
+			item => {
+				return this.contentRegexFromSearchTerm(item, phraseSearch);
+			},
+			this
+		);
 
 		return new XRegExp(escapedParts.join('|'), 'ig');
-	}
-
-
+	},
 }).create();

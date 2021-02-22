@@ -1,30 +1,29 @@
 export default {
-	selectAll () {
+	selectAll() {
 		this.set('selectedUsers', this.get('items'));
 
 		this.emitChange('selectedUsers');
 	},
 
-	deselectAll () {
+	deselectAll() {
 		this.set('selectedUsers', []);
 
 		this.emitChange('selectedUsers');
 	},
 
-	isAllSelected () {
+	isAllSelected() {
 		const selected = this.get('selectedUsers');
 		const items = this.get('items');
 
 		return !!(selected && selected.length === items.length);
 	},
 
-	onSelect (user) {
+	onSelect(user) {
 		let selected = this.get('selectedUsers');
 
-		if(!selected) {
+		if (!selected) {
 			selected = [user];
-		}
-		else {
+		} else {
 			selected.push(user);
 		}
 
@@ -33,11 +32,13 @@ export default {
 		this.emitChange('selectedUsers');
 	},
 
-	isSelected (user) {
-		return (this.get('selectedUsers') || []).some(x => x.getID() === user.getID());
+	isSelected(user) {
+		return (this.get('selectedUsers') || []).some(
+			x => x.getID() === user.getID()
+		);
 	},
 
-	onDeselect (user) {
+	onDeselect(user) {
 		let selected = this.get('selectedUsers');
 
 		selected = selected.filter(x => x.getID() !== user.getID());
@@ -45,5 +46,5 @@ export default {
 		this.set('selectedUsers', selected);
 
 		this.emitChange('selectedUsers');
-	}
+	},
 };

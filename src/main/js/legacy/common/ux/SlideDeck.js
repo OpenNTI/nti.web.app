@@ -4,22 +4,25 @@ const Ext = require('@nti/extjs');
 const ContentUtils = require('legacy/util/Content');
 const PlaylistItem = require('legacy/model/PlaylistItem');
 const Slide = require('legacy/model/Slide');
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 require('legacy/app/mediaviewer/content/Overlay');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
-
 	openFromDom: function (el, reader) {
-		var DQ = Ext.DomQuery, dom,
+		var DQ = Ext.DomQuery,
+			dom,
 			ntiid = reader.getLocation().NTIID,
 			selector = 'object[type$=nextthought.slide]',
-			obj = Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
-			startingSlide = (obj && obj.getAttribute('data-ntiid')) || undefined,
-			startingVideo, slidedeckId;
+			obj = Ext.fly(el).is(selector)
+				? el
+				: Ext.fly(el).findParentNode(selector),
+			startingSlide =
+				(obj && obj.getAttribute('data-ntiid')) || undefined,
+			startingVideo,
+			slidedeckId;
 
-		function getParam (name) {
+		function getParam(name) {
 			var e = DQ.select('param[name="' + name + '"]', obj)[0];
 			return e ? e.getAttribute('value') : null;
 		}
@@ -40,29 +43,38 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 		this.__open(ntiid, slidedeckId, startingVideo, startingSlide);
 	},
 
-	__open: function (ntiidInContent, slidedeckId, startingVideo, startingSlide) {
+	__open: function (
+		ntiidInContent,
+		slidedeckId,
+		startingVideo,
+		startingSlide
+	) {
 		slidedeckId = slidedeckId || 'default';
 
 		var root = ContentUtils.getLineage(ntiidInContent).last(),
 			//Just suppress the warnings, this is still not right
-			title = Library.getTitle(root),//eslint-disable-line
-			toc = Library.getToc(title),//eslint-disable-line
+			title = Library.getTitle(root), //eslint-disable-line
+			toc = Library.getToc(title), //eslint-disable-line
 			ids = [],
 			videoIndex,
-			store = new Ext.data.Store({proxy: 'memory'});
-
+			store = new Ext.data.Store({ proxy: 'memory' });
 
 		console.debug('opening slidedesk id: ' + slidedeckId);
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]', toc), function (o) {
-			if ((o.getAttribute('href') || '').indexOf('#') >= 0) {return;}
+			if ((o.getAttribute('href') || '').indexOf('#') >= 0) {
+				return;
+			}
 			ids.push(o.getAttribute('ntiid'));
 		});
 
 		Ext.getBody().mask('Loading Slides...', 'navigation');
 
-		function findRecordWithSource (sources) {
-			var i, j, currentItem, currentSources,
+		function findRecordWithSource(sources) {
+			var i,
+				j,
+				currentItem,
+				currentSources,
 				items = store.data.items;
 
 			for (i = 0; i < items.length; i++) {
@@ -70,7 +82,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 				currentSources = currentItem.get('media').get('sources');
 				if (currentSources.length === sources.length) {
 					for (j = 0; j < sources.length; j++) {
-						if (PlaylistItem.compareSources(currentSources[j].source, sources[j].source)) {
+						if (
+							PlaylistItem.compareSources(
+								currentSources[j].source,
+								sources[j].source
+							)
+						) {
 							return currentItem;
 						}
 					}
@@ -79,14 +96,18 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			return null;
 		}
 
-		function finish () {
+		function finish() {
 			var earliestSlide, p;
 			store.sort('ordinal', 'ASC');
-			store.filter(function (_) {return _.get('slidedeck-id') === slidedeckId; });
+			store.filter(function (_) {
+				return _.get('slidedeck-id') === slidedeckId;
+			});
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if (!startingSlide && startingVideo) {
-				earliestSlide = findRecordWithSource(startingVideo.get('sources'));
+				earliestSlide = findRecordWithSource(
+					startingVideo.get('sources')
+				);
 				//The store is sorted by slide, so the first find is the earliest
 				if (earliestSlide) {
 					startingSlide = earliestSlide.getId();
@@ -94,7 +115,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			}
 
 			Ext.getBody().unmask();
-			p = Ext.widget('slidedeck-overlay', {store: store, startOn: startingSlide});
+			p = Ext.widget('slidedeck-overlay', {
+				store: store,
+				startOn: startingSlide,
+			});
 			p.fireEvent('suspend-annotation-manager', this);
 			p.show();
 			p.on('destroy', function () {
@@ -102,14 +126,18 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			});
 		}
 
-
-		function parse (content, pageInfo) {
-			var basePath = ContentUtils.getRoot(pageInfo.getId()), dom, slides;
+		function parse(content, pageInfo) {
+			var basePath = ContentUtils.getRoot(pageInfo.getId()),
+				dom,
+				slides;
 
 			basePath = getURL(basePath);
 			content = ContentUtils.fixReferences(content, basePath);
 			dom = ContentUtils.parseXML(content);
-			slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', dom);
+			slides = Ext.DomQuery.select(
+				'object[type="application/vnd.nextthought.slide"]',
+				dom
+			);
 
 			Ext.each(slides, function (doc, i, a) {
 				a[i] = Slide.fromDom(doc, pageInfo.getId(), videoIndex);
@@ -119,12 +147,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 		}
 
 		//Just supress the warning, it still wrong
-		Library.getVideoIndex(title)//eslint-disable-line
-			.catch(function () {return null;})
+		Library.getVideoIndex(title) //eslint-disable-line
+			.catch(function () {
+				return null;
+			})
 			.then(function (data) {
 				videoIndex = data;
 				ContentUtils.spider(ids, finish, parse);
 			});
-	}
-
+	},
 }).create();

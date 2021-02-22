@@ -1,69 +1,79 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const StoreUtils = require('legacy/util/Store');
 const GroupsStateStore = require('legacy/app/groups/StateStore');
 
 require('./TabView');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.contacts.components.ListView',
+	{
+		extend: 'NextThought.app.contacts.components.TabView',
+		alias: 'widget.lists-tab-view',
 
-module.exports = exports = Ext.define('NextThought.app.contacts.components.ListView', {
-	extend: 'NextThought.app.contacts.components.TabView',
-	alias: 'widget.lists-tab-view',
+		navigation: {
+			xtype: 'contacts-outline',
+			cls: 'list',
+			subType: 'list',
+			outlineLabel: getString('contacts_all_list'),
+		},
 
-	navigation: {
-		xtype: 'contacts-outline',
-		cls: 'list',
+		body: {
+			xtype: 'data-bound-panel',
+			defaultType: 'contacts-tabs-grouping',
+			items: [],
+			ui: 'contacts-list',
+			cls: 'list-panel',
+			filter: function (group) {
+				return group.hidden !== true && !group.isDFL;
+			},
+			emptyCmp: {
+				xtype: 'box',
+				emptyState: true,
+				renderTpl: Ext.DomHelper.markup([
+					{
+						cls: 'empty-state',
+						cn: [
+							{ cls: 'header', html: '{{{no_list_header}}}' },
+							{ cls: 'sub', html: '{{{no_list_sub}}}' },
+						],
+					},
+				]),
+			},
+		},
+
 		subType: 'list',
-		outlineLabel: getString('contacts_all_list')
-	},
+		filter: function (group) {
+			return group.hidden !== true && !group.isDFL;
+		},
 
-	body: {
-		xtype: 'data-bound-panel',
-		defaultType: 'contacts-tabs-grouping',
-		items: [],
-		ui: 'contacts-list',
-		cls: 'list-panel',
-		filter: function (group) { return group.hidden !== true && !group.isDFL; },
-		emptyCmp: {
-			xtype: 'box', emptyState: true,
-			renderTpl: Ext.DomHelper.markup([{
-				cls: 'empty-state', cn: [
-					{cls: 'header', html: '{{{no_list_header}}}'},
-					{cls: 'sub', html: '{{{no_list_sub}}}'}
-				]
-			}])
-		}
-	},
+		initComponent: function () {
+			this.callParent(arguments);
 
-	subType: 'list',
-	filter: function (group) { return group.hidden !== true && !group.isDFL; },
+			this.GroupStore = GroupsStateStore.getInstance();
+			this.buildStore();
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
+		buildStore: function () {
+			var s = this.GroupStore.getFriendsList(),
+				store = StoreUtils.newView(s);
 
-		this.GroupStore = GroupsStateStore.getInstance();
-		this.buildStore();
-	},
+			if (Ext.isFunction(this.filter)) {
+				store.filter(this.filter);
+			}
 
-	buildStore: function () {
-		var s = this.GroupStore.getFriendsList(),
-			store = StoreUtils.newView(s);
+			this.body.bindStore(s);
+			this.navigation.bindStore(store);
 
-		if (Ext.isFunction(this.filter)) {
-			store.filter(this.filter);
-		}
-
-		this.body.bindStore(s);
-		this.navigation.bindStore(store);
-
-		// FIXME: for some reason the first time this is shown
-		// if it's not the active view, it doesn't display the navigation records.
-		// For now add force it to refresh.
-		this.navigation.on({
-			'afterrender': this.navigation.refresh.bind(this.navigation),
-			single: true
-		});
-		this.body.doRefresh(s);
+			// FIXME: for some reason the first time this is shown
+			// if it's not the active view, it doesn't display the navigation records.
+			// For now add force it to refresh.
+			this.navigation.on({
+				afterrender: this.navigation.refresh.bind(this.navigation),
+				single: true,
+			});
+			this.body.doRefresh(s);
+		},
 	}
-});
+);

@@ -1,88 +1,100 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const VideoPosters = require('../resolvers/VideoPosters');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.converters.VideoSources',
+	{
+		override: 'Ext.data.Types',
 
-module.exports = exports = Ext.define('NextThought.model.converters.VideoSources', {
-	override: 'Ext.data.Types',
+		VIDEOSOURCES: {
+			type: 'VideoSource',
+			sortType: null,
 
-	VIDEOSOURCES: {
-		type: 'VideoSource',
-		sortType: null,
+			convert: function (v) {
+				var i = v.length - 1,
+					x,
+					o,
+					sources,
+					types,
+					newSource = [];
 
-		convert: function (v) {
-			var i = v.length - 1, x,
-				o, sources, types,
-				newSource = [];
+				for (i; i >= 0; i--) {
+					o = v[i];
 
-			for (i; i >= 0; i--) {
-				o = v[i];
+					if (o && o.service === 'html5') {
+						sources = o.source;
+						types = o.type;
+						delete o.type;
 
-				if (o && o.service === 'html5') {
+						//has this already been converted?
+						if (sources && sources[0] && Ext.isObject(sources[0])) {
+							continue;
+						}
 
-					sources = o.source;
-					types = o.type;
-					delete o.type;
+						if (!types && sources && sources.length === 1) {
+							o.source = [{ source: sources[0] }];
+							continue;
+						}
 
-					//has this already been converted?
-					if (sources && sources[0] && Ext.isObject(sources[0])) {
-						continue;
+						if (
+							!sources ||
+							!types ||
+							sources.length !== types.length
+						) {
+							console.error('Bad Video Source!', Ext.clone(v));
+							delete v[i];
+							continue;
+						}
+
+						x = sources.length - 1;
+						for (x; x >= 0; x--) {
+							newSource[x] = {
+								source: sources[x],
+								type: types[x],
+							};
+						}
+
+						o.source = newSource;
 					}
-
-					if (!types && sources && sources.length === 1) {
-						o.source = [{source: sources[0]}];
-						continue;
-					}
-
-					if (!sources || !types || sources.length !== types.length) {
-						console.error('Bad Video Source!', Ext.clone(v));
-						delete v[i];
-						continue;
-					}
-
-					x = sources.length - 1;
-					for (x; x >= 0; x--) {
-						newSource[x] = {
-							source: sources[x],
-							type: types[x]
-						};
-					}
-
-					o.source = newSource;
 				}
-			}
 
-			//console.debug('Video Sources:',v);
-			return v;
-		}
-	},
-
-	VIDEOPOSTER: {
-		type: 'VideoPoster',
-		sortType: null,
-		convert: function (v, r, source) {
-			var name = this.mapping || this.name, len, x, s,
-				raw = r && r.raw,
-				resolver = VideoPosters;
-
-			if (v && Ext.isString(v)) {//if we already have a value, done.
+				//console.debug('Video Sources:',v);
 				return v;
-			}
+			},
+		},
 
-			if (raw && raw.sources && !source) {//no value, try to find it on the sources (not in recursive state)
-				len = raw.sources.length || 0;
-				for (x = 0; !v && x < len; x++) {
-					s = raw.sources[x] || {};
-					v = this.convert(s[name], r, s);
+		VIDEOPOSTER: {
+			type: 'VideoPoster',
+			sortType: null,
+			convert: function (v, r, source) {
+				var name = this.mapping || this.name,
+					len,
+					x,
+					s,
+					raw = r && r.raw,
+					resolver = VideoPosters;
+
+				if (v && Ext.isString(v)) {
+					//if we already have a value, done.
+					return v;
 				}
-			}
 
-			if (!v && source) { //still didn't find it, and we are recusing on a source
-				v = Ext.BLANK_IMAGE_URL;//stop iteration on caller and let the async resolver replace this value as soon as it resolves.
+				if (raw && raw.sources && !source) {
+					//no value, try to find it on the sources (not in recursive state)
+					len = raw.sources.length || 0;
+					for (x = 0; !v && x < len; x++) {
+						s = raw.sources[x] || {};
+						v = this.convert(s[name], r, s);
+					}
+				}
 
-				resolver.resolveForSource(source)
-					.then(function (data) {
+				if (!v && source) {
+					//still didn't find it, and we are recusing on a source
+					v = Ext.BLANK_IMAGE_URL; //stop iteration on caller and let the async resolver replace this value as soon as it resolves.
+
+					resolver.resolveForSource(source).then(function (data) {
 						r.set(name, data[name]);
 						if (name === 'poster') {
 							wait(1).then(function () {
@@ -90,14 +102,16 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 							});
 						}
 					});
-			} else {
-				wait().then(r.fireEvent.bind(r, 'resolved-poster', r));
-			}
+				} else {
+					wait().then(r.fireEvent.bind(r, 'resolved-poster', r));
+				}
 
-			return v;
-		}
+				return v;
+			},
+		},
+	},
+	function () {
+		this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
+		this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;
 	}
-},function () {
-	this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
-	this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;
-});
+);

@@ -2,40 +2,62 @@ const Ext = require('@nti/extjs');
 
 require('./FreeResponse');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.assessment.input.NumericMath',
+	{
+		extend: 'NextThought.app.assessment.input.FreeResponse',
+		alias: 'widget.question-input-numericmathpart',
 
-module.exports = exports = Ext.define('NextThought.app.assessment.input.NumericMath', {
-	extend: 'NextThought.app.assessment.input.FreeResponse',
-	alias: 'widget.question-input-numericmathpart',
+		allowKeys: {},
 
-	allowKeys: {},
+		keyFilter: function (e, d) {
+			var chr = e.getCharCode(),
+				mod = e.altKey || e.ctrlKey || e.shiftKey,
+				r = this.callParent(arguments);
 
-	keyFilter: function (e,d) {
-		var chr = e.getCharCode(),
-			mod = e.altKey || e.ctrlKey || e.shiftKey,
-			r = this.callParent(arguments);
+			console.log('typed', chr);
 
-		console.log('typed', chr);
+			if (mod || r === false) {
+				return r;
+			}
 
-		if (mod || r === false) {return r;}
+			if (!this.allowKeys[chr]) {
+				e.stopEvent();
+				return false;
+			}
+		},
+	},
+	function () {
+		var me = this.prototype,
+			m = Math,
+			c = Ext.EventObject;
 
-		if (!this.allowKeys[chr]) {
-			e.stopEvent();
-			return false;
+		function range(a, b) {
+			var i = m.min(a, b),
+				e = m.max(a, b);
+			for (e; e >= i; e--) {
+				me.allowKeys[e] = 1;
+			}
 		}
+		function set() {
+			var i = arguments.length;
+			for (i; i >= 0; i--) {
+				me.allowKeys[arguments[i]] = 1;
+			}
+		}
+
+		range(c.PAGE_UP, c.NINE); //number keys accross the top of keyboard, and home/page/etc...
+		range(c.NUM_ZERO, c.NUM_DIVISION); //num pad keys
+		range(c.SHIFT, c.ALT);
+		range(187, 191);
+		set(
+			c.BACKSPACE,
+			c.ENTER,
+			c.TAB,
+			c.NUM_CENTER,
+			188 /*Comma*/,
+			190 /*Period*/,
+			106 /*astrix*/
+		);
 	}
-}, function () {
-	var me = this.prototype,
-		m = Math,
-		c = Ext.EventObject;
-
-	function range (a,b) { var i = m.min(a, b), e = m.max(a, b); for (e; e >= i; e--) { me.allowKeys[e] = 1; } }
-	function set () { var i = arguments.length; for (i; i >= 0; i--) {me.allowKeys[arguments[i]] = 1;} }
-
-
-
-	range(c.PAGE_UP, c.NINE);//number keys accross the top of keyboard, and home/page/etc...
-	range(c.NUM_ZERO, c.NUM_DIVISION);//num pad keys
-	range(c.SHIFT, c.ALT);
-	range(187, 191);
-	set(c.BACKSPACE, c.ENTER, c.TAB, c.NUM_CENTER, 188/*Comma*/, 190/*Period*/, 106/*astrix*/);
-});
+);

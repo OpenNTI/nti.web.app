@@ -1,8 +1,12 @@
 .x-panel-default,
-.x-border-layout-ct { background: inherit; }
+.x-border-layout-ct {
+	background: inherit;
+}
 
 //Firefox: make sure we do not outline focusable elements
-.x-gecko [tabindex] { outline: 0; }
+.x-gecko [tabindex] {
+	outline: 0;
+}
 
 //.viewport {
 // position: fixed;
@@ -25,15 +29,31 @@ body {
 	//@include experimental(font-smoothing, antialiased);
 }
 
-input::-ms-clear { display: none; }
+input::-ms-clear {
+	display: none;
+}
 
-.placeholder { @include placeholder-style(); }
-::input-placeholder { @include placeholder-style(); }
-::-webkit-input-placeholder { @include placeholder-style(); }
-::-moz-placeholder { @include placeholder-style(); }
-input:-moz-placeholder { @include placeholder-style(); }
-:-ms-input-placeholder { @include placeholder-style(); }
-input:-ms-input-placeholder { @include placeholder-style(); }
+.placeholder {
+	@include placeholder-style();
+}
+::input-placeholder {
+	@include placeholder-style();
+}
+::-webkit-input-placeholder {
+	@include placeholder-style();
+}
+::-moz-placeholder {
+	@include placeholder-style();
+}
+input:-moz-placeholder {
+	@include placeholder-style();
+}
+:-ms-input-placeholder {
+	@include placeholder-style();
+}
+input:-ms-input-placeholder {
+	@include placeholder-style();
+}
 
 .ellipsis {
 	margin: 0 10px;
@@ -94,6 +114,6 @@ input:-ms-input-placeholder { @include placeholder-style(); }
 
 .admin-toolbar {
 	.admin-nav {
-		@include icon($topic, $top:11px, $left: 11px);
+		@include icon($topic, $top: 11px, $left: 11px);
 	}
 }

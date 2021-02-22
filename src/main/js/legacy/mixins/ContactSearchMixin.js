@@ -1,13 +1,15 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
-
 	constructor: function () {
 		this.on('afterrender', 'attachContactSearch', this);
-		this.doSearch = Ext.Function.createBuffered(this.doSearch, 250, this, null);
+		this.doSearch = Ext.Function.createBuffered(
+			this.doSearch,
+			250,
+			this,
+			null
+		);
 	},
-
 
 	attachContactSearch: function () {
 		this.searchButton = this.searchButton || this.el.down('.search');
@@ -22,10 +24,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 		this.clearNib.setVisibilityMode(Ext.Element.DISPLAY);
 		this.mon(this.clearNib, 'click', 'clearClicked', this);
 
-		this.mon(this.searchButton, 'click', 'setSearchOverlay', this, {single: true});
+		this.mon(this.searchButton, 'click', 'setSearchOverlay', this, {
+			single: true,
+		});
 		this.mon(this.searchButton, {
 			scope: this,
-			click: 'onSearchClick'
+			click: 'onSearchClick',
 		});
 
 		this.mon(this.searchField, {
@@ -34,13 +38,14 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 			keyup: 'onSearchKeyPressed',
 			contextmenu: function (e) {
 				e.stopPropagation();
-			} //allow context on simple texts
+			}, //allow context on simple texts
 		});
-
 	},
 
 	setSearchOverlay: function () {
-		this.contactSearchOverlay = Ext.widget('contact-search-overlay', { renderTo: this.el});
+		this.contactSearchOverlay = Ext.widget('contact-search-overlay', {
+			renderTo: this.el,
+		});
 	},
 
 	onSearchBlur: function () {
@@ -55,12 +60,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 		}
 	},
 
-
 	onSearchClick: function () {
 		this.searchButton.addCls('active');
 		this.searchField.focus();
 	},
-
 
 	clearClicked: function (e) {
 		if (e) {
@@ -72,7 +75,6 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 
 		return false;
 	},
-
 
 	onSearchKeyPressed: function (e) {
 		if (e.ESC === e.getKey()) {
@@ -89,11 +91,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 		}
 	},
 
-
 	getSearchStore: function () {
 		return this.contactSearchOverlay.getStore();
 	},
-
 
 	doSearch: function (v) {
 		var fn = 'removeAll',
@@ -112,5 +112,5 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 		if (searchStore) {
 			searchStore[fn](param);
 		}
-	}
+	},
 });

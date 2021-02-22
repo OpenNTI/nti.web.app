@@ -4,12 +4,11 @@ const DndActions = require('legacy/app/dnd/Actions');
 
 require('./OrderedContents');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	isMovingRoot: true,
 
 	mixins: {
-		OrderedContents: 'NextThought.mixins.OrderedContents'
+		OrderedContents: 'NextThought.mixins.OrderedContents',
 	},
 
 	getMoveLink: function () {
@@ -28,9 +27,17 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @returns {Promise} fulills with the record that was appended,
 	 */
 	doAppendRecordFrom: function (record, originalParent, newParent) {
-		var index = newParent.getItemsCount ? newParent.getItemsCount() : Infinity;
+		var index = newParent.getItemsCount
+			? newParent.getItemsCount()
+			: Infinity;
 
-		return this.doMoveRecordFrom(record, index, -1, newParent, originalParent);
+		return this.doMoveRecordFrom(
+			record,
+			index,
+			-1,
+			newParent,
+			originalParent
+		);
 	},
 
 	/**
@@ -43,14 +50,21 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Object|string} originalParent the current parent
 	 * @returns {Promise} fulfills with the record that was moved
 	 */
-	doMoveRecordFrom: function (record, index, oldIndex, newParent, originalParent) {
+	doMoveRecordFrom: function (
+		record,
+		index,
+		oldIndex,
+		newParent,
+		originalParent
+	) {
 		var link = this.getMoveLink(),
-			data, move;
+			data,
+			move;
 
 		data = {
 			ObjectNTIID: this.getIdForMove(record),
 			ParentNTIID: this.getIdForMove(newParent),
-			OldParentNTIID: this.getIdForMove(originalParent)
+			OldParentNTIID: this.getIdForMove(originalParent),
 		};
 
 		index = index || 0;
@@ -65,11 +79,20 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 			move = Promise.reject('No new parent to move to');
 		} else if (!originalParent) {
 			move = Promise.reject('No old parent to move from');
-		} else if (data.ParentNTIID === data.OldParentNTIID && index === oldIndex) {
+		} else if (
+			data.ParentNTIID === data.OldParentNTIID &&
+			index === oldIndex
+		) {
 			move = Promise.resolve(record);
 		} else {
-			move = Service.post(link, data)
-				.then(this.__onMoveOperation.bind(this, record, newParent, originalParent));
+			move = Service.post(link, data).then(
+				this.__onMoveOperation.bind(
+					this,
+					record,
+					newParent,
+					originalParent
+				)
+			);
 		}
 
 		return move;
@@ -86,7 +109,9 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @returns {Object} the record that was moved
 	 */
 	__onMoveOperation: function (record, newParent, originalParent, response) {
-		var updatedNewParent, updatedOriginalParent, updatedRecord,
+		var updatedNewParent,
+			updatedOriginalParent,
+			updatedRecord,
 			dndActions = DndActions.create();
 
 		if (!originalParent.isModel) {
@@ -95,10 +120,16 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 
 		this.syncWithResponse(response);
 
-		this.fireEvent('record-moved', record.isModel ? record.getId() : record);
+		this.fireEvent(
+			'record-moved',
+			record.isModel ? record.getId() : record
+		);
 
-		updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
-		updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
+		updatedNewParent =
+			newParent && this.findOrderedContentsItem(newParent.getId());
+		updatedOriginalParent =
+			originalParent &&
+			this.findOrderedContentsItem(originalParent.getId());
 
 		if (dndActions) {
 			dndActions.removeAllPlaceholders();
@@ -115,5 +146,5 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		updatedRecord = newParent.getItemById(record.getId());
 
 		return updatedRecord;
-	}
+	},
 });

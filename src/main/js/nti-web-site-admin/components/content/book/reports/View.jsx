@@ -4,12 +4,13 @@ import { List } from '@nti/web-reports';
 
 import Card from '../../../common/Card';
 
-
 SiteAdminBooksReports.propTypes = {
-	course: PropTypes.object
+	course: PropTypes.object,
 };
-export default function SiteAdminBooksReports ({ course }) {
-	return course ?
-		(<Card><List context={course} /></Card>) :
-		null;
+export default function SiteAdminBooksReports({ course }) {
+	return course ? (
+		<Card>
+			<List context={course} />
+		</Card>
+	) : null;
 }

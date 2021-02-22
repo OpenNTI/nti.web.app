@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 require('legacy/model/Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
 	extend: 'NextThought.model.Base',
 
@@ -10,12 +9,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
 		{ name: 'hints', type: 'arrayItem' },
 		{ name: 'solutions', type: 'arrayItem', limit: 1 },
 		{ name: 'explanation', type: 'string' },
-		{ name: 'answerLabel', type: 'string' }
+		{ name: 'answerLabel', type: 'string' },
 	],
 
 	getVideos: function () {
 		var out = [],
-			dom = new DOMParser().parseFromString(this.get('content'), 'text/xml');
+			dom = new DOMParser().parseFromString(
+				this.get('content'),
+				'text/xml'
+			);
 
 		Ext.each(dom.querySelectorAll('object.naqvideo'), function (i) {
 			var o = {};
@@ -32,5 +34,5 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
 		var solutions = this.get('solutions');
 
 		return solutions && solutions.length > 0;
-	}
+	},
 });

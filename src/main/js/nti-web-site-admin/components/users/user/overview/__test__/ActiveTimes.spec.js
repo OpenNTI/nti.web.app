@@ -4,7 +4,7 @@ import { TestUtils } from '@nti/web-client';
 import { Date as DateUtils } from '@nti/lib-commons';
 
 import ActiveTimes from '../ActiveTimes';
-import {mockActiveTimeData} from '../../../../dashboard/widgets/__test__/active-time-data';
+import { mockActiveTimeData } from '../../../../dashboard/widgets/__test__/active-time-data';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 const { MockDate } = DateUtils;
@@ -13,12 +13,12 @@ const getMockService = () => {
 	return {
 		getBatch: () => {
 			return {
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		get: () => {
 			return Promise.resolve(mockActiveTimeData);
-		}
+		},
 	};
 };
 
@@ -47,10 +47,10 @@ describe('Site admin user overview active times', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			getLink: () => 'mockLink'
+			getLink: () => 'mockLink',
 		};
 
-		const cmp = renderer.create(<ActiveTimes user={user}/>);
+		const cmp = renderer.create(<ActiveTimes user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();

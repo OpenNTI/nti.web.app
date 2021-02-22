@@ -3,13 +3,10 @@ const Ext = require('@nti/extjs');
 require('./CatalogFamily');
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 	extend: 'NextThought.model.Base',
 
-	fields: [
-		{name: 'Items', type: 'arrayItem'}
-	],
+	fields: [{ name: 'Items', type: 'arrayItem' }],
 
 	/**
 	 * Whether or not a family is in the Items
@@ -17,10 +14,15 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 	 * @returns {boolean}			  whether or not the family is in my list
 	 */
 	containsFamily: function (familyOrId) {
-		if (!familyOrId) { return false; }
+		if (!familyOrId) {
+			return false;
+		}
 
 		var items = this.get('Items'),
-			familyId = typeof familyOrId === 'string' ? familyOrId : familyOrId.get('CatalogFamilyID');
+			familyId =
+				typeof familyOrId === 'string'
+					? familyOrId
+					: familyOrId.get('CatalogFamilyID');
 
 		return items.reduce(function (acc, family) {
 			if (family.get('CatalogFamilyID') === familyId) {
@@ -32,7 +34,9 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 	},
 
 	hasInstersectionWith: function (families) {
-		if (!families) { return false; }
+		if (!families) {
+			return false;
+		}
 
 		let items = families.get('Items');
 
@@ -51,5 +55,5 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 		return items.map(function (family) {
 			return family.get('CatalogFamilyID');
 		});
-	}
+	},
 });

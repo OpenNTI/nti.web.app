@@ -5,7 +5,6 @@ const Cue = require('legacy/webvtt/Cue');
 
 require('legacy/model/transcript/Cue');
 
-
 /*
  * Transcript.js
  * This class defines an array of headers and an array of cues which are parsed from a WebVTT file, as well as methods for parsing.
@@ -46,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// Matches (possibly signed) numbers without a trailing percent
 		reSignedNumbersNoTail: /-?(\d)*/,
 		// Matches sequences which contain characters other than percents and digits
-		rePerDigits: /.*[^\u0025\d].*/
+		rePerDigits: /.*[^\u0025\d].*/,
 	},
 
 	/**
@@ -71,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// The content of the WebVTT file that is being parsed
 		fileContent: '',
 		// Whether line feeds in cue text should be ignored
-		ignoreLFs: false
+		ignoreLFs: false,
 	},
 
 	/**
@@ -95,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		console.error(msg);
 		Ext.Error.raise({
 			message: msg,
-			lineNumber: this.scratch.lineNo
+			lineNumber: this.scratch.lineNo,
 		});
 	},
 
@@ -118,7 +117,9 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			if (canBeEmpty) {
 				scratch.line = '';
 			} else {
-				this.signalError('Expected ' + re + ' at line ' + scratch.lineNo);
+				this.signalError(
+					'Expected ' + re + ' at line ' + scratch.lineNo
+				);
 			}
 		}
 	},
@@ -192,7 +193,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 					this.signalError(errMsg);
 				}
 				// 7th char must be a space or a tab
-				if (scratch.line.charCodeAt(6) !== 32 || scratch.line.charCodeAt(6) !== 9) {
+				if (
+					scratch.line.charCodeAt(6) !== 32 ||
+					scratch.line.charCodeAt(6) !== 9
+				) {
 					this.signalError(errMsg);
 				}
 			}
@@ -269,7 +273,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 35. Timings
 		scratch.alreadyCollectedLine = false;
 		// 36. Collect timings and settings for cue and line
-		if (scratch.cue === this.collectTimingsAndSettings(scratch.cue, scratch.line)) { // Else, bad cue
+		if (
+			scratch.cue ===
+			this.collectTimingsAndSettings(scratch.cue, scratch.line)
+		) {
+			// Else, bad cue
 			// 37. Prepare to collect cue text
 			scratch.cueText = '';
 			// 38. Cue text loop
@@ -284,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 50. Bad cue loop
 		do {
 			loop = this.badCueLoop();
-		}while (loop);
+		} while (loop);
 		return !scratch.halt;
 	},
 
@@ -310,7 +318,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 33. Read until the next LF
 		this.scan(regexp.reNotLF, true);
 		// 34. Discard and read another cue if we read an empty string
-		return (scratch.line !== '');
+		return scratch.line !== '';
 	},
 
 	/**
@@ -342,21 +350,36 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 6. Abort if not at a minus
 		if (input.charCodeAt(pos) !== 45) {
 			// return error
-			console.error('collectTimingsAndSettings: 6. should be a minus sign in "' + input + '" at position ' + pos);
+			console.error(
+				'collectTimingsAndSettings: 6. should be a minus sign in "' +
+					input +
+					'" at position ' +
+					pos
+			);
 			return false;
 		}
 		pos++;
 		// 7. Abort if not at a minus
 		if (input.charCodeAt(pos) !== 45) {
 			// return error
-			console.error('collectTimingsAndSettings: 7. should be a minus sign in "' + input + '" at position ' + pos);
+			console.error(
+				'collectTimingsAndSettings: 7. should be a minus sign in "' +
+					input +
+					'" at position ' +
+					pos
+			);
 			return false;
 		}
 		pos++;
 		// 8. Abort if not at a greater-than sign
 		if (input.charCodeAt(pos) !== 62) {
 			// return error
-			console.error('collectTimingsAndSettings: 8. should be a greater-than sign in "' + input + '" at position ' + pos);
+			console.error(
+				'collectTimingsAndSettings: 8. should be a greater-than sign in "' +
+					input +
+					'" at position ' +
+					pos
+			);
 			return false;
 		}
 		pos++;
@@ -387,20 +410,36 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 	collectTimestamp: function (input, pos) {
 		// 2. By default assume minutes are the most significant units of time
 		var mostSigUnits = 'minutes',
-			string, value1, value2, value3, value4,
+			string,
+			value1,
+			value2,
+			value3,
+			value4,
 			result,
 			regexp = this.regexp;
 
 		// 3. Out-of-bounds error
 		if (pos >= input.length) {
 			// return error
-			console.error('collectTimestamp: 3. position ' + pos + ' is out-of-range in "' + input + '"');
+			console.error(
+				'collectTimestamp: 3. position ' +
+					pos +
+					' is out-of-range in "' +
+					input +
+					'"'
+			);
 			return false;
 		}
 		// 4. Make sure we're at a digit
 		if (!regexp.reDigit.test(input.charAt(pos))) {
 			// return error
-			console.error('collectTimestamp: 4. should be a digit at position ' + pos + ' in "' + input + '"');
+			console.error(
+				'collectTimestamp: 4. should be a digit at position ' +
+					pos +
+					' in "' +
+					input +
+					'"'
+			);
 			return false;
 		}
 		// 5. Collect digits in most significant time unit
@@ -416,7 +455,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 8. Abort if past input length or not at a colon
 		if (pos >= input.length || input.charCodeAt(pos) !== 58) {
 			// return error
-			console.error('collectTimestamp: 8. position ' + pos + ' in "' + input + '" is out-of-range or is not a colon');
+			console.error(
+				'collectTimestamp: 8. position ' +
+					pos +
+					' in "' +
+					input +
+					'" is out-of-range or is not a colon'
+			);
 			return false;
 		}
 		pos++;
@@ -426,18 +471,30 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 10.
 		if (string.length !== 2) {
 			// return error
-			console.error('collectTimestamp: 10. the length of "' + string + '" should be exactly 2');
+			console.error(
+				'collectTimestamp: 10. the length of "' +
+					string +
+					'" should be exactly 2'
+			);
 			return false;
 		}
 		// 11.
 		value2 = parseInt(string, 10);
 		// 12. Parse the hours if necessary
-		if (mostSigUnits === 'hours' ||
-			(pos < input.length && input.charCodeAt(pos) === 58)) {
+		if (
+			mostSigUnits === 'hours' ||
+			(pos < input.length && input.charCodeAt(pos) === 58)
+		) {
 			// 1.
 			if (pos >= input.length || input.charCodeAt(pos) !== 58) {
 				// return error
-				console.error('collectTimestamp: 12-1. position ' + pos + ' in "' + input + '" is out-of-range or is not a colon');
+				console.error(
+					'collectTimestamp: 12-1. position ' +
+						pos +
+						' in "' +
+						input +
+						'" is out-of-range or is not a colon'
+				);
 				return false;
 			}
 			pos++;
@@ -447,7 +504,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			// 3.
 			if (string.length !== 2) {
 				// return error
-				console.error('collectTimestamp: 12-3. the length of "' + string + '" should be exactly 2');
+				console.error(
+					'collectTimestamp: 12-3. the length of "' +
+						string +
+						'" should be exactly 2'
+				);
 				return false;
 			}
 			value3 = parseInt(string, 10);
@@ -459,7 +520,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 13. Abort if past input length or not at a full stop (.)
 		if (pos >= input.length || input.charCodeAt(pos) !== 46) {
 			// return error
-			console.error('collectTimestamp: 13. position ' + pos + ' in "' + input + '" is out-of-range or is not a period');
+			console.error(
+				'collectTimestamp: 13. position ' +
+					pos +
+					' in "' +
+					input +
+					'" is out-of-range or is not a period'
+			);
 			return false;
 		}
 		pos++;
@@ -469,7 +536,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 15.
 		if (string.length !== 3) {
 			// return error
-			console.error('collectTimestamp: 15. the length of "' + string + '" should be exactly 3');
+			console.error(
+				'collectTimestamp: 15. the length of "' +
+					string +
+					'" should be exactly 3'
+			);
 			return false;
 		}
 		// 16.
@@ -477,7 +548,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 17.
 		if (value2 > 59 || value3 > 59) {
 			// return error
-			console.error('collectTimestamp: 17. the values of ' + value2 + ' and ' + value3 + ' must both be less than or equal to 59');
+			console.error(
+				'collectTimestamp: 17. the values of ' +
+					value2 +
+					' and ' +
+					value3 +
+					' must both be less than or equal to 59'
+			);
 			return false;
 		}
 		// 18.
@@ -485,7 +562,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// 19.
 		return {
 			timestamp: result,
-			position: pos
+			position: pos,
 		};
 	},
 
@@ -499,7 +576,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 	parseSettings: function (cue, input) {
 		// 1.
 		var settings = input.split(' '),
-			i, setting, name, value, number,
+			i,
+			setting,
+			name,
+			value,
+			number,
 			regexp = this.regexp,
 			alignValues = ['left', 'middle', 'right', 'start', 'end'];
 
@@ -507,8 +588,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		for (i = 0; i < settings.length; i++) {
 			// 1.
 			setting = settings[i];
-			if (!regexp.reColon.test(setting) || setting.indexOf(':') === 0
-				|| setting.indexOf(':') === setting.length - 1) {
+			if (
+				!regexp.reColon.test(setting) ||
+				setting.indexOf(':') === 0 ||
+				setting.indexOf(':') === setting.length - 1
+			) {
 				continue;
 			}
 			// 2.
@@ -517,43 +601,67 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			value = setting.split(':')[1];
 			// 4.
 			if (name === 'vertical') {
-				if (value === 'rl') { // 1.
+				if (value === 'rl') {
+					// 1.
 					cue.setWritingDirection('vertical growing left');
-				} else if (value === 'lr') {// 2.
+				} else if (value === 'lr') {
+					// 2.
 					cue.setWritingDirection('vertical growing right');
 				}
 			} else if (name === 'line') {
-				if (regexp.reNotHyPerDigits.test(value)) {// 1.
+				if (regexp.reNotHyPerDigits.test(value)) {
+					// 1.
 					continue;
-				} else if (regexp.reNoDigits.test(value)) {// 2.
+				} else if (regexp.reNoDigits.test(value)) {
+					// 2.
 					continue;
-				} else if (regexp.reFollowingHyphen.test(value)) {// 3.
+				} else if (regexp.reFollowingHyphen.test(value)) {
+					// 3.
 					continue;
-				} else if (regexp.reLeadingPercent.test(value)) {// 4.
+				} else if (regexp.reLeadingPercent.test(value)) {
+					// 4.
 					continue;
-				} else if (regexp.reHyphenFirst.test(value) && regexp.rePercentLast.test(value)) {// 5.
+				} else if (
+					regexp.reHyphenFirst.test(value) &&
+					regexp.rePercentLast.test(value)
+				) {
+					// 5.
 					continue;
 				}
-				number = parseInt(regexp.reSignedNumbersNoTail.exec(value)[0], 10); // 6.
-				if (regexp.rePercentLast.test(value) && (number < 0 || number > 100)) {// 7.
+				number = parseInt(
+					regexp.reSignedNumbersNoTail.exec(value)[0],
+					10
+				); // 6.
+				if (
+					regexp.rePercentLast.test(value) &&
+					(number < 0 || number > 100)
+				) {
+					// 7.
 					continue;
 				}
 				cue.linePosition = number; // 8.
-				cue.snapToLines = !(regexp.rePercentLast.test(value)); // 9.
+				cue.snapToLines = !regexp.rePercentLast.test(value); // 9.
 			} else if (name === 'position') {
-				if (regexp.rePerDigits.test(value)) {// 1.
+				if (regexp.rePerDigits.test(value)) {
+					// 1.
 					continue;
 				}
-				if (regexp.reNoDigits.test(value)) {// 2.
+				if (regexp.reNoDigits.test(value)) {
+					// 2.
 					continue;
 				}
-				if (regexp.reLeadingPercent.test(value)) {// 3.
+				if (regexp.reLeadingPercent.test(value)) {
+					// 3.
 					continue;
 				}
-				if (!regexp.rePercentLast.test(value)) {// 4.
+				if (!regexp.rePercentLast.test(value)) {
+					// 4.
 					continue;
 				}
-				number = parseInt(regexp.reSignedNumbersNoTail.exec(value)[0], 10); // 5.
+				number = parseInt(
+					regexp.reSignedNumbersNoTail.exec(value)[0],
+					10
+				); // 5.
 				if (number < 0 || number > 100) {
 					continue;
 				}
@@ -635,13 +743,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
 			reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
 			scratch = this.scratch;
-			//regexp = this.regexp;
+		//regexp = this.regexp;
 
 		/*
 		 * Callback for replace which replaces <v> tags with <span> tags, returning a resulting replacement string
 		 * @param str The matched string, which is a <v> tag (with annotations and such)
 		 */
-		function replaceV (str) {
+		function replaceV(str) {
 			var replacement;
 			// Check whether this is a valid tag (it must have an annotation), return empty span if not
 			if (!reGoodV.test(str)) {
@@ -657,7 +765,6 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			return replacement;
 		}
 
-
 		/*
 		 * Callback for replace used actually to replace parts of the tag as required.
 		 * @param {String} str
@@ -665,7 +772,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		 * @param {String} speakerName eg "<the name of the speaker>"
 		 * @return The replacement string
 		 */
-		function replaceVParts (str,className,speakerName) {
+		function replaceVParts(str, className, speakerName) {
 			var replacement, reClasses, replacementClasses;
 
 			// Initialize to the matched string
@@ -678,20 +785,24 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 				replacementClasses = className;
 				replacementClasses = replacementClasses.replace(/\u002e/g, ' ');
 				replacementClasses = replacementClasses.trim();
-				replacement = replacement.replace(reClasses, ' class=\'' + replacementClasses + '\'');
+				replacement = replacement.replace(
+					reClasses,
+					" class='" + replacementClasses + "'"
+				);
 			}
 			// Adds a title attribute with speakerName as its value
-			replacement = replacement.replace(new RegExp(speakerName + '(?=>)'),
-				'title=\'' + speakerName + '\'');
+			replacement = replacement.replace(
+				new RegExp(speakerName + '(?=>)'),
+				"title='" + speakerName + "'"
+			);
 			spanCount++;
 			//			  console.debug(str+' replaced with '+replacement);
 
 			return replacement;
 		}
 
-
 		/* Callback for replace which replaces </v> tags with </span> tags and keeps track of how many times this is done */
-		function replaceEndV () {
+		function replaceEndV() {
 			spanCount--;
 			return '</span>';
 		}
@@ -750,7 +861,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			return false;
 		}
 		// 54. Repeat cueLoop if line is the empty string 55. Otherwise, repeat badCueLoop
-		return (scratch.line !== '');
+		return scratch.line !== '';
 	},
 
 	/**
@@ -795,7 +906,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		var i, tmpCue;
 		for (i = 0; i < tree.length; i++) {
 			tmpCue = cue.cueTree[i];
-			if (cue.startTime >= tmpCue.startTime && cue.endTime <= tmpCue.endTime) {
+			if (
+				cue.startTime >= tmpCue.startTime &&
+				cue.endTime <= tmpCue.endTime
+			) {
 				this.cueTreeInsert(cue, tmpCue.cueTree);
 				return;
 			}
@@ -826,7 +940,9 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 	 * @param ignoreLFs Whether line feeds in cue text should be ignored rather than converted to <br> tags
 	 */
 	parseWebVTT: function () {
-		var s, scratch = this.scratch, loop;
+		var s,
+			scratch = this.scratch,
+			loop;
 		// Make sure scratchwork is clear
 		for (s in scratch) {
 			if (scratch.hasOwnProperty(s)) {
@@ -873,5 +989,5 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 
 		return this.cueList;
-	}
+	},
 });

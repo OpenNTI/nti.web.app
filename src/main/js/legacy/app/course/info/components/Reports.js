@@ -1,46 +1,47 @@
 const Ext = require('@nti/extjs');
-const {List} = require('@nti/web-reports');
+const { List } = require('@nti/web-reports');
 
 require('legacy/overrides/ReactHarness.js');
 
-module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-info-reports',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.info.components.Reports',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.course-info-reports',
 
-	cls: 'course-reports',
+		cls: 'course-reports',
 
-	layout: 'none',
-	items: [],
+		layout: 'none',
+		items: [],
 
+		initComponent() {
+			this.callParent(arguments);
 
-	initComponent () {
-		this.callParent(arguments);
+			if (this.bundle) {
+				this.setContent(this.bundle);
+			}
+		},
 
-		if (this.bundle) {
-			this.setContent(this.bundle);
-		}
-	},
+		async setContent(bundle) {
+			if (this.currentBundle === bundle || !bundle) {
+				return;
+			}
 
-	async setContent (bundle) {
-		if (this.currentBundle === bundle || !bundle) {
-			return;
-		}
+			this.currentBundle = bundle;
+			const context = await bundle.getInterfaceInstance();
 
-		this.currentBundle = bundle;
-		const context = await bundle.getInterfaceInstance();
-
-		this.removeAll(true);
-		this.add({
-			xtype: 'react',
-			component: List,
-			context
-		});
+			this.removeAll(true);
+			this.add({
+				xtype: 'react',
+				component: List,
+				context,
+			});
+		},
 	}
-});
+);
 
 // const {wait} = require('@nti/lib-commons');
 // const {getString} = require('legacy/util/Localization');
-
 
 // //TODO: move this in to the strings file once we get that figured out
 // const labels = {
@@ -55,7 +56,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 // };
 
 // require('legacy/mixins/FillScreen');
-
 
 // module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {
 // 	extend: 'Ext.Component',
@@ -84,15 +84,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 // 		]
 // 	})),
 
-
 // 	afterRender () {
 // 		this.callParent(arguments);
-
 
 // 		if (this.bundle) {
 // 			this.setContent(this.bundle);
 // 		}
-
 
 // 		this.mon(this.el, 'click', function (e) {
 // 			let target = e.getTarget('.target');
@@ -113,7 +110,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 
 // 		this.on('activate', this.fillScreen.bind(this, this.el.dom));
 // 	},
-
 
 // 	setContent (bundle) {
 // 		this.bundle = bundle;

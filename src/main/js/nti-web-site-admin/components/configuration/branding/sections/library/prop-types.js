@@ -5,13 +5,14 @@ export const libraryTheme = {
 		navigation: PropTypes.shape({
 			backgroundColor: PropTypes.oneOfType([
 				PropTypes.string, // css color string
-				PropTypes.shape({ // @nti/lib-commons Color
+				PropTypes.shape({
+					// @nti/lib-commons Color
 					isColor: PropTypes.bool,
 					hex: PropTypes.shape({
-						toString: PropTypes.func.isRequired
-					})
+						toString: PropTypes.func.isRequired,
+					}),
 				}),
-			])
-		})
-	})
+			]),
+		}),
+	}),
 };

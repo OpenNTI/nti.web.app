@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .course-instructor-permission-list {
 	.header {
@@ -12,7 +12,8 @@
 			flex: 1 1 auto;
 		}
 
-		.instructor-label, .editor-label {
+		.instructor-label,
+		.editor-label {
 			flex: 0 0 60px;
 			font-size: 0.625rem;
 			font-weight: 700;

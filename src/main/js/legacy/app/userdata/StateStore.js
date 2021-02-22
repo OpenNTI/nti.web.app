@@ -1,10 +1,8 @@
-
 const Ext = require('@nti/extjs');
 
 const Socket = require('legacy/proxy/Socket');
 
 require('legacy/common/StateStore');
-
 
 module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -17,33 +15,27 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 		return this.socket;
 	},
 
-
 	setPreference: function (key, pref) {
 		this.pagePreferenceMap = this.pagePreferenceMap || {};
 
 		this.pagePreferenceMap[key] = pref;
 	},
 
-
 	getPreference: function (key) {
 		return this.pagePreferenceMap && this.pagePreferenceMap[key];
 	},
-
 
 	setContext: function (ctx) {
 		this.currentContext = ctx;
 	},
 
-
 	clearContext: function () {
 		delete this.currentContext;
 	},
 
-
 	getMainReaderContext: function () {
 		return this.flatPageContextMap['main-reader-view'];
 	},
-
 
 	addStore: function (store) {
 		if (!this.flatPageContextMap) {
@@ -52,13 +44,12 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 
 		if (!this.flatPageContextMap.others) {
 			this.flatPageContextMap.others = {
-				currentPageStores: {}
+				currentPageStores: {},
 			};
 		}
 
 		this.flatPageContextMap.others.currentPageStores[store.storeId] = store;
 	},
-
 
 	getContext: function (cmp) {
 		if (!this.flatPageContextMap) {
@@ -82,14 +73,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 				});
 			}
 
-			c[cmp.id] = c[cmp.id] || {flatPageStore: cmp.flatPageStore};
+			c[cmp.id] = c[cmp.id] || { flatPageStore: cmp.flatPageStore };
 
 			return c[cmp.id];
 		}
 
 		return this.currentContext;
 	},
-
 
 	//<editor-fold desc="Store Iteration">
 	//Calls the provided fn on all the stores.	Optionally takes a predicate
@@ -101,19 +91,21 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 					return;
 				}
 
-				if (!Ext.isFunction(predicate) || predicate.apply(null, arguments)) {
+				if (
+					!Ext.isFunction(predicate) ||
+					predicate.apply(null, arguments)
+				) {
 					Ext.callback(fn, null, arguments);
 				}
 			});
 		});
 	},
 
-
 	applyToStoresThatWantItem: function (fn, item) {
-		function predicate (id, store) {
+		function predicate(id, store) {
 			return store && store.wantsItem(item);
 		}
 
 		this.applyToStores(fn, predicate);
-	}
+	},
 });

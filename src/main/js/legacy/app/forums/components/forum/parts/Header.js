@@ -4,123 +4,160 @@ const { Forums } = require('@nti/web-discussions');
 
 const { getString } = require('legacy/util/Localization');
 
-module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
-	extend: 'Ext.Component',
-	alias: 'widget.forums-forum-header',
-	cls: 'topic-list-header',
+module.exports = exports = Ext.define(
+	'NextThought.app.forums.components.forum.parts.Header',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.forums-forum-header',
+		cls: 'topic-list-header',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
-		{cls: 'delete-forum', html: 'Delete'},
-		{cls: 'edit-forum', html: 'Edit'},
-		{cls: 'controls', cn: [
-			{cls: 'position', cn: [
-				{tag: 'span', cls: 'bold', html: '{{{NextThought.view.forums.forum.parts.Header.page}}}'},
-				{tag: 'span', cls: 'current bold', html: '{currentPage}'},
-				'{{{NextThought.view.forums.forum.parts.Header.of}}}',
-				{tag: 'span', cls: 'total bold', html: '{totalPages}'}
-			]},
-			{cls: 'pager', cn: [
-				{cls: 'prev disabled'},
-				{cls: 'next disabled'}
-			]}
-		]}
-	]),
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'new-topic',
+				html: '{{{NextThought.view.forums.forum.parts.Header.new}}}',
+			},
+			{ cls: 'delete-forum', html: 'Delete' },
+			{ cls: 'edit-forum', html: 'Edit' },
+			{
+				cls: 'controls',
+				cn: [
+					{
+						cls: 'position',
+						cn: [
+							{
+								tag: 'span',
+								cls: 'bold',
+								html:
+									'{{{NextThought.view.forums.forum.parts.Header.page}}}',
+							},
+							{
+								tag: 'span',
+								cls: 'current bold',
+								html: '{currentPage}',
+							},
+							'{{{NextThought.view.forums.forum.parts.Header.of}}}',
+							{
+								tag: 'span',
+								cls: 'total bold',
+								html: '{totalPages}',
+							},
+						],
+					},
+					{
+						cls: 'pager',
+						cn: [
+							{ cls: 'prev disabled' },
+							{ cls: 'next disabled' },
+						],
+					},
+				],
+			},
+		]),
 
-	renderSelectors: {
-		newTopicEl: '.new-topic',
-		deleteForumEl: '.delete-forum',
-		editForumEl: '.edit-forum',
-		currentEl: '.controls .position .current',
-		totalEl: '.controls .position .total',
-		prevEl: '.controls .pager .prev',
-		nextEl: '.controls .pager .next'
-	},
+		renderSelectors: {
+			newTopicEl: '.new-topic',
+			deleteForumEl: '.delete-forum',
+			editForumEl: '.edit-forum',
+			currentEl: '.controls .position .current',
+			totalEl: '.controls .position .total',
+			prevEl: '.controls .pager .prev',
+			nextEl: '.controls .pager .next',
+		},
 
-	afterRender () {
-		const me = this;
+		afterRender() {
+			const me = this;
 
-		if (!me.record.getLink('add')) {
-			me.newTopicEl.destroy();
-		} else {
-			me.mon(me.newTopicEl, 'click', function () {
-				me.fireEvent('new-topic', me, me.record, me.newTopicEl);
-			});
-		}
-
-		if(me.record.hasLink('edit')) {
-			me.mon(me.deleteForumEl, 'click', 'deleteForum');
-			me.mon(me.editForumEl, 'click', 'editForum');
-		} else {
-			me.deleteForumEl.hide();
-			me.editForumEl.hide();
-		}
-
-		me.updatePosition();
-		me.mon(me.store, 'load', 'updatePosition');
-
-		me.mon(me.prevEl, 'click', 'previousPage');
-		me.mon(me.nextEl, 'click', 'nextPage');
-
-	},
-
-	editForum () {
-		this.onEdit();
-	},
-
-	deleteForum () {
-		Ext.Msg.show({
-			msg: getString(
-				'NextThought.view.forums.forum.parts.Header.deletewarning'
-			),
-			title: getString(
-				'NextThought.view.forums.forum.parts.Header.deletetitle'
-			),
-			icon: 'warning-red',
-			buttons: {
-				primary: {
-					text: 'Remove',
-					handler: async () => {
-						try {
-							await Service.requestDelete(this.record.getLink('edit'));
-							this.replaceRouteState(null, '', '/');
-							dispatch(Forums.FORUM_LIST_REFRESH);
-						} catch (error) {
-							console.error(error);
-							setTimeout(() => { alert('Unable to delete this forum.'); }, 1000);
-						}
-					}
-				},
-				secondary: 'Cancel'
+			if (!me.record.getLink('add')) {
+				me.newTopicEl.destroy();
+			} else {
+				me.mon(me.newTopicEl, 'click', function () {
+					me.fireEvent('new-topic', me, me.record, me.newTopicEl);
+				});
 			}
-		});
-	},
 
-	updatePosition () {
-		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
-			currentPage = total ? this.store.currentPage : 0;
+			if (me.record.hasLink('edit')) {
+				me.mon(me.deleteForumEl, 'click', 'deleteForum');
+				me.mon(me.editForumEl, 'click', 'editForum');
+			} else {
+				me.deleteForumEl.hide();
+				me.editForumEl.hide();
+			}
 
-		this.prevEl[(currentPage > 1) ? 'removeCls' : 'addCls']('disabled');
-		this.nextEl[(currentPage < total) ? 'removeCls' : 'addCls']('disabled');
+			me.updatePosition();
+			me.mon(me.store, 'load', 'updatePosition');
 
-		this.currentEl.update(currentPage || '0');
-		this.totalEl.update(total || '0');
-	},
+			me.mon(me.prevEl, 'click', 'previousPage');
+			me.mon(me.nextEl, 'click', 'nextPage');
+		},
 
-	previousPage () {
-		var current = this.store.currentPage;
+		editForum() {
+			this.onEdit();
+		},
 
-		if (current - 1 > 0) {
-			this.fireEvent('page-change', current - 1);
-		}
-	},
+		deleteForum() {
+			Ext.Msg.show({
+				msg: getString(
+					'NextThought.view.forums.forum.parts.Header.deletewarning'
+				),
+				title: getString(
+					'NextThought.view.forums.forum.parts.Header.deletetitle'
+				),
+				icon: 'warning-red',
+				buttons: {
+					primary: {
+						text: 'Remove',
+						handler: async () => {
+							try {
+								await Service.requestDelete(
+									this.record.getLink('edit')
+								);
+								this.replaceRouteState(null, '', '/');
+								dispatch(Forums.FORUM_LIST_REFRESH);
+							} catch (error) {
+								console.error(error);
+								setTimeout(() => {
+									alert('Unable to delete this forum.');
+								}, 1000);
+							}
+						},
+					},
+					secondary: 'Cancel',
+				},
+			});
+		},
 
-	nextPage () {
-		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
-			current = this.store.currentPage;
+		updatePosition() {
+			var total = Math.ceil(
+					this.store.getTotalCount() / this.store.pageSize
+				),
+				currentPage = total ? this.store.currentPage : 0;
 
-		if (current + 1 <= total) {
-			this.fireEvent('page-change', current + 1);
-		}
+			this.prevEl[currentPage > 1 ? 'removeCls' : 'addCls']('disabled');
+			this.nextEl[currentPage < total ? 'removeCls' : 'addCls'](
+				'disabled'
+			);
+
+			this.currentEl.update(currentPage || '0');
+			this.totalEl.update(total || '0');
+		},
+
+		previousPage() {
+			var current = this.store.currentPage;
+
+			if (current - 1 > 0) {
+				this.fireEvent('page-change', current - 1);
+			}
+		},
+
+		nextPage() {
+			var total = Math.ceil(
+					this.store.getTotalCount() / this.store.pageSize
+				),
+				current = this.store.currentPage;
+
+			if (current + 1 <= total) {
+				this.fireEvent('page-change', current + 1);
+			}
+		},
 	}
-});
+);

@@ -2,12 +2,15 @@ const Ext = require('@nti/extjs');
 
 require('../outlinenode/AddNode');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.outline.contentnode.AddNode',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode',
+		alias: 'widget.overview-editing-new-node',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.AddNode', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode',
-	alias: 'widget.overview-editing-new-node',
+		cls: 'new-node lesson',
 
-	cls: 'new-node lesson',
-
-	autoPublish: false
-});
+		autoPublish: false,
+	}
+);

@@ -1,15 +1,17 @@
 const Ext = require('@nti/extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 const Assignment = require('./assessment/Assignment');
 
 require('./assessment/Question');
 require('./Base');
 
-const ContentPackageMimeType = 'application/vnd.nextthought.renderablecontentpackage';
+const ContentPackageMimeType =
+	'application/vnd.nextthought.renderablecontentpackage';
 
 module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 	extend: 'NextThought.model.Base',
@@ -21,22 +23,22 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 			return {
 				mimeType: this.mimeType,
 				NTIID: data.href,
-				label: data.title
+				label: data.title,
 			};
-		}
+		},
 	},
 
 	fields: [
-		{ name: 'ContentPackageNTIID', type: 'string'},
+		{ name: 'ContentPackageNTIID', type: 'string' },
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },
 		{ name: 'dataFilterPreference', type: 'auto' },
 		//Placeholder for client-side generated page content :} *facepalm*
 		{ name: 'content', type: 'string', persist: false },
-		{ name: 'Title', type: 'string'},
-		{ name: 'DoNotLoadAnnotations', persist: false},
-		{ name: 'isFakePlaceholder', type: 'bool', persist: false},
-		{ name: 'isFakePageInfo', type: 'bool', persis: true}
+		{ name: 'Title', type: 'string' },
+		{ name: 'DoNotLoadAnnotations', persist: false },
+		{ name: 'isFakePlaceholder', type: 'bool', persist: false },
+		{ name: 'isFakePageInfo', type: 'bool', persis: true },
 	],
 
 	isPageInfo: true,
@@ -44,11 +46,15 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 	getSubContainerURL: function (rel, id) {
 		var pagesCollection = Service.getCollection('Pages') || {};
 
-		if(!pagesCollection.href) {
+		if (!pagesCollection.href) {
 			return null;
 		}
 
-		return pagesCollection.href + encodeURIComponent('(' + id + ')') + '/UserGeneratedData';
+		return (
+			pagesCollection.href +
+			encodeURIComponent('(' + id + ')') +
+			'/UserGeneratedData'
+		);
 	},
 
 	getTitle: function (/*defaultTitle*/) {
@@ -64,14 +70,18 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		return !this.getLinkFragment('content');
 	},
 
-	getContentPackage () {
+	getContentPackage() {
 		const url = this.getLink('package');
-		const request = url ? Service.request({url, headers: {Accept: ContentPackageMimeType}}) : Promise.reject('No Link');
+		const request = url
+			? Service.request({
+					url,
+					headers: { Accept: ContentPackageMimeType },
+			  })
+			: Promise.reject('No Link');
 
-		return request
-			.then((resp) => {
-				return lazy.ParseUtils.parseItems(resp)[0];
-			});
+		return request.then(resp => {
+			return lazy.ParseUtils.parseItems(resp)[0];
+		});
 	},
 
 	getPageRootID: function () {
@@ -81,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 
 		var l = (ContentUtils.getLocation(this) || {}).location;
 
-		function isRoot (n) {
+		function isRoot(n) {
 			n = n && n.getAttribute('href');
 			n = n && n.spnit('#')[1];
 			return !l;
@@ -115,12 +125,20 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 
 		ntiid = '[ntiid="' + lazy.ParseUtils.escapeId(ntiid) + '"]';
 
-		if (!l || !toc) {return false;}
+		if (!l || !toc) {
+			return false;
+		}
 
-		return this.isPartOfCourse() && Boolean(
-			/^toc$/i.test(l.location.nodeName) ||
-				toc.querySelector('unit' + ntiid) ||
-				toc.querySelector('lesson' + ntiid.replace(/^\[/, '[topic-')));
+		return (
+			this.isPartOfCourse() &&
+			Boolean(
+				/^toc$/i.test(l.location.nodeName) ||
+					toc.querySelector('unit' + ntiid) ||
+					toc.querySelector(
+						'lesson' + ntiid.replace(/^\[/, '[topic-')
+					)
+			)
+		);
 	},
 
 	getPublicScope: function () {
@@ -131,7 +149,8 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		return (title && title.getScope('public')) || [];
 	},
 
-	getRestrictedScope: function () {//i don't think this is used
+	getRestrictedScope: function () {
+		//i don't think this is used
 		var l = this.getLocationInfo(),
 			title = l && l.title;
 		console.error('[DEPRECATED] User CourseInstance');
@@ -170,29 +189,28 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 			return Promise.resolve();
 		}
 		//get the assignments from the assignments by outline node request on the course
-		return bundle.getAssignments()
-			.then(function (assignments) {
-				var oldAssessment = me.get('AssessmentItems') || [],
-					newAssessment = [];
+		return bundle.getAssignments().then(function (assignments) {
+			var oldAssessment = me.get('AssessmentItems') || [],
+				newAssessment = [];
 
-				//go through our assessment items and get the matching one
-				//from the course assignments and update the dates
-				oldAssessment.forEach(function (item) {
-					var a = assignments.getItem(item.getId());
+			//go through our assessment items and get the matching one
+			//from the course assignments and update the dates
+			oldAssessment.forEach(function (item) {
+				var a = assignments.getItem(item.getId());
 
-					if (a) {
-						item.set({
-							'availableBeginning': a.get('availableBeginning'),
-							'availableEnding': a.get('availableEnding')
-						});
-					}
-				});
-
-				//if we found any items to replace replace all of them
-				if (!Ext.isEmpty(newAssessment)) {
-					me.set('AssessmentItems', newAssessment);
+				if (a) {
+					item.set({
+						availableBeginning: a.get('availableBeginning'),
+						availableEnding: a.get('availableEnding'),
+					});
 				}
 			});
+
+			//if we found any items to replace replace all of them
+			if (!Ext.isEmpty(newAssessment)) {
+				me.set('AssessmentItems', newAssessment);
+			}
+		});
 	},
 
 	replaceAssignment: function (assignment) {
@@ -209,8 +227,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		this.set('AssessmentItems', items);
 	},
 
-
-	clone () {
+	clone() {
 		return lazy.ParseUtils.parseItems(this.rawData)[0];
-	}
+	},
 });

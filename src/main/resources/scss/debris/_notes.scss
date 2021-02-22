@@ -38,9 +38,11 @@
 
 @mixin note-control-box {
 	.note-here-control-box {
-		@include animate(fadeIn,0.1s);
-		@include icon($add-note,$position: absolute, $top:-4px);
-		&:hover::after { @include sprite($add-note_active); }
+		@include animate(fadeIn, 0.1s);
+		@include icon($add-note, $position: absolute, $top: -4px);
+		&:hover::after {
+			@include sprite($add-note_active);
+		}
 
 		display: block;
 		left: 20px;
@@ -67,7 +69,9 @@
 		opacity: 0.4;
 		color: var(--secondary-grey);
 
-		.reply, .share, .more {
+		.reply,
+		.share,
+		.more {
 			display: inline-block;
 			font-weight: 700;
 			font-size: 12px;
@@ -150,17 +154,29 @@
 			.x-menu-item {
 				color: var(--secondary-grey) !important;
 
-				&.edit::after { @include sprite($edit-dark); }
-				&.flag::after { @include sprite($flag-dark); }
-				&.delete::after { @include sprite($trash-can-dark); }
+				&.edit::after {
+					@include sprite($edit-dark);
+				}
+				&.flag::after {
+					@include sprite($flag-dark);
+				}
+				&.delete::after {
+					@include sprite($trash-can-dark);
+				}
 
 				&.x-menu-item-active {
 					color: var(--tertiary-grey) !important;
 					background: #3d3d3d !important;
 
-					&.edit::after { @include sprite($edit-dark_hover); }
-					&.flag::after { @include sprite($flag-dark_hover); }
-					&.delete::after { @include sprite($trash-can-dark_hover); }
+					&.edit::after {
+						@include sprite($edit-dark_hover);
+					}
+					&.flag::after {
+						@include sprite($flag-dark_hover);
+					}
+					&.delete::after {
+						@include sprite($trash-can-dark_hover);
+					}
 				}
 			}
 		}
@@ -183,24 +199,56 @@
 				left: 13px;
 			}
 
-			&.edit::after { @include sprite($edit-15); }
-			&.flag::after { @include sprite($flag-13x15); }
-			&.add-contact::after { @include sprite($add-contact-14x14); }
-			&.chat::after { @include sprite($chat-18x12); }
-			&.follow::after { @include sprite($follow); }
-			&.block::after { @include sprite($block); }
-			&.mute::after { @include sprite($mute-14x13); }
-			&.delete::after { @include sprite($trash-can-11x14); }
+			&.edit::after {
+				@include sprite($edit-15);
+			}
+			&.flag::after {
+				@include sprite($flag-13x15);
+			}
+			&.add-contact::after {
+				@include sprite($add-contact-14x14);
+			}
+			&.chat::after {
+				@include sprite($chat-18x12);
+			}
+			&.follow::after {
+				@include sprite($follow);
+			}
+			&.block::after {
+				@include sprite($block);
+			}
+			&.mute::after {
+				@include sprite($mute-14x13);
+			}
+			&.delete::after {
+				@include sprite($trash-can-11x14);
+			}
 
 			&.x-menu-item-active {
-				&.edit::after { @include sprite($edit-15_hover); }
-				&.flag::after { @include sprite($flag-13x15_hover); }
-				&.add-contact::after { @include sprite($add-contact-14x14_hover); }
-				&.chat::after { @include sprite($chat-18x12_hover); }
-				&.follow::after { @include sprite($follow_hover); }
-				&.block::after { @include sprite($block_hover); }
-				&.mute::after { @include sprite($mute-14x13_hover); }
-				&.delete::after { @include sprite($trash-can-11x14_hover); }
+				&.edit::after {
+					@include sprite($edit-15_hover);
+				}
+				&.flag::after {
+					@include sprite($flag-13x15_hover);
+				}
+				&.add-contact::after {
+					@include sprite($add-contact-14x14_hover);
+				}
+				&.chat::after {
+					@include sprite($chat-18x12_hover);
+				}
+				&.follow::after {
+					@include sprite($follow_hover);
+				}
+				&.block::after {
+					@include sprite($block_hover);
+				}
+				&.mute::after {
+					@include sprite($mute-14x13_hover);
+				}
+				&.delete::after {
+					@include sprite($trash-can-11x14_hover);
+				}
 			}
 		}
 	}
@@ -233,8 +281,12 @@
 						margin-top: 0;
 					}
 				}
-				.shared-to { display: none; }
-				.title { display: none; }
+				.shared-to {
+					display: none;
+				}
+				.title {
+					display: none;
+				}
 
 				.name {
 					font-size: 14px;
@@ -261,18 +313,28 @@
 		}
 
 		&.deleted-reply {
-			&::after { background: none !important; }
+			&::after {
+				background: none !important;
+			}
 
 			min-height: 35px;
 			padding: 6px 30px;
 
 			.meta {
 				display: none;
-				.controls { display: none !important; }
+				.controls {
+					display: none !important;
+				}
 			}
-			.body { display: none; }
-			.avatar { display: none; }
-			.name { display: none; }
+			.body {
+				display: none;
+			}
+			.avatar {
+				display: none;
+			}
+			.name {
+				display: none;
+			}
 
 			.respond {
 				overflow: visible;
@@ -290,11 +352,16 @@
 			}
 		}
 
-		&.editor-active,&.hover {
+		&.editor-active,
+		&.hover {
 			border-color: #e6e6e6;
 			box-shadow: none;
-			.meta .controls { display: block; }
-			.respond .reply-options { opacity: 1; }
+			.meta .controls {
+				display: block;
+			}
+			.respond .reply-options {
+				opacity: 1;
+			}
 		}
 
 		.avatar {
@@ -353,12 +420,18 @@
 
 		&.editor-active .respond {
 			display: block;
-			.reply-options { display: none; }
-			.time { display: none; }
+			.reply-options {
+				display: none;
+			}
+			.time {
+				display: none;
+			}
 
 			.editor {
 				display: block;
-				.action.share { display: none !important; }
+				.action.share {
+					display: none !important;
+				}
 			}
 		}
 
@@ -367,7 +440,9 @@
 			overflow: hidden;
 
 			@include reply-options;
-			.reply-options .more ol { position: fixed; }
+			.reply-options .more ol {
+				position: fixed;
+			}
 
 			&.shared .reply-options .share {
 				display: inline-block;
@@ -407,7 +482,9 @@
 
 				.footer {
 					background-color: transparent;
-					&::after { display: none; }
+					&::after {
+						display: none;
+					}
 				}
 			}
 		}
@@ -450,11 +527,13 @@
 		position: relative;
 		padding-left: 27px;
 
-		&.editor-active, &.hover {
+		&.editor-active,
+		&.hover {
 			box-shadow: inset 0 1px 0 0 #fff;
 		}
 
-		img.avatar, .avatar-container {
+		img.avatar,
+		.avatar-container {
 			float: left;
 			width: 60px;
 			height: 60px;
@@ -490,7 +569,9 @@
 
 				@include ellipsis;
 
-				.whiteboard-container { display: none !important; }
+				.whiteboard-container {
+					display: none !important;
+				}
 			}
 
 			.name-wrap {
@@ -518,7 +599,7 @@
 				.shared-to {
 					color: var(--primary-blue);
 
-					name[data-profile-idx]:not([data-profile-idx=""]) {
+					name[data-profile-idx]:not([data-profile-idx='']) {
 						cursor: pointer;
 					}
 				}
@@ -544,7 +625,7 @@
 			clear: both;
 			overflow: {
 				x: hidden;
-				y: auto //scroll;
+				y: auto; //scroll;
 			}
 
 			max-height: 30em;
@@ -675,9 +756,12 @@
 		}
 	}
 
-	.note-container.child { background: #fff; }
+	.note-container.child {
+		background: #fff;
+	}
 
-	.note-footer, .note-content-container.scrollbody {
+	.note-footer,
+	.note-content-container.scrollbody {
 		@include scrollbar(#ffffff, var(--tertiary-grey));
 		//background: var(--panel-background);
 	}
@@ -745,11 +829,16 @@
 				clip: rect(-10px, auto, 2px, auto);
 			}
 
-			&.edit,&:hover {
+			&.edit,
+			&:hover {
 				overflow: visible;
 				height: auto !important;
 				z-index: 10;
-				background-image: linear-gradient(to bottom, #fff 0%, rgba(251, 251, 251, 0) 70%);
+				background-image: linear-gradient(
+					to bottom,
+					#fff 0%,
+					rgba(251, 251, 251, 0) 70%
+				);
 
 				&::after {
 					bottom: 1px;
@@ -764,7 +853,11 @@
 
 			//make sure nodes are sorted
 			& + .x-component-notepad-item {
-				background-image: linear-gradient(to bottom, #fff 0%, rgba(251, 251, 251, 0) 70%);
+				background-image: linear-gradient(
+					to bottom,
+					#fff 0%,
+					rgba(251, 251, 251, 0) 70%
+				);
 			}
 		}
 	}
@@ -824,9 +917,7 @@
 		padding: 0.4em 0.5em;
 
 		&:not(.inline-editor):hover {
-			box-shadow:
-				inset 0 -1px 0 0 #e3e3e3,
-				inset 0 1px 0 0 #e3e3e3;
+			box-shadow: inset 0 -1px 0 0 #e3e3e3, inset 0 1px 0 0 #e3e3e3;
 		}
 
 		&.inline-editor {
@@ -845,8 +936,6 @@
 	}
 
 	& > div > .x-component-notepad-item.inline-editor {
-		box-shadow:
-			inset 0 -1px 0 0 #ededed,
-			inset 0 1px 0 0 #ededed;
+		box-shadow: inset 0 -1px 0 0 #ededed, inset 0 1px 0 0 #ededed;
 	}
 }

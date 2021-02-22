@@ -5,7 +5,6 @@ const PromptStateStore = require('./StateStore');
 
 require('./components/Container');
 
-
 module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.prompt-view',
@@ -23,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		this.PromptStateStore = PromptStateStore.getInstance();
 
 		this.mon(this.PromptStateStore, {
-			'open-prompt': this.openPrompt.bind(this)
+			'open-prompt': this.openPrompt.bind(this),
 		});
 	},
 
@@ -32,7 +31,6 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			this.HTML_ELEMENT.classList.add('prompt-open');
 			Commons.Prompt.Manager.suspendEscapeListener();
 		}
-
 	},
 
 	removeOpenCls: function () {
@@ -56,7 +54,9 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 	},
 
 	openPrompt: function (cmp, type, fulfill, reject, data) {
-		if (!cmp) { return; }
+		if (!cmp) {
+			return;
+		}
 
 		var index = this.promptStack.length,
 			close = this.closePrompt.bind(this, index),
@@ -72,17 +72,15 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			hidden: data && data.auto,
 			hideMode: 'visibility',
 			onSubmit: function (value) {
-				close()
-					.then(function () {
-						fulfill(value);
-					});
+				close().then(function () {
+					fulfill(value);
+				});
 			},
 			onCancel: function (reason) {
-				close()
-					.then(function () {
-						reject(reason);
-					});
-			}
+				close().then(function () {
+					reject(reason);
+				});
+			},
 		});
 
 		this.promptStack.push(prompt);
@@ -99,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			prompt = stack.peek(),
 			allow;
 
-		function close () {
+		function close() {
 			prompt.destroy();
 			stack.pop();
 
@@ -121,7 +119,6 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			allow = Promise.resolve();
 		}
 
-		return allow
-			.then(close);
-	}
+		return allow.then(close);
+	},
 });

@@ -1,129 +1,132 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-const {Community} = require('@nti/web-profiles');
+const { Community } = require('@nti/web-profiles');
 
 const CommunityOverrides = require('nti-web-community-overrides');
 const NavigationActions = require('legacy/app/navigation/Actions');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/overrides/ReactHarness');
 
 require('legacy/mixins/Router');
 
-module.exports = exports = Ext.define('NextThought.app.profiles.community.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-community',
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.community.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.profile-community',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	cls: `${CommunityOverrides.viewClassName}`,
-	layout: 'none',
-	items: [],
+		cls: `${CommunityOverrides.viewClassName}`,
+		layout: 'none',
+		items: [],
 
-	initComponent () {
-		this.callParent(arguments);
-		this.NavActions = NavigationActions.create();
+		initComponent() {
+			this.callParent(arguments);
+			this.NavActions = NavigationActions.create();
 
-		this.initRouter();
+			this.initRouter();
 
-		this.addDefaultRoute(this.showCommunity.bind(this));
-	},
+			this.addDefaultRoute(this.showCommunity.bind(this));
+		},
 
+		onRouteActivate() {
+			clearTimeout(this.deactivateTimeout);
+		},
 
-	onRouteActivate () {
-		clearTimeout(this.deactivateTimeout);
-	},
+		onRouteDeactivate() {
+			clearTimeout(this.deactivateTimeout);
+			this.deactivateTimeout = setTimeout(() => {
+				if (this.communityCmp) {
+					this.communityCmp.destroy();
+					delete this.communityCmp;
+				}
+			}, 100);
+		},
 
-	onRouteDeactivate () {
-		clearTimeout(this.deactivateTimeout);
-		this.deactivateTimeout = setTimeout(() => {
+		getContext() {
+			return this.activeCommunity;
+		},
+
+		setActiveEntity(id) {
+			const url = Service.getResolveUserURL(id);
+
+			if (this.activeCommunity && this.activeCommunity.getId() === id) {
+				return Promise.resolve(this.activeCommunity);
+			}
+
 			if (this.communityCmp) {
 				this.communityCmp.destroy();
 				delete this.communityCmp;
 			}
-		}, 100);
-	},
 
+			return Service.request(url)
+				.then(
+					resp =>
+						lazy.ParseUtils.parseItems(JSON.parse(resp) || {})[0]
+				)
+				.then(community => (this.activeCommunity = community));
+		},
 
-	getContext () {
-		return this.activeCommunity;
-	},
-
-	setActiveEntity (id) {
-		const url = Service.getResolveUserURL(id);
-
-		if (this.activeCommunity && this.activeCommunity.getId() === id) {
-			return Promise.resolve(this.activeCommunity);
-		}
-
-		if (this.communityCmp) {
-			this.communityCmp.destroy();
-			delete this.communityCmp;
-		}
-
-		return Service.request(url)
-			.then(resp => lazy.ParseUtils.parseItems(JSON.parse(resp) || {})[0])
-			.then(community => this.activeCommunity = community);
-	},
-
-
-	updateNavigation () {
-		this.NavActions.updateNavBar({
-			hideBranding: true
-		});
-
-		this.NavActions.setActiveContent(null, false, false);
-	},
-
-
-	async showCommunity () {
-		const community = await this.activeCommunity.getInterfaceInstance();
-		const baseroute = this.getBaseRoute();
-
-		if (!community) {
-			throw new Error('Unable to find community.');
-		}
-
-		this.updateNavigation();
-
-		if (!this.communityCmp) {
-			this.communityCmp = this.add({
-				xtype: 'react',
-				component: Community.View,
-				overrides: CommunityOverrides.Overrides,
-				topicWindowClassName: CommunityOverrides.topicWindowClassName,
-				community,
-				baseroute,
-				setTitle: (title) => this.setTitle(title)
+		updateNavigation() {
+			this.NavActions.updateNavBar({
+				hideBranding: true,
 			});
-		}
-	},
 
+			this.NavActions.setActiveContent(null, false, false);
+		},
 
-	getRouteForPath: function (path, community) {
-		const [/*board*/, forum, topic, comment] = path;
+		async showCommunity() {
+			const community = await this.activeCommunity.getInterfaceInstance();
+			const baseroute = this.getBaseRoute();
 
-		let route = '';
+			if (!community) {
+				throw new Error('Unable to find community.');
+			}
 
-		if (forum) {
-			route = `${route}/${encodeForURI(forum.getId())}`;
-		}
+			this.updateNavigation();
 
-		if (topic) {
-			route = `${route}/${encodeForURI(topic.getId())}`;
-		}
+			if (!this.communityCmp) {
+				this.communityCmp = this.add({
+					xtype: 'react',
+					component: Community.View,
+					overrides: CommunityOverrides.Overrides,
+					topicWindowClassName:
+						CommunityOverrides.topicWindowClassName,
+					community,
+					baseroute,
+					setTitle: title => this.setTitle(title),
+				});
+			}
+		},
 
-		if (comment && comment.isComment) {
-			route = `${route}/#${encodeForURI(comment.getId())}`;
-		}
+		getRouteForPath: function (path, community) {
+			const [, /*board*/ forum, topic, comment] = path;
 
-		return {
-			path: route,
-			noWindow: true,
-			isFull: true
-		};
+			let route = '';
+
+			if (forum) {
+				route = `${route}/${encodeForURI(forum.getId())}`;
+			}
+
+			if (topic) {
+				route = `${route}/${encodeForURI(topic.getId())}`;
+			}
+
+			if (comment && comment.isComment) {
+				route = `${route}/#${encodeForURI(comment.getId())}`;
+			}
+
+			return {
+				path: route,
+				noWindow: true,
+				isFull: true,
+			};
+		},
 	}
-});
+);

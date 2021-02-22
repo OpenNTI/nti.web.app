@@ -10,24 +10,23 @@ const getMockService = () => {
 	return {
 		getObject: () => {
 			return {
-				title: 'abc'
+				title: 'abc',
 			};
 		},
-		get: (link) => {
-			if(link === 'mockAnalytics') {
+		get: link => {
+			if (link === 'mockAnalytics') {
 				return Promise.resolve({
 					Links: [
 						{
 							rel: 'active_times_summary',
-							href: 'mockActiveTimes'
-						}
-					]
+							href: 'mockActiveTimes',
+						},
+					],
 				});
-			}
-			else if(link === 'mockActiveTimes') {
+			} else if (link === 'mockActiveTimes') {
 				return Promise.resolve({});
 			}
-		}
+		},
 	};
 };
 
@@ -52,19 +51,19 @@ describe('Site admin user book overview test', () => {
 			hasLink: () => true,
 			fetchLink: () => {
 				return Promise.resolve({
-					Items: []
+					Items: [],
 				});
 			},
 			Links: [
 				{
 					rel: 'analytics',
-					href: 'mockAnalytics'
-				}
+					href: 'mockAnalytics',
+				},
 			],
-			getLink: () => 'mockEntityLink'
+			getLink: () => 'mockEntityLink',
 		};
 
-		const cmp = renderer.create(<View course={course}/>);
+		const cmp = renderer.create(<View course={course} />);
 
 		jest.runAllTimers();
 		await flushPromises();

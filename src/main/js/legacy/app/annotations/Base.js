@@ -2,29 +2,29 @@ const Ext = require('@nti/extjs');
 
 const IdCache = require('legacy/cache/IdCache');
 const Globals = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/mixins/Shareable');
 require('./renderer/Manager');
-
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 	alias: 'annotations.base',
 
 	mixins: {
 		observable: 'Ext.util.Observable',
-		shareable: 'NextThought.mixins.Shareable'
+		shareable: 'NextThought.mixins.Shareable',
 	},
 
 	statics: {
 		NOT_FOUND: -3,
 		NOT_VISIBLE: -4,
-		HIDDEN: undefined
+		HIDDEN: undefined,
 	},
 
 	onClassExtended: function (cls, data, hooks) {
-		var a, onBeforeClassCreated = hooks.onBeforeCreated;
+		var a,
+			onBeforeClassCreated = hooks.onBeforeCreated;
 		hooks.onBeforeCreated = function (cls2, data2) {
 			if (data2.requestRender) {
 				Ext.Error.raise('You should not replace requestRender');
@@ -32,18 +32,25 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			onBeforeClassCreated.call(this, cls2, data2, hooks);
 		};
 
-		function getType (t) {
+		function getType(t) {
 			if (Ext.isArray(t)) {
 				return Ext.Array.map(t, getType);
 			}
-			return (t || '').replace(/^annotations\./i, '').replace(/^widget\./i, '');//TODO: stop aliasing these as 'widget.'s!
+			return (t || '')
+				.replace(/^annotations\./i, '')
+				.replace(/^widget\./i, ''); //TODO: stop aliasing these as 'widget.'s!
 		}
 
-		a = data.annotationsType = (cls.prototype.annotationsType || []).slice();
+		a = data.annotationsType = (
+			cls.prototype.annotationsType || []
+		).slice();
 		if (a.length === 0) {
 			a.push.apply(a, getType(cls.prototype.alias));
 		}
-		a.push.apply(a, getType(Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]));
+		a.push.apply(
+			a,
+			getType(Ext.isArray(data.alias) ? data.alias.slice() : [data.alias])
+		);
 	},
 
 	constructor: function (config) {
@@ -64,7 +71,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			record: r,
 			userId: r.get('Creator') || $AppConfig.username,
 			isModifiable: r.isModifiable(),
-			isVisible: Boolean(r.phantom || (!c.filter ? true : c.filter.test(r))),
+			isVisible: Boolean(
+				r.phantom || (!c.filter ? true : c.filter.test(r))
+			),
 
 			allowShare: Service.canShare(),
 
@@ -73,23 +82,34 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 			prefix: c.prefix || 'default',
 
-			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me, null),
+			requestRender: Ext.Function.createBuffered(
+				me.requestRender,
+				10,
+				me,
+				null
+			),
 
-			manager: c.getAnnotations().getManager()
+			manager: c.getAnnotations().getManager(),
 		});
 
 		if (!me.manager) {
 			//TODO what to actually do here.  Throw exception? this wont work without a manager
-			console.log('No manager supplied for annotation. Expect issues', me, c);
+			console.log(
+				'No manager supplied for annotation. Expect issues',
+				me,
+				c
+			);
 		}
 
 		if (r.data.sharedWith !== undefined) {
-			try { this.mixins.shareable.afterRender.call(this); }
-			catch (e) {
+			try {
+				this.mixins.shareable.afterRender.call(this);
+			} catch (e) {
 				console.warn(
 					'attempted to setup dragging on ',
 					r.$className,
-					Globals.getError(e));
+					Globals.getError(e)
+				);
 			}
 		}
 
@@ -105,13 +125,22 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 	},
 
 	is: function (selector) {
-	//		console.log(this.annotationsType,[selector]);
-		return Ext.Array.contains(this.annotationsType, selector) || selector === '*';
+		//		console.log(this.annotationsType,[selector]);
+		return (
+			Ext.Array.contains(this.annotationsType, selector) ||
+			selector === '*'
+		);
 	},
 
-	getBubbleTarget: function () {return this.ownerCmp; },
-	getItemId: function () {return this.id; },
-	isXType: function () {return false;},
+	getBubbleTarget: function () {
+		return this.ownerCmp;
+	},
+	getItemId: function () {
+		return this.id;
+	},
+	isXType: function () {
+		return false;
+	},
 
 	getEl: function () {
 		return Ext.get(this.img);
@@ -127,9 +156,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 	createElement: function (tag, parent, cls, css, id) {
 		var el = document.createElement(tag);
-		if (cls) { Ext.get(el).addCls(cls); }
-		if (css) { el.setAttribute('style', css); }
-		if (id) {el.setAttribute('id', id);}
+		if (cls) {
+			Ext.get(el).addCls(cls);
+		}
+		if (css) {
+			el.setAttribute('style', css);
+		}
+		if (id) {
+			el.setAttribute('id', id);
+		}
 		parent.appendChild(el);
 		return el;
 	},
@@ -151,9 +186,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		return Ext.query(selector, this.doc);
 	},
 
-	getSortValue: function () {console.warn('Implement me!!');},
-	getRecord: function () { return this.record || {get: Ext.emptyFn}; },
-	getRecordField: function (field) { return this.getRecord().get(field); },
+	getSortValue: function () {
+		console.warn('Implement me!!');
+	},
+	getRecord: function () {
+		return this.record || { get: Ext.emptyFn };
+	},
+	getRecordField: function (field) {
+		return this.getRecord().get(field);
+	},
 
 	attachRecord: function (record) {
 		var old = this.record;
@@ -163,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			single: true,
 			scope: this,
 			updated: this.attachRecord,
-			destroy: this.onDestroy
+			destroy: this.onDestroy,
 		});
 
 		if (old.getId() !== record.getId()) {
@@ -179,8 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 	onDestroy: function () {
 		try {
 			this.cleanup();
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e.message, e);
 		}
 	},
@@ -231,9 +271,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 	},
 
 	render: function () {
-		console.warn(Ext.String.format(
-			'{0} does not implement render()',
-			this.$className));
+		console.warn(
+			Ext.String.format(
+				'{0} does not implement render()',
+				this.$className
+			)
+		);
 	},
 
 	requestRender: function () {
@@ -243,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 	},
 
 	remove: function () {
-		this.record.destroy();//the destroy event calls cleanup
+		this.record.destroy(); //the destroy event calls cleanup
 	},
 
 	getRestrictedRange: function () {
@@ -256,23 +299,29 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 		items = items || [];
 
-		if (d) { items.push(d); }
+		if (d) {
+			items.push(d);
+		}
 
-		if (items.length) { items.push({xtype: 'menuseparator'}); }
+		if (items.length) {
+			items.push({ xtype: 'menuseparator' });
+		}
 
 		if (this.isModifiable) {
 			items.push({
 				text: 'Delete ' + m.getDisplayName(),
-				handler: Ext.bind(m.remove, m)
+				handler: Ext.bind(m.remove, m),
 			});
 		}
 
 		if (this.allowShare) {
 			items.push({
-				text: m.isModifiable ? getString('NextThought.view.annotations.Base.share') : getString('NextThought.view.annotations.Base.get'),
+				text: m.isModifiable
+					? getString('NextThought.view.annotations.Base.share')
+					: getString('NextThought.view.annotations.Base.get'),
 				handler: function () {
 					m.ownerCmp.fireEvent('share-with', m.record);
-				}
+				},
 			});
 		}
 
@@ -284,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			items: items,
 			cls: 'annotation-menu',
 			minWidth: 150,
-			defaults: {ui: 'nt-annotaion', plain: true }
+			defaults: { ui: 'nt-annotaion', plain: true },
 		});
 	},
 
@@ -293,7 +342,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 		if (m) {
 			m.on('hide', function () {
-				if (!isLeaf) { m.destroy(); }
+				if (!isLeaf) {
+					m.destroy();
+				}
 			});
 		}
 
@@ -307,11 +358,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 		var called = false;
 
-		function block () {
-			if (called) {return undefined;}
+		function block() {
+			if (called) {
+				return undefined;
+			}
 			called = true;
 			var r = fn.apply(scope, arguments);
-			setTimeout(function () {called = false;},50);
+			setTimeout(function () {
+				called = false;
+			}, 50);
 			return r;
 		}
 
@@ -326,7 +381,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			return true;
 		}
 
-		var menu, a,
+		var menu,
+			a,
 			xy = e.getXY().slice(),
 			scrollOffset = Ext.getBody().getScroll().top,
 			offsets = this.ownerCmp.getAnnotationOffsets(),
@@ -334,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 		//adjust points
 		xy[0] += offsets.left;
-		xy[1] += (offsets.rect.top + scrollOffset);
+		xy[1] += offsets.rect.top + scrollOffset;
 
 		//the event is an anchor
 		a = e.getTarget('a');
@@ -343,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 				text: 'Follow Link',
 				handler: function () {
 					NavigationActions.navigateToHref(a.href);
-				}
+				},
 			};
 		}
 
@@ -357,11 +413,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 			menu.showAt.apply(menu, xy);
 
-			xy[0] = xy[0] - (menu.getWidth() / 2);
+			xy[0] = xy[0] - menu.getWidth() / 2;
 			xy[1] = xy[1] + 10;
 
 			menu.setXY(xy, false);
 			// menu.setPosition(xy[0] - menu.getWidth() / 2, xy[1] + 10);
 		}
-	}
+	},
 });

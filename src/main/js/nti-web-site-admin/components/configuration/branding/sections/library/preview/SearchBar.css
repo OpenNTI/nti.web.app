@@ -22,7 +22,8 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
-	background: url('../../../../../../../legacy/app/search/assets/search-nav-dark.svg') no-repeat center var(--panel-background-alt);
+	background: url('../../../../../../../legacy/app/search/assets/search-nav-dark.svg')
+		no-repeat center var(--panel-background-alt);
 }
 
 .dark.search-bar {

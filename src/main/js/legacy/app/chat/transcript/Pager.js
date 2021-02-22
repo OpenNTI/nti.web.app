@@ -10,10 +10,9 @@ const ChatStateStore = require('../StateStore');
 
 require('../components/log/PagerEntry');
 
-
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
 
 	PAGE_SIZE: 3,
@@ -28,10 +27,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 
 	buildTranscriptStore: function (occupants) {
 		var user = Ext.Array.remove(occupants.slice(), $AppConfig.username)[0],
-			url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
+			url = Service.getContainerUrl(
+				Globals.CONTENT_ROOT,
+				Globals.RECURSIVE_USER_GENERATED_DATA
+			),
 			s = PageItem.make(url, Globals.CONTENT_ROOT, true);
 
-		if (!user) { return; }
+		if (!user) {
+			return;
+		}
 
 		s.pageSize = this.PAGE_SIZE;
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
@@ -42,8 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 			transcriptUser: user || '',
 			accept: [
 				TranscriptSummary.prototype.mimeType,
-				Transcript.prototype.mimeType
-			].join(',')
+				Transcript.prototype.mimeType,
+			].join(','),
 		});
 
 		this.transcriptStore = s;
@@ -68,39 +72,41 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 	},
 
 	loadTranscripts: function (records) {
-		var toAdd = [], p, me = this;
+		var toAdd = [],
+			p,
+			me = this;
 		Ext.each(records || [], function (record) {
 			p = me.getMessages(record);
 			toAdd.push(p);
 		});
 
 		return new Promise(function (fulfill, reject) {
-			Promise.all(toAdd)
-				.then(function (results) {
-					var allMessages = [];
-					Ext.each(results, function (msgs) {
-						allMessages = allMessages.concat(msgs);
-					});
-
-					fulfill(allMessages);
+			Promise.all(toAdd).then(function (results) {
+				var allMessages = [];
+				Ext.each(results, function (msgs) {
+					allMessages = allMessages.concat(msgs);
 				});
+
+				fulfill(allMessages);
+			});
 		});
 	},
 
 	getMessages: function (transcript) {
 		var me = this;
 
-		return me.ChatActions.loadTranscript(transcript.get('RoomInfo'))
-			.then(function (t) {
-				var messages = t && t.get('Messages') || [];
+		return me.ChatActions.loadTranscript(transcript.get('RoomInfo')).then(
+			function (t) {
+				var messages = (t && t.get('Messages')) || [];
 				return Promise.resolve(messages);
-			});
+			}
+		);
 	},
 
 	sortMessages: function (messages) {
-		function timeSort (a, b) {
-			var aRaw = a.raw || {CreatedTime: 0},
-				bRaw = b.raw || {CreatedTime: 0};
+		function timeSort(a, b) {
+			var aRaw = a.raw || { CreatedTime: 0 },
+				bRaw = b.raw || { CreatedTime: 0 };
 
 			return aRaw.CreatedTime - bRaw.CreatedTime;
 		}
@@ -138,19 +144,24 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 	},
 
 	maybeAddMoreEntry: function (lastLoadRecords) {
-		var pageCount = Math.ceil(this.transcriptStore.getTotalCount() / this.PAGE_SIZE),
-			hasMore = pageCount > 0 ? this.transcriptStore.currentPage < pageCount : false,
-			logView = this.chatWindow && this.chatWindow.logView, me = this;
+		var pageCount = Math.ceil(
+				this.transcriptStore.getTotalCount() / this.PAGE_SIZE
+			),
+			hasMore =
+				pageCount > 0
+					? this.transcriptStore.currentPage < pageCount
+					: false,
+			logView = this.chatWindow && this.chatWindow.logView,
+			me = this;
 
 		if (logView && hasMore) {
 			this.pagingCmp = logView.insert(0, {
-				xtype: 'chat-pager-entry'
+				xtype: 'chat-pager-entry',
 			});
 
-			this.pagingCmp.onceRendered
-				.then(function () {
-					me.mon(me.pagingCmp.messageEl, 'click', me.loadNext.bind(me));
-				});
+			this.pagingCmp.onceRendered.then(function () {
+				me.mon(me.pagingCmp.messageEl, 'click', me.loadNext.bind(me));
+			});
 		}
 
 		return Promise.resolve();
@@ -160,11 +171,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 		var currentPage = this.transcriptStore.currentPage,
 			nextPage = currentPage + 1,
 			param = {
-				batchStart: (nextPage - 1) * this.PAGE_SIZE
+				batchStart: (nextPage - 1) * this.PAGE_SIZE,
 			},
 			s = this.transcriptStore;
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, param);
 		s.loadPage(nextPage);
-	}
+	},
 });

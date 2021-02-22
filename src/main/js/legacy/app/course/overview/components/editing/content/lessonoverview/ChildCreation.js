@@ -6,28 +6,27 @@ const OverviewgroupEditor = require('../overviewgroup/Editor');
 
 require('../../creation/ChildCreation');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+		alias: 'widget.overview-editing-lessonoverview-childcreation',
+		title: 'Content Types',
+		saveText: 'Add to Lesson',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-lessonoverview-childcreation',
-	title: 'Content Types',
-	saveText: 'Add to Lesson',
+		statics: {
+			getHandledMimeTypes: function () {
+				return [OverviewLesson.mimeType];
+			},
 
-	statics: {
-		getHandledMimeTypes: function () {
-			return [
-				OverviewLesson.mimeType
-			];
+			getEditors: function () {
+				return [OverviewgroupEditor];
+			},
 		},
 
-		getEditors: function () {
-			return [
-				OverviewgroupEditor
-			];
-		}
-	},
-
-	setUpTypeList: function () {
-		this.callParent(arguments);
+		setUpTypeList: function () {
+			this.callParent(arguments);
+		},
 	}
-});
+);

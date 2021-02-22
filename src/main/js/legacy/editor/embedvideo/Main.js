@@ -5,30 +5,67 @@ const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
 const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
 const HTML = require('legacy/model/resolvers/videoservices/HTML');
 
-
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.embedvideo-main-view',
 	cls: 'embedvideo-main-view',
 
 	items: [
-		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
-			{xtype: 'box', autoEl: {tag: 'textarea', name: 'embed', placeholder: 'Video URL...'}, name: 'embed', cls: 'input-box textarea', emptyText: 'Video URL...'}
-		]},
-		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn: [
-				{cls: 'error-field'},
-				{cls: 'error-desc'}
-			]}
+		{
+			xtype: 'container',
+			layout: 'anchor',
+			cls: 'input-wrapper',
+			items: [
+				{
+					xtype: 'box',
+					autoEl: {
+						tag: 'textarea',
+						name: 'embed',
+						placeholder: 'Video URL...',
+					},
+					name: 'embed',
+					cls: 'input-box textarea',
+					emptyText: 'Video URL...',
+				},
+			],
 		},
-		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function (b) {
-				b.up('window').close();
-			}},
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Embed', handler: function (b) {
-				b.up('window').embed();
-			}}
-		]}
+		{
+			xtype: 'box',
+			hidden: true,
+			name: 'error',
+			autoEl: {
+				cls: 'error-box',
+				tag: 'div',
+				cn: [{ cls: 'error-field' }, { cls: 'error-desc' }],
+			},
+		},
+		{
+			xtype: 'container',
+			cls: 'submit',
+			layout: { type: 'hbox', pack: 'end' },
+			items: [
+				{
+					xtype: 'button',
+					ui: 'secondary',
+					scale: 'large',
+					name: 'cancel',
+					text: 'Cancel',
+					handler: function (b) {
+						b.up('window').close();
+					},
+				},
+				{
+					xtype: 'button',
+					ui: 'primary',
+					scale: 'large',
+					name: 'submit',
+					text: 'Embed',
+					handler: function (b) {
+						b.up('window').embed();
+					},
+				},
+			],
+		},
 	],
 
 	afterRender: function () {
@@ -47,14 +84,11 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 	},
 
 	getValues: function () {
-		var raw = this.down('[name=embed]').getEl().getValue(), matches,
+		var raw = this.down('[name=embed]').getEl().getValue(),
+			matches,
 			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
-			types = [
-				Kaltura,
-				Youtube,
-				Vimeo,
-				HTML
-			], type = null;
+			types = [Kaltura, Youtube, Vimeo, HTML],
+			type = null;
 
 		matches = iframeRegex.exec(raw);
 
@@ -67,13 +101,12 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 				type = {
 					type: video.TYPE,
 					embedURL: video.getEmbedURL(raw),
-					VideoId: video.getIdFromURL(raw)
+					VideoId: video.getIdFromURL(raw),
 				};
 			}
 		});
 
 		return type;
-
 
 		// if (Videos.Kaltura.urlIsFor(raw)) {
 		//	type = {type: 'kaltura', embedURL: raw};
@@ -94,7 +127,9 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function (f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {
+			f.removeCls('error');
+		});
 
 		//make main error field show up
 		box.el.down('.error-field').update('Video');
@@ -105,5 +140,5 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 		field.addCls('error');
 
 		this.up('window').updateLayout();
-	}
+	},
 });

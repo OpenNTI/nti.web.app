@@ -5,12 +5,16 @@ import renderer from 'react-test-renderer';
 import CreatedTime from '../CreatedTime';
 
 describe('Site admin content table created time column test', () => {
-	const verifyColumn = (date) => {
-		const colCmp = renderer.create(<CreatedTime item={{
-			getCreatedTime: () => {
-				return date;
-			}
-		}}/>);
+	const verifyColumn = date => {
+		const colCmp = renderer.create(
+			<CreatedTime
+				item={{
+					getCreatedTime: () => {
+						return date;
+					},
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

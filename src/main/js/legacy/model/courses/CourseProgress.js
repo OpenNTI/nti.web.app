@@ -2,19 +2,22 @@ const Ext = require('@nti/extjs');
 
 require('../Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.courses.CourseProgress',
+	{
+		extend: 'NextThought.model.Base',
+		mimeType:
+			'application/vnd.nextthought.completion.completioncontextprogress',
 
-module.exports = exports = Ext.define('NextThought.model.courses.CourseProgress', {
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.completion.completioncontextprogress',
-
-	fields: [
-		{ name: 'Class', type: 'string' },
-		{ name: 'MimeType', type: 'string' },
-		{ name: 'AbsoluteProgress', type: 'int' },
-		{ name: 'Completed', type: 'bool' },
-		{ name: 'CompletedDate', type: 'string' },
-		{ name: 'HasProgress', type: 'bool' },
-		{ name: 'MaxPossibleProgress', type: 'int' },
-		{ name: 'PercentageProgress', type: 'number' }
-	]
-});
+		fields: [
+			{ name: 'Class', type: 'string' },
+			{ name: 'MimeType', type: 'string' },
+			{ name: 'AbsoluteProgress', type: 'int' },
+			{ name: 'Completed', type: 'bool' },
+			{ name: 'CompletedDate', type: 'string' },
+			{ name: 'HasProgress', type: 'bool' },
+			{ name: 'MaxPossibleProgress', type: 'int' },
+			{ name: 'PercentageProgress', type: 'number' },
+		],
+	}
+);

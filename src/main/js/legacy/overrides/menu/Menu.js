@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.overrides.menu.Menu', {
 	override: 'Ext.menu.Menu',
 
@@ -14,5 +13,5 @@ module.exports = exports = Ext.define('NextThought.overrides.menu.Menu', {
 
 	frame: false,
 
-	hideMode: 'display'
+	hideMode: 'display',
 });

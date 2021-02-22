@@ -1,4 +1,6 @@
-.navbar:global(.main-navigation.hide-branding .back-container .branding-container) {
+.navbar:global(.main-navigation.hide-branding
+		.back-container
+		.branding-container) {
 	display: none;
 }
 
@@ -13,7 +15,10 @@
 	justify-content: center;
 }
 
-.navbar:global(.main-navigation .back-container .branding-container .x-selectable) {
+.navbar:global(.main-navigation
+		.back-container
+		.branding-container
+		.x-selectable) {
 	cursor: inherit;
 }
 

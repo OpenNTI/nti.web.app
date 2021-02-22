@@ -9,19 +9,19 @@ export default class AdminToolbar extends Component {
 		handleNav: PropTypes.func.isRequired,
 		onCourseCreated: PropTypes.func.isRequired,
 		onCourseModified: PropTypes.func.isRequired,
-		canCreate: PropTypes.bool.isRequired
+		canCreate: PropTypes.bool.isRequired,
 	};
 
 	goToSiteAdmin = () => {
 		this.props.handleNav('Admin', '/siteadmin');
 	};
 
-	render () {
+	render() {
 		const {
 			onCourseCreated,
 			onCourseModified,
 			handleNav,
-			canCreate
+			canCreate,
 		} = this.props;
 
 		return (

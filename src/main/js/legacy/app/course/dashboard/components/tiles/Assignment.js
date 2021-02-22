@@ -1,109 +1,114 @@
 const Ext = require('@nti/extjs');
-const {format, isSameDay, isSameMonth, isSameYear, isBefore} = require('date-fns');
+const {
+	format,
+	isSameDay,
+	isSameMonth,
+	isSameYear,
+	isBefore,
+} = require('date-fns');
 
 const ContentUtils = require('legacy/util/Content');
 
 require('./Item');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.dashboard.components.tiles.Assignment',
+	{
+		extend: 'NextThought.app.course.dashboard.components.tiles.Item',
+		alias: 'widget.dashboard-assignment',
 
-module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Assignment', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.Item',
-	alias: 'widget.dashboard-assignment',
+		cls: 'dashboard-item assignment-tile',
 
-	cls: 'dashboard-item assignment-tile',
+		afterRender: function () {
+			this.callParent(arguments);
 
+			this.getHistory().catch(
+				this.callWhenRendered.bind(this, 'setLate')
+			);
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
+		handleNavigation: function () {
+			this.navigateToObject(this.record);
+		},
 
-		this.getHistory()
-			.catch(this.callWhenRendered.bind(this, 'setLate'));
-	},
-
-
-	handleNavigation: function () {
-		this.navigateToObject(this.record);
-	},
-
-
-	getPath: function () {
-		return ContentUtils.getLineageLabels(this.record.get('ContainerId'), false, this.course)
-			.then(function (paths) {
+		getPath: function () {
+			return ContentUtils.getLineageLabels(
+				this.record.get('ContainerId'),
+				false,
+				this.course
+			).then(function (paths) {
 				var path = paths[0];
 
 				Ext.clone(path);
 
 				path.shift();
 
-				return [
-					'Assignments',
-					path[0]
-				];
+				return ['Assignments', path[0]];
 			});
-	},
+		},
 
+		getTitle: function () {
+			return this.record.get('title');
+		},
 
-	getTitle: function () {
-		return this.record.get('title');
-	},
+		getBullets: function () {
+			var questionCount = this.record.getQuestionCount();
 
+			if (!questionCount) {
+				return [];
+			}
 
-	getBullets: function () {
-		var questionCount = this.record.getQuestionCount();
+			return [Ext.util.Format.plural(questionCount, 'Question')];
+		},
 
-		if (!questionCount) {
-			return [];
-		}
+		getHistory: function () {
+			return this.getAssignmentHistory;
+		},
 
-		return [
-			Ext.util.Format.plural(questionCount, 'Question')
-		];
-	},
+		getFooter: function () {
+			var due = this.record.getDueDate();
 
+			return this.getHistory()
+				.then(function (history) {
+					var submission = history && history.get('Submission'),
+						grade = history && history.get('Grade');
 
-	getHistory: function () {
-		return this.getAssignmentHistory;
-	},
+					if (grade && !grade.isEmpty()) {
+						return 'Graded';
+					}
 
+					if (submission) {
+						return 'Completed';
+					}
 
-	getFooter: function () {
-		var due = this.record.getDueDate();
+					//cause a fail so the next fail handler can return the due date
+					return Promise.reject();
+				})
+				.catch(function () {
+					var now = new Date();
 
-		return this.getHistory()
-			.then(function (history) {
-				var submission = history && history.get('Submission'),
-					grade = history && history.get('Grade');
+					if (!due) {
+						return '';
+					}
 
-				if (grade && !grade.isEmpty()) {
-					return 'Graded';
-				}
+					if (
+						isSameDay(now, due) &&
+						isSameMonth(now, due) &&
+						isSameYear(now, due)
+					) {
+						return 'Due Today';
+					}
 
-				if (submission) {
-					return 'Completed';
-				}
+					return 'Due ' + format(due, 'eeee, MMMM d');
+				});
+		},
 
-				//cause a fail so the next fail handler can return the due date
-				return Promise.reject();
-			})
-			.catch(function () {
-				var now = new Date();
+		setLate: function () {
+			var due = this.record.getDueDate();
 
-				if (!due) { return ''; }
-
-				if (isSameDay(now, due) && isSameMonth(now, due) && isSameYear(now, due)) {
-					return 'Due Today';
-				}
-
-				return 'Due ' + format(due, 'eeee, MMMM d');
-			});
-	},
-
-
-	setLate: function () {
-		var due = this.record.getDueDate();
-
-		if (isBefore(new Date(), due)) {
-			this.addCls('late');
-		}
+			if (isBefore(new Date(), due)) {
+				this.addCls('late');
+			}
+		},
 	}
-});
+);

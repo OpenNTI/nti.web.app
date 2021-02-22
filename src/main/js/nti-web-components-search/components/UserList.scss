@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 //colors
 $white: #fff;
 $black_19: rgba(0, 0, 0, 0.19);
@@ -180,12 +180,20 @@ $black_50: rgba(0, 0, 0, 0.5);
 			transform: translateY(-50%);
 			min-width: 74px;
 			max-width: 74px;
-			background: linear-gradient(270deg, $white 0, rgba(255, 255, 255, 0) 100%);
+			background: linear-gradient(
+				270deg,
+				$white 0,
+				rgba(255, 255, 255, 0) 100%
+			);
 			z-index: 1;
 
 			&.left {
 				left: 0;
-				background: linear-gradient(-270deg, $white 0, rgba(255, 255, 255, 0) 100%);
+				background: linear-gradient(
+					-270deg,
+					$white 0,
+					rgba(255, 255, 255, 0) 100%
+				);
 			}
 
 			&.right {

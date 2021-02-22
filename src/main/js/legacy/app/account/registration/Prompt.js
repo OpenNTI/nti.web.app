@@ -4,7 +4,7 @@ const PromptStateStore = require('legacy/app/prompt/StateStore');
 
 const SURVEY_COMPLETE = 'survey-complete';
 
-function getData ({data}) {
+function getData({ data }) {
 	try {
 		return JSON.parse(data);
 	} catch (e) {
@@ -13,62 +13,69 @@ function getData ({data}) {
 	return {};
 }
 
+let registerPrompt = (module.exports = exports = Ext.define(
+	'NextThought.app.account.registration.Prompt',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.registration-prompt',
 
-let registerPrompt = module.exports = exports = Ext.define('NextThought.app.account.registration.Prompt', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.registration-prompt',
+		title: 'Submit Registration',
 
-	title: 'Submit Registration',
+		cls: 'registration-prompt',
+		layout: 'none',
+		items: [],
 
-	cls: 'registration-prompt',
-	layout: 'none',
-	items: [],
+		initComponent() {
+			this.callParent(arguments);
 
-	initComponent () {
-		this.callParent(arguments);
+			let src = this.Prompt.data.link;
+			this.postMessageSourceId = new URL(
+				src,
+				window.location.href
+			).toString();
 
-		let src = this.Prompt.data.link;
-		this.postMessageSourceId = new URL(src, window.location.href).toString();
+			this.Prompt.Header.disableClose();
+			this.Prompt.Header.setTitle(this.title);
 
+			this.Prompt.Footer.hide();
+			// this.Prompt.allowFullScreen();
 
-		this.Prompt.Header.disableClose();
-		this.Prompt.Header.setTitle(this.title);
+			this.iframeCmp = this.add({
+				xtype: 'box',
+				autoEl: {
+					tag: 'iframe',
+					src: src,
+				},
+			});
 
-		this.Prompt.Footer.hide();
-		// this.Prompt.allowFullScreen();
+			let onPostMessage = this.onPostMessage.bind(this);
 
-		this.iframeCmp = this.add({
-			xtype: 'box',
-			autoEl: {
-				tag: 'iframe',
-				src: src
+			window.addEventListener('message', onPostMessage);
+
+			this.on('destroy', () => {
+				window.removeEventListener('message', onPostMessage);
+			});
+		},
+
+		onPostMessage(event) {
+			if (event.origin !== window.location.origin) {
+				return;
 			}
-		});
 
-		let onPostMessage = this.onPostMessage.bind(this);
+			const data = getData(event);
 
-		window.addEventListener('message', onPostMessage);
+			if (
+				data.id === this.postMessageSourceId &&
+				data.method === SURVEY_COMPLETE
+			) {
+				this.Prompt.doSave();
+			}
+		},
 
-		this.on('destroy', () => {
-			window.removeEventListener('message', onPostMessage);
-		});
-	},
-
-
-	onPostMessage (event) {
-		if (event.origin !== window.location.origin) { return; }
-
-		const data = getData(event);
-
-		if (data.id === this.postMessageSourceId && data.method === SURVEY_COMPLETE) {
-			this.Prompt.doSave();
-		}
-	},
-
-
-	onSave () {
-		return Promise.resolve();
+		onSave() {
+			return Promise.resolve();
+		},
 	}
-});
+));
 
 PromptStateStore.register('account-registration', registerPrompt);

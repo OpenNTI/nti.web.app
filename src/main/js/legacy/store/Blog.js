@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('legacy/proxy/reader/Json');
 
-
 module.exports = exports = Ext.define('NextThought.store.Blog', {
 	extend: 'Ext.data.Store',
 	alias: 'store.blog',
@@ -14,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.store.Blog', {
 		reader: {
 			type: 'nti',
 			root: 'Items',
-			totalProperty: 'TopicCount'
+			totalProperty: 'TopicCount',
 		},
 		extraParams: {
 			sortOn: 'createdTime',
-			sortOrder: 'descending'
+			sortOrder: 'descending',
 		},
-		headers: { 'Accept': 'application/vnd.nextthought.collection+json' },
-		model: 'NextThought.model.forums.PersonalBlogEntry'
+		headers: { Accept: 'application/vnd.nextthought.collection+json' },
+		model: 'NextThought.model.forums.PersonalBlogEntry',
 	},
 
 	remove: function (records) {
@@ -30,6 +29,5 @@ module.exports = exports = Ext.define('NextThought.store.Blog', {
 		Ext.each(records, function (record) {
 			record.fireEvent('destroy', record);
 		});
-
-	}
+	},
 });

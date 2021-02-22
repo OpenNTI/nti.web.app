@@ -6,7 +6,9 @@ import Pager from '../Pager';
 
 describe('Site admin table pager test', () => {
 	test('Test no pages', () => {
-		const pagerCmp = renderer.create(<Pager loadPage={()=>{}} numPages={0} />);
+		const pagerCmp = renderer.create(
+			<Pager loadPage={() => {}} numPages={0} />
+		);
 
 		const tree = pagerCmp.toJSON();
 
@@ -15,7 +17,9 @@ describe('Site admin table pager test', () => {
 	});
 
 	test('Test 1 page', () => {
-		const pagerCmp = renderer.create(<Pager loadPage={()=>{}} numPages={1} pageNumber={1} />);
+		const pagerCmp = renderer.create(
+			<Pager loadPage={() => {}} numPages={1} pageNumber={1} />
+		);
 
 		const tree = pagerCmp.toJSON();
 
@@ -24,7 +28,9 @@ describe('Site admin table pager test', () => {
 	});
 
 	test('Test 2 pages', () => {
-		const pagerCmp = renderer.create(<Pager loadPage={()=>{}} numPages={2} pageNumber={1} />);
+		const pagerCmp = renderer.create(
+			<Pager loadPage={() => {}} numPages={2} pageNumber={1} />
+		);
 
 		const tree = pagerCmp.toJSON();
 
@@ -32,7 +38,9 @@ describe('Site admin table pager test', () => {
 	});
 
 	test('Test 10 pages, pageNumber=1', () => {
-		const pagerCmp = renderer.create(<Pager loadPage={()=>{}} numPages={10} pageNumber={1} />);
+		const pagerCmp = renderer.create(
+			<Pager loadPage={() => {}} numPages={10} pageNumber={1} />
+		);
 
 		const tree = pagerCmp.toJSON();
 
@@ -41,7 +49,9 @@ describe('Site admin table pager test', () => {
 	});
 
 	test('Test 10 pages, pageNumber=5', () => {
-		const pagerCmp = renderer.create(<Pager loadPage={()=>{}} numPages={10} pageNumber={5} />);
+		const pagerCmp = renderer.create(
+			<Pager loadPage={() => {}} numPages={10} pageNumber={5} />
+		);
 
 		const tree = pagerCmp.toJSON();
 

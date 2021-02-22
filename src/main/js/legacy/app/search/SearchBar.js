@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-const {wait} = require('@nti/lib-commons');
-const {Store, Input} = require('@nti/web-search');
+const { wait } = require('@nti/lib-commons');
+const { Store, Input } = require('@nti/web-search');
 
-const {default:Search} = require('nti-web-components-search');
+const { default: Search } = require('nti-web-components-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
@@ -23,13 +23,13 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	BUFFER: 500,
 
 	specialKeys: {
-		8: true,	//Ext.EventObject.BACKSPACE
-		13: true,	//Ext.EventObject.ENTER
-		27: true,	//Ext.EventObject.ESC
-		32: true,	//Ext.EventObject.SPACE
-		46: true,	//Ext.EventObject.DELETE
-		37: true,	//Ext.EventObject.LEFT
-		39: true	//Ext.EventObject.RIGHT
+		8: true, //Ext.EventObject.BACKSPACE
+		13: true, //Ext.EventObject.ENTER
+		27: true, //Ext.EventObject.ESC
+		32: true, //Ext.EventObject.SPACE
+		46: true, //Ext.EventObject.DELETE
+		37: true, //Ext.EventObject.LEFT
+		39: true, //Ext.EventObject.RIGHT
 	},
 
 	renderTpl: Ext.DomHelper.markup({
@@ -41,12 +41,12 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 				'aria-label': 'search',
 				tag: 'a',
 				cn: [
-					{cls: 'input-container'},
-					{cls: 'trigger'},
-					{cls: 'search-icon'}
-				]
-			}
-		]
+					{ cls: 'input-container' },
+					{ cls: 'trigger' },
+					{ cls: 'search-icon' },
+				],
+			},
+		],
 	}),
 
 	renderSelectors: {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		inputContainerEl: '.input-container',
 		inputEl: 'input',
 		triggerEl: '.trigger',
-		searchIconEl: '.search-icon'
+		searchIconEl: '.search-icon',
 	},
 
 	constructor: function () {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 
 		this.mon(this.SearchStore, 'sync-term', this.syncTerm.bind(this));
 
-		const onSearchChange = ({type}) => {
+		const onSearchChange = ({ type }) => {
 			if (type === 'context') {
 				if (SearchStore.context) {
 					this.onSearchAddContext();
@@ -94,18 +94,17 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			store: SearchStore,
 			onBlur: (...args) => this.onInputBlur(...args),
 			onKeyPress: (...args) => this.keyPressed(...args),
-			onKeyDown: (...args) => this.keyDown(...args)
+			onKeyDown: (...args) => this.keyDown(...args),
 		});
 
 		this.on('destroy', () => this.input.destroy());
 
 		this.mon(this.searchIconEl, {
-			click: this.searchClicked.bind(this)
+			click: this.searchClicked.bind(this),
 		});
-
 	},
 
-	setTheme (theme) {
+	setTheme(theme) {
 		if (theme === 'dark') {
 			this.removeCls(lightCls);
 			this.addCls(darkCls);
@@ -189,11 +188,13 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 
 		// no point in starting up the search process if there is nothing
 		// to search on
-		if(!val) {
+		if (!val) {
 			return;
 		}
 
-		if (this.noRouteOnSearch) { return this.doSearch(); }
+		if (this.noRouteOnSearch) {
+			return this.doSearch();
+		}
 
 		this.doSearch(true);
 
@@ -242,5 +243,5 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 
 	getValue: function () {
 		return SearchStore.searchTerm;
-	}
+	},
 });

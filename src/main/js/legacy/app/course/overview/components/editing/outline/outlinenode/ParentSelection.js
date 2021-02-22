@@ -2,18 +2,21 @@ const Ext = require('@nti/extjs');
 
 require('../../parentselection/Index');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.outline.outlinenode.ParentSelection',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.parentselection.Index',
+		alias: 'widget.overview-editing-outlinenode-parentselection',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ParentSelection', {
-	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
-	alias: 'widget.overview-editing-outlinenode-parentselection',
+		label: 'Outline:',
 
-	label: 'Outline:',
-
-	parseItemData: function (item) {
-		return {
-			cls: 'outline-item',
-			ntiid: item.getId(),
-			label: item.getTitle && item.getTitle()
-		};
+		parseItemData: function (item) {
+			return {
+				cls: 'outline-item',
+				ntiid: item.getId(),
+				label: item.getTitle && item.getTitle(),
+			};
+		},
 	}
-});
+);

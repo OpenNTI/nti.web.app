@@ -4,55 +4,55 @@ const ObjectUtils = require('legacy/util/Object');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'username',
 	fields: [
-		{ name: 'username', type: 'string'},
-		{ name: 'type', type: 'string'},
-		{ name: 'show', type: 'string', defaultValue: 'chat'},
-		{ name: 'status', type: 'string', defaultValue: null}
+		{ name: 'username', type: 'string' },
+		{ name: 'type', type: 'string' },
+		{ name: 'show', type: 'string', defaultValue: 'chat' },
+		{ name: 'status', type: 'string', defaultValue: null },
 	],
 
 	statics: {
 		createFromPresenceString: function (presence, username) {
 			return Ext.create('NextThought.model.PresenceInfo', {
-				'username': username,
-				'type': (presence.toLowerCase() !== 'online') ? 'unavailable' : 'available'
+				username: username,
+				type:
+					presence.toLowerCase() !== 'online'
+						? 'unavailable'
+						: 'available',
 			});
 		},
 
 		createPresenceInfo: function (username, type, show, status) {
 			return Ext.create('NextThought.model.PresenceInfo', {
-				'username': username,
-				'type': (type) ? type : 'unavailable',
-				'show': show,
-				'status': status
+				username: username,
+				type: type ? type : 'unavailable',
+				show: show,
+				status: status,
 			});
-		}
+		},
 	},
-
 
 	constructor: function () {
 		this.callParent(arguments);
 
 		ObjectUtils.defineAttributes(this, {
 			name: {
-				getter: this.getName
-			}
+				getter: this.getName,
+			},
 		});
 	},
-
 
 	isPresenceInfo: true,
 
 	nameToDisplay: {
-		'dnd': 'Do not disturb',
-		'away': 'Away',
-		'available': 'Available',
-		'unavailable': '',
-		'invisible': 'Invisible'
+		dnd: 'Do not disturb',
+		away: 'Away',
+		available: 'Available',
+		unavailable: '',
+		invisible: 'Invisible',
 	},
 
 	isOnline: function () {
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 	},
 
 	toString: function () {
-		return (this.isOnline()) ? 'Online' : 'Offline';
+		return this.isOnline() ? 'Online' : 'Offline';
 	},
 
 	getDisplayText: function () {
@@ -93,6 +93,5 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 		}
 
 		return show;
-	}
-
+	},
 });

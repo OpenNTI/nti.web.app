@@ -2,37 +2,41 @@ const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 require('./Membership');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.membership.parts.Groups',
+	{
+		extend:
+			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		alias: 'widget.profile-user-membership-groups',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Groups', {
-	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
-	alias: 'widget.profile-user-membership-groups',
+		cls: 'memberships full group four-column',
+		title: 'Groups',
+		profileRouteRoot: '/group',
 
-	cls: 'memberships full group four-column',
-	title: 'Groups',
-	profileRouteRoot: '/group',
+		entryTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'entry',
+				'data-route': '{route}',
+				cn: ['{group:avatar}', { cls: 'name', html: '{name}' }],
+			})
+		),
 
-	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', 'data-route': '{route}', cn: [
-			'{group:avatar}',
-			{cls: 'name', html: '{name}'}
-		]
-	})),
+		setUser(user, isMe) {
+			this.removeAll();
 
-
-	setUser (user, isMe) {
-		this.removeAll();
-
-		user.getGroupMembership()
-			.then(groups => {
+			user.getGroupMembership().then(groups => {
 				if (groups.length) {
-					groups.map(group => {
-						const id = group.getId();
-						return {
-							group: group,
-							name: group.getName(),
-							route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
-						};
-					})
+					groups
+						.map(group => {
+							const id = group.getId();
+							return {
+								group: group,
+								name: group.getName(),
+								route: isNTIID(id)
+									? encodeForURI(id)
+									: encodeURIComponent(id),
+							};
+						})
 						.forEach(c => this.addEntry(c));
 				} else if (isMe) {
 					//TODO: change this text
@@ -41,5 +45,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					this.showEmptyText('This user has no public groups.');
 				}
 			});
+		},
 	}
-});
+);

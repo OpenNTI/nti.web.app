@@ -4,7 +4,6 @@ require('legacy/common/window/Window');
 require('../Header');
 require('./Main');
 
-
 module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.coppa-window',
@@ -19,10 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {
 	width: 480,
 	layout: 'none',
 
-	items: [
-		{xtype: 'account-header-view'},
-		{xtype: 'coppa-main-view'}
-	],
+	items: [{ xtype: 'account-header-view' }, { xtype: 'coppa-main-view' }],
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -31,5 +27,5 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {
 
 		view.setSchema(this.schema);
 		view.handleSubmit = this.handleSubmit.bind(this);
-	}
+	},
 });

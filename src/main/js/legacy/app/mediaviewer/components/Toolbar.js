@@ -1,223 +1,253 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.mediaviewer.components.Toolbar',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.media-toolbar',
 
-module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
-	extend: 'Ext.Component',
-	alias: 'widget.media-toolbar',
+		layout: {
+			type: 'hbox',
+			align: 'stretch',
+		},
+		border: false,
+		plain: true,
+		cls: 'media-toolbar',
 
-	layout: {
-		type: 'hbox',
-		align: 'stretch'
-	},
-	border: false,
-	plain: true,
-	cls: 'media-toolbar',
-
-	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([{
-		cls: 'left', cn: [
-			{cls: 'control back-button', 'data-qtip': 'Exit', tabindex: '1', 'aria-label': 'Exit', tag: 'a'},
-			{cls: 'navigation', cn: [
-				'{[this.splitNumberFromTitle(values)]}',
-				{tag: 'tpl', 'if': 'sectionNumber', cn: [
-					{ cls: 'section-number'}
-				]},
+		renderTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup([
 				{
-					cls: 'wrap',
+					cls: 'left',
 					cn: [
-						{ cls: 'section-name'},
-						{ cls: 'title'}
-					]
+						{
+							cls: 'control back-button',
+							'data-qtip': 'Exit',
+							tabindex: '1',
+							'aria-label': 'Exit',
+							tag: 'a',
+						},
+						{
+							cls: 'navigation',
+							cn: [
+								'{[this.splitNumberFromTitle(values)]}',
+								{
+									tag: 'tpl',
+									if: 'sectionNumber',
+									cn: [{ cls: 'section-number' }],
+								},
+								{
+									cls: 'wrap',
+									cn: [
+										{ cls: 'section-name' },
+										{ cls: 'title' },
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					cls: 'right',
+					cn: [
+						{
+							cls: 'video-picker',
+							cn: [
+								{ cls: 'grid-view' },
+								{
+									cls:
+										'selected-mv-type hasTranscript video-focus',
+									html: 'split video',
+								},
+							],
+						},
+					],
+				},
+			]),
+			{
+				splitNumberFromTitle: function (values) {
+					var s = (values.title || '').split(' '),
+						number = s.shift(),
+						numberVal = parseFloat(number),
+						title = s.join(' ');
+
+					if (
+						!values.sectionNumber &&
+						!isNaN(numberVal) &&
+						isFinite(numberVal)
+					) {
+						values.sectionNumber = number;
+						values.title = title;
+					}
+				},
+			}
+		),
+
+		renderSelectors: {
+			gridEl: '.grid-view',
+			pickerEl: '.selected-mv-type',
+			exitEl: '.back-button',
+			titleEl: '.navigation .wrap .title',
+			sectionNameEl: '.navigation .wrap .section-name',
+		},
+
+		clsToName: function (cls) {
+			var map = {
+				'video-focus': 'Split Video',
+				'transcript-focus': 'Split Transcript',
+				'full-video': 'Full Video',
+			};
+
+			return map[cls];
+		},
+
+		initComponent: function () {
+			var me = this;
+			me.callParent(arguments);
+			me.currentType = me.currentType || 'video-focus';
+			me.enableBubble('exit-viewer');
+
+			me.on({
+				pickerEl: { click: 'showVideoPlayerPicker' },
+				gridEl: { click: 'showGridPicker' },
+			});
+		},
+
+		setContent: function (video, transcript) {
+			var me = this,
+				title,
+				description;
+
+			me.video = video;
+			me.transcript = transcript;
+			me.noTranscript = !transcript;
+			(title = me.video && me.video.get('title')),
+				(description = me.video && me.video.get('description'));
+
+			me.onceRendered.then(function () {
+				me.titleEl.update(Ext.util.Format.htmlEncode(title));
+				me.sectionNameEl.update(
+					Ext.util.Format.htmlEncode(description)
+				);
+
+				if (me.noTranscript) {
+					me.pickerEl.removeCls('hasTranscript');
+				} else {
+					me.pickerEl.addCls('hasTranscript');
 				}
-			]}
-		]},{
-		cls: 'right', cn: [
-			{cls: 'video-picker', cn: [
-				{cls: 'grid-view'},
-				{cls: 'selected-mv-type hasTranscript video-focus', html: 'split video'}
-			]}
-		]
-	}]), {
-		splitNumberFromTitle: function (values) {
-			var s = (values.title || '').split(' '),
-				number = s.shift(),
-				numberVal = parseFloat(number),
-				title = s.join(' ');
+			});
+		},
 
-			if (!values.sectionNumber && !isNaN(numberVal) && isFinite(numberVal)) {
-				values.sectionNumber = number;
-				values.title = title;
-			}
-		}
-	}),
+		afterRender: function () {
+			this.callParent(arguments);
+			this.pickerEl.removeCls('video-focus').addCls(this.currentType);
+			this.pickerEl.update(this.clsToName(this.currentType));
 
-	renderSelectors: {
-		gridEl: '.grid-view',
-		pickerEl: '.selected-mv-type',
-		exitEl: '.back-button',
-		titleEl: '.navigation .wrap .title',
-		sectionNameEl: '.navigation .wrap .section-name'
-	},
+			this.mon(this.exitEl, 'click', () => {
+				this.fireEvent('exit-viewer');
+			});
+		},
 
-	clsToName: function (cls) {
-		var map = {
-			'video-focus': 'Split Video',
-			'transcript-focus': 'Split Transcript',
-			'full-video': 'Full Video'
-		};
+		showGridPicker: function () {
+			var el = this.gridEl,
+				cls = 'active',
+				action = el.hasCls(cls) ? 'hide' : 'show';
 
-		return map[cls];
-	},
-
-	initComponent: function () {
-		var me = this;
-		me.callParent(arguments);
-		me.currentType = me.currentType || 'video-focus';
-		me.enableBubble('exit-viewer');
-
-		me.on({
-			pickerEl: { click: 'showVideoPlayerPicker' },
-			gridEl: { click: 'showGridPicker' }
-		});
-	},
-
-
-	setContent: function (video, transcript) {
-		var me = this, title, description;
-
-		me.video = video;
-		me.transcript = transcript;
-		me.noTranscript = !transcript;
-		title = me.video && me.video.get('title'),
-		description = me.video && me.video.get('description');
-
-		me.onceRendered.then(function () {
-			me.titleEl.update(Ext.util.Format.htmlEncode(title));
-			me.sectionNameEl.update(Ext.util.Format.htmlEncode(description));
-
-			if (me.noTranscript) {
-				me.pickerEl.removeCls('hasTranscript');
-			}
-			else {
-				me.pickerEl.addCls('hasTranscript');
-			}
-		});
-
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
-		this.pickerEl.update(this.clsToName(this.currentType));
-
-		this.mon(this.exitEl, 'click', () => {
-			this.fireEvent('exit-viewer');
-		});
-	},
-
-
-	showGridPicker: function () {
-		var el = this.gridEl,
-			cls = 'active',
-			action = el.hasCls(cls) ? 'hide' : 'show';
-
-		this.floatParent.showGridViewer(action)
-			.then(function () {
+			this.floatParent.showGridViewer(action).then(function () {
 				el.toggleCls(cls);
 			});
-	},
+		},
 
+		toggleGridPicker: function () {
+			var el = this.gridEl,
+				cls = 'active';
 
-	toggleGridPicker: function () {
-		var el = this.gridEl,
-			cls = 'active';
+			el.toggleCls(cls);
+		},
 
-		el.toggleCls(cls);
-	},
+		showVideoPlayerPicker: function () {
+			console.log('clicked on show the video player picker..');
 
+			// No menu, if we don't have a transcript.
+			if (this.noTranscript) {
+				return;
+			}
 
-	showVideoPlayerPicker: function () {
-		console.log('clicked on show the video player picker..');
+			if (!this.videoPicker) {
+				this.createViewPlayerPicker();
+			}
+			this.videoPicker.showBy(this.pickerEl, 'tl-tl', [0, 0]);
+		},
 
-		// No menu, if we don't have a transcript.
-		if (this.noTranscript) { return; }
+		createViewPlayerPicker: function () {
+			var me = this,
+				type = this.currentType,
+				items = [
+					{
+						text: me.clsToName('video-focus'),
+						cls: 'label video-focus',
+						action: 'video-focus',
+						checked: type === 'video-focus',
+						disabled: this.noTranscript,
+					},
+					{
+						text: me.clsToName('transcript-focus'),
+						cls: 'label transcript-focus',
+						action: 'transcript-focus',
+						checked: type === 'transcript-focus',
+						disabled: this.noTranscript,
+					},
+					{
+						text: me.clsToName('full-video'),
+						cls: 'label full-video',
+						action: 'full-video',
+						checked: type === 'full-video',
+					},
+				];
 
-		if (!this.videoPicker) {
-			this.createViewPlayerPicker();
-		}
-		this.videoPicker.showBy(this.pickerEl, 'tl-tl', [0, 0]);
-	},
+			//Make selected item is at the top of the list.
+			items = Ext.Array.sort(items, function (a, b) {
+				return !a.checked && b.checked;
+			});
 
-
-	createViewPlayerPicker: function () {
-		var me = this,
-			type = this.currentType,
-			items = [
-				{
-					text: me.clsToName('video-focus'),
-					cls: 'label video-focus',
-					action: 'video-focus',
-					checked: type === 'video-focus',
-					disabled: this.noTranscript
+			this.videoPicker = Ext.widget('menu', {
+				cls: 'video-player-options-menu',
+				width: 215,
+				ownerCmp: me,
+				defaults: {
+					ui: 'nt-menuitem',
+					xtype: 'menucheckitem',
+					plain: true,
+					listeners: {
+						beforecheckchange: function (item, checked) {
+							return item.allowUncheck !== false;
+						},
+						click: function (item) {
+							item.up('menu').ownerCmp.handleClick(
+								item,
+								item.up('menu')
+							);
+						},
+					},
 				},
-				{
-					text: me.clsToName('transcript-focus'),
-					cls: 'label transcript-focus',
-					action: 'transcript-focus',
-					checked: type === 'transcript-focus',
-					disabled: this.noTranscript
-				},
-				{
-					text: me.clsToName('full-video'),
-					cls: 'label full-video',
-					action: 'full-video',
-					checked: type === 'full-video'
-				}
-			];
+				items: items,
+			});
+		},
 
-		//Make selected item is at the top of the list.
-		items = Ext.Array.sort(items, function (a, b) {
-			return !a.checked && b.checked;
-		});
+		updateType(type) {
+			this.updateCurrentType(type, this.clsToName(type));
+		},
 
-		this.videoPicker = Ext.widget('menu', {
-			cls: 'video-player-options-menu',
-			width: 215,
-			ownerCmp: me,
-			defaults: {
-				ui: 'nt-menuitem',
-				xtype: 'menucheckitem',
-				plain: true,
-				listeners: {
-					'beforecheckchange': function (item, checked) { return item.allowUncheck !== false; },
-					'click': function (item) {
-						item.up('menu').ownerCmp.handleClick(item, item.up('menu'));
-					}
-				}
-			},
-			items: items
-		});
-	},
+		transcriptFailedToLoad() {
+			this.pickerEl.removeCls('hasTranscript');
+			this.noTranscript = true;
+			this.videoPicker && this.videoPicker.hide();
+		},
 
+		handleClick: function (item, menu) {
+			var me = this;
 
-	updateType (type) {
-		this.updateCurrentType(type, this.clsToName(type));
-	},
-
-
-	transcriptFailedToLoad () {
-		this.pickerEl.removeCls('hasTranscript');
-		this.noTranscript = true;
-		this.videoPicker && this.videoPicker.hide();
-	},
-
-
-	handleClick: function (item, menu) {
-		var me = this;
-
-		this.floatParent.switchVideoViewer(item.action)
-			.then(function () {
-				me.updateCurrentType(item.action,item.text);
+			this.floatParent.switchVideoViewer(item.action).then(function () {
+				me.updateCurrentType(item.action, item.text);
 
 				Ext.each(menu.query('menuitem[checked]'), function (i) {
 					i.setChecked(false, true);
@@ -226,16 +256,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 				item.setChecked(true, true);
 			});
 
-		return false;
-	},
+			return false;
+		},
 
-	updateCurrentType: function (newType, newText) {
-		var previousType = this.currentType, me = this;
+		updateCurrentType: function (newType, newText) {
+			var previousType = this.currentType,
+				me = this;
 
-		newText = newText || this.clsToName(newType);
+			newText = newText || this.clsToName(newType);
 
-		me.pickerEl.removeCls(previousType).addCls(newType);
-		me.currentType = newType;
-		me.pickerEl.update(newText);
+			me.pickerEl.removeCls(previousType).addCls(newType);
+			me.currentType = newType;
+			me.pickerEl.update(newText);
+		},
 	}
-});
+);

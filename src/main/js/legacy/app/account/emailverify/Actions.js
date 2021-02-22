@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const LoginStore = require('legacy/login/StateStore');
 const PromptActions = require('legacy/app/prompt/Actions').create();
-const {isFeature} = require('legacy/util/Globals');
+const { isFeature } = require('legacy/util/Globals');
 const NavActions = require('legacy/app/navigation/Actions').create();
 
 const StateStore = require('./StateStore');
@@ -12,109 +12,111 @@ require('./info/Prompt');
 require('./verify/Prompt');
 require('legacy/common/Actions');
 
-module.exports = exports = Ext.define('NextThought.app.account.emailverify.Actions', {
-	extend: 'NextThought.common.Actions',
+module.exports = exports = Ext.define(
+	'NextThought.app.account.emailverify.Actions',
+	{
+		extend: 'NextThought.common.Actions',
 
-	constructor () {
-		if (!StateStore.loading && !StateStore.hasFinishedLoad) {
-			if (window.Service) {
-				this.onLogin();
-			} else {
-				this.mon(LoginStore, 'login-reader', this.onLogin.bind(this));
+		constructor() {
+			if (!StateStore.loading && !StateStore.hasFinishedLoad) {
+				if (window.Service) {
+					this.onLogin();
+				} else {
+					this.mon(
+						LoginStore,
+						'login-reader',
+						this.onLogin.bind(this)
+					);
+				}
 			}
-		}
 
-		StateStore.setLoaded();
-	},
+			StateStore.setLoaded();
+		},
 
+		onLogin() {
+			if (isFeature('email-verification')) {
+				this.maybeAskForEmailVerification();
+			}
+		},
 
-	onLogin () {
-		if (isFeature('email-verification')) {
-			this.maybeAskForEmailVerification();
-		}
-	},
+		maybeAskForEmailVerification() {
+			var user = $AppConfig.userObject;
 
+			if (user && user.get('email') && !user.isEmailVerified()) {
+				wait().then(this.askForEmailVerfication.bind(this));
+			}
+		},
 
-	maybeAskForEmailVerification () {
-		var user = $AppConfig.userObject;
+		askForEmailVerfication() {
+			var cfg = {
+				iconCls: 'warning',
+				message: 'Please take a moment to verify your email address.',
+				buttons: [
+					{
+						cls: 'verify',
+						action: 'onEmailVerify',
+						label: 'Verify Now',
+						handler: this.sendEmailVerification.bind(this),
+					},
+					{
+						cls: 'info',
+						action: 'onMoreInfo',
+						label: 'More Info',
+						handler: this.showMoreInfo.bind(this),
+					},
+				],
+				type: 'email-verification',
+			};
 
-		if (user && user.get('email') && !user.isEmailVerified()) {
-			wait()
-				.then(this.askForEmailVerfication.bind(this));
-		}
-	},
+			NavActions.presentMessageBar(cfg);
+		},
 
+		sendEmailVerification() {
+			let user = $AppConfig.userObject;
 
-	askForEmailVerfication () {
-		var cfg = {
-			iconCls: 'warning',
-			message: 'Please take a moment to verify your email address.',
-			buttons: [
-				{
-					cls: 'verify',
-					action: 'onEmailVerify',
-					label: 'Verify Now',
-					handler: this.sendEmailVerification.bind(this)
+			function onVerificationComplete() {
+				NavActions.closeMessageBar();
+			}
+
+			user.sendEmailVerification().then(
+				function () {
+					return PromptActions.prompt('verify-email', {
+						onVerificationComplete: onVerificationComplete,
+					});
 				},
-				{
-					cls: 'info',
-					action: 'onMoreInfo',
-					label: 'More Info',
-					handler: this.showMoreInfo.bind(this)
+				function (error) {
+					let e = Ext.decode(error && error.responseText);
+					let seconds = error.status === 422 ? e && e.seconds : null;
+
+					return PromptActions.prompt('verify-email', {
+						seconds: seconds,
+						onVerificationComplete: onVerificationComplete,
+					});
 				}
-			],
-			type: 'email-verification'
-		};
+			);
+		},
 
-		NavActions.presentMessageBar(cfg);
-	},
+		showMoreInfo() {
+			PromptActions.prompt('verify-email-info');
+		},
 
+		createEmailVerifyWindow() {
+			var me = this;
 
-	sendEmailVerification () {
-		let user = $AppConfig.userObject;
+			this.emailVerifyWin = Ext.widget('email-token-window', {
+				user: $AppConfig.userObject,
+				autoShow: false,
+				onVerificationComplete: function () {
+					var messageBar = Ext.getCmp('message-bar');
 
-		function onVerificationComplete () {
-			NavActions.closeMessageBar();
-		}
-
-		user.sendEmailVerification()
-			.then(function () {
-				return PromptActions.prompt('verify-email', {
-					onVerificationComplete: onVerificationComplete
-				});
-			}, function (error) {
-				let e = Ext.decode(error && error.responseText);
-				let seconds = error.status === 422 ? e && e.seconds : null;
-
-				return PromptActions.prompt('verify-email', {
-					seconds: seconds,
-					onVerificationComplete: onVerificationComplete
-				});
+					if (messageBar) {
+						messageBar.close();
+					}
+				},
+				onDestroy: function () {
+					delete me.emailVerifyWin;
+				},
 			});
-	},
-
-
-	showMoreInfo () {
-		PromptActions.prompt('verify-email-info');
-	},
-
-
-	createEmailVerifyWindow () {
-		var me = this;
-
-		this.emailVerifyWin = Ext.widget('email-token-window', {
-			user: $AppConfig.userObject,
-			autoShow: false,
-			onVerificationComplete: function () {
-				var messageBar = Ext.getCmp('message-bar');
-
-				if (messageBar) {
-					messageBar.close();
-				}
-			},
-			onDestroy: function () {
-				delete me.emailVerifyWin;
-			}
-		});
+		},
 	}
-});
+);

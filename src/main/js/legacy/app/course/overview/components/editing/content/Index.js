@@ -4,7 +4,7 @@ require('../../Lesson');
 
 require('./lessonoverview/Index');
 
-function getOutlineFromNode (outlineNode) {
+function getOutlineFromNode(outlineNode) {
 	let parent = outlineNode;
 
 	while (parent) {
@@ -18,61 +18,66 @@ function getOutlineFromNode (outlineNode) {
 	return null;
 }
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.Index',
+	{
+		extend: 'NextThought.app.course.overview.components.Lesson',
+		alias: 'widget.overview-editing-content',
+		cls: '',
+		isLessonView: false,
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
-	extend: 'NextThought.app.course.overview.components.Lesson',
-	alias: 'widget.overview-editing-content',
-	cls: '',
-	isLessonView: false,
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.loadLesson = this.renderLesson(this.outlineNode, this.record);
+		},
 
-		this.loadLesson = this.renderLesson(this.outlineNode, this.record);
-	},
+		onceLoaded: function () {
+			return this.loadLesson || Promise.resolve();
+		},
 
-	onceLoaded: function () {
-		return this.loadLesson || Promise.resolve();
-	},
+		renderLesson: function (outlineNode, contents) {
+			var me = this,
+				course = me.bundle,
+				overviewsrc =
+					(outlineNode && outlineNode.getLink('overview-content')) ||
+					null;
 
-	renderLesson: function (outlineNode, contents) {
-		var me = this,
-			course = me.bundle,
-			overviewsrc = (outlineNode && outlineNode.getLink('overview-content')) || null;
+			if (!outlineNode || !course || !contents) {
+				//show empty state?
+				console.warn('Unable to edit overview content');
+				return;
+			}
 
-		if (!outlineNode || !course || !contents) {
-			//show empty state?
-			console.warn('Unable to edit overview content');
-			return;
-		}
+			me.buildingOverview = true;
+			me.maybeMask();
 
-		me.buildingOverview = true;
-		me.maybeMask();
+			return me
+				.getInfo(outlineNode, course, overviewsrc)
+				.then(function (results) {
+					var assignments = results[0],
+						enrollment = results[1],
+						//Just use the first one for now
+						locInfo = results[2][0];
 
-		return me.getInfo(outlineNode, course, overviewsrc)
-			.then(function (results) {
-				var assignments = results[0],
-					enrollment = results[1],
-					//Just use the first one for now
-					locInfo = results[2][0];
+					me.currentOverview = me.add({
+						xtype: 'overview-editing-lessonoverview',
+						record: outlineNode,
+						locInfo: locInfo,
+						assignments: assignments,
+						enrollment: enrollment,
+						bundle: course,
+						contents: contents,
+						outline: getOutlineFromNode(outlineNode),
+						navigate: me.navigate,
+					});
 
-				me.currentOverview = me.add({
-					xtype: 'overview-editing-lessonoverview',
-					record: outlineNode,
-					locInfo: locInfo,
-					assignments: assignments,
-					enrollment: enrollment,
-					bundle: course,
-					contents: contents,
-					outline: getOutlineFromNode(outlineNode),
-					navigate: me.navigate
-				});
-
-				return me.currentOverview.onceLoaded();
-			})
-			.catch(function (reason) {
-				console.error(reason);
-			})
-			.then(me.maybeUnmask.bind(me));
+					return me.currentOverview.onceLoaded();
+				})
+				.catch(function (reason) {
+					console.error(reason);
+				})
+				.then(me.maybeUnmask.bind(me));
+		},
 	}
-});
+);

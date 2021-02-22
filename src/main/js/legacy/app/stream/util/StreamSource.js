@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const BatchInterface = require('legacy/store/BatchInterface');
 
-
 /**
  * An interface for the BatchInterface to handle paging through a stream of activity.
  * Keeps track of the batch you are on, so you only have to call getNextBatch repeatedly.
@@ -11,180 +10,185 @@ const BatchInterface = require('legacy/store/BatchInterface');
  * @author andrew.ligon@nexthought.com (Andrew Ligon)
  */
 
-module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource', {
-	/**
-	 * Construct an instance of a StreamSource
-	 *
-	 * @memberOf NextThought.app.stream.util.StreamSource#
-	 *
-	 * @param {Object} config values to set up the stream source with
-	 * @param {string} config.batch which batch to start on
-	 * @param {string} config.batchParam the value to key the batch on
-	 * @param {string} config.batchAfter which batch to start on after a value
-	 * @param {string} config.batchAfterParam the value to key the batchAfter on
-	 * @param {Array} config.filters filters to apply to the batch
-	 * @param {string} config.filterParam the value to key the filters on
-	 * @param {number} config.pageSize the size of the batch
-	 * @param {string} config.sizeParam the value to key the size on
-	 * @param {string|Object} config.sort the field to sort the items on, or an object
-	 * @param {string} config.sort.on the field to sort the items on
-	 * @param {string} config.sort.order the order to sort on
-	 * @param {string} config.sortParam the value to key the sort on
-	 * @param {string} config.sortOrder the order to sort on
-	 * @param {Strin} config.sortOrderParam the value to key the sort order on
-	 * @param {string} config.context an ntiid to filter to items contained in it
-	 * @param {string} config.contextParam the value to key the context on
-	 * @returns {void}
-	 */
-	constructor: function (config) {
-		this.callParent(arguments);
+module.exports = exports = Ext.define(
+	'NextThought.app.stream.util.StreamSource',
+	{
+		/**
+		 * Construct an instance of a StreamSource
+		 *
+		 * @memberOf NextThought.app.stream.util.StreamSource#
+		 *
+		 * @param {Object} config values to set up the stream source with
+		 * @param {string} config.batch which batch to start on
+		 * @param {string} config.batchParam the value to key the batch on
+		 * @param {string} config.batchAfter which batch to start on after a value
+		 * @param {string} config.batchAfterParam the value to key the batchAfter on
+		 * @param {Array} config.filters filters to apply to the batch
+		 * @param {string} config.filterParam the value to key the filters on
+		 * @param {number} config.pageSize the size of the batch
+		 * @param {string} config.sizeParam the value to key the size on
+		 * @param {string|Object} config.sort the field to sort the items on, or an object
+		 * @param {string} config.sort.on the field to sort the items on
+		 * @param {string} config.sort.order the order to sort on
+		 * @param {string} config.sortParam the value to key the sort on
+		 * @param {string} config.sortOrder the order to sort on
+		 * @param {Strin} config.sortOrderParam the value to key the sort order on
+		 * @param {string} config.context an ntiid to filter to items contained in it
+		 * @param {string} config.contextParam the value to key the context on
+		 * @returns {void}
+		 */
+		constructor: function (config) {
+			this.callParent(arguments);
 
-		if (!config.url) {
-			throw new Error('No URL given for stream source');
-		}
-
-		this.url = config.url;
-		this.extraParams = config.extraParams || {};
-
-		if (config.modifier) {
-			this.extraParams = Ext.apply(this.extraParams, config.modifier);
-		}
-
-		this.batch = {
-			param: config.batchParam || 'batchStart',
-			value: config.batch
-		};
-
-		this.batchAfter = {
-			param: config.batchAfterParam || 'batchAfter',
-			value: config.batchAfter
-		};
-
-		this.filters = {
-			param: config.filterParam || 'filter',
-			value: config.filters
-		};
-
-		this.size = {
-			param: config.sizeParam || 'batchSize',
-			value: config.pageSize || 50
-		};
-
-
-		this.sort = {
-			param: config.sortParam || 'sortOn',
-			value: config.sortOn || (config.sort && config.sort.on) || 'CreatedTime'
-		};
-
-		this.sortOrder = {
-			param: config.sortOrderParam || 'sortOrder',
-			value: config.sortOrder || (config.sort && config.sort.order) || 'descending'
-		};
-
-		this.context = {
-			param: config.contextParam || 'topLevelContextFilter',
-			value: config.context
-		};
-
-		let accepts = config.accepts;
-
-		if (accepts && accepts.join) {
-			accepts = accepts.join(',');
-		} else if (accepts === '*/*') {
-			accepts = null;
-		}
-
-		this.accepts = {
-			param: config.acceptsParam || 'accept',
-			value: accepts
-		};
-	},
-
-	getURL: function () {
-		return this.url;
-	},
-
-	/**
-	 * Build the params to send back with the request
-	 *
-	 * @memberOf  NextThought.app.stream.util.StreamSource#
-	 * @returns {Object} params
-	 */
-	getParams: function () {
-		var params,
-			knownParams = [
-				this.batch,
-				this.batchAfter,
-				this.filters,
-				this.size,
-				this.sort,
-				this.sortOrder,
-				this.context,
-				this.accepts
-			];
-
-		params = knownParams.reduce(function (acc, param) {
-			if (param.value) {
-				acc[param.param] = param.value;
+			if (!config.url) {
+				throw new Error('No URL given for stream source');
 			}
 
-			return acc;
-		}, this.extraParams || {});
+			this.url = config.url;
+			this.extraParams = config.extraParams || {};
 
-		return params;
-	},
+			if (config.modifier) {
+				this.extraParams = Ext.apply(this.extraParams, config.modifier);
+			}
 
-	__getBatch: function () {
-		return this.currentBatch;
-	},
+			this.batch = {
+				param: config.batchParam || 'batchStart',
+				value: config.batch,
+			};
 
-	getCurrentBatch: function () {
-		if (!this.currentBatch) {
-			this.currentBatch = new BatchInterface({
-				url: this.getURL(),
-				params: this.getParams()
-			});
-		}
+			this.batchAfter = {
+				param: config.batchAfterParam || 'batchAfter',
+				value: config.batchAfter,
+			};
 
-		return this.currentBatch.getBatch();
-	},
+			this.filters = {
+				param: config.filterParam || 'filter',
+				value: config.filters,
+			};
 
-	getNextBatch: function () {
-		var me = this,
-			batch = me.__getBatch();
+			this.size = {
+				param: config.sizeParam || 'batchSize',
+				value: config.pageSize || 50,
+			};
 
-		return batch.getNextBatch()
-			.then(function (b) {
+			this.sort = {
+				param: config.sortParam || 'sortOn',
+				value:
+					config.sortOn ||
+					(config.sort && config.sort.on) ||
+					'CreatedTime',
+			};
+
+			this.sortOrder = {
+				param: config.sortOrderParam || 'sortOrder',
+				value:
+					config.sortOrder ||
+					(config.sort && config.sort.order) ||
+					'descending',
+			};
+
+			this.context = {
+				param: config.contextParam || 'topLevelContextFilter',
+				value: config.context,
+			};
+
+			let accepts = config.accepts;
+
+			if (accepts && accepts.join) {
+				accepts = accepts.join(',');
+			} else if (accepts === '*/*') {
+				accepts = null;
+			}
+
+			this.accepts = {
+				param: config.acceptsParam || 'accept',
+				value: accepts,
+			};
+		},
+
+		getURL: function () {
+			return this.url;
+		},
+
+		/**
+		 * Build the params to send back with the request
+		 *
+		 * @memberOf  NextThought.app.stream.util.StreamSource#
+		 * @returns {Object} params
+		 */
+		getParams: function () {
+			var params,
+				knownParams = [
+					this.batch,
+					this.batchAfter,
+					this.filters,
+					this.size,
+					this.sort,
+					this.sortOrder,
+					this.context,
+					this.accepts,
+				];
+
+			params = knownParams.reduce(function (acc, param) {
+				if (param.value) {
+					acc[param.param] = param.value;
+				}
+
+				return acc;
+			}, this.extraParams || {});
+
+			return params;
+		},
+
+		__getBatch: function () {
+			return this.currentBatch;
+		},
+
+		getCurrentBatch: function () {
+			if (!this.currentBatch) {
+				this.currentBatch = new BatchInterface({
+					url: this.getURL(),
+					params: this.getParams(),
+				});
+			}
+
+			return this.currentBatch.getBatch();
+		},
+
+		getNextBatch: function () {
+			var me = this,
+				batch = me.__getBatch();
+
+			return batch.getNextBatch().then(function (b) {
 				me.currentBatch = b;
 
 				return b.getBatch();
 			});
-	},
+		},
 
-	getPreviousBatch: function () {
-		var me = this,
-			batch = me.__getBatch();
+		getPreviousBatch: function () {
+			var me = this,
+				batch = me.__getBatch();
 
-		return batch.getPreviousBatch()
-			.then(function (b) {
+			return batch.getPreviousBatch().then(function (b) {
 				me.currentBatch = b;
 
 				return b.getBatch();
 			});
-	},
+		},
 
-	reset: function () {
-		delete this.currentBatch;
-	},
+		reset: function () {
+			delete this.currentBatch;
+		},
 
+		fetchNewItems: function () {
+			var batch = this.__getBatch();
 
-	fetchNewItems: function () {
-		var batch = this.__getBatch();
+			if (!batch) {
+				return Promise.resolve([]);
+			}
 
-		if (!batch) {
-			return Promise.resolve([]);
-		}
-
-		return batch.fetchNewItems();
+			return batch.fetchNewItems();
+		},
 	}
-});
+);

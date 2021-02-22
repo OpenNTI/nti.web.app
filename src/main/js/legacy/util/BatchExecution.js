@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 /**
  * A utility that allows you to schedule tasks to be ran sequentially, if a task returns a promise
  * it will wait for it to finish before executing the next.
@@ -31,18 +30,20 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	schedule: function (fn) {
 		var me = this;
 
-		return new Promise(function (fulfill/*, reject*/) {
+		return new Promise(function (fulfill /*, reject*/) {
 			me.__queue(function () {
 				var resp = fn.call();
 
 				//if the resp is a Promise, a rejection will cause the execution to stop
 				//so catch failed promises.
 				if (resp instanceof Promise) {
-					resp = resp.then(function (val) {
-						fulfill(val);
-					}).catch(function (reason) {
-						console.warn('Batch Execution failed: ', reason);
-					});
+					resp = resp
+						.then(function (val) {
+							fulfill(val);
+						})
+						.catch(function (reason) {
+							console.warn('Batch Execution failed: ', reason);
+						});
 				} else {
 					fulfill(resp);
 				}
@@ -52,7 +53,6 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 		});
 	},
 
-
 	__queue: function (fn) {
 		this.TASKS.push(fn);
 
@@ -61,10 +61,11 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 		}
 	},
 
-
 	__executeBatch: function () {
 		//if we were stopped, don't execute the next batch
-		if (!this.running) { return; }
+		if (!this.running) {
+			return;
+		}
 
 		var batch = this.TASKS.splice(0, this.batchSize);
 
@@ -78,10 +79,8 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 			return item.call();
 		});
 
-		Promise.all(batch)
-			.always(this.__executeBatch.bind(this));
+		Promise.all(batch).always(this.__executeBatch.bind(this));
 	},
-
 
 	startExecution: function () {
 		this.running = true;
@@ -89,8 +88,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 		this.__executeBatch();
 	},
 
-
 	stopExecution: function () {
 		this.running = false;
-	}
+	},
 });

@@ -2,10 +2,8 @@ const Ext = require('@nti/extjs');
 
 require('legacy/common/StateStore');
 
-
 module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 	extend: 'NextThought.common.StateStore',
-
 
 	setActiveDragItem: function (activeItem) {
 		this.activeDragItem = activeItem;
@@ -17,7 +15,6 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 		this.fireEvent('drag-start');
 	},
 
-
 	removeActiveDragItem: function (activeItem) {
 		if (this.activeDragItem === activeItem) {
 			delete this.activeItem;
@@ -25,21 +22,22 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 		}
 	},
 
-
 	getActiveDragItem: function () {
 		return this.activeDragItem;
 	},
-
 
 	getPlaceholderStyles: function () {
 		var styles;
 
 		if (this.placeholderStyles) {
 			styles = this.placeholderStyles;
-		} else if (this.activeDragItem && this.activeDragItem.getPlaceholderStyles()) {
+		} else if (
+			this.activeDragItem &&
+			this.activeDragItem.getPlaceholderStyles()
+		) {
 			styles = this.activeDragItem.getPlaceholderStyles();
 		}
 
 		return styles || {};
-	}
+	},
 });

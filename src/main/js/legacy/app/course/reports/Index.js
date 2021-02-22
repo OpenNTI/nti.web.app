@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const {isFeature} = require('legacy/util/Globals');
+const { isFeature } = require('legacy/util/Globals');
 
 require('legacy/mixins/Router');
-
 
 module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 	extend: 'Ext.container.Container',
@@ -12,24 +11,28 @@ module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 	title: 'Reports',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	statics: {
 		showTab: function (bundle) {
-			var reportLinks = bundle && bundle.getReportLinks && bundle.getReportLinks();
+			var reportLinks =
+				bundle && bundle.getReportLinks && bundle.getReportLinks();
 
-			return false && reportLinks && isFeature('course-reports') && !bundle.get('Preview');
-		}
+			return (
+				false &&
+				reportLinks &&
+				isFeature('course-reports') &&
+				!bundle.get('Preview')
+			);
+		},
 	},
 
-	items: [
-		{xtype: 'box', autoEl: {html: 'reports'}}
-	],
+	items: [{ xtype: 'box', autoEl: { html: 'reports' } }],
 
 	onActivate: function () {
 		this.setTitle(this.title);
 	},
 
-	bundleChanged: function (bundle) {}
+	bundleChanged: function (bundle) {},
 });

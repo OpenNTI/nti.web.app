@@ -1,4 +1,4 @@
-import {getServer} from '@nti/web-client';
+import { getServer } from '@nti/web-client';
 
 import BrandingStore from '../../branding/Store';
 import {
@@ -7,7 +7,7 @@ import {
 	MODIFIED,
 	THEME,
 	SITE_BRAND,
-	CAN_RESET
+	CAN_RESET,
 } from '../../branding/constants';
 
 const PreviewRel = 'certificate_preview';
@@ -18,7 +18,7 @@ export default class CertificateStylingStore extends BrandingStore {
 	static Loading = LOADING;
 	static Modified = MODIFIED;
 	static Theme = THEME;
-	static SiteBrand= SITE_BRAND;
+	static SiteBrand = SITE_BRAND;
 	static CanReset = CAN_RESET;
 	static Save = 'save';
 	static Cancel = 'cancel';
@@ -28,13 +28,13 @@ export default class CertificateStylingStore extends BrandingStore {
 	static SetThemeProp = 'setThemeProp';
 	static CanEditCertificate = CanEditCertificate;
 
-	get [CanEditCertificate] () {
+	get [CanEditCertificate]() {
 		const brand = this.get(SITE_BRAND);
 
 		return !brand?.HideCertificateStyling;
 	}
 
-	async getPreviewBlob () {
+	async getPreviewBlob() {
 		const brand = this.get(SITE_BRAND);
 		const previewLink = brand.getLink(PreviewRel);
 
@@ -43,7 +43,7 @@ export default class CertificateStylingStore extends BrandingStore {
 			method: 'PUT',
 			blob: true,
 			url: previewLink,
-			data: this.getFormData()
+			data: this.getFormData(),
 		});
 
 		return resp;

@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 require('legacy/common/window/Window');
 require('../Video');
 
-
 module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.video-window-window',
@@ -14,16 +13,21 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 	dialog: true,
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'video-window-container', cn: [
-			{cls: 'close'},
-			{
-				id: '{id}-body', cls: 'button-body', html: '{%this.renderContainer(out,values)%}'
-			}
-		]}
+		{
+			cls: 'video-window-container',
+			cn: [
+				{ cls: 'close' },
+				{
+					id: '{id}-body',
+					cls: 'button-body',
+					html: '{%this.renderContainer(out,values)%}',
+				},
+			],
+		},
 	]),
 
 	renderSelectors: {
-		closeEl: '.close'
+		closeEl: '.close',
 	},
 
 	initComponent: function () {
@@ -32,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 		this.add({
 			xtype: 'content-video',
 			url: this.url,
-			doNotDeactivateOtherPlayers: true
+			doNotDeactivateOtherPlayers: true,
 		});
 	},
 
@@ -45,5 +49,5 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 	onCloseClicked: function () {
 		this.close();
 		this.destroy();
-	}
+	},
 });

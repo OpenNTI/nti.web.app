@@ -1,23 +1,25 @@
 const Ext = require('@nti/extjs');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 const NTMatrix = require('./Matrix');
 
-
-function maybeMakeSourceRelative (src) {
+function maybeMakeSourceRelative(src) {
 	const location = window.location;
-	const origin = location.origin ? location.origin : (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : ''));
+	const origin = location.origin
+		? location.origin
+		: location.protocol +
+		  '//' +
+		  location.hostname +
+		  (location.port ? ':' + location.port : '');
 
 	return src.replace(origin, '');
 }
 
-
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
-
 	USE_DATA_URLS: false,
 
-	getSlope: function (x0,y0, x1,y1) {
+	getSlope: function (x0, y0, x1, y1) {
 		if (Ext.isArray(x0)) {
 			y1 = x0[3];
 			x1 = x0[2];
@@ -27,17 +29,17 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return (y1 - y0) / (x1 - x0);
 	},
 
-	getDegrees: function (x0,y0, x1,y1) {
+	getDegrees: function (x0, y0, x1, y1) {
 		if (Ext.isArray(x0)) {
 			y1 = x0[3];
 			x1 = x0[2];
 			y0 = x0[1];
 			x0 = x0[0];
 		}
-		var dx	= x1 - x0,
-			dy	= y1 - y0;
+		var dx = x1 - x0,
+			dy = y1 - y0;
 
-		return Math.atan2(dy, dx) * 180 / Math.PI;
+		return (Math.atan2(dy, dx) * 180) / Math.PI;
 	},
 
 	toRadians: function (degrees) {
@@ -61,15 +63,17 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 	},
 
 	canUse: function (image, fastOnCORS) {
-		var c, ctx, l = window.location;
-		var origin = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '');
+		var c,
+			ctx,
+			l = window.location;
+		var origin =
+			l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '');
 		try {
 			var src = image.src;
 			var cors = src.indexOf(origin) < 0;
 			if (/^data:/i.test(src) || !cors) {
 				return true;
-			}
-			else if (fastOnCORS && cors) {
+			} else if (fastOnCORS && cors) {
 				return false;
 			}
 
@@ -78,11 +82,10 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			ctx = c.getContext('2d');
 			ctx.drawImage(image, 0, 0);
 
-			ctx.getImageData(0, 0, 1, 1);//way faster than toDataURL
+			ctx.getImageData(0, 0, 1, 1); //way faster than toDataURL
 
-			c.width = 0;//should free the buffer we just rendered
-		}
-		catch (e) {
+			c.width = 0; //should free the buffer we just rendered
+		} catch (e) {
 			return false;
 		}
 		return true;
@@ -92,14 +95,16 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		var tempImage = new Image(),
 			me = this;
 
-		function errorPassthrough () {
+		function errorPassthrough() {
 			console.error('Could not load: ' + url);
 			passthrough();
 		}
 
-		function passthrough () { image.src = url; }
+		function passthrough() {
+			image.src = url;
+		}
 
-		function finishTest () {
+		function finishTest() {
 			if (!me.canUse(tempImage, true)) {
 				image.src = me.proxyImage(url);
 				return;
@@ -117,7 +122,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			console.error('A data url was attempted to be proxied.');
 			throw new Error('A data url was attempted to be proxied.');
 		}
-		return getURL($AppConfig['server-path'] + '@@echo_image_url?image_url=' + encodeURIComponent(imageUrl));
+		return getURL(
+			$AppConfig['server-path'] +
+				'@@echo_image_url?image_url=' +
+				encodeURIComponent(imageUrl)
+		);
 	},
 
 	imgToDataUrl: function (img) {
@@ -128,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		c.height = img.naturalHeight || img.height;
 		c.getContext('2d').drawImage(img, 0, 0);
 		url = c.toDataURL('image/png');
-		c.width = 0;//should free the buffer we just rendered
+		c.width = 0; //should free the buffer we just rendered
 		return url;
 	},
 
@@ -137,17 +146,16 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			image,
 			useClonedImage = forceDataUrl || me.USE_DATA_URLS;
 
-		function error () {
+		function error() {
 			alert('Hmm, there seems to be a problem with that image');
 		}
 
-		function requestDataURL () {
+		function requestDataURL() {
 			var proxyUrl, proxy, dataUrl;
 			try {
 				dataUrl = me.imgToDataUrl(img);
 				image.src = dataUrl;
-			}
-			catch (er) {
+			} catch (er) {
 				Ext.getBody().mask('Loading...');
 				proxyUrl = me.proxyImage(img.src);
 				proxy = new Image();
@@ -164,37 +172,37 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			}
 		}
 
-
 		if (useClonedImage === true) {
 			image = new Image();
 			image.onerror = error;
-			image.onload = function () { Ext.callback(cb, null, [me.buildCanvasFromImage(image)], 1); };
+			image.onload = function () {
+				Ext.callback(cb, null, [me.buildCanvasFromImage(image)], 1);
+			};
 			requestDataURL();
-		}
-		else {
+		} else {
 			Ext.callback(cb, null, [this.buildCanvasFromImage(img)], 1);
 		}
-
 	},
 
 	buildCanvasFromImage: function (img) {
 		var w = img.naturalWidth || img.width,
 			h = img.naturalHeight || img.height,
 			scale = 1 / w,
-			wbCX, wbCY,
+			wbCX,
+			wbCY,
 			m = new NTMatrix(),
 			data = {
 				shapeList: [],
 				MimeType: 'application/vnd.nextthought.canvas',
 				Class: 'Canvas',
-				viewportRatio: (16 / 9)
+				viewportRatio: 16 / 9,
 			};
 
 		wbCX = (scale * w) / 2;
-		wbCY = (1 / data.viewportRatio) / 2;
+		wbCY = 1 / data.viewportRatio / 2;
 
-		if (h > w || (h * scale) > (1 / data.viewportRatio)) {
-			scale = (1 / data.viewportRatio) / h;
+		if (h > w || h * scale > 1 / data.viewportRatio) {
+			scale = 1 / data.viewportRatio / h;
 			wbCY = (scale * h) / 2;
 			wbCX = 0.5;
 		}
@@ -205,10 +213,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		data.shapeList.push({
 			Class: 'CanvasUrlShape',
 			url: maybeMakeSourceRelative(img.src),
-			transform: m.toTransform()
+			transform: m.toTransform(),
 		});
 
 		return data;
-	}
-
+	},
 }).create();

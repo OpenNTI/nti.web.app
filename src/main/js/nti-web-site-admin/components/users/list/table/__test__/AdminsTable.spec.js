@@ -6,43 +6,44 @@ import AdminsTable from '../AdminsTable';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfUsers) => {
+const getMockService = numberOfUsers => {
 	return {
 		getCollection: () => {
 			return {
 				hasLink: () => true,
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		getBatch: () => {
 			let Items = [];
 
-			for(let i = 0; i < numberOfUsers; i++) {
+			for (let i = 0; i < numberOfUsers; i++) {
 				const index = i + 1;
 
 				Items.push({
 					Username: 'test' + index,
 					getID: () => 'test' + index,
 					getCreatedTime: () => new Date('10/30/2017'),
-					getLastSeenTime: () => new Date(Date.now() - 1000 * 60 * 60 * 24 * index) // last seen i days ago
+					getLastSeenTime: () =>
+						new Date(Date.now() - 1000 * 60 * 60 * 24 * index), // last seen i days ago
 				});
 			}
 
 			return Promise.resolve({
 				Total: numberOfUsers,
 				BatchPage: 1,
-				Items
+				Items,
 			});
 		},
 		getWorkspace: () => {
 			return {
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfUsers) => {
+const onBefore = numberOfUsers => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfUsers));
 };
@@ -59,7 +60,7 @@ describe('Site admin user admin list (with no items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable/>);
+		const cmp = renderer.create(<AdminsTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -76,7 +77,7 @@ describe('Site admin user admin list (with 5 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable/>);
+		const cmp = renderer.create(<AdminsTable />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -93,7 +94,7 @@ describe('Site admin user admin list (with 25 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable/>);
+		const cmp = renderer.create(<AdminsTable />);
 
 		jest.runAllTimers();
 		await flushPromises();

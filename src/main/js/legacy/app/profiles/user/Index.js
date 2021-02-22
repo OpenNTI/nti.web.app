@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-const {User} = require('@nti/web-profiles');
+const { User } = require('@nti/web-profiles');
 
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
 const UserModel = require('legacy/model/User');
 const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const SettingsWindow = require('legacy/app/account/settings/Window');
-
 
 const Header = require('./Tabs');
 
@@ -20,16 +19,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	alias: 'widget.profile-user',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
-
 
 	cls: 'user-profile profile',
 	items: [],
 	layout: 'none',
 
-
-	initComponent () {
+	initComponent() {
 		this.callParent(arguments);
 
 		this.NavActions = NavigationActions.create();
@@ -37,13 +34,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.headerContainer = this.add({
 			xtype: 'container',
 			layout: 'none',
-			items: []
+			items: [],
 		});
 
 		this.bodyContainer = this.add({
 			xtype: 'container',
 			layout: 'none',
-			items: []
+			items: [],
 		});
 
 		this.initRouter();
@@ -58,13 +55,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.addDefaultRoute('/about');
 	},
 
-
-	onRouteActivate () {
+	onRouteActivate() {
 		this.stopCleanup();
 	},
 
-
-	onRouteDeactivate () {
+	onRouteDeactivate() {
 		this.stopResourceViewed();
 
 		this.stopCleanup();
@@ -73,14 +68,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}, 100);
 	},
 
-
-	stopCleanup () {
+	stopCleanup() {
 		clearTimeout(this.cleanupTimeout);
 	},
 
-
-	async setActiveEntity (id) {
-		if (this.activeEntity && (this.activeEntity.get('Username') || '').toLowerCase() === id.toLowerCase()) {
+	async setActiveEntity(id) {
+		if (
+			this.activeEntity &&
+			(this.activeEntity.get('Username') || '').toLowerCase() ===
+				id.toLowerCase()
+		) {
 			return;
 		}
 
@@ -98,20 +95,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			entity: interfaceUser,
 			launchEditor: () => {
 				var win = SettingsWindow.create({
-					onUserChange: async (modifiedUser) => {
+					onUserChange: async modifiedUser => {
 						await this.interfaceEntity.refresh();
 
-						this.headerCmp.setProps({entity: this.interfaceEntity});
-					}
+						this.headerCmp.setProps({
+							entity: this.interfaceEntity,
+						});
+					},
 				});
 
 				win.show();
 				win.center();
 			},
 			getRouteFor: (obj, context) => {
-				if (!obj.isUser) { return; }
+				if (!obj.isUser) {
+					return;
+				}
 
-				const base = `/app/user/${UserModel.getUsernameForURL(obj.Username)}/`;
+				const base = `/app/user/${UserModel.getUsernameForURL(
+					obj.Username
+				)}/`;
 
 				if (context === 'about') {
 					return base;
@@ -136,37 +139,33 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				if (context === 'edit') {
 					return `${base}edit/`;
 				}
-			}
+			},
 		});
 
 		this.bodyContainer.removeAll(true);
 	},
 
-
 	getRouteTitle: function () {
 		return this.activeEntity ? this.activeEntity.getName() : '';
 	},
 
-
-	updateHeader () {
+	updateHeader() {
 		if (this.headerCmp) {
 			this.headerCmp.setBaseRoute(this.getBaseRoute());
 		}
 
 		this.NavActions.updateNavBar({
-			hideBranding: true
+			hideBranding: true,
 		});
 
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
-
-	getActive (selector) {
+	getActive(selector) {
 		return this.bodyContainer.down(selector);
 	},
 
-
-	setActive (cmp) {
+	setActive(cmp) {
 		this.bodyContainer.removeAll(true);
 
 		if (cmp) {
@@ -174,8 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-
-	showEdit () {
+	showEdit() {
 		this.updateHeader();
 		this.stopCleanup();
 
@@ -193,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				component: User.Edit,
 				user: this.interfaceEntity,
 				addHistory: true,
-				baseroute
+				baseroute,
 			});
 		}
 	},
@@ -221,14 +219,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-	setContextualTitle (context) {
+	setContextualTitle(context) {
 		this.setTitle(context + ' - ' + this.activeEntity.get('displayName'));
 	},
 
-	showAbout () {
+	showAbout() {
 		this.updateHeader();
 		this.stopCleanup();
-
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isAbout]');
@@ -246,14 +243,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				component: User.About,
 				user: this.interfaceEntity,
 				addHistory: true,
-				baseroute
+				baseroute,
 			});
 		}
 	},
 
-
-
-	showActivity (route, subRoute) {
+	showActivity(route, subRoute) {
 		this.updateHeader();
 		this.stopCleanup();
 
@@ -263,18 +258,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (!cmp) {
 			cmp = this.setActive({
-				xtype: 'profile-user-activity'
+				xtype: 'profile-user-activity',
 			});
 
 			this.addChildRouter(cmp);
 		}
 
-		return cmp.userChanged(this.activeEntity, this.isMe)
+		return cmp
+			.userChanged(this.activeEntity, this.isMe)
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-
-	showMembership (route, subRoute) {
+	showMembership(route, subRoute) {
 		this.updateHeader();
 		this.stopCleanup();
 
@@ -284,16 +279,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (!cmp) {
 			cmp = this.setActive({
-				xtype: 'user-profile-membership'
+				xtype: 'user-profile-membership',
 			});
 		}
 
-		return cmp.userChanged(this.activeEntity, this.isMe)
+		return cmp
+			.userChanged(this.activeEntity, this.isMe)
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-
-	showAchievements () {
+	showAchievements() {
 		this.updateHeader();
 		this.stopCleanup();
 
@@ -309,13 +304,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				component: User.Achievements,
 				entity: this.interfaceEntity,
 				addHistory: true,
-				baseroute
+				baseroute,
 			});
 		}
 	},
 
-
-	showTranscripts () {
+	showTranscripts() {
 		this.updateHeader();
 		this.stopCleanup();
 
@@ -333,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				component: User.Transcripts,
 				entity: this.interfaceEntity,
 				addHistory: true,
-				baseroute
+				baseroute,
 			});
 		}
 	},
@@ -342,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		// Select the activity tab.
 		return {
 			path: '/activity/',
-			isFull: true
+			isFull: true,
 		};
 	},
 
@@ -356,10 +350,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		return {
 			path: typeof root === 'string' ? root : '',
-			isFull: true
+			isFull: true,
 		};
-	}
-
+	},
 
 	// showUser () {
 	// 	const baseroute = this.getBaseRoute();
@@ -374,7 +367,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	// 			baseroute: this.getBaseRoute()
 	// 		});
 	// 	}
-
 
 	// 	this.NavActions.updateNavBar({
 	// 		hideBranding: true

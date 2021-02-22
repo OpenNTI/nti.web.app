@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.Webinar', {
 	},
 
 	fields: [
-		{name: 'subject', type: 'string'},
-		{name: 'description', type: 'string'}
-	]
+		{ name: 'subject', type: 'string' },
+		{ name: 'description', type: 'string' },
+	],
 });

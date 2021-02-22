@@ -1,10 +1,10 @@
 /*globals $AppConfig*/
-import {Stores} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
 
 import BaseModel from 'legacy/model/Base';
 
-async function getHistory (assignmentId, assignments) {
+async function getHistory(assignmentId, assignments) {
 	try {
 		const history = await assignments.getHistoryItem(assignmentId, true);
 
@@ -15,10 +15,12 @@ async function getHistory (assignmentId, assignments) {
 }
 
 export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundStore {
-	async load () {
-		const {assignment, course} = this.binding;
+	async load() {
+		const { assignment, course } = this.binding;
 
-		if (this.assignment === assignment && this.course === course) { return; }
+		if (this.assignment === assignment && this.course === course) {
+			return;
+		}
 
 		this.assignment = assignment;
 		this.course = course;
@@ -26,16 +28,21 @@ export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundSto
 		this.set({
 			loading: true,
 			assignment: null,
-			history: null
+			history: null,
 		});
 
-
 		try {
-			const assignmentId = assignment['Target-NTIID'] || assignment.getID();
+			const assignmentId =
+				assignment['Target-NTIID'] || assignment.getID();
 			const courseModel = BaseModel.interfaceToModel(course);
 			const assignmentsModel = await courseModel.getAssignments();
-			const assignmentModel = await assignmentsModel.fetchAssignment(assignmentId);
-			const historyModel = await getHistory(assignmentId, assignmentsModel);
+			const assignmentModel = await assignmentsModel.fetchAssignment(
+				assignmentId
+			);
+			const historyModel = await getHistory(
+				assignmentId,
+				assignmentsModel
+			);
 
 			this.set({
 				loading: false,
@@ -43,18 +50,17 @@ export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundSto
 				assignmentsModel,
 				assignmentModel,
 				historyModel,
-				student: $AppConfig.userObject
+				student: $AppConfig.userObject,
 			});
 		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}
 
-
-	async updateHistoryItem (submittedId, historyItemLink) {
+	async updateHistoryItem(submittedId, historyItemLink) {
 		const assignments = this.get('assignmentsModel');
 
 		try {
@@ -67,12 +73,12 @@ export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundSto
 			assignments.updateHistoryItem(submittedId, container);
 
 			this.set({
-				historyModel
+				historyModel,
 			});
 
 			return {
 				historyModel,
-				container
+				container,
 			};
 		} catch (e) {
 			return null;

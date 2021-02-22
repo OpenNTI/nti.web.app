@@ -5,200 +5,256 @@ const Globals = require('legacy/util/Globals');
 
 require('legacy/app/contentviewer/overlay/Panel');
 
+module.exports = exports = Ext.define(
+	'NextThought.common.components.cards.CardTarget',
+	{
+		extend: 'NextThought.app.contentviewer.overlay.Panel',
+		alias: 'widget.overlay-card-target',
+		representsUserDataContainer: true,
+		ui: 'content-card',
+		cls: 'content-card-target-container',
 
-module.exports = exports = Ext.define('NextThought.common.components.cards.CardTarget', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-card-target',
-	representsUserDataContainer: true,
-	ui: 'content-card',
-	cls: 'content-card-target-container',
+		setupContentElement: function () {
+			this.callParent(arguments);
+			Ext.fly(this.contentElement).setStyle({
+				margin: '45px 0 0 0',
+			});
+		},
 
-	setupContentElement: function () {
-		this.callParent(arguments);
-		Ext.fly(this.contentElement).setStyle({
-			margin: '45px 0 0 0'
-		});
-	},
+		syncTop: function () {
+			if (!this.contentElement) {
+				return;
+			}
+			var ctTop = this.el.up('.x-reader-pane').getY(),
+				top = 10 + ctTop;
 
-	syncTop: function () {
-		if (!this.contentElement) {return;}
-		var ctTop = this.el.up('.x-reader-pane').getY(),
-			top = (10 + ctTop);
+			if (top !== this.cachedTop) {
+				this.cachedTop = top;
+				this.el.setY(top);
+				this.viewportMonitor();
+			}
 
-		if (top !== this.cachedTop) {
-			this.cachedTop = top;
-			this.el.setY(top);
-			this.viewportMonitor();
-		}
+			return top;
+		},
 
-		return top;
-	},
+		constructor: function (config) {
+			if (!config || !config.contentElement) {
+				throw new Error('you must supply a contentElement');
+			}
 
-	constructor: function (config) {
-		if (!config || !config.contentElement) {
-			throw new Error('you must supply a contentElement');
-		}
+			let version,
+				data = DomUtils.parseDomObject(config.contentElement);
+			let nativeSupport = Globals.hasPDFSupport();
+			// let anchorAttr = 'class=\'link\' target=\'_blank\'';
+			// let chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>';
+			// let safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>';
+			// let ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>';
+			// let ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
 
-		let version, data = DomUtils.parseDomObject(config.contentElement);
-		let nativeSupport = Globals.hasPDFSupport();
-		// let anchorAttr = 'class=\'link\' target=\'_blank\'';
-		// let chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>';
-		// let safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>';
-		// let ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>';
-		// let ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
+			//the data-href has the adjusted href.
+			data.href = data['attribute-data-href'];
 
-		//the data-href has the adjusted href.
-		data.href = data['attribute-data-href'];
+			this.viewportMonitor = Ext.Function.createBuffered(
+				this.viewportMonitor,
+				100,
+				this,
+				null
+			);
 
-		this.viewportMonitor = Ext.Function.createBuffered(this.viewportMonitor, 100, this, null);
+			config.layout = 'fit';
 
-		config.layout = 'fit';
+			this.callParent([config]);
+			this.reader.getScroll().lock();
+			Ext.EventManager.onWindowResize(this.viewportMonitor, this);
 
-		this.callParent([config]);
-		this.reader.getScroll().lock();
-		Ext.EventManager.onWindowResize(this.viewportMonitor, this);
+			if (Ext.isGecko) {
+				version = /Firefox\/(\d+\.\d+)/.exec(navigator.userAgent)[1];
+				version = parseInt(version, 10);
+			}
 
-		if (Ext.isGecko) {
-			version = /Firefox\/(\d+\.\d+)/.exec(navigator.userAgent)[1];
-			version = parseInt(version, 10);
-		}
+			//Not supported in mobile. Telling them to update to latest version would be confusing.
+			if (Ext.is.iOS) {
+				this.add({
+					xtype: 'box',
+					renderTpl: Ext.DomHelper.markup({
+						cls: 'no-support',
+						'data-link': data.href,
+						cn: [
+							{
+								cls: 'message',
+								html:
+									'{{{NextThought.view.cards.CardTarget.no-mobile-support}}}',
+							},
+						],
+					}),
+				});
+				return;
+			}
 
-		//Not supported in mobile. Telling them to update to latest version would be confusing.
-		if (Ext.is.iOS) {
+			if (
+				(version && version <= 18) ||
+				(!nativeSupport && !Ext.isGecko)
+			) {
+				this.addUnsupported(data);
+				return;
+			}
+
+			this.addIframe(data);
+
+			this.mon(
+				this.reader,
+				'allow-custom-scrolling',
+				function () {
+					return false;
+				},
+				this
+			);
+		},
+
+		resolveHref: function (data) {
+			return Promise.resolve(data.href);
+		},
+
+		resolveTargetMimeType: function (data) {
+			return Promise.resolve(data.targetMimeType);
+		},
+
+		addIframe: function (data) {
+			var me = this;
+
+			return Promise.all([
+				this.resolveHref(data),
+				this.resolveTargetMimeType(data),
+			]).then(function (results) {
+				me.addIframeFromHref(results[0], results[1]);
+			});
+		},
+
+		addIframeFromHref: function (href, targetMimeType) {
+			this.add({
+				xtype: 'box',
+				autoEl: {
+					tag: Ext.isIE10m ? 'object' : 'iframe',
+					src: href,
+					data: href,
+					type: targetMimeType || 'application/pdf',
+					border: 0,
+					frameBorder: 0,
+				},
+			});
+		},
+
+		addUnsupported: function (data) {
+			return this.resolveHref(data).then(
+				this.addUnsupportedForHref.bind(this)
+			);
+		},
+
+		addUnsupportedForHref: function (href) {
+			var anchorAttr = "class='link' target='_blank'",
+				chrome =
+					'<a ' +
+					anchorAttr +
+					" href='http://www.google.com/chrome'>Chrome,</a>",
+				safari =
+					'<a ' +
+					anchorAttr +
+					" href='http://www.apple.com/safari/download/'>Safari,</a>",
+				ff =
+					'<a ' +
+					anchorAttr +
+					" href='http://www.getfirefox.com'>Firefox,</a>",
+				ie =
+					'<a ' +
+					anchorAttr +
+					" href='http://www.microsoft.com/ie'>Internet Explorer.</a>";
+
 			this.add({
 				xtype: 'box',
 				renderTpl: Ext.DomHelper.markup({
-					cls: 'no-support', 'data-link': data.href, cn: [
-						{ cls: 'message', html: '{{{NextThought.view.cards.CardTarget.no-mobile-support}}}'}
-					]
-				})
+					cls: 'no-support',
+					cn: [
+						{
+							cls: 'message',
+							html:
+								'Your browser does not currently support viewing PDF files.',
+						},
+						{
+							cls: '',
+							cn: [
+								{
+									tag: 'a',
+									cls: 'link',
+									href: 'https://get.adobe.com/reader/',
+									target: '_blank',
+									html: 'Install Adobe Acrobat Reader ',
+								},
+								'or try the latest version of one of the following browsers:<br>',
+								chrome,
+								' ',
+								safari,
+								' ',
+								ff,
+								' ',
+								ie,
+							],
+						},
+						'<br>',
+						{
+							cls: '',
+							cn: [
+								{
+									tag: 'a',
+									cls: 'link',
+									href: href,
+									html: 'Download the PDF',
+								},
+							],
+						},
+					],
+				}),
 			});
-			return;
-		}
+		},
 
-		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko)) {
-			this.addUnsupported(data);
-			return;
-		}
+		onDestroy: function () {
+			this.reader.getScroll().unlock();
+			Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
+			this.callParent(arguments);
+		},
 
-		this.addIframe(data);
+		viewportMonitor: function () {
+			try {
+				var margin = 15,
+					y = this.cachedY,
+					h = Ext.dom.Element.getViewportHeight() - y - margin;
 
-		this.mon(this.reader, 'allow-custom-scrolling', function () {
-			return false;
-		}, this);
-	},
-
-	resolveHref: function (data) {
-		return Promise.resolve(data.href);
-	},
-
-	resolveTargetMimeType: function (data) {
-		return Promise.resolve(data.targetMimeType);
-	},
-
-	addIframe: function (data) {
-		var me = this;
-
-		return Promise.all([
-			this.resolveHref(data),
-			this.resolveTargetMimeType(data)
-		]).then(function (results) {
-			me.addIframeFromHref(results[0], results[1]);
-		});
-	},
-
-	addIframeFromHref: function (href, targetMimeType) {
-		this.add({
-			xtype: 'box',
-			autoEl: {
-				tag: Ext.isIE10m ? 'object' : 'iframe',
-				src: href,
-				data: href,
-				type: targetMimeType || 'application/pdf',
-				border: 0,
-				frameBorder: 0
+				if (this.getHeight() !== h) {
+					this.setHeight(h);
+				}
+			} catch (e) {
+				console.warn(e.message);
 			}
-		});
-	},
+		},
 
-	addUnsupported: function (data) {
-		return this.resolveHref(data)
-			.then(this.addUnsupportedForHref.bind(this));
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	addUnsupportedForHref: function (href) {
-		var anchorAttr = 'class=\'link\' target=\'_blank\'',
-			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
-			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
-			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>',
-			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
+			this.cachedY = this.getY();
 
+			this.viewportMonitor();
+			//	this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
+			//		click: function(){
+			//			history.back();
+			//		}
+			//	});
+		},
 
-		this.add({
-			xtype: 'box',
-			renderTpl: Ext.DomHelper.markup({
-				cls: 'no-support', cn: [
-					{cls: 'message', html: 'Your browser does not currently support viewing PDF files.'},
-					{cls: '', cn: [
-						{tag: 'a', cls: 'link', href: 'https://get.adobe.com/reader/', target: '_blank', html: 'Install Adobe Acrobat Reader '},
-						'or try the latest version of one of the following browsers:<br>',
-						chrome,
-						' ',
-						safari,
-						' ',
-						ff,
-						' ',
-						ie
-					]},
-					'<br>',
-					{cls: '', cn: [
-						{tag: 'a', cls: 'link', href: href, html: 'Download the PDF'}
-					]}
-				]
-			})
-		});
-	},
+		findLine: function () {
+			var doc = this.contentElement.ownerDocument,
+				range = doc.createRange();
 
-	onDestroy: function () {
-		this.reader.getScroll().unlock();
-		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
-		this.callParent(arguments);
-	},
-
-	viewportMonitor: function () {
-		try {
-
-			var margin = 15,
-				y = this.cachedY,
-				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
-
-			if (this.getHeight() !== h) {
-				this.setHeight(h);
-			}
-		}
-		catch (e) {
-			console.warn(e.message);
-		}
-	},
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		this.cachedY = this.getY();
-
-		this.viewportMonitor();
-		//	this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
-		//		click: function(){
-		//			history.back();
-		//		}
-		//	});
-	},
-
-	findLine: function () {
-		var doc = this.contentElement.ownerDocument,
-			range = doc.createRange();
-
-		range.selectNodeContents(this.contentElement);
-		return {range: range, rect: {top: 267}};
+			range.selectNodeContents(this.contentElement);
+			return { range: range, rect: { top: 267 } };
+		},
 	}
-});
+);

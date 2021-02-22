@@ -1,4 +1,3 @@
-
 @mixin chat-history-item {
 	margin: 15px;
 	padding-left: 30px;
@@ -12,7 +11,8 @@
 		content: ' ';
 		height: 14px;
 		width: 18px;
-		background: url(../images/old_sprites/spr_activity_icons.png) -2px -24px no-repeat;
+		background: url(../images/old_sprites/spr_activity_icons.png) -2px -24px
+			no-repeat;
 	}
 
 	.occupants {
@@ -54,7 +54,9 @@
 			.time {
 				font-weight: 700;
 				font-size: 9px;
-				.started { display: none; }
+				.started {
+					display: none;
+				}
 			}
 		}
 	}
@@ -73,14 +75,19 @@
 		padding-top: 12px;
 	}
 
-	.divider + .post, .divider + .comment {
+	.divider + .post,
+	.divider + .comment {
 		box-shadow: none !important;
 		border-top: none !important;
 	}
 
-	div.history:first-of-type { margin-top: 10px; }
+	div.history:first-of-type {
+		margin-top: 10px;
+	}
 
-	.divider + div.history:first-of-type { margin-top: 0; }
+	.divider + div.history:first-of-type {
+		margin-top: 0;
+	}
 
 	.history {
 		&:first-of-type:not(.notification) {
@@ -114,8 +121,9 @@
 					font-style: italic;
 				}
 
-				&.quote::before, &.quote::after {
-					content: '"';//"
+				&.quote::before,
+				&.quote::after {
+					content: '"'; //"
 				}
 			}
 
@@ -129,7 +137,9 @@
 				@include chat-history-item;
 
 				.time {
-					.date { display: none; }
+					.date {
+						display: none;
+					}
 				}
 			}
 
@@ -139,12 +149,16 @@
 			&.favorite {
 				margin: 0 20px;
 
-				.path,.location, .tags, .title {
+				.path,
+				.location,
+				.tags,
+				.title {
 					color: var(--tertiary-grey);
 					font-family: var(--body-font-family);
 				}
 
-				.path, .title {
+				.path,
+				.title {
 					font-size: 10px;
 					font-weight: 600;
 					text-transform: uppercase;
@@ -154,7 +168,9 @@
 					overflow: hidden;
 				}
 
-				.location, .text, .tags {
+				.location,
+				.text,
+				.tags {
 					font-size: 14px;
 					font-weight: 500;
 					font-style: italic;
@@ -215,7 +231,8 @@
 					text-transform: uppercase;
 				}
 
-				.title, .tags {
+				.title,
+				.tags {
 					font-size: 12px;
 				}
 			}
@@ -265,7 +282,8 @@
 
 					background: none;
 
-					&::before, &::after {
+					&::before,
+					&::after {
 						display: none;
 					}
 				}

@@ -1,11 +1,14 @@
-
 .x-component-nt.pointer {
 	position: absolute;
 	overflow: hidden;
 
 	@include sprite($rhp_flyout_nib_wht);
 
-	&.grey { @include sprite($rhp_flyout_nib_gry); }
+	&.grey {
+		@include sprite($rhp_flyout_nib_gry);
+	}
 
-	&.contact { @include sprite($add_contact_pointer2); }
+	&.contact {
+		@include sprite($add_contact_pointer2);
+	}
 }

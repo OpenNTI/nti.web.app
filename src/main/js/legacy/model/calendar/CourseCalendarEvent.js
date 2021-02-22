@@ -10,6 +10,5 @@ module.exports = exports = Ext.define('NextThought.model.CourseCalendarEvent', {
 		mimeType: 'application/vnd.nextthought.courseware.coursecalendarevent',
 	},
 
-	fields: []
-
+	fields: [],
 });

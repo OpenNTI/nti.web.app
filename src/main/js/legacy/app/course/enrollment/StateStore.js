@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 
@@ -10,82 +10,89 @@ const StoreEnrollment = require('./options/StoreEnrollment');
 
 require('legacy/common/StateStore');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.StateStore',
+	{
+		extend: 'NextThought.common.StateStore',
+		__optionMap: {},
+		__Options: [],
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateStore', {
-	extend: 'NextThought.common.StateStore',
-	__optionMap: {},
-	__Options: [],
+		constructor: function () {
+			this.callParent(arguments);
 
-	constructor: function () {
-		this.callParent(arguments);
+			this.addOption(OpenEnrollment);
+			this.addOption(FiveminuteEnrollment);
+			this.addOption(StoreEnrollment);
+			this.CourseStore = CoursesStateStore.getInstance();
+		},
 
-		this.addOption(OpenEnrollment);
-		this.addOption(FiveminuteEnrollment);
-		this.addOption(StoreEnrollment);
-		this.CourseStore = CoursesStateStore.getInstance();
-	},
+		getBasePriority: function () {
+			return {
+				OpenEnrollment: 3,
+				StoreEnrollment: 2,
+				FiveminuteEnrollment: 1,
+			};
+		},
 
-	getBasePriority: function () {
-		return {
-			OpenEnrollment: 3,
-			StoreEnrollment: 2,
-			FiveminuteEnrollment: 1
-		};
-	},
+		addOption: function (option) {
+			this.__optionMap[option.NAME] = option;
 
-	addOption: function (option) {
-		this.__optionMap[option.NAME] = option;
-
-		this.__Options.push({
-			name: option.NAME,
-			base: option.isBase
-		});
-	},
-
-	getOption: function (name) {
-		return this.__optionMap[name] || {};
-	},
-
-	getEnrolledText: function (course) {
-		var me = this,
-			text = '';
-
-		if (course) {
-			me.forEachOption(function (option) {
-				var courseOption = course.getEnrollmentOption(option.name);
-
-				if (courseOption && courseOption.IsEnrolled) {
-					text = me.getOption(option.name).getEnrolledWording();
-				}
+			this.__Options.push({
+				name: option.NAME,
+				base: option.isBase,
 			});
-		}
+		},
 
-		if (!text && course.get('enrolled')) {
-			if (course.get('isOpen')) {
-				text = getString('course-info.description-widget.open-enrolled');
-			} else {
-				text = getString('course-info.description-widget.enrolled');
+		getOption: function (name) {
+			return this.__optionMap[name] || {};
+		},
+
+		getEnrolledText: function (course) {
+			var me = this,
+				text = '';
+
+			if (course) {
+				me.forEachOption(function (option) {
+					var courseOption = course.getEnrollmentOption(option.name);
+
+					if (courseOption && courseOption.IsEnrolled) {
+						text = me.getOption(option.name).getEnrolledWording();
+					}
+				});
 			}
-		}
 
-		return text;
-	},
+			if (!text && course.get('enrolled')) {
+				if (course.get('isOpen')) {
+					text = getString(
+						'course-info.description-widget.open-enrolled'
+					);
+				} else {
+					text = getString('course-info.description-widget.enrolled');
+				}
+			}
 
-	/**
-	 * Takes a course and a type of enrollment and returns a list of steps
-	 * that have to be completed to enroll in that course.
-	 *
-	 * @param  {CourseCatalogEntry} course the course we are building the steps for
-	 * @param {string} enrollmentType the type of enrollment
-	 * @param {string} type a subtype of the enrollment gift, or redeem
-	 * @param {Array} config array of strings for the option to parse into the correct state
-	 * @returns {Array}		  an array of steps
-	 */
-	getEnrollmentSteps: function (course, enrollmentType, type, config) {
-		return this.getOption(enrollmentType).buildEnrollmentSteps(course, type, config);
-	},
+			return text;
+		},
 
-	/*
+		/**
+		 * Takes a course and a type of enrollment and returns a list of steps
+		 * that have to be completed to enroll in that course.
+		 *
+		 * @param  {CourseCatalogEntry} course the course we are building the steps for
+		 * @param {string} enrollmentType the type of enrollment
+		 * @param {string} type a subtype of the enrollment gift, or redeem
+		 * @param {Array} config array of strings for the option to parse into the correct state
+		 * @returns {Array}		  an array of steps
+		 */
+		getEnrollmentSteps: function (course, enrollmentType, type, config) {
+			return this.getOption(enrollmentType).buildEnrollmentSteps(
+				course,
+				type,
+				config
+			);
+		},
+
+		/*
 		Enrollment details are objects with the details about if the enrollment process is open, how long it will be open, when it
 		closes, if they have already enrolled in this option and how much it is.
 
@@ -102,81 +109,86 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		}
 	 */
 
-	/**
-	 * Returns the details about the different enrollment options
-	 *
-	 * @param  {CourseCatalogEntry} course		   The course we are getting the options for
-	 * @returns {Promise}				fulfills with information needed to show the enrollment options
-	 */
-	getEnrollmentDetails: function (course) {
-		var p, catalogData = {
-				StartDate: course.get('StartDate'),
-				EndDate: course.get('EndDate'),
-				Enrolled: course.isActive(),
-				Options: {}
-			}, c;
+		/**
+		 * Returns the details about the different enrollment options
+		 *
+		 * @param  {CourseCatalogEntry} course		   The course we are getting the options for
+		 * @returns {Promise}				fulfills with information needed to show the enrollment options
+		 */
+		getEnrollmentDetails: function (course) {
+			var p,
+				catalogData = {
+					StartDate: course.get('StartDate'),
+					EndDate: course.get('EndDate'),
+					Enrolled: course.isActive(),
+					Options: {},
+				},
+				c;
 
-		if (catalogData.Enrolled) {
-			c = this.CourseStore.findCourseBy(course.findByMyCourseInstance());
-			p = Promise.resolve(c)
-				.then(function (instance) {
-					if (instance) {
-						catalogData.EnrolledStartDate = instance.get('CreatedTime');
-					}
+			if (catalogData.Enrolled) {
+				c = this.CourseStore.findCourseBy(
+					course.findByMyCourseInstance()
+				);
+				p = Promise.resolve(c)
+					.then(function (instance) {
+						if (instance) {
+							catalogData.EnrolledStartDate = instance.get(
+								'CreatedTime'
+							);
+						}
+					})
+					.catch(function (reason) {
+						console.error('Failed to find course instance', reason);
+					});
+			} else {
+				p = Promise.resolve();
+			}
+
+			return p
+				.then(function () {
+					return catalogData;
 				})
-				.catch(function (reason) {
-					console.error('Failed to find course instance', reason);
+				.then(this.__fillInOptionDetails.bind(this, course));
+		},
+
+		getGiftDetails: function (course) {
+			var me = this,
+				catalogData = {
+					Enrolled: course.isActive(),
+				};
+
+			return new Promise(function (fulfill, reject) {
+				var wording;
+
+				me.forEachOption(function (option) {
+					option = me.getOption(option.name);
+
+					if (option.buildGiftOptions) {
+						wording = option.buildGiftOptions(course, catalogData);
+					}
 				});
-		} else {
-			p = Promise.resolve();
-		}
 
+				fulfill(wording || {});
+			});
+		},
 
-		return p
-			.then(function () {
-				return catalogData;
-			})
-			.then(this.__fillInOptionDetails.bind(this, course));
+		__fillInOptionDetails: function (course, catalogData) {
+			var me = this;
 
+			this.forEachOption(function (option) {
+				var name = option.name;
 
-	},
-
-	getGiftDetails: function (course) {
-		var me = this,
-			catalogData = {
-				Enrolled: course.isActive()
-			};
-
-
-		return new Promise(function (fulfill, reject) {
-			var wording;
-
-			me.forEachOption(function (option) {
-				option = me.getOption(option.name);
-
-				if (option.buildGiftOptions) {
-					wording = option.buildGiftOptions(course, catalogData);
-				}
+				catalogData.Options[name] = me
+					.getOption(name)
+					.buildEnrollmentDetails(course, catalogData);
 			});
 
-			fulfill(wording || {});
-		});
-	},
+			return catalogData;
+		},
 
-	__fillInOptionDetails: function (course, catalogData) {
-		var me = this;
-
-		this.forEachOption(function (option) {
-			var name = option.name;
-
-			catalogData.Options[name] = me.getOption(name).buildEnrollmentDetails(course, catalogData);
-		});
-
-		return catalogData;
-	},
-
-	//a shortcut for CourseWareUtils.Enrollment.__Options.forEach
-	forEachOption: function (fn) {
-		this.__Options.forEach(fn);
+		//a shortcut for CourseWareUtils.Enrollment.__Options.forEach
+		forEachOption: function (fn) {
+			this.__Options.forEach(fn);
+		},
 	}
-});
+);

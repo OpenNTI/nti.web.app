@@ -2,27 +2,28 @@ const Ext = require('@nti/extjs');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('AnnotationUtils', () => require('legacy/util/Annotations'))
-	.get('ParseUtils', ()=> require('./Parsing'))
+	.get('ParseUtils', () => require('./Parsing'))
 	.get('LibraryStateStore', () => require('legacy/app/library/StateStore'));
 
 require('legacy/overrides/builtins/RegExp');
 
 const Globals = require('./Globals');
 
-const {getURL} = Globals;
-
+const { getURL } = Globals;
 
 module.exports = exports = Ext.define('NextThought.util.Content', {
-
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
 
 	CONTENT_VISIBILITY_MAP: {
-		'OU': 'OUID'
+		OU: 'OUID',
 	},
 
-	IGNORE_ROOTING: new RegExp(RegExp.escape('tag:nextthought.com,2011-10:Alibra-'), 'i'),
+	IGNORE_ROOTING: new RegExp(
+		RegExp.escape('tag:nextthought.com,2011-10:Alibra-'),
+		'i'
+	),
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -46,7 +47,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		// have a 'OUID' on the user record, we will check for its existence.
 		// TODO: we need to define what this 'visibility' means for an AppUser in general (rather than just OU) or
 		// have a convention on how have we resolve it.
-		return !attr || u.hasVisibilityField(attr) || attr === status || (/everyone/i).test(attr);
+		return (
+			!attr ||
+			u.hasVisibilityField(attr) ||
+			attr === status ||
+			/everyone/i.test(attr)
+		);
 	},
 
 	getNTIIDFromThing: function (thing) {
@@ -55,17 +61,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		if (thing && thing.getAttribute) {
 			ntiid = thing.getAttribute('ntiid');
 		} else if (thing && thing.isModel) {
-			ntiid = thing.get('ContainerId') || thing.get('containerId') || thing.get('NTIID') || thing.getId();
+			ntiid =
+				thing.get('ContainerId') ||
+				thing.get('containerId') ||
+				thing.get('NTIID') ||
+				thing.getId();
 		}
 
 		return ntiid || thing;
 	},
 
-
-	__getContentPackages (x) {
+	__getContentPackages(x) {
 		return x.getContentPackages ? x.getContentPackages() : [];
 	},
-
 
 	__resolveTocs: function (bundleOrTocOrNTIID) {
 		var x = bundleOrTocOrNTIID,
@@ -84,7 +92,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return load;
 	},
 
-
 	__resolveTocFor: function (bundle, ID) {
 		let load;
 
@@ -98,12 +105,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	__findNode: function (ntiid, toc) {
-		function getNode (node) {
+		function getNode(node) {
 			return {
 				toc: toc,
 				location: node,
 				NTIID: ntiid,
-				ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
+				ContentNTIID: node.ownerDocument.documentElement.getAttribute(
+					'ntiid'
+				),
 			};
 		}
 
@@ -116,8 +125,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				'related[ntiid="' + escaped + '"]',
 				'object[ntiid="' + escaped + '"]',
 				'unit[ntiid="' + escaped + '"]',
-				'topic[ntiid="' + escaped + '"]'
-			], i, node;
+				'topic[ntiid="' + escaped + '"]',
+			],
+			i,
+			node;
 
 		for (i = 0; i < selectors.length; i++) {
 			node = toc.querySelector(selectors[i]);
@@ -130,7 +141,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9+-.]*):)/i,
-
 
 	/**
 	 * Detect whether or not a uri is pointing out of the site
@@ -156,24 +166,24 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @returns {Promise}					fulfills with the nodes
 	 */
 	getNodes: function (ntiid, bundleOrTocOrNTIID) {
-		var result, me = this;
+		var result,
+			me = this;
 
 		result = me.findCache[ntiid];
 
 		if (!result) {
-			result = me.__resolveTocs(bundleOrTocOrNTIID)
-				.then(function (tocs) {
-					var nodes = (tocs || []).map(function (toc) {
-						return me.__findNode(ntiid, toc);
-					});
-
-					//filter out falsy values
-					nodes = nodes.filter(function (node) {
-						return !!node;
-					});
-
-					return nodes;
+			result = me.__resolveTocs(bundleOrTocOrNTIID).then(function (tocs) {
+				var nodes = (tocs || []).map(function (toc) {
+					return me.__findNode(ntiid, toc);
 				});
+
+				//filter out falsy values
+				nodes = nodes.filter(function (node) {
+					return !!node;
+				});
+
+				return nodes;
+			});
 
 			me.findCache[ntiid] === result;
 		}
@@ -186,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return Promise.resolve([]);
 		}
 
-		function mapNode (node) {
+		function mapNode(node) {
 			var lineage = [],
 				value;
 
@@ -207,10 +217,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return lineage;
 		}
 
-		return this.getNodes(ntiid, bundleOrToc)
-			.then(function (nodes) {
-				return (nodes || []).map(mapNode);
-			});
+		return this.getNodes(ntiid, bundleOrToc).then(function (nodes) {
+			return (nodes || []).map(mapNode);
+		});
 	},
 
 	/**
@@ -273,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		this.libraryMon = this.mon(this.LibraryStore, {
 			destroyable: true,
-			loaded: this.clearCache.bind(this)
+			loaded: this.clearCache.bind(this),
 		});
 	},
 
@@ -292,9 +301,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	getLocation: function (ntiid, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
 
-		var me = this, result;
+		var me = this,
+			result;
 
-		function getAttribute (elements, attr) {
+		function getAttribute(elements, attr) {
 			var i, value;
 
 			for (i = 0; i < elements.length; i++) {
@@ -314,40 +324,57 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return null;
 		}
 
-		function mapNode (node, realPageIndex) {
+		function mapNode(node, realPageIndex) {
 			var doc = node.toc && node.toc.documentElement,
 				loc = node.location;
 
-			return Ext.apply({
-				NTIID: ntiid,
-				realPages: realPageIndex ? realPageIndex.NTIIDs[ntiid] : null,
-				icon: getAttribute([loc, doc], 'icon'),
-				isCourse: (getAttribute([loc, doc], 'isCourse') || '').toLowerCase() === 'true',
-				root: getAttribute([loc, doc], 'base'),
-				title: getAttribute([loc, doc], 'title'),
-				label: getAttribute([loc, doc], 'label'),
-				thumbnail: getAttribute([loc, doc], 'thumbnail'),
-				getIcon: function (fromBook) {
-					var iconPath = fromBook ? this.title.get('icon') : this.icon;
+			return Ext.apply(
+				{
+					NTIID: ntiid,
+					realPages: realPageIndex
+						? realPageIndex.NTIIDs[ntiid]
+						: null,
+					icon: getAttribute([loc, doc], 'icon'),
+					isCourse:
+						(
+							getAttribute([loc, doc], 'isCourse') || ''
+						).toLowerCase() === 'true',
+					root: getAttribute([loc, doc], 'base'),
+					title: getAttribute([loc, doc], 'title'),
+					label: getAttribute([loc, doc], 'label'),
+					thumbnail: getAttribute([loc, doc], 'thumbnail'),
+					getIcon: function (fromBook) {
+						var iconPath = fromBook
+							? this.title.get('icon')
+							: this.icon;
 
-					if (this.root && iconPath.substr(0, this.root.length) !== this.root) {
-						iconPath = this.root + this.icon;
-					}
+						if (
+							this.root &&
+							iconPath.substr(0, this.root.length) !== this.root
+						) {
+							iconPath = this.root + this.icon;
+						}
 
-					return iconPath;
+						return iconPath;
+					},
+					getPathLabel: function () {
+						return me
+							.getLineageLabels(this.NTIID, bundleOrToc)
+							.then(function (lineages) {
+								var lineage = lineages[0],
+									sep =
+										lineage.length <= 2 ? ' / ' : ' /.../ ',
+									base = lineage.last() || '',
+									leaf = lineage.first();
+
+								return lineage.length <= 1
+									? base
+									: base + sep + leaf;
+							});
+					},
 				},
-				getPathLabel: function () {
-					return me.getLineageLabels(this.NTIID, bundleOrToc)
-						.then(function (lineages) {
-							var lineage = lineages[0],
-								sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
-								base = lineage.last() || '',
-								leaf = lineage.first();
-
-							return lineage.length <= 1 ? base : base + sep + leaf;
-						});
-				}
-			}, node);
+				node
+			);
 		}
 
 		me.listenToLibrary();
@@ -357,16 +384,18 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		if (!result) {
 			result = Promise.all([
 				this.getNodes(ntiid, bundleOrToc),
-				bundleOrToc.getContentPackageContaining(ntiid)
-					.then(contentPackage => contentPackage.getInterfaceInstance())
+				bundleOrToc
+					.getContentPackageContaining(ntiid)
+					.then(contentPackage =>
+						contentPackage.getInterfaceInstance()
+					)
 					.then(contentPackage => contentPackage.getRealPageIndex())
-					.catch(() => null)
-			])
-				.then((results) => {
-					const [nodes, realPageIndex] = results;
+					.catch(() => null),
+			]).then(results => {
+				const [nodes, realPageIndex] = results;
 
-					return (nodes || []).map(n => mapNode(n, realPageIndex));
-				});
+				return (nodes || []).map(n => mapNode(n, realPageIndex));
+			});
 
 			me.cache[ntiid] = result;
 		}
@@ -382,39 +411,52 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			previous: null,
 			next: null,
 			previousTitle: '',
-			nextTitle: ''
+			nextTitle: '',
 		};
 	},
 
 	__getNavInfoFromToc: function (node, toc, rootId) {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
-			prev, next, prevTitle, nextTitle,
-			prevNode, nextNode,
-			walker, visibleNodes, currentIndex,
+			prev,
+			next,
+			prevTitle,
+			nextTitle,
+			prevNode,
+			nextNode,
+			walker,
+			visibleNodes,
+			currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
-		function maybeBlocker (id) {
-			return (!id || /\.blocker(\.)?/ig.test(id)) ? true : false;
+		function maybeBlocker(id) {
+			return !id || /\.blocker(\.)?/gi.test(id) ? true : false;
 		}
 
-		function isTopicOrToc (n) {
-			if (!n) { return false; }
+		function isTopicOrToc(n) {
+			if (!n) {
+				return false;
+			}
 
 			var result = NodeFilter.FILTER_SKIP,
 				topicOrToc = topicOrTocRegex.test(n.tagName),
-				href = (n.getAttribute) ? n.getAttribute('href') : null;
+				href = n.getAttribute ? n.getAttribute('href') : null;
 
 			//decide if this is a navigate-able thing, it must be a topic or toc, it must
 			//have an href, and that hre must NOT have a fragment
-			if (topicOrToc && href && href.lastIndexOf('#') === -1 && !node.hasAttribute('suppressed')) {
+			if (
+				topicOrToc &&
+				href &&
+				href.lastIndexOf('#') === -1 &&
+				!node.hasAttribute('suppressed')
+			) {
 				result = NodeFilter.FILTER_ACCEPT;
 			}
 
 			return result;
 		}
 
-		function getRef (n) {
+		function getRef(n) {
 			if (!n || !n.getAttribute) {
 				return null;
 			}
@@ -422,8 +464,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return n.getAttribute('ntiid') || null;
 		}
 
-
-		function getTitle (n) {
+		function getTitle(n) {
 			if (!n || !n.getAttribute) {
 				return '';
 			}
@@ -431,14 +472,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return n.getAttribute('label') || '';
 		}
 
-
 		if (!node || !toc) {
 			return null;
 		}
 
 		//If we have a rootId, lets make that what we consider the root.
 		if (rootId) {
-			root = toc.querySelector('[ntiid="' + lazy.ParseUtils.escapeId(rootId) + '"]') || root;
+			root =
+				toc.querySelector(
+					'[ntiid="' + lazy.ParseUtils.escapeId(rootId) + '"]'
+				) || root;
 		}
 
 		if (node.hasAttribute('suppressed')) {
@@ -446,7 +489,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			onSuppressed = true;
 		}
 
-		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
+		visibleNodes = Array.prototype.slice.call(
+			root.querySelectorAll(
+				'topic[ntiid]:not([suppressed]):not([href*="#"])'
+			)
+		);
 		visibleNodes.unshift(root);
 
 		if (onSuppressed) {
@@ -456,7 +503,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		currentIndex = visibleNodes.indexOf(node);
 
 		if (node) {
-			walker = toc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, isTopicOrToc, false);
+			walker = toc.createTreeWalker(
+				root,
+				NodeFilter.SHOW_ELEMENT,
+				isTopicOrToc,
+				false
+			);
 
 			walker.currentNode = node;
 			prev = walker.previousNode();
@@ -493,7 +545,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			previousTitle: prevTitle,
 			nextTitle: nextTitle,
 			previousNode: prevNode,
-			nextNode: nextNode
+			nextNode: nextNode,
 		};
 	},
 
@@ -504,46 +556,55 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		return Promise.all([
 			this._getContentNavigationInfo(ntiid, rootId, bundleOrToc),
-			bundleOrToc.getContentPackageContaining(ntiid)
+			bundleOrToc
+				.getContentPackageContaining(ntiid)
 				.then(contentPackage => contentPackage.getInterfaceInstance())
 				.then(contentPackage => contentPackage.getRealPageIndex())
-				.catch(() => null)
-		])
-			.then((results) => {
-				const [navInfo, realPageIndex] = results;
+				.catch(() => null),
+		]).then(results => {
+			const [navInfo, realPageIndex] = results;
 
-				return realPageIndex ?
-					this._getRealPageNavigationInfo(realPageIndex, navInfo, ntiid, rootId) :
-					navInfo;
-			});
+			return realPageIndex
+				? this._getRealPageNavigationInfo(
+						realPageIndex,
+						navInfo,
+						ntiid,
+						rootId
+				  )
+				: navInfo;
+		});
 	},
 
-
-	_getRealPageNavigationInfo (realPageIndex, navInfo, ntiid, rootId) {
+	_getRealPageNavigationInfo(realPageIndex, navInfo, ntiid, rootId) {
 		const allPages = realPageIndex.NTIIDs[rootId];
 		const pages = realPageIndex.NTIIDs[ntiid];
 
-		if (!allPages || !pages || !allPages.length || !pages.length) { throw new Error('Invalid real pages'); }
+		if (!allPages || !pages || !allPages.length || !pages.length) {
+			throw new Error('Invalid real pages');
+		}
 
 		return {
 			...navInfo,
 			isRealPages: true,
 			realPageIndex,
 			pages: allPages,
-			page: pages[0]
+			page: pages[0],
 		};
 	},
 
-
-	_getContentNavigationInfo (ntiid, rootId, bundleOrToc) {
+	_getContentNavigationInfo(ntiid, rootId, bundleOrToc) {
 		if (!ntiid) {
 			return Promise.reject('No NTIID');
 		}
 
 		var me = this;
 
-		function mapNode (node) {
-			return me.__getNavInfoFromToc(node && node.location, node && node.toc, rootId);
+		function mapNode(node) {
+			return me.__getNavInfoFromToc(
+				node && node.location,
+				node && node.toc,
+				rootId
+			);
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
@@ -564,7 +625,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				} else if (bundleOrToc.canGetToContent) {
 					result = Promise.all([
 						bundleOrToc.canGetToContent(info.previous, rootId),
-						bundleOrToc.canGetToContent(info.next, rootId)
+						bundleOrToc.canGetToContent(info.next, rootId),
 					]).then(r => {
 						info.previous = r[0] ? info.previous : null;
 						info.next = r[1] ? info.next : null;
@@ -592,27 +653,28 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	getPageID: function (ntiid, bundleOrToc) {
 		var me = this;
 
-		function getPageInToc (toc) {
-			return me.getLineage(ntiid, toc)
-				.then(function (lineages) {
-					var l = (lineages && lineages[0]) || [],
-						i, href, node;
+		function getPageInToc(toc) {
+			return me.getLineage(ntiid, toc).then(function (lineages) {
+				var l = (lineages && lineages[0]) || [],
+					i,
+					href,
+					node;
 
-					for (; l.length > 0;) {
-						i = me.__findNode(l.shift(), toc);
+				for (; l.length > 0; ) {
+					i = me.__findNode(l.shift(), toc);
 
-						node = i && i.location;
-						href = node && node.getAttribute('href');
+					node = i && i.location;
+					href = node && node.getAttribute('href');
 
-						if (href && href.indexOf('#') < 0) {
-							return i.NTIID;
-						}
+					if (href && href.indexOf('#') < 0) {
+						return i.NTIID;
 					}
-				});
+				}
+			});
 		}
 
-
-		return me.__resolveTocs(bundleOrToc)
+		return me
+			.__resolveTocs(bundleOrToc)
 			.then(function (tocs) {
 				return Promise.all((tocs || []).map(getPageInToc));
 			})
@@ -628,29 +690,43 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return Promise.resolve(null);
 		}
 
-		return me.getNodes(ntiid, bundleOrToc)
-			.then(function (info) {
-				info = info && info[0];
+		return me.getNodes(ntiid, bundleOrToc).then(function (info) {
+			info = info && info[0];
 
-				if (!info) { return null; }
+			if (!info) {
+				return null;
+			}
 
-				var node;
+			var node;
 
+			node = info.location;
 
-				node = info.location;
-
-				while (node && node.parentNode) {
-					if (node.parentNode === node.ownerDocument.firstChild || node.parentNode === node.ownerDocument) { break; }
-
-					node = node.parentNode;
-
-					if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
-						console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
-					}
+			while (node && node.parentNode) {
+				if (
+					node.parentNode === node.ownerDocument.firstChild ||
+					node.parentNode === node.ownerDocument
+				) {
+					break;
 				}
 
-				return (node && node.getAttribute && node.getAttribute('ntiid')) || null;
-			});
+				node = node.parentNode;
+
+				if (
+					/\.blocker/i.test(
+						node.getAttribute && node.getAttribute('ntiid')
+					)
+				) {
+					console.error(
+						'\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n'
+					);
+				}
+			}
+
+			return (
+				(node && node.getAttribute && node.getAttribute('ntiid')) ||
+				null
+			);
+		});
 	},
 
 	getFirstTopic: function (node) {
@@ -663,7 +739,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		node = this.getFirstTopic(node);
 
 		for (node; node && node.nextSibling; node = node.nextSibling) {
-			if (!/topic/i.test(node.tagName) || (node.getAttribute('href') || '').indexOf('#') >= 0) {
+			if (
+				!/topic/i.test(node.tagName) ||
+				(node.getAttribute('href') || '').indexOf('#') >= 0
+			) {
 				continue;
 			}
 
@@ -677,10 +756,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		var ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
 			nodes = [];
 
-		function getSiblings (info) {
+		function getSiblings(info) {
 			var children,
 				p = node && node.parentNode,
-				courseNode = info && info.toc && info.toc.querySelector('unit[ntiid="' + ntiid + '"],lesson[topic-ntiid="' + ntiid + '"]');
+				courseNode =
+					info &&
+					info.toc &&
+					info.toc.querySelector(
+						'unit[ntiid="' +
+							ntiid +
+							'"],lesson[topic-ntiid="' +
+							ntiid +
+							'"]'
+					);
 
 			if (courseNode) {
 				p = courseNode.parentNode;
@@ -698,7 +786,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					return;
 				}
 
-				if (/content:related/i.test(child.tagName) && /^application\/vnd.nextthought\.content$/i.test(child.getAttribute('type'))) {
+				if (
+					/content:related/i.test(child.tagName) &&
+					/^application\/vnd.nextthought\.content$/i.test(
+						child.getAttribute('type')
+					)
+				) {
 					childId = child.getAttribute('href');
 				} else if (/lesson/i.test(child.tagName)) {
 					childId = child.getAttribute('topic-ntiid');
@@ -711,7 +804,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					return;
 				}
 
-				child = info && info.toc && info.toc.querySelector('topic[ntiid="' + childId + '"]');
+				child =
+					info &&
+					info.toc &&
+					info.toc.querySelector('topic[ntiid="' + childId + '"]');
 				if (child) {
 					nodes.push(child);
 				}
@@ -720,16 +816,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return nodes;
 		}
 
-		return this.getNodes(ntiid, bundleOrToc)
-			.then(function (infos) {
-				infos = (infos || []).map(getSiblings);
+		return this.getNodes(ntiid, bundleOrToc).then(function (infos) {
+			infos = (infos || []).map(getSiblings);
 
-				infos.filter(function (x) { return !!x; });
-
-				return infos[0];
+			infos.filter(function (x) {
+				return !!x;
 			});
-	},
 
+			return infos[0];
+		});
+	},
 
 	bustCorsForResources: function (string, name, value) {
 		//Look for things we know come out of a different domain
@@ -744,9 +840,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		//TODO Processing html with a regex is stupid
 		//consider parsing and using selectors here instead.  Note
 		//we omit things that contain query strings here
-		var regex = /(\S+)\s*=\s*"(((\/[^"/]+\/)||\/)resources\/[^?"]*?)"/igm;
+		var regex = /(\S+)\s*=\s*"(((\/[^"/]+\/)||\/)resources\/[^?"]*?)"/gim;
 
-		function cleanup (original, attr, url) {
+		function cleanup(original, attr, url) {
 			return attr + '="' + url + '?' + name + '=' + value + '"';
 		}
 
@@ -755,11 +851,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	fixReferences: function (string, basePath) {
 		var me = this,
-			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
+			envSalt = $AppConfig.corsSalt ? '?' + $AppConfig.corsSalt : '',
 			locationHash = String.hash(window.location.hostname + envSalt);
 
-		function fixReferences (original, attr, url) {
-			const {location} = global;
+		function fixReferences(original, attr, url) {
+			const { location } = global;
 			var firstChar = url.charAt(0),
 				absolute = firstChar === '/',
 				anchor = firstChar === '#',
@@ -776,20 +872,27 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					'rel=0',
 					'showinfo=0',
 					'wmode=opaque',
-					'origin=' + encodeURIComponent(location.protocol + '//' + location.host)];
+					'origin=' +
+						encodeURIComponent(
+							location.protocol + '//' + location.host
+						),
+				];
 
-				return Ext.String.format('src="{0}?{1}"',
+				return Ext.String.format(
+					'src="{0}?{1}"',
 					url.replace(/http:/i, 'https:').replace(/\?.*/i, ''),
-					params.join('&'));
+					params.join('&')
+				);
 			}
 
 			//inline
-			return (anchor || external || /^data:/i.test(url)) ?
-				original : attr + '="' + host + url + '"';
+			return anchor || external || /^data:/i.test(url)
+				? original
+				: attr + '="' + host + url + '"';
 		}
 
 		string = this.bustCorsForResources(string, 'h', locationHash);
-		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+		string = string.replace(/(src|href|poster)="(.*?)"/gim, fixReferences);
 		return string;
 	},
 
@@ -804,21 +907,25 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			df = document.createDocumentFragment(),
 			d = document.createElement('div'),
 			out = document.createElement('div'),
-			texts, c = 0,
+			texts,
+			c = 0,
 			r = document.createRange();
 
 		df.appendChild(d);
 		if (Ext.isString(html)) {
 			d.innerHTML = html;
-		}
-		else if (html && html.cloneNode) {
+		} else if (html && html.cloneNode) {
 			d.appendChild(html.cloneNode(true));
-		}
-		else {
+		} else {
 			Ext.Error.raise('IllegalArgument');
 		}
 
-		Ext.each(Ext.DomQuery.select('.body-divider .toolbar', d), function (e) { e.parentNode.removeChild(e); });
+		Ext.each(
+			Ext.DomQuery.select('.body-divider .toolbar', d),
+			function (e) {
+				e.parentNode.removeChild(e);
+			}
+		);
 		html = d.innerHTML; //filter out whiteboard controls
 
 		if (d.firstChild) {
@@ -832,15 +939,15 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				offset;
 
 			Ext.each(spaces.exec(v) || [], function (gap) {
-				o -= (gap.length - 1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
+				o -= gap.length - 1; //subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
 			});
 
-
-			if (o > max) { //Time to split!
+			if (o > max) {
+				//Time to split!
 				offset = max - c;
 				v = v.substr(offset);
 				v = i.exec(v);
-				offset += (v && v.length > 0 ? v[0].length : 0);
+				offset += v && v.length > 0 ? v[0].length : 0;
 				r.setEnd(t, offset);
 				return false;
 			}
@@ -862,12 +969,17 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		var path = this.getReadingPath(reading);
 
 		return path.map(function (part) {
-			return (part.getAttribute && part.getAttribute('label')) || (part.getAttribute && part.getAttribute('title')) || part.title;
+			return (
+				(part.getAttribute && part.getAttribute('label')) ||
+				(part.getAttribute && part.getAttribute('title')) ||
+				part.title
+			);
 		});
 	},
 
 	getReadingPath: function (reading) {
-		var path = [], node;
+		var path = [],
+			node;
 
 		path.push(reading);
 
@@ -891,22 +1003,33 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				href = node.getAttribute('href'),
 				parts = href && Globals.getURLParts(href);
 
-			return tagName === 'topic' && href && !parts.hash && !node.querySelector('object[mimeType$=assignment], object[mimeType$=naquestionset]');
+			return (
+				tagName === 'topic' &&
+				href &&
+				!parts.hash &&
+				!node.querySelector(
+					'object[mimeType$=assignment], object[mimeType$=naquestionset]'
+				)
+			);
 		});
 	},
 
 	getReading: function (ntiid, bundle) {
-		function findReading (toc) {
+		function findReading(toc) {
 			var escaped = lazy.ParseUtils.escapeId(ntiid),
-				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
+				query =
+					'toc[ntiid="' +
+					escaped +
+					'"],topic[ntiid="' +
+					escaped +
+					'"]';
 
 			return toc.querySelector(query);
 		}
 
-		return this.__resolveTocs(bundle)
-			.then(function (tocs) {
-				return tocs.map(findReading).filter(x => x)[0];
-			});
+		return this.__resolveTocs(bundle).then(function (tocs) {
+			return tocs.map(findReading).filter(x => x)[0];
+		});
 	},
 
 	getReadings: function (bundle, unfiltered, contentPackageID) {
@@ -920,13 +1043,17 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		// 	return t && t.getAttribute('ntiid');
 		// }
 
-		function buildNavigationMap (toc) {
-			var nodes = toc.querySelectorAll('course, course unit, course lesson');
+		function buildNavigationMap(toc) {
+			var nodes = toc.querySelectorAll(
+				'course, course unit, course lesson'
+			);
 
 			nodes = Array.prototype.slice.call(nodes);
 
 			return nodes.reduce(function (acc, node) {
-				var ntiid = node.getAttribute('ntiid') || node.getAttribute('topic-ntiid');
+				var ntiid =
+					node.getAttribute('ntiid') ||
+					node.getAttribute('topic-ntiid');
 
 				acc[ntiid] = true;
 
@@ -934,7 +1061,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			}, {});
 		}
 
-		function findUnfilteredReadings (toc) {
+		function findUnfilteredReadings(toc) {
 			buildNavigationMap(toc);
 			let topLevel = toc.querySelectorAll('toc, toc > topic');
 
@@ -943,9 +1070,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return topLevel;
 		}
 
-		function findFilteredReadings (toc) {
+		function findFilteredReadings(toc) {
 			var navigation = buildNavigationMap(toc),
-				readingNodes = toc.querySelectorAll('toc, topic[label=Readings]');
+				readingNodes = toc.querySelectorAll(
+					'toc, topic[label=Readings]'
+				);
 
 			readingNodes = Array.prototype.slice.call(readingNodes);
 
@@ -958,32 +1087,38 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return readingNodes;
 		}
 
-		let resolve = contentPackageID ? this.__resolveTocFor(bundle, contentPackageID) : this.__resolveTocs(bundle);
+		let resolve = contentPackageID
+			? this.__resolveTocFor(bundle, contentPackageID)
+			: this.__resolveTocs(bundle);
 
-		return resolve
-			.then(function (tocs) {
-				if (!Array.isArray(tocs)) {
-					tocs = [tocs];
-				}
+		return resolve.then(function (tocs) {
+			if (!Array.isArray(tocs)) {
+				tocs = [tocs];
+			}
 
-				const readings = tocs.map(unfiltered ? findUnfilteredReadings : findFilteredReadings);
+			const readings = tocs.map(
+				unfiltered ? findUnfilteredReadings : findFilteredReadings
+			);
 
-				return contentPackageID ? readings[0] : readings;
-			});
+			return contentPackageID ? readings[0] : readings;
+		});
 	},
 
-
-	getContentPackageContainingReading (ntiid, bundle) {
+	getContentPackageContainingReading(ntiid, bundle) {
 		const contentPackages = this.__getContentPackages(bundle);
 		let toCheck = [...contentPackages];
 
-		function findReading (toc) {
+		function findReading(toc) {
 			var escaped = lazy.ParseUtils.escapeId(ntiid),
-				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
+				query =
+					'toc[ntiid="' +
+					escaped +
+					'"],topic[ntiid="' +
+					escaped +
+					'"]';
 
 			return toc.querySelector(query);
 		}
-
 
 		const checkNext = async () => {
 			const current = toCheck.pop();
@@ -999,18 +1134,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 			try {
 				const toc = await this.__resolveTocFor(bundle, id);
-			
+
 				if (findReading(toc)) {
 					return current;
 				}
-			
 			} catch {
 				//move on
 			}
 			return checkNext();
 		};
 
-
 		return checkNext();
-	}
+	},
 }).create();

@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 const Globals = require('legacy/util/Globals');
 require('../proxy/reader/Json');
 
-
 /**
  * This stream DOES NOT support random access to any
  * page.  It uses the optimized batchBefore parameter
@@ -31,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		extraParams: {
 			exclude: 'application/vnd.nextthought.redaction',
 			sortOn: 'lastModified',
-			sortOrder: 'descending'
+			sortOrder: 'descending',
 		},
 		type: 'rest',
 		limitParam: 'batchSize',
@@ -40,10 +39,10 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		reader: {
 			type: 'nti',
 			root: 'Items',
-			totalProperty: 'FilteredTotalItemCount'
+			totalProperty: 'FilteredTotalItemCount',
 		},
 		headers: {
-			'Accept': 'application/vnd.nextthought.collection+json'
+			Accept: 'application/vnd.nextthought.collection+json',
 		},
 		model: 'NextThought.model.Change',
 
@@ -60,14 +59,14 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 			});
 
 			return p;
-		}
+		},
 	},
 
 	groupers: [
 		{
 			property: 'EventTime',
-			direction: 'DESC'
-		}
+			direction: 'DESC',
+		},
 	],
 
 	//Note this matches the default sort order
@@ -75,8 +74,8 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 	sorters: [
 		{
 			property: 'Last Modified',
-			direction: 'DESC'
-		}
+			direction: 'DESC',
+		},
 	],
 
 	constructor: function () {
@@ -116,13 +115,19 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		if (this.snapshot) {
 			//Note snapshot is both unfiltered and unsorted.
 			//TODO more efficient way to do this? sorting the mixed collection doesn't seem to work
-			return Ext.Array.sort(this.snapshot.items, Globals.SortModelsBy('Last Modified', 'ASC')).last();
+			return Ext.Array.sort(
+				this.snapshot.items,
+				Globals.SortModelsBy('Last Modified', 'ASC')
+			).last();
 		}
 		return this.last();
 	},
 
 	hasAdditionalPagesToLoad: function () {
-		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
+		return (
+			this.mayHaveAdditionalPages === undefined ||
+			this.mayHaveAdditionalPages
+		);
 	},
 
 	isOnLastBatch: function () {
@@ -135,7 +140,9 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 
 	loadPage: function (page, options) {
 		if (page !== 1 && page !== this.currentPage + 1) {
-			Ext.Error.raise('loadPage can only be called for page 1 or n + 1 where n is currentPage');
+			Ext.Error.raise(
+				'loadPage can only be called for page 1 or n + 1 where n is currentPage'
+			);
 		}
 
 		var before, last;
@@ -150,9 +157,12 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 			}
 		}
 
-		options = Ext.apply({
-			start: before
-		}, options);
+		options = Ext.apply(
+			{
+				start: before,
+			},
+			options
+		);
 
 		this.callParent([page, options]);
 	},
@@ -165,25 +175,37 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 
 		delete this.requestedToLoad;
 
-		options = Ext.applyIf(options || {}, {start: null});
+		options = Ext.applyIf(options || {}, { start: null });
 
-		function isMoreDetector (records, operation, success) {
+		function isMoreDetector(records, operation, success) {
 			//Set some state that indicates if we may have more
 
 			//If we fail with a 404 we treat that as no more
-			if (!success && operation.response && operation.response.status === 404) {
+			if (
+				!success &&
+				operation.response &&
+				operation.response.status === 404
+			) {
 				this.mayHaveAdditionalPages = false;
-			}
-			else {
-				this.mayHaveAdditionalPages = (!success || operation.limit === undefined || records.length === operation.limit);
+			} else {
+				this.mayHaveAdditionalPages =
+					!success ||
+					operation.limit === undefined ||
+					records.length === operation.limit;
 			}
 
-
-			console.log('Load finished.	 Do we have additional pages', this.mayHaveAdditionalPages);
+			console.log(
+				'Load finished.	 Do we have additional pages',
+				this.mayHaveAdditionalPages
+			);
 		}
 
-		options.callback = Ext.Function.createSequence(isMoreDetector, options.callback, this);
+		options.callback = Ext.Function.createSequence(
+			isMoreDetector,
+			options.callback,
+			this
+		);
 
 		this.callParent([options]);
-	}
+	},
 });

@@ -1,30 +1,27 @@
-import {getService} from '@nti/web-client';
+import { getService } from '@nti/web-client';
 
 export default {
-	resolveObject (hit) {
-		return getService()
-			.then(service => service.getObject(hit.NTIID));
+	resolveObject(hit) {
+		return getService().then(service => service.getObject(hit.NTIID));
 	},
 
-	initComponent (/*obj, hit*/) {
+	initComponent(/*obj, hit*/) {},
 
-	},
-
-	resolveTitle (obj/*, hit*/) {
+	resolveTitle(obj /*, hit*/) {
 		return obj.title || obj.label || obj.Title || '';
 	},
 
-	resolveFragments (obj, hit) {
+	resolveFragments(obj, hit) {
 		const fragments = hit.Fragments || [];
 
 		return fragments.reduce((acc, frag, fragIndex) => {
-			const {Matches:matches = []} = frag;
+			const { Matches: matches = [] } = frag;
 
 			if (frag.Field !== 'keywords') {
 				matches.reduce((ac, match) => {
 					ac.push({
 						fragIndex,
-						text: match.trim()
+						text: match.trim(),
 					});
 
 					return ac;
@@ -34,17 +31,21 @@ export default {
 		}, []);
 	},
 
-	resolvePath (obj, hit, getBreadCrumb) {
+	resolvePath(obj, hit, getBreadCrumb) {
 		return getBreadCrumb(obj).then(breadCrumb => breadCrumb);
 	},
 
-	resolveContainerID (obj, hit) {
-		return hit && hit.isModel && hit.ContainerId || (hit.Containers || [])[0];
+	resolveContainerID(obj, hit) {
+		return (
+			(hit && hit.isModel && hit.ContainerId) || (hit.Containers || [])[0]
+		);
 	},
 
-	resolveNavigateToSearchHit (obj, hit, fragment) {
-		const containerId = hit && hit.isModel && hit.ContainerId || (hit.Containers || [])[0],
+	resolveNavigateToSearchHit(obj, hit, fragment) {
+		const containerId =
+				(hit && hit.isModel && hit.ContainerId) ||
+				(hit.Containers || [])[0],
 			fragIndex = fragment.fragIndex;
-		return Promise.resolve({obj, fragIndex, containerId});
-	}
+		return Promise.resolve({ obj, fragIndex, containerId });
+	},
 };

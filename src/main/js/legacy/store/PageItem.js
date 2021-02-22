@@ -1,8 +1,9 @@
 const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 require('../proxy/reader/Json');
 require('legacy/model/GenericObject');
@@ -34,19 +35,19 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		reader: {
 			type: 'nti',
 			root: 'Items',
-			totalProperty: 'FilteredTotalItemCount'
+			totalProperty: 'FilteredTotalItemCount',
 		},
 		headers: {
-			'Accept': 'application/vnd.nextthought.collection+json'
+			Accept: 'application/vnd.nextthought.collection+json',
 		},
-		model: 'NextThought.model.GenericObject'
+		model: 'NextThought.model.GenericObject',
 	},
 
 	statics: {
-		make: function makeFactory (url, id, disablePaging) {
+		make: function makeFactory(url, id, disablePaging) {
 			var ps = this.create({
 				clearOnPageLoad: false,
-				containerId: id
+				containerId: id,
 			});
 			ps.proxy.url = url;
 			if (disablePaging) {
@@ -57,10 +58,9 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			return ps;
 		},
 
-
 		peek: function () {
 			return coordinator;
-		}
+		},
 	},
 
 	onProxyLoad: function (operation) {
@@ -78,7 +78,10 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 	constructor: function (config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
-			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
+			this.proxy = Ext.merge(
+				Ext.clone(this.proxy),
+				this.config.proxyOverride
+			);
 			delete config.proxyOverride;
 		}
 
@@ -90,12 +93,11 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			delete this.url;
 		}
 
-
 		this.mon(coordinator, {
-			delay: 1,//move this handler to the next event pump
+			delay: 1, //move this handler to the next event pump
 			scope: this,
 			'removed-item': this.removeByIdsFromEvent,
-			'added-item': this.addFromEvent
+			'added-item': this.addFromEvent,
 		});
 	},
 
@@ -107,13 +109,17 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 	getBins: function () {
 		var groups = this.getGroups(),
 			bins = {},
-			k, b = null,
+			k,
+			b = null,
 			getters = UtilUserDataThreader.GETTERS;
 
 		for (k in groups) {
 			if (groups.hasOwnProperty(k)) {
 				b = groups[k].name;
-				bins[b] = Ext.Array.sort(groups[k].children, Globals.SortModelsBy(k, getters[b]));
+				bins[b] = Ext.Array.sort(
+					groups[k].children,
+					Globals.SortModelsBy(k, getters[b])
+				);
 			}
 		}
 
@@ -124,7 +130,9 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		var bins = otherBins || this.getBins() || {},
 			tree = this.buildThreads(bins);
 
-		return Ext.Object.getValues(tree).concat(bins.Highlight || []).concat(bins.Redaction || []);
+		return Ext.Object.getValues(tree)
+			.concat(bins.Highlight || [])
+			.concat(bins.Redaction || []);
 	},
 
 	buildThreads: function (bins) {
@@ -155,19 +163,23 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			Ext.defer(this.filter, 1, this);
 		}
 
-		function adoptChild (parent, child) {
+		function adoptChild(parent, child) {
 			//found our parent:
 			child.parent = parent;
-			if (!parent.children) {parent.children = [];}
+			if (!parent.children) {
+				parent.children = [];
+			}
 			//Check if we are not already in the children array
-			if (!Ext.Array.contains(parent.children, child)) { parent.children.push(child); }
+			if (!Ext.Array.contains(parent.children, child)) {
+				parent.children.push(child);
+			}
 			//fire events for anyone who cares:
 			parent.fireEvent('child-added', child);
 			child.fireEvent('parent-set', parent);
 		}
 
-		function checkStoreItem (ancestor) {
-			return function checkItem (storeItem) {
+		function checkStoreItem(ancestor) {
+			return function checkItem(storeItem) {
 				if (ancestor === storeItem.getId()) {
 					adopted = true;
 					adoptChild(storeItem, record);
@@ -181,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			};
 		}
 
-		function updateRef (r) {
+		function updateRef(r) {
 			//find my parent if it's there and add myself to it:
 			var refs = (r.get('references') || []).slice();
 
@@ -196,10 +208,9 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			}
 		}
 
-		if	(Ext.isArray(record)) {
+		if (Ext.isArray(record)) {
 			Ext.each(record, updateRef, this);
-		}
-		else {
+		} else {
 			updateRef.call(this, record);
 		}
 
@@ -244,35 +255,41 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		}
 
 		if (!Ext.isIterable(records)) {
-
 			if (typeof records === 'object' && !records.isModel) {
 				records = this.resolveRange(records);
-			}
-			else {
+			} else {
 				records = [records];
 			}
 		}
 
-		Ext.each(records, function (record) {
-			if (Ext.isNumber(record)) {
-				record = this.getAt(record);
-			}
+		Ext.each(
+			records,
+			function (record) {
+				if (Ext.isNumber(record)) {
+					record = this.getAt(record);
+				}
 
-			if (record.placeholder || !record.wouldBePlaceholderOnDelete()) {
-				Ext.Array.push(toActuallyRemove, record);
-				Ext.Array.push(idsToBoradcast, record.getId());
-			}
-			else {
-				record.convertToPlaceholder();
-			}
-		}, this);
+				if (
+					record.placeholder ||
+					!record.wouldBePlaceholderOnDelete()
+				) {
+					Ext.Array.push(toActuallyRemove, record);
+					Ext.Array.push(idsToBoradcast, record.getId());
+				} else {
+					record.convertToPlaceholder();
+				}
+			},
+			this
+		);
 
 		if (!Ext.isEmpty(toActuallyRemove)) {
 			this.callParent(args);
 		}
 
 		Ext.each(toActuallyRemove, function (record) {
-			if (record.parent) { record.parent.fireEvent('child-removed', record);}
+			if (record.parent) {
+				record.parent.fireEvent('child-removed', record);
+			}
 			record.tearDownLinks();
 			record.fireEvent('destroy', record);
 		});
@@ -300,8 +317,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 
 		try {
 			Ext.each(records, function (rec) {
-				var current,
-					newRecord;
+				var current, newRecord;
 
 				if (!me.wantsItem(rec)) {
 					return;
@@ -317,8 +333,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 					}
 				}
 			});
-		}
-		catch (er) {
+		} catch (er) {
 			console.warn(Globals.getError(er));
 		}
 
@@ -336,11 +351,10 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 					me.remove(r, isMove, silent);
 				}
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			console.warn(Globals.getError(e));
 		}
 
 		coordinator.resumeEvents();
-	}
+	},
 });

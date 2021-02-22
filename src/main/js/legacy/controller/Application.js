@@ -1,14 +1,15 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-const {wait} = require('@nti/lib-commons');
-const {getHistory} = require('@nti/web-routing');
-const {default: Logger} = require('@nti/util-logger');
+const { wait } = require('@nti/lib-commons');
+const { getHistory } = require('@nti/web-routing');
+const { default: Logger } = require('@nti/util-logger');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const LoginStore = require('legacy/login/StateStore');
 const LoginActions = require('legacy/login/Actions');
 const LibraryActions = require('legacy/app/library/Actions');
@@ -28,10 +29,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
 
 	refs: [
-		{ref: 'body', selector: 'main-views'},
-		{ref: 'nav', selector: 'main-navigation'}
+		{ ref: 'body', selector: 'main-views' },
+		{ ref: 'nav', selector: 'main-navigation' },
 	],
-
 
 	FRAG_ROUTE: /^#!/,
 	OBJECT_FRAG_ROUTE: /^#!object\/ntiid/i,
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		/^group/,
 		/^community/,
 		/^contacts/,
-		/^id/
+		/^id/,
 	],
 
 	init: function () {
@@ -73,16 +73,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		routeHistory.listen(this.maybeSyncToHistory.bind(this));
 	},
 
-
 	load: function () {
-		if(window.NextThought) {
+		if (window.NextThought) {
 			window.NextThought.isInitialized = true;
 		}
 		this.mon(this.LoginStore, 'login-ready', 'onLogin');
 
 		this.LoginActions.login();
 	},
-
 
 	onLogin: function () {
 		Ext.widget('master-view');
@@ -102,33 +100,40 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		nav.pushRootRoute = body.pushRoute.bind(body);
 		nav.navigateToObject = body.navigateToObject.bind(body);
-		nav.attemptToNavigateToObject = body.attemptToNavigateToObject.bind(body);
+		nav.attemptToNavigateToObject = body.attemptToNavigateToObject.bind(
+			body
+		);
 
 		NavigationActions.doPushRootRoute = body.pushRootRoute.bind(body);
 		NavigationActions.doReplaceRootRoute = body.replaceRootRoute.bind(body);
 
-		this.handleCurrentState()
-			.then(Globals.removeLoaderSplash.bind(Globals));
+		this.handleCurrentState().then(
+			Globals.removeLoaderSplash.bind(Globals)
+		);
 	},
 
+	maybeSyncToHistory() {
+		if (!this.currentMyRoute) {
+			return;
+		}
 
-
-	maybeSyncToHistory () {
-		if (!this.currentMyRoute) { return; }
-
-		const {pathname} = routeHistory.location;
-		const currentPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
-		const pendingPathname = this.pendingRoute ? decodeURI(Globals.getURLParts(this.pendingRoute).pathname) : '';
+		const { pathname } = routeHistory.location;
+		const currentPathname = decodeURI(
+			Globals.getURLParts(this.currentMyRoute).pathname
+		);
+		const pendingPathname = this.pendingRoute
+			? decodeURI(Globals.getURLParts(this.pendingRoute).pathname)
+			: '';
 
 		//if the history changes to a new path that doesn't match our current route, handle it
 		if (
-			Globals.trimRoute(pathname) !== Globals.trimRoute(currentPathname) &&
+			Globals.trimRoute(pathname) !==
+				Globals.trimRoute(currentPathname) &&
 			Globals.trimRoute(pathname) !== Globals.trimRoute(pendingPathname)
 		) {
 			this.handleCurrentState();
 		}
 	},
-
 
 	handleCurrentState: function () {
 		var path = Globals.trimRoute(window.location.pathname),
@@ -136,7 +141,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			parts = path.split('/');
 
 		//Don't handle the state until we are logged in
-		if (!this.loggedIn) { return; }
+		if (!this.loggedIn) {
+			return;
+		}
 
 		this.currentMyRoute = path;
 
@@ -160,19 +167,19 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		return this.handleRoute(document.title, path);
 	},
 
-
 	handleFragmentRoute: function (fragment) {
 		var path = '',
 			parts = fragment.split('/'),
 			subRoute = '',
-			id, hash;
+			id,
+			hash;
 
 		if (this.OBJECT_FRAG_ROUTE.test(fragment)) {
 			id = parts.last();
 			id = decodeURIComponent(id);
 			path = '/id/';
 		} else if (this.LIBRARY_FRAG_ROUTE.test(fragment)) {
-			id = parts[2];//#!library, available courses, id
+			id = parts[2]; //#!library, available courses, id
 			id = B64.decodeURLFriendly(id);
 			path = '/catalog/object/';
 
@@ -181,20 +188,24 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			} else if (parts[3] === 'forcredit') {
 				subRoute = 'forcredit';
 			}
-
 		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)) {
 			path = '/notifications';
 		} else if (this.HTML_FRAG_ROUTE.test(fragment)) {
 			path = '/id/';
 			id = lazy.ParseUtils.parseNtiFragment(fragment);
 		} else {
-			logger.error('Fragement route we dont know how to handle.', fragment);
+			logger.error(
+				'Fragement route we dont know how to handle.',
+				fragment
+			);
 		}
 
 		if (id) {
 			id = id.split('#');
 			hash = id[1];
-			id[0] = isNTIID(id[0]) ? encodeForURI(id[0]) : encodeURIComponent(id[0]);
+			id[0] = isNTIID(id[0])
+				? encodeForURI(id[0])
+				: encodeURIComponent(id[0]);
 			path += id[0];
 		}
 
@@ -210,7 +221,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 	__shouldMark: function (route) {
-		if (!route) { return false; }
+		if (!route) {
+			return false;
+		}
 
 		var shouldMark = false;
 
@@ -223,7 +236,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		return shouldMark;
 	},
 
-
 	maybeMarkReturn: function (title, route) {
 		var nav = this.NavigationActions,
 			newRouteShouldMark = this.__shouldMark(route),
@@ -234,22 +246,29 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		}
 	},
 
-	sendGAEvent () {
+	sendGAEvent() {
 		if (!global.ga) {
-			logger.debug('Router requires ga to be available in global scope. Aborting attempt to send google analytics navigation event');
+			logger.debug(
+				'Router requires ga to be available in global scope. Aborting attempt to send google analytics navigation event'
+			);
 			return;
 		}
-		global.ga('set', 'page', global.location.href.replace(global.location.origin, ''));
+		global.ga(
+			'set',
+			'page',
+			global.location.href.replace(global.location.origin, '')
+		);
 		global.ga('send', 'pageview');
 	},
 
 	handleRoute: function (title, route, precache, afterRoute) {
-		var me = this, location;
+		var me = this,
+			location;
 
-		function handleRoute (r, p) {
+		function handleRoute(r, p) {
 			var tries = 0;
 
-			return new Promise(function handle (fulfill, reject) {
+			return new Promise(function handle(fulfill, reject) {
 				var body = me.getBody();
 
 				tries += 1;
@@ -267,8 +286,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 					body.beforeRouteChange(r);
 				}
 
-				body.handleRoute(r, p)
-					.then(fulfill, reject);
+				body.handleRoute(r, p).then(fulfill, reject);
 			});
 		}
 
@@ -278,7 +296,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		//with a / so there will be an empty space at the end of the string
 		//so use that when we join to keep the path absolute
 		// const parts = location.pathname.split('/');
-
 
 		//if we are navigating to an object remove it from the path
 		//so any handlers that have a variable at the end won't accidentally
@@ -293,12 +310,13 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		this.maybeMarkReturn(title, location.pathname);
 
-		this.currentRoute = location.pathname + (location.search || '') + (location.hash || '');
+		this.currentRoute =
+			location.pathname + (location.search || '') + (location.hash || '');
 
-		return handleRoute(this.currentRoute, precache)
-			.then(this.onRoute.bind(this, title, route, afterRoute));
+		return handleRoute(this.currentRoute, precache).then(
+			this.onRoute.bind(this, title, route, afterRoute)
+		);
 	},
-
 
 	onRoute: function (title, route, afterRoute) {
 		var body = this.getBody(),
@@ -308,10 +326,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		//so make sure we split it off
 		route = route.split('#')[0];
 
-		body.getCurrentContext()
-			.then(function (context) {
-				store.setContext(context, title || document.title, route);
-			});
+		body.getCurrentContext().then(function (context) {
+			store.setContext(context, title || document.title, route);
+		});
 
 		this.sendGAEvent();
 
@@ -320,15 +337,16 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		}
 	},
 
-
 	__mergeTitle: function (title) {
-		var rootTitle = getString('application.title-bar-prefix', 'NextThought');
+		var rootTitle = getString(
+			'application.title-bar-prefix',
+			'NextThought'
+		);
 
 		title = rootTitle + ': ' + title;
 
 		return title;
 	},
-
 
 	__mergeRoute: function (route) {
 		var location = Globals.getURLParts(route),
@@ -357,7 +375,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		return pathname;
 	},
 
-
 	__doRoute: function (fn, state, title, route, precache, afterRoute) {
 		var me = this,
 			body = me.getBody(),
@@ -365,14 +382,19 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			myRoute = me.__mergeRoute(route),
 			allow = body.allowNavigation();
 
-
-		function finish () {
+		function finish() {
 			me.pendingRoute = myRoute;
 
 			const remove = routeHistory.listen((_, action) => {
-				if (me.pendingRoute !== myRoute) { return; }
-				if (fn === 'push' && action !== 'PUSH') { return; }
-				if (fn === 'replace' && action !== 'REPLACE') { return; }
+				if (me.pendingRoute !== myRoute) {
+					return;
+				}
+				if (fn === 'push' && action !== 'PUSH') {
+					return;
+				}
+				if (fn === 'replace' && action !== 'REPLACE') {
+					return;
+				}
 
 				me.currentMyRoute = myRoute;
 				delete me.pendingRoute;
@@ -381,7 +403,11 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				//so immediately replace the current state with one with the title
 				//also the history library is decodeURIing the so for a uri encoded
 				//uri part we still need to replaceState to make sure that encoding is correct
-				window.history.replaceState(window.history.state, myTitle, myRoute);
+				window.history.replaceState(
+					window.history.state,
+					myTitle,
+					myRoute
+				);
 				// history[fn](state || window.history.state, myTitle, myRoute);
 				document.title = title;
 
@@ -390,24 +416,26 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				remove();
 			});
 
-			routeHistory[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
+			routeHistory[fn](
+				myRoute,
+				state ||
+					(window.history.state && window.history.state.state) ||
+					window.history.state
+			);
 		}
 
-		function stopNav () {
+		function stopNav() {
 			logger.warn('NAVIGATION STOPPED:', title, route);
 		}
 
 		if (allow instanceof Promise) {
-			allow
-				.then(finish)
-				.catch(stopNav);
+			allow.then(finish).catch(stopNav);
 		} else if (allow === false) {
 			stopNav();
 		} else {
 			finish();
 		}
 	},
-
 
 	pushRoute: function (title, route, precache) {
 		this.__doRoute('push', null, title, route, precache, () => {
@@ -419,11 +447,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.__doRoute('push', null, title, route, precache);
 	},
 
-
 	replaceRoute: function (title, route, precache, fragment) {
 		this.__doRoute('replace', null, title, route, precache);
 	},
-
 
 	pushRouteState: function (state, title, route, precache, fragment) {
 		var body = this.getBody(),
@@ -434,7 +460,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.__doRoute('push', historyState, title, route, precache);
 	},
 
-
 	replaceRouteState: function (state, title, route, precache, fragment) {
 		var body = this.getBody(),
 			historyState = {};
@@ -444,12 +469,11 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.__doRoute('replace', historyState, title, route, precache);
 	},
 
-
 	setTitle: function (title) {
 		title = this.__mergeTitle(title);
 
 		document.title = title;
 
 		this.ContextStore.setCurrentTitle(title);
-	}
+	},
 });

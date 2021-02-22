@@ -26,15 +26,17 @@ describe('Site admin user book enrollment nav bar test', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			Username: 'testUser'
+			Username: 'testUser',
 		};
 
 		const book = {
 			title: 'book1',
-			getDefaultAssetRoot () { return 'testRoot'; }
+			getDefaultAssetRoot() {
+				return 'testRoot';
+			},
 		};
 
-		const cmp = renderer.create(<View user={user} book={book}/>);
+		const cmp = renderer.create(<View user={user} book={book} />);
 
 		const tree = cmp.toJSON();
 

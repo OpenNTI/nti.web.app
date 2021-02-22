@@ -9,12 +9,11 @@ const RectUtils = require('legacy/util/Rects');
 const AnnotationsBase = require('./Base');
 
 var lazyResolve = {
-	get ReaderPanel () {
+	get ReaderPanel() {
 		delete this.ReaderPanel;
-		return this.ReaderPanel = require('../contentviewer/components/Reader');
-	}
+		return (this.ReaderPanel = require('../contentviewer/components/Reader'));
+	},
 };
-
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	extend: 'NextThought.app.annotations.Base',
@@ -22,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 	inheritableStatics: {
 		bgcolor: {},
-		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i
+		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i,
 	},
 
 	highlightCls: 'application-highlight',
@@ -48,7 +47,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	},
 
 	getRange: function () {
-		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, lazyResolve.ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
+		var range = Anchors.toDomRange(
+			this.getRecordField('applicableRange'),
+			this.doc,
+			lazyResolve.ReaderPanel.get().getCleanContent(),
+			this.getRecordField('ContainerId')
+		);
 
 		if (!range) {
 			if (this.manager.isDebug) {
@@ -83,8 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				try {
 					this.compElements.clearListeners();
 					this.compElements.clear();
-				}
-				catch (e) {
+				} catch (e) {
 					//catch any exceptions if things have changed...
 				}
 
@@ -97,7 +100,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				}
 
 				Ext.each(c, this.unwrap, this);
-
 			} catch (e2) {
 				console.error(Globals.getError(e2));
 			}
@@ -114,11 +116,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			if (Ext.is.iOS) {
 				var me = this;
 				Ext.defer(function () {
-					var menu = Ext.get(Ext.query('.x-menu .x-component-nt-annotaion')[0]).el.up('.x-menu');
+					var menu = Ext.get(
+						Ext.query('.x-menu .x-component-nt-annotaion')[0]
+					).el.up('.x-menu');
 					me.mon(Ext.getCmp(menu.id), 'destroy', function () {
 						me.onMouseOut();
 					});
-				},250);
+				}, 250);
 			}
 		}
 	},
@@ -126,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	onMouseOut: function () {
 		var me = this;
 
-		function off () {
+		function off() {
 			me.compElements.removeCls(me.mouseOverCls);
 			me.render();
 		}
@@ -152,9 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			try {
 				range.setStartBefore(this.rendered.first());
 				range.setEndAfter(this.rendered.last());
-
-			}
-			catch (e) {
+			} catch (e) {
 				console.error(Globals.getError(e));
 			}
 		}
@@ -167,8 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		if (this.rendered) {
 			r = this.buildRange();
-		}
-		else {
+		} else {
 			r = this.getRange();
 		}
 
@@ -196,7 +197,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			topOffset = 10,
 			leftOffset = 5,
 			fakeRectRange,
-			state = 'normal', sampleEl;
+			state = 'normal',
+			sampleEl;
 
 		if (!me.rendered) {
 			range = me.getRange();
@@ -206,7 +208,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			me.rendered = me.wrapRange(range.commonAncestorContainer, range);
 
 			if (!me.rendered || me.rendered.length === 0) {
-				console.error('Dropping annotation with no nodes to render', me);
+				console.error(
+					'Dropping annotation with no nodes to render',
+					me
+				);
 				return -1;
 			}
 
@@ -229,15 +234,17 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			//hasn't been applied to what becomes sampleEl.	 It gets applied in the subclass when this returns
 			//therefore here it looks just like a highlight.
 			if (me.record.get('Class') === 'Highlight') {
-
 				if (me.isModifiable && style !== 'suppressed') {
-
 					if (!me.self.bgcolor[me.record.get('Class')]) {
 						me.self.bgcolor[me.record.get('Class')] = {};
 						sampleEl = me.compElements.first();
-						me.self.bgcolor[me.record.get('Class')].normal = sampleEl.getStyle('background-color');
+						me.self.bgcolor[
+							me.record.get('Class')
+						].normal = sampleEl.getStyle('background-color');
 						sampleEl.addCls(me.mouseOverCls);
-						me.self.bgcolor[me.record.get('Class')].hover = sampleEl.getStyle('background-color');
+						me.self.bgcolor[
+							me.record.get('Class')
+						].hover = sampleEl.getStyle('background-color');
 						sampleEl.removeCls(me.mouseOverCls);
 					}
 					//me.compElements.setStyle('background-color','transparent');
@@ -253,13 +260,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		if (!me.content || !me.content.dom) {
 			try {
-				me.content = Ext.get(me.doc.getElementById('NTIContent')).first();
+				me.content = Ext.get(
+					me.doc.getElementById('NTIContent')
+				).first();
 			} catch (e) {
 				console.log('no content');
 			}
 		}
 
-		range = (!range || range.collapsed) ? me.buildRange() : range;
+		range = !range || range.collapsed ? me.buildRange() : range;
 		bounds = range.getBoundingClientRect();
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
@@ -267,13 +276,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		boundingWidth = Math.ceil(bounds.width); // Seemed more appropriate than content width
 		Ext.fly(me.canvas).setXY([
 			boundingLeft - leftOffset,
-			boundingTop - topOffset
+			boundingTop - topOffset,
 		]);
 		Ext.fly(me.canvas).set({
-			width: boundingWidth + (leftOffset * 2),
-			height: boundingHeight + (topOffset * 2)
+			width: boundingWidth + leftOffset * 2,
+			height: boundingHeight + topOffset * 2,
 		});
-
 
 		if (me.compElements.first().hasCls(me.mouseOverCls)) {
 			state = 'hover';
@@ -297,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 					}
 				});
 				return r;
-			}
+			},
 		};
 
 		if (Ext.is.iOS) {
@@ -308,10 +316,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		var colorSpec = AnnotationUtils.colorsForName(this.highlightColorName);
 
-		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
-			me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
-			[leftOffset, topOffset]);
-
+		boundingTop = AnnotationUtils.drawCanvas(
+			me.canvas,
+			me.content,
+			fakeRectRange,
+			colorSpec || me.self.bgcolor[me.record.get('Class')][state],
+			[leftOffset, topOffset]
+		);
 
 		me.range = range;
 
@@ -319,7 +330,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	},
 
 	createCanvas: function () {
-
 		var id = 'annotation-container',
 			doc = this.doc,
 			body = this.doc.getElementById('NTIContent'),
@@ -331,16 +341,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			body.parentNode.insertBefore(cnt, body);
 		}
 
-		return this.createElement(
-			'canvas', cnt,
-			'highlight-canvas');
+		return this.createElement('canvas', cnt, 'highlight-canvas');
 	},
 
 	createCounter: function (after) {
 		var el = Ext.get(this.createNonAnchorableSpan()),
 			style = this.record.get('style') || 'plain';
 
-		el.addCls([this.highlightCls, 'counter', style]);//,'with-count']);
+		el.addCls([this.highlightCls, 'counter', style]); //,'with-count']);
 		el.on('click', this.onClick, this);
 		after.appendChild(el.dom);
 		return el.dom;
@@ -350,7 +358,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return {
 			none: true,
 			inline: true,
-			'': true
+			'': true,
 			//Do not include "inline-(block|table)"
 		}[getComputedStyle(node).display];
 		//getComputedStyle === $$$$
@@ -375,10 +383,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				return true;
 			}
 
-			if (node.className.indexOf && (
-				node.className.indexOf('mathjax') >= 0 ||
+			if (
+				node.className.indexOf &&
+				(node.className.indexOf('mathjax') >= 0 ||
 					node.className.indexOf('mathquill') >= 0) &&
-					node.className.indexOf('link-button') < 0) {
+				node.className.indexOf('link-button') < 0
+			) {
 				return true;
 			}
 		}
@@ -386,7 +396,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	},
 
 	onClick: function (e) {
-		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
+		if (
+			this.ownerCmp.getAnnotations().getSelection() ||
+			!this.isModifiable
+		) {
 			return;
 		}
 
@@ -404,20 +417,20 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		var nodeList = [],
 			newRange,
 			nodeRange = node.ownerDocument.createRange(),
-
 			startToStart,
 			startToEnd,
 			endToStart,
 			endToEnd,
-
 			BEFORE = -1,
 			SAME = 0,
 			AFTER = 1,
-
 			valid;
 
 		nodeRange.selectNodeContents(node);
-		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);
+		startToStart = nodeRange.compareBoundaryPoints(
+			Range.START_TO_START,
+			range
+		);
 		startToEnd = nodeRange.compareBoundaryPoints(Range.START_TO_END, range);
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
@@ -425,8 +438,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		valid = this.validToWrapEntireNode(node);
 
 		//Easy case, the node is completely surronded and valid, wrap the node
-		if ((startToStart === AFTER || startToStart === SAME) &&
-			(endToEnd === BEFORE || endToEnd === SAME) && valid) {
+		if (
+			(startToStart === AFTER || startToStart === SAME) &&
+			(endToEnd === BEFORE || endToEnd === SAME) &&
+			valid
+		) {
 			newRange = node.ownerDocument.createRange();
 			newRange.selectNode(node);
 			nodeList.push(this.doWrap(newRange));
@@ -434,25 +450,32 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		//If the node overlaps with the range in anyway we need to work on it's children
 		else {
-			Ext.each(node.childNodes, function (i) {
-				nodeList.push.apply(nodeList, this.wrapRange(i, range));
-			}, this);
+			Ext.each(
+				node.childNodes,
+				function (i) {
+					nodeList.push.apply(nodeList, this.wrapRange(i, range));
+				},
+				this
+			);
 
 			if (node.childNodes.length === 0) {
-
-				if (startToStart === BEFORE && (endToEnd === BEFORE || endToEnd === SAME)) {
+				if (
+					startToStart === BEFORE &&
+					(endToEnd === BEFORE || endToEnd === SAME)
+				) {
 					newRange = this.doc.createRange();
 					newRange.setStart(range.startContainer, range.startOffset);
 					newRange.setEndAfter(node);
 					range = newRange;
-				}
-				else if (endToEnd === AFTER && (startToStart === AFTER || startToStart === SAME)) {
+				} else if (
+					endToEnd === AFTER &&
+					(startToStart === AFTER || startToStart === SAME)
+				) {
 					newRange = this.doc.createRange();
 					newRange.setStartBefore(node);
 					newRange.setEnd(range.endContainer, range.endOffset);
 					range = newRange;
 				}
-
 
 				if (startToEnd !== BEFORE && endToStart !== AFTER) {
 					nodeList.push(this.doWrap(range));
@@ -468,7 +491,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			s,
 			rangeString = range.toString(),
 			sc = range.startContainer,
-			selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
+			selectedNodes = RangeUtils.getSelectedNodes(
+				range,
+				range.commonAncestorContainer.ownerDocument
+			);
 
 		//This drops entire empty ranges, anything that wraps no text is thrown out.
 		if (!rangeString || /^\s+$/.test(rangeString)) {
@@ -482,7 +508,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				s = Ext.fly(selectedNodes[0]).getStyle('display');
 
 				if (/block/i.test(s)) {
-					Ext.fly(span).setStyle({display: s});
+					Ext.fly(span).setStyle({ display: s });
 				}
 			} catch (e) {
 				//	 Ext.fly(span).setStyle({display:'inline-block'});
@@ -501,24 +527,27 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			this.attachEvent(['click', 'mouseup'], span, this.onClick, this);
 		}
 
-
 		return span;
 	},
 
 	getScrollPosition: function (currentPosition) {
 		var dh = 100,
-			range = this.getRange(), top;
+			range = this.getRange(),
+			top;
 
 		if (range) {
 			top = Math.floor(range.getBoundingClientRect().top);
-			return currentPosition > top ? currentPosition - top : top - currentPosition - dh;
+			return currentPosition > top
+				? currentPosition - top
+				: top - currentPosition - dh;
 		}
 
 		return 0;
 	},
 
 	unwrap: function (node) {
-		var r, p = node.parentNode;
+		var r,
+			p = node.parentNode;
 
 		if (node.firstChild) {
 			r = node.ownerDocument.createRange();
@@ -530,5 +559,5 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		p.removeChild(node);
 		p.normalize();
-	}
+	},
 });

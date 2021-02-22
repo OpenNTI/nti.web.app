@@ -1,19 +1,19 @@
-$loading-indicator:			url(../images/elements/spinning_logo.png) !default;
-$data-view-over-bg:			url(../images/elements/over.gif) !default;
-$data-view-selected-bg:		url(../images/elements/selected.gif) !default;
+$loading-indicator: url(../images/elements/spinning_logo.png) !default;
+$data-view-over-bg: url(../images/elements/over.gif) !default;
+$data-view-selected-bg: url(../images/elements/selected.gif) !default;
 
 $header-height: 70px !default;
 $header-height-withbar: 110px !default;
 $msg-bar-height: 40px !default;
 
-$hide-chat-break-point: "only screen and (max-width: 1200px)";
-$show-chat-break-point: "only screen and (min-width: 1200px)";
+$hide-chat-break-point: 'only screen and (max-width: 1200px)';
+$show-chat-break-point: 'only screen and (min-width: 1200px)';
 
 // Repeating variables from @nti/style-common/fonts/iconmoon
-$icon-education: "\e60a";
-$icon-location: "\e60b";
-$icon-briefcase: "\e60c";
+$icon-education: '\e60a';
+$icon-location: '\e60b';
+$icon-briefcase: '\e60c';
 
-@import "common-mixins";
+@import 'common-mixins';
 
 // colors & fonts come from variables.css

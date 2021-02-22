@@ -7,7 +7,6 @@ const WindowsStateStore = require('legacy/app/windows/StateStore');
 require('legacy/util/Ranges');
 require('./Header');
 
-
 module.exports = exports = Ext.define('NextThought.common.window.Window', {
 	extend: 'Ext.window.Window',
 	alias: 'widget.nti-window',
@@ -28,8 +27,8 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 	layout: 'none',
 
 	items: [
-		{xtype: 'nti-window-header' },
-		{xtype: 'container', flex: 1, windowContentWrapper: true}
+		{ xtype: 'nti-window-header' },
+		{ xtype: 'container', flex: 1, windowContentWrapper: true },
 	],
 
 	onClassExtended: function (_, __, hooks) {
@@ -42,17 +41,16 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 
 			if (data.dialog) {
 				data.layout = data.layout || 'auto'; //dialogs define their own view
-			}
-			else {
+			} else {
 				Ext.apply(frame[frame.length - 1], {
 					items: data.items,
 					layout: data.layout,
-					autoScroll: data.autoScroll
+					autoScroll: data.autoScroll,
 				});
 
 				Ext.apply(frame[0], {
 					title: data.title || '',
-					tools: data.tools || []
+					tools: data.tools || [],
 				});
 
 				delete data.tools;
@@ -67,7 +65,6 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 
 	constructor: function (config) {
 		if (!this.dialog && !config.dialog) {
-
 			Ext.copyTo(this.items.last(), config, ['items', 'layout']);
 
 			delete config.items;
@@ -87,12 +84,15 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 	initComponent: function () {
 		this.callParent(arguments);
 		var me = this,
-			closeCalled, windowStore,
+			closeCalled,
+			windowStore,
 			w = this.width,
 			h = this.height;
 
-		this.widthPercent = typeof w === 'string' ? (parseInt(w, 10) / 100) : null;
-		this.heightPercent = typeof h === 'string' ? (parseInt(h, 10) / 100) : null;
+		this.widthPercent =
+			typeof w === 'string' ? parseInt(w, 10) / 100 : null;
+		this.heightPercent =
+			typeof h === 'string' ? parseInt(h, 10) / 100 : null;
 
 		if (this.widthPercent || this.heightPercent) {
 			this.resizable = false;
@@ -112,25 +112,25 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 
 		// NOTE: most windows are currently treated as an overlay.
 		// The overlay flag will allow us to opt in or out.
-		if(this.isOverlay) {
+		if (this.isOverlay) {
 			this.on({
-				'show': function () {
+				show: function () {
 					me._windowStoreNotified = true;
 					windowStore.addOpenCls();
 				},
-				'close': function () {
+				close: function () {
 					closeCalled = true;
-					if(me._windowStoreNotified) {
+					if (me._windowStoreNotified) {
 						windowStore.removeOpenCls();
 						delete me._windowStoreNotified;
 					}
 				},
-				'destroy': function () {
+				destroy: function () {
 					if (!closeCalled && me._windowStoreNotified) {
 						windowStore.removeOpenCls();
 						delete me._windowStoreNotified;
 					}
-				}
+				},
 			});
 		}
 	},
@@ -142,7 +142,6 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		if (!me.dialog) {
 			me.fixScroll();
 		}
-
 
 		if (!me.syncedSize) {
 			Ext.defer(me.syncHeight, 1, me);
@@ -164,18 +163,22 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 			target = 'targetEl',
 			c = me.down('container[windowContentWrapper]');
 
-		function getEl (cmp, sub) {
+		function getEl(cmp, sub) {
 			return Ext.get(cmp.getId() + '-' + sub);
 		}
 
-		function fixIt (cmp, sub) {
+		function fixIt(cmp, sub) {
 			var el = getEl(cmp, sub);
 			if (el) {
-				el.setStyle({ position: 'fixed', top: 'initial', left: 'initial' });
+				el.setStyle({
+					position: 'fixed',
+					top: 'initial',
+					left: 'initial',
+				});
 			}
 		}
 
-		function fixWidth () {
+		function fixWidth() {
 			//This is called with various argument lengths, but the last argument is always the one we care about.
 			var o = arguments[arguments.length - 1],
 				cmp = o.cmp,
@@ -194,12 +197,12 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		//get docked items so we can reset margins because of docked items
 		Ext.each(me.getDockedItems(), function (i) {
 			var o = {
-				'show': fixWidth,
-				'hide': fixWidth,
-				'close': fixWidth,
-				'destroy': fixWidth,
+				show: fixWidth,
+				hide: fixWidth,
+				close: fixWidth,
+				destroy: fixWidth,
 				cmp: i,
-				scope: me
+				scope: me,
 			};
 
 			me.mon(i, o);
@@ -208,21 +211,20 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 	},
 
 	show: function () {
-		var s = window.getSelection(), r,
+		var s = window.getSelection(),
+			r,
 			c = Ext.WindowManager.getActive();
 		if (c) {
 			c.fireEvent('deactivate');
 			if (!c || (!c.modal && this.focusOnToFront)) {
 				c = null;
-			}
-			else {
+			} else {
 				try {
 					r = RangeUtils.saveRange(s.getRangeAt(0));
 					if (r.collapsed) {
 						r = RangeUtils.saveInputSelection(s);
 					}
-				}
-				catch (e) {
+				} catch (e) {
 					//no range to save, like a note to a chat for example...
 				}
 			}
@@ -243,13 +245,11 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 						s.addRange(r);
 					}, 50);
 				}
-			}
-			else if (r && r.selectionStart) {
+			} else if (r && r.selectionStart) {
 				setTimeout(function () {
 					r.input.setSelectionRange(r.selectionStart, r.selectionEnd);
 				}, 50);
 			}
-
 		}
 
 		return this;
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 
 		if (height > viewHeight || this.desiredHeight > viewHeight) {
 			this.setHeight(Math.max(viewHeight, 400));
-		}else if (height < this.desiredHeight) {
+		} else if (height < this.desiredHeight) {
 			this.setHeight(this.desiredHeight);
 		}
 
@@ -274,9 +274,11 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		var me = this,
 			h = Ext.Element.getViewportHeight() * me.heightPercent,
 			w = Ext.Element.getViewportWidth() * me.widthPercent,
-			size = me.rendered ? me.getSize() : {width: me.width, height: me.height};
+			size = me.rendered
+				? me.getSize()
+				: { width: me.width, height: me.height };
 
-		size.width = Math.floor(w || size.width);//NaN is falsy
+		size.width = Math.floor(w || size.width); //NaN is falsy
 		size.height = Math.floor(h || size.height);
 
 		this.setSize(size, undefined);
@@ -291,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 			scope: this,
 			beforeresize: this.resizeDragMaskOn,
 			resizedrag: this.cancelResizeMaskTimeout,
-			resize: this.dragMaskOff
+			resize: this.dragMaskOff,
 		});
 	},
 
@@ -303,16 +305,15 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 					constrainTo: Ext.getBody(),
 					el: this.el,
 					tolerance: this.dragStartTolerance,
-					delegate: '.nti-window-header'
+					delegate: '.nti-window-header',
 				});
 				this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
 				this.mon(this.dd, {
 					scope: this,
 					dragstart: this.dragMaskOn,
-					dragend: this.dragMaskOff
+					dragend: this.dragMaskOff,
 				});
-			}
-			catch (e) {
+			} catch (e) {
 				console.error(Globals.getError(e));
 			}
 		}
@@ -334,7 +335,9 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 	},
 
 	getHeight: function () {
-		return this.rendered ? this.callParent() : this.height || this.minHeight;
+		return this.rendered
+			? this.callParent()
+			: this.height || this.minHeight;
 	},
 
 	getWidth: function () {
@@ -360,13 +363,13 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		var e = Ext.getBody();
 		this.wasMasked = this.modal || Boolean(Ext.getBody().isMasked());
 		if (!this.wasMasked) {
-
 			e.mask('', 'drag-mask');
 			try {
 				e.getCache().data.maskEl.addCls('nti-clear');
-			}
-			catch (badThings) {
-				console.error('ExtJS private api changed..., find another way to add the class to the mask element');
+			} catch (badThings) {
+				console.error(
+					'ExtJS private api changed..., find another way to add the class to the mask element'
+				);
 			}
 		}
 	},
@@ -376,5 +379,5 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 			Ext.getBody().unmask();
 		}
 		delete this.wasMasked;
-	}
+	},
 });

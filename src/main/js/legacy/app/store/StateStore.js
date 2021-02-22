@@ -14,7 +14,6 @@ require('legacy/model/store/StripePurchaseError');
 require('legacy/model/store/StripePurchaseItem');
 require('legacy/model/store/StripePurchaseOrder');
 
-
 module.exports = exports = Ext.define('NextThought.app.store.StateStore', {
 	extend: 'NextThought.common.StateStore',
 	PURCHASABLES: [],
@@ -27,5 +26,5 @@ module.exports = exports = Ext.define('NextThought.app.store.StateStore', {
 		this.PURCHASABLES = items;
 
 		this.fireEvent('purchasables-set', items);
-	}
+	},
 });

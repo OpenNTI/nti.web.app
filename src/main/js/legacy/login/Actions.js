@@ -1,23 +1,24 @@
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
-const {wait} = require('@nti/lib-commons');
-const {init} = require('@nti/lib-locale');
+const { getService } = require('@nti/web-client');
+const { wait } = require('@nti/lib-commons');
+const { init } = require('@nti/lib-locale');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const Socket = require('legacy/proxy/Socket');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const LoginStateStore = require('legacy/login/StateStore');
 const ModelService = require('legacy/model/Service');
-const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
 
-const {location: locationHref} = global;
+const { location: locationHref } = global;
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
-	constructor () {
+	constructor() {
 		this.callParent(arguments);
 
 		//we don't have the service doc yet, but we need the ajax helpers
@@ -25,15 +26,16 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		this.store = LoginStateStore.getInstance();
 	},
 
-	handleImpersonate () {
+	handleImpersonate() {
 		var url = $AppConfig.userObject.getLink('logon.nti.impersonate'),
-			username = url && prompt('What username do you want to impersonate?'),
+			username =
+				url && prompt('What username do you want to impersonate?'),
 			params;
 
 		if (username) {
 			params = Ext.Object.toQueryString({
 				username: username,
-				success: locationHref.pathname
+				success: locationHref.pathname,
 			});
 
 			url = Ext.String.urlAppend(url, params);
@@ -42,11 +44,13 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-	async handleLogout () {
-		const url = Globals.getURL(Ext.String.urlAppend(
-			this.store.getLogoutURL(),
-			'success=' + encodeURIComponent('/login/')
-		));
+	async handleLogout() {
+		const url = Globals.getURL(
+			Ext.String.urlAppend(
+				this.store.getLogoutURL(),
+				'success=' + encodeURIComponent('/login/')
+			)
+		);
 
 		TemporaryStorage.removeAll();
 
@@ -58,15 +62,12 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			await new Promise((done, timeout) => {
 				const lag = setTimeout(timeout, 10000);
 				this.store.willLogout(() => {
-					clearTimeout(lag),
-					done();
+					clearTimeout(lag), done();
 				});
 			});
-		}
-		catch {
+		} catch {
 			// timeout
-		}
-		finally {
+		} finally {
 			try {
 				Socket.tearDownSocket();
 				this.store.fireEvent('session-closed');
@@ -76,12 +77,12 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-	async __onLoginSuccess () {
+	async __onLoginSuccess() {
 		let setFromCookie, preference;
 		const field = 'useHighContrast';
 		const cookieName = 'use-accessibility-mode';
 
-		this.store.setSessionId(B64.encodeURLFriendly($AppConfig.username));//weak obfuscation
+		this.store.setSessionId(B64.encodeURLFriendly($AppConfig.username)); //weak obfuscation
 
 		try {
 			const value = await $AppConfig.Preferences.getPreference('WebApp');
@@ -99,13 +100,17 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 			if (pref || c) {
 				try {
-					await Globals.loadStyleSheetPromise('/app/resources/css/accessibility.css', 'main-stylesheet');
+					await Globals.loadStyleSheetPromise(
+						'/app/resources/css/accessibility.css',
+						'main-stylesheet'
+					);
 				} catch {
-					throw new Error('Failed to load the accessibility style sheet');
+					throw new Error(
+						'Failed to load the accessibility style sheet'
+					);
 				}
 			}
-		}
-		finally {
+		} finally {
 			this.store.onSessionReady();
 
 			await wait();
@@ -117,36 +122,42 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 		await wait();
 
-		if (!setFromCookie) { return; }
+		if (!setFromCookie) {
+			return;
+		}
 		Ext.Msg.show({
 			title: 'High Contrast mode',
-			msg: 'You are using the site in high contrast mode. Do you want to make this your preferred version of the app?',
+			msg:
+				'You are using the site in high contrast mode. Do you want to make this your preferred version of the app?',
 			buttons: {
 				primary: {
 					text: 'Yes',
-					handler () {
+					handler() {
 						if (preference) {
 							preference.set(field, true);
 							preference.save();
 						}
-					}
+					},
 				},
 				secondary: {
 					text: 'No',
-					handler () {
+					handler() {
 						Ext.util.Cookies.set(cookieName, 'false');
-					}
-				}
-			}
+					},
+				},
+			},
 		});
-
 	},
 
-	async __onLoginFailure (reason) {
+	async __onLoginFailure(reason) {
 		let url = $AppConfig.login;
 		const o = {};
 
-		if (locationHref.pathname !== '/' || locationHref.hash || locationHref.search) {
+		if (
+			locationHref.pathname !== '/' ||
+			locationHref.hash ||
+			locationHref.search
+		) {
 			o['return'] = locationHref.href;
 		}
 
@@ -154,9 +165,10 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			alert({
 				icon: 'error',
 				title: 'Request Timeout',
-				msg: 'There was some issue preventing us from starting. Please try again in a few minutes.',
+				msg:
+					'There was some issue preventing us from starting. Please try again in a few minutes.',
 				closable: false,
-				buttons: {}
+				buttons: {},
 			});
 
 			return;
@@ -172,21 +184,30 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 	 * Get the user, and set up the service object
 	 * @returns {Promise} fulfills is successfully logged in
 	 */
-	login () {
-		return this.__attemptLogin().then(this.__onLoginSuccess.bind(this), this.__onLoginFailure.bind(this));
+	login() {
+		return this.__attemptLogin().then(
+			this.__onLoginSuccess.bind(this),
+			this.__onLoginFailure.bind(this)
+		);
 	},
 
-	async __attemptLogin () {
+	async __attemptLogin() {
 		var dataserver = $AppConfig['server-path'],
 			ping = 'logon.ping';
 
 		try {
-			const response = Globals.parseJSON(await this.ServiceInterface.request({
-				timeout: 60000,
-				url: Globals.getURL(dataserver + ping)
-			}), true);
+			const response = Globals.parseJSON(
+				await this.ServiceInterface.request({
+					timeout: 60000,
+					url: Globals.getURL(dataserver + ping),
+				}),
+				true
+			);
 
-			const link = this.ServiceInterface.getLinkFrom(response.Links, 'logon.handshake');
+			const link = this.ServiceInterface.getLinkFrom(
+				response.Links,
+				'logon.handshake'
+			);
 			const siteFeatures = $AppConfig.features?.[response.Site];
 
 			if (siteFeatures) {
@@ -199,8 +220,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			}
 
 			return this.performHandshake(response);
-
-		} catch(reason) {
+		} catch (reason) {
 			if (reason?.timedout) {
 				console.log('Request timed out: ', reason.request.options.url);
 			}
@@ -209,44 +229,60 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-	async performHandshake (pongFromPing) {
-		const link = this.ServiceInterface.getLinkFrom(pongFromPing.Links, 'logon.handshake');
+	async performHandshake(pongFromPing) {
+		const link = this.ServiceInterface.getLinkFrom(
+			pongFromPing.Links,
+			'logon.handshake'
+		);
 		const username = decodeURIComponent(Ext.util.Cookies.get('username'));
 		const handshakeTimer = setTimeout(this.handshakeRecovery, 30000);
 
 		//NOTE: handshakeTimer will retry if it return before 30 seconds because it's been reported that
 		//you can get into a bad state during handshake, so we want to interrupt that and try again.
 
-		const response = Globals.parseJSON(await this.ServiceInterface.request({
-			method: 'POST',
-			timeout: 60000,
-			url: Globals.getURL(link),
-			callback () { clearTimeout(handshakeTimer);},
-			params: {
-				username: username
-			}
-		}), true);
+		const response = Globals.parseJSON(
+			await this.ServiceInterface.request({
+				method: 'POST',
+				timeout: 60000,
+				url: Globals.getURL(link),
+				callback() {
+					clearTimeout(handshakeTimer);
+				},
+				params: {
+					username: username,
+				},
+			}),
+			true
+		);
 
-		if (!this.ServiceInterface.getLinkFrom(response.Links, 'logon.continue')) {
+		if (
+			!this.ServiceInterface.getLinkFrom(response.Links, 'logon.continue')
+		) {
 			throw new Error('No Continue Link');
 		}
 
 		this.store.maybeAddImmediateAction(response);
-		this.store.setLogoutURL(this.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
+		this.store.setLogoutURL(
+			this.ServiceInterface.getLinkFrom(response.Links, 'logon.logout')
+		);
 
 		await this.resolveService();
 
-		const tosLink = this.ServiceInterface.getLinkFrom(response.Links, 'content.direct_tos_link');
+		const tosLink = this.ServiceInterface.getLinkFrom(
+			response.Links,
+			'content.direct_tos_link'
+		);
 		if (tosLink) {
 			this.service.overrideServiceLink('termsOfService', tosLink);
 		}
 	},
 
-	findResolveSelfWorkspace (service) {
+	findResolveSelfWorkspace(service) {
 		var items = service.get('Items') || [],
-			w = null, l;
+			w = null,
+			l;
 
-		Ext.each(items, (item) => {
+		Ext.each(items, item => {
 			var links = item.Links || [];
 
 			l = service.getLinkFrom(links, 'ResolveSelf');
@@ -262,8 +298,8 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return w;
 	},
 
-	async resolveService () {
-		const unauthorized = {401: true, 403: true};
+	async resolveService() {
+		const unauthorized = { 401: true, 403: true };
 
 		try {
 			const service = await getService();
@@ -278,17 +314,17 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			this.service = $AppConfig.service = doc;
 			// TODO: work through all the global references of Service to obtain the service doc from this action/store.
 			Object.defineProperty(window, 'Service', {
-				get () {
+				get() {
 					// console.trace('Stop referencing Service from global.');
 					return doc;
-				}
+				},
 			});
 			this.store.setService(doc);
 
 			if (Ext.isEmpty($AppConfig.userObject)) {
 				return this.attemptLoginCallback(doc);
 			}
-		} catch(reason) {
+		} catch (reason) {
 			if (unauthorized[reason.status]) {
 				//Just let this fall through and reject. we can't
 				//logout because we never logged in, when we reject
@@ -296,13 +332,16 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				//login page. -cutz
 				//this.handleLogout();
 			} else {
-				console.error('Could not resolve service document.\n', reason.stack || reason.message || reason);
+				console.error(
+					'Could not resolve service document.\n',
+					reason.stack || reason.message || reason
+				);
 
 				return new Promise((_, reject) => {
 					alert({
 						title: getString('Apologies'),
 						msg: getString('Cannot load page.'),
-						fn: () => reject(reason)
+						fn: () => reject(reason),
 					});
 				});
 			}
@@ -311,13 +350,16 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-	async attemptLoginCallback (service) {
+	async attemptLoginCallback(service) {
 		var href, workspace;
 
 		this.store.setupSocket();
 
 		workspace = this.findResolveSelfWorkspace(service);
-		href = service.getLinkFrom((workspace || {}).Links || [], 'ResolveSelf');
+		href = service.getLinkFrom(
+			(workspace || {}).Links || [],
+			'ResolveSelf'
+		);
 
 		if (!href) {
 			console.error('No link found to resolve app user', arguments);
@@ -329,10 +371,12 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				url: Globals.getURL(href),
 				scope: this,
 				headers: {
-					Accept: 'application/json'
-				}
+					Accept: 'application/json',
+				},
 			});
-			const user = lazy.ParseUtils.parseItems(Globals.parseJSON(response))[0];
+			const user = lazy.ParseUtils.parseItems(
+				Globals.parseJSON(response)
+			)[0];
 			if (!user || user.get('Username') !== workspace.Title) {
 				throw new Error('Mismatch');
 			}
@@ -342,10 +386,9 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			this.store.setActiveUser(user);
 
 			return user;
-		}
-		catch(reason) {
+		} catch (reason) {
 			console.error('could not resolve app user', reason);
 			throw reason;
 		}
-	}
+	},
 });

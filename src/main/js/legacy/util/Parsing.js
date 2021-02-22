@@ -6,7 +6,6 @@ const JSONProxy = require('../proxy/reader/Json');
 
 const ObjectUtils = require('./Object');
 
-
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
 
@@ -16,7 +15,10 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @returns {Object[]} Parsed models.
 	 */
 	parseItems: function (items, supplemental) {
-		var key, item, reader, results = [];
+		var key,
+			item,
+			reader,
+			results = [];
 
 		if (!Ext.isArray(items)) {
 			items = (items && items.Items) || [items];
@@ -26,7 +28,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 			if (items.hasOwnProperty(key)) {
 				item = items[key] || {};
 
-				if (typeof item === 'string') {item = Ext.JSON.decode(item);}
+				if (typeof item === 'string') {
+					item = Ext.JSON.decode(item);
+				}
 
 				if (item instanceof Ext.data.Model) {
 					results.push(item);
@@ -53,8 +57,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	},
 
 	findModel: function (data) {
-		function recurse (dir, modelName) {
-			var sub, o = dir[modelName];
+		function recurse(dir, modelName) {
+			var sub,
+				o = dir[modelName];
 
 			if (o) {
 				return o;
@@ -64,7 +69,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 				if (dir.hasOwnProperty(sub) && sub !== 'MAP') {
 					if (!dir[sub].$isClass && !dir[sub].singleton) {
 						o = recurse(dir[sub], modelName);
-						if (o) {return o;}
+						if (o) {
+							return o;
+						}
 					}
 				}
 			}
@@ -81,7 +88,12 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 				return m;
 			}
 
-			console.warn('No model for mimeType: ' + data.MimeType + '. Falling back to classname resolution: ' + data.Class);
+			console.warn(
+				'No model for mimeType: ' +
+					data.MimeType +
+					'. Falling back to classname resolution: ' +
+					data.Class
+			);
 		}
 
 		if (Ext.isString(data)) {
@@ -104,12 +116,12 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		if (!this.readers[o.$className]) {
 			this.readers[o.$className] = NextThought.proxy.reader.Base.create({
-				model: o.$className, proxy: 'nti'
+				model: o.$className,
+				proxy: 'nti',
 			});
 		}
 
 		return this.readers[o.$className];
-
 	},
 
 	isNTIID: function (id) {
@@ -124,8 +136,11 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @returns {Object} an object containing the components of the id
 	 */
 	parseNTIID: function (id) {
-		var parts = (typeof id !== 'string' ? (id || '').toString() : id).split(':'),
-			authority, specific,
+		var parts = (typeof id !== 'string' ? (id || '').toString() : id).split(
+				':'
+			),
+			authority,
+			specific,
 			result = {};
 
 		if (parts.length < 3 || parts[0] !== 'tag') {
@@ -144,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		result.authority = {
 			name: authority[0],
-			date: authority[1]
+			date: authority[1],
 		};
 
 		//join any parts after the 2nd into the specific portion that will
@@ -155,34 +170,33 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		result.specific = {
 			type: specific.length === 3 ? specific[1] : specific[0],
-			typeSpecific: specific.length === 3 ? specific[2] : specific[1]
+			typeSpecific: specific.length === 3 ? specific[2] : specific[1],
 		};
 
 		//Define a setter on provider property so we can match the ds escaping of '-' to '_'
 		ObjectUtils.defineAttributes(result.specific, {
 			provider: {
-				getter: function () {return this.$$provider;},
+				getter: function () {
+					return this.$$provider;
+				},
 				setter: function (p) {
 					if (p && p.replace) {
 						p = p.replace(/-/g, '_');
 					}
 					this.$$provider = p;
-				}
-			}
+				},
+			},
 		});
 
 		result.specific.provider = specific.length === 3 ? specific[0] : null;
 
 		result.toString = function () {
 			var m = this,
-				a = [
-					m.authority.name,
-					m.authority.date
-				],
+				a = [m.authority.name, m.authority.date],
 				s = [
 					m.specific.provider,
 					m.specific.type,
-					m.specific.typeSpecific
+					m.specific.typeSpecific,
 				];
 			if (!m.specific.provider) {
 				s.splice(0, 1);
@@ -194,7 +208,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		//FIXME include authority?
 		result.toURLSuffix = function () {
 			//#!html/mathcounts/mathcounts2013.warm_up_7
-			var m = this, components = [];
+			var m = this,
+				components = [];
 
 			components.push(m.specific.type);
 			if (m.specific.provider) {
@@ -202,7 +217,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 			}
 			components.push(m.specific.typeSpecific);
 
-			return '#!' + Ext.Array.map(components, encodeURIComponent).join('/');
+			return (
+				'#!' + Ext.Array.map(components, encodeURIComponent).join('/')
+			);
 		};
 
 		return result;
@@ -214,9 +231,10 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @returns {string} CSS-friendly string to use in a selector
 	 */
 	escapeId: function (id) {
-		return id.replace(/:/g, '\\3a ') //no colons
-			.replace(/,/g, '\\2c ')//no commas
-			.replace(/\./g, '\\2e ');//no periods
+		return id
+			.replace(/:/g, '\\3a ') //no colons
+			.replace(/,/g, '\\2c ') //no commas
+			.replace(/\./g, '\\2e '); //no periods
 	},
 
 	/**
@@ -228,14 +246,20 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		var ntiid = this.parseNTIID(id);
 		if (ntiid) {
 			ntiid.specific.type = 'HTML';
-			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific
+				.split('.')
+				.first();
 		}
 		return ntiid && ntiid.toString();
 	},
 
 	parseNtiFragment: function (fragment) {
 		var authority = 'nextthought.com,2011-10',
-			parts, type, provider, typeSpecific, s;
+			parts,
+			type,
+			provider,
+			typeSpecific,
+			s;
 
 		if (Ext.isEmpty(fragment) || fragment.indexOf('#!') !== 0) {
 			return null;
@@ -270,7 +294,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		});
 
 		r.toString = function () {
-			var out = [], k;
+			var out = [],
+				k;
 			for (k in this) {
 				if (this.hasOwnProperty(k)) {
 					out.push([k, encodeURIComponent(this[k])].join('='));
@@ -297,7 +322,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	encodeForURI: function (ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 
-		console.error('This is deprecated. Use @nti/lib-ntiids encodeForURI instead.');
+		console.error(
+			'This is deprecated. Use @nti/lib-ntiids encodeForURI instead.'
+		);
 
 		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
 			ntiid = ntiid.substr(cut);
@@ -309,19 +336,21 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	decodeFromURI: function (component) {
 		var ntiid = decodeURIComponent(component);
 
-		console.error('This is deprecated. Use @nti/lib-ntiids decodeFromURI instead.');
+		console.error(
+			'This is deprecated. Use @nti/lib-ntiids decodeFromURI instead.'
+		);
 
-		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {
+		if (!this.isNTIID(ntiid) && ntiid.substr(0, 3) !== 'tag') {
 			ntiid = this.COMMON_PREFIX + ntiid;
 		}
 
 		return ntiid;
-	}
+	},
 }).create();
 
-
-JSONProxy.findModel =
-JSONProxy.prototype.findModel = exports.findModel.bind(exports);
+JSONProxy.findModel = JSONProxy.prototype.findModel = exports.findModel.bind(
+	exports
+);
 
 /*
  * DOMParser HTML extension
@@ -342,11 +371,13 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 	// Firefox/Opera/IE throw errors on unsupported types
 	try {
 		// WebKit returns null on unsupported types
-		if ((new DOMParser()).parseFromString('', 'text/html')) {
+		if (new DOMParser().parseFromString('', 'text/html')) {
 			// text/html parsing is natively supported
 			return;
 		}
-	} catch (ex) {/*ignore*/}
+	} catch (ex) {
+		/*ignore*/
+	}
 
 	DOMParserProto.parseFromString = function (markup, type) {
 		if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
@@ -358,12 +389,16 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 				docElement.innerHTML = markup;
 				firstElement = docElement.firstElementChild;
 
-				if (docElement.childElementCount === 1 && firstElement.localName.toLowerCase() === 'html') {
+				if (
+					docElement.childElementCount === 1 &&
+					firstElement.localName.toLowerCase() === 'html'
+				) {
 					doc.replaceChild(firstElement, docElement);
 				}
-			}
-			catch (IE_SUCKS) {
-				console.warn('Head tags may not be returned from queries, due to polyfill/browser shortcomings');
+			} catch (IE_SUCKS) {
+				console.warn(
+					'Head tags may not be returned from queries, due to polyfill/browser shortcomings'
+				);
 				doc.body.innerHTML = markup;
 			}
 
@@ -371,4 +406,4 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 		}
 		return RealParseFromString.apply(this, arguments);
 	};
-}(global.DOMParser));
+})(global.DOMParser);

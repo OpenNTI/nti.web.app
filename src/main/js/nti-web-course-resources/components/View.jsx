@@ -1,67 +1,66 @@
 import './View.scss';
 import React from 'react';
-import {scoped} from '@nti/lib-locale';
+import { scoped } from '@nti/lib-locale';
 import PropTypes from 'prop-types';
-import {Flyout, Icons, Button} from '@nti/web-commons';
+import { Flyout, Icons, Button } from '@nti/web-commons';
 
 import Controls from './Controls';
-import Readings, {KEY as READINGS} from './readings';
+import Readings, { KEY as READINGS } from './readings';
 import Surveys from './surveys';
 
 const DEFAULT_STRINGS = {
-	'readings': 'Readings',
-	'surveys': 'Surveys',
+	readings: 'Readings',
+	surveys: 'Surveys',
 };
 
 const t = scoped('nti-course-resources.View', DEFAULT_STRINGS);
 
-export default
-class CourseResources extends React.Component {
-	static READINGS = READINGS
+export default class CourseResources extends React.Component {
+	static READINGS = READINGS;
 
 	static propTypes = {
 		course: PropTypes.object,
 		createResource: PropTypes.func,
 		gotoResource: PropTypes.func,
-		searchTerm: PropTypes.string
-	}
+		searchTerm: PropTypes.string,
+	};
 
 	static defaultProps = {
-		activeType: READINGS
-	}
+		activeType: READINGS,
+	};
 
-	flyout = React.createRef()
+	flyout = React.createRef();
 
 	state = {
-		active: 'readings'
-	}
+		active: 'readings',
+	};
 
 	onCreate = () => {
-		const {createResource} = this.props;
+		const { createResource } = this.props;
 
 		if (createResource) {
 			createResource(this.state.active);
 		}
-	}
+	};
 
-
-	gotoResource = (id) => {
-		const {gotoResource} = this.props;
+	gotoResource = id => {
+		const { gotoResource } = this.props;
 
 		if (gotoResource) {
 			gotoResource(id);
 		}
-	}
+	};
 
-	closeFlyout = () => this.flyout.current?.dismiss()
+	closeFlyout = () => this.flyout.current?.dismiss();
 
-	selectReadings = () => this.setState({active: 'readings'}, this.closeFlyout)
-	selectSurveys = () => this.setState({active: 'surveys'}, this.closeFlyout)
+	selectReadings = () =>
+		this.setState({ active: 'readings' }, this.closeFlyout);
+	selectSurveys = () =>
+		this.setState({ active: 'surveys' }, this.closeFlyout);
 
-
-	render () {
-		const {course, searchTerm} = this.props;
-		const {active} = this.state;
+	render() {
+		const { course, searchTerm } = this.props;
+		const { active } = this.state;
 
 		const headerTrigger = (
 			<div className="header">
@@ -73,12 +72,24 @@ class CourseResources extends React.Component {
 		return (
 			<div className="course-resources">
 				<div className="course-resources-header">
-					<Flyout.Triggered ref={this.flyout} trigger={headerTrigger} horizontalAlign={Flyout.ALIGNMENTS.LEFT_OR_RIGHT} >
+					<Flyout.Triggered
+						ref={this.flyout}
+						trigger={headerTrigger}
+						horizontalAlign={Flyout.ALIGNMENTS.LEFT_OR_RIGHT}
+					>
 						<div className="course-resource-types">
-							<Button plain className="header-option" onClick={this.selectReadings}>
+							<Button
+								plain
+								className="header-option"
+								onClick={this.selectReadings}
+							>
 								{t('readings')}
 							</Button>
-							<Button plain className="header-option" onClick={this.selectSurveys}>
+							<Button
+								plain
+								className="header-option"
+								onClick={this.selectSurveys}
+							>
 								{t('surveys')}
 							</Button>
 						</div>
@@ -87,10 +98,18 @@ class CourseResources extends React.Component {
 					<Controls onCreate={this.onCreate} />
 				</div>
 				{active === 'readings' && (
-					<Readings course={course} gotoResource={this.gotoResource} searchTerm={searchTerm} />
+					<Readings
+						course={course}
+						gotoResource={this.gotoResource}
+						searchTerm={searchTerm}
+					/>
 				)}
 				{active === 'surveys' && (
-					<Surveys course={course} gotoResource={this.gotoResource} searchTerm={searchTerm} />
+					<Surveys
+						course={course}
+						gotoResource={this.gotoResource}
+						searchTerm={searchTerm}
+					/>
 				)}
 			</div>
 		);

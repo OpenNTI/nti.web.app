@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 require('../window/Window');
-
 
 module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 	extend: 'NextThought.common.window.Window',
@@ -21,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 	desiredHeight: 595,
 
 	config: {
-		loadingText: 'Loading...'
+		loadingText: 'Loading...',
 	},
 
 	items: [
@@ -38,8 +37,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow-x: hidden; overflow-y:auto; height: 585px;'
-			}
+				style: 'overflow-x: hidden; overflow-y:auto; height: 585px;',
+			},
 		},
 		{
 			xtype: 'container',
@@ -49,26 +48,39 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 				cls: 'footer-region',
 				xtype: 'container',
 				flex: 1,
-				layout: 'none'
-			},
-			items: [{
 				layout: 'none',
-				defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
-				items: [
-					//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
-					{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: '', target: '_blank'}},
-					{
-						text: 'Close',
-						cls: 'x-btn-blue-large dismiss',
-						action: 'cancel',
-						style: { 'float': 'right'},
-						handler: function (b, e) {
-							e.stopEvent(); b.up('window').close();
-						}
-					}
-				]
-			}]
-		}
+			},
+			items: [
+				{
+					layout: 'none',
+					defaults: { xtype: 'button', ui: 'blue', scale: 'large' },
+					items: [
+						//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
+						{
+							xtype: 'box',
+							cls: 'iframe-save',
+							save: true,
+							autoEl: {
+								tag: 'a',
+								href: '{url}',
+								html: '',
+								target: '_blank',
+							},
+						},
+						{
+							text: 'Close',
+							cls: 'x-btn-blue-large dismiss',
+							action: 'cancel',
+							style: { float: 'right' },
+							handler: function (b, e) {
+								e.stopEvent();
+								b.up('window').close();
+							},
+						},
+					],
+				},
+			],
+		},
 	],
 
 	initComponent: function () {
@@ -80,7 +92,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 			iframe = this.down('box[itemId=iframe]'),
 			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1';
 
-		iframe.autoEl.src = url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
+		iframe.autoEl.src =
+			url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
 
 		if (this.noSaveLink) {
 			save.destroy();
@@ -112,25 +125,31 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 						p.then(parent.unmask.bind(parent));
 					}
 				});
-			}
+			},
 		});
 
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
 
 		if (Ext.is.iOS) {
-			this.on('afterrender', function () {
-				var iframeCmp = this.el.down('iframe');
-				iframeCmp.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
-				iframeCmp.parent().el.setStyle('overflow', 'auto');
-			},this);
+			this.on(
+				'afterrender',
+				function () {
+					var iframeCmp = this.el.down('iframe');
+					iframeCmp
+						.parent()
+						.el.setStyle('-webkit-overflow-scrolling', 'touch');
+					iframeCmp.parent().el.setStyle('overflow', 'auto');
+				},
+				this
+			);
 		}
 
 		if (this.width === 'max') {
 			this.fillScreen();
 		}
 
-		function onResize () {
+		function onResize() {
 			let iframeCmp = me.el.dom.querySelector('iframe');
 
 			me.fillScreen();
@@ -147,12 +166,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		});
 	},
 
-
 	fillScreen: function () {
 		var aspect = this.desiredWidth / this.desiredHeight, //width / height
-			height, width,
-			MAX_WIDTH = (Ext.Element.getViewWidth() - 50), //window width - padding
-			MAX_HEIGHT = (Ext.Element.getViewHeight() - 20 - 55); //window height - padding - bottom bar
+			height,
+			width,
+			MAX_WIDTH = Ext.Element.getViewWidth() - 50, //window width - padding
+			MAX_HEIGHT = Ext.Element.getViewHeight() - 20 - 55; //window height - padding - bottom bar
 
 		height = MAX_HEIGHT;
 		width = aspect * MAX_HEIGHT;
@@ -169,17 +188,15 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		this.setWidth(width);
 	},
 
-
 	addCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		mask.addCls('nti-black-clear');
 	},
-
 
 	removeCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		if (mask) {
 			mask.removeCls('nti-black-clear');
 		}
-	}
+	},
 });

@@ -20,7 +20,10 @@
 		max-width: 255px;
 
 		&.floating {
-			--navigation-height: calc(100vh - var(--navigation-top, 0) - var(--navigation-bottom-gap, 0));
+			--navigation-height: calc(
+				100vh - var(--navigation-top, 0) -
+					var(--navigation-bottom-gap, 0)
+			);
 
 			position: fixed;
 			top: var(--navigation-top);

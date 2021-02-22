@@ -16,19 +16,23 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 			cn: [
 				//				{ cls: 'favorite' },
 				//				{ cls: 'like' },
-				{ cls: 'video', html: '{{{NextThought.view.assessment.Header.related-videos}}}' }
-			]
+				{
+					cls: 'video',
+					html:
+						'{{{NextThought.view.assessment.Header.related-videos}}}',
+				},
+			],
 		},
-		{cls: 'title', html: '{title}'},
-		{cls: 'status {status}', html: '{status}'}
+		{ cls: 'title', html: '{title}' },
+		{ cls: 'status {status}', html: '{status}' },
 	]),
 
 	renderSelectors: {
-	//		liked: '.controls .like',
-	//		favorites: '.controls .favorite',
+		//		liked: '.controls .like',
+		//		favorites: '.controls .favorite',
 		myTitle: '.title',
 		status: '.status',
-		video: '.video'
+		video: '.video',
 	},
 
 	initComponent: function () {
@@ -39,14 +43,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 	afterRender: function () {
 		this.callParent(arguments);
 		var //r = this.question,
-		//			l = this.liked,
-		//			f = this.favorites,
+			//			l = this.liked,
+			//			f = this.favorites,
 			v = this.video;
 
 		if (!this.videos.length) {
 			v.remove();
-		}
-		else {
+		} else {
 			this.mon(v, 'click', this.openVideos, this);
 		}
 
@@ -55,8 +58,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 		//		l.update(r.getFriendlyLikeCount());
 		//		l[(r.isLiked()?'add':'remove')+'Cls']('on');
 		//		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
-
-
 	},
 
 	onAdded: function (assessmentParent) {
@@ -73,8 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 			}
 
 			this.videos = this.question.getVideos() || [];
-		}
-		catch (e) {
+		} catch (e) {
 			console.warn(Globals.getError(e));
 		}
 
@@ -129,5 +129,5 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 
 	openVideos: function () {
 		Ext.widget('video-lightbox', { data: this.videos }).show();
-	}
+	},
 });

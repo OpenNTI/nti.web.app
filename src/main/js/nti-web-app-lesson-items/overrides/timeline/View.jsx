@@ -1,35 +1,35 @@
 /*globals createStoryJS*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate, rawContent} from '@nti/lib-commons';
+import { decorate, rawContent } from '@nti/lib-commons';
 
 import AnalyticsUtil from 'legacy/util/Analytics';
 
 import Registry from '../Registry';
 
-const ASPECT_RATIO = 1.333;//4:3
+const ASPECT_RATIO = 1.333; //4:3
 
 const MIME_TYPE = 'application/vnd.nextthought.ntitimeline';
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
+const handles = obj => {
+	const { location } = obj || {};
+	const { item } = location || {};
 
 	return item && item.MimeType === MIME_TYPE;
 };
 
 const DATA_ATTR = 'data-timeline-placeholder';
-const PLACEHOLDER_TPL = (item) => {
+const PLACEHOLDER_TPL = item => {
 	return `<div id="${item.getID()}-placeholder-element" ${DATA_ATTR}></div>`;
 };
 
 class NTIWebAppLessonItemsTimeline extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
-			item: PropTypes.object
-		})
-	}
+			item: PropTypes.object,
+		}),
+	};
 
-	attachContainer = (node) => {
+	attachContainer = node => {
 		setTimeout(() => {
 			if (!this.node && node) {
 				this.node = node;
@@ -39,26 +39,28 @@ class NTIWebAppLessonItemsTimeline extends React.Component {
 				this.teardownTimeline();
 			}
 		}, 1);
-	}
+	};
 
-	componentDidUpdate (prev) {
-		const {location} = this.props;
-		const {location: prevLocation} = prev;
+	componentDidUpdate(prev) {
+		const { location } = this.props;
+		const { location: prevLocation } = prev;
 
-		const {item} = location || {};
-		const {item:prevItem} = prevLocation || {};
+		const { item } = location || {};
+		const { item: prevItem } = prevLocation || {};
 
 		if (item !== prevItem) {
 			this.setupTimeline();
 		}
 	}
 
-	setupTimeline () {
-		const {location} = this.props;
-		const {item} = location || {};
+	setupTimeline() {
+		const { location } = this.props;
+		const { item } = location || {};
 		const renderTo = this.node && this.node.querySelector(`[${DATA_ATTR}]`);
 
-		if (!item || !renderTo) { return null; }
+		if (!item || !renderTo) {
+			return null;
+		}
 
 		const width = renderTo.clientWidth;
 		const height = width / ASPECT_RATIO;
@@ -66,37 +68,41 @@ class NTIWebAppLessonItemsTimeline extends React.Component {
 
 		createStoryJS({
 			source: item.href,
-			'embed_id': id,
-			height
+			embed_id: id,
+			height,
 		});
 
 		AnalyticsUtil.startEvent(item.NTIID, 'ResourceView');
 	}
 
+	teardownTimeline() {
+		const { location } = this.props;
+		const { item } = location || {};
 
-	teardownTimeline () {
-		const {location} = this.props;
-		const {item}  = location || {};
-
-		if (!item) { return; }
+		if (!item) {
+			return;
+		}
 
 		AnalyticsUtil.stopEvent(item.NTIID, 'ResourceView');
 	}
 
+	render() {
+		const { location } = this.props;
+		const { item } = location || {};
 
-	render () {
-		const {location} = this.props;
-		const {item} = location || {};
-
-		if (!item) { return null;}
+		if (!item) {
+			return null;
+		}
 
 		return (
-			<div ref={this.attachContainer} {...rawContent(PLACEHOLDER_TPL(item))} />
+			<div
+				ref={this.attachContainer}
+				{...rawContent(PLACEHOLDER_TPL(item))}
+			/>
 		);
 	}
 }
 
-
 export default decorate(NTIWebAppLessonItemsTimeline, [
-	Registry.register(handles)
+	Registry.register(handles),
 ]);

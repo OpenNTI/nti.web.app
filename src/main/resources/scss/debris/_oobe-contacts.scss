@@ -99,7 +99,7 @@
 		padding: 0 24px 5px;
 		border-bottom: 1px solid #ccc;
 
-		@include icon($search,$top:11px, $left:5px);
+		@include icon($search, $top: 11px, $left: 5px);
 
 		input {
 			background: #fff;
@@ -181,7 +181,7 @@
 			}
 
 			&.x-item-selected {
-				@include icon($add_contact_check,$top:41px,$left:41px);
+				@include icon($add_contact_check, $top: 41px, $left: 41px);
 
 				.name {
 					background: rgba(63, 179, 79, 0.85);

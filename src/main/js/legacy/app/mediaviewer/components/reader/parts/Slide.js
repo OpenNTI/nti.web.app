@@ -1,203 +1,242 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const SharingUtils = require('legacy/util/Sharing');
 const UserDataActions = require('legacy/app/userdata/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-const lazy = require('legacy/util/lazy-require')
-	.get('Anchors', () => require('legacy/util/Anchors'));
+const lazy = require('legacy/util/lazy-require').get('Anchors', () =>
+	require('legacy/util/Anchors')
+);
 
 require('../mixins/AnnotationsMixin');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.mediaviewer.components.reader.parts.Slide',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.slide-component',
 
+		mixins: {
+			transcriptItem:
+				'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin',
+		},
 
-module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
-	extend: 'Ext.Component',
-	alias: 'widget.slide-component',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'image-wrap',
+				cn: [
+					{ tag: 'img', cls: 'slide' },
+					{
+						tag: 'span',
+						cls: 'add-note-here',
+						cn: {
+							cls: 'note-here-control-box hidden',
+							tag: 'span',
+						},
+					},
+					//		{cls: 'left', cn:[{cls: 'prev'}]},
+					//	{cls: 'right',cn:[{cls: 'next'}]}
+				],
+			},
+		]),
 
-	mixins: {
-		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
-	},
+		contextTpl: Ext.DomHelper.markup([
+			{ cls: 'image-wrap', cn: [{ tag: 'img', src: '{image}' }] },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'image-wrap', cn: [
-			{tag: 'img', cls: 'slide'},
-			{tag: 'span', cls: 'add-note-here', cn: {cls: 'note-here-control-box hidden', tag: 'span'}}
-			//		{cls: 'left', cn:[{cls: 'prev'}]},
-			//	{cls: 'right',cn:[{cls: 'next'}]}
-		]}
-	]),
+		ui: 'slide',
 
-	contextTpl: Ext.DomHelper.markup([
-		{cls: 'image-wrap', cn: [
-			{tag: 'img', src: '{image}'}
-		]}
-	]),
+		renderSelectors: {
+			slideImage: 'img.slide',
+			createNoteEl: '.add-note-here',
+			//		next: '.next',
+			//		prev: '.prev'
+		},
 
-	ui: 'slide',
+		initComponent: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		slideImage: 'img.slide',
-		createNoteEl: '.add-note-here'
-	//		next: '.next',
-	//		prev: '.prev'
-	},
+			this.mixins.transcriptItem.constructor.apply(this, arguments);
+			this.enableBubble(['register-records', 'unregister-records']);
+			this.UserDataActions = UserDataActions.create();
+			this.MediaViewerStore = MediaViewerStateStore.getInstance();
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
+		containerIdForData: function () {
+			return this.slide && this.slide.getId();
+		},
 
-		this.mixins.transcriptItem.constructor.apply(this, arguments);
-		this.enableBubble(['register-records', 'unregister-records']);
-		this.UserDataActions = UserDataActions.create();
-		this.MediaViewerStore = MediaViewerStateStore.getInstance();
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	containerIdForData: function () {
-		return this.slide && this.slide.getId();
-	},
+			var slide = this.slide,
+				i,
+				me = this;
+			if (slide) {
+				i = this.slideImage.dom;
+				i.onload = Ext.bind(me.finishedLoadingImage, me);
+				i.onerror = Ext.bind(me.finishedLoadingImage, me);
+				this.slideImage.set({ src: slide.get('image') });
 
-	afterRender: function () {
-		this.callParent(arguments);
+				this.mon(this.el, {
+					scope: this,
+					mouseover: 'onMouseOver',
+					mouseout: 'onMouseOut',
+				});
 
-		var slide = this.slide, i, me = this;
-		if (slide) {
-			i = this.slideImage.dom;
-			i.onload = Ext.bind(me.finishedLoadingImage, me);
-			i.onerror = Ext.bind(me.finishedLoadingImage, me);
-			this.slideImage.set({src: slide.get('image')});
-
-			this.mon(this.el, {
-				scope: this,
-				'mouseover': 'onMouseOver',
-				'mouseout': 'onMouseOut'
-			});
-
-			this.mon(this.createNoteEl, {
-				scope: this,
-				'click': 'openNoteEditor'
-			});
-
-		}
-	},
-
-	finishedLoadingImage: function () {
-		this.notifyReady();
-	},
-
-	openNoteEditor: function (e) {
-		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')};
-
-		data.isDomRange = true;
-		data.range = null;
-		data.containerId = this.slide.getId();
-		data.userDataStore = this.userDataStore;
-		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
-		wait()
-			.then(this.setEditorDefaultSharing.bind(this));
-	},
-
-	setEditorDefaultSharing: function () {
-		var pageInfo = this.slide.pageInfo,
-			pid = pageInfo && pageInfo.getId(),
-			reader = this.up('slidedeck-transcript'),
-			course = reader && reader.currentBundle || this.slide.courseBundle,
-			me = this;
-
-		if (!pid || !course) { return; }
-
-		me.MediaViewerStore.getSharingPreferences(pid, course)
-			.then(function (prefs) {
-				var sharing = prefs && prefs.sharing,
-					sharedWith = sharing && sharing.sharedWith;
-
-				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), course);
-			})
-			.then(function (shareInfo) {
-				if (me.noteOverlay && me.noteOverlay.editor) {
-					me.noteOverlay.editor.setSharedWith(shareInfo);
-				}
-			});
-	},
-
-	onMouseOver: function (e) {
-		var t = e.getTarget('.x-component-slide', null, true),
-			box = t && t.down('.add-note-here'), me = this,
-			current = this.el.parent().down('.note-here-control-box:not(.hidden)');
-
-		if (this.suspendMoveEvents || !t || !box) { return; }
-
-		clearTimeout(this.mouseEnterTimeout);
-
-		this.mouseLeaveTimeout = setTimeout(function () {
-			box.down('.note-here-control-box').removeCls('hidden');
-			if (current && current !== box.down('.note-here-control-box')) {
-				current.addCls('hidden');
+				this.mon(this.createNoteEl, {
+					scope: this,
+					click: 'openNoteEditor',
+				});
 			}
-			me.activeCueEl = t;
-		}, 100);
+		},
 
-	},
+		finishedLoadingImage: function () {
+			this.notifyReady();
+		},
 
-	onMouseOut: function (e) {
-		var target = e.getTarget(null, null, true),
-			t = target && target.is('.x-component-slide'),
-			box = t && target.down('.add-note-here'), me = this;
+		openNoteEditor: function (e) {
+			var data = {
+				startTime: this.slide.get('video-start'),
+				endTime: this.slide.get('video-end'),
+			};
 
-		if (this.suspendMoveEvents || !target || !box) { return; }
+			data.isDomRange = true;
+			data.range = null;
+			data.containerId = this.slide.getId();
+			data.userDataStore = this.userDataStore;
+			this.fireEvent(
+				'show-editor',
+				data,
+				e.getTarget('.add-note-here', null, true)
+			);
+			wait().then(this.setEditorDefaultSharing.bind(this));
+		},
 
-		//clearTimeout(this.mouseLeaveTimeout);
+		setEditorDefaultSharing: function () {
+			var pageInfo = this.slide.pageInfo,
+				pid = pageInfo && pageInfo.getId(),
+				reader = this.up('slidedeck-transcript'),
+				course =
+					(reader && reader.currentBundle) || this.slide.courseBundle,
+				me = this;
 
-		if (!box.down('.note-here-control-box').hasCls('hidden')) {
-			this.mouseEnterTimeout = setTimeout(function () {
-				if (box && !box.down('.note-here-control-box').hasCls('hidden')) {
-					box.down('.note-here-control-box').addCls('hidden');
+			if (!pid || !course) {
+				return;
+			}
+
+			me.MediaViewerStore.getSharingPreferences(pid, course)
+				.then(function (prefs) {
+					var sharing = prefs && prefs.sharing,
+						sharedWith = sharing && sharing.sharedWith;
+
+					return SharingUtils.sharedWithToSharedInfo(
+						SharingUtils.resolveValue(sharedWith),
+						course
+					);
+				})
+				.then(function (shareInfo) {
+					if (me.noteOverlay && me.noteOverlay.editor) {
+						me.noteOverlay.editor.setSharedWith(shareInfo);
+					}
+				});
+		},
+
+		onMouseOver: function (e) {
+			var t = e.getTarget('.x-component-slide', null, true),
+				box = t && t.down('.add-note-here'),
+				me = this,
+				current = this.el
+					.parent()
+					.down('.note-here-control-box:not(.hidden)');
+
+			if (this.suspendMoveEvents || !t || !box) {
+				return;
+			}
+
+			clearTimeout(this.mouseEnterTimeout);
+
+			this.mouseLeaveTimeout = setTimeout(function () {
+				box.down('.note-here-control-box').removeCls('hidden');
+				if (current && current !== box.down('.note-here-control-box')) {
+					current.addCls('hidden');
 				}
-				delete me.activeCueEl;
-			}, 500);
-		}
-	},
+				me.activeCueEl = t;
+			}, 100);
+		},
 
-	getAnchorResolver: function () {
-		return lazy.Anchors;
-	},
+		onMouseOut: function (e) {
+			var target = e.getTarget(null, null, true),
+				t = target && target.is('.x-component-slide'),
+				box = t && target.down('.add-note-here'),
+				me = this;
 
-	createDomRange: function () {
-		var range = document.createRange(),
-			el = this.el.down('img');
+			if (this.suspendMoveEvents || !target || !box) {
+				return;
+			}
 
-		if (el) { range.selectNode(el.dom); }
-		return range;
-	},
+			//clearTimeout(this.mouseLeaveTimeout);
 
-	isTimeWithinTimeRange: function (time) {
-		var start = this.slide.get('video-start'),
-			end = this.slide.get('video-end');
+			if (!box.down('.note-here-control-box').hasCls('hidden')) {
+				this.mouseEnterTimeout = setTimeout(function () {
+					if (
+						box &&
+						!box.down('.note-here-control-box').hasCls('hidden')
+					) {
+						box.down('.note-here-control-box').addCls('hidden');
+					}
+					delete me.activeCueEl;
+				}, 500);
+			}
+		},
 
-		return start <= time && time <= end;
-	},
+		getAnchorResolver: function () {
+			return lazy.Anchors;
+		},
 
-	getElementAtTime: function (/*time*/) {
-		return this.slideImage;
-	},
+		createDomRange: function () {
+			var range = document.createRange(),
+				el = this.el.down('img');
 
-	wantsRecord: function (rec) {
-		var anchorResolver = this.getAnchorResolver(),
-			domFrag = this.slide.get('dom-clone'),
-			containerId = rec.get('ContainerId'),
-			result = this.slide.getId() === containerId;
+			if (el) {
+				range.selectNode(el.dom);
+			}
+			return range;
+		},
 
-		if (!result) {
-			result = anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
-		}
+		isTimeWithinTimeRange: function (time) {
+			var start = this.slide.get('video-start'),
+				end = this.slide.get('video-end');
 
-		return result;
-	},
+			return start <= time && time <= end;
+		},
 
-	domRangeForRecord: function (/*rec*/) {
-		return this.createDomRange();
-	},
+		getElementAtTime: function (/*time*/) {
+			return this.slideImage;
+		},
 
-	getDomContextForRecord: function (/*r*/) {
-		return Ext.clone(this.el.down('img').dom);
+		wantsRecord: function (rec) {
+			var anchorResolver = this.getAnchorResolver(),
+				domFrag = this.slide.get('dom-clone'),
+				containerId = rec.get('ContainerId'),
+				result = this.slide.getId() === containerId;
+
+			if (!result) {
+				result = anchorResolver.doesContentRangeDescriptionResolve(
+					rec.get('applicableRange'),
+					domFrag
+				);
+			}
+
+			return result;
+		},
+
+		domRangeForRecord: function (/*rec*/) {
+			return this.createDomRange();
+		},
+
+		getDomContextForRecord: function (/*r*/) {
+			return Ext.clone(this.el.down('img').dom);
+		},
 	}
-});
+);

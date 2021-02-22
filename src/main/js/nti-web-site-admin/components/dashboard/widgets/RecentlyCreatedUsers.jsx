@@ -1,57 +1,52 @@
 import './RecentlyCreatedUsers.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {DateTime, Loading, Avatar} from '@nti/web-commons';
-import {getService} from '@nti/web-client';
+import { scoped } from '@nti/lib-locale';
+import { DateTime, Loading, Avatar } from '@nti/web-commons';
+import { getService } from '@nti/web-client';
 
 const LABELS = {
 	title: 'Recently Created Users',
 	name: 'Name',
 	value: '',
-	noItems: 'No users found'
+	noItems: 'No users found',
 };
 
-const t = scoped('nti-web-site-admins.components.dashboard.widgets.recentlycreatedusers', LABELS);
+const t = scoped(
+	'nti-web-site-admins.components.dashboard.widgets.recentlycreatedusers',
+	LABELS
+);
 const PAGE_SIZE = 4;
 
 class Item extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired
-	}
+		item: PropTypes.object.isRequired,
+	};
 
-	renderImg () {
+	renderImg() {
 		const { item } = this.props;
 
-		return <Avatar className="item-image" entity={item.entity}/>;
+		return <Avatar className="item-image" entity={item.entity} />;
 	}
 
-	renderInfo () {
+	renderInfo() {
 		const { item } = this.props;
 
 		return (
 			<div className="info">
-				<div className="name">
-					{item.name}
-				</div>
-				<div className="description">
-					{item.description}
-				</div>
+				<div className="name">{item.name}</div>
+				<div className="description">{item.description}</div>
 			</div>
 		);
 	}
 
-	renderValue () {
+	renderValue() {
 		const { item } = this.props;
 
-		return (
-			<div className="value">
-				{item.value}
-			</div>
-		);
+		return <div className="value">{item.value}</div>;
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="item">
 				{this.renderImg()}
@@ -63,37 +58,42 @@ class Item extends React.Component {
 }
 
 export default class RecentlyCreatedUsers extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			loading: true,
-			pageNumber: 0
+			pageNumber: 0,
 		};
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		this.setState({ items: [] }, () => {
 			this.loadData();
 		});
 	}
 
-	async loadData () {
+	async loadData() {
 		const service = await getService();
 
-		const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+		const userWorkspace = service.Items.filter(x =>
+			x.hasLink('SiteUsers')
+		)[0];
 
-		if(!userWorkspace) {
+		if (!userWorkspace) {
 			this.setState({
 				loading: false,
 				items: [],
-				error: 'Could not load users'
+				error: 'Could not load users',
 			});
 
 			return;
 		}
 
 		try {
-			const users = await service.getBatch(userWorkspace.getLink('SiteUsers'), { sortOn: 'createdTime', sortOrder: 'descending', batchSize: 4});
+			const users = await service.getBatch(
+				userWorkspace.getLink('SiteUsers'),
+				{ sortOn: 'createdTime', sortOrder: 'descending', batchSize: 4 }
+			);
 
 			this.setState({
 				loading: false,
@@ -103,41 +103,42 @@ export default class RecentlyCreatedUsers extends React.Component {
 					return {
 						entity: x,
 						name: x.alias,
-						description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME)
+						description:
+							'Created ' +
+							DateTime.format(
+								new Date(x.getCreatedTime()),
+								DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME
+							),
 					};
-				})
+				}),
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			this.setState({
 				loading: false,
 				items: [],
-				error: e.message || 'There was an error loading users'
+				error: e.message || 'There was an error loading users',
 			});
 		}
 	}
 
-	renderHeader () {
+	renderHeader() {
 		return (
 			<div className="header">
-				<div className="title">
-					{t('title')}
-				</div>
+				<div className="title">{t('title')}</div>
 			</div>
 		);
 	}
 
 	renderItem = (item, index) => {
-		return <Item key={item.name + index} item={item}/>;
-	}
+		return <Item key={item.name + index} item={item} />;
+	};
 
-	renderItems () {
+	renderItems() {
 		const { items, loading } = this.state;
 
-		if(loading) {
-			return <Loading.Mask/>;
-		}
-		else if(items && items.length === 0) {
+		if (loading) {
+			return <Loading.Mask />;
+		} else if (items && items.length === 0) {
 			return <div className="no-items">{t('noItems')}</div>;
 		}
 
@@ -150,7 +151,7 @@ export default class RecentlyCreatedUsers extends React.Component {
 		);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="dashboard-list-widget recently-created-users">
 				{this.renderHeader()}

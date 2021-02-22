@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .admin-toolbar {
 	margin-bottom: 30px;
@@ -19,7 +19,8 @@
 		flex: 0 0 auto;
 		display: flex;
 
-		.gear-button, .admin-nav {
+		.gear-button,
+		.admin-nav {
 			width: 40px;
 			background-color: #555;
 			height: 40px;

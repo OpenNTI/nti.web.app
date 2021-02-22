@@ -1,11 +1,11 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {List, Loading} from '@nti/web-commons';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {LinkTo} from '@nti/web-routing';
-import {searchable} from '@nti/web-search';
+import { List, Loading } from '@nti/web-commons';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { LinkTo } from '@nti/web-routing';
+import { searchable } from '@nti/web-search';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 import Pager from '../../../common/Pager';
@@ -16,7 +16,7 @@ import BookRosterStore from './BookRosterStore';
 
 const DEFAULT_TEXT = {
 	empty: 'No users have access to this book.',
-	loadMore: 'Load More'
+	loadMore: 'Load More',
 };
 const t = scoped('nti-site-admin.courses.course.info.Roster', DEFAULT_TEXT);
 
@@ -28,28 +28,45 @@ class SiteAdminBookRoster extends React.Component {
 		loading: PropTypes.bool,
 		error: PropTypes.string,
 		numPages: PropTypes.number,
-		pageNumber: PropTypes.number
-	}
+		pageNumber: PropTypes.number,
+	};
 
-	componentDidMount () {
+	componentDidMount() {
 		this.props.store.loadBook(this.props.course);
 	}
 
-	render () {
-		const {loading, error, items, store, numPages, pageNumber} = this.props;
+	render() {
+		const {
+			loading,
+			error,
+			items,
+			store,
+			numPages,
+			pageNumber,
+		} = this.props;
 
 		return (
 			<div className="site-admin-course-roster">
-				{loading && (<div className="loading-mask"><Loading.Mask /></div>)}
-				{error && (<ErrorMessage>{t('error')}</ErrorMessage>)}
+				{loading && (
+					<div className="loading-mask">
+						<Loading.Mask />
+					</div>
+				)}
+				{error && <ErrorMessage>{t('error')}</ErrorMessage>}
 				{!loading && items && this.renderItems(items)}
-				{!loading && !error && <Pager store={store} numPages={numPages} pageNumber={pageNumber}/>}
+				{!loading && !error && (
+					<Pager
+						store={store}
+						numPages={numPages}
+						pageNumber={pageNumber}
+					/>
+				)}
 			</div>
 		);
 	}
 
-	renderItems (items) {
-		if(items.length === 0) {
+	renderItems(items) {
+		if (items.length === 0) {
 			return <div className="empty-state">{t('empty')}</div>;
 		}
 
@@ -59,7 +76,10 @@ class SiteAdminBookRoster extends React.Component {
 					{items.map((item, index) => {
 						return (
 							<li key={index}>
-								<LinkTo.Object object={item} context="site-admin.courses.book-roster.list">
+								<LinkTo.Object
+									object={item}
+									context="site-admin.courses.book-roster.list"
+								>
 									<Item item={item} />
 								</LinkTo.Object>
 							</li>
@@ -69,7 +89,6 @@ class SiteAdminBookRoster extends React.Component {
 			</Card>
 		);
 	}
-
 }
 
 export default decorate(SiteAdminBookRoster, [
@@ -79,6 +98,6 @@ export default decorate(SiteAdminBookRoster, [
 		items: 'items',
 		error: 'error',
 		numPages: 'numPages',
-		pageNumber: 'pageNumber'
-	})
+		pageNumber: 'pageNumber',
+	}),
 ]);

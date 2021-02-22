@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');
 
 require('legacy/mixins/Searchable');
@@ -9,7 +9,6 @@ require('./Actions');
 require('./panels/Reader');
 require('./panels/assignment/Admin');
 require('./panels/assignment/Student');
-
 
 /**
  * Renders a piece of content
@@ -60,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 	cls: 'content-viewer',
 
 	mixins: {
-		Searchable: 'NextThought.mixins.Searchable'
+		Searchable: 'NextThought.mixins.Searchable',
 	},
 
 	layout: 'none',
@@ -89,25 +88,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			fragment: config.fragment,
 			note: config.note,
 			rootRoute: config.rootRoute,
-			handleEdit: config.handleEdit
+			handleEdit: config.handleEdit,
 		};
 
 		if (config.assignment) {
-			readerConfig.xtype = !config.student || isMe(config.student) ? 'assignment-reader' : 'admin-assignment-reader';
+			readerConfig.xtype =
+				!config.student || isMe(config.student)
+					? 'assignment-reader'
+					: 'admin-assignment-reader';
 			readerConfig.assignment = config.assignment;
 			readerConfig.assignmentHistory = config.assignmentHistory;
-			readerConfig.assignmentHistoryItemContainer = config.assignmentHistoryItemContainer;
+			readerConfig.assignmentHistoryItemContainer =
+				config.assignmentHistoryItemContainer;
 			readerConfig.assignmentId = config.assignment.getId();
 			readerConfig.student = config.student;
 			readerConfig.instructorProspective = config.instructorProspective;
 		}
 
-
 		config.readerConfig = readerConfig;
 
 		this.callParent(arguments);
 	},
-
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -116,44 +117,45 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 
 		me.ContentViewerActions = ContentviewerActions.create();
 
-		me.resolvePageInfo()
-			.then(function (pageInfo) {
-				me.resolvedPageInfo = pageInfo;
-				me.readerConfig.pageInfo = pageInfo;
+		me.resolvePageInfo().then(function (pageInfo) {
+			me.resolvedPageInfo = pageInfo;
+			me.readerConfig.pageInfo = pageInfo;
 
-				me.readerConfig = me.__fixConfigForPageInfo(me.readerConfig, pageInfo);
+			me.readerConfig = me.__fixConfigForPageInfo(
+				me.readerConfig,
+				pageInfo
+			);
 
-				me.reader = me.add(me.readerConfig);
-				me.reader.fireEvent('activate');
-				me.fireEvent('reader-set');
+			me.reader = me.add(me.readerConfig);
+			me.reader.fireEvent('activate');
+			me.fireEvent('reader-set');
 
-				me.mon(me.reader, {
-					'assignment-submitted': (...args) => {
-						me.fireEvent('assignment-submitted', ...args);
+			me.mon(me.reader, {
+				'assignment-submitted': (...args) => {
+					me.fireEvent('assignment-submitted', ...args);
 
-						if (me.onAssignmentSubmitted) {
-							me.onAssignmentSubmitted(...args);
-						}
-					},
-					'assessment-graded': (...args) => {
-						me.fireEvent('assessment-graded', ...args);
-
-						if (me.onAssessmentGraded) {
-							me.onAssessmentGraded(...args);
-						}
+					if (me.onAssignmentSubmitted) {
+						me.onAssignmentSubmitted(...args);
 					}
-				});
+				},
+				'assessment-graded': (...args) => {
+					me.fireEvent('assessment-graded', ...args);
 
-				me.initSearch();
+					if (me.onAssessmentGraded) {
+						me.onAssessmentGraded(...args);
+					}
+				},
 			});
 
+			me.initSearch();
+		});
+
 		me.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this),
-			'beforedestroy': this.onDeactivate.bind(this)
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this),
+			beforedestroy: this.onDeactivate.bind(this),
 		});
 	},
-
 
 	__fixConfigForPageInfo: function (config, pageInfo) {
 		var assignment = pageInfo.getAssignment();
@@ -169,7 +171,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return config;
 	},
 
-
 	onActivate: function () {
 		this.initSearch();
 
@@ -178,25 +179,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		}
 	},
 
-
 	onDeactivate: function () {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-
-	alignNavigation () {
+	alignNavigation() {
 		if (this.reader) {
 			this.reader.alignNavigation();
 		}
 	},
 
-
 	getContainerIdForSearch: function () {
 		return this.resolvedPageInfo && this.resolvedPageInfo.getId();
 	},
-
 
 	onceReadyForSearch: function () {
 		var me = this;
@@ -212,29 +209,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-
 	showSearchHit: function (hit, fragment) {
 		this.clearSearchHit();
 
-		wait()
-			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
+		wait().then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
-
 
 	goToFragment: function (fragment) {
 		this.reader.goToFragment(fragment);
 	},
 
-
 	goToNote: function (note) {
 		this.reader.goToNote(note);
 	},
 
-
-	showContainerNoteEditor () {
+	showContainerNoteEditor() {
 		this.reader.showContainerNoteEditor();
 	},
-
 
 	resolvePageInfo: function () {
 		var p;
@@ -242,14 +233,26 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		if (this.pageInfo) {
 			p = Promise.resolve(this.pageInfo);
 		} else if (this.relatedWork) {
-			p = this.ContentViewerActions.getRelatedWorkPageInfo(this.relatedWork, this.bundle);
+			p = this.ContentViewerActions.getRelatedWorkPageInfo(
+				this.relatedWork,
+				this.bundle
+			);
 		} else if (this.assignment) {
 			p = this.resolveAssignmentPageInfo(this.assignment, this.bundle);
 			// p = Service.getPageInfo(this.assignment.getId(), null, null, null, this.bundle);
 		} else if (this.contentId) {
-			p = Service.getPageInfo(this.contentId, null, null, null, this.bundle);
+			p = Service.getPageInfo(
+				this.contentId,
+				null,
+				null,
+				null,
+				this.bundle
+			);
 		} else if (this.externalToolAsset) {
-			p = this.ContentViewerActions.getExternalToolAssetPageInfo(this.externalToolAsset, this.bundle);
+			p = this.ContentViewerActions.getExternalToolAssetPageInfo(
+				this.externalToolAsset,
+				this.bundle
+			);
 		} else if (this.survey) {
 			p = this.resolveSurveyPageInfo(this.survey, this.bundle);
 		}
@@ -257,37 +260,45 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return p;
 	},
 
-
-	resolveAssignmentPageInfo (assignment, bundle) {
-		return Service.getPageInfo(assignment.getId(), null, null, null, this.bundle)
-			.catch(() => {
-				return this.ContentViewerActions.getAssignmentPageInfo(assignment, bundle, this.student);
-			});
+	resolveAssignmentPageInfo(assignment, bundle) {
+		return Service.getPageInfo(
+			assignment.getId(),
+			null,
+			null,
+			null,
+			this.bundle
+		).catch(() => {
+			return this.ContentViewerActions.getAssignmentPageInfo(
+				assignment,
+				bundle,
+				this.student
+			);
+		});
 	},
 
-
-	resolveSurveyPageInfo (survey, bundle) {
-		return Service.getPageInfo(survey.getId(), null, null, null, bundle)
-			.catch(() => {
-				return this.ContentViewerActions.getSurveyPageInfo(survey, bundle);
-			});
+	resolveSurveyPageInfo(survey, bundle) {
+		return Service.getPageInfo(
+			survey.getId(),
+			null,
+			null,
+			null,
+			bundle
+		).catch(() => {
+			return this.ContentViewerActions.getSurveyPageInfo(survey, bundle);
+		});
 	},
-
 
 	allowNavigation: function () {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
 
-
 	beforeRouteChange: function () {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
-
 	getLocation: function () {
 		return this.reader.getLocation();
 	},
-
 
 	updateHistory: function (h, container) {
 		var reader = this.reader;
@@ -295,5 +306,5 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		if (reader && reader.updateHistory) {
 			reader.updateHistory(h, container);
 		}
-	}
+	},
 });

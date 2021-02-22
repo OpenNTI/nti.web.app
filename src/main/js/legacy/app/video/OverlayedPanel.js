@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {default: Logger} = require('@nti/util-logger');
+const { default: Logger } = require('@nti/util-logger');
 
 const DomUtils = require('legacy/util/Dom');
 const PlaylistItem = require('legacy/model/PlaylistItem');
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	representsUserDataContainer: true,
 
 	renderSelectors: {
-		openMediaViewerEl: '.media-transcript'
+		openMediaViewerEl: '.media-transcript',
 	},
 
 	statics: {
@@ -30,10 +30,10 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				description = el.down('span.description');
 
 			Ext.applyIf(data, {
-				description: (description && description.getHTML()) || ''
+				description: (description && description.getHTML()) || '',
 			});
 			return data;
-		}
+		},
 	},
 
 	constructor: function (config) {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		Ext.applyIf(data, {
 			basePath: reader && reader.basePath,
-			description: (description && description.getHTML()) || ''
+			description: (description && description.getHTML()) || '',
 		});
 
 		this.size = size;
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		this.LibraryActions = LibraryActions.create();
 
 		Ext.apply(config, {
-			layout: 'fit'
+			layout: 'fit',
 		});
 
 		this.data = data;
@@ -72,9 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		this.callParent([config]);
 
 		this.getVideo(bundle, content)
-			.then((index) => {
+			.then(index => {
 				if (!me.checkDomState()) {
-					console.warn('Weird dom state. Might’ve unmounted before the video request came back. Bailing.');
+					console.warn(
+						'Weird dom state. Might’ve unmounted before the video request came back. Bailing.'
+					);
 					return;
 				}
 
@@ -85,18 +87,37 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				this.curtain = this.add({
 					width: size.width,
 					xtype: 'box',
-					autoEl: { cls: 'curtain content-video-curtain', cn: [
-						{ cls: 'ctr', cn: [
-							{ cls: 'play', cn: [
-								{cls: 'blur-clip', cn: {cls: 'blur'}},
-								{ cls: 'label', 'data-qtip': 'Play' },
-								{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
-							] }
-						] }
-					]}
+					autoEl: {
+						cls: 'curtain content-video-curtain',
+						cn: [
+							{
+								cls: 'ctr',
+								cn: [
+									{
+										cls: 'play',
+										cn: [
+											{
+												cls: 'blur-clip',
+												cn: { cls: 'blur' },
+											},
+											{
+												cls: 'label',
+												'data-qtip': 'Play',
+											},
+											{
+												cls: 'launch-player',
+												'data-qtip':
+													'Play with transcript',
+											},
+										],
+									},
+								],
+							},
+						],
+					},
 				});
 
-				this.player = this.insert(0,{
+				this.player = this.insert(0, {
 					width: size.width,
 					xtype: 'content-video-player',
 					data: data,
@@ -121,13 +142,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 						},
 						'player-deactivated': () => {
 							me.onPlayerDeactivated();
-						}
+						},
 					},
 					xhooks: {
 						playerConfigOverrides: function (type) {
-							return {reserveControlSpace: true};
-						}
-					}
+							return { reserveControlSpace: true };
+						},
+					},
 				});
 
 				this.syncElementHeight();
@@ -136,17 +157,19 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				return index;
 			})
 			.then(this.fillVideo.bind(this))
-			.catch((error) => {
+			.catch(error => {
 				this.error = this.add({
 					width: size.width,
 					xtype: 'box',
-					autoEl: { cls: 'curtain error content-video-curtain', cn: [
-						{ cls: 'ctr', cn: [
-							{ cls: 'play', cn: [
-								{ cls: 'error'}
-							] }
-						] }
-					]}
+					autoEl: {
+						cls: 'curtain error content-video-curtain',
+						cn: [
+							{
+								cls: 'ctr',
+								cn: [{ cls: 'play', cn: [{ cls: 'error' }] }],
+							},
+						],
+					},
 				});
 
 				this.syncElementHeight();
@@ -156,14 +179,18 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	checkDomState: function () {
-		return !this.isDestroyed && this.dom && this.readerMounted() && this.isMountedInReader(this.dom);
+		return (
+			!this.isDestroyed &&
+			this.dom &&
+			this.readerMounted() &&
+			this.isMountedInReader(this.dom)
+		);
 	},
 
 	readerMounted: function () {
 		try {
 			return document.body.contains(this.reader.el.dom);
-		}
-		catch (e) {
+		} catch (e) {
 			//
 		}
 		return false;
@@ -171,9 +198,11 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 	isMountedInReader: function (elem) {
 		try {
-			return this.reader.getIframe().getDocumentElement().body.contains(elem);
-		}
-		catch {
+			return this.reader
+				.getIframe()
+				.getDocumentElement()
+				.body.contains(elem);
+		} catch {
 			//
 		}
 		return false;
@@ -193,23 +222,23 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 			this.el.setStyle({
 				left: this.size.left + 'px',
-				width: this.size.parentWidth + 'px'
+				width: this.size.parentWidth + 'px',
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e);
 			throw e;
 		}
 	},
 
 	getSize: function (dom, desiredWidth) {
-		var parent = dom.parentElement, left,
+		var parent = dom.parentElement,
+			left,
 			parentRect = parent && parent.getBoundingClientRect();
 
 		if (!parentRect) {
 			return {
 				left: 0,
-				width: desiredWidth
+				width: desiredWidth,
 			};
 		}
 
@@ -224,13 +253,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			return {
 				left: left,
 				parentWidth: parentRect.width,
-				width: desiredWidth
+				width: desiredWidth,
 			};
 		}
 
 		return {
 			left: parentRect.left,
-			width: desiredWidth
+			width: desiredWidth,
 		};
 	},
 
@@ -243,16 +272,17 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		if (poster) {
 			this.setBackground(poster, label);
 		} else {
-			VideoPosters.resolveForSource(source)
-				.then(imgs => {
-					this.setBackground(imgs.poster, label);
-				});
+			VideoPosters.resolveForSource(source).then(imgs => {
+				this.setBackground(imgs.poster, label);
+			});
 		}
 	},
 
 	setError: function (error) {
 		if (!this.el) {
-			this.on('afterrender', this.setError.bind(this, error), this, {single: true});
+			this.on('afterrender', this.setError.bind(this, error), this, {
+				single: true,
+			});
 			return;
 		}
 
@@ -260,36 +290,42 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			this.down('box').getEl().setStyle({
 				backgroundSize: 'contain',
 				backgroundColor: 'black',
-				backgroundPosition: 'center center'
+				backgroundPosition: 'center center',
 			});
 
 			this.down('box').getEl().down('.error').update(error);
-		}
-		catch (e) {
+		} catch (e) {
 			logger.error('Unable to set error. %o', error);
 		}
 	},
 
 	setBackground: function (src, label) {
 		if (!this.el) {
-			this.on('afterrender', this.setBackground.bind(this, src), this, {single: true});
+			this.on('afterrender', this.setBackground.bind(this, src), this, {
+				single: true,
+			});
 			return;
 		}
 
-		this.down('content-video-player').getEl().setStyle({cursor: 'pointer'});
+		this.down('content-video-player')
+			.getEl()
+			.setStyle({ cursor: 'pointer' });
 
 		this.curtain.getEl().setStyle({
 			backgroundImage: 'url(' + src + ')',
 			backgroundSize: 'contain',
 			backgroundColor: 'black',
-			backgroundPosition: 'center center'
+			backgroundPosition: 'center center',
 		});
 
 		if (!src) {
 			this.addCls('no-poster');
 		}
 
-		this.curtain.getEl().down('.label').update(Ext.util.Format.htmlEncode(label));
+		this.curtain
+			.getEl()
+			.down('.label')
+			.update(Ext.util.Format.htmlEncode(label));
 
 		this.mon(this.el, 'click', this.play.bind(this));
 	},
@@ -298,29 +334,32 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		const playing = this.hasCls('playing');
 
 		//If we are already playing don't stomp on the player
-		if (playing) { return; }
+		if (playing) {
+			return;
+		}
 
 		if (e.getTarget('.launch-player')) {
 			this.fromClick = true;
 			this.addCls('playing');
 			this.down('content-video-player').resumePlayback(true);
-		}
-		else {
+		} else {
 			this.openMediaViewer();
 		}
 	},
 
-
-	onPlayerDeactivated () {
+	onPlayerDeactivated() {
 		this.removeCls('playing');
 	},
-
 
 	openMediaViewer: function () {
 		var v = this.playlist[0],
 			bundleContent = this.up('bundle-content'),
 			contentViewer = this.up('content-viewer'),
-			location = this.reader && this.reader.getLocation && this.reader.getLocation() || {},
+			location =
+				(this.reader &&
+					this.reader.getLocation &&
+					this.reader.getLocation()) ||
+				{},
 			path;
 
 		if (bundleContent && bundleContent.getVideoRouteForObject) {
@@ -341,6 +380,6 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			range = doc.createRange();
 
 		range.selectNode(this.contentElement);
-		return {range: range, rect: this.el.dom.getBoundingClientRect()};
-	}
+		return { range: range, rect: this.el.dom.getBoundingClientRect() };
+	},
 });

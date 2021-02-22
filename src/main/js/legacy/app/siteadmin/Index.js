@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-const {View:SiteAdminView} = require('nti-web-site-admin');
+const { View: SiteAdminView } = require('nti-web-site-admin');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
@@ -13,14 +13,13 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	alias: 'widget.site-admin-index',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	cls: 'site-admin-index',
 
 	layout: 'none',
 	items: [],
-
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -39,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
-	onRouteDeactivate () {
+	onRouteDeactivate() {
 		this.deactivateTimeout = setTimeout(() => {
 			if (this.siteAdmin) {
 				this.siteAdmin.destroy();
@@ -48,12 +47,11 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		}, 100);
 	},
 
-	onRouteActivate () {
+	onRouteActivate() {
 		clearTimeout(this.deactivateTimeout);
 	},
 
-
-	showSiteAdmin (route) {
+	showSiteAdmin(route) {
 		const baseroute = this.getBaseRoute();
 
 		if (this.siteAdmin) {
@@ -65,7 +63,13 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				baseroute: baseroute,
 				workspace: Service.getWorkspace('SiteAdmin'),
 				getRouteFor: (obj, context) => {
-					if (!obj || obj.Class !== 'Workspace' || obj.Title !== 'SiteAdmin') { return; }
+					if (
+						!obj ||
+						obj.Class !== 'Workspace' ||
+						obj.Title !== 'SiteAdmin'
+					) {
+						return;
+					}
 
 					const base = '/app/siteadmin/';
 					let part = '';
@@ -84,17 +88,16 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 
 					return part ? `${base}${part}/` : base;
 				},
-				setTitle: (title) => {
+				setTitle: title => {
 					this.setTitle(title);
-				}
+				},
 			});
 		}
 
 		this.setUpNavigation(baseroute, route.path);
 	},
 
-
-	setUpNavigation (baseroute, path) {
+	setUpNavigation(baseroute, path) {
 		const navigation = this.getNavigation();
 
 		navigation.updateTitle('Site Administration');
@@ -107,15 +110,14 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 			hideBranding: true,
 			onBack: () => {
 				this.pushRootRoute('Library', '/library');
-			}
+			},
 		});
 	},
-
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
-				bodyView: this
+				bodyView: this,
 			});
 		}
 
@@ -124,5 +126,5 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 
 	onTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
-	}
+	},
 });

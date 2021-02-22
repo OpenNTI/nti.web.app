@@ -4,41 +4,41 @@ const Video = require('legacy/app/video/Video');
 
 require('./SmallVideo');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.mediaviewer.components.mode.Split',
+	{
+		extend: 'NextThought.app.mediaviewer.components.mode.SmallVideo',
+		alias: 'widget.media-split-viewer',
 
-module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.Split', {
-	extend: 'NextThought.app.mediaviewer.components.mode.SmallVideo',
-	alias: 'widget.media-split-viewer',
+		transcriptRatio: 0.35,
 
-	transcriptRatio: 0.35,
+		cls: '',
 
-	cls:'',
+		viewerType: 'video-focus',
+		playerConfiguration: 'mediaviewer-split',
 
-	viewerType: 'video-focus',
-	playerConfiguration: 'mediaviewer-split',
+		statics: {
+			getTargetVideoWidth: function (el, transcriptRatio) {
+				var screenHeight = Ext.Element.getViewportHeight(),
+					screenWidth = Ext.Element.getViewportWidth(),
+					tWidth = Math.floor(screenWidth * transcriptRatio),
+					ratio = Video.ASPECT_RATIO,
+					defaultWidth = Ext.Element.getViewportWidth() - tWidth,
+					defaultHeight = Math.round(defaultWidth * ratio),
+					y = 80,
+					diff = screenHeight - (y + defaultHeight),
+					newWidth;
 
-	statics:{
+				if (diff >= 0) {
+					return defaultWidth;
+				}
 
-		getTargetVideoWidth: function (el, transcriptRatio) {
-			var screenHeight = Ext.Element.getViewportHeight(),
-				screenWidth = Ext.Element.getViewportWidth(),
-				tWidth = Math.floor(screenWidth * transcriptRatio),
-				ratio = Video.ASPECT_RATIO,
-				defaultWidth = Ext.Element.getViewportWidth() - tWidth,
-				defaultHeight = Math.round(defaultWidth * ratio),
-				y = 80,
-				diff = screenHeight - (y + defaultHeight),
-				newWidth;
+				newWidth = Math.round(
+					(1 - Math.abs(diff) / screenHeight) * defaultWidth
+				);
 
-
-			if (diff >= 0) {
-				return defaultWidth;
-			}
-
-			newWidth = Math.round((1 - (Math.abs(diff) / screenHeight)) * defaultWidth);
-
-			return Math.max(newWidth, 512);
-		}
+				return Math.max(newWidth, 512);
+			},
+		},
 	}
-
-
-});
+);

@@ -1,11 +1,9 @@
 const Ext = require('@nti/extjs');
 
 const ChatActions = require('legacy/app/chat/Actions');
-const {isMe} = require('legacy/util/Globals');
-
+const { isMe } = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
-
 	/*
 	 * This mixin assumes we are mixed into a class that is Observable, and has a userObject property (or a user
 	 * property), where the object is an instance of {NextThought.model.User}.
@@ -34,18 +32,19 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 
 	maybeShowChat: function (el) {
 		if (!el) {
-			console.error('Error: No chat element was passed to maybeShowChat.');
+			console.error(
+				'Error: No chat element was passed to maybeShowChat.'
+			);
 			return;
 		}
 
 		var me = this;
 		if (me.shouldShowChat()) {
 			el.show();
-		}
-		else {
+		} else {
 			el.hide();
 		}
-		me.mon(el, {click: me.onChatWith, scope: me});
+		me.mon(el, { click: me.onChatWith, scope: me });
 	},
 
 	onChatWith: function (e) {
@@ -58,6 +57,5 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 		console.debug('Clicked Chat');
 		Actions.startChat(this.userObject || this.user);
 		return false;
-	}
-
+	},
 });

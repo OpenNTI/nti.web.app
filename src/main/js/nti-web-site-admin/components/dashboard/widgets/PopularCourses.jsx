@@ -1,66 +1,69 @@
 import './PopularCourses.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {Presentation, Loading} from '@nti/web-commons';
-import {getService} from '@nti/web-client';
+import { scoped } from '@nti/lib-locale';
+import { Presentation, Loading } from '@nti/web-commons';
+import { getService } from '@nti/web-client';
 import cx from 'classnames';
 
-import {getString} from 'legacy/util/Localization';
+import { getString } from 'legacy/util/Localization';
 
 const LABELS = {
-	title: getString('NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses'),
+	title: getString(
+		'NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses'
+	),
 	name: 'Course Rank',
 	value: 'Students',
-	noItems: 'No courses found'
+	noItems: 'No courses found',
 };
 
-const t = scoped('nti-web-site-admins.components.dashboard.widgets.popularcourses', LABELS);
+const t = scoped(
+	'nti-web-site-admins.components.dashboard.widgets.popularcourses',
+	LABELS
+);
 const PAGE_SIZE = 4;
 
 class Item extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired
-	}
+		item: PropTypes.object.isRequired,
+	};
 
-	renderRank () {
+	renderRank() {
 		const { item } = this.props;
 
 		return <div className="rank">{item.rank}.</div>;
 	}
 
-	renderImg () {
+	renderImg() {
 		const { item } = this.props;
 
-		return <Presentation.AssetBackground className="item-image" contentPackage={item} type="landing" />;
+		return (
+			<Presentation.AssetBackground
+				className="item-image"
+				contentPackage={item}
+				type="landing"
+			/>
+		);
 	}
 
-	renderInfo () {
+	renderInfo() {
 		const { item } = this.props;
 
 		return (
 			<div className="info">
-				<div className="name">
-					{item.name}
-				</div>
-				<div className="description">
-					{item.description}
-				</div>
+				<div className="name">{item.name}</div>
+				<div className="description">{item.description}</div>
 			</div>
 		);
 	}
 
-	renderValue () {
+	renderValue() {
 		const { item } = this.props;
 
-		return (
-			<div className="value">
-				{item.value}
-			</div>
-		);
+		return <div className="value">{item.value}</div>;
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="item">
 				{this.renderRank()}
@@ -73,62 +76,70 @@ class Item extends React.Component {
 }
 
 export default class PopularCourses extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			loading: true,
-			pageNumber: 0
+			pageNumber: 0,
 		};
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		this.setState({ items: [] }, () => {
 			this.loadData();
 		});
 	}
 
-	loadData (link) {
+	loadData(link) {
 		const { pageNumber } = this.state;
 
 		const batchStart = pageNumber * PAGE_SIZE;
 
-		this.setState({loading: true});
+		this.setState({ loading: true });
 
 		getService().then(service => {
 			const collection = service.getCollection('Courses', 'Catalog');
 			const popularLink = collection && collection.getLink('Popular');
 
-			if(popularLink) {
-				const getBatchLink = link ? link : popularLink + '?batchSize=' + PAGE_SIZE + '&batchStart=' + batchStart;
+			if (popularLink) {
+				const getBatchLink = link
+					? link
+					: popularLink +
+					  '?batchSize=' +
+					  PAGE_SIZE +
+					  '&batchStart=' +
+					  batchStart;
 
-				service.getBatch(getBatchLink).then((results) => {
-					this.setState({
-						loading: false,
-						totalPages: Math.ceil(results.Total / PAGE_SIZE),
-						prevLink: results.getLink('batch-prev'),
-						nextLink: results.getLink('batch-next'),
-						items: results.Items.map((x, i) => {
-							return {
-								...x,
-								name: x.Title,
-								description: x.ProviderUniqueID,
-								rank: batchStart + i + 1,
-								value: x.TotalEnrolledCount
-							};
-						})
+				service
+					.getBatch(getBatchLink)
+					.then(results => {
+						this.setState({
+							loading: false,
+							totalPages: Math.ceil(results.Total / PAGE_SIZE),
+							prevLink: results.getLink('batch-prev'),
+							nextLink: results.getLink('batch-next'),
+							items: results.Items.map((x, i) => {
+								return {
+									...x,
+									name: x.Title,
+									description: x.ProviderUniqueID,
+									rank: batchStart + i + 1,
+									value: x.TotalEnrolledCount,
+								};
+							}),
+						});
+					})
+					.catch(resp => {
+						this.setState({
+							loading: false,
+							items: [],
+						});
 					});
-				}).catch(resp => {
-					this.setState({
-						loading: false,
-						items: []
-					});
-				});
-			}
-			else {
+			} else {
 				// no popular link, set items to empty
 				this.setState({
 					loading: false,
-					items: []
+					items: [],
 				});
 			}
 		});
@@ -137,49 +148,58 @@ export default class PopularCourses extends React.Component {
 	onPrevious = () => {
 		const { pageNumber, prevLink } = this.state;
 
-		if(pageNumber === 0) {
+		if (pageNumber === 0) {
 			return;
 		}
 
-		this.setState({
-			pageNumber: pageNumber - 1
-		}, () => {
-			this.loadData(prevLink);
-		});
-	}
-
+		this.setState(
+			{
+				pageNumber: pageNumber - 1,
+			},
+			() => {
+				this.loadData(prevLink);
+			}
+		);
+	};
 
 	onNext = () => {
 		const { pageNumber, totalPages, nextLink } = this.state;
 
-		if(pageNumber >= totalPages) {
+		if (pageNumber >= totalPages) {
 			return;
 		}
 
-		this.setState({
-			pageNumber: pageNumber + 1
-		}, () => {
-			this.loadData(nextLink);
-		});
-	}
+		this.setState(
+			{
+				pageNumber: pageNumber + 1,
+			},
+			() => {
+				this.loadData(nextLink);
+			}
+		);
+	};
 
-	renderHeader () {
+	renderHeader() {
 		// disabled state for previous includes a check where pageNumber is 0.  This way, if we get to that last "phantom" page where we have no
 		// links (prev or next), we can still go back to the previous real page
-		const prevClassName = cx('page-control', 'previous', { disabled: this.state.loading || (!this.state.prevLink && this.state.pageNumber === 0) });
-		const nextClassName = cx('page-control', 'next', { disabled: this.state.loading || !this.state.nextLink });
+		const prevClassName = cx('page-control', 'previous', {
+			disabled:
+				this.state.loading ||
+				(!this.state.prevLink && this.state.pageNumber === 0),
+		});
+		const nextClassName = cx('page-control', 'next', {
+			disabled: this.state.loading || !this.state.nextLink,
+		});
 
 		return (
 			<div className="header">
-				<div className="title">
-					{t('title')}
-				</div>
+				<div className="title">{t('title')}</div>
 				<div className="pager">
 					<div className={prevClassName} onClick={this.onPrevious}>
-						<i className="icon-chevron-left"/>
+						<i className="icon-chevron-left" />
 					</div>
 					<div className={nextClassName} onClick={this.onNext}>
-						<i className="icon-chevron-right"/>
+						<i className="icon-chevron-right" />
 					</div>
 				</div>
 			</div>
@@ -187,28 +207,23 @@ export default class PopularCourses extends React.Component {
 	}
 
 	renderItem = (item, index) => {
-		return <Item key={item.name + index} item={item}/>;
-	}
+		return <Item key={item.name + index} item={item} />;
+	};
 
-	renderItems () {
+	renderItems() {
 		const { items, loading } = this.state;
 
-		if(loading) {
-			return <Loading.Mask/>;
-		}
-		else if(items && items.length === 0) {
+		if (loading) {
+			return <Loading.Mask />;
+		} else if (items && items.length === 0) {
 			return <div className="no-items">{t('noItems')}</div>;
 		}
 
 		return (
 			<div className="items-container">
 				<div className="items-header">
-					<div className="column-header name">
-						{t('name')}
-					</div>
-					<div className="column-header value">
-						{t('value')}
-					</div>
+					<div className="column-header name">{t('name')}</div>
+					<div className="column-header value">{t('value')}</div>
 				</div>
 				<div className="items">
 					{(items || []).map(this.renderItem)}
@@ -217,7 +232,7 @@ export default class PopularCourses extends React.Component {
 		);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="dashboard-list-widget popular-courses">
 				{this.renderHeader()}

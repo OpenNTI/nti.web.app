@@ -2,17 +2,16 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.Discussion', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
-		{name: 'icon', type: 'string'},
-		{name: 'label', type: 'string'},
-		{name: 'title', type: 'string'}
+		{ name: 'icon', type: 'string' },
+		{ name: 'label', type: 'string' },
+		{ name: 'title', type: 'string' },
 	],
 
-	constructor () {
+	constructor() {
 		this.callParent(arguments);
 
 		Object.defineProperties(this, {
@@ -23,5 +22,5 @@ module.exports = exports = Ext.define('NextThought.model.Discussion', {
 				get: () => this.get('displayTitle') || this.get('title'),
 			},
 		});
-	}
+	},
 });

@@ -1,61 +1,78 @@
 const Ext = require('@nti/extjs');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 require('../Base');
 
 require('./StripePurchaseOrder');
 require('./PricingResults');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.store.PurchaseAttempt',
+	{
+		extend: 'NextThought.model.Base',
 
-module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt', {
-	extend: 'NextThought.model.Base',
+		statics: {
+			STATE_UNKNOWN: 'Unknown',
+			STATE_FAILURE: 'Failed',
+			STATE_SUCCESS: 'Success',
+			STATE_STARTED: 'Started',
+		},
 
-	statics: {
-		STATE_UNKNOWN: 'Unknown',
-		STATE_FAILURE: 'Failed',
-		STATE_SUCCESS: 'Success',
-		STATE_STARTED: 'Started'
-	},
+		fields: [
+			{ name: 'Items', type: 'auto', persist: false },
+			{ name: 'State', type: 'string', persist: false },
+			{ name: 'Processor', type: 'string', persist: false },
+			{
+				name: 'StartTime',
+				type: 'date',
+				persist: false,
+				dateFormat: 'timestamp',
+				defaultValue: new Date(),
+			},
+			{ name: 'Error', type: 'singleItem', persist: false },
+			{ name: 'Description', type: 'string', persist: false },
+			{ name: 'Quantity', type: 'int', persist: false },
+			{ name: 'TransactionID', type: 'string', persist: false },
+			{ name: 'TokenID', type: 'string', persist: false },
+			{ name: 'InvitationCode', type: 'string', persist: false },
+			{ name: 'RemainingInvitations', type: 'int', persist: false },
+			{ name: 'Order', type: 'singleitem', persist: false },
+			{ name: 'Pricing', type: 'singleitem', persist: false },
+			{ name: 'RedemptionCode', type: 'string', persist: false },
+			{
+				name: 'RedemptionTime',
+				type: 'date',
+				persist: false,
+				dateFormat: 'timestamp',
+				defaultValue: new Date(),
+			},
+			{ name: 'VendorThankYouPage', type: 'auto' },
+		],
 
-	fields: [
-		{ name: 'Items', type: 'auto', persist: false },
-		{ name: 'State', type: 'string', persist: false },
-		{ name: 'Processor', type: 'string', persist: false },
-		{ name: 'StartTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Error', type: 'singleItem', persist: false},
-		{ name: 'Description', type: 'string', persist: false },
-		{ name: 'Quantity', type: 'int', persist: false },
-		{ name: 'TransactionID', type: 'string', persist: false},
-		{ name: 'TokenID', type: 'string', persist: false },
-		{ name: 'InvitationCode', type: 'string', persist: false },
-		{ name: 'RemainingInvitations', type: 'int', persist: false },
-		{ name: 'Order', type: 'singleitem', persist: false},
-		{ name: 'Pricing', type: 'singleitem', persist: false},
-		{ name: 'RedemptionCode', type: 'string', persist: false },
-		{ name: 'RedemptionTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'VendorThankYouPage', type: 'auto'}
-	],
+		isPurchaseAttempt: true,
 
-	isPurchaseAttempt: true,
+		//TODO we want the polling link on the attempt
+		getLink: function (rel) {
+			if (rel === 'get_purchase_attempt') {
+				return getURL(
+					'/dataserver2/store/get_purchase_attempt?' +
+						Ext.Object.toQueryString({ purchaseID: this.getId() })
+				);
+			}
+			return this.mixins.hasLinks.getLink.call(this, rel);
+		},
 
-	//TODO we want the polling link on the attempt
-	getLink: function (rel) {
-		if (rel === 'get_purchase_attempt') {
-			return getURL('/dataserver2/store/get_purchase_attempt?' + Ext.Object.toQueryString({purchaseID: this.getId()}));
-		}
-		return this.mixins.hasLinks.getLink.call(this, rel);
-	},
+		isComplete: function () {
+			return this.isSuccess() || this.isFailure();
+		},
 
-	isComplete: function () {
-		return this.isSuccess() || this.isFailure();
-	},
+		isSuccess: function () {
+			return this.get('State') === this.self.STATE_SUCCESS;
+		},
 
-	isSuccess: function () {
-		return this.get('State') === this.self.STATE_SUCCESS;
-	},
-
-	isFailure: function () {
-		return this.get('State') === this.self.STATE_FAILURE;
+		isFailure: function () {
+			return this.get('State') === this.self.STATE_FAILURE;
+		},
 	}
-});
+);

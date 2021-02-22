@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
-const {Theme} = require('@nti/web-commons');
+const { Theme } = require('@nti/web-commons');
 const Session = require('@nti/web-session');
 
-Ext.Loader.setConfig({enabled: false});
+Ext.Loader.setConfig({ enabled: false });
 
-const {getURL, validateConfig, loadScript} = require('./util/Globals');
+const { getURL, validateConfig, loadScript } = require('./util/Globals');
 
 require('@nti/style-common/variables.css');
 require('./util/Localization');
@@ -42,25 +42,21 @@ const applyBranding = (siteBrand = {}) => {
 	const link = document.getElementById('favicon');
 
 	if (link) {
-		const {favicon} = theme.assets || {};
-		const {href, cacheBust} = favicon;
+		const { favicon } = theme.assets || {};
+		const { href, cacheBust } = favicon;
 
 		link.href = cacheBust ? `${href}?v=${cacheBust}` : href;
 	}
 };
-
 
 Ext.application({
 	name: 'NextThought',
 	appProperty: 'appInstance',
 	autoCreateViewport: false,
 
+	controllers: ['Application'],
 
-	controllers: [
-		'Application'
-	],
-
-	launch () {
+	launch() {
 		// console.debug('launching');
 
 		applyBranding($AppConfig.branding);
@@ -73,12 +69,12 @@ Ext.application({
 		let unsupported = [];
 		let geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
-		function start () {
+		function start() {
 			if (Ext.is.iOS) {
 				Ext.getBody().addCls('x-ios');
 			}
 
-			Ext.applyIf($AppConfig, {links: {}});
+			Ext.applyIf($AppConfig, { links: {} });
 
 			me.getController('Application').load(me);
 
@@ -87,13 +83,17 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
-
-
 		//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-		for(let f of ['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius']) {
-			if(!Ext.supports[f]) { unsupported.push(f); }
+		for (let f of [
+			'Canvas',
+			'Range',
+			'CSS3BoxShadow',
+			'CSS3BorderRadius',
+		]) {
+			if (!Ext.supports[f]) {
+				unsupported.push(f);
+			}
 		}
-
 
 		// allow PhantomJS through the browser block - at least far enough for our headless login test
 		Ext.isPhantomJS = /PhantomJS/i.test(navigator.userAgent);
@@ -103,17 +103,30 @@ Ext.application({
 
 		ios = (function () {
 			if (/iP(hone|od|ad)/.test(navigator.platform)) {
-				let v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-				return v && [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+				let v = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
+				return (
+					v && [
+						parseInt(v[1], 10),
+						parseInt(v[2], 10),
+						parseInt(v[3] || 0, 10),
+					]
+				);
 			}
-		}());
-
+		})();
 
 		if (unsupported.length > 0) {
-			reasons.push('Required html5 features are not present: ' + unsupported.join(','));
+			reasons.push(
+				'Required html5 features are not present: ' +
+					unsupported.join(',')
+			);
 		}
 
-		if (!Ext.isIE && !Ext.isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) {
+		if (
+			!Ext.isIE &&
+			!Ext.isIE11p &&
+			!(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) &&
+			!Ext.isWebKit
+		) {
 			reasons.push('This version of FireFox is not supported.');
 		}
 
@@ -121,8 +134,15 @@ Ext.application({
 			reasons.push('Please use IE10 or newer');
 		}
 
-		if (Ext.isSafari && Ext.safariVersion < 6 && !Ext.isPhantomJS && !Ext.isCapybaraWebkit) {
-			reasons.push('Please use the latest Safari available. Currently only 5.1+ is supported.');
+		if (
+			Ext.isSafari &&
+			Ext.safariVersion < 6 &&
+			!Ext.isPhantomJS &&
+			!Ext.isCapybaraWebkit
+		) {
+			reasons.push(
+				'Please use the latest Safari available. Currently only 5.1+ is supported.'
+			);
 		}
 
 		if (ios && ios[0] < 6) {
@@ -132,7 +152,7 @@ Ext.application({
 		if (reasons.length > 0) {
 			console.error(reasons.join('\n'));
 			window.location.replace($AppConfig.unsupported);
-			return;//we're leaving... so lets just stop here.
+			return; //we're leaving... so lets just stop here.
 		}
 
 		if (!validateConfig()) {
@@ -144,5 +164,5 @@ Ext.application({
 		loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		start();
-	}
+	},
 });

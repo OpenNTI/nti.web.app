@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const StateStore = require('./StateStore');
 const Actions = require('./Actions');
@@ -8,22 +8,23 @@ require('legacy/mixins/Router');
 require('../annotations/note/Window');
 require('./components/Container');
 
-
 module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.windows-view',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	activeWindows: [],
 	layout: 'none',
 	cls: 'window-container',
 
-	items: [{
-		xtype: 'window-container'
-	}],
+	items: [
+		{
+			xtype: 'window-container',
+		},
+	],
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -31,7 +32,9 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore = StateStore.getInstance();
 		this.WindowActions = Actions.create();
 
-		this.WindowStore.addAllowNavigationHandler(this.allowNavigation.bind(this));
+		this.WindowStore.addAllowNavigationHandler(
+			this.allowNavigation.bind(this)
+		);
 
 		this.viewContainer = this.down('window-container');
 
@@ -40,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		this.mon(this.WindowStore, {
 			'show-window': this.showWindow.bind(this),
 			'close-window': this.closeWindow.bind(this),
-			'allow-navigation': this.allowNavigation.bind(this)
+			'allow-navigation': this.allowNavigation.bind(this),
 		});
 	},
 
@@ -63,48 +66,64 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		return allow;
 	},
 
-
-	setFullScreen () {
+	setFullScreen() {
 		this.addCls('full-screen');
 	},
 
-
-	removeFullScreen () {
+	removeFullScreen() {
 		this.removeCls('full-screen');
 	},
 
 	showWindow: function (object, state, el, monitors, precache) {
-		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
+		var type = this.WindowStore.getComponentForMimeType(
+				object && (object.mimeType || object)
+			),
 			cmp;
 
 		if (!type) {
 			if (object && object.mimeType) {
-				console.error('No component to show object of ', object.mimeType);
+				console.error(
+					'No component to show object of ',
+					object.mimeType
+				);
 			} else {
 				console.error('Unable to figure out how to show window');
 			}
 
-			this.WindowStore.fireReplaceOpenWindowRoute(object, state, '', '', precache);
+			this.WindowStore.fireReplaceOpenWindowRoute(
+				object,
+				state,
+				'',
+				'',
+				precache
+			);
 			return;
 		}
 
 		this.removeFullScreen();
 
 		cmp = type.create({
-			record: object && object.isModel && object,//only pass a record when we have an object and it is a model
+			record: object && object.isModel && object, //only pass a record when we have an object and it is a model
 			precache: precache || {},
 			state: state,
-			doClose: this.doClose.bind(this, monitors && monitors.doClose, monitors && monitors.afterClose),
-			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate),
+			doClose: this.doClose.bind(
+				this,
+				monitors && monitors.doClose,
+				monitors && monitors.afterClose
+			),
+			doNavigate: this.doNavigate.bind(
+				this,
+				monitors && monitors.beforeNavigate
+			),
 			setFullScreen: this.setFullScreen.bind(this),
 			monitors: monitors,
 			scrollingParent: this.el,
-			ignoreEvent: (e) => {
+			ignoreEvent: e => {
 				this.ignoredEvents = this.ignoredEvents = new Set([e]);
 				setTimeout(() => {
 					this.ignoredEvents.delete(e);
 				}, 100);
-			}
+			},
 		});
 
 		if (cmp.Router) {
@@ -128,16 +147,25 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	onKeyPress: function (e) {
 		const html = this.WindowStore.getHTML();
 
-		if (html.classList.contains('prompt-open')) { return; }
+		if (html.classList.contains('prompt-open')) {
+			return;
+		}
 
-		if (e.key === Ext.EventObject.ESC || e.keyCode === Ext.EventObject.ESC) {
+		if (
+			e.key === Ext.EventObject.ESC ||
+			e.keyCode === Ext.EventObject.ESC
+		) {
 			this.closeAllWindows();
 		}
 	},
 
 	onClick: function (e) {
-		if (this.ignoredEvents?.has(e)) { return; }
-		if (e.getTarget('.window-content')) { return; }
+		if (this.ignoredEvents?.has(e)) {
+			return;
+		}
+		if (e.getTarget('.window-content')) {
+			return;
+		}
 		this.closeAllWindows();
 	},
 
@@ -156,7 +184,6 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	},
 
 	doClose: function (doClose, afterClose, record) {
-
 		if (doClose) {
 			doClose();
 		} else {
@@ -166,12 +193,11 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		document.body.removeEventListener('keydown', this.onKeyPress);
 		if (afterClose) {
 			//give close a chance to finish before calling afterClose
-			wait()
-				.then(afterClose.bind(null, record));
+			wait().then(afterClose.bind(null, record));
 		}
 	},
 
 	doNavigate: function (beforeNavigate, record) {
 		this.WindowStore.navigateToObject(record);
-	}
+	},
 });

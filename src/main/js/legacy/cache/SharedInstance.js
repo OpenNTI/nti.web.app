@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 /**
  * A CACHE to hold a shared instance of a record to be shared across
@@ -10,7 +10,6 @@ const lazy = require('legacy/util/lazy-require')
  * a change to all
  */
 module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
-
 	//A list of props to include in the JSON of a record when updating
 	UPDATE_WHITELIST: ['href', 'IsExcused', 'Links'],
 
@@ -62,11 +61,9 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 		return href;
 	},
 
-
 	__getRecordForKey: function (key) {
 		return this.KEY_TO_RECORD[key];
 	},
-
 
 	__storeRecordAtKey: function (key, record) {
 		if (!this.KEY_TO_RECORD[key]) {
@@ -76,7 +73,6 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 		}
 	},
 
-
 	/**
 	 * Set the values of the record from the server to the shared instance
 	 * @param {string} key key for the record
@@ -85,7 +81,10 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 */
 	__updateRecord: function (key, record) {
 		var cachedRecord = this.__getRecordForKey(key),
-			json = record.asJSON(), i, prop, value;
+			json = record.asJSON(),
+			i,
+			prop,
+			value;
 
 		for (i = 0; i < this.UPDATE_WHITELIST.length; i++) {
 			prop = this.UPDATE_WHITELIST[i];
@@ -98,10 +97,8 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 			json[prop] = record.get(prop);
 		}
 
-
 		cachedRecord.set(json);
 	},
-
 
 	/**
 	 * Fetch the record from the server and update the values in the shared instance
@@ -125,7 +122,6 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 			});
 	},
 
-
 	/**
 	 * Given a record either:
 	 *
@@ -140,7 +136,9 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	getRecord: function (record, sync, forceUpdate) {
 		var key = this.getKeyForRecord(record),
 			cachedRecord = key && this.__getRecordForKey(key),
-			lastMod = record.get ? record.get('Last Modified') : record['Last Modified'],
+			lastMod = record.get
+				? record.get('Last Modified')
+				: record['Last Modified'],
 			cachedLastMod = cachedRecord && cachedRecord.get('Last Modified');
 
 		if (!cachedRecord) {
@@ -160,15 +158,13 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 		if (lastMod > cachedLastMod || forceUpdate) {
 			if (cachedRecord) {
 				cachedRecord.syncWith(record);
-			}
-			else {
+			} else {
 				this.__updateRecord(key, record);
 			}
 		}
 
 		return cachedRecord;
 	},
-
 
 	/**
 	 * Given a key find the record in the cache if it exists
@@ -177,5 +173,5 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 */
 	findRecord: function (key) {
 		return this.__getRecordForKey(key);
-	}
+	},
 });

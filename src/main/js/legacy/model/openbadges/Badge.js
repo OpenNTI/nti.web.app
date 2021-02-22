@@ -1,11 +1,11 @@
 /*globals OpenBadges*/
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('../Base');
-
 
 module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	extend: 'NextThought.model.Base',
@@ -14,20 +14,19 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	idProperty: 'name',
 
 	fields: [
-		{name: 'alignment', type: 'auto'},
-		{name: 'criteria', type: 'string'},
-		{name: 'description', type: 'string'},
-		{name: 'image', type: 'string'},
-		{name: 'issuer', type: 'auto'},
-		{name: 'name', type: 'string'},
-		{name: 'tags', type: 'auto'},
-		{name: 'Locked', type: 'boolean'},
+		{ name: 'alignment', type: 'auto' },
+		{ name: 'criteria', type: 'string' },
+		{ name: 'description', type: 'string' },
+		{ name: 'image', type: 'string' },
+		{ name: 'issuer', type: 'auto' },
+		{ name: 'name', type: 'string' },
+		{ name: 'tags', type: 'auto' },
+		{ name: 'Locked', type: 'boolean' },
 		//properties for the ui
-		{name: 'earnedCls', type: 'string', persist: false},
-		{name: 'isEmpty', type: 'bool', persist: false},
-		{name: 'isMe', type: 'boolean', persist: false}
+		{ name: 'earnedCls', type: 'string', persist: false },
+		{ name: 'isEmpty', type: 'bool', persist: false },
+		{ name: 'isMe', type: 'boolean', persist: false },
 	],
-
 
 	pushToMozillaBackpack: function () {
 		var jsonURL = this.getLink('mozilla-backpack');
@@ -47,22 +46,21 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 		});
 	},
 
-
 	lockBadge: function () {
-		if (this.isBadgeLocked()) { return Promise.resolve(); }
+		if (this.isBadgeLocked()) {
+			return Promise.resolve();
+		}
 
 		var me = this;
-		return Service.post(this.getLink('lock'))
-			.then(function (resp) {
-				var rec = lazy.ParseUtils.parseItems(resp)[0];
-				me.set('Links', rec.get('Links'));
-				me.set('Locked', rec.get('Locked'));
-				Promise.resolve();
-			});
+		return Service.post(this.getLink('lock')).then(function (resp) {
+			var rec = lazy.ParseUtils.parseItems(resp)[0];
+			me.set('Links', rec.get('Links'));
+			me.set('Locked', rec.get('Locked'));
+			Promise.resolve();
+		});
 	},
-
 
 	isBadgeLocked: function () {
 		return !this.hasLink('lock');
-	}
+	},
 });

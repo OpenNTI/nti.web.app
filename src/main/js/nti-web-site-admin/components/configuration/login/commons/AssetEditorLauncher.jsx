@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
-import {Prompt, Text, Theme} from '@nti/web-commons';
-import {AssetEditor} from '@nti/web-whiteboard';
+import { scoped } from '@nti/lib-locale';
+import { Prompt, Text, Theme } from '@nti/web-commons';
+import { AssetEditor } from '@nti/web-whiteboard';
 
 import Store from '../Store';
-import {readFile} from '../utils';
+import { readFile } from '../utils';
 
 import Styles from './AssetInput.css';
 import Filename from './Filename';
 
 const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
-	change: 'Change'
+	change: 'Change',
 });
 
 AssetEditorLauncher.propTypes = {
@@ -21,9 +21,16 @@ AssetEditorLauncher.propTypes = {
 	setAsset: PropTypes.func,
 	setThemeProp: PropTypes.func,
 	hideFlag: PropTypes.string,
-	notSet: PropTypes.string
+	notSet: PropTypes.string,
 };
-function AssetEditorLauncher ({name, setAsset, setThemeProp, hideFlag, notSet, ...otherProps}) {
+function AssetEditorLauncher({
+	name,
+	setAsset,
+	setThemeProp,
+	hideFlag,
+	notSet,
+	...otherProps
+}) {
 	const [show, setShow] = React.useState(false);
 
 	const asset = Theme.useThemeProperty(`assets.${name}`);
@@ -31,19 +38,21 @@ function AssetEditorLauncher ({name, setAsset, setThemeProp, hideFlag, notSet, .
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
 	const href = !hide && asset.href;
 
-	const closeAssetEditor = (e) => {
-		if (e && e.stopPropagation) { e.stopPropagation(); }
+	const closeAssetEditor = e => {
+		if (e && e.stopPropagation) {
+			e.stopPropagation();
+		}
 		setShow(false);
 	};
 	const openAssetEditor = () => setShow(true);
 
-	const onSave = async (blob) => {
+	const onSave = async blob => {
 		const source = await readFile(blob);
 
 		setAsset(name, {
 			file: blob,
 			filename: blob.name,
-			source
+			source,
 		});
 
 		if (hideFlag) {
@@ -54,20 +63,35 @@ function AssetEditorLauncher ({name, setAsset, setThemeProp, hideFlag, notSet, .
 	};
 
 	return (
-		<div name={name} className={cx('asset-input')} onClick={openAssetEditor} >
-			{href && (<Filename className={cx('file-name')} file={asset.filename} />)}
-			<Text.Base className={cx('change')}>{href || !notSet ? t('change') : notSet}</Text.Base>
+		<div
+			name={name}
+			className={cx('asset-input')}
+			onClick={openAssetEditor}
+		>
+			{href && (
+				<Filename className={cx('file-name')} file={asset.filename} />
+			)}
+			<Text.Base className={cx('change')}>
+				{href || !notSet ? t('change') : notSet}
+			</Text.Base>
 			{show && (
-				<Prompt.Dialog onBeforeDismiss={closeAssetEditor} closeOnMaskClick={false}>
-					<AssetEditor asset={href} {...otherProps} onSave={onSave} onCancel={closeAssetEditor} />
+				<Prompt.Dialog
+					onBeforeDismiss={closeAssetEditor}
+					closeOnMaskClick={false}
+				>
+					<AssetEditor
+						asset={href}
+						{...otherProps}
+						onSave={onSave}
+						onCancel={closeAssetEditor}
+					/>
 				</Prompt.Dialog>
 			)}
 		</div>
 	);
 }
 
-export default Store
-	.monitor({
-		[Store.SetAsset]: 'setAsset',
-		[Store.SetThemeProp]: 'setThemeProp'
-	})(AssetEditorLauncher);
+export default Store.monitor({
+	[Store.SetAsset]: 'setAsset',
+	[Store.SetThemeProp]: 'setThemeProp',
+})(AssetEditorLauncher);

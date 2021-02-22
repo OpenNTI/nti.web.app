@@ -1,12 +1,13 @@
-import {getService} from '@nti/web-client';
+import { getService } from '@nti/web-client';
 
 export default {
-	handles (targetMimeType) {
+	handles(targetMimeType) {
 		return targetMimeType === 'application/vnd.nextthought.highlight';
 	},
 
-	resolveObject (hit) {
-		const containerId = hit && hit.ContainerId || (hit.Containers || [])[0];
+	resolveObject(hit) {
+		const containerId =
+			(hit && hit.ContainerId) || (hit.Containers || [])[0];
 		return getService().then(service => service.getObject(containerId));
-	}
+	},
 };

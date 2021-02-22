@@ -1,12 +1,11 @@
 Object.assign(exports, {
-	get (name, packageRequire, cache = {}) {
-
+	get(name, packageRequire, cache = {}) {
 		if (!cache.hasOwnProperty(name)) {
 			Object.defineProperty(cache, name, {
-				get () {
+				get() {
 					delete cache[name];
-					return cache[name] = packageRequire();
-				}
+					return (cache[name] = packageRequire());
+				},
 			});
 		}
 
@@ -15,5 +14,5 @@ Object.assign(exports, {
 		}
 
 		return cache;
-	}
+	},
 });

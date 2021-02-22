@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
-import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { Layouts, Loading, Prompt, Decorators } from '@nti/web-commons';
+import { LinkTo, Prompt as RoutePrompt } from '@nti/web-routing';
 import BlogWindow from 'legacy/app/forums/components/blog/Window';
 
 import BaseModel from 'legacy/model/Base';
@@ -17,12 +17,12 @@ const cx = classnames.bind(Styles);
 const t = scoped('nti-web-community-overrides.topic.View', {
 	title: {
 		newTopic: 'Posting in %(channelName)s',
-		existingTopic: 'Posted in %(channelName)s'
-	}
+		existingTopic: 'Posted in %(channelName)s',
+	},
 });
 
-const handles = (obj) => obj && obj.isBlogEntry;
-const {Uncontrolled} = Layouts;
+const handles = obj => obj && obj.isBlogEntry;
+const { Uncontrolled } = Layouts;
 
 class NTIWebCommunityTopic extends React.Component {
 	static propTypes = {
@@ -30,16 +30,19 @@ class NTIWebCommunityTopic extends React.Component {
 		topic: PropTypes.object,
 		channel: PropTypes.object.isRequired,
 		selectedComment: PropTypes.string,
-		focusNewComment: PropTypes.bool
-	}
+		focusNewComment: PropTypes.bool,
+	};
 
 	static contextTypes = {
-		router: PropTypes.object
-	}
+		router: PropTypes.object,
+	};
 
-	componentDidUpdate (prevProps) {
-		const {focusNewComment, selectedComment} = this.props;
-		const {focusNewComment: prevFocus, selectedComment: prevComment} = prevProps;
+	componentDidUpdate(prevProps) {
+		const { focusNewComment, selectedComment } = this.props;
+		const {
+			focusNewComment: prevFocus,
+			selectedComment: prevComment,
+		} = prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();
@@ -50,21 +53,25 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	doFocusNewComment () {
+	doFocusNewComment() {
 		if (this.topicCmp) {
 			this.topicCmp.showNewComment();
 		}
 	}
 
-	async doSelectComment (comment) {
-		if (!this.topicCmp) { return; }
+	async doSelectComment(comment) {
+		if (!this.topicCmp) {
+			return;
+		}
 
 		this.selectingComment = comment;
 
 		try {
-			const commentModel = await Service.getObject(comment);//eslint-disable-line
+			const commentModel = await Service.getObject(comment); //eslint-disable-line
 
-			if (this.selectingComment !== comment) { return; }
+			if (this.selectingComment !== comment) {
+				return;
+			}
 			if (this.topicCmp) {
 				this.topicCmp.selectComment(commentModel);
 			}
@@ -73,8 +80,8 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	setupTopic = (renderTo) => {
-		const {topic, focusNewComment, selectedComment} = this.props;
+	setupTopic = renderTo => {
+		const { topic, focusNewComment, selectedComment } = this.props;
 		const topicModel = BaseModel.interfaceToModel(topic);
 
 		if (this.topicCmp) {
@@ -87,7 +94,7 @@ class NTIWebCommunityTopic extends React.Component {
 			hideHeader: true,
 			onClose: () => this.onDismiss(),
 			doClose: () => this.onDismiss(),
-			doNavigate: () => {}
+			doNavigate: () => {},
 		});
 
 		if (focusNewComment) {
@@ -97,17 +104,17 @@ class NTIWebCommunityTopic extends React.Component {
 		if (selectedComment) {
 			this.doSelectComment(selectedComment);
 		}
-	}
+	};
 
 	tearDownTopic = () => {
 		if (this.topicCmp) {
 			this.topicCmp.destroy();
 			delete this.topicCmp;
 		}
-	}
+	};
 
-	onDismiss = (e) => {
-		const {channel} = this.props;
+	onDismiss = e => {
+		const { channel } = this.props;
 
 		if (e) {
 			e.stopPropagation();
@@ -115,8 +122,7 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 
 		return LinkTo.Object.routeTo(this.context.router, channel);
-	}
-
+	};
 
 	onRoute = async (cont, stop) => {
 		if (!this.topicCmp || !this.topicCmp.allowNavigation) {
@@ -130,29 +136,35 @@ class NTIWebCommunityTopic extends React.Component {
 		} catch (e) {
 			stop();
 		}
+	};
+
+	getTitle() {
+		const { topic, channel } = this.props;
+
+		if (!topic) {
+			return '';
+		}
+
+		return topic.isNewTopic
+			? t('title.newTopic', { channelName: channel.title })
+			: t('title.existingTopic', { channelName: topic.ContainerTitle });
 	}
 
-	getTitle () {
-		const {topic, channel} = this.props;
-
-		if (!topic) { return ''; }
-
-		return topic.isNewTopic ?
-			t('title.newTopic', {channelName: channel.title}) :
-			t('title.existingTopic', {channelName: topic.ContainerTitle});
-	}
-
-	render () {
-		const {topic, loading} = this.props;
+	render() {
+		const { topic, loading } = this.props;
 		const title = this.getTitle();
 
 		return (
-			<Prompt.PagingWindow
-				onDismiss={this.onDismiss}
-				title={title}
-			>
-				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
-					<Uncontrolled className={cx('topic')} onMount={this.setupTopic} onUnmount={this.tearDownTopic} />
+			<Prompt.PagingWindow onDismiss={this.onDismiss} title={title}>
+				<Loading.Placeholder
+					loading={loading || !topic}
+					fallback={<Loading.Spinner.Large />}
+				>
+					<Uncontrolled
+						className={cx('topic')}
+						onMount={this.setupTopic}
+						onUnmount={this.tearDownTopic}
+					/>
 				</Loading.Placeholder>
 				<RoutePrompt onRoute={this.onRoute} when />
 			</Prompt.PagingWindow>
@@ -162,5 +174,5 @@ class NTIWebCommunityTopic extends React.Component {
 
 export default decorate(NTIWebCommunityTopic, [
 	Registry.register(handles),
-	Decorators.addClassToRoot('community-content-open')
+	Decorators.addClassToRoot('community-content-open'),
 ]);

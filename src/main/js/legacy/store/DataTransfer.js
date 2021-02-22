@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 /**
  * Wrap some helper methods around setting and getting data from the dataTransfer object
@@ -11,12 +11,10 @@ const lazy = require('legacy/util/lazy-require')
  * for that event pump. Afterwards the browser will not let us access it.
  */
 module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
-
 	constructor: function (config) {
 		this.dataTransfer = config && config.dataTransfer;
 		this.transferData = {};
 	},
-
 
 	/**
 	 * Add values to be set on the dataTransfer object.
@@ -59,7 +57,14 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 		}
 
 		if (this.transferData[key]) {
-			console.warn('Overriding transfer data: ', key, ' from ', this.transferData[key], ' with ', value);
+			console.warn(
+				'Overriding transfer data: ',
+				key,
+				' from ',
+				this.transferData[key],
+				' with ',
+				value
+			);
 		}
 
 		if (value.getDataTransferValue) {
@@ -70,7 +75,6 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 
 		this.transferData[key] = value;
 	},
-
 
 	/**
 	 * Iterate the data that has been set with setData,
@@ -90,7 +94,6 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 			fn(key, data[key]);
 		});
 	},
-
 
 	/**
 	 * If we've been given dataTransfer from an event check if the key is on there.
@@ -112,7 +115,6 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 		return data || this.transferData[key];
 	},
 
-
 	getJSON: function (key) {
 		var data = this.getData(key);
 
@@ -125,33 +127,30 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 		return data;
 	},
 
-
 	getModel: function (key) {
 		var data = this.getData(key);
 
 		return lazy.ParseUtils.parseItems(data)[0];
 	},
 
-
 	findDataFor: function (key) {
 		return this.getModel(key) || this.getJSON(key) || this.getData(key);
 	},
-
 
 	containsType: function (key) {
 		var types = this.dataTransfer && this.dataTransfer.types;
 
 		if (types) {
 			// The spec returns specifies this as a DomStringList which implements a fast contains check.
-			if(types.contains) {
+			if (types.contains) {
 				return types.contains(key);
 			}
 
 			// Buggy/non-spec-compliant browsers return something that does not implement 'contains'.
 			// This is DIRT SLOW... avoid calling this repeatedly.
-			if(types.indexOf) {
+			if (types.indexOf) {
 				return types.indexOf(key) >= 0;
 			}
 		}
-	}
+	},
 });

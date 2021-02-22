@@ -1,33 +1,29 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
-
 	statics: {
-		getRequestAnimationFrame () {
+		getRequestAnimationFrame() {
 			var names = [
 					'requestAnimationFrame',
 					'webkitRequestAnimationFrame',
 					'mozRequestAnimationFrame',
-					'msRequestAnimationFrame'
+					'msRequestAnimationFrame',
 				],
 				request;
 
 			request = names.reduce((acc, name) => acc || window[name], null);
 
 			if (!request) {
-				request = (callback) => setTimeout(callback, 1000 / 60);
+				request = callback => setTimeout(callback, 1000 / 60);
 			}
 
 			return request;
-		}
+		},
 	},
 
+	MAX_RUN_TIME: 60000, //For now set it to a minute
 
-	MAX_RUN_TIME: 60000,//For now set it to a minute
-
-
-	constructor (fn) {
+	constructor(fn) {
 		if (!fn) {
 			throw new Error('No function passed to animation frame');
 		}
@@ -35,13 +31,10 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 		this.frameFn = fn;
 	},
 
-
-
-	start () {
+	start() {
 		if (this.running) {
 			return;
 		}
-
 
 		const startTime = new Date();
 
@@ -62,9 +55,7 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 		this.running = true;
 	},
 
-
-
-	stop () {
+	stop() {
 		this.stopAnimation = true;
-	}
+	},
 });

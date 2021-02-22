@@ -1,30 +1,29 @@
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
+const { getService } = require('@nti/web-client');
 
-const {getURL} = require('legacy/util/Globals');
-
+const { getURL } = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
-
 	getLink: function (rel, raw) {
-		var links = this.get('Links') || Ext.data.Types.LINKS.convert((this.raw && this.raw.Links) || []),
-			ref = links ? links.getRelHref(rel, raw === true) : null;//raw is only ever true if and only if passing literally "true" to the param. Not 'truthy'
+		var links =
+				this.get('Links') ||
+				Ext.data.Types.LINKS.convert(
+					(this.raw && this.raw.Links) || []
+				),
+			ref = links ? links.getRelHref(rel, raw === true) : null; //raw is only ever true if and only if passing literally "true" to the param. Not 'truthy'
 		return ref ? getURL(ref) : null;
 	},
 
-
-	getLinkProperty (rel, prop) {
+	getLinkProperty(rel, prop) {
 		const links = this.get('Links');
 		const link = links && links.getRelLink(rel);
 
 		return link && link[prop];
 	},
 
-
 	getLinkFragment: function (rel) {
 		return (this.getLink(rel, true) || '').split('#')[1];
 	},
-
 
 	getLinkMethod: function (rel) {
 		var links = this.get('Links'),
@@ -33,20 +32,18 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 		return link && link.method;
 	},
 
-
-	async fetchLink (rel) {
+	async fetchLink(rel) {
 		const service = await getService();
 		return service.get(this.getLink(rel));
 	},
-
 
 	hasLink: function (rel) {
 		return !!this.getLink(rel);
 	},
 
-
 	deleteLink: function (rel) {
-		var links = this.get('Links').links || (this.raw && this.raw.Links), reqLink;
+		var links = this.get('Links').links || (this.raw && this.raw.Links),
+			reqLink;
 
 		Ext.Array.every(links || [], function (link) {
 			if (link && link.rel === rel) {
@@ -61,10 +58,10 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 		}
 	},
 
-
 	getReportLinks: function () {
 		var linksObj = this.get('Links'),
-			links = (linksObj && linksObj.links) || (this.raw && this.raw.Links),
+			links =
+				(linksObj && linksObj.links) || (this.raw && this.raw.Links),
 			reports = [];
 
 		(links || []).forEach(function (link) {
@@ -74,5 +71,5 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 		});
 
 		return reports;
-	}
+	},
 });

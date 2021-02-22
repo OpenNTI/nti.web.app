@@ -5,7 +5,6 @@ const ContentStateStore = require('./content/StateStore');
 
 require('legacy/common/StateStore');
 
-
 module.exports = exports = Ext.define('NextThought.app.library.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
@@ -18,5 +17,5 @@ module.exports = exports = Ext.define('NextThought.app.library.StateStore', {
 
 	getTitle: function (id) {
 		return this.ContentStore.getTitle(id);
-	}
+	},
 });

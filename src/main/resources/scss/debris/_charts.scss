@@ -1,4 +1,3 @@
-
 .x-component-chart {
 	position: relative;
 
@@ -43,7 +42,7 @@
 
 			&[data-sub]::after {
 				color: var(--primary-grey);
-				content: attr(data-value) "% - " attr(data-sub);
+				content: attr(data-value) '% - ' attr(data-sub);
 				display: block;
 				line-height: 1em;
 				overflow: hidden;

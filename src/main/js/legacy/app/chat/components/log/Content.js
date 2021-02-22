@@ -2,111 +2,122 @@ const Ext = require('@nti/extjs');
 
 const LocationMeta = require('legacy/cache/LocationMeta');
 const UserRepository = require('legacy/cache/UserRepository');
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.chat.components.log.Content',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.chat-content-log-entry',
 
-module.exports = exports = Ext.define('NextThought.app.chat.components.log.Content', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chat-content-log-entry',
+		renderTpl: new Ext.XTemplate(
+			'<div class="x-chat-content-log-entry">',
+			'<div class="timestamp">{time}</div>',
+			'<img src="{icon}" width=16 height=16"/>',
+			'<div>',
+			'<span class="name">{name}</span> ',
+			'<span class="body-text">sent content {body}</span> ',
+			'<img src="{locationicon}" class="contentimage" width=90%/>',
+			'</div>',
+			'</div>'
+		),
 
-	renderTpl: new Ext.XTemplate(
-		'<div class="x-chat-content-log-entry">',
-		'<div class="timestamp">{time}</div>',
-		'<img src="{icon}" width=16 height=16"/>',
-		'<div>',
-		'<span class="name">{name}</span> ',
-		'<span class="body-text">sent content {body}</span> ',
-		'<img src="{locationicon}" class="contentimage" width=90%/>',
-		'</div>',
-		'</div>'
-	),
+		renderSelectors: {
+			box: 'div.x-chat-content-log-entry',
+			name: '.x-chat-content-log-entry span.name',
+			text: 'span.body-text',
+			time: 'div.timestamp',
+			icon: 'img[width=16]',
+			locationicon: 'img.contentimage',
+		},
 
-	renderSelectors: {
-		box: 'div.x-chat-content-log-entry',
-		name: '.x-chat-content-log-entry span.name',
-		text: 'span.body-text',
-		time: 'div.timestamp',
-		icon: 'img[width=16]',
-		locationicon: 'img.contentimage'
+		initComponent: function () {
+			var me = this;
+			me.callParent(arguments);
 
-	},
+			//request the location that has been sent, save it for use later
+			me.ntiid = me.message.get('body').ntiid;
 
-	initComponent: function () {
-		var me = this;
-		me.callParent(arguments);
+			LocationMeta.getMeta(this.ntiid, function (meta) {
+				me.location = meta;
+				me.clickable = me.location ? true : false;
+				me.update();
+			});
+		},
 
-		//request the location that has been sent, save it for use later
-		me.ntiid = me.message.get('body').ntiid;
+		update: function () {
+			var me = this,
+				href,
+				icon,
+				root,
+				username;
 
-		LocationMeta.getMeta(this.ntiid, function (meta) {
-			me.location = meta;
-			me.clickable = me.location ? true : false;
-			me.update();
-		});
-	},
+			if (this.location) {
+				icon = this.location.icon;
+				root = this.location.root;
 
-	update: function () {
-		var me = this,
-			href,
-			icon, root, username;
-
-		if (this.location) {
-			icon = this.location.icon;
-			root = this.location.root;
-
-			//icon url does not have root
-			if (icon.indexOf(root) !== 0) {
-				href = root + icon;
+				//icon url does not have root
+				if (icon.indexOf(root) !== 0) {
+					href = root + icon;
+				} else {
+					//root already there...
+					href = icon;
+				}
+			} else {
+				href = getURL(
+					Service.getCollection('Objects', 'Global').href +
+						'/' +
+						this.ntiid
+				);
 			}
-			else {
-				//root already there...
-				href = icon;
+
+			me.renderData.time = Ext.Date.format(new Date(), 'g:i:sa');
+			me.renderData.name = 'resolving...';
+			me.renderData.body = this.location
+				? this.location.label || this.location.title
+				: '';
+			me.renderData.locationicon = href;
+
+			if (me.rendered) {
+				me.renderTpl.overwrite(me.el, me.renderData);
+				me.applyRenderSelectors();
+				me.attachClick();
 			}
-		}
-		else {
-			href = getURL(Service.getCollection('Objects', 'Global').href + '/' + this.ntiid);
-		}
 
-		me.renderData.time = Ext.Date.format(new Date(), 'g:i:sa');
-		me.renderData.name = 'resolving...';
-		me.renderData.body = this.location ? this.location.label || this.location.title : '';
-		me.renderData.locationicon = href;
+			username = this.message.get('Creator');
+			UserRepository.getUser(username, me.fillInUser, me);
 
-		if (me.rendered) {
-			me.renderTpl.overwrite(me.el, me.renderData);
-			me.applyRenderSelectors();
-			me.attachClick();
-		}
+			me.addCls('nooid');
+		},
 
-		username = this.message.get('Creator');
-		UserRepository.getUser(username, me.fillInUser, me);
+		afterRender: function () {
+			this.callParent(arguments);
+			this.attachClick();
+		},
 
-		me.addCls('nooid');
-	},
+		attachClick: function () {
+			if (this.clickable) {
+				this.el.on(
+					'click',
+					function () {
+						this.fireEvent('click', this);
+					},
+					this
+				);
+			}
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
-		this.attachClick();
-	},
+		fillInUser: function (u) {
+			var name = u.get('alias') || u.get('Username'),
+				i = u.get('avatarURL');
 
-	attachClick: function () {
-		if (this.clickable) {
-			this.el.on('click', function () {this.fireEvent('click', this);}, this);
-		}
-	},
-
-	fillInUser: function (u) {
-		var name = u.get('alias') || u.get('Username'),
-			i = u.get('avatarURL');
-
-		if (this.rendered) {
-			this.icon.set({src: i});
-			this.name.update(name);
-		}
-		else {
-			this.renderData.name = name;
-			this.renderData.icon = i;
-		}
-
+			if (this.rendered) {
+				this.icon.set({ src: i });
+				this.name.update(name);
+			} else {
+				this.renderData.name = name;
+				this.renderData.icon = i;
+			}
+		},
 	}
-});
+);

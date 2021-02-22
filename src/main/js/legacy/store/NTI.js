@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('../proxy/reader/Json');
 
-
 module.exports = exports = Ext.define('NextThought.store.NTI', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Base',
@@ -18,20 +17,22 @@ module.exports = exports = Ext.define('NextThought.store.NTI', {
 		reader: {
 			type: 'nti',
 			root: 'Items',
-			totalProperty: 'FilteredTotalItemCount'
+			totalProperty: 'FilteredTotalItemCount',
 		},
 		headers: {
-			'Accept': 'application/vnd.nextthought.collection+json'
-		}
+			Accept: 'application/vnd.nextthought.collection+json',
+		},
 	},
 
 	constructor: function (config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
-			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
+			this.proxy = Ext.merge(
+				Ext.clone(this.proxy),
+				this.config.proxyOverride
+			);
 			delete config.proxyOverride;
 		}
-
 
 		this.callParent(arguments);
 
@@ -60,11 +61,12 @@ module.exports = exports = Ext.define('NextThought.store.NTI', {
 	remove: function (records, m, silent) {
 		this.callParent(arguments);
 
-		if (silent) { return; }
+		if (silent) {
+			return;
+		}
 
 		Ext.each(records, function (record) {
 			record.fireEvent('destroy', record);
 		});
-
-	}
+	},
 });

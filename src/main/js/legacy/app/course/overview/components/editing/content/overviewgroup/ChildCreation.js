@@ -17,67 +17,78 @@ const ContentQuote = require('../quotes/ContentQuote');
 
 require('../../creation/ChildCreation');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+		alias: 'widget.overview-editing-overviewgroup-childcreation',
+		title: 'Choose a Content Type',
+		backText: 'Content Types',
+		saveText: 'Add to Lesson',
 
+		statics: {
+			getHandledMimeTypes: function () {
+				return [OverviewGroup.mimeType];
+			},
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-overviewgroup-childcreation',
-	title: 'Choose a Content Type',
-	backText: 'Content Types',
-	saveText: 'Add to Lesson',
+			getEditors: function (bundle) {
+				var editors = [
+					ContentlinkEditor,
+					VideoEditor,
+					DiscussionEditor,
+					QuestionsetEditor,
+					TimelineEditor,
+					SurveyEditor,
+					WebinarEditor,
+					EventEditor,
+					ScormEditor,
+				];
 
-	statics: {
-		getHandledMimeTypes: function () {
-			return [
-				OverviewGroup.mimeType
-			];
+				if (bundle && bundle.hasLink('lti-configured-tools')) {
+					editors.push(LTIExternalToolAssetEditor);
+				}
+
+				editors.push({
+					getTypes: () => [
+						{
+							isDivider: true,
+							text: 'NextThought Can Help—Get a Quote!',
+							isAvailable: () => true,
+						},
+					],
+				});
+				editors.push(VideoQuote);
+				editors.push(ContentQuote);
+
+				return editors;
+			},
 		},
 
-		getEditors: function (bundle) {
+		setUpTypeList: function () {
+			this.callParent(arguments);
 
-			var editors = [
-				ContentlinkEditor,
-				VideoEditor,
-				DiscussionEditor,
-				QuestionsetEditor,
-				TimelineEditor,
-				SurveyEditor,
-				WebinarEditor,
-				EventEditor,
-				ScormEditor,
-			];
+			var subTitle =
+				this.rootRecord &&
+				this.rootRecord.getTitle &&
+				this.rootRecord.getTitle();
 
-			if (bundle && bundle.hasLink('lti-configured-tools')) {
-				editors.push(LTIExternalToolAssetEditor);
+			if (this.setSubTitle && subTitle) {
+				this.setSubTitle(subTitle);
 			}
+		},
 
-			editors.push({ getTypes: () => (
-				[{ isDivider: true, text: 'NextThought Can Help—Get a Quote!', isAvailable: () => true }]
-			)});
-			editors.push(VideoQuote);
-			editors.push(ContentQuote);
+		setUpTypeEditor: function () {
+			this.callParent(arguments);
 
-			return editors;
-		}
-	},
+			var subTitle =
+				this.rootRecord &&
+				this.rootRecord.getTitle &&
+				this.rootRecord.getTitle();
 
-	setUpTypeList: function () {
-		this.callParent(arguments);
-
-		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
-
-		if (this.setSubTitle && subTitle) {
-			this.setSubTitle(subTitle);
-		}
-	},
-
-	setUpTypeEditor: function () {
-		this.callParent(arguments);
-
-		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
-
-		if (this.setSubTitle && subTitle) {
-			this.setSubTitle(subTitle);
-		}
+			if (this.setSubTitle && subTitle) {
+				this.setSubTitle(subTitle);
+			}
+		},
 	}
-});
+);

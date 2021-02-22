@@ -1,33 +1,33 @@
-import {getService} from '@nti/web-client';
-import {Stores} from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
 import Logger from '@nti/util-logger';
 
-const logger =  Logger.get('site-admin:components:user:books:store');
+const logger = Logger.get('site-admin:components:user:books:store');
 
 export default class UserBookStore extends Stores.SimpleStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set({
 			items: [],
 			loading: false,
-			error: null
+			error: null,
 		});
 	}
 
-	get error () {
+	get error() {
 		return this._error;
 	}
 
-	get items () {
+	get items() {
 		return this._items;
 	}
 
-	get loading () {
+	get loading() {
 		return this._loading;
 	}
 
-	async loadBooks (user) {
+	async loadBooks(user) {
 		this.set('items', []);
 		this.set('loading', true);
 		this.emitChange('loading', 'items');
@@ -51,7 +51,7 @@ export default class UserBookStore extends Stores.SimpleStore {
 		}
 	}
 
-	unloadBooks () {
+	unloadBooks() {
 		this.set('items', []);
 	}
 }

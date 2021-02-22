@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme} from '@nti/web-commons';
+import { Theme } from '@nti/web-commons';
 
 import styles from './Collection.css';
 
 const cx = classnames.bind(styles);
 
-export default function Collection ({title, children}) {
+export default function Collection({ title, children }) {
 	const mode = Theme.useThemeProperty('background');
 
 	return (
@@ -23,5 +23,5 @@ export default function Collection ({title, children}) {
 }
 
 Collection.propTypes = {
-	title: PropTypes.string
+	title: PropTypes.string,
 };

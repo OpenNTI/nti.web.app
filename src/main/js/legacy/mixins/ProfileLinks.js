@@ -1,18 +1,22 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 // const {isMe} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
-	.get('Actions', ()=> require('legacy/app/navigation/Actions'))
-	.get('Popout', ()=> require('legacy/app/account/contacts/management/Popout'))
-	.get('MenuItem', ()=> require('legacy/app/account/identity/components/MenuItem'));
+	.get('Actions', () => require('legacy/app/navigation/Actions'))
+	.get('Popout', () =>
+		require('legacy/app/account/contacts/management/Popout')
+	)
+	.get('MenuItem', () =>
+		require('legacy/app/account/identity/components/MenuItem')
+	);
 
 // let contactCardPopout;
 // let showCardTimer;
 // let canShow;
 
 //the scope is being set by the caller
-function onUserNameClick (e) {
+function onUserNameClick(e) {
 	if (e) {
 		e.stopEvent();
 	}
@@ -22,21 +26,18 @@ function onUserNameClick (e) {
 
 	if (profileUrl) {
 		if (this instanceof lazy.Popout) {
-			wait()
-				.then(this.destroy.bind(this));
+			wait().then(this.destroy.bind(this));
 		} else if (this instanceof lazy.MenuItem) {
-			wait()
-				.then(this.setMenuClosed.bind(this));
+			wait().then(this.setMenuClosed.bind(this));
 		}
 
 		lazy.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
-			user: u
+			user: u,
 		});
 
 		return false;
 	}
 }
-
 
 // function showCard (e, el, position) {
 // 	var Popup = Popout,
@@ -83,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 
 		if (profileUrl) {
 			lazy.Actions.pushRootRoute(u.getName(), profileUrl, {
-				user: u
+				user: u,
 			});
 		}
 	},
@@ -99,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 		var me = this,
 			events = {
 				scope: me,
-				click: onUserNameClick
+				click: onUserNameClick,
 			};
 
 		Ext.each(arguments, function (el) {
@@ -121,5 +122,5 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 				me.mon(el, events);
 			}
 		});
-	}
+	},
 });

@@ -29,7 +29,7 @@ describe('Site admin user course reports test', () => {
 	test('Basic render test', async () => {
 		const course = {};
 
-		const cmp = renderer.create(<View course={course}/>);
+		const cmp = renderer.create(<View course={course} />);
 
 		jest.runAllTimers();
 		await flushPromises();

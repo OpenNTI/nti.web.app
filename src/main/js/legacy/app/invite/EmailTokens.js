@@ -7,49 +7,64 @@ module.exports = exports = Ext.define('NextThought.app.invite.EmailTokens', {
 	cls: 'unstyled-tokens',
 	renderSelectors: {
 		wrapEl: '.token-wrap',
-		emailCountEl: '.email-count'
+		emailCountEl: '.email-count',
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'token-wrap'},
-		{tag: 'span', cls: 'email-count', html: ''}
+		{ cls: 'token-wrap' },
+		{ tag: 'span', cls: 'email-count', html: '' },
 	]),
 
-	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'token', cn: [
-		{tag: 'span', cls: 'value', html: '{text}'}
-	]}),
+	tokenTpl: Ext.DomHelper.createTemplate({
+		tag: 'span',
+		cls: 'token',
+		cn: [{ tag: 'span', cls: 'value', html: '{text}' }],
+	}),
 
-	afterRender () {
+	afterRender() {
 		this.callParent(arguments);
 
 		this.addTags(this.tags);
 	},
 
-	addTags (tags) {
+	addTags(tags) {
 		this.wrapEl.dom.innerHTML = '';
 		this.emailCountEl.setHTML('');
-		if(!Array.isArray(tags) || tags.length === 0) {
+		if (!Array.isArray(tags) || tags.length === 0) {
 			return;
 		}
 		let numberTags = tags.length;
 
-		for(let tag of tags) {
+		for (let tag of tags) {
 			let insertedTag = this.insertTag(tag),
 				boundingRect = insertedTag.dom.getBoundingClientRect();
-			if ((Math.ceil(boundingRect.left) >= Math.floor(this.emailCountEl.dom.getBoundingClientRect().left) - 20) || boundingRect.width === 0) { break; }
+			if (
+				Math.ceil(boundingRect.left) >=
+					Math.floor(
+						this.emailCountEl.dom.getBoundingClientRect().left
+					) -
+						20 ||
+				boundingRect.width === 0
+			) {
+				break;
+			}
 			numberTags = numberTags - 1;
 		}
 
-		if(numberTags !== 0) {
+		if (numberTags !== 0) {
 			this.emailCountEl.setHTML(`+${numberTags}`);
 		}
 	},
 
-	insertTag (tag) {
-		return this.tokenTpl.append(this.getInsertionPoint(), Ext.apply({text: tag}), true);
+	insertTag(tag) {
+		return this.tokenTpl.append(
+			this.getInsertionPoint(),
+			Ext.apply({ text: tag }),
+			true
+		);
 	},
 
-	getInsertionPoint () {
+	getInsertionPoint() {
 		return this.wrapEl;
-	}
+	},
 });

@@ -65,12 +65,14 @@
 
 //TODO: get rid of this
 .x-main-navigation {
-	.x-masked & { z-index: 99; }//below the extjs mask z-index
+	.x-masked & {
+		z-index: 99;
+	} //below the extjs mask z-index
 
 	background: #ebebec;
 	padding-left: 100px;
 	height: 57px;
-	z-index: 150;//keep this above dashboard
+	z-index: 150; //keep this above dashboard
 
 	& > div {
 		width: 70px;
@@ -121,7 +123,8 @@
 
 			background: #fff;
 
-			&::before, &::after {
+			&::before,
+			&::after {
 				content: '';
 				position: absolute;
 				top: 0;
@@ -133,7 +136,7 @@
 			}
 
 			&::before {
-				clip: rect(0, ($width*2), auto, $width);
+				clip: rect(0, ($width * 2), auto, $width);
 				right: 0;
 			}
 
@@ -171,7 +174,12 @@
 		max-width: 400px;
 		z-index: 2;
 
-		@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
+		@include icon(
+			$arrow-course-dropdown,
+			$top: 25px,
+			$left: auto,
+			$right: 15px
+		);
 
 		&::after {
 			z-index: 1;
@@ -179,13 +187,14 @@
 
 		opacity: 0.5;
 
-		&.active, &:hover {
+		&.active,
+		&:hover {
 			opacity: 1;
 		}
 	}
 
 	.library {
-		@include icon($course-nav-library,$top: 14px, $left: 24px);
+		@include icon($course-nav-library, $top: 14px, $left: 24px);
 
 		&:hover::after {
 			@include sprite($course-nav-library_hover);
@@ -197,7 +206,7 @@
 	}
 
 	.forums {
-		@include icon($course-nav-forum,$top: 14px, $left: 20px);
+		@include icon($course-nav-forum, $top: 14px, $left: 20px);
 
 		&:hover::after {
 			@include sprite($course-nav-forum_hover);
@@ -209,7 +218,7 @@
 	}
 
 	.contacts {
-		@include icon($course-nav-contacts,$top: 16px, $left: 17px);
+		@include icon($course-nav-contacts, $top: 16px, $left: 17px);
 
 		&:hover::after {
 			@include sprite($course-nav-contacts_hover);
@@ -221,7 +230,7 @@
 	}
 
 	.search {
-		@include icon($course-nav-search,$top: 15px, $left: 22px);
+		@include icon($course-nav-search, $top: 15px, $left: 22px);
 
 		&:hover::after {
 			@include sprite($course-nav-search_hover);
@@ -236,7 +245,11 @@
 .x-panel-content-switcher {
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
-	.x-menu-body { padding: 0; background: #eae9e9; border: none; }
+	.x-menu-body {
+		padding: 0;
+		background: #eae9e9;
+		border: none;
+	}
 
 	.item {
 		@include content-item-row;
@@ -246,7 +259,12 @@
 		&:first-of-type {
 			background: #fff;
 
-			@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
+			@include icon(
+				$arrow-course-dropdown,
+				$top: 25px,
+				$left: auto,
+				$right: 15px
+			);
 		}
 
 		&:not(:first-of-type) {

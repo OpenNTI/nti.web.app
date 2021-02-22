@@ -10,28 +10,46 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	cls: 'main-message-bar',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}'},
-		{cls: 'msg', html: '{msg}'},
-		{cls: 'buttons'},
-		{cls: 'close'}
+		{ cls: 'icon {iconCls}' },
+		{ cls: 'msg', html: '{msg}' },
+		{ cls: 'buttons' },
+		{ cls: 'close' },
 	]),
 
 	renderSelectors: {
 		buttonsEl: '.buttons',
 		closeEl: '.close',
 		messageEl: '.msg',
-		iconEl: '.icon'
+		iconEl: '.icon',
 	},
 
-
-	buttonTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', 'data-qtip': '{tip}', html: '{label}'}
-		]},
-		{tag: 'tpl', 'if': '!tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
-		]}
-	])),
+	buttonTpl: new Ext.XTemplate(
+		Ext.DomHelper.markup([
+			{
+				tag: 'tpl',
+				if: 'tip',
+				cn: [
+					{
+						cls: 'button {cls}',
+						'data-action': '{action}',
+						'data-qtip': '{tip}',
+						html: '{label}',
+					},
+				],
+			},
+			{
+				tag: 'tpl',
+				if: '!tip',
+				cn: [
+					{
+						cls: 'button {cls}',
+						'data-action': '{action}',
+						html: '{label}',
+					},
+				],
+			},
+		])
+	),
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -39,20 +57,20 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 		this.enableBubble([MSG_BAR_OPENED, MSG_BAR_CLOSED]);
 	},
 
-
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.applyIf(this.renderData || {}, {iconCls: '', msg: ''});
+		this.renderData = Ext.applyIf(this.renderData || {}, {
+			iconCls: '',
+			msg: '',
+		});
 	},
-
 
 	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.closeEl, 'click', this.close.bind(this));
 		this.mon(this.buttonsEl, 'click', this.buttonClicked.bind(this));
 	},
-
 
 	addButton: function (data) {
 		data.tip = data.tip || '';
@@ -62,11 +80,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 		}
 	},
 
-
 	setMessage: function (msg) {
 		this.messageEl.update(msg);
 	},
-
 
 	setIcon: function (iconCls) {
 		if (iconCls) {
@@ -74,7 +90,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 			this.iconCls = iconCls;
 		}
 	},
-
 
 	clear: function () {
 		if (this.iconCls) {
@@ -94,7 +109,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 		}
 	},
 
-
 	close: function () {
 		var vel = Ext.query('.x-viewport')[0];
 
@@ -110,13 +124,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 		this.clear();
 	},
 
-
 	fireOpenedEvent: function () {
 		this.fireEvent(MSG_BAR_OPENED);
 	},
 
-
 	fireClosedEvent: function () {
 		this.fireEvent(MSG_BAR_CLOSED);
-	}
+	},
 });

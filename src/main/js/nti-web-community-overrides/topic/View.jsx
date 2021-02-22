@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
-import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { Layouts, Loading, Prompt, Decorators } from '@nti/web-commons';
+import { LinkTo, Prompt as RoutePrompt } from '@nti/web-routing';
 
 import TopicWindow from 'legacy/app/forums/components/topic/Window';
 import BaseModel from 'legacy/model/Base';
@@ -17,12 +17,12 @@ const cx = classnames.bind(Styles);
 const t = scoped('nti-web-community-overrides.topic.View', {
 	title: {
 		newTopic: 'Posting in %(channelName)s',
-		existingTopic: 'Posted in %(channelName)s'
-	}
+		existingTopic: 'Posted in %(channelName)s',
+	},
 });
 
-const handles = (obj) => !obj || obj.isTopic;
-const {Uncontrolled} = Layouts;
+const handles = obj => !obj || obj.isTopic;
+const { Uncontrolled } = Layouts;
 
 class NTIWebCommunityTopic extends React.Component {
 	static propTypes = {
@@ -31,16 +31,20 @@ class NTIWebCommunityTopic extends React.Component {
 		channel: PropTypes.object.isRequired,
 		selectedComment: PropTypes.string,
 		focusNewComment: PropTypes.bool,
-		editMode: PropTypes.bool
-	}
+		editMode: PropTypes.bool,
+	};
 
 	static contextTypes = {
-		router: PropTypes.object
-	}
+		router: PropTypes.object,
+	};
 
-	componentDidUpdate (prevProps) {
-		const {focusNewComment, selectedComment, editMode} = this.props;
-		const {focusNewComment: prevFocus, selectedComment: prevComment, editMode: prevEdit} = prevProps;
+	componentDidUpdate(prevProps) {
+		const { focusNewComment, selectedComment, editMode } = this.props;
+		const {
+			focusNewComment: prevFocus,
+			selectedComment: prevComment,
+			editMode: prevEdit,
+		} = prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();
@@ -55,27 +59,31 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	doFocusNewComment () {
+	doFocusNewComment() {
 		if (this.topicCmp) {
 			this.topicCmp.showNewComment();
 		}
 	}
 
-	doShowEditMode () {
+	doShowEditMode() {
 		if (this.topicCmp) {
 			this.topicCmp.showEditMode();
 		}
 	}
 
-	async doSelectComment (comment) {
-		if (!this.topicCmp) { return; }
+	async doSelectComment(comment) {
+		if (!this.topicCmp) {
+			return;
+		}
 
 		this.selectingComment = comment;
 
 		try {
-			const commentModel = await Service.getObject(comment);//eslint-disable-line
+			const commentModel = await Service.getObject(comment); //eslint-disable-line
 
-			if (this.selectingComment !== comment) { return; }
+			if (this.selectingComment !== comment) {
+				return;
+			}
 			if (this.topicCmp) {
 				this.topicCmp.selectComment(commentModel);
 			}
@@ -84,10 +92,12 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	async addNewTopic (rec) {
-		const {channel} = this.props;
+	async addNewTopic(rec) {
+		const { channel } = this.props;
 
-		if (!channel) { return; }
+		if (!channel) {
+			return;
+		}
 
 		try {
 			const topic = await rec.getInterfaceInstance();
@@ -98,8 +108,8 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	async updateTopic (rec) {
-		const {topic} = this.props;
+	async updateTopic(rec) {
+		const { topic } = this.props;
 
 		try {
 			const title = rec.get('title');
@@ -108,7 +118,7 @@ class NTIWebCommunityTopic extends React.Component {
 			await topic.refresh({
 				NTIID: topic.NTIID,
 				title,
-				headline
+				headline,
 			});
 
 			topic.onChange();
@@ -117,11 +127,21 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	setupTopic = (renderTo) => {
-		const {topic, channel, focusNewComment, selectedComment, editMode} = this.props;
+	setupTopic = renderTo => {
+		const {
+			topic,
+			channel,
+			focusNewComment,
+			selectedComment,
+			editMode,
+		} = this.props;
 		const isNewTopic = topic.isNewTopic;
-		const topicModel = isNewTopic ? null : BaseModel.interfaceToModel(topic);
-		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
+		const topicModel = isNewTopic
+			? null
+			: BaseModel.interfaceToModel(topic);
+		const forum = channel.backer
+			? BaseModel.interfaceToModel(channel.backer)
+			: null;
 
 		if (this.topicCmp) {
 			this.topicCmp.destroy();
@@ -136,14 +156,14 @@ class NTIWebCommunityTopic extends React.Component {
 			doClose: () => this.onDismiss(),
 			doNavigate: () => {},
 			monitors: {
-				afterSave: (rec) => {
+				afterSave: rec => {
 					if (isNewTopic) {
 						this.addNewTopic(rec);
 					} else {
 						this.updateTopic(rec);
 					}
-				}
-			}
+				},
+			},
 		});
 
 		if (focusNewComment) {
@@ -157,17 +177,17 @@ class NTIWebCommunityTopic extends React.Component {
 		if (editMode) {
 			this.doShowEditMode();
 		}
-	}
+	};
 
 	tearDownTopic = () => {
 		if (this.topicCmp) {
 			this.topicCmp.destroy();
 			delete this.topicCmp;
 		}
-	}
+	};
 
-	onDismiss = (e) => {
-		const {channel} = this.props;
+	onDismiss = e => {
+		const { channel } = this.props;
 
 		if (e) {
 			e.stopPropagation();
@@ -175,8 +195,7 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 
 		return LinkTo.Object.routeTo(this.context.router, channel);
-	}
-
+	};
 
 	onRoute = async (cont, stop) => {
 		if (!this.topicCmp || !this.topicCmp.allowNavigation) {
@@ -190,29 +209,35 @@ class NTIWebCommunityTopic extends React.Component {
 		} catch (e) {
 			stop();
 		}
+	};
+
+	getTitle() {
+		const { topic, channel } = this.props;
+
+		if (!topic) {
+			return '';
+		}
+
+		return topic.isNewTopic
+			? t('title.newTopic', { channelName: channel.title })
+			: t('title.existingTopic', { channelName: topic.ContainerTitle });
 	}
 
-	getTitle () {
-		const {topic, channel} = this.props;
-
-		if (!topic) { return ''; }
-
-		return topic.isNewTopic ?
-			t('title.newTopic', {channelName: channel.title}) :
-			t('title.existingTopic', {channelName: topic.ContainerTitle});
-	}
-
-	render () {
-		const {topic, loading} = this.props;
+	render() {
+		const { topic, loading } = this.props;
 		const title = this.getTitle();
 
 		return (
-			<Prompt.PagingWindow
-				onDismiss={this.onDismiss}
-				title={title}
-			>
-				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
-					<Uncontrolled className={cx('topic')} onMount={this.setupTopic} onUnmount={this.tearDownTopic} />
+			<Prompt.PagingWindow onDismiss={this.onDismiss} title={title}>
+				<Loading.Placeholder
+					loading={loading || !topic}
+					fallback={<Loading.Spinner.Large />}
+				>
+					<Uncontrolled
+						className={cx('topic')}
+						onMount={this.setupTopic}
+						onUnmount={this.tearDownTopic}
+					/>
 				</Loading.Placeholder>
 				<RoutePrompt onRoute={this.onRoute} when />
 			</Prompt.PagingWindow>

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 
 require('./Base');
-
 
 module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 	extend: 'NextThought.model.Base',
@@ -12,25 +11,25 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		mimeType: [
 			'application/vnd.nextthought._meeting',
 			'application/vnd.nextthought.meeting',
-			'application/vnd.nextthought.roominfo'
-		]
+			'application/vnd.nextthought.roominfo',
+		],
 	},
 
 	mimeType: [
 		'application/vnd.nextthought._meeting',
 		'application/vnd.nextthought.meeting',
-		'application/vnd.nextthought.roominfo'
+		'application/vnd.nextthought.roominfo',
 	],
 
 	idProperty: 'ID',
 	fields: [
 		{ name: 'Active', type: 'bool' },
 		{ name: 'MessageCount', type: 'int' },
-		{ name: 'Occupants', type: 'UserList'},
-		{ name: 'Moderators', type: 'UserList'},
-		{ name: 'Moderated', type: 'bool'},
+		{ name: 'Occupants', type: 'UserList' },
+		{ name: 'Moderators', type: 'UserList' },
+		{ name: 'Moderated', type: 'bool' },
 		{ name: 'inReplyTo', type: 'string' },
-		{ name: 'references', type: 'auto', defaultValue: [] }
+		{ name: 'references', type: 'auto', defaultValue: [] },
 	],
 
 	isGroupChat: function () {
@@ -42,24 +41,32 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		return participants.length > 2;
 	},
 
-	getAllRoomStates: function () { return this.roomStates || {}; },
+	getAllRoomStates: function () {
+		return this.roomStates || {};
+	},
 
 	getRoomState: function (user) {
-		if (!this.roomStates) { return null;}
+		if (!this.roomStates) {
+			return null;
+		}
 		return this.roomStates[user];
 	},
 
 	setRoomState: function (user, state) {
-		if (!this.roomStates) { this.roomStates = {};}
+		if (!this.roomStates) {
+			this.roomStates = {};
+		}
 		this.roomStates[user] = state;
 	},
 
 	getInputTypeStates: function () {
-		var p = [], inputStates = ['composing', 'paused'], me = this;
+		var p = [],
+			inputStates = ['composing', 'paused'],
+			me = this;
 		Ext.each(me.get('Occupants'), function (user) {
 			var userState = me.getRoomState(user);
 			if (Ext.Array.contains(inputStates, userState) && !isMe(user)) {
-				p.push({user: user, state: userState});
+				p.push({ user: user, state: userState });
 			}
 		});
 		return p;
@@ -79,7 +86,6 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		return this._originalOccupants || [];
 	},
 
-
 	getOccupantsKey: function () {
 		var occupants = this.getOriginalOccupants();
 		if (occupants.length === 0) {
@@ -87,5 +93,5 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		}
 
 		return Ext.Array.sort(occupants).join('_');
-	}
+	},
 });

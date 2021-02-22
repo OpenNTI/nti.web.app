@@ -4,7 +4,6 @@ const VideoPosters = require('./resolvers/VideoPosters');
 
 require('./Base');
 
-
 const TRANSCRIPT_PURPOSE = 'normal';
 const CAPTION_PURPOSE = 'captions';
 
@@ -16,28 +15,30 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		mimeType: 'application/vnd.nextthought.ntivideo',
 		refMimeType: 'application/vnd.nextthought.ntivideoref',
 
-
-		getTranscripts (transcripts) {
-			return (transcripts || []).filter(x => x.purpose === TRANSCRIPT_PURPOSE);
+		getTranscripts(transcripts) {
+			return (transcripts || []).filter(
+				x => x.purpose === TRANSCRIPT_PURPOSE
+			);
 		},
 
-
-		getCaptions (transcripts) {
-			return (transcripts || []).filter(x => x.purpose === CAPTION_PURPOSE);
-		}
+		getCaptions(transcripts) {
+			return (transcripts || []).filter(
+				x => x.purpose === CAPTION_PURPOSE
+			);
+		},
 	},
 
 	idProperty: 'ntiid',
 
 	fields: [
-		{name: 'description', type: 'string'},
-		{name: 'poster', type: 'string'},
-		{name: 'subtitle', type: 'string'},
-		{name: 'title', type: 'string'},
-		{name: 'sources', type: 'auto'},
-		{name: 'transcripts', type: 'auto'},
-		{name: 'label', type: 'string'},
-		{name: 'ntiid', type: 'string'}
+		{ name: 'description', type: 'string' },
+		{ name: 'poster', type: 'string' },
+		{ name: 'subtitle', type: 'string' },
+		{ name: 'title', type: 'string' },
+		{ name: 'sources', type: 'auto' },
+		{ name: 'transcripts', type: 'auto' },
+		{ name: 'label', type: 'string' },
+		{ name: 'ntiid', type: 'string' },
 	],
 
 	getId: function () {
@@ -59,16 +60,18 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 	__resolvePosterFromSource: function () {
 		var sources = this.get('sources');
 
-		return Promise.all(sources.map(function (source) {
-			if (source.poster || source.thumbnail) {
-				return {
-					poster: source.poster,
-					thumbnail: source.thumbnail
-				};
-			}
+		return Promise.all(
+			sources.map(function (source) {
+				if (source.poster || source.thumbnail) {
+					return {
+						poster: source.poster,
+						thumbnail: source.thumbnail,
+					};
+				}
 
-			return VideoPosters.resolveForSource(source);
-		}));
+				return VideoPosters.resolveForSource(source);
+			})
+		);
 	},
 
 	resolveThumbnail: function () {
@@ -78,25 +81,24 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 			return Promise.resolve(poster);
 		}
 
-		return this.__resolvePosterFromSource()
-			.then(([resolved]) => resolved.thumbnail || resolved.poster || resolved);
+		return this.__resolvePosterFromSource().then(
+			([resolved]) => resolved.thumbnail || resolved.poster || resolved
+		);
 	},
 
 	shouldBeRoot: function () {
 		return true;
 	},
 
-
-	getTranscripts () {
+	getTranscripts() {
 		const transcripts = this.get('transcripts');
 
 		return transcripts.filter(x => x.purpose === TRANSCRIPT_PURPOSE);
 	},
 
-
-	getCaptions () {
+	getCaptions() {
 		const transcripts = this.get('transcripts');
 
 		return transcripts.filter(x => x.purpose === CAPTION_PURPOSE);
-	}
+	},
 });

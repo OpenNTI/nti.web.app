@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const ModelBase = require('legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
@@ -13,17 +13,34 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 
 	overItemCls: 'over',
 	itemSelector: '.row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'row', cn: [
-			{cls: 'name', html: '{Creator}'},
-			{cls: 'snippet', html: '{preview}'},
-			{cls: 'footer', cn: [
-				{tag: 'span', html: '{ReplyCount:plural("Comment")}'},
-				{tag: 'span', html: '{CreatedTime:timeDifference}'}
-			]}
-		] }
-
-	]})),
+	tpl: new Ext.XTemplate(
+		Ext.DomHelper.markup({
+			tag: 'tpl',
+			for: '.',
+			cn: [
+				{
+					cls: 'row',
+					cn: [
+						{ cls: 'name', html: '{Creator}' },
+						{ cls: 'snippet', html: '{preview}' },
+						{
+							cls: 'footer',
+							cn: [
+								{
+									tag: 'span',
+									html: '{ReplyCount:plural("Comment")}',
+								},
+								{
+									tag: 'span',
+									html: '{CreatedTime:timeDifference}',
+								},
+							],
+						},
+					],
+				},
+			],
+		})
+	),
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -37,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		this.on('beforedeactivate', 'beforeDeactivate');
 		this.on('select', 'navigateToNote');
 
-		this.deleteWrapper = (id) => this.deleteNote(id);
+		this.deleteWrapper = id => this.deleteNote(id);
 
 		ModelBase.addListener('deleted', this.deleteWrapper);
 	},
@@ -68,9 +85,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		var editorEl = Ext.getBody().down('.note-window .editor-active');
 
 		if (editorEl && editorEl.isVisible()) {
-			var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
+			var msg = getString(
+				'NextThought.view.content.reader.NoteOverlay.editing'
+			);
 			Ext.defer(function () {
-				alert({msg: msg});
+				alert({ msg: msg });
 			}, 1);
 			return false;
 		}
@@ -78,23 +97,21 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		return true;
 	},
 
-
 	navigateToNote: function (sel, rec) {
 		var el = this.getNodeByRecord(rec);
 
 		if (this.showNote) {
 			this.showNote(rec, el, {
-				afterClose: this.onNoteClose.bind(this)
+				afterClose: this.onNoteClose.bind(this),
 			});
 		} else {
 			console.error('No Handler to show note');
 		}
 	},
 
-
 	onNoteClose: function () {
 		if (this.el) {
 			this.getSelectionModel().deselectAll();
 		}
-	}
+	},
 });

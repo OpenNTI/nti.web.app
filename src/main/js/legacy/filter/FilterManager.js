@@ -1,15 +1,13 @@
 const Ext = require('@nti/extjs');
 
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 
 require('./Filter');
 require('./FilterGroup');
 
-
 //TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.
 
 module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
-
 	constructor: function () {
 		this.scopes = {};
 	},
@@ -22,16 +20,22 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		return this.scopes[scope];
 	},
 
-	registerFilterListener: function retry (filterScope, fn, fnScope) {
-		var me = this, o, p, fc;
+	registerFilterListener: function retry(filterScope, fn, fnScope) {
+		var me = this,
+			o,
+			p,
+			fc;
 		if (filterScope && filterScope.isComponent) {
 			p = filterScope.up('view-container');
 			if (p) {
 				fc = p.down('content-filter');
-				if (fc) {filterScope = fc.menu.getId();}
-			}
-			else {
-				setTimeout(function () { retry.call(me, filterScope, fn, fnScope); },10);
+				if (fc) {
+					filterScope = fc.menu.getId();
+				}
+			} else {
+				setTimeout(function () {
+					retry.call(me, filterScope, fn, fnScope);
+				}, 10);
 				return;
 			}
 		}
@@ -77,21 +81,27 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 			var m;
 			if (f.fieldName === 'sharedWith') {
 				params.sharedWith = params.sharedWith || [];
-				params.sharedWith.push(f.value.getId ? f.value.getId() : f.value);
+				params.sharedWith.push(
+					f.value.getId ? f.value.getId() : f.value
+				);
 				return;
 			}
 			if (f.fieldName === 'Creator') {
-				if (isMe(f.value)) { params.me = true; }
-				else { params.groups = true; }
+				if (isMe(f.value)) {
+					params.me = true;
+				} else {
+					params.groups = true;
+				}
 				return;
 			}
 			try {
 				m = Ext.ClassManager.get(f.value);
-				if (!m || !m.prototype || !m.prototype.mimeType) {return;}
+				if (!m || !m.prototype || !m.prototype.mimeType) {
+					return;
+				}
 				params[f.fieldName] = params[f.fieldName] || [];
 				params[f.fieldName].push(m.prototype.mimeType);
-			}
-			catch (e) {
+			} catch (e) {
 				console.error(e.message, e);
 			}
 		});
@@ -104,17 +114,14 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		if (params.me && params.groups) {
 			//both true
 			params.filter = 'IFollowAndMe';
-		}
-		else if (params.groups) {
+		} else if (params.groups) {
 			//groups true
 			params.filter = 'IFollow';
-		}
-		else if (params.me) {
+		} else if (params.me) {
 			//only me
 			params.filter = 'MeOnly';
 		}
 
 		return params;
-	}
-
+	},
 }).create();

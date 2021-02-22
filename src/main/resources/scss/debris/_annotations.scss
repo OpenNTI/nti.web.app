@@ -11,7 +11,8 @@
 		text-decoration: none;
 
 		&.disabled {
-			&, &:hover {
+			&,
+			&:hover {
 				display: none;
 				opacity: 0.5;
 				cursor: default;
@@ -19,7 +20,8 @@
 			}
 		}
 
-		&.zoom, &.unzoom {
+		&.zoom,
+		&.unzoom {
 			display: block;
 			position: absolute;
 			top: 0;
@@ -41,7 +43,8 @@
 		max-height: 200px;
 		overflow-y: auto;
 
-		.image-caption,.image-title {
+		.image-caption,
+		.image-title {
 			line-height: 1.2em;
 			display: block;
 			font-size: 16px;
@@ -57,7 +60,9 @@
 
 		.bar-cell {
 			display: block;
-			& > span:first-child { margin-top: 14px; }
+			& > span:first-child {
+				margin-top: 14px;
+			}
 		}
 
 		a.bar-cell {
@@ -200,7 +205,8 @@
 	}
 }
 
-@media screen and (max-device-width: 768px) { // iPad
+@media screen and (max-device-width: 768px) {
+	// iPad
 	.annotation-gutter {
 		width: 25px;
 		right: 35px;
@@ -239,11 +245,15 @@
 		border-bottom: 1px solid #ededed;
 
 		&.x-item-selected {
-			&, &.over {
-				.name,.footer {
+			&,
+			&.over {
+				.name,
+				.footer {
 					color: #c5eaff;
 				}
-				.snippet { color: #fff; }
+				.snippet {
+					color: #fff;
+				}
 
 				background: var(--primary-blue);
 				box-shadow: inset -1px 0 0 1px #107eed, 1px 0 0 0 #107eed;
@@ -268,7 +278,7 @@
 		.snippet {
 			min-height: 50px;
 			max-height: 5em;
-			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
+			overflow: hidden; //because this is allowing line wrapping, we can't ellipse the text overflow.
 			font: italic 400 16px/25px var(--body-font-family);
 			margin: 0 0 10px -10px;
 			padding-left: 10px;
@@ -277,8 +287,12 @@
 			word-wrap: break-word;
 
 			.body-divider .whiteboard-container {
-				.whiteboard-wrapper .overlay { bottom: 0; }
-				.toolbar { display: none; }
+				.whiteboard-wrapper .overlay {
+					bottom: 0;
+				}
+				.toolbar {
+					display: none;
+				}
 			}
 
 			p {
@@ -465,7 +479,9 @@
 }
 
 .x-component-zoom {
-	img { width: 100%; }
+	img {
+		width: 100%;
+	}
 
 	@include image-bar;
 }
@@ -481,7 +497,7 @@
 	box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45);
 	background: #fafafa;
 	position: fixed !important;
-	margin-top: 35px;//account for the close button
+	margin-top: 35px; //account for the close button
 
 	@include image-bar;
 
@@ -505,7 +521,8 @@
 }
 
 .note-window .note.main-view .context {
-	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"] {
+	[itemprop~='nti-data-markupenabled'],
+	[itemprop~='nti-slide-video'] {
 		&:hover {
 			a.zoom {
 				display: none !important;
@@ -568,7 +585,7 @@
 .note-window .main-view .context,
 #NTIContent {
 	.figure {
-		[itemprop*="nti-data-markup"]:not(.no-details) {
+		[itemprop*='nti-data-markup']:not(.no-details) {
 			max-width: 100%;
 
 			& ~ .caption {
@@ -583,8 +600,8 @@
 		}
 	}
 
-	[itemprop*="nti-data-markup"]:not(.no-details),
-	[itemprop~="nti-slide-video"] {
+	[itemprop*='nti-data-markup']:not(.no-details),
+	[itemprop~='nti-slide-video'] {
 		@include hardware-accelerate();
 
 		display: inline-block;
@@ -611,16 +628,22 @@
 		}
 	}
 
-	object[type$=slide],object[type$=slidevideo] {
-		.bar a.slide { display: block; }
+	object[type$='slide'],
+	object[type$='slidevideo'] {
+		.bar a.slide {
+			display: block;
+		}
 	}
 
-	object[type$=slidevideo] .bar a.mark { display: none; }
+	object[type$='slidevideo'] .bar a.mark {
+		display: none;
+	}
 
 	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
 	li.footnote {
 		&.redacted {
-			span, a {
+			span,
+			a {
 				display: none;
 			}
 		}
@@ -657,7 +680,8 @@
 				&::after {
 					position: absolute;
 					content: '';
-					background: url(../images/elements/div_block_redaction.png) 0 0 repeat-x;
+					background: url(../images/elements/div_block_redaction.png)
+						0 0 repeat-x;
 					top: -6px;
 					left: 0;
 					width: 100%;
@@ -670,11 +694,14 @@
 			.controls {
 				display: none;
 			}
-			span.editableSpan { border-right-width: 1px; }
+			span.editableSpan {
+				border-right-width: 1px;
+			}
 		}
 	}
 
-	.block-redaction, .redactionAction {
+	.block-redaction,
+	.redactionAction {
 		&.editing {
 			span.editableSpan {
 				cursor: text;
@@ -682,7 +709,8 @@
 
 			.controls {
 				span {
-					&.share,&.delete {
+					&.share,
+					&.delete {
 						display: none;
 					}
 				}
@@ -705,7 +733,7 @@
 
 		font-size: 10px;
 		line-height: 14px;
-		vertical-align: top;//fix alignment in firefox
+		vertical-align: top; //fix alignment in firefox
 		vertical-align: middle;
 		margin: 0 2px 0 2px;
 		overflow: hidden;
@@ -716,8 +744,12 @@
 		}
 
 		&.redacted {
-			.controls { display: none; }
-			span.editableSpan { border-right-width: 1px; }
+			.controls {
+				display: none;
+			}
+			span.editableSpan {
+				border-right-width: 1px;
+			}
 		}
 
 		span.editableSpan {
@@ -761,15 +793,22 @@
 				box-shadow: inset 0 0 0 1px var(--border-grey);
 
 				&::after {
-					background: url(../images/old_sprites/spr_redaction.png) 0 0 no-repeat;
+					background: url(../images/old_sprites/spr_redaction.png) 0 0
+						no-repeat;
 					content: ' ';
 					width: 16px;
 					height: 16px;
 					position: absolute;
 				}
-				&.edit { @include icon($redactions-edit,$top: 6px, $left: 6px); }
-				&.share { @include icon($redactions-share,$top: 6px, $left: 6px); }
-				&.delete { @include icon($redactions-trashcan,$top: 5px, $left: 7px); }
+				&.edit {
+					@include icon($redactions-edit, $top: 6px, $left: 6px);
+				}
+				&.share {
+					@include icon($redactions-share, $top: 6px, $left: 6px);
+				}
+				&.delete {
+					@include icon($redactions-trashcan, $top: 5px, $left: 7px);
+				}
 
 				&.edit.save {
 					box-shadow: inset 0 0 0 1px #369ad3;
@@ -800,10 +839,16 @@
 					&.delete {
 						background-color: var(--primary-red);
 						box-shadow: inset 0 0 0 1px #d14646 !important;
-						&::after { @include sprite($redactions-trashcan_hover); }
+						&::after {
+							@include sprite($redactions-trashcan_hover);
+						}
 					}
-					&.edit::after { @include sprite($redactions-edit_hover); }
-					&.share::after { @include sprite($redactions-share_hover); }
+					&.edit::after {
+						@include sprite($redactions-edit_hover);
+					}
+					&.share::after {
+						@include sprite($redactions-share_hover);
+					}
 				}
 			}
 		}
@@ -816,7 +861,8 @@
 	.sidebar.warning {
 		.application-highlight {
 			&.shared-with-me {
-				&,.math {
+				&,
+				.math {
 					color: white;
 				}
 			}
@@ -825,9 +871,9 @@
 }
 
 #NTIContent {
-	[itemprop~="nti-data-markupenabled"],
-	[itemprop~="nti-slide-video"] {
-		&[itemprop~="nti-data-resizeable"] {
+	[itemprop~='nti-data-markupenabled'],
+	[itemprop~='nti-slide-video'] {
+		&[itemprop~='nti-data-resizeable'] {
 			.bar .image-title {
 				overflow: hidden;
 
@@ -836,7 +882,7 @@
 		}
 	}
 
-	[itemprop~="nti-data-resizeable"] {
+	[itemprop~='nti-data-resizeable'] {
 		img {
 			max-width: 100%;
 			height: auto !important;
@@ -844,21 +890,24 @@
 	}
 }
 
-div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
+div.section-problem .highlight-mouse-over .MathJax_Display {
+	color: #076da7;
+}
 
 #NTIContent ol.parts > li.part::before {
 	z-index: 2;
 }
 
 #annotation-container {
-	&, .highlight-canvas {
+	&,
+	.highlight-canvas {
 		position: absolute;
 		pointer-events: none;
 	}
 }
 
 .nt-annotation-menu {
-	$transition-duration:0.1s;
+	$transition-duration: 0.1s;
 
 	background: var(--annotations-menu-bg);
 	border-radius: 6px;
@@ -873,7 +922,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 
 	// the pointer/arrow
 	&::after {
-		$arrow-size:0.5em;
+		$arrow-size: 0.5em;
 
 		content: '';
 		position: absolute;
@@ -898,7 +947,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 	.x-menu-item {
 		// &.icon {}
 
-		&.add-note, &.define {
+		&.add-note,
+		&.define {
 			overflow: hidden;
 			display: block;
 			text-indent: -100em;
@@ -909,7 +959,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 		}
 
 		&.define {
-			@include icon($search-white,$top:8px,$left:5px);
+			@include icon($search-white, $top: 8px, $left: 5px);
 		}
 
 		&::after {
@@ -928,8 +978,9 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 	}
 
 	.x-component {
-		&::before { // divider line between items
-			content: "";
+		&::before {
+			// divider line between items
+			content: '';
 			border-right: 2px solid rgba(128, 128, 128, 0.2);
 			position: absolute;
 			height: 75%;
@@ -959,8 +1010,9 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 		}
 
 		a {
-			span { // the color swatches
-				$swatchSize:1.25em;
+			span {
+				// the color swatches
+				$swatchSize: 1.25em;
 
 				display: inline-block;
 				width: $swatchSize;
@@ -969,7 +1021,10 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 				border-radius: $swatchSize/2;
 				margin: 0.5em 0.2em;
 				position: relative;
-				transform: scale(1, 1); // so the transform will animate on mouseout.
+				transform: scale(
+					1,
+					1
+				); // so the transform will animate on mouseout.
 				transition: all $transition-duration 0;
 
 				&::after {
@@ -977,7 +1032,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 					position: absolute;
 					top: 0;
 					left: 0;
-					background: url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
+					background: url('../images/icons/rhp-status-checkmark.png')
+						center no-repeat transparent;
 					width: 100%;
 					height: 100%;
 					opacity: 0;
@@ -990,7 +1046,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 			}
 		}
 
-		a:hover, a.x-color-picker-selected {
+		a:hover,
+		a.x-color-picker-selected {
 			background: none;
 			border: none;
 
@@ -1015,7 +1072,11 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 
 	& + li.part,
 	& + li.exercise {
-		&::before, &::after { z-index: 1; color: #076da7; }
+		&::before,
+		&::after {
+			z-index: 1;
+			color: #076da7;
+		}
 	}
 	// &.highlight-mouse-over {
 	// 	& + li.part, & + li.exercise {
@@ -1024,7 +1085,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 	// }
 
 	&.plain {
-		&, * {
+		&,
+		* {
 			position: relative;
 		}
 
@@ -1033,7 +1095,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 		overflow: hidden;
 
 		&.shared-with-me {
-			&,.math {
+			&,
+			.math {
 				background: none;
 				color: var(--primary-grey);
 				border-bottom: 1px solid #9fd9fa;
@@ -1047,14 +1110,16 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 			// }
 
 			.application-highlight.shared-with-me {
-				&,.math {
+				&,
+				.math {
 					border-bottom: none;
 				}
 			}
 		}
 
 		&.highlight-mouse-over {
-			&,a {
+			&,
+			a {
 				// color: #ffffff;
 				// background-color: var(--primary-blue);
 				.application-highlight {

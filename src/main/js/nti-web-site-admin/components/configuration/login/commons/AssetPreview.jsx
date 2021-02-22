@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme, Input} from '@nti/web-commons';
+import { Theme, Input } from '@nti/web-commons';
 
-import {readFile} from '../utils';
+import { readFile } from '../utils';
 import Store from '../Store';
 
 import Styles from './AssetPreview.css';
@@ -22,16 +22,28 @@ AssetPreview.propTypes = {
 	notSetHeader: PropTypes.string,
 	notSetLabel: PropTypes.string,
 	setAsset: PropTypes.func,
-	setThemeProp: PropTypes.func
+	setThemeProp: PropTypes.func,
 };
-function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, notSetHeader, notSetLabel, setAsset, setThemeProp, maxHeight = 110, ...otherProps}) {
+function AssetPreview({
+	className,
+	name,
+	hideFlag,
+	noBorder,
+	recommendedSize,
+	notSetHeader,
+	notSetLabel,
+	setAsset,
+	setThemeProp,
+	maxHeight = 110,
+	...otherProps
+}) {
 	const property = Theme.useThemeProperty(`assets.${name}`);
 
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
 	const href = !hide && property && property.href;
 
 	const styles = {
-		maxHeight: `${maxHeight}px`
+		maxHeight: `${maxHeight}px`,
 	};
 
 	const minHeight = noBorder ? 0 : maxHeight + 50;
@@ -39,16 +51,17 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 
 	const Container = inputMode ? Input.FileInputWrapper : 'div';
 	const containerProps = {
-		className: cx('asset-preview', className, {'no-border': noBorder}),
-		style: {minHeight: `${minHeight}px`}
+		className: cx('asset-preview', className, { 'no-border': noBorder }),
+		style: { minHeight: `${minHeight}px` },
 	};
 
 	if (inputMode) {
-
 		containerProps.onChange = async (files, e) => {
 			const file = files[0];
 
-			if (!file) { return; }
+			if (!file) {
+				return;
+			}
 
 			try {
 				const source = await readFile(file);
@@ -56,7 +69,7 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 				setAsset(name, {
 					file,
 					filename: file.name,
-					source
+					source,
 				});
 
 				if (hideFlag) {
@@ -75,8 +88,14 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 	};
 
 	return (
-		<Container {...containerProps} >
-			{href && (<Theme.Asset {...otherProps} property={property} style={styles} />)}
+		<Container {...containerProps}>
+			{href && (
+				<Theme.Asset
+					{...otherProps}
+					property={property}
+					style={styles}
+				/>
+			)}
 			{!href && (notSetHeader || notSetLabel) && (
 				<div className={cx('not-set')}>
 					{notSetHeader && (
@@ -96,13 +115,16 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 					<i className={cx('icon-bold-x', 'icon')} />
 				</div>
 			)}
-			{recommendedSize && (<Text.Small className={cx('dimensions')}>{recommendedSize}</Text.Small>)}
+			{recommendedSize && (
+				<Text.Small className={cx('dimensions')}>
+					{recommendedSize}
+				</Text.Small>
+			)}
 		</Container>
 	);
 }
 
-export default Store
-	.monitor({
-		[Store.SetAsset]: 'setAsset',
-		[Store.SetThemeProp]: 'setThemeProp'
-	})(AssetPreview);
+export default Store.monitor({
+	[Store.SetAsset]: 'setAsset',
+	[Store.SetThemeProp]: 'setThemeProp',
+})(AssetPreview);

@@ -6,7 +6,6 @@ const DndStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
 
-
 module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
 	extend: 'NextThought.common.Actions',
 
@@ -59,14 +58,16 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
 	},
 
 	removeAllPlaceholders: function () {
-		var placeholders = document.querySelector('.dnd-drop-placeholder, .dnd-save-placeholder');
+		var placeholders = document.querySelector(
+			'.dnd-drop-placeholder, .dnd-save-placeholder'
+		);
 
-		if(placeholders instanceof Array) {
+		if (placeholders instanceof Array) {
 			placeholders.forEach(function (placeholder) {
 				placeholder.remove();
 			});
-		} else if(placeholders) {
+		} else if (placeholders) {
 			placeholders.remove();
 		}
-	}
+	},
 });

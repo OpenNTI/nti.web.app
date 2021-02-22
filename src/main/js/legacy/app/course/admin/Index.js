@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-const {AdminTools} = require('@nti/web-course');
+const { AdminTools } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
@@ -9,7 +9,6 @@ const ComponentsNavigation = require('legacy/common/components/Navigation');
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
-
 
 // const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
@@ -25,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	alias: 'widget.course-admin-index',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	cls: 'course-admin-index',
@@ -33,12 +32,12 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	layout: 'none',
 	items: [],
 
-	onRouteActivate () {
+	onRouteActivate() {
 		clearTimeout(this.cleanupTimeout);
 		this.setTitle('Course Administration');
 	},
 
-	onRouteDeactivate () {
+	onRouteDeactivate() {
 		this.cleanupTimeout = setTimeout(() => {
 			this.remove(this.siteAdminTools, true);
 			this.remove(this.siteAdminRoster, true);
@@ -47,7 +46,6 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			delete this.siteAdminRoster;
 		}, 500);
 	},
-
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -58,12 +56,11 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
-
-	setCourseId (courseId) {
+	setCourseId(courseId) {
 		this.courseId = courseId;
 	},
 
-	showSiteAdmin (route) {
+	showSiteAdmin(route) {
 		const baseroute = this.getBaseRoute();
 		if (this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
 			maybeHide(this.siteAdminRoster);
@@ -87,8 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		this.setUpNavigation(baseroute, route.path);
 	},
 
-
-	setupAdminTools () {
+	setupAdminTools() {
 		const baseroute = this.getBaseRoute();
 
 		this.siteAdminTools = this.add({
@@ -97,28 +93,28 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			component: AdminTools.View,
 			baseroute: baseroute,
 			onChange: async () => {
-				if(this.activeBundle) {
+				if (this.activeBundle) {
 					await this.activeBundle.updateFromServer();
 
 					this.setBundle(this.activeBundle);
 				}
 			},
 			loading: true,
-			setTitle: (title) => { this.setTitle(title); }
+			setTitle: title => {
+				this.setTitle(title);
+			},
 		});
-
 	},
 
-
-	setupRoster () {
+	setupRoster() {
 		this.siteAdminRoster = this.add({
 			xtype: 'course-info-roster',
 			itemId: ROSTER_ID,
-			getParentBaseRoute: () => this.getBaseRoute()
+			getParentBaseRoute: () => this.getBaseRoute(),
 		});
 	},
 
-	async setBundle (activeBundle) {
+	async setBundle(activeBundle) {
 		this.activeBundle = activeBundle;
 		const service = await getService();
 		const course = await service.getObject(activeBundle.rawData.NTIID);
@@ -130,24 +126,32 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			this.siteAdminTools.setProps({ course, loading: false });
 		}
 
-		if(this.siteAdminTools) {
+		if (this.siteAdminTools) {
 			this.siteAdminTools.el.unmask();
 		}
 	},
 
-	setUpNavigation (baseroute, path) {
+	setUpNavigation(baseroute, path) {
 		const navigation = this.getNavigation();
 		const me = this;
 		const onBack = () => {
-			me.pushRootRoute('', `/course/${encodeForURI(me.activeBundle.getId())}/info`);
+			me.pushRootRoute(
+				'',
+				`/course/${encodeForURI(me.activeBundle.getId())}/info`
+			);
 		};
 
-		const showRoster = this.activeBundle && this.activeBundle.hasLink('CourseEnrollmentRoster');
-		const showReports = this.activeBundle && this.activeBundle.getReportLinks().length > 0 ? true : false;
+		const showRoster =
+			this.activeBundle &&
+			this.activeBundle.hasLink('CourseEnrollmentRoster');
+		const showReports =
+			this.activeBundle && this.activeBundle.getReportLinks().length > 0
+				? true
+				: false;
 
 		// we should only be showing this page if the user has an administrative enrollment, might as well always show advanced (individual items on the advanced tab will be
 		// disabled/enabled according to the user's permissions)
-		const showAdvanced = true;//this.activeBundle && (this.activeBundle.hasLink('lti-configured-tools') || this.activeBundle.hasLink('CompletionPolicy'));
+		const showAdvanced = true; //this.activeBundle && (this.activeBundle.hasLink('lti-configured-tools') || this.activeBundle.hasLink('CompletionPolicy'));
 
 		navigation.updateTitle('Course Administration');
 
@@ -163,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			tabs.push({
 				text: 'Reports',
 				route: '/reports',
-				active: REPORTS_ACTIVE.test(path)
+				active: REPORTS_ACTIVE.test(path),
 			});
 		}
 
@@ -171,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			tabs.push({
 				text: 'Roster',
 				route: '/roster',
-				active: ROSTER_ACTIVE.test(path)
+				active: ROSTER_ACTIVE.test(path),
 			});
 		}
 
@@ -179,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			tabs.push({
 				text: 'Advanced',
 				route: '/advanced',
-				active: ADVANCED_ACTIVE.test(path)
+				active: ADVANCED_ACTIVE.test(path),
 			});
 		}
 
@@ -190,15 +194,14 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			cmp: navigation,
 			noLibraryLink: false,
 			hideBranding: true,
-			onBack
+			onBack,
 		});
 	},
-
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
-				bodyView: this
+				bodyView: this,
 			});
 		}
 
@@ -207,5 +210,5 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 
 	onTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
-	}
+	},
 });

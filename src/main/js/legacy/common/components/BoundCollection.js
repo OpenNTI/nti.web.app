@@ -1,330 +1,376 @@
 const Ext = require('@nti/extjs');
 
 const Transition = require('legacy/mixins/Transition');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
+module.exports = exports = Ext.define(
+	'NextThought.common.components.BoundCollection',
+	{
+		extend: 'Ext.container.Container',
+		emptyText: '',
+		transitionStates: false,
+		autoUpdate: true,
+		layout: 'none',
+		items: [],
 
-module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
-	extend: 'Ext.container.Container',
-	emptyText: '',
-	transitionStates: false,
-	autoUpdate: true,
-	layout: 'none',
-	items: [],
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.addBodyConfig();
 
-		this.addBodyConfig();
-
-		if (this.initialState) {
-			this.__activeState = {items: this.getItems(this.initialState)};
-		}
-	},
-
-	addBodyConfig: function () {
-		this.add(this.getBodyConfig());
-	},
-
-	getBodyConfig: function () {
-		var cls = ['collection-body'];
-
-		if (this.bodyCls) {
-			cls.push(this.bodyCls);
-		}
-
-		return {
-			xtype: 'container',
-			cls: cls.join(' '),
-			isCollectionBody: true,
-			layout: 'none',
-			items: []
-		};
-	},
-
-	getBodyContainer: function () {
-		return this.down('[isCollectionBody]');
-	},
-
-	getComponents: function () {
-		var body = this.getBodyContainer(),
-			items = body && body.items && body.items.items;
-
-		return items || [];
-	},
-
-	parseCollection: function (response) {
-		var obj = lazy.ParseUtils.parseItems(response)[0];
-
-		return obj || JSON.parse(response);
-	},
-
-	loadCollection: function (url) {
-		var me = this;
-
-		me.activeUrl = url;
-
-		return Service.request(url)
-			.then(me.parseCollection.bind(me))
-			.then(function (json) {
-				me.setCollection(json);
-			})
-			.catch(function (reason) {
-				console.error('Failed to load outline contents: ', reason);
-				//TODO: Show an error state
-			});
-	},
-
-	getEmptyState: function () {
-		return {
-			xtype: 'box',
-			autoEl: {
-				cls: 'empty-state',
-				html: this.emptyText
+			if (this.initialState) {
+				this.__activeState = {
+					items: this.getItems(this.initialState),
+				};
 			}
-		};
-	},
+		},
 
-	getItems: function (collection) {
-		return collection.get('Items') || [];
-	},
+		addBodyConfig: function () {
+			this.add(this.getBodyConfig());
+		},
 
-	suspendUpdates: function () {
-		this.__suspendUpdates = true;
-	},
+		getBodyConfig: function () {
+			var cls = ['collection-body'];
 
-	resumeUpdates: function () {
-		this.__suspendUpdates = false;
+			if (this.bodyCls) {
+				cls.push(this.bodyCls);
+			}
 
-		if (this.__latestUpdate) {
-			this.setCollection(this.__latestUpdate);
-			delete this.__latestUpdate;
-		}
-	},
+			return {
+				xtype: 'container',
+				cls: cls.join(' '),
+				isCollectionBody: true,
+				layout: 'none',
+				items: [],
+			};
+		},
 
-	beforeSetCollection: function () {},
-	afterSetCollection: function () {},
+		getBodyContainer: function () {
+			return this.down('[isCollectionBody]');
+		},
 
-	onCollectionUpdate: function (collection) {
-		if (this.__suspendUpdates) {
-			this.__latestUpdate = collection;
-		} else {
-			this.setCollection(collection);
-		}
-	},
+		getComponents: function () {
+			var body = this.getBodyContainer(),
+				items = body && body.items && body.items.items;
 
-	setHeaderForCollection: function (collection) {
-		var header = this.buildHeader && this.buildHeader(collection);
+			return items || [];
+		},
 
-		if (this.currentHeader) {
-			this.currentHeader.destroy();
-		}
+		parseCollection: function (response) {
+			var obj = lazy.ParseUtils.parseItems(response)[0];
 
-		if (header) {
-			this.currentHeader = this.insert(0, header);
-		}
-	},
+			return obj || JSON.parse(response);
+		},
 
-	setFooterForCollection: function (collection) {
-		var footer = this.buildFooter && this.buildFooter(collection);
+		loadCollection: function (url) {
+			var me = this;
 
-		if (this.currentFooter) {
-			this.currentFooter.destroy();
-		}
+			me.activeUrl = url;
 
-		if (footer) {
-			this.currentFooter = this.insert(2, footer);
-		}
-	},
+			return Service.request(url)
+				.then(me.parseCollection.bind(me))
+				.then(function (json) {
+					me.setCollection(json);
+				})
+				.catch(function (reason) {
+					console.error('Failed to load outline contents: ', reason);
+					//TODO: Show an error state
+				});
+		},
 
-	setCollection: function (collection) {
-		this.beforeSetCollection(collection);
+		getEmptyState: function () {
+			return {
+				xtype: 'box',
+				autoEl: {
+					cls: 'empty-state',
+					html: this.emptyText,
+				},
+			};
+		},
 
-		var items = this.getItems(collection);
+		getItems: function (collection) {
+			return collection.get('Items') || [];
+		},
 
-		this.setHeaderForCollection(collection);
-		this.setFooterForCollection(collection);
+		suspendUpdates: function () {
+			this.__suspendUpdates = true;
+		},
 
-		if (this.autoUpdate) {
-			this.addCollectionMonitors(collection);
-		}
+		resumeUpdates: function () {
+			this.__suspendUpdates = false;
 
-		if (this.__activeState && this.transitionStates) {
-			this.__activeState = this.__transitionTo(items, this.__activeState);
-		} else {
-			this.__activeState = this.__showItems(items);
-		}
+			if (this.__latestUpdate) {
+				this.setCollection(this.__latestUpdate);
+				delete this.__latestUpdate;
+			}
+		},
 
-		this.afterSetCollection(collection);
-	},
+		beforeSetCollection: function () {},
+		afterSetCollection: function () {},
 
-	removeCollectionMonitors () {
-		if (this.updateMonitor) {
-			Ext.destroy(this.updateMonitor);
-			delete this.updateMonitor;
-		}
-	},
-
-	addCollectionMonitors (collection) {
-		this.removeCollectionMonitors();
-
-		this.updateMonitor = this.mon(collection, {
-			single: true,
-			destroyable: true,
-			'update': this.onCollectionUpdate.bind(this, collection)
-		});
-	},
-
-	mergeItems: function (oldItems, newItems) {
-		var oldIndex = 0, newIndex = 0,
-			oldRecords, newRecords,
-			newItem, oldItem,
-			merge = [];
-
-		oldRecords = oldItems.reduce(function (acc, item) {
-			acc[item.getId()] = true;
-			return acc;
-		}, {});
-
-
-		newRecords = newItems.reduce(function (acc, item) {
-			acc[item.getId()] = true;
-			return acc;
-		}, {});
-
-		/*
-		 * Merge with the following heuristic:
-		 *
-		 * Iterating the new list, look at whats at the same index in the old list.
-		 * Then:
-		 *
-		 * 1.) If both lists have the same record, add it to the merged list with no transition
-		 * 2.) If both lists have different records
-		 *	a.) If the new is not in the old list, add it to the merged list with an add transition
-		 *	b.) If the new is in the old list, add it to the merged list with a move transition
-		 *	c.) If the old is not in the new list, add it to the merged list with a remove transition
-		 *	d.) If the old is in the new list, do nothing (Hitting it in the new list will make sure its there)
-		 *
-		 * Then if there is anything left in the old list, append them with a remove transition
-		 */
-
-		while (oldItems[oldIndex] || newItems[newIndex]) {
-			newItem = newItems[newIndex];
-			oldItem = oldItems[oldIndex];
-
-			if (!newItem && oldItem) {
-				merge.push({record: oldItem, type: Transition.LIST_REMOVE, oldRecord: oldItem});
-			} else if (newItem && !oldItem) {
-				merge.push({record: newItem, type: Transition.LIST_ADD, oldRecord: oldItem});
-			} else if (newItem.getId() === oldItem.getId()) {
-				merge.push({record: newItem, type: '', oldRecord: oldItem});
+		onCollectionUpdate: function (collection) {
+			if (this.__suspendUpdates) {
+				this.__latestUpdate = collection;
 			} else {
-				if (oldRecords[newItem.getId()]) {
-					merge.push({record: newItem, type: Transition.LIST_MOVE, oldRecord: newItem});
+				this.setCollection(collection);
+			}
+		},
+
+		setHeaderForCollection: function (collection) {
+			var header = this.buildHeader && this.buildHeader(collection);
+
+			if (this.currentHeader) {
+				this.currentHeader.destroy();
+			}
+
+			if (header) {
+				this.currentHeader = this.insert(0, header);
+			}
+		},
+
+		setFooterForCollection: function (collection) {
+			var footer = this.buildFooter && this.buildFooter(collection);
+
+			if (this.currentFooter) {
+				this.currentFooter.destroy();
+			}
+
+			if (footer) {
+				this.currentFooter = this.insert(2, footer);
+			}
+		},
+
+		setCollection: function (collection) {
+			this.beforeSetCollection(collection);
+
+			var items = this.getItems(collection);
+
+			this.setHeaderForCollection(collection);
+			this.setFooterForCollection(collection);
+
+			if (this.autoUpdate) {
+				this.addCollectionMonitors(collection);
+			}
+
+			if (this.__activeState && this.transitionStates) {
+				this.__activeState = this.__transitionTo(
+					items,
+					this.__activeState
+				);
+			} else {
+				this.__activeState = this.__showItems(items);
+			}
+
+			this.afterSetCollection(collection);
+		},
+
+		removeCollectionMonitors() {
+			if (this.updateMonitor) {
+				Ext.destroy(this.updateMonitor);
+				delete this.updateMonitor;
+			}
+		},
+
+		addCollectionMonitors(collection) {
+			this.removeCollectionMonitors();
+
+			this.updateMonitor = this.mon(collection, {
+				single: true,
+				destroyable: true,
+				update: this.onCollectionUpdate.bind(this, collection),
+			});
+		},
+
+		mergeItems: function (oldItems, newItems) {
+			var oldIndex = 0,
+				newIndex = 0,
+				oldRecords,
+				newRecords,
+				newItem,
+				oldItem,
+				merge = [];
+
+			oldRecords = oldItems.reduce(function (acc, item) {
+				acc[item.getId()] = true;
+				return acc;
+			}, {});
+
+			newRecords = newItems.reduce(function (acc, item) {
+				acc[item.getId()] = true;
+				return acc;
+			}, {});
+
+			/*
+			 * Merge with the following heuristic:
+			 *
+			 * Iterating the new list, look at whats at the same index in the old list.
+			 * Then:
+			 *
+			 * 1.) If both lists have the same record, add it to the merged list with no transition
+			 * 2.) If both lists have different records
+			 *	a.) If the new is not in the old list, add it to the merged list with an add transition
+			 *	b.) If the new is in the old list, add it to the merged list with a move transition
+			 *	c.) If the old is not in the new list, add it to the merged list with a remove transition
+			 *	d.) If the old is in the new list, do nothing (Hitting it in the new list will make sure its there)
+			 *
+			 * Then if there is anything left in the old list, append them with a remove transition
+			 */
+
+			while (oldItems[oldIndex] || newItems[newIndex]) {
+				newItem = newItems[newIndex];
+				oldItem = oldItems[oldIndex];
+
+				if (!newItem && oldItem) {
+					merge.push({
+						record: oldItem,
+						type: Transition.LIST_REMOVE,
+						oldRecord: oldItem,
+					});
+				} else if (newItem && !oldItem) {
+					merge.push({
+						record: newItem,
+						type: Transition.LIST_ADD,
+						oldRecord: oldItem,
+					});
+				} else if (newItem.getId() === oldItem.getId()) {
+					merge.push({
+						record: newItem,
+						type: '',
+						oldRecord: oldItem,
+					});
 				} else {
-					merge.push({record: newItem, type: Transition.LIST_ADD, oldRecord: oldItem});
+					if (oldRecords[newItem.getId()]) {
+						merge.push({
+							record: newItem,
+							type: Transition.LIST_MOVE,
+							oldRecord: newItem,
+						});
+					} else {
+						merge.push({
+							record: newItem,
+							type: Transition.LIST_ADD,
+							oldRecord: oldItem,
+						});
+					}
+
+					if (!newRecords[oldItem.getId()]) {
+						merge.push({
+							record: oldItem,
+							type: Transition.LIST_REMOVE,
+							oldRecord: oldItem,
+						});
+					}
 				}
 
-				if (!newRecords[oldItem.getId()]) {
-					merge.push({record: oldItem, type: Transition.LIST_REMOVE, oldRecord: oldItem});
-				}
+				oldIndex += 1;
+				newIndex += 1;
 			}
 
-			oldIndex += 1;
-			newIndex += 1;
-		}
+			return merge;
+		},
 
-		return merge;
-	},
+		__transitionTo: function (items, state) {
+			var me = this,
+				newState,
+				merged = this.mergeItems(state.items, items),
+				body = this.getBodyContainer();
 
-	__transitionTo: function (items, state) {
-		var me = this, newState,
-			merged = this.mergeItems(state.items, items),
-			body = this.getBodyContainer();
+			this.clearCollection();
 
-		this.clearCollection();
+			newState = merged.reduce(
+				function (acc, item) {
+					var cmp =
+						item &&
+						me.getCmpForRecord(
+							item.record,
+							item.type,
+							item.oldRecord
+						);
 
-		newState = merged.reduce(function (acc, item) {
-			var cmp = item && me.getCmpForRecord(item.record, item.type, item.oldRecord);
+					if (cmp) {
+						acc.cmps.push(cmp);
+						acc.items.push(item.record);
+					}
 
-			if (cmp) {
-				acc.cmps.push(cmp);
-				acc.items.push(item.record);
+					return acc;
+				},
+				{ cmps: [], items: [] }
+			);
+
+			if (!newState.cmps.length && this.emptyText) {
+				newState.cmps.push(me.getEmptyState());
 			}
 
-			return acc;
-		}, {cmps: [], items: []});
+			body.add(newState.cmps);
 
-		if (!newState.cmps.length && this.emptyText) {
-			newState.cmps.push(me.getEmptyState());
-		}
+			return newState;
+		},
 
-		body.add(newState.cmps);
+		__showItems: function (items) {
+			var me = this,
+				state,
+				body = me.getBodyContainer();
 
-		return newState;
-	},
+			this.clearCollection();
 
-	__showItems: function (items) {
-		var me = this, state,
-			body = me.getBodyContainer();
+			state = items.reduce(
+				function (acc, item) {
+					var cmp = item && me.getCmpForRecord(item);
 
-		this.clearCollection();
+					if (cmp) {
+						acc.cmps.push(cmp);
+						acc.items.push(item);
+					}
 
-		state = items.reduce(function (acc, item) {
-			var cmp = item && me.getCmpForRecord(item);
+					return acc;
+				},
+				{ cmps: [], items: [] }
+			);
 
-			if (cmp) {
-				acc.cmps.push(cmp);
-				acc.items.push(item);
+			if (!state.cmps.length && this.emptyText) {
+				state.cmps.push(me.getEmptyState());
 			}
 
-			return acc;
-		}, {cmps: [], items: []});
+			body.suspendEvents();
+			state.cmps = body.add(state.cmps);
+			body.resumeEvents();
 
-		if (!state.cmps.length && this.emptyText) {
-			state.cmps.push(me.getEmptyState());
-		}
+			return state;
+		},
 
-		body.suspendEvents();
-		state.cmps = body.add(state.cmps);
-		body.resumeEvents();
+		/**
+		 * Return a cmp to add to the body for a given record.
+		 *
+		 * A transition can be given to trigger an animation for adding or removing.
+		 *
+		 * An earlier version of the record can be passed, so the cmp has a chance
+		 * to figure out how it should animate the record in. Since we are creating
+		 * new cmps every time and not updating existing cmps, this gives us a chance
+		 * to nest the transition between states.
+		 *
+		 * @param  {Object} record		 the record to get the comp for
+		 * @param  {string} transition	 a transition cls to apply to the record
+		 * @param  {Object} initialState an earlier version of the record
+		 * @returns {Object}				 the cmp for the record
+		 */
+		getCmpForRecord: function (record, transition, initialState) {},
 
-		return state;
-	},
+		clearCollection: function () {
+			var body = this.getBodyContainer();
 
-	/**
-	 * Return a cmp to add to the body for a given record.
-	 *
-	 * A transition can be given to trigger an animation for adding or removing.
-	 *
-	 * An earlier version of the record can be passed, so the cmp has a chance
-	 * to figure out how it should animate the record in. Since we are creating
-	 * new cmps every time and not updating existing cmps, this gives us a chance
-	 * to nest the transition between states.
-	 *
-	 * @param  {Object} record		 the record to get the comp for
-	 * @param  {string} transition	 a transition cls to apply to the record
-	 * @param  {Object} initialState an earlier version of the record
-	 * @returns {Object}				 the cmp for the record
-	 */
-	getCmpForRecord: function (record, transition, initialState) {
+			body.removeAll(true);
 
-	},
+			if (this.onClearCollection) {
+				this.onClearCollection();
+			}
+		},
 
-	clearCollection: function () {
-		var body = this.getBodyContainer();
+		refresh: function () {
+			this.clearCollection();
 
-		body.removeAll(true);
-
-		if (this.onClearCollection) {
-			this.onClearCollection();
-		}
-	},
-
-	refresh: function () {
-		this.clearCollection();
-
-		return this.loadCollection(this.activeUrl);
+			return this.loadCollection(this.activeUrl);
+		},
 	}
-});
+);

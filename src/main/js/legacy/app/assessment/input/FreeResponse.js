@@ -1,141 +1,170 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 require('./Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.assessment.input.FreeResponse',
+	{
+		extend: 'NextThought.app.assessment.input.Base',
+		alias: 'widget.question-input-freeresponsepart',
 
-module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResponse', {
-	extend: 'NextThought.app.assessment.input.Base',
-	alias: 'widget.question-input-freeresponsepart',
+		SaveProgressBuffer: 5000,
 
-	SaveProgressBuffer: 5000,
+		cls: 'free-response-part field',
 
-	cls: 'free-response-part field',
+		inputTpl: Ext.DomHelper.markup({
+			tag: 'input',
+			type: 'text',
+			spellcheck: 'true',
+			placeholder:
+				'{{{NextThought.view.assessment.input.FreeResponse.answer}}}',
+			tabIndex: '{tabIndex}',
+			cls: 'answer-field tabable',
+		}),
 
-	inputTpl: Ext.DomHelper.markup({
-		tag: 'input',
-		type: 'text',
-		spellcheck: 'true',
-		placeholder: '{{{NextThought.view.assessment.input.FreeResponse.answer}}}',
-		tabIndex: '{tabIndex}',
-		cls: 'answer-field tabable'
-	}),
+		renderSelectors: {
+			inputField: '.answer-field',
+		},
 
-	renderSelectors: {
-		inputField: '.answer-field'
-	},
+		initComponent: function () {
+			this.renderData = Ext.apply(this.renderData || {}, {
+				tabIndex: this.tabIndexTracker.getNext(),
+			});
 
+			this.callParent(arguments);
+		},
 
-	initComponent: function () {
-		this.renderData = Ext.apply(this.renderData || {}, {
-			tabIndex: this.tabIndexTracker.getNext()
-		});
+		afterRender: function () {
+			this.solutionAnswerBox.insertFirst([
+				getString(
+					'NextThought.view.assessment.input.FreeResponse.answer'
+				) + ': ',
+				{ tag: 'span' },
+			]);
+			this.solutionAnswerBox = this.solutionAnswerBox.down('span');
 
-		this.callParent(arguments);
-	},
+			this.callParent(arguments);
 
+			this.setupAnswerLabel(this.part.get('answerLabel'));
 
-	afterRender: function () {
-		this.solutionAnswerBox.insertFirst([getString('NextThought.view.assessment.input.FreeResponse.answer') + ': ', {tag: 'span'}]);
-		this.solutionAnswerBox = this.solutionAnswerBox.down('span');
+			this.mon(this.inputField, {
+				scope: this,
+				blur: function (e, dom) {
+					dom.setAttribute(
+						'placeholder',
+						getString(
+							'NextThought.view.assessment.input.FreeResponse.answer'
+						)
+					);
+				},
+				focus: function (e, dom) {
+					dom.removeAttribute('placeholder');
+				},
+				keyup: function (e, dom) {
+					if (dom.value === '') {
+						this.disableSubmission();
+					} else {
+						this.enableSubmission();
+					}
+				},
+				keydown: this.keyFilter,
+				paste: function (e) {
+					e.stopEvent();
+					return false;
+				},
+			});
+		},
 
-		this.callParent(arguments);
+		setupAnswerLabel: function (label) {
+			if (!label) {
+				return;
+			}
 
-		this.setupAnswerLabel(this.part.get('answerLabel'));
+			var i = this.inputField,
+				el = (this.answerLabelEl = Ext.DomHelper.append(
+					this.inputBox,
+					{ cls: 'label', html: label },
+					true
+				));
 
-		this.mon(this.inputField, {
-			scope: this,
-			blur: function (e, dom) { dom.setAttribute('placeholder', getString('NextThought.view.assessment.input.FreeResponse.answer')); },
-			focus: function (e, dom) { dom.removeAttribute('placeholder'); },
-			keyup: function (e, dom) {
-				if (dom.value === '') { this.disableSubmission(); }
-				else { this.enableSubmission(); }
-			},
-			keydown: this.keyFilter,
-			paste: function (e) {
+			el.hide();
+
+			function show() {
+				var l,
+					m = new Ext.util.TextMetrics();
+				m.bind(i);
+				l = 10 + m.getWidth(i.getValue());
+
+				m.destroy();
+				el.setStyle({ left: l + 'px' });
+				el.show();
+			}
+
+			this.mon(i, {
+				scope: this,
+				blur: function () {
+					el.hide();
+				},
+				focus: show,
+				keyup: show,
+			});
+		},
+
+		keyFilter: function (e, dom) {
+			if (e.getKey() === e.ENTER) {
+				this.submitOrTabNext(dom);
 				e.stopEvent();
 				return false;
 			}
-		});
-	},
+		},
 
+		canHaveAnswerHistory: function () {
+			return this.questionSet ? false : true;
+		},
 
-	setupAnswerLabel: function (label) {
-		if (!label) {return;}
+		getValue: function () {
+			return this.inputField.getValue().trim();
+		},
 
-		var i = this.inputField,
-			el = this.answerLabelEl =
-			Ext.DomHelper.append(this.inputBox, {cls: 'label', html: label},true);
+		setValue: function (str) {
+			if (!Ext.isString(str)) {
+				str = ((str && str.value) || [])[0] || '';
+			}
 
-		el.hide();
+			var d = document.createElement('div');
+			d.innerHTML = str;
 
-		function show () {
-			var l, m = new Ext.util.TextMetrics();
-			m.bind(i);
-			l = 10 + m.getWidth(i.getValue());
+			this.inputField.dom.value = d.textContent;
+		},
 
-			m.destroy();
-			el.setStyle({left: l + 'px'});
-			el.show();
-		}
+		markSubmitted: function (cls) {
+			this.callParent(arguments);
 
-		this.mon(i, {
-			scope: this,
-			blur: function () { el.hide(); },
-			focus: show,
-			keyup: show
-		});
-	},
+			var b = this.inputBox.removeCls('incorrect correct');
+			if (!Ext.isEmpty(cls)) {
+				b.addCls(cls);
+			}
+			this.inputField.set({
+				disabled: 'disabled',
+				readOnly: true,
+				placeholder: '',
+			});
+		},
 
-
-	keyFilter: function (e, dom) {
-		if (e.getKey() === e.ENTER) {
-			this.submitOrTabNext(dom);
-			e.stopEvent();
-			return false;
-		}
-	},
-
-	canHaveAnswerHistory: function () {
-		return this.questionSet ? false : true;
-	},
-
-	getValue: function () {
-		return this.inputField.getValue().trim();
-	},
-
-
-	setValue: function (str) {
-		if (!Ext.isString(str)) {
-			str = (str && str.value || [])[0] || '';
-		}
-
-		var d = document.createElement('div');
-		d.innerHTML = str;
-
-		this.inputField.dom.value = d.textContent;
-	},
-
-
-	markSubmitted: function (cls) {
-		this.callParent(arguments);
-
-		var b = this.inputBox.removeCls('incorrect correct');
-		if (!Ext.isEmpty(cls)) {b.addCls(cls);}
-		this.inputField.set({disabled: 'disabled', readOnly: true, placeholder: ''});
-	},
-
-
-	reset: function () {
-		this.callParent(arguments);
-		this.inputBox.removeCls(['incorrect', 'correct']);
-		this.inputField.set({
-			disabled: undefined,
-			readOnly: undefined,
-			placeholder: getString('NextThought.view.assessment.input.FreeResponse.answer')
-		});
-		this.inputField.dom.value = '';
-		//this.inputField.focus();
+		reset: function () {
+			this.callParent(arguments);
+			this.inputBox.removeCls(['incorrect', 'correct']);
+			this.inputField.set({
+				disabled: undefined,
+				readOnly: undefined,
+				placeholder: getString(
+					'NextThought.view.assessment.input.FreeResponse.answer'
+				),
+			});
+			this.inputField.dom.value = '';
+			//this.inputField.focus();
+		},
 	}
-});
+);

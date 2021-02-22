@@ -7,7 +7,7 @@ import styles from './Library.css';
 
 const cx = classnames.bind(styles);
 
-export default function Library (props) {
+export default function Library(props) {
 	return (
 		<div className={cx('library-root')}>
 			<Communities />

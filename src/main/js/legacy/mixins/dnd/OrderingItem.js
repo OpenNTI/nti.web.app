@@ -2,180 +2,177 @@ const Ext = require('@nti/extjs');
 
 require('legacy/mixins/dnd/Draggable');
 
-const DndOrderingItem =
-module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
-	statics: {
-		SIDES: {
-			TOP: 't',
-			BOTTOM: 'b',
-			LEFT: 'l',
-			RIGHT: 'r'
-		}
-	},
+const DndOrderingItem = (module.exports = exports = Ext.define(
+	'NextThought.mixins.dnd.OrderingItem',
+	{
+		statics: {
+			SIDES: {
+				TOP: 't',
+				BOTTOM: 'b',
+				LEFT: 'l',
+				RIGHT: 'r',
+			},
+		},
 
-	mixins: {
-		Draggable: 'NextThought.mixins.dnd.Draggable'
-	},
+		mixins: {
+			Draggable: 'NextThought.mixins.dnd.Draggable',
+		},
 
+		VERTICAL_TOLERANCE: 2,
+		HORIZONTAL_TOLERANCE: 20,
+		isOrderingItem: true,
 
-	VERTICAL_TOLERANCE: 2,
-	HORIZONTAL_TOLERANCE: 20,
-	isOrderingItem: true,
+		enableOrdering: function (index, onDragStart, onDragEnd) {
+			this.orderingIndex = index;
+			this.onDragStart = onDragStart;
+			this.onDragEnd = onDragEnd;
+			this.enableDragging();
+		},
 
+		disableOrdering: function () {
+			this.disableDragging();
+		},
 
-	enableOrdering: function (index, onDragStart, onDragEnd) {
-		this.orderingIndex = index;
-		this.onDragStart = onDragStart;
-		this.onDragEnd = onDragEnd;
-		this.enableDragging();
-	},
+		getVerticalMidpoint: function () {
+			var rect = this.__getRect();
 
+			return rect.top + rect.height / 2;
+		},
 
-	disableOrdering: function () {
-		this.disableDragging();
-	},
+		getHorizontalMidpoint: function () {
+			var rect = this.__getRect();
 
+			return rect.left + rect.width / 2;
+		},
 
-	getVerticalMidpoint: function () {
-		var rect = this.__getRect();
+		__getRect: function () {
+			return this.lockedRect || this.getDragBoundingClientRect();
+		},
 
-		return rect.top + (rect.height / 2);
-	},
+		lockRectRelative: function (parent) {
+			var rect = this.getDragBoundingClientRect(),
+				top = rect.top - parent.top,
+				left = rect.left - parent.left,
+				width = rect.width,
+				height = rect.height;
 
+			this.lockedRect = {
+				top: top,
+				left: left,
+				right: left + width,
+				bottom: top + height,
+				width: width,
+				height: height,
+			};
+		},
 
-	getHorizontalMidpoint: function () {
-		var rect = this.__getRect();
+		unlockRect: function () {
+			// this.lockedRect = null;
+		},
 
-		return rect.left + (rect.width / 2);
-	},
+		__getTopOrBottom: function (x, y) {
+			var midpoint = this.getVerticalMidpoint(),
+				side;
 
+			if (y < midpoint) {
+				side = DndOrderingItem.SIDES.TOP;
+			} else {
+				side = DndOrderingItem.SIDES.BOTTOM;
+			}
 
-	__getRect: function () {
-		return this.lockedRect || this.getDragBoundingClientRect();
-	},
+			return side;
+		},
 
+		__getLeftOrRight: function (x, y) {
+			var midpoint = this.getHorizontalMidpoint(),
+				side;
 
-	lockRectRelative: function (parent) {
-		var rect = this.getDragBoundingClientRect(),
-			top = rect.top - parent.top,
-			left = rect.left - parent.left,
-			width = rect.width,
-			height = rect.height;
+			if (x < midpoint) {
+				side = DndOrderingItem.SIDES.LEFT;
+			} else {
+				side = DndOrderingItem.SIDES.RIGHT;
+			}
 
-		this.lockedRect = {
-			top: top,
-			left: left,
-			right: left + width,
-			bottom: top + height,
-			width: width,
-			height: height
-		};
-	},
+			return side;
+		},
 
+		getPlaceholderBeforeHeight: function () {
+			var rect = this.__getRect();
 
-	unlockRect: function () {
-		// this.lockedRect = null;
-	},
+			return rect.height;
+		},
 
+		getPlaceholderAfterHeight: function () {
+			var rect = this.__getRect();
 
-	__getTopOrBottom: function (x, y) {
-		var midpoint = this.getVerticalMidpoint(), side;
+			return rect.height;
+		},
 
-		if (y < midpoint) {
-			side = DndOrderingItem.SIDES.TOP;
-		} else {
-			side = DndOrderingItem.SIDES.BOTTOM;
-		}
+		isFullWidth: function (fullWidth) {
+			var rect = this.__getRect();
 
-		return side;
-	},
+			return (
+				Math.abs(fullWidth - rect.width) <=
+				this.HORIZONTAL_TOLERANCE * 2
+			);
+		},
 
+		isPointContainedVertically: function (x, y) {
+			var rect = this.__getRect(),
+				tol = this.VERTICAL_TOLERANCE;
 
-	__getLeftOrRight: function (x, y) {
-		var midpoint = this.getHorizontalMidpoint(), side;
+			return y >= rect.top - tol && y <= rect.bottom - tol;
+		},
 
-		if (x < midpoint) {
-			side = DndOrderingItem.SIDES.LEFT;
-		} else {
-			side = DndOrderingItem.SIDES.RIGHT;
-		}
+		isPointAbove: function (x, y) {
+			var side = this.__getTopOrBottom(x, y);
 
-		return side;
-	},
+			return side === DndOrderingItem.SIDES.TOP;
+		},
 
-	getPlaceholderBeforeHeight: function () {
-		var rect = this.__getRect();
+		isPointBelow: function (x, y) {
+			var side = this.__getTopOrBottom(x, y);
 
-		return rect.height;
-	},
+			return side === DndOrderingItem.SIDES.BOTTOM;
+		},
 
+		isPointLeft: function (x, y) {
+			var side = this.__getLeftOrRight(x, y);
 
-	getPlaceholderAfterHeight: function () {
-		var rect = this.__getRect();
+			return (
+				side === DndOrderingItem.SIDES.LEFT &&
+				this.isPointContainedVertically(x, y)
+			);
+		},
 
-		return rect.height;
-	},
+		isPointRight: function (x, y) {
+			var side = this.__getLeftOrRight(x, y);
 
+			return (
+				side === DndOrderingItem.SIDES.RIGHT &&
+				this.isPointContainedVertically(x, y)
+			);
+		},
 
-	isFullWidth: function (fullWidth) {
-		var rect = this.__getRect();
+		isPointBefore: function (x, y) {
+			return this.isPointAbove(x, y) || this.isPointLeft(x, y);
+		},
 
-		return Math.abs(fullWidth - rect.width) <= (this.HORIZONTAL_TOLERANCE * 2);
-	},
+		isPointAfter: function (x, y, isFullWidth) {
+			return this.isPointBelow(x, y) || this.isPointRight(x, y);
+		},
 
+		isSameRow: function (orderingItem) {
+			if (!orderingItem.getVerticalMidpoint) {
+				console.error('Invalid Ordering Item');
+				return false;
+			}
 
-	isPointContainedVertically: function (x, y) {
-		var rect = this.__getRect(),
-			tol = this.VERTICAL_TOLERANCE;
-
-		return y >= (rect.top - tol) && y <= (rect.bottom - tol);
-	},
-
-
-	isPointAbove: function (x, y) {
-		var side = this.__getTopOrBottom(x, y);
-
-		return side === DndOrderingItem.SIDES.TOP;
-	},
-
-
-	isPointBelow: function (x, y) {
-		var side = this.__getTopOrBottom(x, y);
-
-		return side === DndOrderingItem.SIDES.BOTTOM;
-	},
-
-
-	isPointLeft: function (x, y) {
-		var side = this.__getLeftOrRight(x, y);
-
-		return side === DndOrderingItem.SIDES.LEFT && this.isPointContainedVertically(x, y);
-	},
-
-
-	isPointRight: function (x, y) {
-		var side = this.__getLeftOrRight(x, y);
-
-		return side === DndOrderingItem.SIDES.RIGHT && this.isPointContainedVertically(x, y);
-	},
-
-
-	isPointBefore: function (x, y) {
-		return this.isPointAbove(x, y) || this.isPointLeft(x, y);
-	},
-
-
-	isPointAfter: function (x, y, isFullWidth) {
-		return this.isPointBelow(x, y) || this.isPointRight(x, y);
-	},
-
-
-	isSameRow: function (orderingItem) {
-		if (!orderingItem.getVerticalMidpoint) {
-			console.error('Invalid Ordering Item');
-			return false;
-		}
-
-		return (this.getVerticalMidpoint() - orderingItem.getVerticalMidpoint()) <= this.VERTICAL_TOLERANCE;
+			return (
+				this.getVerticalMidpoint() -
+					orderingItem.getVerticalMidpoint() <=
+				this.VERTICAL_TOLERANCE
+			);
+		},
 	}
-});
+));

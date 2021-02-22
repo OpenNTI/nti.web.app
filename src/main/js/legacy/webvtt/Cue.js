@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 /*
  * Cue.js
  * This class defines a single WebVTT cue as specified by http://dev.w3.org/html5/webvtt/
@@ -25,13 +24,12 @@ module.exports = exports = Ext.define('NextThought.webvtt.Cue', {
 		startTime: -1,
 		endTime: -1,
 		// Nested tree of sub-cues, if present
-		cueTree: []
+		cueTree: [],
 	},
 
 	constructor: function (config) {
 		this.subCues = [];
 
 		this.initConfig(config);
-	}
-
+	},
 });

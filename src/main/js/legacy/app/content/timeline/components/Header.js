@@ -1,46 +1,40 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.content.timeline.components.Header',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.timeline-header',
 
-module.exports = exports = Ext.define('NextThought.app.content.timeline.components.Header', {
-	extend: 'Ext.Component',
-	alias: 'widget.timeline-header',
+		cls: 'nti-window-header',
 
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'controls', cn: [{ cls: 'tool close' }] },
+			{ tag: 'span', html: '{title}' },
+		]),
 
-	cls: 'nti-window-header',
+		renderSelectors: {
+			closeEl: '.close',
+		},
 
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'controls', cn: [
-			{cls: 'tool close'}
-		]},
-		{tag: 'span', html: '{title}'}
-	]),
+			this.renderData = Ext.apply(this.renderData || {}, {
+				title: this.title,
+			});
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		closeEl: '.close'
-	},
+			this.mon(this.closeEl, 'click', this.onCloseClick.bind(this));
+		},
 
-
-	beforeRender: function () {
-		this.callParent(arguments);
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title
-		});
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		this.mon(this.closeEl, 'click', this.onCloseClick.bind(this));
-	},
-
-
-	onCloseClick: function () {
-		if (this.doClose) {
-			this.doClose();
-		}
+		onCloseClick: function () {
+			if (this.doClose) {
+				this.doClose();
+			}
+		},
 	}
-});
+);

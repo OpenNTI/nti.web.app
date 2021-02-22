@@ -6,91 +6,104 @@ const { getService } = require('@nti/web-client');
 
 require('legacy/overrides/ReactHarness');
 
-module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-scorm-content',
-	title: 'Content',
-	cls: 'course-scorm-content',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.scorm-content.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.course-scorm-content',
+		title: 'Content',
+		cls: 'course-scorm-content',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	layout: 'none',
-	items: [],
+		layout: 'none',
+		items: [],
 
-	statics: {
-		showTab: function (bundle) {
-			const metadata = bundle.get('Metadata');
-			return bundle && bundle.isScormCourse && (bundle.hasLink('ImportSCORM') || (metadata && metadata.hasLink('LaunchSCORM')));
-		}
-	},
+		statics: {
+			showTab: function (bundle) {
+				const metadata = bundle.get('Metadata');
+				return (
+					bundle &&
+					bundle.isScormCourse &&
+					(bundle.hasLink('ImportSCORM') ||
+						(metadata && metadata.hasLink('LaunchSCORM')))
+				);
+			},
+		},
 
-	onRouteActivate () {
-		this.setTitle('Content');
-	},
+		onRouteActivate() {
+			this.setTitle('Content');
+		},
 
-	initComponent () {
-		this.callParent(arguments);
+		initComponent() {
+			this.callParent(arguments);
 
-		this.addDefaultRoute(this.showScormContent.bind(this));
-	},
+			this.addDefaultRoute(this.showScormContent.bind(this));
+		},
 
-	async bundleChanged (legacyBundle) {
-		if (this.currentBundle === legacyBundle) { return; }
+		async bundleChanged(legacyBundle) {
+			if (this.currentBundle === legacyBundle) {
+				return;
+			}
 
-		this.currentBundle = legacyBundle;
+			this.currentBundle = legacyBundle;
 
-		if (!legacyBundle) {
-			delete this.currentBundle;
-			return;
-		}
+			if (!legacyBundle) {
+				delete this.currentBundle;
+				return;
+			}
 
-		const service = await getService();
+			const service = await getService();
 
-		const bundle = await service.getObject(legacyBundle.raw);
-		this.libBundle = bundle;
+			const bundle = await service.getObject(legacyBundle.raw);
+			this.libBundle = bundle;
 
-		if (this.scormContent) {
-			this.scormContent.setProps({ bundle });
-		}
-	},
+			if (this.scormContent) {
+				this.scormContent.setProps({ bundle });
+			}
+		},
 
+		async onBundleUpdate(newBundle) {
+			if (this.scormContent && this.libBundle) {
+				const bundle = await this.libBundle.refresh(newBundle);
+				this.scormContent.setProps({ bundle });
+			}
+		},
 
-	async onBundleUpdate (newBundle) {
-		if (this.scormContent && this.libBundle) {
-			const bundle = await this.libBundle.refresh(newBundle);
-			this.scormContent.setProps({ bundle });
-		}
-	},
+		showScormContent(route) {
+			const queryParams = queryString.decode(
+				(global.location.search || '').replace(/^\?/, '')
+			);
+			const error = queryParams && queryParams.error;
 
-	showScormContent (route) {
-		const queryParams = queryString.decode((global.location.search || '').replace(/^\?/, ''));
-		const error = queryParams && queryParams.error;
+			if (queryParams) {
+				delete queryParams.error;
+				delete queryParams.regid;
+			}
 
-		if (queryParams) {
-			delete queryParams.error;
-			delete queryParams.regid;
-		}
+			const { history, location } = global;
+			const updatedRoute = new URL(location.href);
+			updatedRoute.search =
+				Object.keys(queryParams).length === 0
+					? ''
+					: queryString.stringify(queryParams);
+			history.replaceState(history.state, '', updatedRoute.toString());
 
-		const {history, location} = global;
-		const updatedRoute = new URL(location.href);
-		updatedRoute.search = Object.keys(queryParams).length === 0 ? '' : queryString.stringify(queryParams);
-		history.replaceState(history.state, '', updatedRoute.toString());
-
-
-		if (this.scormContent) {
-			this.scormContent.setProps({
-				error: error === '' ? 'Unknown Scorm Error' : (error || null)
-			});
-		} else {
-			this.scormContent = this.add({
-				xtype: 'react',
-				component: Scorm,
-				bundle: this.libBundle,
-				error: error === '' ? 'Unknown Scorm Error' : (error || null),
-				onBundleUpdate: this.onBundleUpdate.bind(this)
-			});
-		}
+			if (this.scormContent) {
+				this.scormContent.setProps({
+					error: error === '' ? 'Unknown Scorm Error' : error || null,
+				});
+			} else {
+				this.scormContent = this.add({
+					xtype: 'react',
+					component: Scorm,
+					bundle: this.libBundle,
+					error: error === '' ? 'Unknown Scorm Error' : error || null,
+					onBundleUpdate: this.onBundleUpdate.bind(this),
+				});
+			}
+		},
 	}
-});
+);

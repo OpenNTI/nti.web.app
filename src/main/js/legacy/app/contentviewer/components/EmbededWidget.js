@@ -1,74 +1,70 @@
 const Ext = require('@nti/extjs');
-const {Widgets} = require('@nti/web-content');
+const { Widgets } = require('@nti/web-content');
 
 require('legacy/overrides/ReactHarness');
 
-module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
-	extend: 'Ext.Component',
-	alias: 'widget.overlay-content-embeded-widget-frame',
+module.exports = exports = Ext.define(
+	'NextThought.app.contentviewer.components.EmbededWidget',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.overlay-content-embeded-widget-frame',
 
-	cls: 'content-embeded-widget',
+		cls: 'content-embeded-widget',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'container'}
-	]),
+		renderTpl: Ext.DomHelper.markup([{ cls: 'container' }]),
 
-	renderSelectors: {
-		containerEl: '.container'
-	},
+		renderSelectors: {
+			containerEl: '.container',
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
+			const data = { ...(this.data || {}) };
+			const location = this.reader && this.reader.getLocation();
 
-	afterRender: function () {
-		this.callParent(arguments);
+			delete data['attribute-class'];
+			delete data['attribute-data-ntiid'];
+			delete data['attribute-id'];
+			delete data['attribute-itemprop'];
+			delete data['attribute-type'];
+			delete data['asDomSpec'];
 
-		const data = {...(this.data || {})};
-		const location = this.reader && this.reader.getLocation();
+			if (location && location.currentBundle && location.pageInfo) {
+				Promise.all([
+					location.currentBundle.getInterfaceInstance(),
+					location.pageInfo.getInterfaceInstance(),
+				])
+					.then(([c, p]) => this.addWidget(data, c, p))
+					.catch(() => this.addWidget(data));
+			} else {
+				this.addWidget(data);
+			}
+		},
 
-		delete data['attribute-class'];
-		delete data['attribute-data-ntiid'];
-		delete data['attribute-id'];
-		delete data['attribute-itemprop'];
-		delete data['attribute-type'];
-		delete data['asDomSpec'];
+		onDestroy() {
+			if (this.widget) {
+				Ext.destroy(this.widget);
+			}
+		},
 
-		if (location && location.currentBundle && location.pageInfo) {
-			Promise.all([
-				location.currentBundle.getInterfaceInstance(),
-				location.pageInfo.getInterfaceInstance()
-			])
-				.then(([c, p]) => this.addWidget(data, c, p))
-				.catch(() => this.addWidget(data));
-		} else {
-			this.addWidget(data);
-		}
-	},
+		addWidget(data, contentPackage, page) {
+			this.widget = Ext.widget({
+				xtype: 'react',
+				component: Widgets.EmbeddedWidget,
+				item: data,
+				contentPackage,
+				page,
+				maxWidth: 671,
+				onHeightChange: () => this.onHeightChange(),
+				renderTo: this.containerEl,
+			});
+		},
 
-
-	onDestroy () {
-		if (this.widget) {
-			Ext.destroy(this.widget);
-		}
-	},
-
-
-	addWidget (data, contentPackage, page) {
-		this.widget = Ext.widget({
-			xtype: 'react',
-			component: Widgets.EmbeddedWidget,
-			item: data,
-			contentPackage,
-			page,
-			maxWidth: 671,
-			onHeightChange: () => this.onHeightChange(),
-			renderTo: this.containerEl
-		});
-	},
-
-
-	onHeightChange () {
-		if (this.syncElementHeight) {
-			this.syncElementHeight();
-		}
+		onHeightChange() {
+			if (this.syncElementHeight) {
+				this.syncElementHeight();
+			}
+		},
 	}
-});
+);

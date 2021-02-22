@@ -2,17 +2,16 @@ const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/common/StateStore');
 
-function decodeObjectPart (part) {
+function decodeObjectPart(part) {
 	const decoded = decodeURIComponent(part);
 
-	return decoded.indexOf('uri:') === 0 ?
-		decoded :
-		decodeFromURI(part);
+	return decoded.indexOf('uri:') === 0 ? decoded : decodeFromURI(part);
 }
 
 module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
@@ -29,25 +28,22 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		this.fireEvent('new-context');
 	},
 
-
 	setCurrentTitle: function (title) {
 		this.currentTitle = title;
 	},
-
 
 	getContext: function () {
 		return this.currentContext || [];
 	},
 
-
 	getRootContext: function () {
 		return this.currentContext[this.currentContext.length - 1];
 	},
 
-
 	getRootBundle: function () {
 		var context = this.currentContext || [],
-			i, x;
+			i,
+			x;
 
 		for (i = 0; i < context.length; i++) {
 			x = context[i];
@@ -58,10 +54,10 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		}
 	},
 
-
 	getRootProfile: function () {
 		var context = this.currentContext || [],
-			i, x;
+			i,
+			x;
 
 		for (i = 0; i < context.length; i++) {
 			x = context[i];
@@ -71,7 +67,6 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 			}
 		}
 	},
-
 
 	getReaderLocation: function () {
 		var root = this.getRootContext(),
@@ -84,26 +79,21 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		return null;
 	},
 
-
 	getCurrentRoute: function () {
 		return this.ROUTE_PARTS.pathname;
 	},
-
 
 	getCurrentSearch: function () {
 		return this.ROUTE_PARTS.search;
 	},
 
-
 	getCurrentHash: function () {
 		return this.ROUTE_PARTS.hash;
 	},
 
-
 	getCurrentTitle: function () {
 		return this.currentTitle;
 	},
-
 
 	getCurrentObjectId: function () {
 		var parts = this.getCurrentObjectParts();
@@ -111,14 +101,12 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		return parts.id;
 	},
 
-
 	__parseTwoObjectParts: function (parts) {
 		return {
 			id: decodeObjectPart(parts.last()),
-			rawId: parts.last()
+			rawId: parts.last(),
 		};
 	},
-
 
 	__parseThreeObjectParts: function (parts) {
 		var first = parts[parts.length - 2],
@@ -138,7 +126,6 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		return part;
 	},
 
-
 	getCurrentObjectParts: function () {
 		var route = Globals.trimRoute(this.getCurrentRoute()),
 			parts = route.split('/'),
@@ -153,7 +140,6 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		return objectParts;
 	},
 
-
 	removeObjectRoute: function (path) {
 		var route = Globals.trimRoute(path || this.getCurrentRoute()),
 			parts = route.split('/');
@@ -166,6 +152,10 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 		route = parts.join('/');
 
-		return route + (this.getCurrentSearch() || '') + (this.getCurrentHash() || '');
-	}
+		return (
+			route +
+			(this.getCurrentSearch() || '') +
+			(this.getCurrentHash() || '')
+		);
+	},
 });

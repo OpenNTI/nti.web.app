@@ -9,91 +9,126 @@ const PageInfo = require('legacy/model/PageInfo');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/mixins/EllipsisText');
 require('legacy/common/components/cards/Card');
 require('legacy/util/Parsing');
 
-function resolveIcon (config, n, root) {
+function resolveIcon(config, n, root) {
 	const icon = n.getAttribute('icon');
 	let getIcon;
 
 	if (config.record && config.record.resolveIcon) {
 		getIcon = config.record.resolveIcon(root, config.course);
 	} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
-		getIcon = Promise.resolve({url: Globals.getURL(icon)});
+		getIcon = Promise.resolve({ url: Globals.getURL(icon) });
 	} else {
-		getIcon = Promise.resolve({url: Globals.getURL((root || '') + icon)});
+		getIcon = Promise.resolve({ url: Globals.getURL((root || '') + icon) });
 	}
 
 	return getIcon;
 }
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.parts.ContentLink',
+	{
+		extend: 'NextThought.common.components.cards.Card',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
-	extend: 'NextThought.common.components.cards.Card',
+		alias: [
+			'widget.course-overview-content',
+			'widget.course-overview-relatedworkref',
+			'widget.course-overview-externallink',
+		],
 
-	alias: [
-		'widget.course-overview-content',
-		'widget.course-overview-relatedworkref',
-		'widget.course-overview-externallink'
-	],
+		doNotRenderIcon: true,
 
-	doNotRenderIcon: true,
+		// requires: ['NextThought.view.contentviewer.View'],
 
-	// requires: ['NextThought.view.contentviewer.View'],
-
-	renderTpl: Ext.DomHelper.markup([
-		// { cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
-		{ cls: 'thumbnail', cn: [
-			{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{thumbnail}\');', cn: [
-				{tag: 'label', cls: 'extension', html: '{extension}'}
-			]}
-		]},
-		{ cls: 'meta', cn: [
-			{ cls: 'title', html: '{title:htmlEncode}' },
-			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
-			{ cls: 'description', html: '{description:htmlEncode}' }
-		]}
-	]),
-
-	renderSelectors: {
-		iconEl: '.thumbnail .icon',
-		extensionEl: '.thumbnail .icon .extension',
-		meta: '.meta',
-		titleEl: '.meta .title',
-		liked: '.controls .like',
-		favorites: '.controls .favorite',
-		thumbnailEl: '.thumbnail'
-	},
-
-	constructor: function (config) {
-		var n = config.node || {getAttribute: function (a) { return config[a];} },
-			i = config.locationInfo || {
-				root: config.course && config.course.getContentRoots() && config.course.getContentRoots()[0]
+		renderTpl: Ext.DomHelper.markup([
+			// { cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+			{
+				cls: 'thumbnail',
+				cn: [
+					{
+						cls: 'icon {extension} {iconCls}',
+						style: "background-image: url('{thumbnail}');",
+						cn: [
+							{
+								tag: 'label',
+								cls: 'extension',
+								html: '{extension}',
+							},
+						],
+					},
+				],
 			},
-			href = config.record && config.record.getHref ? config.record.getHref() : n.getAttribute('href'),
-			ntiid = n.getAttribute('ntiid'),
-			root = i && i.root;
+			{
+				cls: 'meta',
+				cn: [
+					{ cls: 'title', html: '{title:htmlEncode}' },
+					{
+						cls: 'byline',
+						html: '{{{NextThought.view.cards.Card.by}}}',
+					},
+					{ cls: 'description', html: '{description:htmlEncode}' },
+				],
+			},
+		]),
 
-		if (Globals.ROOT_URL_PATTERN.test(href)) {
-			href = Globals.getURL(href);
-		} else if (!lazy.ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
-			href = Globals.getURL((root || '') + href);
-		}
+		renderSelectors: {
+			iconEl: '.thumbnail .icon',
+			extensionEl: '.thumbnail .icon .extension',
+			meta: '.meta',
+			titleEl: '.meta .title',
+			liked: '.controls .like',
+			favorites: '.controls .favorite',
+			thumbnailEl: '.thumbnail',
+		},
 
-		resolveIcon(config, n, root)
-			.then((icon = {}) => {
+		constructor: function (config) {
+			var n = config.node || {
+					getAttribute: function (a) {
+						return config[a];
+					},
+				},
+				i = config.locationInfo || {
+					root:
+						config.course &&
+						config.course.getContentRoots() &&
+						config.course.getContentRoots()[0],
+				},
+				href =
+					config.record && config.record.getHref
+						? config.record.getHref()
+						: n.getAttribute('href'),
+				ntiid = n.getAttribute('ntiid'),
+				root = i && i.root;
+
+			if (Globals.ROOT_URL_PATTERN.test(href)) {
+				href = Globals.getURL(href);
+			} else if (
+				!lazy.ParseUtils.isNTIID(href) &&
+				!Globals.HOST_PREFIX_PATTERN.test(href)
+			) {
+				href = Globals.getURL((root || '') + href);
+			}
+
+			resolveIcon(config, n, root).then((icon = {}) => {
 				this.data.thumbnail = icon.url;
 				this.data.extension = icon.extension;
 				this.data.iconCls = icon.iconCls;
 
-
 				if (this.iconEl) {
-					this.iconEl.addCls([icon.extension || '', icon.iconCls || '']);
-					this.iconEl.setStyle({backgroundImage: `url('${icon.url}')`});
+					this.iconEl.addCls([
+						icon.extension || '',
+						icon.iconCls || '',
+					]);
+					this.iconEl.setStyle({
+						backgroundImage: `url('${icon.url}')`,
+					});
 				}
 
 				if (this.extensionEl && icon.extension) {
@@ -101,134 +136,151 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			});
 
+			config.data = {
+				'attribute-data-href': href,
+				href: href,
+				creator: n.getAttribute('byline') || n.getAttribute('creator'),
+				description:
+					n.getAttribute('desc') || n.getAttribute('description'),
+				ntiid: ntiid,
+				title: n.getAttribute('label'),
+				targetMimeType: n.getAttribute('targetMimeType'),
+				notTarget: !Globals.shouldOpenInApp(ntiid, href),
+				asDomSpec: DomUtils.asDomSpec,
+			};
 
-		config.data = {
-			'attribute-data-href': href, href: href,
-			creator: n.getAttribute('byline') || n.getAttribute('creator'),
-			description: n.getAttribute('desc') || n.getAttribute('description'),
-			ntiid: ntiid,
-			title: n.getAttribute('label'),
-			targetMimeType: n.getAttribute('targetMimeType'),
-			notTarget: !Globals.shouldOpenInApp(ntiid, href),
-			asDomSpec: DomUtils.asDomSpec
-		};
+			this.ContentActions = ContentviewerActions.create();
 
-		this.ContentActions = ContentviewerActions.create();
+			this.callParent([config]);
 
-		this.callParent([config]);
+			this.WindowActions = WindowsActions.create();
+			this.WindowStore = WindowsStateStore.getInstance();
+		},
 
-		this.WindowActions = WindowsActions.create();
-		this.WindowStore = WindowsStateStore.getInstance();
-	},
+		commentTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'comment',
+				cn: [{ html: '{count:plural("Comment")}' }],
+			})
+		),
 
-	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'comment', cn: [
-			{ html: '{count:plural("Comment")}'}
-		]
-	})),
+		loadContainer: function () {
+			var ntiid = this.data.href,
+				req;
 
-	loadContainer: function () {
-		var ntiid = this.data.href,
-			req;
+			if (!lazy.ParseUtils.isNTIID(ntiid)) {
+				ntiid = this.data.ntiid;
+				if (!ntiid) {
+					return;
+				}
+			}
 
-		if (!lazy.ParseUtils.isNTIID(ntiid)) {
-			ntiid = this.data.ntiid;
-			if (!ntiid) {
+			req = {
+				url: Service.getContainerUrl(
+					ntiid,
+					Globals.USER_GENERATED_DATA
+				),
+				scope: this,
+				method: 'GET',
+				params: {
+					accept: Note.mimeType,
+					batchStart: 0,
+					batchSize: 1,
+					filter: 'TopLevel',
+				},
+				callback: this.containerLoaded,
+			};
+
+			Ext.Ajax.request(req);
+		},
+
+		appendTotal: function (total) {
+			if (!this.rendered) {
+				this.on(
+					'afterrender',
+					Ext.bind(this.appendTotal, this, arguments),
+					this,
+					{ single: true }
+				);
 				return;
 			}
-		}
 
-		req = {
-			url: Service.getContainerUrl(ntiid, Globals.USER_GENERATED_DATA),
-			scope: this,
-			method: 'GET',
-			params: {
-				accept: Note.mimeType,
-				batchStart: 0,
-				batchSize: 1,
-				filter: 'TopLevel'
-			},
-			callback: this.containerLoaded
-		};
+			if (Ext.getDom(this.meta)) {
+				this.commentTpl.append(this.meta, { count: total });
+			}
+		},
 
-		Ext.Ajax.request(req);
-	},
+		containerLoaded: function (q, s, r) {
+			var total = 0,
+				json = Ext.decode(r && r.responseText, true);
+			if (s && json) {
+				total = json.FilteredTotalItemCount || 0;
+			}
 
-	appendTotal: function (total) {
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.appendTotal, this, arguments), this, {single: true});
-			return;
-		}
+			this.appendTotal(total);
+		},
 
-		if (Ext.getDom(this.meta)) {
-			this.commentTpl.append(this.meta, {count: total});
-		}
-	},
+		getCurrentBundle: function () {
+			return this.course;
+		},
 
-	containerLoaded: function (q, s, r) {
-		var total = 0,
-			json = Ext.decode(r && r.responseText, true);
-		if (s && json) {
-			total = json.FilteredTotalItemCount || 0;
-		}
+		navigateToTarget: function () {
+			if (!this.navigate) {
+				console.error('No navigate set on content link');
+				return;
+			}
 
-		this.appendTotal(total);
-	},
+			var config;
 
-	getCurrentBundle: function () {
-		return this.course;
-	},
+			if (lazy.ParseUtils.isNTIID(this.target)) {
+				config = PageInfo.fromOutlineNode(this.data);
+			} else {
+				config = RelatedWork.fromOutlineNode(this.data);
+			}
 
-	navigateToTarget: function () {
-		if (!this.navigate) {
-			console.error('No navigate set on content link');
-			return;
-		}
+			this.navigate.call(null, config);
+		},
 
-		var config;
+		onCardClicked: function (e) {
+			if (e && e.getTarget('.comment')) {
+				e.stopEvent();
+				this.bypassEvent = false;
+			}
 
-		if (lazy.ParseUtils.isNTIID(this.target)) {
-			config = PageInfo.fromOutlineNode(this.data);
-		} else {
-			config = RelatedWork.fromOutlineNode(this.data);
-		}
+			if (this.bypassEvent) {
+				AnalyticsUtil.startEvent(this.ntiid, 'ResourceView'); //??? where is the close?
 
-		this.navigate.call(null, config);
-	},
+				this.setProgress();
+			}
 
-	onCardClicked: function (e) {
-		if (e && e.getTarget('.comment')) {
-			e.stopEvent();
-			this.bypassEvent = false;
-		}
+			return this.callParent(arguments);
+		},
 
-		if (this.bypassEvent) {
-			AnalyticsUtil.startEvent(this.ntiid, 'ResourceView');//??? where is the close?
+		setProgress: function (progress) {
+			progress = progress || this.progress;
 
-			this.setProgress();
-		}
+			this.progress = progress;
 
-		return this.callParent(arguments);
-	},
+			if (!progress) {
+				return;
+			}
 
-	setProgress: function (progress) {
-		progress = progress || this.progress;
+			var beenViewed =
+				progress.hasBeenViewed(this.target) ||
+				progress.hasBeenViewed(this.ntiid);
 
-		this.progress = progress;
+			if (beenViewed) {
+				this.addCls('viewed');
+			}
+		},
 
-		if (!progress) { return; }
+		setCommentCounts: function (commentCounts) {
+			var summary =
+					commentCounts[this.record.getId()] ||
+					commentCounts[this.record.get('target-NTIID')],
+				count = summary ? summary.ItemCount : 0;
 
-		var beenViewed = progress.hasBeenViewed(this.target) || progress.hasBeenViewed(this.ntiid);
-
-		if (beenViewed) {
-			this.addCls('viewed');
-		}
-	},
-
-	setCommentCounts: function (commentCounts) {
-		var summary = commentCounts[this.record.getId()] || commentCounts[this.record.get('target-NTIID')],
-			count = summary ? summary.ItemCount : 0;
-
-		this.appendTotal(count);
+			this.appendTotal(count);
+		},
 	}
-});
+);

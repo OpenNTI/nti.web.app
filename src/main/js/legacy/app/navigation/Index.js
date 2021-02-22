@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-const {Theme} = require('@nti/web-commons');
+const { wait } = require('@nti/lib-commons');
+const { Theme } = require('@nti/web-commons');
 const { NotificationsView } = require('@nti/web-notifications');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
@@ -12,38 +12,50 @@ const GutterTab = require('../chat/components/gutter/Tab');
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
 
-
-
 require('legacy/mixins/State');
 require('../chat/Index');
 
 const DefaultAsset = 'assets.logo';
-
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.main-navigation',
 
 	mixins: {
-		State: 'NextThought.mixins.State'
+		State: 'NextThought.mixins.State',
 	},
 
 	cls: `main-navigation ${styles.navbar}`,
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'back-container', cn: [
-			{cls: 'branding-container', tabindex: '0', 'aria-label': 'Home', tag: 'a'},
-			{cls: 'back', tabindex: '0', 'aria-label': 'Back', tag: 'a', cn: [
-				{ cls: 'icon-remove' }
-			]}
-		]},
-		{cls: 'nav-container'},
-		{cls: 'search-container collapsed'},
-		{cls: 'icons', cn: [
-			{cls: 'chat-notification-container'},
-			{cls: 'notification-container'},
-			{cls: 'identity-container'}
-		]}
+		{
+			cls: 'back-container',
+			cn: [
+				{
+					cls: 'branding-container',
+					tabindex: '0',
+					'aria-label': 'Home',
+					tag: 'a',
+				},
+				{
+					cls: 'back',
+					tabindex: '0',
+					'aria-label': 'Back',
+					tag: 'a',
+					cn: [{ cls: 'icon-remove' }],
+				},
+			],
+		},
+		{ cls: 'nav-container' },
+		{ cls: 'search-container collapsed' },
+		{
+			cls: 'icons',
+			cn: [
+				{ cls: 'chat-notification-container' },
+				{ cls: 'notification-container' },
+				{ cls: 'identity-container' },
+			],
+		},
 	]),
 
 	renderSelectors: {
@@ -54,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		identityEl: '.identity-container',
 		notificationEl: '.notification-container',
 		searchEl: '.search-container',
-		chatNotifyEl: '.chat-notification-container'
+		chatNotifyEl: '.chat-notification-container',
 	},
 
 	initComponent: function () {
@@ -64,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.mon(this.NavStore, {
 			'update-nav': this.updateNav.bind(this),
-			'set-active-content': this.setActiveContent.bind(this)
+			'set-active-content': this.setActiveContent.bind(this),
 		});
 	},
 
@@ -77,38 +89,38 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		me.navCmp.addCls('removing');
 
-		return wait(300)
-			.then(function () {
-				Ext.destroy(me.navCmp);
-				delete me.navCmp;
-			});
+		return wait(300).then(function () {
+			Ext.destroy(me.navCmp);
+			delete me.navCmp;
+		});
 	},
 
 	__renderNavCmp: function (cmp) {
 		var me = this;
 
-		function render (animate) {
-			if (this.pendingNavCmp && this.pendingNavCmp !== cmp) { return; }
+		function render(animate) {
+			if (this.pendingNavCmp && this.pendingNavCmp !== cmp) {
+				return;
+			}
 
 			this.pendingNavCmp = null;
 
 			if (animate) {
 				cmp.addCls('showing');
 
-				wait(300)
-					.then(cmp.removeCls.bind(cmp, 'showing'));
+				wait(300).then(cmp.removeCls.bind(cmp, 'showing'));
 			}
 
 			if (!cmp.rendered && !cmp.rendering) {
 				cmp.render(me.navContainerEl);
 			}
 
-
 			me.navCmp = cmp;
 			me.resizeNavCmp();
 		}
 
-		const isSame = (nav) => nav && nav.xtype === cmp.xtype && nav.getId() === cmp.getId();
+		const isSame = nav =>
+			nav && nav.xtype === cmp.xtype && nav.getId() === cmp.getId();
 
 		if (isSame(this.navCmp) || isSame(this.pendingNavCmp)) {
 			return;
@@ -116,8 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.pendingNavCmp = cmp;
 
-		return this.__removeNavCmp()
-			.then(render.bind(null, true));
+		return this.__removeNavCmp().then(render.bind(null, true));
 	},
 
 	updateNav: function (config) {
@@ -142,8 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			this.addCls('no-nav');
 			this.removeCls('has-nav');
 
-			wait(300)
-				.then(this.removeCls.bind(this, 'removing-nav'));
+			wait(300).then(this.removeCls.bind(this, 'removing-nav'));
 
 			this.searchCmp.isActive = false;
 			this.searchEl.removeCls('collapsed');
@@ -159,8 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 			this.__removeNavCmp();
 
-			wait(300)
-				.then(this.removeCls.bind(this, 'removing-nav'));
+			wait(300).then(this.removeCls.bind(this, 'removing-nav'));
 
 			this.searchCmp.isActive = false;
 
@@ -217,18 +226,15 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	__setVendorIcon: function (url) {
 		// const img = new Image();
 		// const {brandingEl} = this;
-
 		// const work = url && new Promise(function (fulfill, reject) {
 		// 	img.onload = fulfill;
 		// 	img.onerror = reject;
 		// 	img.src = url;
 		// });
-
 		// return (work || Promise.reject())
 		// 	.then(() => {
 		// 		const aspect = img.width / img.height,
 		// 			width = aspect * 70;
-
 		// 		brandingEl.addCls('custom-vendor');
 		// 		brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
 		// 	})
@@ -238,15 +244,19 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		// 	});
 	},
 
-
-	setTheme (theme = {}, themeScope) {
+	setTheme(theme = {}, themeScope) {
 		const el = this.el && this.el.dom;
 
-		if (!el) { return; }
+		if (!el) {
+			return;
+		}
 
 		if (theme.backgroundColor) {
 			el.style.setProperty('background-color', theme.backgroundColor);
-			el.style.setProperty('--nav-background-color', theme.backgroundColor);
+			el.style.setProperty(
+				'--nav-background-color',
+				theme.backgroundColor
+			);
 		} else {
 			el.style.removeProperty('background-color');
 			el.style.removeProperty('--nav-background-color');
@@ -257,12 +267,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		if (theme.branding) {
 			this.brandingCmp.setProps({
 				property: theme.branding,
-				name: null
+				name: null,
 			});
 		} else {
 			this.brandingCmp.setProps({
 				property: null,
-				name: DefaultAsset
+				name: DefaultAsset,
 			});
 		}
 
@@ -271,7 +281,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.chatCmp.setTheme(theme.icon);
 		this.notificationCmp?.setThemeScope(themeScope);
 	},
-
 
 	setActiveContent: function (bundle) {
 		if (!this.rendered) {
@@ -282,7 +291,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		if (!bundle || !bundle.getVendorIconImage) {
 			this.__removeVendorIcon();
 		} else {
-			bundle.getVendorIconImage()
+			bundle
+				.getVendorIconImage()
 				.then(this.__setVendorIcon.bind(this))
 				.catch(this.__removeVendorIcon.bind(this));
 		}
@@ -295,15 +305,14 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			component: Theme.Asset,
 			name: DefaultAsset,
 			className: styles['navigation-branding-asset'],
-			cacheBust: true
+			cacheBust: true,
 		});
 
 		this.identityCmp = IdentityIndex.create({
-			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
+			setMenuOpen: this.setState.bind(this, { active: 'identityCmp' }),
 			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: this.pushRoute.bind(this)
+			pushRootRoute: this.pushRoute.bind(this),
 		});
-
 
 		this.notificationCmp = ReactHarness.create({
 			component: NotificationsView,
@@ -312,7 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		});
 
 		this.searchCmp = SearchBar.create({
-			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
+			setMenuOpen: this.setState.bind(this, { active: 'searchCmp' }),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this),
 			onSearchFocus: this.onSearchFocus.bind(this),
@@ -320,13 +329,13 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			onSearchAddContext: this.onSearchAddContext.bind(this),
 			onSearchRemoveContext: this.onSearchRemoveContext.bind(this),
 			noRouteOnSearch: this.noRouteOnSearch,
-			containerCmp: this.searchEl
+			containerCmp: this.searchEl,
 		});
 
 		this.chatCmp = GutterTab.create({
-			setMenuOpen: this.setState.bind(this, {active: 'chatTabCmp'}),
+			setMenuOpen: this.setState.bind(this, { active: 'chatTabCmp' }),
 			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: this.pushRoute.bind(this)
+			pushRootRoute: this.pushRoute.bind(this),
 		});
 
 		this.brandingCmp.render(this.brandingContainerEl);
@@ -337,7 +346,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.on('destroy', 'destroy', this.identityCmp);
 
-		this.mon(this.brandingContainerEl, 'click', this.gotoLibrary.bind(this));
+		this.mon(
+			this.brandingContainerEl,
+			'click',
+			this.gotoLibrary.bind(this)
+		);
 		this.mon(this.backEl, 'click', this.goBack.bind(this));
 		this.mon(this.searchEl, 'click', this.expandSearch.bind(this));
 
@@ -350,7 +363,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	resizeNavCmp: function () {
 		var width = this.navContainerEl.getWidth(),
-			bar = Ext.Element.getViewportWidth() - this.brandingContainerEl.getWidth();
+			bar =
+				Ext.Element.getViewportWidth() -
+				this.brandingContainerEl.getWidth();
 
 		if (this.navCmp && this.navCmp.maybeCollapse) {
 			this.navCmp.maybeCollapse(width, bar);
@@ -361,8 +376,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.searchEl.removeCls('collapsed');
 		this.searchCmp.focusInput();
 
-		wait()
-			.then(this.resizeNavCmp.bind(this));
+		wait().then(this.resizeNavCmp.bind(this));
 	},
 
 	goBack: function () {
@@ -406,18 +420,15 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		}
 	},
 
-
-	onSearchAddContext () {
+	onSearchAddContext() {
 		this.searchEl.removeCls('collapsed');
 
-		wait()
-			.then(this.resizeNavCmp.bind(this));
+		wait().then(this.resizeNavCmp.bind(this));
 
 		this.searchHasContext = true;
 	},
 
-
-	onSearchRemoveContext () {
+	onSearchRemoveContext() {
 		this.searchHasContext = false;
 	},
 
@@ -437,11 +448,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			hide = 'onMenuHide',
 			show = 'onMenuShow';
 
-		function showOrHide (name) {
+		function showOrHide(name) {
 			me[name][state.active === name ? show : hide]?.();
 		}
 
 		showOrHide('identityCmp');
 		showOrHide('notificationCmp');
-	}
+	},
 });

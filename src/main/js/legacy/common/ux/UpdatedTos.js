@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('./WelcomeGuide');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 	extend: 'NextThought.common.ux.WelcomeGuide',
 	alias: 'widget.updated-tos',
@@ -16,11 +15,21 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 	items: [
 		{
 			xtype: 'box',
-			autoEl: {cn: [
-				{tag: 'h3', html: 'We recently updated our Terms of Service and Privacy Policy.'},
-				{tag: 'span', cls: 'you-should', html: 'Please take a moment to read them carefully.'}
-			]},
-			cls: 'tos-header'
+			autoEl: {
+				cn: [
+					{
+						tag: 'h3',
+						html:
+							'We recently updated our Terms of Service and Privacy Policy.',
+					},
+					{
+						tag: 'span',
+						cls: 'you-should',
+						html: 'Please take a moment to read them carefully.',
+					},
+				],
+			},
+			cls: 'tos-header',
 		},
 		{
 			xtype: 'component',
@@ -34,8 +43,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow-x: hidden; overflow-y:auto; height: 520px;'
-			}
+				style: 'overflow-x: hidden; overflow-y:auto; height: 520px;',
+			},
 		},
 		{
 			xtype: 'container',
@@ -46,23 +55,24 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 				cls: 'footer-region',
 				xtype: 'container',
 				flex: 1,
-				layout: 'none'
+				layout: 'none',
 			},
 			items: [
 				{
-					defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
+					defaults: { xtype: 'button', ui: 'blue', scale: 'large' },
 					items: [
 						{
 							xtype: 'checkbox',
 							name: 'check_accept_tos',
 							cls: 'yes-checkbox',
 							flex: 1,
-							boxLabel: 'Yes, I agree to the Terms of Service and Privacy Policy.',
+							boxLabel:
+								'Yes, I agree to the Terms of Service and Privacy Policy.',
 							handler: function (b, e) {
 								var btn = Ext.getCmp('tos-agree');
 								btn.setDisabled(!btn.disabled);
 								// would prefer to check the button's state, relying on initial state = disabled
-							}
+							},
 						},
 						{
 							text: 'I Agree',
@@ -74,11 +84,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 							handler: function (b, e) {
 								e.stopEvent();
 								b.up('window').close();
-							}
-						}
-					]
-				}
-			]
-		}
-	]
+							},
+						},
+					],
+				},
+			],
+		},
+	],
 });

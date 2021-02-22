@@ -2,35 +2,41 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
-module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Event', {
-	extend: 'NextThought.app.notifications.components.types.Base',
-	alias: 'widget.notifications-item-event',
+module.exports = exports = Ext.define(
+	'NextThought.app.notifications.components.types.Event',
+	{
+		extend: 'NextThought.app.notifications.components.types.Base',
+		alias: 'widget.notifications-item-event',
 
-	statics: {
-		mimeType: 'application/vnd.nextthought.courseware.coursecalendarevent'
-	},
+		statics: {
+			mimeType:
+				'application/vnd.nextthought.courseware.coursecalendarevent',
+		},
 
-	itemCls: 'event',
+		itemCls: 'event',
 
-	createdWording: 'created an event {name}',
-	updatedWording: 'updated an event {name}',
+		createdWording: 'created an event {name}',
+		updatedWording: 'updated an event {name}',
 
+		isCreated() {
+			const type = this.change && this.change.get('ChangeType');
 
-	isCreated () {
-		const type = this.change && this.change.get('ChangeType');
+			return type === 'Created';
+		},
 
-		return type === 'Created';
-	},
+		fillInWording() {
+			const title = this.titleTpl.apply({
+				name: this.record.get('title'),
+			});
+			const wording = this.isCreated()
+				? this.createdWording.replace('{name}', title)
+				: this.updatedWording.replace('{name}', title);
 
-
-	fillInWording () {
-		const title = this.titleTpl.apply({name: this.record.get('title')});
-		const wording = this.isCreated() ?
-			this.createdWording.replace('{name}', title) :
-			this.updatedWording.replace('{name}', title);
-
-		if (this.wordingEl && this.wordingEl.dom) {
-			this.wordingEl.dom.innerHTML = Ext.util.Format.htmlEncode(wording);
-		}
+			if (this.wordingEl && this.wordingEl.dom) {
+				this.wordingEl.dom.innerHTML = Ext.util.Format.htmlEncode(
+					wording
+				);
+			}
+		},
 	}
-});
+);

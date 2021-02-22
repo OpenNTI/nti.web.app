@@ -52,7 +52,8 @@
 					border-color: var(--primary-red);
 				}
 
-				&.invite-people, &.resend {
+				&.invite-people,
+				&.resend {
 					background-color: var(--primary-blue);
 					color: white;
 					border-color: var(--primary-blue);

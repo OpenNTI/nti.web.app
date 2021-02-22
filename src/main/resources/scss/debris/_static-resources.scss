@@ -17,7 +17,10 @@
 				position: relative;
 				padding-right: 18px;
 
-				&, a:link, a:visited, a:active {
+				&,
+				a:link,
+				a:visited,
+				a:active {
 					color: var(--primary-blue);
 					font: 14px var(--body-font-family) !important;
 					font-style: normal !important;
@@ -35,19 +38,19 @@
 					font: 24px var(--body-font-family) !important;
 					font-weight: 300 !important;
 					font-style: italic !important;
-					content: ".";
+					content: '.';
 					position: absolute;
 					bottom: 0;
 					right: 5px;
 				}
 
 				&:last-child::after {
-					content: " ";
+					content: ' ';
 				}
 			}
 		}
 
-		@include icon($modal-yellow-sign,$top: 12px,$left: 20px);
+		@include icon($modal-yellow-sign, $top: 12px, $left: 20px);
 
 		.heading {
 			color: var(--tertiary-grey);

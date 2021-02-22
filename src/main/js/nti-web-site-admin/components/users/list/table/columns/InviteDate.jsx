@@ -1,33 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {DateTime} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { DateTime } from '@nti/web-commons';
 import cx from 'classnames';
 
 import styles from './InviteDate.css';
 
-const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteDate', {
-	headerTitle: 'Invite Date',
-	title: 'Invite Date',
-	today: 'Today',
-	yesterday: 'Yesterday'
-});
+const t = scoped(
+	'nti-web-site-admin.components.users.list.table.columns.InviteDate',
+	{
+		headerTitle: 'Invite Date',
+		title: 'Invite Date',
+		today: 'Today',
+		yesterday: 'Yesterday',
+	}
+);
 
 const Format = DateTime.MONTH_ABBR_DAY_YEAR;
 
 export default class InviteDate extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired
-	}
+		item: PropTypes.object.isRequired,
+	};
 
 	static cssClassName = 'invite-date-column';
 
-	static Name = () => t('title')
+	static Name = () => t('title');
 
 	static SortKey = 'created_time';
 
-	render () {
-		const {item} = this.props;
+	render() {
+		const { item } = this.props;
 
 		const isToday = DateTime.isToday(item.getCreatedTime());
 
@@ -37,7 +40,13 @@ export default class InviteDate extends React.Component {
 
 		return (
 			<div className={cx('cell', styles.cell)}>
-				{!isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format={Format} />}
+				{!isToday && !isYesterday && (
+					<DateTime
+						className={styles.value}
+						date={item.getCreatedTime()}
+						format={Format}
+					/>
+				)}
 				{isToday && <span>{t('today')}</span>}
 				{isYesterday && <span>{t('yesterday')}</span>}
 			</div>

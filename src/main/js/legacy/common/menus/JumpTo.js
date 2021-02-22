@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 require('legacy/mixins/MenuShowHideBehavior');
-
 
 module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 	extend: 'Ext.menu.Menu',
@@ -11,21 +10,20 @@ module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 	maxWidth: 500,
 
 	mixins: {
-		menuBehavior: 'NextThought.mixins.MenuShowHideBehavior'
+		menuBehavior: 'NextThought.mixins.MenuShowHideBehavior',
 	},
 
 	layout: {
 		type: 'vbox',
 		align: 'stretch',
-		overflowHandler: 'Scroller'
+		overflowHandler: 'Scroller',
 	},
 
 	defaults: {
-		plain: true
+		plain: true,
 	},
 
 	cls: 'jump-menu',
-
 
 	initComponent: function () {
 		this.mixins.menuBehavior.constructor.call(this);
@@ -37,7 +35,6 @@ module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 		}
 	},
 
-
 	afterRender: function () {
 		this.callParent(arguments);
 
@@ -48,5 +45,5 @@ module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 		} else {
 			wait(1).then(this.destroy.bind(this));
 		}
-	}
+	},
 });

@@ -1,4 +1,4 @@
-import {Theme} from '@nti/web-login/shared';
+import { Theme } from '@nti/web-login/shared';
 
 import BrandingStore from '../branding/Store';
 import {
@@ -7,7 +7,7 @@ import {
 	MODIFIED,
 	THEME,
 	SITE_BRAND,
-	CAN_RESET
+	CAN_RESET,
 } from '../branding/constants';
 
 export default class LoginStore extends BrandingStore {
@@ -15,7 +15,7 @@ export default class LoginStore extends BrandingStore {
 	static Loading = LOADING;
 	static Modified = MODIFIED;
 	static Theme = THEME;
-	static SiteBrand= SITE_BRAND;
+	static SiteBrand = SITE_BRAND;
 	static CanReset = CAN_RESET;
 	static Save = 'save';
 	static Cancel = 'cancel';
@@ -24,5 +24,5 @@ export default class LoginStore extends BrandingStore {
 	static SetBrandProp = 'setBrandProp';
 	static SetThemeProp = 'setThemeProp';
 
-	ThemeProperties = Theme.Properties
+	ThemeProperties = Theme.Properties;
 }

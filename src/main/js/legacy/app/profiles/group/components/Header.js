@@ -3,84 +3,109 @@ const Ext = require('@nti/extjs');
 require('legacy/model/User');
 require('../../components/Header');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.group.components.Header',
+	{
+		extend: 'NextThought.app.profiles.components.Header',
+		alias: 'widget.profile-group-header',
+		cls: 'profile-header group-header',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.group.components.Header', {
-	extend: 'NextThought.app.profiles.components.Header',
-	alias: 'widget.profile-group-header',
-	cls: 'profile-header group-header',
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'buttons' },
+			{
+				cls: 'outline',
+				cn: [
+					{ cls: 'avatar-container' },
+					{
+						cls: 'meta',
+						cn: [
+							{
+								cls: 'about',
+								cn: [
+									{
+										cls: 'field-container',
+										cn: [
+											{
+												cls: 'field username',
+												'data-field': 'alias',
+											},
+										],
+									},
+									{
+										cls: 'field about',
+										'data-field': 'about',
+									},
+								],
+							},
+						],
+					},
+					{ cls: 'tabs' },
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'buttons'},
-		{cls: 'outline', cn: [
-			{cls: 'avatar-container'},
-			{cls: 'meta', cn: [
-				{cls: 'about', cn: [
-					{cls: 'field-container', cn: [
-						{cls: 'field username', 'data-field': 'alias'}
-					]},
-					{cls: 'field about', 'data-field': 'about'}
-				]}
-			]},
-			{cls: 'tabs'}
-		]}
-	]),
+		renderSelectors: {
+			avatarContainerEl: '.avatar-container',
+			usernameEl: '.about .username',
+			aboutFieldEl: '.about .field.about',
+			tabsEl: '.tabs',
+			buttonsEl: '.buttons',
+		},
 
-	renderSelectors: {
-		avatarContainerEl: '.avatar-container',
-		usernameEl: '.about .username',
-		aboutFieldEl: '.about .field.about',
-		tabsEl: '.tabs',
-		buttonsEl: '.buttons'
-	},
+		updateEntity: function (entity, tabs) {
+			if (!this.rendered) {
+				this.on(
+					'afterrender',
+					this.updateUser.bind(this, entity, tabs)
+				);
+				return;
+			}
 
-	updateEntity: function (entity, tabs) {
-		if (!this.rendered) {
-			this.on('afterrender', this.updateUser.bind(this, entity, tabs));
-			return;
-		}
+			this.entity = entity;
+			Ext.destroy(this.userMonitor);
 
-		this.entity = entity;
-		Ext.destroy(this.userMonitor);
-
-		this.userMonitor = this.mon(entity, {
-			destroyable: true,
-			'changed': this.fillInEntity.bind(this, entity)
-		});
-
-		this.fillInEntity(entity);
-
-		this.__updateTabs(tabs);
-		this.clearButtons();
-
-		if (this.entity.getLink('my_membership')) {
-			this.addButton({
-				cls: 'leave',
-				action: 'leaveGroup',
-				label: 'Leave Group'
+			this.userMonitor = this.mon(entity, {
+				destroyable: true,
+				changed: this.fillInEntity.bind(this, entity),
 			});
-		}
-	},
 
-	fillInEntity: function (entity) {
-		var data = entity.getAboutData();
+			this.fillInEntity(entity);
 
-		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(entity);
-		this.usernameEl.update(data.displayName);
+			this.__updateTabs(tabs);
+			this.clearButtons();
 
-		this.aboutFieldEl.dom.innerHTML = data.about || '';
-	},
+			if (this.entity.getLink('my_membership')) {
+				this.addButton({
+					cls: 'leave',
+					action: 'leaveGroup',
+					label: 'Leave Group',
+				});
+			}
+		},
 
-	setSchema: function (schema) {},
+		fillInEntity: function (entity) {
+			var data = entity.getAboutData();
 
-	__updateTabs: function (tabs) {
-		this.clearTabs();
+			this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(
+				entity
+			);
+			this.usernameEl.update(data.displayName);
 
-		tabs.forEach(this.addTab.bind(this));
-	},
+			this.aboutFieldEl.dom.innerHTML = data.about || '';
+		},
 
-	leaveGroup: function () {
-		if (this.doLeaveGroup) {
-			this.doLeaveGroup();
-		}
+		setSchema: function (schema) {},
+
+		__updateTabs: function (tabs) {
+			this.clearTabs();
+
+			tabs.forEach(this.addTab.bind(this));
+		},
+
+		leaveGroup: function () {
+			if (this.doLeaveGroup) {
+				this.doLeaveGroup();
+			}
+		},
 	}
-});
+);

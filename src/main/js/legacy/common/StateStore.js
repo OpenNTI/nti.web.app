@@ -1,11 +1,9 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.common.StateStore', {
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
-
 
 	inheritableStatics: {
 		__instance: null,
@@ -22,9 +20,8 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 			}
 
 			return this.__instance;
-		}
+		},
 	},
-
 
 	constructor: function (config) {
 		this.callParent(arguments);
@@ -32,22 +29,18 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 		this.mixins.observable.constructor.call(this, config);
 	},
 
-
 	isLoading: function () {
 		return this.loading;
 	},
-
 
 	hasLoaded: function () {
 		return this.hasFinishedLoad;
 	},
 
-
 	setLoading: function () {
 		this.loading = true;
 		this.fireEvent('loading');
 	},
-
 
 	setLoaded: function () {
 		this.loading = false;
@@ -72,8 +65,8 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 		return new Promise(function (fulfill) {
 			me.on({
 				single: true,
-				'loaded': fulfill.bind(null, me)
+				loaded: fulfill.bind(null, me),
 			});
 		});
-	}
+	},
 });

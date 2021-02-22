@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
-
+const { getString } = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 	extend: 'Ext.container.Container',
@@ -9,24 +8,46 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 	cls: 'contact-main-view',
 
 	items: [
-		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
-			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.contact.Main.email')},
-			{
-				xtype: 'box',
-				autoEl: {tag: 'textarea', name: 'message', placeholder: getString('NextThought.view.account.contact.Main.input-placeholder')},
-				name: 'message',
-				cls: 'input-box textarea',
-				emptyText: getString('NextThought.view.account.contact.Main.input-placeholder')
-			}
-		]},
+		{
+			xtype: 'container',
+			layout: 'anchor',
+			cls: 'input-wrapper',
+			items: [
+				{
+					xtype: 'simpletext',
+					name: 'email',
+					cls: 'input-box',
+					inputType: 'email',
+					placeholder: getString(
+						'NextThought.view.account.contact.Main.email'
+					),
+				},
+				{
+					xtype: 'box',
+					autoEl: {
+						tag: 'textarea',
+						name: 'message',
+						placeholder: getString(
+							'NextThought.view.account.contact.Main.input-placeholder'
+						),
+					},
+					name: 'message',
+					cls: 'input-box textarea',
+					emptyText: getString(
+						'NextThought.view.account.contact.Main.input-placeholder'
+					),
+				},
+			],
+		},
 		{
 			xtype: 'box',
 			hidden: true,
 			name: 'error',
-			autoEl: {cls: 'error-box', tag: 'div', cn: [
-				{cls: 'error-field'},
-				{cls: 'error-desc'}
-			]}
+			autoEl: {
+				cls: 'error-box',
+				tag: 'div',
+				cn: [{ cls: 'error-field' }, { cls: 'error-desc' }],
+			},
 		},
 		{
 			xtype: 'container',
@@ -38,24 +59,29 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 					ui: 'primary',
 					scale: 'large',
 					name: 'submit',
-					style: {'float': 'right'},
-					text: getString('NextThought.view.account.contact.Main.submit'),
+					style: { float: 'right' },
+					text: getString(
+						'NextThought.view.account.contact.Main.submit'
+					),
 					handler: function (b) {
 						b.up('contact-main-view').submit(b);
-					}
+					},
 				},
 				{
 					xtype: 'button',
 					ui: 'secondary',
 					scale: 'large',
 					name: 'cancel',
-					style: {'float': 'right'},
-					text: getString('NextThought.view.account.contact.Main.cancel'),
+					style: { float: 'right' },
+					text: getString(
+						'NextThought.view.account.contact.Main.cancel'
+					),
 					handler: function (b) {
 						b.up('window').close();
-					}
-				}
-			]}
+					},
+				},
+			],
+		},
 	],
 
 	afterRender: function () {
@@ -78,9 +104,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 		return {
 			//email: email,
 			email: email,
-			message: message
+			message: message,
 		};
-
 	},
 
 	setError: function (error) {
@@ -89,7 +114,9 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function (f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {
+			f.removeCls('error');
+		});
 
 		//make main error field show up
 		box.el.down('.error-field').update(error.field.replace('_', ' '));
@@ -108,8 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 
 		b.addCls('disabled');
 
-		this.handleSubmit(values,win.role)
+		this.handleSubmit(values, win.role)
 			.then(win.close.bind(win))
 			.catch(this.setError.bind(this));
-	}
+	},
 });

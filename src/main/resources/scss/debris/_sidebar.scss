@@ -13,9 +13,13 @@
 
 	@include icon($add_contacts_card);
 
-	* { position: relative; z-index: 1; }
+	* {
+		position: relative;
+		z-index: 1;
+	}
 
-	a,a:link {
+	a,
+	a:link {
 		text-decoration: none;
 	}
 
@@ -104,7 +108,8 @@
 			padding: 0;
 		}
 
-		&,&.x-tab-top {
+		&,
+		&.x-tab-top {
 			background: none;
 		}
 
@@ -135,7 +140,9 @@
 			width: auto;
 			text-indent: 0;
 
-			&:empty { display: none; }
+			&:empty {
+				display: none;
+			}
 		}
 
 		.x-tab-button {
@@ -144,9 +151,14 @@
 			height: 55px;
 			overflow: hidden;
 
-			&:active { left: 0; top: 0; }
+			&:active {
+				left: 0;
+				top: 0;
+			}
 
-			.x-tab-inner { display: none; }
+			.x-tab-inner {
+				display: none;
+			}
 		}
 	}
 
@@ -181,14 +193,24 @@
 
 	.x-tab-top-active {
 		background: none;
-		button span.x-tab-inner { color: #b1b1b1; }
+		button span.x-tab-inner {
+			color: #b1b1b1;
+		}
 
 		span.x-tab-icon-el {
-			&.contacts { @include sprite($rhp-contacts_active); }
-			&.activity { @include sprite($rhp-activity_active); }
-			&.inbox { @include sprite($rhp-notification_active); }
+			&.contacts {
+				@include sprite($rhp-contacts_active);
+			}
+			&.activity {
+				@include sprite($rhp-activity_active);
+			}
+			&.inbox {
+				@include sprite($rhp-notification_active);
+			}
 
-			&.history { @include sprite($rhp-history_active); }
+			&.history {
+				@include sprite($rhp-history_active);
+			}
 		}
 	}
 }

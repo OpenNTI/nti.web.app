@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const RectUtils = require('legacy/util/Rects');
 
-
 module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
 
@@ -13,13 +12,14 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 			this.on({
 				scope: this,
 				buffer: 200,
-				scroll: this._scrollStopped
+				scroll: this._scrollStopped,
 			});
 		} else {
-			console.warn('trying to register a listener for a element with out a dom node, it will not fire scrollstop');
+			console.warn(
+				'trying to register a listener for a element with out a dom node, it will not fire scrollstop'
+			);
 		}
 	},
-
 
 	_scrollStopped: function (e) {
 		var me = this,
@@ -31,10 +31,11 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		});
 	},
 
-
 	getScrollingEl: function () {
-
-		var el = this, found = 0, max = 100, flow;
+		var el = this,
+			found = 0,
+			max = 100,
+			flow;
 
 		do {
 			el = el && el.parent();
@@ -44,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 					found = max;
 				}
 			}
-		}while (el && found < max);
+		} while (el && found < max);
 
 		return el || this;
 	},
@@ -53,22 +54,23 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
 			el = this.dom,
 			offsets = this.getOffsetsTo(container),
-
 			top = offsets[1] + container.scrollTop,
 			bottom = top + el.offsetHeight,
-
 			ctClientHeight = container.clientHeight,
 			ctTop = parseInt(container.scrollTop, 10),
 			ctBottom = ctTop + ctClientHeight;
 
-		return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
+		return (
+			top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom
+		);
 	},
-
 
 	scrollCompletelyIntoView: function (container, hscroll, animate) {
 		var me = this,
 			dom = me.dom,
-			offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
+			offsets = me.getOffsetsTo(
+				(container = Ext.getDom(container) || Ext.getBody().dom)
+			),
 			// el's box
 			left = offsets[0] + container.scrollLeft,
 			top = offsets[1] + container.scrollTop,
@@ -85,26 +87,32 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
 			newPos = top - this.getHeight();
 		} else if (bottom > ctBottom) {
-			newPos = (bottom - ctClientHeight) + this.getHeight();
+			newPos = bottom - ctClientHeight + this.getHeight();
 		}
 		if (newPos !== null) {
-			me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
+			me.scrollChildFly
+				.attach(container)
+				.scrollTo('top', newPos, animate);
 		}
 
 		if (hscroll !== false) {
 			newPos = null;
-			if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
+			if (
+				dom.offsetWidth > container.clientWidth ||
+				left < ctScrollLeft
+			) {
 				newPos = left;
 			} else if (right > ctRight) {
 				newPos = right - container.clientWidth;
 			}
 			if (newPos !== null) {
-				me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
+				me.scrollChildFly
+					.attach(container)
+					.scrollTo('left', newPos, animate);
 			}
 		}
 		return me;
 	},
-
 
 	/**
 	 *
@@ -119,12 +127,12 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		return RectUtils.contains(parentRect, myRect, bufferZone);
 	},
 
-
 	getAttribute: function (attr, ns) {
 		var v = this.callParent(arguments);
-		return v || (attr === 'class' ? this.callParent(['className', ns]) : null);
+		return (
+			v || (attr === 'class' ? this.callParent(['className', ns]) : null)
+		);
 	},
-
 
 	getAndRemoveAttr: function (attr) {
 		var r = this.dom.getAttribute(attr);
@@ -132,9 +140,10 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		return r;
 	},
 
-
 	allowContextMenu: function () {
-		this.on('contextmenu', function (e) {e.stopPropagation();});
+		this.on('contextmenu', function (e) {
+			e.stopPropagation();
+		});
 		return this;
-	}
+	},
 });

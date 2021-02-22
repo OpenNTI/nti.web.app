@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('../form/fields/SimpleTextField');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
 	extend: 'NextThought.common.form.fields.SimpleTextField',
 	alias: 'widget.search-menu-item',
@@ -17,17 +16,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
 
 	afterRender: function () {
 		this.callParent(arguments);
-		this.inputEl.set({size: 13});
+		this.inputEl.set({ size: 13 });
 
 		this.mon(this.inputEl, {
 			keydown: 'stop',
 			keyup: 'stop',
-			keypress: 'stop'
+			keypress: 'stop',
 		});
 	},
 
 	stop: function (e) {
 		//Because it is in a view, it is preventing the default function of space
 		e.stopPropagation();
-	}
+	},
 });

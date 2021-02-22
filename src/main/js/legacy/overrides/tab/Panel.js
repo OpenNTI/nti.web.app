@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.overrides.tab.Panel', {
 	override: 'Ext.tab.Panel',
 
@@ -12,13 +11,12 @@ module.exports = exports = Ext.define('NextThought.overrides.tab.Panel', {
 		try {
 			this.getLayout().getActiveItem();
 			this.setActiveTab(t);
-		}catch (e) {
+		} catch (e) {
 			console.error(e.stack);
 		}
-
 	},
 
 	getState: function () {
-		return {t: this.items.indexOf(this.getActiveTab())};
-	}
+		return { t: this.items.indexOf(this.getActiveTab()) };
+	},
 });

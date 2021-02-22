@@ -1,7 +1,7 @@
 import './View.scss';
 import React from 'react';
-import {ManageTranscriptCredits} from '@nti/web-course';
-import {scoped} from '@nti/lib-locale';
+import { ManageTranscriptCredits } from '@nti/web-course';
+import { scoped } from '@nti/lib-locale';
 
 import BulkImport from './bulkimport';
 import CertificateStyling from './certificate-styling';
@@ -11,14 +11,13 @@ const t = scoped('web-site-admin.components.advanced.transcripts.View', {
 });
 
 export default class AdminTranscripts extends React.Component {
-
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {};
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="site-admin-advanced-transcripts">
 				<CertificateStyling />

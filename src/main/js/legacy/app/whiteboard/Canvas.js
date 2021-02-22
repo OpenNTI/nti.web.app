@@ -18,10 +18,9 @@ const SHAPES = {
 	Url,
 };
 
-
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 	extend: 'Ext.Component',
-	alias:	'widget.whiteboard-canvas',
+	alias: 'widget.whiteboard-canvas',
 	autoEl: 'canvas',
 
 	initComponent: function () {
@@ -41,9 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 		if (scene && scene.viewportRatio) {
 			this.viewportRatio = scene.viewportRatio;
-		}
-		else {
-			this.viewportRatio = Globals.CANVAS_GOLDEN_RATIO;	//Default to this for new shapes.
+		} else {
+			this.viewportRatio = Globals.CANVAS_GOLDEN_RATIO; //Default to this for new shapes.
 		}
 	},
 
@@ -56,12 +54,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 			shapes = this.drawData.shapeList,
 			i = shapes.length - 1;
 
-		data.shapeList	= [];
-		data.MimeType	= 'application/vnd.nextthought.canvas';
-		data.Class	= 'Canvas';
+		data.shapeList = [];
+		data.MimeType = 'application/vnd.nextthought.canvas';
+		data.Class = 'Canvas';
 		data.viewportRatio = this.viewportRatio;
 		data.NTIID = this.drawData.NTIID;
-
 
 		for (i; i >= 0; i--) {
 			data.shapeList.push(shapes[i].getJSON());
@@ -80,19 +77,19 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 		this.el.setStyle({
 			width: width + 'px',
-			height: height + 'px'
+			height: height + 'px',
 		});
 
 		this.el.set({
 			width: width,
-			height: height
+			height: height,
 		});
 
 		var me = this;
 
 		setTimeout(function () {
 			me.drawScene();
-		},1);
+		}, 1);
 	},
 
 	drawScene: function (finished) {
@@ -109,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 		var me = this;
 
-		function fin () {
+		function fin() {
 			delete me.drawing;
 			Ext.callback(finished);
 		}
@@ -126,11 +123,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 	},
 
 	statics: {
-		objectNameRe: (/^Canvas(.+?)Shape$/i),
+		objectNameRe: /^Canvas(.+?)Shape$/i,
 
 		updateData: function (scene) {
-			var shapes, i,
-				drawData = Ext.clone(scene || {shapeList: []});
+			var shapes,
+				i,
+				drawData = Ext.clone(scene || { shapeList: [] });
 
 			//maintain z-order since we're looping backwards (for speed)
 			drawData.shapeList.reverse();
@@ -144,7 +142,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 			return drawData;
 		},
-
 
 		makeShape: function (data) {
 			//reparent shapes
@@ -161,7 +158,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 			return c ? c.create(data) : null;
 		},
 
-
 		drawScene: function (data, canvas, finished) {
 			var c = canvas.dom,
 				w = c.width,
@@ -170,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 				shapes = data.shapeList || [],
 				i = shapes.length - 1;
 
-			function draw (x, cb) {
+			function draw(x, cb) {
 				if (x < 0) {
 					if (cb && cb.call) {
 						cb.call(this);
@@ -185,7 +181,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 			}
 
 			//reset context
-			c.width = 1; c.width = w;
+			c.width = 1;
+			c.width = w;
 			c.height = h;
 
 			ctx = c.getContext('2d');
@@ -198,24 +195,37 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 			draw(i, finished);
 		},
 
-
 		getThumbnail: function (scene, resultCallback) {
-			var c = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}},true),
+			var c = Ext.DomHelper.append(
+					Ext.getBody(),
+					{
+						tag: 'canvas',
+						style: { visibility: 'hidden', position: 'absolute' },
+					},
+					true
+				),
 				width = 580,
 				height = width / (scene.viewportRatio || 1);
 
-			function finish () {
+			function finish() {
 				var data = Globals.CANVAS_BROKEN_IMAGE.src;
-				try { data = c.dom.toDataURL('image/png'); } catch (er) {/*ignore*/}
-				try { c.remove(); }catch (e) { console.warn(Globals.getError(e)); }
+				try {
+					data = c.dom.toDataURL('image/png');
+				} catch (er) {
+					/*ignore*/
+				}
+				try {
+					c.remove();
+				} catch (e) {
+					console.warn(Globals.getError(e));
+				}
 				resultCallback.call(window, data);
 			}
-
 
 			c.dom.width = width;
 			c.dom.height = height;
 
 			this.drawScene(this.updateData(scene), c, finish);
-		}
-	}
+		},
+	},
 });

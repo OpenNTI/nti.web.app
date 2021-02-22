@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 
-const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
 require('legacy/common/StateStore');
-
 
 module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -19,11 +18,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 		this.fireEvent('chat-notify-tab', msg);
 	},
 
-	fireMessageBarOpen () {
+	fireMessageBarOpen() {
 		this.fireEvent('message-bar-open');
 	},
 
-	fireMessageBarClose () {
+	fireMessageBarClose() {
 		this.fireEvent('message-bar-close');
 	},
 
@@ -31,13 +30,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 		this.returnPoint = route;
 	},
 
-
 	getReturnPoint: function () {
 		return this.returnPoint;
 	},
 
-
-	putMessageBarItemIntoSession: function (id/*, cfg*/) {
+	putMessageBarItemIntoSession: function (id /*, cfg*/) {
 		const stateKey = 'topMessages';
 		let o = TemporaryStorage.get(stateKey) || {};
 
@@ -45,11 +42,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 		TemporaryStorage.set(stateKey, o);
 	},
 
-
 	getMessageBarItemFromSession: function (id) {
 		let stateKey = 'topMessages';
 		let o = TemporaryStorage.get(stateKey) || {};
 
 		return o[id];
-	}
+	},
 });

@@ -1,38 +1,41 @@
 import './Result.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
+import { scoped } from '@nti/lib-locale';
 
 import DisplayNameColumn from './DisplayNameColumn';
 import column from './PropertyColumn';
 import ResultTabs from './ResultTabs';
 import StatusReport from './StatusReport';
 
-const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.result', {
-	heading: 'Successfully imported credits',
-	columnHeader: {
-		titleByUser: 'Credit Title',
-		typeByUser: 'Types',
-		username: 'Username'
-	},
-	units: {
-		credits: {
-			one: 'Credit',
-			other: 'Credits',
+const t = scoped(
+	'web-site-admin.components.advanced.transcripts.bulkimport.result',
+	{
+		heading: 'Successfully imported credits',
+		columnHeader: {
+			titleByUser: 'Credit Title',
+			typeByUser: 'Types',
+			username: 'Username',
 		},
-		users: {
-			one: 'Learner',
-			other: 'Learners',
+		units: {
+			credits: {
+				one: 'Credit',
+				other: 'Credits',
+			},
+			users: {
+				one: 'Learner',
+				other: 'Learners',
+			},
+			types: {
+				one: 'Type',
+				other: 'Types',
+			},
 		},
-		types: {
-			one: 'Type',
-			other: 'Types',
-		}
-	},
-	more: '…and %(number)s more'
-});
+		more: '…and %(number)s more',
+	}
+);
 
-function Tab ({count, unit} = {}) {
+function Tab({ count, unit } = {}) {
 	return (
 		<div className="results-tab">
 			<span className="count">{count}</span>
@@ -43,14 +46,15 @@ function Tab ({count, unit} = {}) {
 
 Tab.propTypes = {
 	count: PropTypes.number.isRequired,
-	unit: PropTypes.string.isRequired
+	unit: PropTypes.string.isRequired,
 };
 
 const MAX_ROWS = 6;
-const getProp = (item, prop) => prop.split('.').reduce((node, property) => (node || {})[property], item);
+const getProp = (item, prop) =>
+	prop.split('.').reduce((node, property) => (node || {})[property], item);
 
 class Counter {
-	constructor (prop, groupBy) {
+	constructor(prop, groupBy) {
 		this.prop = prop;
 		this.groupBy = groupBy;
 		this.results = {};
@@ -67,25 +71,24 @@ class Counter {
 
 		this.results[v] = this.results[v] || new Set();
 		this.results[v].add(g);
-	}
+	};
 
-	get numGroups () {
+	get numGroups() {
 		return Object.keys(this.results).length;
 	}
 
-	get total () {
+	get total() {
 		return Object.values(this.results).reduce((s, v) => s + v.size, 0);
 	}
 }
 
 export default class Result extends React.PureComponent {
-
 	static propTypes = {
-		result: PropTypes.array
-	}
+		result: PropTypes.array,
+	};
 
 	tabs = () => {
-		const {result: items = []} = this.props;
+		const { result: items = [] } = this.props;
 		const titleByUser = new Counter('title', 'user.ID');
 		const typeByUser = new Counter('creditDefinition.type', 'user.ID');
 		const users = {};
@@ -101,42 +104,99 @@ export default class Result extends React.PureComponent {
 
 		return [
 			{
-				label: <Tab count={titleByUser.numGroups} unit={t(['units', 'credits'], {count: titleByUser.numGroups})} />,
+				label: (
+					<Tab
+						count={titleByUser.numGroups}
+						unit={t(['units', 'credits'], {
+							count: titleByUser.numGroups,
+						})}
+					/>
+				),
 				data: Object.entries(titleByUser.results)
-					.map(([name, learners]) => ({name, learners: learners.size}))
+					.map(([name, learners]) => ({
+						name,
+						learners: learners.size,
+					}))
 					.slice(0, MAX_ROWS),
-				columns: [column('name', t(['columnHeader', 'titleByUser'])), column('learners')],
-				footer: titleByUser.numGroups > MAX_ROWS ? t('more', {number: titleByUser.numGroups - MAX_ROWS}) : null
+				columns: [
+					column('name', t(['columnHeader', 'titleByUser'])),
+					column('learners'),
+				],
+				footer:
+					titleByUser.numGroups > MAX_ROWS
+						? t('more', {
+								number: titleByUser.numGroups - MAX_ROWS,
+						  })
+						: null,
 			},
 			{
-				label: <Tab count={typeByUser.numGroups} unit={t(['units', 'types'], {count: typeByUser.numGroups})} />,
+				label: (
+					<Tab
+						count={typeByUser.numGroups}
+						unit={t(['units', 'types'], {
+							count: typeByUser.numGroups,
+						})}
+					/>
+				),
 				data: Object.entries(typeByUser.results)
-					.map(([name, learners]) => ({name, learners: learners.size}))
+					.map(([name, learners]) => ({
+						name,
+						learners: learners.size,
+					}))
 					.slice(0, MAX_ROWS),
-				columns: [column('name', t(['columnHeader', 'typeByUser'])), column('learners')],
-				footer: typeByUser.numGroups > MAX_ROWS ? t('more', {number: typeByUser.numGroups - MAX_ROWS}) : null
+				columns: [
+					column('name', t(['columnHeader', 'typeByUser'])),
+					column('learners'),
+				],
+				footer:
+					typeByUser.numGroups > MAX_ROWS
+						? t('more', { number: typeByUser.numGroups - MAX_ROWS })
+						: null,
 			},
 			{
-				label: <Tab count={Object.values(users).length} unit={t(['units', 'users'], {count: Object.values(users).length})} />,
+				label: (
+					<Tab
+						count={Object.values(users).length}
+						unit={t(['units', 'users'], {
+							count: Object.values(users).length,
+						})}
+					/>
+				),
 				data: Object.values(users).slice(0, MAX_ROWS),
-				columns: [DisplayNameColumn, column('Username', t(['columnHeader', 'username']))],
-				footer: Object.values(users).length > MAX_ROWS ? t('more', {number: Object.values(users).length - MAX_ROWS}) : null
-			}
+				columns: [
+					DisplayNameColumn,
+					column('Username', t(['columnHeader', 'username'])),
+				],
+				footer:
+					Object.values(users).length > MAX_ROWS
+						? t('more', {
+								number: Object.values(users).length - MAX_ROWS,
+						  })
+						: null,
+			},
 		];
-	}
+	};
 
-	render () {
-		const {result} = this.props;
+	render() {
+		const { result } = this.props;
 
 		if (!result || result.length === 0) {
 			return null;
 		}
 
 		const tabs = this.tabs();
-		const heading = <div><i className="icon-check success"/>{t('heading')}</div>;
+		const heading = (
+			<div>
+				<i className="icon-check success" />
+				{t('heading')}
+			</div>
+		);
 
 		return (
-			<StatusReport className="transcript-credit-import-result" heading={heading}>
+			<StatusReport
+				className="transcript-credit-import-result"
+				heading={heading}
+			>
 				<ResultTabs tabs={tabs} />
 			</StatusReport>
 		);

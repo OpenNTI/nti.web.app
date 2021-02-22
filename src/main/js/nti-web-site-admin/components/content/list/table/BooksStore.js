@@ -1,40 +1,41 @@
-import {Stores, Mixins} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
-import {mixin} from '@nti/lib-decorators';
-import {decorate} from '@nti/lib-commons';
+import { Stores, Mixins } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { mixin } from '@nti/lib-decorators';
+import { decorate } from '@nti/lib-commons';
 
 const PAGE_SIZE = 20;
 
 class BookStore extends Stores.BoundStore {
-
-	constructor () {
+	constructor() {
 		super();
 
 		this.set({
 			items: null,
 			loading: true,
 			sortOn: null,
-			sortDirection: null
+			sortDirection: null,
 		});
 	}
 
-	loadPage (pageNumber) {
+	loadPage(pageNumber) {
 		this.set('pageNumber', pageNumber);
 
 		this.load();
 	}
 
-	async load () {
-		if (this.isBufferingSearch) { return; }
+	async load() {
+		if (this.isBufferingSearch) {
+			return;
+		}
 
 		this.set('loading', true);
 
-		if(this.searchTerm && this.searchTerm.length < 3) {
+		if (this.searchTerm && this.searchTerm.length < 3) {
 			this.set({
 				items: [],
 				numPages: 1,
 				currentSearchTerm: '',
-				loading: false
+				loading: false,
 			});
 
 			return;
@@ -52,15 +53,15 @@ class BookStore extends Stores.BoundStore {
 
 			let params = {};
 
-			if(sortOn) {
+			if (sortOn) {
 				params.sortOn = sortOn;
 			}
 
-			if(sortDirection) {
+			if (sortDirection) {
 				params.sortOrder = sortDirection;
 			}
 
-			if(pageNumber) {
+			if (pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
 
 				params.batchStart = batchStart;
@@ -68,20 +69,25 @@ class BookStore extends Stores.BoundStore {
 
 			params.batchSize = PAGE_SIZE;
 
-			if(this.searchTerm) {
+			if (this.searchTerm) {
 				params.filter = this.searchTerm;
 				params.batchStart = 0;
 			}
 
-			const collection = service.getCollection('VisibleContentBundles', 'ContentBundles');
+			const collection = service.getCollection(
+				'VisibleContentBundles',
+				'ContentBundles'
+			);
 			const batch = await service.getBatch(collection.href, params);
-			const promises = (batch.titles || []).map(x => service.getObject(x));
+			const promises = (batch.titles || []).map(x =>
+				service.getObject(x)
+			);
 			const parsed = await Promise.all(promises);
 			const result = { items: parsed, total: parsed.length };
 
 			items = result.items;
 
-			if(this.searchTerm !== searchTerm) {
+			if (this.searchTerm !== searchTerm) {
 				// a new search term has been entered since we performed the load
 				return;
 			}
@@ -94,18 +100,17 @@ class BookStore extends Stores.BoundStore {
 				pageNumber: batch.BatchPage,
 				loading: false,
 				items,
-				currentSearchTerm: this.searchTerm
+				currentSearchTerm: this.searchTerm,
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			this.set({
 				loading: false,
-				error: e.message || 'Could not load books'
+				error: e.message || 'Could not load books',
 			});
 		}
 	}
 }
 
 export default decorate(BookStore, [
-	mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+	mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable),
 ]);

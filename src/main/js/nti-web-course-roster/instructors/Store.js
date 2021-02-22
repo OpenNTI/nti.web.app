@@ -14,7 +14,7 @@ import {
 	USERS_LOADED,
 	USER_UPDATING,
 	USER_UPDATED,
-	LIST_UPDATED
+	LIST_UPDATED,
 } from './Constants';
 
 const Protected = Symbol('Protected');
@@ -37,7 +37,7 @@ const UserUpdated = Symbol('User updated');
 const GetManagers = Symbol('Get Manager');
 const SetList = Symbol('Set List');
 
-function getUserMap (users) {
+function getUserMap(users) {
 	return users.reduce((acc, user) => {
 		acc[user.getID()] = true;
 
@@ -45,20 +45,19 @@ function getUserMap (users) {
 	}, {});
 }
 
-function init (store) {
+function init(store) {
 	store[Protected] = {
 		loading: false,
 		searching: false,
 		instructors: [],
 		editors: [],
 		permissionsList: [],
-		updatingUsers: {}
+		updatingUsers: {},
 	};
 }
 
-
 class Store extends StorePrototype {
-	constructor () {
+	constructor() {
 		super();
 
 		init(this);
@@ -75,172 +74,180 @@ class Store extends StorePrototype {
 			[EDITOR_REMOVED]: RemoveEditor,
 			[USERS_LOADED]: UsersLoaded,
 			[USER_UPDATING]: UserUpdating,
-			[USER_UPDATED]: UserUpdated
+			[USER_UPDATED]: UserUpdated,
 		});
 	}
 
-
-	[Loading] () {
+	[Loading]() {
 		this[Protected].loading = true;
 
-		this.emitChange({type: LOADING});
+		this.emitChange({ type: LOADING });
 	}
 
-
-	[Searching] () {
+	[Searching]() {
 		this[Protected].searching = true;
 
-		this.emitChange({type: SEARCHING});
+		this.emitChange({ type: SEARCHING });
 	}
 
-
-	[SetError] (e) {
-		const {response} = e.action;
+	[SetError](e) {
+		const { response } = e.action;
 
 		this[Protected].error = response;
 
-		this.emitChange({type: ERROR});
+		this.emitChange({ type: ERROR });
 	}
 
-
-	[UpdateInstructors] (instructors) {
-		const {permissionsList} = this;
+	[UpdateInstructors](instructors) {
+		const { permissionsList } = this;
 
 		this[Protected].instructors = instructors;
 
 		//If we don't have any active permissions there's nothing to update
-		if (!permissionsList.length) { return; }
+		if (!permissionsList.length) {
+			return;
+		}
 
 		const map = getUserMap(instructors);
 
-		const newList = permissionsList.map((permissions) => {
-			const {user} = permissions;
+		const newList = permissionsList.map(permissions => {
+			const { user } = permissions;
 
-			return map[user.getID()] ?
-				Permissions.setIsInstructor(permissions, true) :
-				Permissions.setIsInstructor(permissions, false);
+			return map[user.getID()]
+				? Permissions.setIsInstructor(permissions, true)
+				: Permissions.setIsInstructor(permissions, false);
 		});
 
 		this[SetList](newList);
 	}
 
-
-	[UpdateEditors] (editors) {
-		const {permissionsList} = this;
+	[UpdateEditors](editors) {
+		const { permissionsList } = this;
 
 		this[Protected].editors = editors;
 
 		//If we don't have any active permissions there's nothing to update
-		if (!permissionsList.length) { return; }
+		if (!permissionsList.length) {
+			return;
+		}
 
 		const map = getUserMap(editors);
 
-		const newList = permissionsList.map((permissions) => {
-			const {user} = permissions;
+		const newList = permissionsList.map(permissions => {
+			const { user } = permissions;
 
-			return map[user.getID()] ?
-				Permissions.setIsEditor(permissions, true) :
-				Permissions.setIsEditor(permissions, false);
+			return map[user.getID()]
+				? Permissions.setIsEditor(permissions, true)
+				: Permissions.setIsEditor(permissions, false);
 		});
 
 		this[SetList](newList);
 	}
 
-
-	[InstructorsLoaded] (e) {
-		const {response:instructors} = e.action;
+	[InstructorsLoaded](e) {
+		const { response: instructors } = e.action;
 		this[UpdateInstructors](instructors);
 	}
 
-
-	[EditorsLoaded] (e) {
-		const {response:editors} = e.action;
+	[EditorsLoaded](e) {
+		const { response: editors } = e.action;
 
 		this[UpdateEditors](editors);
 	}
 
-
-	[AddInstructor] (e) {
-		const {response:instructor} = e.action;
-		const {instructors:oldInstructors} = this[Protected];
+	[AddInstructor](e) {
+		const { response: instructor } = e.action;
+		const { instructors: oldInstructors } = this[Protected];
 
 		const oldMap = getUserMap(oldInstructors);
 
-		const newInstructors = oldMap[instructor.getID()] ? [...oldInstructors] : [...oldInstructors, instructor];
+		const newInstructors = oldMap[instructor.getID()]
+			? [...oldInstructors]
+			: [...oldInstructors, instructor];
 
 		this[UpdateInstructors](newInstructors);
 	}
 
-
-	[AddEditor] (e) {
-		const {response:editor} = e.action;
-		const {editors:oldEditors} = this[Protected];
+	[AddEditor](e) {
+		const { response: editor } = e.action;
+		const { editors: oldEditors } = this[Protected];
 
 		const oldMap = getUserMap(oldEditors);
 
-		const newEditors = oldMap[editor.getID()] ? [...oldEditors] : [...oldEditors, editor];
+		const newEditors = oldMap[editor.getID()]
+			? [...oldEditors]
+			: [...oldEditors, editor];
 
 		this[UpdateEditors](newEditors);
 	}
 
+	[RemoveInstructor](e) {
+		const { response: instructor } = e.action;
+		const { instructors: oldInstructors } = this[Protected];
 
-	[RemoveInstructor] (e) {
-		const {response:instructor} = e.action;
-		const {instructors:oldInstructors} = this[Protected];
-
-		const newInstructors = oldInstructors.filter(u => u.getID() !== instructor.getID());
+		const newInstructors = oldInstructors.filter(
+			u => u.getID() !== instructor.getID()
+		);
 
 		this[UpdateInstructors](newInstructors);
 	}
 
-
-	[RemoveEditor] (e) {
-		const {response:editor} = e.action;
-		const {editors:oldEditors} = this[Protected];
+	[RemoveEditor](e) {
+		const { response: editor } = e.action;
+		const { editors: oldEditors } = this[Protected];
 
 		const newEditors = oldEditors.filter(u => u.getID() !== editor.getID());
 
 		this[UpdateEditors](newEditors);
 	}
 
-
-	[UsersLoaded] (e) {
-		const {response} = e.action;
+	[UsersLoaded](e) {
+		const { response } = e.action;
 		//If a falsy response is passed for the users show the managers
 		const users = response || this[GetManagers]();
 
-		const {instructors, editors} = this[Protected];
+		const { instructors, editors } = this[Protected];
 		const instructorMap = getUserMap(instructors);
 		const editorMap = getUserMap(editors);
 
-		const list = users.map((u) => new Permissions(u, instructorMap[u.getID()], editorMap[u.getID()]));
+		const list = users.map(
+			u =>
+				new Permissions(
+					u,
+					instructorMap[u.getID()],
+					editorMap[u.getID()]
+				)
+		);
 
 		this[SetList](list);
 	}
 
+	[UserUpdating](e) {
+		const { response: user } = e.action;
+		const { updatingUsers } = this[Protected];
 
-	[UserUpdating] (e) {
-		const {response:user} = e.action;
-		const {updatingUsers} = this[Protected];
+		this[Protected].updatingUsers = {
+			...updatingUsers,
+			[user.getID()]: true,
+		};
 
-		this[Protected].updatingUsers = {...updatingUsers, [user.getID()]: true };
-
-		this.emitChange({type: USER_UPDATING});
+		this.emitChange({ type: USER_UPDATING });
 	}
 
+	[UserUpdated](e) {
+		const { response: user } = e.action;
+		const { updatingUsers } = this[Protected];
 
-	[UserUpdated] (e) {
-		const {response:user} = e.action;
-		const {updatingUsers} = this[Protected];
+		this[Protected].updatingUsers = {
+			...updatingUsers,
+			[user.getID()]: void 0,
+		};
 
-		this[Protected].updatingUsers = {...updatingUsers, [user.getID()]: void 0};
-
-		this.emitChange({type: USER_UPDATING});
+		this.emitChange({ type: USER_UPDATING });
 	}
 
-
-	[GetManagers] () {
-		const {instructors, editors} = this[Protected];
+	[GetManagers]() {
+		const { instructors, editors } = this[Protected];
 
 		const instructorMap = getUserMap(instructors);
 
@@ -255,38 +262,32 @@ class Store extends StorePrototype {
 		return users;
 	}
 
-
-	[SetList] (permissions) {
+	[SetList](permissions) {
 		this[Protected].permissionsList = permissions;
 
 		this[Protected].loading = false;
 		this[Protected].searching = false;
 
-		this.emitChange({type: LIST_UPDATED});
+		this.emitChange({ type: LIST_UPDATED });
 	}
 
-
-	isUserUpdating (user) {
+	isUserUpdating(user) {
 		return this[Protected].updatingUsers[user.getID()];
 	}
 
-
-	get loading () {
+	get loading() {
 		return this[Protected].loading;
 	}
 
-
-	get error () {
+	get error() {
 		return this[Protected].error;
 	}
 
-
-	get permissionsList () {
+	get permissionsList() {
 		return this[Protected].permissionsList;
 	}
 
-
-	get updatingUsers () {
+	get updatingUsers() {
 		return this[Protected].updatingUsers;
 	}
 }

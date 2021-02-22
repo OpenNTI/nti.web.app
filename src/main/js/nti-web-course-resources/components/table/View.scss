@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .nti-web-course-resources {
 	min-height: 200px;
@@ -11,7 +11,9 @@
 			margin-bottom: 20px;
 			text-transform: uppercase;
 
-			.name, .publish, .last-modified {
+			.name,
+			.publish,
+			.last-modified {
 				font-size: 0.625rem;
 				font-weight: bold;
 				color: var(--secondary-grey);
@@ -26,19 +28,22 @@
 			}
 
 			.sort-default::after {
-				content: " " url(../../../../resources/images/elements/menu-arrow-down-default.png);
+				content: ' '
+					url(../../../../resources/images/elements/menu-arrow-down-default.png);
 				position: relative;
 				top: -1px;
 			}
 
 			.sort-asc::after {
-				content: " " url(../../../../resources/images/elements/menu-arrow-up-active.png);
+				content: ' '
+					url(../../../../resources/images/elements/menu-arrow-up-active.png);
 				position: relative;
 				top: -1px;
 			}
 
 			.sort-desc::after {
-				content: " " url(../../../../resources/images/elements/menu-arrow-down-active.png);
+				content: ' '
+					url(../../../../resources/images/elements/menu-arrow-down-active.png);
 				position: relative;
 				top: -1px;
 			}

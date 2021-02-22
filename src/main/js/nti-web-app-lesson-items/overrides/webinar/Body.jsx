@@ -11,23 +11,26 @@ export default class WebinarBody extends React.Component {
 		item: PropTypes.shape({
 			description: PropTypes.any,
 			icon: PropTypes.string,
-		}).isRequired
-	}
+		}).isRequired,
+	};
 
-	render () {
+	render() {
 		const {
-			item: {
-				description,
-				icon,
-			}
+			item: { description, icon },
 		} = this.props;
 
 		const hasIcon = icon && icon !== 'null'; // NTI-7752
 
 		return (
 			<div className={cx('webinar-body')}>
-				{hasIcon && <div className={cx('image')}><img src={icon} /></div>}
-				{description && <div className={cx('description')}>{description}</div>}
+				{hasIcon && (
+					<div className={cx('image')}>
+						<img src={icon} />
+					</div>
+				)}
+				{description && (
+					<div className={cx('description')}>{description}</div>
+				)}
 			</div>
 		);
 	}

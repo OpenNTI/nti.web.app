@@ -1,36 +1,32 @@
 const Ext = require('@nti/extjs');
 const React = require('react');
 const ReactDOM = require('react-dom');
-const {createDOM} = require('@nti/lib-dom');
-const {Session} = require('@nti/web-session');
-const {wait} = require('@nti/lib-commons');
+const { createDOM } = require('@nti/lib-dom');
+const { Session } = require('@nti/web-session');
+const { wait } = require('@nti/lib-commons');
 
 const ContextStateStore = require('legacy/app/context/StateStore');
 
-
 module.exports = exports = Ext.define('NextThought.util.Analytics', {
-
 	VIEWED_MAP: {},
 
-
-	getContextRoot () {
+	getContextRoot() {
 		return this.getContext().first();
 	},
 
-
-	getContext () {
+	getContext() {
 		var ContextSS = ContextStateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
 			context = [];
 
-		function mapContextObjectToAnalyticContext (contextPart) {
+		function mapContextObjectToAnalyticContext(contextPart) {
 			var contextObject = contextPart && contextPart.obj,
 				contextCmp = contextPart && contextPart.cmp,
 				contextStr = null;
 
 			if (contextObject && contextObject.contentIds) {
 				contextStr = contextObject.contentIds;
-			}else if (contextObject && Ext.isFunction(contextObject.get)) {
+			} else if (contextObject && Ext.isFunction(contextObject.get)) {
 				contextStr = contextObject.get('NTIID');
 			}
 			if (!contextStr) {
@@ -40,24 +36,32 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			return contextStr;
 		}
 
-		context = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContext);
+		context = Ext.Array.map(
+			contextObjects,
+			mapContextObjectToAnalyticContext
+		);
 		context = context.reduce((acc, c) => acc.concat(c), []);
-		context = Ext.Array.filter(context, function (str) {return !Ext.isEmpty(str);});
+		context = Ext.Array.filter(context, function (str) {
+			return !Ext.isEmpty(str);
+		});
 
 		return context || [];
 	},
 
-
-	beginSession () {
+	beginSession() {
 		if (this.mountPoint) {
 			return this.sessionPromise;
 		}
 
-		this.mountPoint = createDOM({'data-analytics-session': true}/*, document.body*/);
+		this.mountPoint = createDOM(
+			{ 'data-analytics-session': true } /*, document.body*/
+		);
 
 		this.sessionPromise = new Promise(fulfill => {
 			ReactDOM.render(
-				React.createElement(Session, {ref: x => this.setSession(x, fulfill) }),
+				React.createElement(Session, {
+					ref: x => this.setSession(x, fulfill),
+				}),
 				this.mountPoint
 			);
 		});
@@ -65,13 +69,11 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		return this.sessionPromise;
 	},
 
-
-	getManager () {
+	getManager() {
 		return this.manager;
 	},
 
-
-	async setSession (session, fulfill) {
+	async setSession(session, fulfill) {
 		if (!session) {
 			return;
 		}
@@ -85,15 +87,14 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		fulfill && fulfill();
 	},
 
-
-	startEvent (resourceId, data) {
+	startEvent(resourceId, data) {
 		if (typeof data === 'string') {
 			data = {
-				type: data
+				type: data,
 			};
 		}
 
-		const {type} = data;
+		const { type } = data;
 		const Event = this.manager[type];
 
 		if (!Event) {
@@ -102,28 +103,26 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 
 		if (!Event.start && !Event.send) {
-			console.error('Attempting to send "%s" event, but it does not have start nor send methods.', type);
+			console.error(
+				'Attempting to send "%s" event, but it does not have start nor send methods.',
+				type
+			);
 			return;
 		}
 
 		const context = this.getContext();
 		const [first] = context;
-		const {course} = data;
+		const { course } = data;
 
 		data = {
 			...data,
 			context: [
-				...(
-					(course && first !== course)
-						? [data.course]
-						: []
-				),
-				...context
+				...(course && first !== course ? [data.course] : []),
+				...context,
 			],
 			user: $AppConfig.username,
 			ResourceId: resourceId,
 		};
-
 
 		this.VIEWED_MAP[resourceId] = true;
 
@@ -134,13 +133,12 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-
-	updateEvent (resourceId, data) {
+	updateEvent(resourceId, data) {
 		if (typeof data === 'string') {
-			data = {type: data};
+			data = { type: data };
 		}
 
-		const {type} = data;
+		const { type } = data;
 		const Event = this.manager[type];
 
 		if (!Event) {
@@ -149,41 +147,43 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 
 		if (!Event.update) {
-			console.error('Attempting to update "%s" event, but it does not have an update method.', type);
+			console.error(
+				'Attempting to update "%s" event, but it does not have an update method.',
+				type
+			);
 			return;
 		}
 
 		Event.update(resourceId, data);
 	},
 
-
-	stopEvent (resourceId, type, data) {
+	stopEvent(resourceId, type, data) {
 		const Event = this.manager[type];
 		if (!Event) {
 			console.error('%o does not resolve to an event.', type);
 			return;
 		}
 		if (!Event.stop) {
-			console.error('Attempting to stop "%s" event, but it does not have a stop() method.', type);
+			console.error(
+				'Attempting to stop "%s" event, but it does not have a stop() method.',
+				type
+			);
 			return;
 		}
 
 		Event.stop(resourceId, data);
 	},
 
-
-	sendEvent (resourceId, data) {
+	sendEvent(resourceId, data) {
 		this.startEvent(resourceId, data);
 	},
-
 
 	/**
 	 * Whether or not we have sent a view event for an ntiid
 	 * @param  {string}	 id Ntiid to check
 	 * @returns {boolean}	[description]
 	 */
-	hasBeenViewed (id) {
+	hasBeenViewed(id) {
 		return this.VIEWED_MAP[id];
-	}
-
+	},
 }).create();

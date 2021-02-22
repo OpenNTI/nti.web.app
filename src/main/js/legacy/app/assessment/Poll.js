@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/model/assessment/UsersCourseInquiryItem');
 require('legacy/model/assessment/UsersCourseInquiryItemResponse');
 require('./results/Poll');
 require('./Question');
-
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 	extend: 'NextThought.app.assessment.Question',
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		if (this.survey) {
 			this.mon(this.survey, {
 				'show-results': this.showResults.bind(this),
-				'hide-results': this.hideResults.bind(this)
+				'hide-results': this.hideResults.bind(this),
 			});
 		}
 	},
@@ -90,10 +90,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		const location = this.reader.getLocation();
 		const bundle = location.currentBundle;
 
-		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually(), bundle)
+		me.AssessmentActions.submitPoll(
+			me.poll,
+			col[me.poll.getId()],
+			me.startTimeStamp,
+			me.canSubmitIndividually(),
+			bundle
+		)
 			.then(function (result) {
 				me.poll.setResults(result.get('Aggregated'));
-				me.updateWithResults(result.get('Submission').get('Submission'));
+				me.updateWithResults(
+					result.get('Submission').get('Submission')
+				);
 			})
 			.catch(function () {
 				alert('Failed to submit your poll');
@@ -104,7 +112,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 	},
 
 	getResults: function () {
-		return this.survey ? this.survey.getResults(this.poll.getId()) : this.poll.getResults();
+		return this.survey
+			? this.survey.getResults(this.poll.getId())
+			: this.poll.getResults();
 	},
 
 	showResults: function () {
@@ -117,14 +127,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		this.addCls('showing-results');
 		this.removeCls('no-data');
 
-		this.add(Ext.widget('assessment-result', {
-			poll: this.poll,
-			survey: this.survey,
-			getResults: this.getResults.bind(this),
-			syncHeight: this.syncElementHeight.bind(this),
-			syncPositioning: this.self.syncPositioningTillStable.bind(this.self),
-			doHideResults: this.hideResults.bind(this)
-		}));
+		this.add(
+			Ext.widget('assessment-result', {
+				poll: this.poll,
+				survey: this.survey,
+				getResults: this.getResults.bind(this),
+				syncHeight: this.syncElementHeight.bind(this),
+				syncPositioning: this.self.syncPositioningTillStable.bind(
+					this.self
+				),
+				doHideResults: this.hideResults.bind(this),
+			})
+		);
 	},
 
 	hideResults: function () {
@@ -144,5 +158,5 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		header.maybeShow();
 
 		this.remove(results, true);
-	}
+	},
 });

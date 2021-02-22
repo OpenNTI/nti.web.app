@@ -15,7 +15,7 @@ module.exports = exports = Ext.define(
 		ui: 'content-card',
 		cls: 'content-card-target-container',
 
-		constructor (config) {
+		constructor(config) {
 			const data = DomUtils.parseDomObject(config.contentElement);
 
 			//the data-href has the adjusted href.
@@ -46,19 +46,19 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		afterRender () {
+		afterRender() {
 			this.callParent(arguments);
 			this.initialY = this.getY();
 			this.viewportMonitor();
 		},
 
-		onDestroy () {
+		onDestroy() {
 			this.reader.getScroll().unlock();
 			Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 			this.callParent(arguments);
 		},
 
-		addIframe (data) {
+		addIframe(data) {
 			const { href } = data;
 			this.add({
 				xtype: 'box',
@@ -67,12 +67,12 @@ module.exports = exports = Ext.define(
 					src: href,
 					data: href,
 					border: 0,
-					frameBorder: 0
-				}
+					frameBorder: 0,
+				},
 			});
 		},
 
-		findLine () {
+		findLine() {
 			const doc = this.contentElement.ownerDocument;
 			const range = doc.createRange();
 
@@ -80,14 +80,14 @@ module.exports = exports = Ext.define(
 			return { range: range, rect: { top: 267 } };
 		},
 
-		setupContentElement () {
+		setupContentElement() {
 			this.callParent(arguments);
 			Ext.fly(this.contentElement).setStyle({
-				margin: '45px 0 0 0'
+				margin: '45px 0 0 0',
 			});
 		},
 
-		syncTop () {
+		syncTop() {
 			if (!this.contentElement) {
 				return;
 			}
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define(
 			return top;
 		},
 
-		viewportMonitor () {
+		viewportMonitor() {
 			try {
 				const margin = 15;
 				const y = this.initialY;
@@ -112,6 +112,6 @@ module.exports = exports = Ext.define(
 			} catch (e) {
 				console.warn(e.message);
 			}
-		}
+		},
 	}
 );

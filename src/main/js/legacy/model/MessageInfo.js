@@ -3,13 +3,12 @@ const Ext = require('@nti/extjs');
 require('legacy/mixins/ModelWithBodyContent');
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.messageinfo',
 
 	mixins: {
-		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent',
 	},
 
 	addMimeTypeToRoute: true,
@@ -20,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'body', type: 'auto', defaultValue: [''] },
 		{ name: 'channel', type: 'string' },
 		{ name: 'recipients', type: 'auto' },
-		{ name: 'sharedWith', type: 'auto'}
+		{ name: 'sharedWith', type: 'auto' },
 	],
 
 	hasBeenModerated: function () {
@@ -29,5 +28,5 @@ module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 
 	hasBeenFlagged: function () {
 		return Boolean(this.getLink('flag.metoo'));
-	}
+	},
 });

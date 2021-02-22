@@ -3,7 +3,6 @@ require('legacy/common/window/Window');
 require('legacy/app/account/Header');
 require('./Main');
 
-
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.embedvideo-window',
@@ -20,11 +19,11 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 
 	layout: {
 		type: 'vbox',
-		align: 'stretch'
+		align: 'stretch',
 	},
 
 	config: {
-		url: ''
+		url: '',
 	},
 
 	items: [
@@ -33,9 +32,10 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 			xtype: 'account-header-view',
 			noIcon: true,
 			title: 'Embed video',
-			detail: 'Just give us the url of the video you want to embed, and we\'ll figure out the rest.'
+			detail:
+				"Just give us the url of the video you want to embed, and we'll figure out the rest.",
 		},
-		{xtype: 'embedvideo-main-view'}
+		{ xtype: 'embedvideo-main-view' },
 	],
 
 	embed: function () {
@@ -47,9 +47,12 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 				Ext.callback(this.onEmbed, this, [val]);
 			}
 			this.close();
+		} else {
+			main.setError({
+				field: 'embed',
+				message:
+					'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url.',
+			});
 		}
-		else {
-			main.setError({field: 'embed', message: 'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url.'});
-		}
-	}
+	},
 });

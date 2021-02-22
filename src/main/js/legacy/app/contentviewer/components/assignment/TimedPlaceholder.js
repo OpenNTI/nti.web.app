@@ -2,118 +2,182 @@ const Ext = require('@nti/extjs');
 
 const TimeUtils = require('legacy/util/Time');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.contentviewer.components.assignment.TimedPlaceholder',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.assignment-timedplaceholder',
 
-module.exports = exports = Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {
-	extend: 'Ext.Component',
-	alias: 'widget.assignment-timedplaceholder',
+		cls: 'timed-placeholder',
 
-	cls: 'timed-placeholder',
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'header', html: '{title}' },
+			{
+				cls: 'fake-questions',
+				cn: [
+					{
+						cls: 'question',
+						cn: [
+							{ cls: 'prompt', cn: [{ cls: 'line' }] },
+							{
+								cls: 'answer-container',
+								cn: [
+									{
+										cls: 'answers',
+										cn: [
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+										],
+									},
+								],
+							},
+						],
+					},
+					{
+						cls: 'question',
+						cn: [
+							{
+								cls: 'prompt',
+								cn: [
+									{ cls: 'line' },
+									{ cls: 'line' },
+									{ cls: 'line long' },
+								],
+							},
+							{
+								cls: 'answer-container',
+								cn: [
+									{
+										cls: 'answers',
+										cn: [
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+										],
+									},
+								],
+							},
+						],
+					},
+					{
+						cls: 'question',
+						cn: [
+							{
+								cls: 'prompt',
+								cn: [{ cls: 'line' }, { cls: 'line' }],
+							},
+							{
+								cls: 'answer-container',
+								cn: [
+									{
+										cls: 'answers',
+										cn: [
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+										],
+									},
+								],
+							},
+						],
+					},
+					{
+						cls: 'question',
+						cn: [
+							{ cls: 'prompt', cn: [{ cls: 'line long' }] },
+							{
+								cls: 'answer-container',
+								cn: [
+									{
+										cls: 'answers',
+										cn: [
+											{ cls: 'answer' },
+											{ cls: 'answer' },
+										],
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				cls: 'nti-alert',
+				cn: [
+					{
+						cls: 'alert-container',
+						cn: [
+							{
+								cls: 'message-container',
+								cn: [
+									{ cls: 'title', html: 'Timed Assignment' },
+									{
+										cls: 'message',
+										cn: [
+											'You have ',
+											{
+												tag: 'span',
+												cls: 'bold',
+												html: '{time} ',
+											},
+											'to complete this Timed Assignment. ',
+											{
+												tag: 'span',
+												cls: 'red',
+												html:
+													"Once you've started, the timer will not stop.",
+											},
+										],
+									},
+								],
+							},
+							{
+								cls: 'button-body',
+								cn: [
+									{
+										cls: 'button primary start',
+										html: 'Start',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', html: '{title}'},
-		{cls: 'fake-questions', cn: [
-			{cls: 'question', cn: [
-				{cls: 'prompt', cn: [
-					{cls: 'line'}
-				]},
-				{cls: 'answer-container', cn: [
-					{cls: 'answers', cn: [
-						{cls: 'answer'},
-						{cls: 'answer'}
-					]}
-				]}
-			]},
-			{cls: 'question', cn: [
-				{cls: 'prompt', cn: [
-					{cls: 'line'},
-					{cls: 'line'},
-					{cls: 'line long'}
-				]},
-				{cls: 'answer-container', cn: [
-					{cls: 'answers', cn: [
-						{cls: 'answer'},
-						{cls: 'answer'},
-						{cls: 'answer'},
-						{cls: 'answer'}
-					]}
-				]}
-			]},
-			{cls: 'question', cn: [
-				{cls: 'prompt', cn: [
-					{cls: 'line'},
-					{cls: 'line'}
-				]},
-				{cls: 'answer-container', cn: [
-					{cls: 'answers', cn: [
-						{cls: 'answer'},
-						{cls: 'answer'},
-						{cls: 'answer'}
-					]}
-				]}
-			]},
-			{cls: 'question', cn: [
-				{cls: 'prompt', cn: [
-					{cls: 'line long'}
-				]},
-				{cls: 'answer-container', cn: [
-					{cls: 'answers', cn: [
-						{cls: 'answer'},
-						{cls: 'answer'}
-					]}
-				]}
-			]}
-		]},
-		{cls: 'nti-alert', cn: [
-			{cls: 'alert-container', cn: [
-				{cls: 'message-container', cn: [
-					{cls: 'title', html: 'Timed Assignment'},
-					{cls: 'message', cn: [
-						'You have ',
-						{tag: 'span', cls: 'bold', html: '{time} '},
-						'to complete this Timed Assignment. ',
-						{tag: 'span', cls: 'red', html: 'Once you\'ve started, the timer will not stop.'}
-					]}
-				]},
-				{cls: 'button-body', cn: [
-					{cls: 'button primary start', html: 'Start'}
-				]}
-			]}
-		]}
-	]),
+		renderSelectors: {
+			startEl: '.button.start',
+		},
 
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		startEl: '.button.start'
-	},
+			var title = this.assignment.get('title'),
+				maxTime = this.assignment.getMaxTime();
 
+			this.renderData = Ext.apply(this.renderData || {}, {
+				title: title,
+				time: TimeUtils.getNaturalDuration(maxTime, 2),
+			});
+		},
 
-	beforeRender: function () {
-		this.callParent(arguments);
+		afterRender: function () {
+			this.callParent(arguments);
 
-		var title = this.assignment.get('title'),
-			maxTime = this.assignment.getMaxTime();
+			var height = Ext.Element.getViewportHeight();
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: title,
-			time: TimeUtils.getNaturalDuration(maxTime, 2)
-		});
-	},
+			this.el.setHeight(height - 100);
 
+			this.mon(this.startEl, 'click', 'start');
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
-
-		var height = Ext.Element.getViewportHeight();
-
-		this.el.setHeight(height - 100);
-
-		this.mon(this.startEl, 'click', 'start');
-	},
-
-
-	start: function () {
-		this.assignment.start()
-			.then(this.startAssignment.bind(this))
-			.catch(this.startFailed.bind(this));
+		start: function () {
+			this.assignment
+				.start()
+				.then(this.startAssignment.bind(this))
+				.catch(this.startFailed.bind(this));
+		},
 	}
-});
+);

@@ -1,9 +1,8 @@
 require('./Redeem.scss');
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 require('legacy/common/form/Form');
-
 
 module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	extend: 'Ext.container.Container',
@@ -13,25 +12,32 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	layout: 'none',
 	items: [],
 	schema: [
-		{type: 'text', required: true, cls: 'code', name: 'invitation_codes', placeholder: 'Enter your redemption code'},
-		{type: 'submit', cls: 'reedem', text: 'Redeem'}
+		{
+			type: 'text',
+			required: true,
+			cls: 'code',
+			name: 'invitation_codes',
+			placeholder: 'Enter your redemption code',
+		},
+		{ type: 'submit', cls: 'reedem', text: 'Redeem' },
 	],
 
 	renderSelectors: {
-		errorLabel: '.error-label'
+		errorLabel: '.error-label',
 	},
 
-	initComponent () {
+	initComponent() {
 		this.callParent(arguments);
 
 		const collection = Service.getCollection('Invitations', 'Invitations');
-		const invite = collection && Service.getLinkFrom(collection.Links, 'accept-course-invitations');
-
+		const invite =
+			collection &&
+			Service.getLinkFrom(collection.Links, 'accept-course-invitations');
 
 		this.label = this.add({
 			xtype: 'label',
 			cls: 'redeemLabel',
-			text: 'Redeem'
+			text: 'Redeem',
 		});
 
 		this.form = this.add({
@@ -41,34 +47,33 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 			onSuccess: this.onSuccess,
 			onError: this.onError.bind(this),
 			onFormChange: this.onFormChange.bind(this),
-			noFocus: true
+			noFocus: true,
 		});
 
 		this.errorContainer = this.add({
 			xtype: 'box',
-			autoEl: {cls: 'error-container', cn: [
-				{tag: 'label', cls: 'error-label', html: ''}
-			]}
+			autoEl: {
+				cls: 'error-container',
+				cn: [{ tag: 'label', cls: 'error-label', html: '' }],
+			},
 		});
 
 		this.errorContainer.hide();
 	},
 
-
-	afterRender () {
+	afterRender() {
 		this.callParent(arguments);
 
-		if(this.code) {
+		if (this.code) {
 			this.form.setValue('invitation_codes', this.code);
 			this.form.enableSubmission();
-			wait()
-				.then(() => this.form.focusField('invitation_codes'));
+			wait().then(() => this.form.focusField('invitation_codes'));
 		}
 	},
 
-	onSuccess () {},
+	onSuccess() {},
 
-	onError (error) {
+	onError(error) {
 		try {
 			let response = error && JSON.parse(error.responseText),
 				errorMessage = response.message || 'Error with the code.';
@@ -76,8 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 			this.errorLabel.setHTML(errorMessage);
 			this.errorContainer.show();
 			this.form.addCls('error');
-		}
-		catch(e) {
+		} catch (e) {
 			// not always guaranteed JSON responseText, so if that errors out
 			// then at least show some kind of generic error message instead of
 			// nothing
@@ -87,13 +91,14 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		}
 	},
 
-	onFormChange (e) {
-		if(!e) { return; }
+	onFormChange(e) {
+		if (!e) {
+			return;
+		}
 
-		if(e.type === 'keyup' || e.type === 'keydown') {
+		if (e.type === 'keyup' || e.type === 'keydown') {
 			this.errorContainer.hide();
 			this.form.removeCls('error');
 		}
-	}
-
+	},
 });

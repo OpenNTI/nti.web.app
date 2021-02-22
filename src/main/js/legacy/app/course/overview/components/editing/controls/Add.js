@@ -2,16 +2,19 @@ const Ext = require('@nti/extjs');
 
 require('./Edit');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.controls.Add',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.controls.Edit',
+		alias: 'widget.overview-editing-controls-add',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Add', {
-	extend: 'NextThought.app.course.overview.components.editing.controls.Edit',
-	alias: 'widget.overview-editing-controls-add',
+		promptName: 'overview-creation',
 
-	promptName: 'overview-creation',
+		name: 'Add',
 
-	name: 'Add',
+		cls: 'nt-button add',
 
-	cls: 'nt-button add',
-
-	renderTpl: '{name}'
-});
+		renderTpl: '{name}',
+	}
+);

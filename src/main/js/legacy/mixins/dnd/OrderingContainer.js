@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');
@@ -7,252 +7,278 @@ const Actions = require('legacy/app/dnd/Actions');
 
 require('./Dropzone');
 
-module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer', {
-	mixins: {
-		Dropzone: 'NextThought.mixins.dnd.Dropzone'
-	},
+module.exports = exports = Ext.define(
+	'NextThought.mixins.dnd.OrderingContainer',
+	{
+		mixins: {
+			Dropzone: 'NextThought.mixins.dnd.Dropzone',
+		},
 
-	statics: {
-		hasMoveInfo: function (dataTransfer) {
-			return dataTransfer.containsType(MoveInfo.mimeType);
-		}
-	},
+		statics: {
+			hasMoveInfo: function (dataTransfer) {
+				return dataTransfer.containsType(MoveInfo.mimeType);
+			},
+		},
 
-	initOrdering: function () {
-	},
+		initOrdering: function () {},
 
-	enableOrderingContainer: function () {
-		this.enableDropzone();
+		enableOrderingContainer: function () {
+			this.enableDropzone();
 
-		var items = this.getOrderingItems();
+			var items = this.getOrderingItems();
 
-		items.forEach(this.enableDraggingOnItem.bind(this));
-	},
+			items.forEach(this.enableDraggingOnItem.bind(this));
+		},
 
-	disableOrderingContainer: function () {
-		this.disableDropzone();
+		disableOrderingContainer: function () {
+			this.disableDropzone();
 
-		var items = this.getOrderingItems();
+			var items = this.getOrderingItems();
 
-		items.forEach(this.disableDraggingOnItem.bind(this));
-	},
+			items.forEach(this.disableDraggingOnItem.bind(this));
+		},
 
-	getOrderingItems: function () {
-		return [];
-	},
+		getOrderingItems: function () {
+			return [];
+		},
 
-	enableDraggingOnItem: function (item, index) {
-		if (item && item.enableOrdering) {
-			item.enableOrdering(index, this.onItemDragStart.bind(this), this.onItemDragEnd.bind(this));
-		}
-	},
+		enableDraggingOnItem: function (item, index) {
+			if (item && item.enableOrdering) {
+				item.enableOrdering(
+					index,
+					this.onItemDragStart.bind(this),
+					this.onItemDragEnd.bind(this)
+				);
+			}
+		},
 
-	disableDraggingOnItem: function (item) {
-		if (item && item.disableOrdering) {
-			item.disableOrdering();
-		}
-	},
+		disableDraggingOnItem: function (item) {
+			if (item && item.disableOrdering) {
+				item.disableOrdering();
+			}
+		},
 
-	getInfoForCoordinates: function (x, y, styles) {
-		var items = this.getOrderingItems(),
-			dropzoneRect = this.getDropzoneBoundingClientRect(),
-			dropzoneWidth = dropzoneRect.width,
-			info, i, current, isBefore;
+		getInfoForCoordinates: function (x, y, styles) {
+			var items = this.getOrderingItems(),
+				dropzoneRect = this.getDropzoneBoundingClientRect(),
+				dropzoneWidth = dropzoneRect.width,
+				info,
+				i,
+				current,
+				isBefore;
 
-		x = x - dropzoneRect.left;
-		y = y - dropzoneRect.top;
+			x = x - dropzoneRect.left;
+			y = y - dropzoneRect.top;
 
-		items = items.filter(function (item) {
-			return (!item.Draggable || !item.Draggable.isDragging) && item.isOrderingItem;
-		});
+			items = items.filter(function (item) {
+				return (
+					(!item.Draggable || !item.Draggable.isDragging) &&
+					item.isOrderingItem
+				);
+			});
 
-		for (i = 0; i < items.length; i++) {
-			// previous = items[i - 1];
-			current = items[i];
+			for (i = 0; i < items.length; i++) {
+				// previous = items[i - 1];
+				current = items[i];
 
-			if (styles && styles.side) {
-				if (current.isFullWidth(dropzoneWidth)) {
-					isBefore = current.isPointAbove(x, y);
+				if (styles && styles.side) {
+					if (current.isFullWidth(dropzoneWidth)) {
+						isBefore = current.isPointAbove(x, y);
+					} else {
+						isBefore = current.isPointLeft(x, y);
+					}
 				} else {
-					isBefore = current.isPointLeft(x, y);
+					if (
+						current.isPointContainedVertically(x, y) &&
+						!current.isFullWidth(dropzoneWidth)
+					) {
+						isBefore = current.isPointLeft(x, y);
+					} else if (current.isFullWidth(dropzoneWidth)) {
+						isBefore = current.isPointAbove(x, y);
+					} else {
+						isBefore = current.isPointBefore(x, y);
+					}
 				}
-			} else {
-				if (current.isPointContainedVertically(x, y) && !current.isFullWidth(dropzoneWidth)) {
-					isBefore = current.isPointLeft(x, y);
-				} else if (current.isFullWidth(dropzoneWidth)) {
-					isBefore = current.isPointAbove(x, y);
-				} else {
-					isBefore = current.isPointBefore(x, y);
+
+				if (isBefore) {
+					info = {
+						index: i,
+						before: current.getDragTarget(),
+					};
+				}
+
+				if (info) {
+					break;
 				}
 			}
 
-			if (isBefore) {
+			if (!info) {
 				info = {
-					index: i,
-					before: current.getDragTarget()
+					index: items.length,
+					append: true,
 				};
 			}
 
-			if (info) {
-				break;
+			return info;
+		},
+
+		__getDropPlaceholder: function () {
+			var placeholder = document.querySelector('.dnd-drop-placeholder');
+
+			if (!placeholder) {
+				placeholder = document.createElement('div');
+				placeholder.classList.add('dnd-drop-placeholder');
 			}
-		}
 
-		if (!info) {
-			info = {
-				index: items.length,
-				append: true
-			};
-		}
+			return placeholder;
+		},
 
+		__removeDropPlaceholder: function () {
+			var placeholder = document.querySelector('.dnd-drop-placeholder');
 
-		return info;
-	},
-
-	__getDropPlaceholder: function () {
-		var placeholder = document.querySelector('.dnd-drop-placeholder');
-
-		if (!placeholder) {
-			placeholder = document.createElement('div');
-			placeholder.classList.add('dnd-drop-placeholder');
-		}
-
-		return placeholder;
-	},
-
-	__removeDropPlaceholder: function () {
-		var placeholder = document.querySelector('.dnd-drop-placeholder');
-
-		if (placeholder) {
-			placeholder.remove();
-		}
-	},
-
-	__getSavePlaceholder: function () {
-		var placeholder = document.querySelector('.dnd-save-placeholder');
-
-		if (!placeholder) {
-			placeholder = document.createElement('div');
-			placeholder.classList.add('dnd-save-placeholder');
-			placeholder.innerHTML = '<span>Saving</span>';
-		}
-
-		return placeholder;
-	},
-
-	__removeSavePlaceholder: function () {
-		var placeholder = document.querySelector('.dnd-save-placeholder');
-
-		if (placeholder) {
-			placeholder.remove();
-		}
-	},
-
-	onItemDragStart: function () {
-		this.__getDropPlaceholder();
-	},
-
-	onItemDragEnd: function () {
-		this.__removeDropPlaceholder();
-	},
-
-	onDragStart: function () {
-		var items = this.getOrderingItems(),
-			rect = this.getDropzoneBoundingClientRect();
-
-		items.forEach(function (item) {
-			if (item.lockRectRelative) {
-				item.lockRectRelative(rect);
+			if (placeholder) {
+				placeholder.remove();
 			}
-		});
-	},
+		},
 
-	onDragEnd: function () {
-		var items = this.getOrderingItems();
+		__getSavePlaceholder: function () {
+			var placeholder = document.querySelector('.dnd-save-placeholder');
 
-		items.forEach(function (item) {
-			if (item.unlockRect) {
-				item.unlockRect();
+			if (!placeholder) {
+				placeholder = document.createElement('div');
+				placeholder.classList.add('dnd-save-placeholder');
+				placeholder.innerHTML = '<span>Saving</span>';
 			}
-		});
-	},
 
-	onDragLeave: function () {
-		this.__removeDropPlaceholder();
-	},
+			return placeholder;
+		},
 
-	__showPlaceholderByInfo: function (placeholder, info, styles) {
-		var target = this.getDropzoneTarget();
+		__removeSavePlaceholder: function () {
+			var placeholder = document.querySelector('.dnd-save-placeholder');
 
-		if (info.append && target.lastChild !== placeholder) {
-			target.appendChild(placeholder);
-		} else if (info.before && info.before.previousSibling !== placeholder) {
-			target.insertBefore(placeholder, info.before);
-		}
-
-		if (styles) {
-			placeholder.style.height = styles.height ? styles.height + 'px' : null;
-			placeholder.style.width = styles.width ? styles.width + 'px' : null;
-			placeholder.style['float'] = styles.side ? styles.side : null;
-			let has = placeholder.classList.contains('column');
-
-			if (styles.side && !has) {
-				placeholder.classList.add('column');
-			} else if (has) {
-				placeholder.classList.remove('column');
+			if (placeholder) {
+				placeholder.remove();
 			}
-		}
+		},
 
-		return placeholder;
-	},
+		onItemDragStart: function () {
+			this.__getDropPlaceholder();
+		},
 
-	onDragOver: function (e, dataTransfer) {
-		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
-			this.__removePlaceholder();
-			return;
-
-		}
-
-		var dndActions = Actions.create(),
-			placeholderStyles = dndActions.getPlaceholderStyles(),
-			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
-			placeholder = this.__getDropPlaceholder();
-
-
-		this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
-	},
-
-	onDragDrop: function (e, dataTransfer) {
-		var dndActions = Actions.create(),
-			placeholderStyles = dndActions.getPlaceholderStyles(),
-			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
-			handlers = this.getHandlersForDataTransfer(dataTransfer),
-			handler = handlers[0], //TODO: think about what to do if there is more than one
-			data = handler && dataTransfer.findDataFor(handler.key),
-			moveInfo = dataTransfer.findDataFor(MoveInfo.mimeType),
-			move, placeholder, minWait = Globals.WAIT_TIMES.SHORT;
-
-		if (!info || !handler || !handler.onDrop || !data) {
-			dndActions.onNoDropHandler();
+		onItemDragEnd: function () {
 			this.__removeDropPlaceholder();
-			return;
-		}
+		},
 
-		placeholder = this.__getSavePlaceholder();
-		this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
-		this.__removeDropPlaceholder();
+		onDragStart: function () {
+			var items = this.getOrderingItems(),
+				rect = this.getDropzoneBoundingClientRect();
 
-		move = handler.onDrop(data, info.index, moveInfo);
+			items.forEach(function (item) {
+				if (item.lockRectRelative) {
+					item.lockRectRelative(rect);
+				}
+			});
+		},
 
-		if (!(move instanceof Promise)) {
-			move = wait(minWait)
-				.then(function () {
+		onDragEnd: function () {
+			var items = this.getOrderingItems();
+
+			items.forEach(function (item) {
+				if (item.unlockRect) {
+					item.unlockRect();
+				}
+			});
+		},
+
+		onDragLeave: function () {
+			this.__removeDropPlaceholder();
+		},
+
+		__showPlaceholderByInfo: function (placeholder, info, styles) {
+			var target = this.getDropzoneTarget();
+
+			if (info.append && target.lastChild !== placeholder) {
+				target.appendChild(placeholder);
+			} else if (
+				info.before &&
+				info.before.previousSibling !== placeholder
+			) {
+				target.insertBefore(placeholder, info.before);
+			}
+
+			if (styles) {
+				placeholder.style.height = styles.height
+					? styles.height + 'px'
+					: null;
+				placeholder.style.width = styles.width
+					? styles.width + 'px'
+					: null;
+				placeholder.style['float'] = styles.side ? styles.side : null;
+				let has = placeholder.classList.contains('column');
+
+				if (styles.side && !has) {
+					placeholder.classList.add('column');
+				} else if (has) {
+					placeholder.classList.remove('column');
+				}
+			}
+
+			return placeholder;
+		},
+
+		onDragOver: function (e, dataTransfer) {
+			if (!this.hasHandlerForDataTransfer(dataTransfer)) {
+				this.__removePlaceholder();
+				return;
+			}
+
+			var dndActions = Actions.create(),
+				placeholderStyles = dndActions.getPlaceholderStyles(),
+				info = this.getInfoForCoordinates(
+					e.clientX,
+					e.clientY,
+					placeholderStyles
+				),
+				placeholder = this.__getDropPlaceholder();
+
+			this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
+		},
+
+		onDragDrop: function (e, dataTransfer) {
+			var dndActions = Actions.create(),
+				placeholderStyles = dndActions.getPlaceholderStyles(),
+				info = this.getInfoForCoordinates(
+					e.clientX,
+					e.clientY,
+					placeholderStyles
+				),
+				handlers = this.getHandlersForDataTransfer(dataTransfer),
+				handler = handlers[0], //TODO: think about what to do if there is more than one
+				data = handler && dataTransfer.findDataFor(handler.key),
+				moveInfo = dataTransfer.findDataFor(MoveInfo.mimeType),
+				move,
+				placeholder,
+				minWait = Globals.WAIT_TIMES.SHORT;
+
+			if (!info || !handler || !handler.onDrop || !data) {
+				dndActions.onNoDropHandler();
+				this.__removeDropPlaceholder();
+				return;
+			}
+
+			placeholder = this.__getSavePlaceholder();
+			this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
+			this.__removeDropPlaceholder();
+
+			move = handler.onDrop(data, info.index, moveInfo);
+
+			if (!(move instanceof Promise)) {
+				move = wait(minWait).then(function () {
 					return move;
 				});
-		}
+			}
 
-		move
-			.catch(function (reason) {
+			move.catch(function (reason) {
 				console.error('Failed to move: ', reason);
 
 				placeholder.innerHTML = '<span>Error</span>';
@@ -261,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 				dndActions.onDropFail();
 
 				return wait(Globals.LONG);
-			})
-			.always(this.__removeSavePlaceholder.bind(this));
+			}).always(this.__removeSavePlaceholder.bind(this));
+		},
 	}
-});
+);

@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Prompt} from '@nti/web-commons';
-import {Content} from '@nti/web-course';
-import {decodeFromURI} from '@nti/lib-ntiids';
-import {LinkTo} from '@nti/web-routing';
+import { Prompt } from '@nti/web-commons';
+import { Content } from '@nti/web-course';
+import { decodeFromURI } from '@nti/lib-ntiids';
+import { LinkTo } from '@nti/web-routing';
 
 import Styles from './Modal.css';
 import overrides from './overrides';
 
 const cx = classnames.bind(Styles);
 
-function pathToSelection (route) {
-	if (!route) { return null; }
+function pathToSelection(route) {
+	if (!route) {
+		return null;
+	}
 
 	const [path] = route.split('#');
 
@@ -27,13 +29,17 @@ function pathToSelection (route) {
 			} else if (part === 'object') {
 				break;
 			} else if (part) {
-				if (!started) { return null; }
+				if (!started) {
+					return null;
+				}
 
 				selection.push(decodeFromURI(part));
 			}
 		}
 
-		if (selection.length === 0) { return null;}
+		if (selection.length === 0) {
+			return null;
+		}
 
 		return selection;
 	} catch (e) {
@@ -42,7 +48,7 @@ function pathToSelection (route) {
 }
 
 export default class NTIWebAppLessonItems extends React.Component {
-	static pathToSelection (path) {
+	static pathToSelection(path) {
 		return pathToSelection(path);
 	}
 
@@ -55,49 +61,46 @@ export default class NTIWebAppLessonItems extends React.Component {
 		handleNavigation: PropTypes.func,
 		firstSelection: PropTypes.bool,
 		activeObjectId: PropTypes.string,
-		activeHash: PropTypes.string
-	}
+		activeHash: PropTypes.string,
+	};
 
 	static contextTypes = {
-		router: PropTypes.object
-	}
+		router: PropTypes.object,
+	};
 
-	state = {}
+	state = {};
 
-	componentDidMount () {
+	componentDidMount() {
 		this.setup();
 	}
 
-	componentDidUpdate (prevProps) {
-		const {path} = this.props;
-		const {path:prevPath} = prevProps;
+	componentDidUpdate(prevProps) {
+		const { path } = this.props;
+		const { path: prevPath } = prevProps;
 
 		if (path !== prevPath) {
 			this.setup();
 		}
 	}
 
-
-	setup () {
-		const {path} = this.props;
+	setup() {
+		const { path } = this.props;
 
 		this.setState({
-			selection: pathToSelection(path)
+			selection: pathToSelection(path),
 		});
 	}
 
-
 	onBeforeDismiss = () => {
-		const {dismissPath} = this.props;
-		const {router} = this.context;
+		const { dismissPath } = this.props;
+		const { router } = this.context;
 
 		if (dismissPath && router) {
 			LinkTo.Path.routeTo(router, dismissPath);
 		}
-	}
+	};
 
-
-	render () {
+	render() {
 		const {
 			course,
 			lesson,
@@ -106,9 +109,9 @@ export default class NTIWebAppLessonItems extends React.Component {
 			handleNavigation,
 			firstSelection,
 			activeObjectId,
-			activeHash
+			activeHash,
 		} = this.props;
-		const {selection} = this.state;
+		const { selection } = this.state;
 
 		if (!selection || !course || !lesson) {
 			return null;
@@ -128,9 +131,10 @@ export default class NTIWebAppLessonItems extends React.Component {
 					requiredOnly={requiredOnly}
 					handleNavigation={handleNavigation}
 					firstSelection={firstSelection}
-					activeObjectId={activeObjectId ? decodeFromURI(activeObjectId) : null}
+					activeObjectId={
+						activeObjectId ? decodeFromURI(activeObjectId) : null
+					}
 					activeHash={activeHash}
-
 					dismissPath={dismissPath}
 					overrides={overrides}
 				/>

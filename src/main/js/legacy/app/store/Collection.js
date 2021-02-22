@@ -4,7 +4,6 @@ const AnnotationUtils = require('legacy/util/Annotations');
 
 require('legacy/common/components/Collection');
 
-
 module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	extend: 'NextThought.common.components.Collection',
 	alias: 'widget.purchasable-collection',
@@ -14,31 +13,47 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	cls: 'purchasables',
 	rowSpan: 3,
 
-	ellipsis: Ext.DomHelper.createTemplate({cls: 'ellipsis', cn: [{},{},{}]}).compile(),
+	ellipsis: Ext.DomHelper.createTemplate({
+		cls: 'ellipsis',
+		cn: [{}, {}, {}],
+	}).compile(),
 
 	tpl: Ext.DomHelper.markup([
-		{ cls: 'stratum collection-name', cn: [
-			'{name}', {cls: 'count', html: '{count}'}
-		]},
-		{ cls: 'grid', cn: { tag: 'tpl', 'for': 'items', cn: ['{entry}']} }
+		{
+			cls: 'stratum collection-name',
+			cn: ['{name}', { cls: 'count', html: '{count}' }],
+		},
+		{ cls: 'grid', cn: { tag: 'tpl', for: 'items', cn: ['{entry}'] } },
 	]),
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} purchasable item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
-		'data-qtip': '{Title:htmlEncode}', cn: [
-			{ cls: 'cover', cn: [
-				{tag: 'img', src: '{Icon}'}
-			]},
-			{ cls: 'meta', cn: [
-				{ cls: 'title', html: '{Title}' },
-				{ cls: 'author', html: '{Provider}' },
-				{tag: 'tpl', 'if': 'Amount', cn: { cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}},
-				{ cls: 'description', html: '{Description}'},
-				{tag: 'tpl', 'if': 'HasHistory', cn: [
-					{ cls: 'history', html: 'Purchase History'}
-				]}
-			]}
-		]
+		cls:
+			'{inGrid} purchasable item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
+		'data-qtip': '{Title:htmlEncode}',
+		cn: [
+			{ cls: 'cover', cn: [{ tag: 'img', src: '{Icon}' }] },
+			{
+				cls: 'meta',
+				cn: [
+					{ cls: 'title', html: '{Title}' },
+					{ cls: 'author', html: '{Provider}' },
+					{
+						tag: 'tpl',
+						if: 'Amount',
+						cn: {
+							cls: 'price',
+							html: '{Amount:ntiCurrency(values.Currency)}',
+						},
+					},
+					{ cls: 'description', html: '{Description}' },
+					{
+						tag: 'tpl',
+						if: 'HasHistory',
+						cn: [{ cls: 'history', html: 'Purchase History' }],
+					},
+				],
+			},
+		],
 	}),
 
 	afterRender: function () {
@@ -94,12 +109,15 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		return true;
 	},
 
-
 	onItemUpdate: function (node) {
 		var desc = Ext.fly(node).down('.description', true),
 			prev = Ext.fly(node).down('.history', true),
-			pos, e, texts, bottom,
-			marker = 'This will need to be optimized, bute force is slow. Moving ellipsis took:';
+			pos,
+			e,
+			texts,
+			bottom,
+			marker =
+				'This will need to be optimized, bute force is slow. Moving ellipsis took:';
 
 		if (!desc || !Ext.fly(desc).isVisible(true)) {
 			return;
@@ -108,7 +126,10 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		pos = Ext.fly(desc).getPositioning(true);
 		pos.right = pos.left;
 		pos.position = 'absolute';
-		pos.bottom = (parseInt(pos.right, 10) + ((prev && Ext.fly(prev).getHeight()) || 0)) + 'px';
+		pos.bottom =
+			parseInt(pos.right, 10) +
+			((prev && Ext.fly(prev).getHeight()) || 0) +
+			'px';
 
 		Ext.fly(desc).setPositioning(pos);
 
@@ -117,10 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		//	return;
 		//}
 
-
-
-		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.right, 10);//margin
-
+		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.right, 10); //margin
 
 		/*
 		TODO: Make this MUCH more efficient.
@@ -156,16 +174,20 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		console.timeEnd(marker);
 
 		//Reset the bottom position to auto.
-		pos.bottom = 'auto';//now let the bottom auto flow
+		pos.bottom = 'auto'; //now let the bottom auto flow
 		Ext.fly(desc).setPositioning(pos);
 	},
 
-
 	detectOverflow: function () {
 		console.log('Detecting overflow...');
-		Ext.each(this.getNodes(), function (v) {this.onItemUpdate(v);},this);
+		Ext.each(
+			this.getNodes(),
+			function (v) {
+				this.onItemUpdate(v);
+			},
+			this
+		);
 	},
-
 
 	refresh: function () {
 		this.callParent(arguments);
@@ -178,5 +200,5 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		if (n) {
 			this.onItemUpdate(n);
 		}
-	}
+	},
 });

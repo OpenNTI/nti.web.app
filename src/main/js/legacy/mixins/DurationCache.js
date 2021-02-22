@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 module.exports = exports = Ext.define('NextThought.mixins.DurationCache', {
 	cacheFor: function (key, value, duration) {
@@ -9,8 +9,7 @@ module.exports = exports = Ext.define('NextThought.mixins.DurationCache', {
 			this.__durationCache[key] = value;
 
 			if (duration < Infinity) {
-				wait(duration)
-					.then(this.removeFromCache.bind(this, key));
+				wait(duration).then(this.removeFromCache.bind(this, key));
 			}
 		}
 
@@ -18,13 +17,12 @@ module.exports = exports = Ext.define('NextThought.mixins.DurationCache', {
 	},
 
 	cacheForShortPeriod: function (key, value) {
-		return this.cacheFor(key, value, 300000);//300 seconds
+		return this.cacheFor(key, value, 300000); //300 seconds
 	},
 
 	cacheForever: function (key, value) {
 		return this.cacheFor(key, value, Infinity);
 	},
-
 
 	getFromCache: function (key) {
 		this.__durationCache = this.__durationCache || {};
@@ -32,10 +30,9 @@ module.exports = exports = Ext.define('NextThought.mixins.DurationCache', {
 		return this.__durationCache[key];
 	},
 
-
 	removeFromCache: function (key) {
 		this.durationCache = this.__durationCache || {};
 
 		delete this.__durationCache[key];
-	}
+	},
 });

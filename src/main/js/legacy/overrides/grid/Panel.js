@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.overrides.grid.Panel', {
 	override: 'Ext.grid.Panel',
 
@@ -25,19 +24,19 @@ module.exports = exports = Ext.define('NextThought.overrides.grid.Panel', {
 			ui: 'nt',
 			border: false,
 			sortable: true,
-			menuDisabled: true
-		}
+			menuDisabled: true,
+		},
 	},
 
 	initComponent: function () {
 		var headerCtCfg = this.columns;
 		if (Ext.isArray(headerCtCfg)) {
 			headerCtCfg = {
-				items: headerCtCfg
+				items: headerCtCfg,
 			};
 		}
 		this.columns = Ext.merge({}, this.columnDefaults, headerCtCfg);
 
 		this.callParent(arguments);
-	}
+	},
 });

@@ -4,15 +4,14 @@ const Commons = require('@nti/web-commons');
 const SlideDeck = require('./SlideDeck');
 
 const lazyResolve = {
-	get ReaderPanel () {
+	get ReaderPanel() {
 		delete this.ReaderPanel;
-		return this.ReaderPanel = require('legacy/app/contentviewer/components/Reader');
-	}
+		return (this.ReaderPanel = require('legacy/app/contentviewer/components/Reader'));
+	},
 };
 
-
-function getCurrentSizeForImage (img) {
-	const allowed = {'quarter': true, 'half': true, 'full': true};
+function getCurrentSizeForImage(img) {
+	const allowed = { quarter: true, half: true, full: true };
 	const name = img.getAttribute('data-nti-image-size');
 
 	return allowed[name] ? name : 'full';
@@ -29,58 +28,76 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 	width: 275,
 	height: 200,
 
-	renderTpl: Ext.DomHelper.markup([{
-		tag: 'a', href: '#unzoom', cls: 'close', 'data-qtip': 'Close'
-	},{
-		cls: 'wrapper',
-		cn: [{
-			tag: 'img'
-		},{
+	renderTpl: Ext.DomHelper.markup([
+		{
 			tag: 'a',
 			href: '#unzoom',
-			cls: 'unzoom',
-			html: ' '
-		}]
-	},{
-		tag: 'span',
-		cls: 'bar',
-		cn: [{
-			tag: 'a',
-			href: '#slide',
-			'data-qtip': 'Open Slides',
-			cls: 'bar-cell slide',
-			html: ' '
-		},{
-			cls: 'bar-cell {[values.markUpEnabled || values.title || values.caption ? \'\' : \'no-details\']}',
-			cn: [{
-				tag: 'tpl',
-				'if': 'title',
-				cn: {
-					tag: 'span',
-					cls: 'image-title',
-					html: '{title}'
-				}
-			},{
-				tag: 'tpl',
-				'if': 'caption',
-				cn: {
-					tag: 'span',
-					cls: 'image-caption',
-					html: '{caption}'
-				}
-			},{
-				tag: 'tpl',
-				'if': 'markUpEnabled',
-				cn: {
+			cls: 'close',
+			'data-qtip': 'Close',
+		},
+		{
+			cls: 'wrapper',
+			cn: [
+				{
+					tag: 'img',
+				},
+				{
 					tag: 'a',
-					href: '#mark',
-					'data-qtip': 'Comment on this',
-					cls: 'mark',
-					html: 'Comment'
-				}
-			}]
-		}]
-	}]),
+					href: '#unzoom',
+					cls: 'unzoom',
+					html: ' ',
+				},
+			],
+		},
+		{
+			tag: 'span',
+			cls: 'bar',
+			cn: [
+				{
+					tag: 'a',
+					href: '#slide',
+					'data-qtip': 'Open Slides',
+					cls: 'bar-cell slide',
+					html: ' ',
+				},
+				{
+					cls:
+						"bar-cell {[values.markUpEnabled || values.title || values.caption ? '' : 'no-details']}",
+					cn: [
+						{
+							tag: 'tpl',
+							if: 'title',
+							cn: {
+								tag: 'span',
+								cls: 'image-title',
+								html: '{title}',
+							},
+						},
+						{
+							tag: 'tpl',
+							if: 'caption',
+							cn: {
+								tag: 'span',
+								cls: 'image-caption',
+								html: '{caption}',
+							},
+						},
+						{
+							tag: 'tpl',
+							if: 'markUpEnabled',
+							cn: {
+								tag: 'a',
+								href: '#mark',
+								'data-qtip': 'Comment on this',
+								cls: 'mark',
+								html: 'Comment',
+							},
+						},
+					],
+				},
+			],
+		},
+	]),
 
 	renderSelectors: {
 		closeEl: 'a.close',
@@ -89,29 +106,36 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		barEl: '.bar',
 		commentEl: 'a.mark',
 		presentationEl: 'a.slide',
-		captionEl: '.image-caption'
+		captionEl: '.image-caption',
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 
-		function get (el, attr) { return el ? el.getAttribute(attr) : null; }
+		function get(el, attr) {
+			return el ? el.getAttribute(attr) : null;
+		}
 
-		this.renderData = Ext.apply(this.renderData || {},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			title: get(this.refEl, 'data-title'),
 			caption: get(this.refEl, 'data-caption'),
-			markUpEnabled: !this.markUpDisabled
+			markUpEnabled: !this.markUpDisabled,
 		});
 
-		var n, keyMap = new Ext.util.KeyMap({
-			target: document,
-			binding: [{
-				key: Ext.EventObject.ESC,
-				fn: this.destroy,
-				scope: this
-			}]
+		var n,
+			keyMap = new Ext.util.KeyMap({
+				target: document,
+				binding: [
+					{
+						key: Ext.EventObject.ESC,
+						fn: this.destroy,
+						scope: this,
+					},
+				],
+			});
+		this.on('destroy', function () {
+			keyMap.destroy(false);
 		});
-		this.on('destroy', function () {keyMap.destroy(false);});
 
 		n = Ext.query('.nav-helper').first();
 		if (n) {
@@ -123,14 +147,16 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		Commons.Prompt.Manager.resumeEscapeListener();
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		var n = Ext.query('.nav-helper').first();
-		if (n) { Ext.fly(n).show(); }
+		if (n) {
+			Ext.fly(n).show();
+		}
 		return this.callParent(arguments);
 	},
 
 	afterRender: function () {
 		this.callParent(arguments);
 		this.el.mask('Loading...');
-		this.el.set({tabindex: 1});
+		this.el.set({ tabindex: 1 });
 		this.mon(this.closeEl, 'click', this.close, this);
 		this.mon(this.closeEl2, 'click', this.close, this);
 		this.mon(this.presentationEl, 'click', this.openPresentation, this);
@@ -140,10 +166,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		}
 
 		var me = this,
-			img = me.imageCache = new Image(),
+			img = (me.imageCache = new Image()),
 			isSlide = Boolean(
-				Ext.fly(me.refEl).parent('object[type$=slide]', true)
-				|| Ext.fly(me.refEl).parent('object[type$=slidevideo]', true)
+				Ext.fly(me.refEl).parent('object[type$=slide]', true) ||
+					Ext.fly(me.refEl).parent('object[type$=slidevideo]', true)
 			);
 
 		if (isSlide) {
@@ -185,13 +211,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 			me = this,
 			barH = Math.min(200, me.barHeightCache),
 			img = me.imageCache,
-			vpH = (El.getViewportHeight() - barH - 125),
-			vpW = (El.getViewportWidth()),
+			vpH = El.getViewportHeight() - barH - 125,
+			vpW = El.getViewportWidth(),
 			h = img.height,
 			w = img.width;
 
 		console.log(w, h);
-		if ((h + barH) > vpH) {
+		if (h + barH > vpH) {
 			w = (vpH / h) * w;
 			h = vpH;
 			console.log('sized h', w, h);
@@ -205,7 +231,6 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 
 		me.setSize(w, h + barH);
 		me.center();
-
 	}, 80),
 
 	center: function () {
@@ -215,16 +240,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		}
 
 		var dom = this.el && this.el.dom,
-			myHeight = this.getHeight() + 35,//my height + the close button
-			myWidth = this.getWidth() + 35,//my width + the close button
+			myHeight = this.getHeight() + 35, //my height + the close button
+			myWidth = this.getWidth() + 35, //my width + the close button
 			viewHeight = Ext.Element.getViewHeight(),
 			viewWidth = Ext.Element.getViewWidth(),
-			top, left;
+			top,
+			left;
 
 		top = (viewHeight - myHeight) / 2;
 		left = (viewWidth - myWidth) / 2;
 
-		top = Math.max(top, 25);//account for the close button
+		top = Math.max(top, 25); //account for the close button
 		left = Math.max(left, 0);
 
 		dom.style.top = top + 'px';
@@ -244,7 +270,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 
 	commentOn: function (e) {
 		this.close();
-		(this.ownerCmp || this.reader || lazyResolve.ReaderPanel.get()).fireEvent('markupenabled-action', this.refEl, 'mark');
+		(
+			this.ownerCmp ||
+			this.reader ||
+			lazyResolve.ReaderPanel.get()
+		).fireEvent('markupenabled-action', this.refEl, 'mark');
 		e.stopEvent();
 		return false;
 	},
@@ -265,33 +295,47 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 				sizes = [
 					'data-nti-image-quarter',
 					'data-nti-image-half',
-					'data-nti-image-full'
+					'data-nti-image-full',
 				],
 				sizeMap = {
-					'quarter': 0,
-					'half': 1,
-					'full': 2
+					quarter: 0,
+					half: 1,
+					full: 2,
 				},
 				src = img.getAttribute('src'),
-				currentSizeName = getCurrentSizeForImage(img),//img.getAttribute('data-nti-image-size'),
+				currentSizeName = getCurrentSizeForImage(img), //img.getAttribute('data-nti-image-size'),
 				currentSize = sizes[sizeMap[currentSizeName]],
 				currentSizeUrl = img.getAttribute(currentSize),
-				nextSize = sizes[Math.min(sizeMap[currentSizeName] + 1, sizes.length - 1)],
-				nextSizeUrl = src.replace(new RegExp(RegExp.escape(currentSizeUrl)), ''),
-				rect = img.getBoundingClientRect();//these are in the document space. We need to convert this to screen space.
+				nextSize =
+					sizes[
+						Math.min(sizeMap[currentSizeName] + 1, sizes.length - 1)
+					],
+				nextSizeUrl = src.replace(
+					new RegExp(RegExp.escape(currentSizeUrl)),
+					''
+				),
+				rect = img.getBoundingClientRect(); //these are in the document space. We need to convert this to screen space.
 
 			nextSizeUrl += img.getAttribute(nextSize);
 			// TODO: optimzise for bandwidth and screen size and choose the best one based on current and client screen size
 			// For now, i'm not going to grab the full.
-			console.log('zoom', img.width + 'x' + img.height, rect, currentSize, nextSize, nextSizeUrl);
+			console.log(
+				'zoom',
+				img.width + 'x' + img.height,
+				rect,
+				currentSize,
+				nextSize,
+				nextSizeUrl
+			);
 
 			Ext.widget('image-zoom-view', {
 				url: nextSizeUrl,
 				refEl: img,
 				reader: reader,
 				ownerCmp: ownerCmp,
-				markUpDisabled: span && span.is('[itemprop~=nti-data-markupdisabled]')
+				markUpDisabled:
+					span && span.is('[itemprop~=nti-data-markupdisabled]'),
 			}).show();
-		}
-	}
+		},
+	},
 });

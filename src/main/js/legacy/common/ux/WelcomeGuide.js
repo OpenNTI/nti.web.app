@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 require('../window/Window');
-
 
 module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 	extend: 'NextThought.common.window.Window',
@@ -29,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow-x: hidden; overflow-y: auto; height: 580px;'
-			}
+				style: 'overflow-x: hidden; overflow-y: auto; height: 580px;',
+			},
 		},
 		{
 			xtype: 'container',
@@ -43,21 +42,33 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 				cls: 'footer-region',
 				xtype: 'container',
 				flex: 1,
-				layout: 'none'
+				layout: 'none',
 			},
-			items: [{
-				defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
-				items: [
-					//{text: 'Learn More',	action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
-					{text: 'Get Started!', cls: '.x-btn-blue-large dismiss', action: 'cancel', handler: function (b, e) { e.stopEvent(); b.up('window').close();}}
-				]
-			}]
-		}
+			items: [
+				{
+					defaults: { xtype: 'button', ui: 'blue', scale: 'large' },
+					items: [
+						//{text: 'Learn More',	action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
+						{
+							text: 'Get Started!',
+							cls: '.x-btn-blue-large dismiss',
+							action: 'cancel',
+							handler: function (b, e) {
+								e.stopEvent();
+								b.up('window').close();
+							},
+						},
+					],
+				},
+			],
+		},
 	],
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.down('component[cls=help-iframe]').autoEl.src = getURL((this.link && this.link.href) || this.link);
+		this.down('component[cls=help-iframe]').autoEl.src = getURL(
+			(this.link && this.link.href) || this.link
+		);
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
 		if (this.deleteOnDestroy) {
@@ -65,11 +76,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 		}
 
 		if (Ext.is.iOS) {
-			this.on('afterrender', function () {
-				var iframe = this.el.down('iframe');
-				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
-				iframe.parent().el.setStyle('overflow', 'auto');
-			},this);
+			this.on(
+				'afterrender',
+				function () {
+					var iframe = this.el.down('iframe');
+					iframe
+						.parent()
+						.el.setStyle('-webkit-overflow-scrolling', 'touch');
+					iframe.parent().el.setStyle('overflow', 'auto');
+				},
+				this
+			);
 		}
 	},
 
@@ -78,14 +95,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 		mask.addCls('nti-black-clear');
 	},
 
-
 	removeCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		if (mask) {
 			mask.removeCls('nti-black-clear');
 		}
 	},
-
 
 	learnMore: function () {
 		console.log('Learn more was clicked');
@@ -102,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 			},
 			fail: function (r, opts) {
 				console.log('Fail: ', arguments);
-			}
+			},
 		});
-	}
+	},
 });

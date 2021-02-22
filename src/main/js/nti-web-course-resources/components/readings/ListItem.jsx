@@ -1,13 +1,13 @@
 import './ListItem.scss';
 import React from 'react';
-import {scoped} from '@nti/lib-locale';
-import {DateTime} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { DateTime } from '@nti/web-commons';
 import PropTypes from 'prop-types';
 
 const DEFAULT_TEXT = {
 	published: 'Published',
 	draft: 'Draft',
-	edit: 'Edit'
+	edit: 'Edit',
 };
 
 const t = scoped('nti-course-resources.readings.ListItem', DEFAULT_TEXT);
@@ -15,19 +15,19 @@ const t = scoped('nti-course-resources.readings.ListItem', DEFAULT_TEXT);
 export default class ReadingListItem extends React.Component {
 	static propTypes = {
 		reading: PropTypes.object,
-		gotoResource: PropTypes.func
-	}
+		gotoResource: PropTypes.func,
+	};
 
 	gotoResource = () => {
-		const {reading, gotoResource} = this.props;
+		const { reading, gotoResource } = this.props;
 
 		if (gotoResource) {
 			gotoResource(reading);
 		}
-	}
+	};
 
-	render () {
-		const {reading} = this.props;
+	render() {
+		const { reading } = this.props;
 
 		return (
 			<div className="course-resources-reading-list-item">
@@ -38,37 +38,44 @@ export default class ReadingListItem extends React.Component {
 		);
 	}
 
-
-	renderMeta = (reading) => {
-		const {icon, title, isPublished} = reading;
+	renderMeta = reading => {
+		const { icon, title, isPublished } = reading;
 		const canEdit = reading.hasLink('edit');
-		const iconFallback = (iconUrl) => iconUrl || '/app/resources/images/file-icons/generic.png';
+		const iconFallback = iconUrl =>
+			iconUrl || '/app/resources/images/file-icons/generic.png';
 
 		return (
 			<div className="meta" role="cell">
-				<div className="icon" style={{backgroundImage: `url(${iconFallback(icon)})`}} />
+				<div
+					className="icon"
+					style={{ backgroundImage: `url(${iconFallback(icon)})` }}
+				/>
 				<div className="wrap">
 					<div className="title">{title}</div>
-					<div className="published-inline">{t(isPublished ? 'published' : 'draft')}</div>
+					<div className="published-inline">
+						{t(isPublished ? 'published' : 'draft')}
+					</div>
 				</div>
-				{canEdit && (<div className="edit" onClick={this.gotoResource}><span>{t('edit')}</span></div>)}
+				{canEdit && (
+					<div className="edit" onClick={this.gotoResource}>
+						<span>{t('edit')}</span>
+					</div>
+				)}
 			</div>
 		);
-	}
+	};
 
-
-	renderPublish = (reading) => {
-		const {isPublished} = reading;
+	renderPublish = reading => {
+		const { isPublished } = reading;
 
 		return (
 			<div className="published" role="cell">
 				{t(isPublished ? 'published' : 'draft')}
 			</div>
 		);
-	}
+	};
 
-
-	renderModified = (reading) => {
+	renderModified = reading => {
 		const lastModified = reading.getLastModified();
 
 		return (
@@ -76,5 +83,5 @@ export default class ReadingListItem extends React.Component {
 				<DateTime date={lastModified} />
 			</div>
 		);
-	}
+	};
 }

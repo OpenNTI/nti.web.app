@@ -1,19 +1,19 @@
 import './Identity.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Presentation} from '@nti/web-commons';
-import {LinkTo} from '@nti/web-routing';
-import {scoped} from '@nti/lib-locale';
+import { Presentation } from '@nti/web-commons';
+import { LinkTo } from '@nti/web-routing';
+import { scoped } from '@nti/lib-locale';
 
 const t = scoped('nti-site-admin.content.books.nav-bar.Identity', {
-	link: 'View Book'
+	link: 'View Book',
 });
 
 SiteAdminBookIdentity.propTypes = {
-	book: PropTypes.object
+	book: PropTypes.object,
 };
-export default function SiteAdminBookIdentity ({book}) {
-	const {title, label} = book;
+export default function SiteAdminBookIdentity({ book }) {
+	const { title, label } = book;
 
 	return (
 		<div className="site-admin-course-identity">

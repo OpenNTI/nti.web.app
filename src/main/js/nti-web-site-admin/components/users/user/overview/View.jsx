@@ -18,35 +18,37 @@ const NUM_SESSIONS_TO_SHOW = 5;
 
 export default class SiteAdminUserOverview extends React.Component {
 	static propTypes = {
-		user: PropTypes.object
-	}
+		user: PropTypes.object,
+	};
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
-		this.state = {loading: true};
+		this.state = { loading: true };
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		this.loadData();
 	}
 
-	async loadData () {
+	async loadData() {
 		const { user } = this.props;
 
 		try {
 			const service = await getService();
 			const historicalSessions = user.getLink(HISTORICAL_SESSIONS_LINK);
-			const results = historicalSessions ? await service.get(historicalSessions) : {};
+			const results = historicalSessions
+				? await service.get(historicalSessions)
+				: {};
 			const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
 
-			this.setState({loading: false, historicalSessions: items});
+			this.setState({ loading: false, historicalSessions: items });
 		} catch (e) {
-			this.setState({loading: false, historicalSessions: []});
+			this.setState({ loading: false, historicalSessions: [] });
 		}
 	}
 
-	render () {
+	render() {
 		const { user } = this.props;
 		const { loading, historicalSessions } = this.state;
 
@@ -56,16 +58,24 @@ export default class SiteAdminUserOverview extends React.Component {
 					<DateValue date={user.getCreatedTime()} label="Joined" />
 				</div>
 				<div className="last-login">
-					<LastLogin user={user} loading={loading} historicalSessions={historicalSessions}/>
+					<LastLogin
+						user={user}
+						loading={loading}
+						historicalSessions={historicalSessions}
+					/>
 				</div>
 				<div className="activity-by-day">
-					<ActiveDays entity={user}/>
+					<ActiveDays entity={user} />
 				</div>
 				<div className="active-times">
-					<ActiveTimes user={user}/>
+					<ActiveTimes user={user} />
 				</div>
 				<div className="recent-sessions">
-					<RecentSessions user={user} loading={loading} historicalSessions={historicalSessions}/>
+					<RecentSessions
+						user={user}
+						loading={loading}
+						historicalSessions={historicalSessions}
+					/>
 				</div>
 			</div>
 		);

@@ -50,7 +50,9 @@
 		font-weight: 600;
 		color: var(--primary-blue);
 
-		p { margin: 0; }
+		p {
+			margin: 0;
+		}
 
 		&:hover {
 			background-color: var(--primary-blue);
@@ -197,7 +199,8 @@ body.dragging * {
 }
 
 .feedback-panel {
-	&, & > .x-panel-body {
+	&,
+	& > .x-panel-body {
 		overflow: visible;
 	}
 
@@ -275,7 +278,9 @@ body.dragging * {
 				color: var(--secondary-grey);
 				margin: 0 0 0 $m;
 
-				.meta > * { margin-right: 0.5em; }
+				.meta > * {
+					margin-right: 0.5em;
+				}
 
 				.name {
 					color: var(--primary-blue);
@@ -359,7 +364,7 @@ body.dragging * {
 		box-shadow: 0 1px 2px 1px rgba(127, 127, 127, 0.08);
 
 		&::before {
-			content: "";
+			content: '';
 			position: absolute;
 			background: #fdfdfd;
 			top: 0;
@@ -398,7 +403,8 @@ body.dragging * {
 		}
 	}
 
-	&.question { //main frame of the question
+	&.question {
+		//main frame of the question
 		background: var(--panel-background);
 		border: 1px solid #e2e2e2;
 		border-radius: 3px;
@@ -417,7 +423,9 @@ body.dragging * {
 				margin: 17px 40px 15px 40px;
 				min-height: 28px;
 
-				&:empty { display: none; }
+				&:empty {
+					display: none;
+				}
 
 				& > pre {
 					padding: 6px 20px;
@@ -467,10 +475,17 @@ body.dragging * {
 			border-bottom-width: 1px !important;
 			padding: 11px 10px 6px 10px;
 
-			&.correct { font-style: italic; color: var(--primary-green); }
-			&.incorrect { font-style: italic; color: var(--primary-red); }
+			&.correct {
+				font-style: italic;
+				color: var(--primary-green);
+			}
+			&.incorrect {
+				font-style: italic;
+				color: var(--primary-red);
+			}
 
-			.title, .status {
+			.title,
+			.status {
 				display: inline;
 			}
 
@@ -493,7 +508,9 @@ body.dragging * {
 					font-weight: normal;
 					white-space: nowrap;
 
-					&:hover { opacity: 1; }
+					&:hover {
+						opacity: 1;
+					}
 
 					&::after {
 						position: absolute;
@@ -532,7 +549,7 @@ body.dragging * {
 				left: 0;
 				cursor: pointer;
 
-				@include icon($light-x,10px,6px);
+				@include icon($light-x, 10px, 6px);
 
 				&:hover::after {
 					@include sprite($light-x_hover);
@@ -576,7 +593,7 @@ body.dragging * {
 		font: normal normal 1em/2 var(--body-font-family);
 		margin: 15px 5px 15px 0;
 
-		@include experimental-value(cursor,grab);
+		@include experimental-value(cursor, grab);
 
 		&:active,
 		&:hover {
@@ -585,7 +602,7 @@ body.dragging * {
 		}
 
 		&:active {
-			@include experimental-value(cursor,grabbing);
+			@include experimental-value(cursor, grabbing);
 		}
 
 		&.dropped {
@@ -603,7 +620,7 @@ body.dragging * {
 		&.correct {
 			cursor: pointer;
 
-			@include icon($circle-check-green-18,26px,11px);
+			@include icon($circle-check-green-18, 26px, 11px);
 
 			.target.drag {
 				background: var(--primary-green);
@@ -617,7 +634,7 @@ body.dragging * {
 		&.incorrect {
 			cursor: pointer;
 
-			@include icon($circle-x-red-18,26px,11px);
+			@include icon($circle-x-red-18, 26px, 11px);
 
 			.target.drag {
 				background: var(--primary-red);
@@ -633,7 +650,9 @@ body.dragging * {
 		border: 0 solid #ebebeb;
 		border-top-width: 1px;
 
-		.reset,.submit,.status {
+		.reset,
+		.submit,
+		.status {
 			display: inline-block;
 			padding: 15px 20px;
 			text-decoration: none;
@@ -648,7 +667,9 @@ body.dragging * {
 				style: italic;
 				weight: normal;
 			}
-			&.ready { color: var(--primary-green); }
+			&.ready {
+				color: var(--primary-green);
+			}
 		}
 
 		.buttons {
@@ -660,7 +681,8 @@ body.dragging * {
 				weight: normal;
 			}
 
-			.reset,.submit {
+			.reset,
+			.submit {
 				border: 1px solid rgba(0, 0, 0, 0);
 				cursor: pointer;
 
@@ -690,8 +712,12 @@ body.dragging * {
 	}
 
 	&.scoreboard {
-		& > .x-panel-body-assessment { padding: 0 15px 0 10px; }
-		.x-btn-secondary-large .x-btn-inner { font-weight: bold; }
+		& > .x-panel-body-assessment {
+			padding: 0 15px 0 10px;
+		}
+		.x-btn-secondary-large .x-btn-inner {
+			font-weight: bold;
+		}
 
 		& > .score-header {
 			border: 0 solid #efefef;
@@ -728,7 +754,7 @@ body.dragging * {
 				margin: 0 5px 0 0;
 
 				.arrow {
-					@include arrow(top,7px,4px,#a2a2a2);
+					@include arrow(top, 7px, 4px, #a2a2a2);
 
 					vertical-align: middle;
 					position: absolute;
@@ -770,23 +796,30 @@ body.dragging * {
 				&.correct {
 					color: #94b61a;
 
-					@include icon($check_progress_grn,$top: 3px);
+					@include icon($check_progress_grn, $top: 3px);
 				}
 
 				&.incorrect {
 					color: #e95a57;
 
-					@include icon($red-x-10,$top: 3px);
+					@include icon($red-x-10, $top: 3px);
 				}
 
-				&.questions { padding: 0; color: var(--tertiary-grey); font-weight: 400; }
+				&.questions {
+					padding: 0;
+					color: var(--tertiary-grey);
+					font-weight: 400;
+				}
 			}
 		}
 
 		&.assignment {
 			.tally .stat {
 				padding-left: 0;
-				&::after { content: none; display: none; }
+				&::after {
+					content: none;
+					display: none;
+				}
 			}
 		}
 
@@ -806,7 +839,9 @@ body.dragging * {
 		&.multipart > .x-panel-body-assessment,
 		&.part-of-set > .x-panel-body-assessment {
 			padding-bottom: 0;
-			.footer .action.check { display: none; }
+			.footer .action.check {
+				display: none;
+			}
 
 			.multipart-submission .footer .action.check {
 				display: block;
@@ -869,7 +904,7 @@ body.dragging * {
 			color: var(--primary-grey);
 			min-height: 38px;
 
-			@include icon($circle-x-red-18,$top: 10px, $left: 10px);
+			@include icon($circle-x-red-18, $top: 10px, $left: 10px);
 
 			&::after {
 				display: none;
@@ -910,7 +945,8 @@ body.dragging * {
 			}
 
 			&.submitted {
-				&, input.answer-field {
+				&,
+				input.answer-field {
 					font-weight: 600;
 				}
 
@@ -926,12 +962,18 @@ body.dragging * {
 			}
 
 			&.incorrect {
-				&, input.answer-field { color: var(--primary-red); }
-				&::after { @include sprite($circle-x-red-18); }
+				&,
+				input.answer-field {
+					color: var(--primary-red);
+				}
+				&::after {
+					@include sprite($circle-x-red-18);
+				}
 			}
 
 			&.correct {
-				&, input.answer-field {
+				&,
+				input.answer-field {
 					color: var(--primary-green);
 					font-weight: normal;
 				}
@@ -956,7 +998,7 @@ body.dragging * {
 				left: 0;
 				right: 0;
 				min-height: 28px; // mainly a fix for IE
-				min-width: 85%;	// mainly a fix for IE
+				min-width: 85%; // mainly a fix for IE
 
 				&[readonly],
 				&[disabled] {
@@ -1002,7 +1044,9 @@ body.dragging * {
 			background: #fff;
 			border: 0 solid var(--tertiary-grey);
 			border-bottom-width: 1px;
-			&:last-of-type { border-bottom-width: 0; }
+			&:last-of-type {
+				border-bottom-width: 0;
+			}
 
 			padding-left: 54px;
 
@@ -1042,21 +1086,35 @@ body.dragging * {
 			padding: 20px 40px;
 		}
 
-		.multi, .single {
-			.choice, .choice:hover {
+		.multi,
+		.single {
+			.choice,
+			.choice:hover {
 				&.correct .control {
-					&,&.checked {
+					&,
+					&.checked {
 						border-color: #9ac73c;
 
-						@include icon($circle-check-green-18,$top:10px,$left:9px, $position:absolute);
+						@include icon(
+							$circle-check-green-18,
+							$top: 10px,
+							$left: 9px,
+							$position: absolute
+						);
 					}
 				}
 
 				&.incorrect .control {
-					&,&.checked {
+					&,
+					&.checked {
 						border-color: var(--primary-red);
 
-						@include icon($circle-x-red-18,$top:10px,$left:9px, $position:absolute);
+						@include icon(
+							$circle-x-red-18,
+							$top: 10px,
+							$left: 9px,
+							$position: absolute
+						);
 					}
 				}
 			}
@@ -1064,12 +1122,21 @@ body.dragging * {
 
 		.multi .choice {
 			.control {
-				@include icon($checkbox-14, $top:12px,$left:20px, $position:absolute);
-				&.checked::after { @include sprite($checkbox-14_active); }
+				@include icon(
+					$checkbox-14,
+					$top: 12px,
+					$left: 20px,
+					$position: absolute
+				);
+				&.checked::after {
+					@include sprite($checkbox-14_active);
+				}
 			}
 
 			&:hover .control {
-				&::after { @include sprite($checkbox-14_hover); }
+				&::after {
+					@include sprite($checkbox-14_hover);
+				}
 
 				&.checked::after {
 					@include sprite($checkbox-14_active);
@@ -1079,12 +1146,21 @@ body.dragging * {
 
 		.single .choice {
 			.control {
-				@include icon($radio-button-16, $top:10px,$left:10px, $position:absolute);
-				&.checked::after { @include sprite($radio-button-16_active); }
+				@include icon(
+					$radio-button-16,
+					$top: 10px,
+					$left: 10px,
+					$position: absolute
+				);
+				&.checked::after {
+					@include sprite($radio-button-16_active);
+				}
 			}
 
 			&:hover .control {
-				&::after { @include sprite($radio-button-16_hover); }
+				&::after {
+					@include sprite($radio-button-16_hover);
+				}
 
 				&.checked::after {
 					@include sprite($radio-button-16_active);
@@ -1109,8 +1185,12 @@ body.dragging * {
 
 				&:last-of-type {
 					border-bottom-width: 0;
-					.draggable-area { border-bottom-width: 0; }
-					.label { border-bottom-width: 0; }
+					.draggable-area {
+						border-bottom-width: 0;
+					}
+					.label {
+						border-bottom-width: 0;
+					}
 				}
 
 				&.selected {
@@ -1182,7 +1262,8 @@ body.dragging * {
 						}
 					}
 
-					&.correct, &.incorrect {
+					&.correct,
+					&.incorrect {
 						.controls .control {
 							display: inline-block;
 						}
@@ -1309,30 +1390,47 @@ body.dragging * {
 
 			.left {
 				float: left;
-				.action { float: left; }
+				.action {
+					float: left;
+				}
 			}
 
 			.right {
 				float: right;
-				.action { float: right; }
+				.action {
+					float: right;
+				}
 			}
 
 			.mathsymbol {
 				opacity: 0.6;
-				&:hover { opacity: 1; }
+				&:hover {
+					opacity: 1;
+				}
 
 				margin-top: 4px;
 				cursor: pointer;
 				width: 36px;
 				height: 36px;
-				background: url(../images/old_sprites/spr_math_symbols.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_math_symbols.png) 0 0
+					no-repeat;
 				float: left;
 
-				&.sqrt { background-position: -2px -2px; }
-				&.square { background-position: -42px -2px; }
-				&.parens { background-position: -82px -2px; }
-				&.approx { background-position: -122px -2px; }
-				&.pi { background-position: -162px -2px; }
+				&.sqrt {
+					background-position: -2px -2px;
+				}
+				&.square {
+					background-position: -42px -2px;
+				}
+				&.parens {
+					background-position: -82px -2px;
+				}
+				&.approx {
+					background-position: -122px -2px;
+				}
+				&.pi {
+					background-position: -162px -2px;
+				}
 
 				&.leq {
 					background: none;
@@ -1398,7 +1496,8 @@ body.dragging * {
 		right: 0 !important;
 		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
-		.x-panel-assessment, .parts {
+		.x-panel-assessment,
+		.parts {
 			.x-panel-body-assessment {
 				padding: 0;
 
@@ -1428,7 +1527,7 @@ body.dragging * {
 				height: 25em;
 			}
 
-			[table=false] {
+			[table='false'] {
 				opacity: 0.5;
 			}
 
@@ -1436,7 +1535,9 @@ body.dragging * {
 				overflow: visible;
 				position: absolute;
 
-				.action { padding: 0; }
+				.action {
+					padding: 0;
+				}
 
 				& > div.right {
 					display: none;
@@ -1484,7 +1585,8 @@ body.dragging * {
 				.preview {
 					display: flex;
 					margin: 20px 20px 10px 20px;
-					box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+					box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1),
+						0 0 1px 1px rgba(0, 0, 0, 0.05);
 					border-radius: 2px;
 
 					&.uploading {
@@ -1553,7 +1655,8 @@ body.dragging * {
 									color: var(--primary-blue);
 									text-decoration: none;
 
-									&:hover, &:visited {
+									&:hover,
+									&:visited {
 										color: var(--primary-blue);
 									}
 								}
@@ -1569,7 +1672,11 @@ body.dragging * {
 							top: 10px;
 							right: 20px;
 
-							@include icon($window-control-close, $top:0, $left:0);
+							@include icon(
+								$window-control-close,
+								$top: 0,
+								$left: 0
+							);
 
 							cursor: pointer;
 						}
@@ -1619,7 +1726,7 @@ body.dragging * {
 				}
 			}
 
-			input[type=file].hidden {
+			input[type='file'].hidden {
 				position: absolute;
 				left: 0;
 				right: 0;
@@ -1637,13 +1744,14 @@ body.dragging * {
 					z-index: 10;
 				}
 
-				.drop,.preview-wrapper {
+				.drop,
+				.preview-wrapper {
 					display: none;
 					z-index: 0;
 				}
 
 				.input-wrapper {
-					input[type=file] {
+					input[type='file'] {
 						z-index: 11;
 					}
 				}
@@ -1655,7 +1763,8 @@ body.dragging * {
 					z-index: 10;
 				}
 
-				.drop, .drop-zone {
+				.drop,
+				.drop-zone {
 					display: none;
 					z-index: 0;
 				}
@@ -1667,7 +1776,8 @@ body.dragging * {
 					z-index: 0;
 				}
 
-				.preview-wrapper, .drop-zone {
+				.preview-wrapper,
+				.drop-zone {
 					display: none;
 					z-index: 0;
 				}
@@ -1728,12 +1838,17 @@ body.dragging * {
 			display: none;
 		}
 
-		&.disabled.good, &.disabled.late {
-			.button { display: none; }
+		&.disabled.good,
+		&.disabled.late {
+			.button {
+				display: none;
+			}
 		}
 
 		&.late {
-			.due { color: var(--primary-red); }
+			.due {
+				color: var(--primary-red);
+			}
 
 			&::after {
 				@include sprite($assignment_late);
@@ -1850,7 +1965,9 @@ body.dragging * {
 			line-height: 3;
 		}
 
-		input { display: none; }
+		input {
+			display: none;
+		}
 
 		.blank {
 			display: inline-block;
@@ -1859,7 +1976,9 @@ body.dragging * {
 			position: relative;
 
 			&.drop-hover {
-				.drag { visibility: hidden; }
+				.drag {
+					visibility: hidden;
+				}
 
 				background: rgba(0, 0, 0, 0.3);
 			}
@@ -1906,8 +2025,11 @@ body.dragging * {
 
 	.wordbank-input {
 		.blank {
-			&.drop-hover, &:not(:empty) {
-				&::after { display: none; }
+			&.drop-hover,
+			&:not(:empty) {
+				&::after {
+					display: none;
+				}
 			}
 		}
 	}
@@ -1922,7 +2044,9 @@ body.dragging * {
 
 		.blank {
 			margin-right: 0;
-			&::after { display: none; }
+			&::after {
+				display: none;
+			}
 		}
 
 		input {
@@ -2012,8 +2136,9 @@ input.preview[readonly] {
 }
 
 .x-component-assessment.audio-clip {
-
-	.note-container .context & { display: none; }
+	.note-container .context & {
+		display: none;
+	}
 
 	display: inline-block;
 	cursor: pointer;
@@ -2021,7 +2146,7 @@ input.preview[readonly] {
 	border: 0;
 	background: none;
 	margin-right: 8px;
-	vertical-align: text-bottom;//looks good so far
+	vertical-align: text-bottom; //looks good so far
 
 	@include icon($audio-icon);
 	@include sprite-width($audio-icon);
@@ -2084,7 +2209,8 @@ input.preview[readonly] {
 		background: #fff;
 		border: solid 1px var(--primary-blue);
 		background-color: #fff;
-		box-shadow: 0 0 5px rgba(63, 179, 246, 0.23), 0 3px 8px rgba(0, 0, 0, 0.22);
+		box-shadow: 0 0 5px rgba(63, 179, 246, 0.23),
+			0 3px 8px rgba(0, 0, 0, 0.22);
 
 		.text {
 			white-space: normal;
@@ -2118,7 +2244,8 @@ input.preview[readonly] {
 
 //in the iframe
 .x-ie9 #NTIContent .naquestion {
-	&, * {
+	&,
+	* {
 		word-wrap: normal !important;
 		white-space: nowrap !important;
 	}
@@ -2283,16 +2410,14 @@ input.preview[readonly] {
 
 			&:first-of-type {
 				border-radius: 3px 0 0 3px;
-				box-shadow:
-					-1px 0 1px 0 rgba(0, 0, 0, 0.1),
+				box-shadow: -1px 0 1px 0 rgba(0, 0, 0, 0.1),
 					0 1px 1px 0 rgba(0, 0, 0, 0.1),
 					0 -1px 1px 0 rgba(0, 0, 0, 0.1);
 			}
 
 			&:last-of-type {
 				border-radius: 0 3px 3px 0;
-				box-shadow:
-					1px 0 1px 0 rgba(0, 0, 0, 0.1),
+				box-shadow: 1px 0 1px 0 rgba(0, 0, 0, 0.1),
 					0 1px 1px 0 rgba(0, 0, 0, 0.1),
 					0 -1px 1px 0 rgba(0, 0, 0, 0.1);
 			}
@@ -2380,7 +2505,12 @@ input.preview[readonly] {
 						left: 50%;
 						margin-left: -8px;
 
-						@include arrow($pointFrom: top, $width: 16px, $height: 8px, $color: var(--panel-background));
+						@include arrow(
+							$pointFrom: top,
+							$width: 16px,
+							$height: 8px,
+							$color: var(--panel-background)
+						);
 					}
 
 					&::before {
@@ -2390,7 +2520,12 @@ input.preview[readonly] {
 						left: 50%;
 						margin-left: -9px;
 
-						@include arrow($pointFrom: top, $width: 16px, $height: 8px, $color: rgba(0, 0, 0, 0.1));
+						@include arrow(
+							$pointFrom: top,
+							$width: 16px,
+							$height: 8px,
+							$color: rgba(0, 0, 0, 0.1)
+						);
 					}
 				}
 			}
@@ -2426,7 +2561,8 @@ input.preview[readonly] {
 	}
 }
 
-.modeled-content-results, .free-response-results {
+.modeled-content-results,
+.free-response-results {
 	.header {
 		text-align: right;
 		margin-bottom: 20px;
@@ -2435,12 +2571,14 @@ input.preview[readonly] {
 			text-transform: uppercase;
 		}
 
-		.current, .total {
+		.current,
+		.total {
 			font-weight: 600;
 		}
 	}
 
-	.next-arrow, .prev-arrow {
+	.next-arrow,
+	.prev-arrow {
 		display: inline-block;
 		cursor: pointer;
 		width: 21px;
@@ -2514,7 +2652,8 @@ input.preview[readonly] {
 		}
 
 		tr {
-			td, th {
+			td,
+			th {
 				text-align: center;
 
 				&:first-of-type {
@@ -2532,7 +2671,8 @@ input.preview[readonly] {
 				}
 			}
 
-			th, td:first-of-type {
+			th,
+			td:first-of-type {
 				font: normal 400 0.875rem/40px var(--body-font-family);
 				overflow: hidden;
 

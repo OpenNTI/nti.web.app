@@ -3,18 +3,20 @@ const Ext = require('@nti/extjs');
 const B64 = require('legacy/util/Base64');
 
 module.exports = exports = Ext.define('NextThought.cache.IdCache', {
-
-	getIdentifier: function (id)
-	{
-		if (!id) { return null; }
+	getIdentifier: function (id) {
+		if (!id) {
+			return null;
+		}
 		return B64.encode(id);
 	},
 
 	getComponentId: function (rec, subRecordField, prefix) {
 		prefix = prefix || '';
-		if (!rec) { return null; }
+		if (!rec) {
+			return null;
+		}
 
-		var i = (typeof (rec) === 'string') ? rec : rec.getId();
+		var i = typeof rec === 'string' ? rec : rec.getId();
 
 		if (!i && subRecordField) {
 			i = rec.get(subRecordField).getId();
@@ -23,11 +25,10 @@ module.exports = exports = Ext.define('NextThought.cache.IdCache', {
 		if (!i) {
 			Ext.Error.raise({
 				msg: 'Could not find NTIID in record',
-				args: arguments
+				args: arguments,
 			});
 		}
 
 		return 'cmp-' + prefix + '-' + this.getIdentifier(i);
-	}
-
+	},
 }).create();

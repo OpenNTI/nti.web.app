@@ -1,4 +1,4 @@
-@import "./card";
+@import './card';
 
 span.tab {
 	white-space: nowrap;
@@ -61,7 +61,10 @@ span.tab {
 				background-position: center;
 				background-repeat: no-repeat;
 
-				&.jpeg, &.jpg, &.gif, &.png {
+				&.jpeg,
+				&.jpg,
+				&.gif,
+				&.png {
 					top: 0;
 					bottom: 0;
 					background-size: cover;
@@ -212,7 +215,7 @@ span.tab {
 	}
 }
 
-@mixin editor($useParent:false) {
+@mixin editor($useParent: false) {
 	$selector: '.editor';
 
 	@if $useParent == true {
@@ -222,7 +225,7 @@ span.tab {
 	#{$selector} {
 		@include hardware-accelerate();
 
-		position: relative;//default
+		position: relative; //default
 
 		&.active {
 			display: block;
@@ -235,7 +238,7 @@ span.tab {
 		}
 
 		&:not(.no-animation) {
-			@include animate(fadeIn,0.3s);
+			@include animate(fadeIn, 0.3s);
 		}
 
 		&.with-controls {
@@ -288,8 +291,8 @@ span.tab {
 					width: 100%;
 					color: var(--primary-grey);
 
-					&[type=text]:not([value]),
-					&[type=text][value=""] {
+					&[type='text']:not([value]),
+					&[type='text'][value=''] {
 						font-style: italic;
 
 						&:focus {
@@ -346,7 +349,8 @@ span.tab {
 				}
 			}
 
-			.aux + .title, .title.small {
+			.aux + .title,
+			.title.small {
 				input {
 					font: italic 14px/20px var(--body-font-family);
 					padding-left: 5px;
@@ -383,18 +387,19 @@ span.tab {
 					left: 5px;
 				}
 
-				.video-thumbnail, .unknown {
+				.video-thumbnail,
+				.unknown {
 					height: 75px;
 					width: 55px;
 					cursor: pointer;
 
-					@include icon($filetype-video, $top:20px, $left:10px);
+					@include icon($filetype-video, $top: 20px, $left: 10px);
 				}
 
 				.unknown {
 					cursor: default;
 
-					@include icon($filetype-unknown, $top:20px, $left:10px);
+					@include icon($filetype-unknown, $top: 20px, $left: 10px);
 				}
 
 				@include attachment();
@@ -413,7 +418,7 @@ span.tab {
 				bottom: 0;
 				z-index: -1;
 
-				input[type=file] {
+				input[type='file'] {
 					height: 100%;
 					opacity: 0;
 					width: 100%;
@@ -448,8 +453,12 @@ span.tab {
 				border-radius: 90px;
 			}
 
-			.left .action { float: left; }
-			.right .action { float: right; }
+			.left .action {
+				float: left;
+			}
+			.right .action {
+				float: right;
+			}
 
 			.action {
 				position: relative;
@@ -463,7 +472,8 @@ span.tab {
 
 				@include experimental(transition, all 0.5s);
 
-				&.text-controls, &.object-controls {
+				&.text-controls,
+				&.object-controls {
 					width: 34px;
 					height: 34px;
 					margin: 6px 0 0 5px;
@@ -508,7 +518,7 @@ span.tab {
 							content: '';
 							position: absolute;
 							top: 32px;
-							left: 16%;//safar5
+							left: 16%; //safar5
 							left: calc(25% - 6px);
 
 							@include sprite($font_style_pointer);
@@ -521,12 +531,19 @@ span.tab {
 							position: relative;
 							display: inline-block;
 
-							&.bold, &.italic, &.underline, &.whiteboard, &.video, &.upload {
+							&.bold,
+							&.italic,
+							&.underline,
+							&.whiteboard,
+							&.video,
+							&.upload {
 								margin-right: 5px;
 								margin-top: 4px;
 								height: 28px;
 
-								&:last-of-type { margin-right: 0; }
+								&:last-of-type {
+									margin-right: 0;
+								}
 
 								&::after {
 									content: '';
@@ -537,22 +554,34 @@ span.tab {
 							}
 
 							&.bold {
-								&::after { @include sprite($bold); }
-								&.selected::after { @include sprite($bold_active); }
+								&::after {
+									@include sprite($bold);
+								}
+								&.selected::after {
+									@include sprite($bold_active);
+								}
 							}
 
 							&.italic {
-								&::after { @include sprite($italic); }
-								&.selected::after { @include sprite($italic_active); }
+								&::after {
+									@include sprite($italic);
+								}
+								&.selected::after {
+									@include sprite($italic_active);
+								}
 							}
 
 							&.underline {
-								&::after { @include sprite($underline); }
-								&.selected::after { @include sprite($underline_active); }
+								&::after {
+									@include sprite($underline);
+								}
+								&.selected::after {
+									@include sprite($underline_active);
+								}
 							}
 
 							&.whiteboard {
-								@include icon($editor-insert-image, $top:10px);
+								@include icon($editor-insert-image, $top: 10px);
 
 								&:hover::after {
 									@include sprite($editor-insert-image_hover);
@@ -560,7 +589,7 @@ span.tab {
 							}
 
 							&.video {
-								@include icon($editor-insert-video, $top:9px);
+								@include icon($editor-insert-video, $top: 9px);
 
 								&:hover::after {
 									@include sprite($editor-insert-video_hover);
@@ -568,14 +597,16 @@ span.tab {
 							}
 
 							&.upload {
-								@include icon($editor-upload-file, $top:8px);
+								@include icon($editor-upload-file, $top: 8px);
 
 								&:hover::after {
 									@include sprite($editor-upload-file-hover);
 								}
 							}
 
-							&.whiteboard, &.video, &.upload {
+							&.whiteboard,
+							&.video,
+							&.upload {
 								margin-right: 10px;
 
 								&::after {
@@ -599,7 +630,7 @@ span.tab {
 									pointer-events: none;
 								}
 
-								input[type=file] {
+								input[type='file'] {
 									position: absolute;
 									top: 0;
 									left: 0;
@@ -618,7 +649,9 @@ span.tab {
 					}
 
 					&.selected {
-						&::after { @include sprite($font_styles_active); }
+						&::after {
+							@include sprite($font_styles_active);
+						}
 					}
 
 					&::before {
@@ -634,7 +667,7 @@ span.tab {
 				}
 
 				&.object-controls {
-					@include icon($editor-attach, $top:10px, $left:10px);
+					@include icon($editor-attach, $top: 10px, $left: 10px);
 
 					&.selected {
 						&::after {
@@ -696,7 +729,8 @@ span.tab {
 					pointer-events: none;
 				}
 
-				.content { }
+				.content {
+				}
 			}
 
 			.action {
@@ -726,7 +760,7 @@ span.tab {
 
 	&.in-gutter {
 		background: #fff;
-		border: 1px solid #cfcfcf;//#ededed
+		border: 1px solid #cfcfcf; //#ededed
 		position: fixed !important;
 
 		.main {
@@ -751,7 +785,9 @@ span.tab {
 
 			.aux + .title,
 			.title.small {
-				input { padding-left: 0; }
+				input {
+					padding-left: 0;
+				}
 			}
 
 			.content {
@@ -808,7 +844,12 @@ span.tab {
 	}
 
 	.contact-card.marked {
-		@include icon($check_gray, $side: after, $top: 23px, $left: 31px);//top: 7 + 32/2, left: 15 + 32/2
+		@include icon(
+			$check_gray,
+			$side: after,
+			$top: 23px,
+			$left: 31px
+		); //top: 7 + 32/2, left: 15 + 32/2
 
 		&::after {
 			z-index: 4;

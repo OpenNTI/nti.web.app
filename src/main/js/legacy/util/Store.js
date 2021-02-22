@@ -1,16 +1,14 @@
 const Ext = require('@nti/extjs');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('UserRepository', () => require('legacy/cache/UserRepository'))
-	.get('ParseUtils', ()=> require('./Parsing'));
+	.get('ParseUtils', () => require('./Parsing'));
 
 module.exports = exports = Ext.define('NextThought.util.Store', {
-
-	fillInUsers: function fillIn (store, records) {
-
+	fillInUsers: function fillIn(store, records) {
 		if (store && arguments.length === 1) {
-			store.on({'load': fillIn});
+			store.on({ load: fillIn });
 			return;
 		}
 
@@ -21,9 +19,11 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 		records = records || [];
 
-		let users = records.map(function (r) {return r.get('Creator');});
+		let users = records.map(function (r) {
+			return r.get('Creator');
+		});
 
-		function apply (r, i) {
+		function apply(r, i) {
 			const u = users[i],
 				id = u.getId(),
 				c = r.get('Creator');
@@ -44,11 +44,8 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 			store.suspendEvents(true);
 			records.forEach(apply);
 			store.resumeEvents();
-
 		});
 	},
-
-
 
 	newView: function (store) {
 		if (Ext.isString(store)) {
@@ -60,10 +57,10 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 			model: store.model,
 			sorters: store.sorters.getRange(),
 			filters: store.filters.getRange(),
-			data: store.getRange()
+			data: store.getRange(),
 		});
 
-		function refilter () {
+		function refilter() {
 			var f = copy.filters.getRange();
 			copy.clearFilter();
 			copy.removeAll();
@@ -73,10 +70,9 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 		}
 
 		//probably a more efficient way exists...
-		copy.mon(store, {datachanged: refilter, refilter: refilter});
+		copy.mon(store, { datachanged: refilter, refilter: refilter });
 
 		return copy;
-
 	},
 
 	loadRawItems: function (url, queryParams) {
@@ -102,21 +98,22 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	loadBatch: function (url, queryParams, itemProp, model, doNotParseItems) {
 		itemProp = itemProp || 'Items';
 
-		return this.loadRawItems(url, queryParams)
-			.then(function (response) {
-				var json = Ext.decode(response, true) || {},
-					items = json[itemProp];
+		return this.loadRawItems(url, queryParams).then(function (response) {
+			var json = Ext.decode(response, true) || {},
+				items = json[itemProp];
 
-				if (model && model.create) {
-					items = items.map(function (item) { return model.create(item); });
-				} else if (!doNotParseItems) {
-					items = lazy.ParseUtils.parseItems(items);
-				}
+			if (model && model.create) {
+				items = items.map(function (item) {
+					return model.create(item);
+				});
+			} else if (!doNotParseItems) {
+				items = lazy.ParseUtils.parseItems(items);
+			}
 
-				json[itemProp] = items;
+			json[itemProp] = items;
 
-				return json;
-			});
+			return json;
+		});
 	},
 
 	/**
@@ -132,10 +129,10 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	loadItems: function (url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
 
-		return this.loadBatch(url, queryParams, itemProp, model)
-			.then(function (json) {
-				return json[itemProp];
-			});
-	}
-
+		return this.loadBatch(url, queryParams, itemProp, model).then(function (
+			json
+		) {
+			return json[itemProp];
+		});
+	},
 }).create();

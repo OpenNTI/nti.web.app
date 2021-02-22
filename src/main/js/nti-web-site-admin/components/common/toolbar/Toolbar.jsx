@@ -18,13 +18,13 @@ export default class Toolbar extends React.Component {
 		actions: PropTypes.arrayOf(
 			PropTypes.shape({
 				name: PropTypes.string,
-				handler: PropTypes.func
+				handler: PropTypes.func,
 			})
 		),
-		onCourseCreated: PropTypes.func
+		onCourseCreated: PropTypes.func,
 	};
 
-	render () {
+	render() {
 		const {
 			className,
 			options,
@@ -32,7 +32,7 @@ export default class Toolbar extends React.Component {
 			onTypeToggle,
 			selectedItems,
 			actions,
-			onCourseCreated
+			onCourseCreated,
 		} = this.props;
 
 		const cls = cx('site-admin-list-toolbar', className);

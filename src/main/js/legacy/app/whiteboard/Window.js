@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 require('legacy/common/window/Window');
 require('./Editor');
 
-
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.wb-window',
@@ -32,43 +31,82 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 			defaults: {
 				cls: 'footer-region',
 				xtype: 'container',
-				layout: 'none'
+				layout: 'none',
 			},
 			items: [
 				{
-					defaults: { xtype: 'button', scale: 'medium', enabled: true },
+					defaults: {
+						xtype: 'button',
+						scale: 'medium',
+						enabled: true,
+					},
 					items: [
-						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function (b) {
-							b.up('window').clearAll();
-						} }
-					]
+						{
+							iconCls: 'new-page',
+							ui: 'new',
+							action: 'new-page',
+							tooltip: 'Clear Page',
+							handler: function (b) {
+								b.up('window').clearAll();
+							},
+						},
+					],
 				},
 				{
 					flex: 2,
 					layout: 'none',
-					defaults: { xtype: 'button', scale: 'medium', disabled: true },
+					defaults: {
+						xtype: 'button',
+						scale: 'medium',
+						disabled: true,
+					},
 					items: [
-						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo', hidden: true },
-						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo', hidden: true }
-					]
+						{
+							iconCls: 'undo',
+							ui: 'history',
+							action: 'undo',
+							tooltip: 'Undo',
+							hidden: true,
+						},
+						{
+							iconCls: 'redo',
+							ui: 'history',
+							action: 'redo',
+							tooltip: 'Redo',
+							hidden: true,
+						},
+					],
 				},
 				{
 					layout: 'none',
 					cls: 'right',
-					defaults: {xtype: 'button', ui: 'primary', scale: 'large'},
+					defaults: {
+						xtype: 'button',
+						ui: 'primary',
+						scale: 'large',
+					},
 					items: [
-						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function (b, e) {
-							e.stopEvent();
-							b.up('window').close();
-						} },
-						{text: 'Save', action: 'save', handler: function (b, e) {
-							e.stopEvent();
-							b.up('window').save(b);
-						} }
-					]
-				}
-			]
-		}
+						{
+							text: 'Cancel',
+							action: 'cancel',
+							ui: 'secondary',
+							handler: function (b, e) {
+								e.stopEvent();
+								b.up('window').close();
+							},
+						},
+						{
+							text: 'Save',
+							action: 'save',
+							handler: function (b, e) {
+								e.stopEvent();
+								b.up('window').save(b);
+							},
+						},
+					],
+				},
+			],
+		},
 	],
 
 	isWhiteboardWindow: true,
@@ -101,10 +139,10 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 
 		this.mon(new Ext.dom.CompositeElement(Ext.query('body > .x-mask')), {
 			scope: this,
-			'click': this.absorbClick
+			click: this.absorbClick,
 		});
 
-		if(Ext.is.iOS) {
+		if (Ext.is.iOS) {
 			this.minHeight = 671;
 		}
 	},
@@ -140,8 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		}
 
 		if (this.cancelOnce !== false) {
-			this.cancel = function () {
-			};
+			this.cancel = function () {};
 		}
 
 		this.fireEvent('cancel', this);
@@ -163,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		me.mon(this.el, 'click', function () {
 			console.log('WB clicked');
 			if (me.ownerCmp) {
-				me.ownerCmp.fireEvent('status-change', {status: 'composing'});
+				me.ownerCmp.fireEvent('status-change', { status: 'composing' });
 			}
 		});
 
@@ -173,7 +210,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 
 	onWindowResize: function () {
 		var viewportHeight = Ext.Element.getViewportHeight(),
-			targetH = this.readonly ? this.TARGET_HEIGHT - 142 : this.TARGET_HEIGHT;
+			targetH = this.readonly
+				? this.TARGET_HEIGHT - 142
+				: this.TARGET_HEIGHT;
 
 		if (!this.el) {
 			return;
@@ -181,8 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 
 		if (viewportHeight < targetH) {
 			this.el.addCls('wb-small');
-		}
-		else {
+		} else {
 			this.el.removeCls('wb-small');
 		}
 	},
@@ -200,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 				if (str === 'ok') {
 					me.down('whiteboard-editor').clear();
 				}
-			}
+			},
 		});
-	}
+	},
 });

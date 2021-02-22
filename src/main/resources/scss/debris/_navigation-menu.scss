@@ -57,15 +57,13 @@
 	border: 1px solid #d2d2d2 !important;
 	border-top-width: 0 !important;
 	border-right-width: 0 !important;
-	box-shadow:
-		inset 1px 0 0 0 #fff,
-		0 3px 0 0 #eaeaea;
+	box-shadow: inset 1px 0 0 0 #fff, 0 3px 0 0 #eaeaea;
 	margin-bottom: 3px;
 	padding: 0 6px 15px;
 	position: relative;
 	overflow: hidden;
 
-	&:nth-child(n+1) {
+	&:nth-child(n + 1) {
 		margin-top: 10px;
 	}
 
@@ -81,7 +79,11 @@
 
 	.count {
 		color: #73cdfb;
-		font: { size: 10px; style: italic; weight: bold; }
+		font: {
+			size: 10px;
+			style: italic;
+			weight: bold;
+		}
 
 		text-transform: uppercase;
 		display: inline-block;
@@ -108,13 +110,11 @@
 		float: left;
 		margin: 5px;
 
-		&.selected, &.x-item-selected {
+		&.selected,
+		&.x-item-selected {
 			background-color: #ebebeb;
-			box-shadow:
-				inset 0 -2px 0 0 #d4d4d4,
-				inset 0  2px 0 0 #d4d4d4,
-				inset -3px 0 0 0 #d4d4d4,
-				inset  3px 0 0 0 #d4d4d4;
+			box-shadow: inset 0 -2px 0 0 #d4d4d4, inset 0 2px 0 0 #d4d4d4,
+				inset -3px 0 0 0 #d4d4d4, inset 3px 0 0 0 #d4d4d4;
 		}
 
 		.cover {
@@ -135,7 +135,9 @@
 		.meta {
 			margin-left: 65px;
 
-			.title, .author, .price {
+			.title,
+			.author,
+			.price {
 				color: var(--primary-grey);
 				font: normal bold 12px/18px var(--body-font-family);
 
@@ -145,7 +147,7 @@
 			}
 
 			.author {
-				color: #ababab;//757474
+				color: #ababab; //757474
 				font-size: 10px;
 				line-height: 15px;
 				white-space: nowrap;
@@ -177,7 +179,8 @@
 			}
 
 			.meta {
-				.title, .author {
+				.title,
+				.author {
 					white-space: normal;
 				}
 

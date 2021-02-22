@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {getScrollParent} from '@nti/lib-dom';
-import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
-import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { getScrollParent } from '@nti/lib-dom';
+import { Layouts, Loading, Prompt, Decorators } from '@nti/web-commons';
+import { LinkTo, Prompt as RoutePrompt } from '@nti/web-routing';
 
 import NoteWindow from 'legacy/app/annotations/note/Window';
 import BaseModel from 'legacy/model/Base';
@@ -16,11 +16,11 @@ import Registry from '../Registry';
 import Styles from './View.css';
 
 const cx = classnames.bind(Styles);
-const handles = (obj) => obj &&  obj.isNote;
-const {Uncontrolled} = Layouts;
+const handles = obj => obj && obj.isNote;
+const { Uncontrolled } = Layouts;
 const t = scoped('nti-web-community-overrides.note.View', {
 	title: 'Posted in %(channelName)s',
-	deletedChannel: 'Deleted Item'
+	deletedChannel: 'Deleted Item',
 });
 
 class NTIWebCommunityNote extends React.Component {
@@ -30,16 +30,20 @@ class NTIWebCommunityNote extends React.Component {
 		channel: PropTypes.object.isRequired,
 		selectedComment: PropTypes.string,
 		focusNewComment: PropTypes.bool,
-		editMode: PropTypes.bool
-	}
+		editMode: PropTypes.bool,
+	};
 
 	static contextTypes = {
-		router: PropTypes.object
-	}
+		router: PropTypes.object,
+	};
 
-	componentDidUpdate (prevProps) {
-		const {focusNewComment, selectedComment, editMode} = this.props;
-		const {focusNewComment: prevFocus, selectedComment: prevComment, editMode:prevEdit} = prevProps;
+	componentDidUpdate(prevProps) {
+		const { focusNewComment, selectedComment, editMode } = this.props;
+		const {
+			focusNewComment: prevFocus,
+			selectedComment: prevComment,
+			editMode: prevEdit,
+		} = prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();
@@ -54,20 +58,22 @@ class NTIWebCommunityNote extends React.Component {
 		}
 	}
 
-	doFocusNewComment () {
+	doFocusNewComment() {
 		if (this.noteCmp) {
 			this.noteCmp.showNewReply();
 		}
 	}
 
-	doShowEditMode () {
+	doShowEditMode() {
 		if (this.noteCmp) {
 			this.noteCmp.showEditMode();
 		}
 	}
 
-	async doSelectComment (comment) {
-		if (!this.noteCmp) { return; }
+	async doSelectComment(comment) {
+		if (!this.noteCmp) {
+			return;
+		}
 
 		try {
 			const cmp = await this.noteCmp.getReplyCmp(comment);
@@ -75,15 +81,20 @@ class NTIWebCommunityNote extends React.Component {
 			if (cmp && cmp.el && cmp.el.dom) {
 				const scroll = getScrollParent(this.noteCmp.el.dom);
 
-				cmp.el.scrollCompletelyIntoView(Ext.get(scroll));//eslint-disable-line
+				cmp.el.scrollCompletelyIntoView(Ext.get(scroll)); //eslint-disable-line
 			}
 		} catch (e) {
 			//swallow
 		}
 	}
 
-	setupNote = (renderTo) => {
-		const {topic, focusNewComment, selectedComment, editMode} = this.props;
+	setupNote = renderTo => {
+		const {
+			topic,
+			focusNewComment,
+			selectedComment,
+			editMode,
+		} = this.props;
 		const noteModel = BaseModel.interfaceToModel(topic);
 
 		if (this.noteCmp) {
@@ -94,7 +105,7 @@ class NTIWebCommunityNote extends React.Component {
 			renderTo,
 			record: noteModel,
 			doClose: () => this.onDismiss(),
-			doNavigate: (obj) => {
+			doNavigate: obj => {
 				const store = ContextStateStore.getInstance();
 				const context = store.getContext();
 				const parts = context.reverse();
@@ -104,7 +115,7 @@ class NTIWebCommunityNote extends React.Component {
 						return part.cmp.navigateToObject(obj);
 					}
 				}
-			}
+			},
 		});
 
 		if (focusNewComment) {
@@ -118,18 +129,17 @@ class NTIWebCommunityNote extends React.Component {
 		if (editMode) {
 			this.doShowEditMode();
 		}
-	}
+	};
 
 	tearDownNote = () => {
 		if (this.noteCmp) {
 			this.noteCmp.destroy();
 			delete this.noteCmp;
 		}
-	}
+	};
 
-
-	onDismiss = (e) => {
-		const {channel} = this.props;
+	onDismiss = e => {
+		const { channel } = this.props;
 
 		if (e) {
 			e.stopPropagation();
@@ -137,8 +147,7 @@ class NTIWebCommunityNote extends React.Component {
 		}
 
 		return LinkTo.Object.routeTo(this.context.router, channel);
-	}
-
+	};
 
 	onRoute = async (cont, stop) => {
 		if (!this.noteCmp || !this.noteCmp.allowNavigation) {
@@ -152,26 +161,33 @@ class NTIWebCommunityNote extends React.Component {
 		} catch (e) {
 			stop();
 		}
-	}
+	};
 
-	render () {
-		const {topic, loading} = this.props;
-		const title = topic ? t('title', {channelName: topic.ContainerTitle || t('deletedChannel')}) : '';
+	render() {
+		const { topic, loading } = this.props;
+		const title = topic
+			? t('title', {
+					channelName: topic.ContainerTitle || t('deletedChannel'),
+			  })
+			: '';
 
 		return (
-			<Prompt.PagingWindow
-				onDismiss={this.onDismiss}
-				title={title}
-			>
-				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
-					<Uncontrolled className={cx('note')} onMount={this.setupNote} onUnmount={this.tearDownNote} />
+			<Prompt.PagingWindow onDismiss={this.onDismiss} title={title}>
+				<Loading.Placeholder
+					loading={loading || !topic}
+					fallback={<Loading.Spinner.Large />}
+				>
+					<Uncontrolled
+						className={cx('note')}
+						onMount={this.setupNote}
+						onUnmount={this.tearDownNote}
+					/>
 				</Loading.Placeholder>
 				<RoutePrompt onRoute={this.onRoute} when />
 			</Prompt.PagingWindow>
 		);
 	}
 }
-
 
 export default decorate(NTIWebCommunityNote, [
 	Registry.register(handles),

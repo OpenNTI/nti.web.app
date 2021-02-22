@@ -9,14 +9,12 @@ require('../contentviewer/overlay/Panel');
 require('./Header');
 require('./Parts');
 
-
-
 module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-question',
 
 	mixins: {
-		questionContent: 'NextThought.mixins.QuestionContent'
+		questionContent: 'NextThought.mixins.QuestionContent',
 	},
 
 	representsUserDataContainer: true,
@@ -24,19 +22,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	ui: 'assessment',
 
 	items: [
-		{xtype: 'box', questionNumberContainer: true},
-		{xtype: 'box', questionContainer: true}
+		{ xtype: 'box', questionNumberContainer: true },
+		{ xtype: 'box', questionContainer: true },
 	],
 
 	dockedItems: [
-		{ dock: 'top', xtype: 'question-header'},
-		{ dock: 'bottom', xtype: 'question-parts'}
+		{ dock: 'top', xtype: 'question-header' },
+		{ dock: 'bottom', xtype: 'question-parts' },
 	],
 
 	initComponent: function () {
 		this.callParent(arguments);
 		var parts = this.question.get('parts'),
-			multiPart = (parts.length > 1);
+			multiPart = parts.length > 1;
 
 		this.questionNumberContainer = this.down('[questionNumberContainer]');
 		this.questionContainer = this.down('[questionContainer]');
@@ -46,24 +44,25 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 			this.questionSet,
 			this.canSubmitIndividually(),
 			this.tabIndexTracker,
-			this.retrieveAnswerLabel());
+			this.retrieveAnswerLabel()
+		);
 
 		if (this.questionSet) {
 			this.mon(this.questionSet, {
 				scope: this,
-				'beforesubmit': this.gatherQuestionResponse,
-				'beforesaveprogress': this.gatherQuestionProgress,
-				'graded': this.updateWithResults,
+				beforesubmit: this.gatherQuestionResponse,
+				beforesaveprogress: this.gatherQuestionProgress,
+				graded: this.updateWithResults,
 				'set-progress': this.updateWithProgress,
-				'reset': this.reset,
+				reset: this.reset,
 				'reapply-progress': this.reapplyProgress,
 				'instructor-reset': this.instructorReset,
-				'instructor-show-solutions': this.showInstructorSolutions
+				'instructor-show-solutions': this.showInstructorSolutions,
 			});
 		}
 		this.mon(this, {
 			'enable-submission': this.determineSubmissionState,
-			'disable-submission': this.determineSubmissionState
+			'disable-submission': this.determineSubmissionState,
 		});
 
 		this.maybeAddQuestionNumber();
@@ -87,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 		if (range) {
 			range.selectNodeContents(this.contentElement);
 		}
-		return {range: range, rect: this.el.dom.getBoundingClientRect()};
+		return { range: range, rect: this.el.dom.getBoundingClientRect() };
 	},
 
 	setupContentElement: function () {
@@ -96,7 +95,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	},
 
 	retrieveAnswerLabel: function () {
-		var sln = this.contentElement && Ext.get(this.contentElement).select('.naqsolution'),
+		var sln =
+				this.contentElement &&
+				Ext.get(this.contentElement).select('.naqsolution'),
 			firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
 			firstUnits;
 
@@ -115,10 +116,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	determineSubmissionState: function () {
 		var d = this.query('[submissionDisabled=true]'),
 			multi = this.down('assessment-multipart-submission');
-		this.submissionDisabled = (d.length !== 0);
+		this.submissionDisabled = d.length !== 0;
 
 		if (multi) {
-			multi[this.submissionDisabled ? 'disableSubmission' : 'enableSubmission']();
+			multi[
+				this.submissionDisabled
+					? 'disableSubmission'
+					: 'enableSubmission'
+			]();
 		}
 	},
 
@@ -135,14 +140,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	 * @returns {void}
 	 */
 	updateWithProgress: function (questionSetSubmission, eopts, reapplying) {
-		if (!questionSetSubmission) { return; }
+		if (!questionSetSubmission) {
+			return;
+		}
 
-		var q, id = this.question.getId(),
+		var q,
+			id = this.question.getId(),
 			questions = questionSetSubmission.get('questions') || [];
 
 		if (questionSetSubmission.isSet) {
 			questions.every(function (question) {
-				if (question.getId() === id || question.get('questionId') === id) {
+				if (
+					question.getId() === id ||
+					question.get('questionId') === id
+				) {
 					q = question;
 				}
 
@@ -156,23 +167,27 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	},
 
 	updateWithResults: function (assessedQuestionSet) {
-		var q, id = this.question.getId(),
+		var q,
+			id = this.question.getId(),
 			correct,
 			fn = {
-				'null': 'markSubmitted',
-				'true': 'markCorrect',
-				'false': 'markIncorrect'
+				null: 'markSubmitted',
+				true: 'markCorrect',
+				false: 'markIncorrect',
 			};
 
 		if (assessedQuestionSet && assessedQuestionSet.isSet) {
 			Ext.each(assessedQuestionSet.get('questions'), function (i) {
-				if (i.getId() === id || i.get('questionId') === id || i.get('pollId') === id) {
+				if (
+					i.getId() === id ||
+					i.get('questionId') === id ||
+					i.get('pollId') === id
+				) {
 					q = i;
 					return false;
 				}
 			});
-		}
-		else {
+		} else {
 			q = assessedQuestionSet;
 		}
 
@@ -190,7 +205,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	},
 
 	gatherQuestionProgress: function (questionSet, collection) {
-		var id = this.question.getId(), values = [];
+		var id = this.question.getId(),
+			values = [];
 
 		Ext.each(this.query('abstract-question-input'), function (p) {
 			var v = p.getProgress ? p.getProgress() : p.getValue();
@@ -211,7 +227,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	},
 
 	gatherQuestionResponse: function (questionSet, collection) {
-		var id = this.question.getId(), values = [];
+		var id = this.question.getId(),
+			values = [];
 		Ext.each(this.query('abstract-question-input'), function (p) {
 			var v = p.getValue();
 			if (v === undefined || v === null) {
@@ -233,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	canSubmitIndividually: function () {
 		var c = this.contentElement;
 
-		function resolve () {
+		function resolve() {
 			var el = Ext.get(c).down('param[name=canindividual]');
 			return !el || el.getValue() !== 'false';
 		}
@@ -248,7 +265,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 	setQuestionContent: function (part) {
 		var me = this,
-			root = me.reader.getLocation().root, c, p;
+			root = me.reader.getLocation().root,
+			c,
+			p;
 
 		c = this.question.get('content') || '';
 		p = part ? part.get('content') : '';
@@ -261,14 +280,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 		this.questionContainer.update(
 			Ext.DomHelper.markup({
 				cls: 'question-content',
-				html: this.buildContent(ContentUtils.fixReferences(c + p, root) || '<p></p>')
-			}));
+				html: this.buildContent(
+					ContentUtils.fixReferences(c + p, root) || '<p></p>'
+				),
+			})
+		);
 
-		function santatize () {
-			me.el.select('a[href]').set({target: '_blank'});
+		function santatize() {
+			me.el.select('a[href]').set({ target: '_blank' });
 			me.el.select('a:empty').set({
 				id: null,
-				name: null
+				name: null,
 			});
 			me.updateLayout();
 		}
@@ -282,10 +304,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 	afterRender: function () {
 		this.callParent(arguments);
-		this.getTargetEl().select('img').on('load', function () {
-			this.updateLayout();
-			this.syncElementHeight();
-		}, this, {single: true});
+		this.getTargetEl()
+			.select('img')
+			.on(
+				'load',
+				function () {
+					this.updateLayout();
+					this.syncElementHeight();
+				},
+				this,
+				{ single: true }
+			);
 		this.getTargetEl().addCls('indexed-content');
 		this.syncTop();
 	},
@@ -350,10 +379,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 		me.gatherQuestionResponse(null, coll);
 
-
 		me.mask('Grading...');
 
-		me.AssessmentActions.checkAnswer(me.question, coll[me.question.getId()], me.startTimestamp, me.canSubmitIndividually())
+		me.AssessmentActions.checkAnswer(
+			me.question,
+			coll[me.question.getId()],
+			me.startTimestamp,
+			me.canSubmitIndividually()
+		)
 			.then(function (result) {
 				me.updateWithResults(result);
 			})
@@ -367,14 +400,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 	maybeAddQuestionNumber: function () {
 		if (this.questionIndex !== undefined) {
-
-			let questionNumberMarkup = Ext.DomHelper.markup(
-				{cls: 'question-number-container', cn: [
-					{cls: 'question-number', 'html': this.questionIndex + 1 + '.'}
-				]}
-			);
+			let questionNumberMarkup = Ext.DomHelper.markup({
+				cls: 'question-number-container',
+				cn: [
+					{
+						cls: 'question-number',
+						html: this.questionIndex + 1 + '.',
+					},
+				],
+			});
 
 			this.questionNumberContainer.update(questionNumberMarkup);
 		}
-	}
+	},
 });

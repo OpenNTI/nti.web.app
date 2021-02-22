@@ -1,40 +1,37 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.parts.Description',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.enrollment-description',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Description', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-description',
+		cls: 'enrollment-description',
 
+		renderTpl: Ext.DomHelper.markup([{ tag: 'p', html: '{text}' }]),
 
-	cls: 'enrollment-description',
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderTpl: Ext.DomHelper.markup([
-		{tag: 'p', html: '{text}'}
-	]),
+			this.renderData = Ext.apply(this.renderData || {}, {
+				text: this.text,
+			});
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			var anchors = this.el.query('a') || [];
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			text: this.text
-		});
-	},
+			anchors.forEach(function (anchor) {
+				if (anchor.host && anchor.host !== window.location.host) {
+					anchor.setAttribute('target', '_blank');
+				}
+			});
 
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		var anchors = this.el.query('a') || [];
-
-		anchors.forEach(function (anchor) {
-			if (anchor.host && anchor.host !== window.location.host) {
-				anchor.setAttribute('target', '_blank');
+			if (this.otherCls) {
+				this.addCls(this.otherCls);
 			}
-		});
-
-		if (this.otherCls) {
-			this.addCls(this.otherCls);
-		}
+		},
 	}
-});
+);

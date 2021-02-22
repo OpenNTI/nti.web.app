@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {Layouts} from '@nti/web-commons';
+import { decorate } from '@nti/lib-commons';
+import { Layouts } from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import TypeRegistry from '../Registry';
@@ -13,14 +13,14 @@ import styles from './View.css';
 
 const cx = classnames.bind(styles);
 
-const {Aside} = Layouts;
+const { Aside } = Layouts;
 const MIME_TYPES = {
-	'application/vnd.nextthought.webinarasset': true
+	'application/vnd.nextthought.webinarasset': true,
 };
 
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
+const handles = obj => {
+	const { location } = obj || {};
+	const { item } = location || {};
 
 	return item && MIME_TYPES[item.MimeType];
 };
@@ -28,14 +28,14 @@ const handles = (obj) => {
 class NTIWebLessonItemsWebinar extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
-			item: PropTypes.object
+			item: PropTypes.object,
 		}),
-		course: PropTypes.object.isRequired
-	}
+		course: PropTypes.object.isRequired,
+	};
 
-	render () {
-		const {course, location} = this.props;
-		const {item} = location || {};
+	render() {
+		const { course, location } = this.props;
+		const { item } = location || {};
 
 		return (
 			<div>
@@ -50,5 +50,5 @@ class NTIWebLessonItemsWebinar extends React.Component {
 }
 
 export default decorate(NTIWebLessonItemsWebinar, [
-	TypeRegistry.register(handles)
+	TypeRegistry.register(handles),
 ]);

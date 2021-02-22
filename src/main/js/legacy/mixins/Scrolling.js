@@ -2,48 +2,55 @@ const Ext = require('@nti/extjs');
 
 const Scrolling = require('legacy/util/Scrolling');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
-	initScrolling () {
+	initScrolling() {
 		if (!this.Scrolling) {
 			this.Scrolling = {
-				scrollingEl: Scrolling.getPageScrollingEl()
+				scrollingEl: Scrolling.getPageScrollingEl(),
 			};
 		}
 	},
 
-	getPageScrollingEl () {
+	getPageScrollingEl() {
 		return Scrolling.getPageScrollingEl();
 	},
 
-	getPageScrollHeight () {
+	getPageScrollHeight() {
 		return Scrolling.getPageScrollingHeight();
 	},
 
-	getPageHeight () {
+	getPageHeight() {
 		return Scrolling.getPageHeight();
 	},
 
-	findScrollableParent (node) {
+	findScrollableParent(node) {
 		this.initScrolling();
 
-		const isScrollable = (el) => {
+		const isScrollable = el => {
 			const computed = el && getComputedStyle(el);
 
 			//if the node is scrollable and the overflow allows it to scroll
-			return el
-				&& el.scrollHeight > el.clientHeight
-				&& (computed['overflow-y'] === 'auto' || computed['overflow-y'] === 'scroll');
+			return (
+				el &&
+				el.scrollHeight > el.clientHeight &&
+				(computed['overflow-y'] === 'auto' ||
+					computed['overflow-y'] === 'scroll')
+			);
 		};
 
-		while (node && node !== this.Scrolling.scrollingEl && node !== document && !isScrollable(node)) {
+		while (
+			node &&
+			node !== this.Scrolling.scrollingEl &&
+			node !== document &&
+			!isScrollable(node)
+		) {
 			node = node.parentNode;
 		}
 
 		return node !== this.Scrolling.scrollingEl && node !== document && node;
 	},
 
-	maybeStopScrollBleed (e) {
+	maybeStopScrollBleed(e) {
 		const target = this.findScrollableParent(e.target);
 		const scrollTop = target && target.scrollTop;
 		const scrollHeight = target && target.scrollHeight;
@@ -51,14 +58,18 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		const delta = e.wheelDelta;
 		const up = delta > 0;
 
-		function prevent () {
+		function prevent() {
 			e.stopPropagation();
 			e.preventDefault();
 			e.returnValue = false;
 			return false;
 		}
 
-		if (!target || target.classList.contains('allow-scroll-bleed') || (e.target === target && target.tagName === 'HTML')) {
+		if (
+			!target ||
+			target.classList.contains('allow-scroll-bleed') ||
+			(e.target === target && target.tagName === 'HTML')
+		) {
 			return true;
 		}
 
@@ -75,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		}
 	},
 
-	scrollPageTo (position) {
+	scrollPageTo(position) {
 		this.initScrolling();
 
 		const page = this.getPageScrollingEl();
@@ -89,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		page.scrollTop = position;
 	},
 
-	scrollPageToTop () {
+	scrollPageToTop() {
 		this.scrollPageTo(0);
-	}
+	},
 });

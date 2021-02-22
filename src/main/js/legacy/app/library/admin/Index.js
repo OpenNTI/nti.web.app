@@ -1,41 +1,47 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 require('../courses/Index');
 require('legacy/mixins/Router');
-
 
 module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 	extend: 'NextThought.app.library.courses.Index',
 	alias: 'widget.library-admin',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	isCoursePage: false,
 
 	layout: 'none',
 
-	items: [{
-		xtype: 'box',
-		cls: 'title-container',
-		autoEl: {cn: [
-			{cls: 'home', html: 'Home'},
-			{cls: 'title', html: getString('NextThought.view.library.View.administeredCourses')}
-		]}
-	}],
+	items: [
+		{
+			xtype: 'box',
+			cls: 'title-container',
+			autoEl: {
+				cn: [
+					{ cls: 'home', html: 'Home' },
+					{
+						cls: 'title',
+						html: getString(
+							'NextThought.view.library.View.administeredCourses'
+						),
+					},
+				],
+			},
+		},
+	],
 
 	__getUpcomingCourses: function () {
 		return this.CourseStore.getUpcomingAdminCourses();
 	},
 
-
 	__getCurrentCourses: function () {
 		return this.CourseStore.getCurrentAdminCourses();
 	},
-
 
 	__getArchivedCourses: function () {
 		return this.CourseStore.getArchivedAdminCourses();
@@ -46,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 
 		return Promise.all([
 			me.Actions.loadAdminUpcomingCourses(),
-			me.Actions.loadAdminCurrentCourses()
+			me.Actions.loadAdminCurrentCourses(),
 		]).then(function () {
 			var upcomingCourses = me.__getUpcomingCourses(),
 				currentCourses = me.__getCurrentCourses();
@@ -68,24 +74,25 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 					xtype: 'library-view-course-page',
 					upcoming: upcomingCourses,
 					current: currentCourses,
-					archived: [],	// defer loading of archived for performance reasons
-					archivedLoader: (forceReload) => {
+					archived: [], // defer loading of archived for performance reasons
+					archivedLoader: forceReload => {
 						const archived = me.__getArchivedCourses();
-						if(!archived || forceReload) {
+						if (!archived || forceReload) {
 							// need to lazy load
-							return me.Actions.loadAdminArchivedCourses().then(() => {
-								return me.__getArchivedCourses();
-							});
+							return me.Actions.loadAdminArchivedCourses().then(
+								() => {
+									return me.__getArchivedCourses();
+								}
+							);
 						}
 
 						return Promise.resolve(archived);
 					},
-					navigate: me.navigateToCourse.bind(me)
+					navigate: me.navigateToCourse.bind(me),
 				});
 			}
 		});
 	},
 
-
-	showAvailableCourses: function (route, subRoute) {}
+	showAvailableCourses: function (route, subRoute) {},
 });

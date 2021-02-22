@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('UserRepository', () => require('legacy/cache/UserRepository'));
-
+const lazy = require('legacy/util/lazy-require').get('UserRepository', () =>
+	require('legacy/cache/UserRepository')
+);
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	extend: 'Ext.data.reader.Json',
@@ -40,20 +40,23 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 		var result = this.callParent([data]),
 			records = result.records;
 		try {
-			Ext.each(records || [], function (record) {
-				this.precacheUserLists(record);
-			}, this);
+			Ext.each(
+				records || [],
+				function (record) {
+					this.precacheUserLists(record);
+				},
+				this
+			);
 
 			return result;
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e.stack || e, records);
 			return Ext.data.ResultSet.create({
 				total: 0,
 				count: 0,
 				records: [],
-				success: false
+				success: false,
 			});
 		}
-	}
+	},
 });

@@ -4,7 +4,6 @@ const BlogActions = require('../Actions');
 
 require('./old/Comment');
 
-
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Comment', {
 	extend: 'NextThought.app.blog.parts.old.Comment',
 	alias: 'widget.profile-blog-comment',
@@ -18,5 +17,5 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Comment', {
 
 	fireDeleteEvent: function () {
 		this.BlogActions.deleteBlogPost(this.record);
-	}
+	},
 });

@@ -1,37 +1,36 @@
 const Ext = require('@nti/extjs');
-const {format} = require('date-fns');
+const { format } = require('date-fns');
 
 require('./Item');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.dashboard.components.tiles.Lesson',
+	{
+		extend: 'NextThought.app.course.dashboard.components.tiles.Item',
+		alias: 'widget.dashboard-lesson',
 
-module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.Item',
-	alias: 'widget.dashboard-lesson',
+		cls: 'dashboard-item lesson-tile',
 
-	cls: 'dashboard-item lesson-tile',
+		getPath: function () {
+			return 'Lessons';
+		},
 
+		getTitle: function () {
+			return this.record.get('title');
+		},
 
-	getPath: function () {
-		return 'Lessons';
-	},
+		getBullets: function () {
+			return [];
+		},
 
+		getFooter: function () {
+			var start = this.record.get('startDate');
 
-	getTitle: function () {
-		return this.record.get('title');
-	},
+			return format(start, 'eeee, MMMM d');
+		},
 
-
-	getBullets: function () { return []; },
-
-
-	getFooter: function () {
-		var start = this.record.get('startDate');
-
-		return format(start, 'eeee, MMMM d');
-	},
-
-
-	handleNavigation: function () {
-		this.navigateToObject(this.record);
+		handleNavigation: function () {
+			this.navigateToObject(this.record);
+		},
 	}
-});
+);

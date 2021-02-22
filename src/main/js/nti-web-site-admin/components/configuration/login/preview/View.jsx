@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
-import {Text} from '@nti/web-login/shared';
-import {Prompt, Button, Theme} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { Text } from '@nti/web-login/shared';
+import { Prompt, Button, Theme } from '@nti/web-commons';
 
 import Styles from './View.css';
 
 const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.admin.login.preview', {
-	save: 'Apply Changes'
+	save: 'Apply Changes',
 });
 
 LoginPreview.propTypes = {
 	onSave: PropTypes.func,
-	onCancel: PropTypes.func
+	onCancel: PropTypes.func,
 };
-export default function LoginPreview ({onSave, onCancel}) {
+export default function LoginPreview({ onSave, onCancel }) {
 	const background = Theme.useThemeProperty('login.background');
 	const disclaimer = Theme.useThemeProperty('login.disclaimer');
 
@@ -27,7 +27,7 @@ export default function LoginPreview ({onSave, onCancel}) {
 	}
 
 	const buttonStyle = {
-		backgroundColor: Theme.useThemeProperty('login.buttonBackground')
+		backgroundColor: Theme.useThemeProperty('login.buttonBackground'),
 	};
 
 	return (
@@ -43,18 +43,40 @@ export default function LoginPreview ({onSave, onCancel}) {
 							<div className={cx('header')}>
 								<Theme.Asset name="login.logo" />
 							</div>
-							<div className={cx('login', {'has-disclaimer': !!disclaimer})}>
-								<Text.H1>{Theme.useThemeProperty('login.title')}</Text.H1>
-								<Text.Large>{Theme.useThemeProperty('login.description')}</Text.Large>
+							<div
+								className={cx('login', {
+									'has-disclaimer': !!disclaimer,
+								})}
+							>
+								<Text.H1>
+									{Theme.useThemeProperty('login.title')}
+								</Text.H1>
+								<Text.Large>
+									{Theme.useThemeProperty(
+										'login.description'
+									)}
+								</Text.Large>
 								{disclaimer && (
-									<Text.Disclaimer>{disclaimer}</Text.Disclaimer>
+									<Text.Disclaimer>
+										{disclaimer}
+									</Text.Disclaimer>
 								)}
 								<div className={cx('form')}>
 									<div className={cx('input')} />
 									<div className={cx('input')} />
 									<div className={cx('recover')} />
-									<div className={cx('button', Theme.useThemeProperty('login.buttonThemes'))} style={buttonStyle}>
-										{Theme.useThemeProperty('login.buttonText')}
+									<div
+										className={cx(
+											'button',
+											Theme.useThemeProperty(
+												'login.buttonThemes'
+											)
+										)}
+										style={buttonStyle}
+									>
+										{Theme.useThemeProperty(
+											'login.buttonText'
+										)}
 									</div>
 								</div>
 							</div>

@@ -1,43 +1,46 @@
 const Ext = require('@nti/extjs');
-const {User} = require('@nti/web-profiles');
+const { User } = require('@nti/web-profiles');
 
 require('legacy/mixins/Router');
 require('legacy/overrides/ReactHarness.js');
 
-const {Transcripts} = User;
+const { Transcripts } = User;
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.transcripts.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.user-profile-transcripts',
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.transcripts.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.user-profile-transcripts',
 
-	columns: 7,
-	layout: 'none',
-	ui: 'profile-transcripts',
-	cls: 'profile-transcripts',
+		columns: 7,
+		layout: 'none',
+		ui: 'profile-transcripts',
+		cls: 'profile-transcripts',
 
-	items: [],
+		items: [],
 
-	mixins: {
-		Route: 'NextThought.mixins.Router'
-	},
+		mixins: {
+			Route: 'NextThought.mixins.Router',
+		},
 
-	userChanged: function (user, isMe) {
-		this.activeUser = user;
+		userChanged: function (user, isMe) {
+			this.activeUser = user;
 
-		this.remove(this.transcriptsCmp);
+			this.remove(this.transcriptsCmp);
 
-		this.activeUser.getInterfaceInstance().then(modeledUser => {
-			this.transcriptsCmp = this.add({
-				xtype: 'react',
-				component: Transcripts,
-				entity: modeledUser
+			this.activeUser.getInterfaceInstance().then(modeledUser => {
+				this.transcriptsCmp = this.add({
+					xtype: 'react',
+					component: Transcripts,
+					entity: modeledUser,
+				});
 			});
-		});
 
-		return Promise.resolve();
-	},
+			return Promise.resolve();
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
+		initComponent: function () {
+			this.callParent(arguments);
+		},
 	}
-});
+);

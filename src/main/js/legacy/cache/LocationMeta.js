@@ -1,27 +1,25 @@
 const Ext = require('@nti/extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
-
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
 	},
 
 	meta: {},
 	ids: {},
 
-
 	getValue: function (id) {
 		return this.meta[this.ids[id]];
 	},
 
-
 	getMeta: function (ntiid, callback, scope) {
-		var maybe = this.getValue(ntiid), p,
+		var maybe = this.getValue(ntiid),
+			p,
 			cb = callback || Ext.emptyFn;
 
 		if (!ntiid) {
@@ -39,10 +37,10 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		return p;
 	},
 
-
 	attachContentRootToMeta: function (meta, pi) {
-		function buildPath (s, root) {
-			var p = s.split('/'); p.splice(-1, 1, '');
+		function buildPath(s, root) {
+			var p = s.split('/');
+			p.splice(-1, 1, '');
 			p = p.join('/');
 			//trim off the root if its present
 			return p.replace(new RegExp(RegExp.escape(root) + '$'), '');
@@ -53,7 +51,6 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		meta.pageInfo = pi; // cache the pageInfo as well.
 		return meta;
 	},
-
 
 	cacheMeta: function (meta, theId, ntiid, assessmentItems) {
 		var me = this;
@@ -68,7 +65,6 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 			me.ids[assessmentItem.getId()] = theId;
 		});
 	},
-
 
 	createAndCacheMeta: function (ntiid, pi, ignoreCache) {
 		var assessmentItems = pi.get('AssessmentItems') || [],
@@ -87,7 +83,6 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 
 		return meta;
 	},
-
 
 	/*
 	 * Load meta data for the provided ntiid.  These should be content ids here.
@@ -123,8 +118,20 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 			.then(function (info) {
 				return Promise.resolve(info)
 					.then(function (pi) {
-						var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
-						return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
+						var meta = me.createAndCacheMeta(
+							ntiid,
+							pi,
+							ignoreCache
+						);
+						return (
+							meta ||
+							Promise.reject([
+								'createAndCacheMeta failed: ',
+								ntiid,
+								pi,
+								ignoreCache,
+							])
+						);
 					})
 					.then(function (infos) {
 						return Ext.isArray(infos) ? infos[0] : infos;
@@ -132,17 +139,21 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 			})
 			.catch(function (reason) {
 				if (reason && reason.status === 403) {
-					console.log('Unauthorized when requesting page info', ntiid);
+					console.log(
+						'Unauthorized when requesting page info',
+						ntiid
+					);
 					return me.handleUnauthorized(ntiid, reason);
 				}
 				return Promise.reject(reason);
 			});
 	},
 
-
 	listenToLibrary: function () {
 		//It doesn't look like this is being called
-		console.error('listenToLibrary doesn\'t look like its being called, don`t call it');
+		console.error(
+			"listenToLibrary doesn't look like its being called, don`t call it"
+		);
 		// var me = this;
 
 		// if (me.libraryMon) {
@@ -155,12 +166,10 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		// });
 	},
 
-
 	clearCache: function () {
 		this.meta = {};
 		this.ids = {};
 	},
-
 
 	handleUnauthorized: function (ntiid, reason) {
 		var me = this,
@@ -168,33 +177,36 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 			bookPrefix;
 
 		if (meta) {
-			return Service.getPageInfo(meta.ContentNTIID)
-				.then(function (pageInfo) {
-					if (pageInfo.isPageInfo) {
-						me.attachContentRootToMeta(meta, pageInfo);
-						me.cacheMeta(meta, ntiid, ntiid);
-						return meta;
-					}
-					return Promise.reject('No Meta');
-				});
+			return Service.getPageInfo(meta.ContentNTIID).then(function (
+				pageInfo
+			) {
+				if (pageInfo.isPageInfo) {
+					me.attachContentRootToMeta(meta, pageInfo);
+					me.cacheMeta(meta, ntiid, ntiid);
+					return meta;
+				}
+				return Promise.reject('No Meta');
+			});
 		}
 
 		bookPrefix = me.bookPrefixIfQuestion(ntiid);
 		bookPrefix = bookPrefix ? me.findTitleWithPrefix(bookPrefix) : null;
 
-		return bookPrefix ? me.loadMeta(bookPrefix.get('NTIID')) : Promise.reject(reason || 'No Content');
+		return bookPrefix
+			? me.loadMeta(bookPrefix.get('NTIID'))
+			: Promise.reject(reason || 'No Content');
 	},
-
 
 	findTitleWithPrefix: function (prefix) {
 		//It doesn`t look like this is getting called.
-		console.error('findTitleWithPrefix doesn`t look like its getting called, don`t call it.');
+		console.error(
+			'findTitleWithPrefix doesn`t look like its getting called, don`t call it.'
+		);
 		return null;
 		// return Library.findTitleWithPrefix(prefix);
 	},
 
 	bookPrefixIfQuestion: function (id) {
 		return lazy.ParseUtils.ntiidPrefix(id);
-	}
-
+	},
 }).create();

@@ -1,138 +1,124 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const ControlBar = require('nti-web-course-overview-controls').default;
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.EditingControls',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.course-overview-editing-controls',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.EditingControls', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-overview-editing-controls',
+		cls: 'editing-controls',
 
-	cls: 'editing-controls',
+		renderTpl: Ext.DomHelper.markup([{ cls: 'controls' }]),
 
+		renderSelectors: {
+			controlsEl: '.controls',
+		},
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'controls'}
-	]),
+		afterRender: function () {
+			this.callParent(arguments);
 
+			this.controlBar = new ReactHarness({
+				component: ControlBar,
+				renderTo: this.controlsEl,
+				gotoResources: () => this.gotoResources(),
+				switchToEdit: () => this.switchToEdit(),
+				switchToPreview: () => this.switchToPreview(),
+				showAuditLogs: () => this.showAuditLogs(),
+				canDoAdvancedEditing: Service.canDoAdvancedEditing(),
+				mode: this.mode,
+				hide: this.doHide,
+				disabled: false,
+			});
+		},
 
-	renderSelectors: {
-		controlsEl: '.controls'
-	},
+		isHidden() {
+			return this.doHide;
+		},
 
+		hide() {
+			this.doHide = true;
 
-	afterRender: function () {
-		this.callParent(arguments);
-
-		this.controlBar = new ReactHarness({
-			component: ControlBar,
-			renderTo: this.controlsEl,
-			gotoResources: () => this.gotoResources(),
-			switchToEdit: () => this.switchToEdit(),
-			switchToPreview: () => this.switchToPreview(),
-			showAuditLogs: () => this.showAuditLogs(),
-			canDoAdvancedEditing: Service.canDoAdvancedEditing(),
-			mode: this.mode,
-			hide: this.doHide,
-			disabled: false
-		});
-	},
-
-
-	isHidden () {
-		return this.doHide;
-	},
-
-
-	hide () {
-		this.doHide = true;
-
-		if (this.controlBar) {
-			wait()
-				.then(() => {
+			if (this.controlBar) {
+				wait().then(() => {
 					if (this.doHide) {
 						this.controlBar.setProps({
-							hide: true
+							hide: true,
 						});
 					}
 				});
+			}
+		},
 
-		}
-	},
+		show() {
+			this.doHide = false;
 
+			if (this.controlBar) {
+				this.controlBar.setProps({
+					hide: false,
+				});
+			}
+		},
 
-	show () {
-		this.doHide = false;
+		showNotEditing: function () {
+			this.mode = ControlBar.PREVIEW;
 
-		if (this.controlBar) {
-			this.controlBar.setProps({
-				hide: false
-			});
-		}
-	},
+			if (this.controlBar) {
+				this.controlBar.setProps({
+					mode: ControlBar.PREVIEW,
+					disabled: false,
+				});
+			}
+		},
 
+		showEditing: function () {
+			this.mode = ControlBar.EDITING;
 
-	showNotEditing: function () {
-		this.mode = ControlBar.PREVIEW;
+			if (this.controlBar) {
+				this.controlBar.setProps({
+					mode: ControlBar.EDITING,
+					disabled: false,
+				});
+			}
+		},
 
-		if (this.controlBar) {
-			this.controlBar.setProps({
-				mode: ControlBar.PREVIEW,
-				disabled: false
-			});
-		}
-	},
+		switchToEdit: function () {
+			if (this.controlBar) {
+				this.controlBar.setProps({
+					disabled: true,
+				});
+			}
 
+			if (this.openEditing) {
+				this.openEditing();
+			}
+		},
 
-	showEditing: function () {
-		this.mode = ControlBar.EDITING;
+		switchToPreview: function () {
+			if (this.controlBar) {
+				this.controlBar.setProps({
+					disabled: true,
+				});
+			}
 
-		if (this.controlBar) {
-			this.controlBar.setProps({
-				mode: ControlBar.EDITING,
-				disabled: false
-			});
-		}
-	},
+			if (this.closeEditing) {
+				this.closeEditing();
+			}
+		},
 
+		gotoResources() {
+			if (this.gotoResources) {
+				this.gotoResources();
+			}
+		},
 
-	switchToEdit: function () {
-		if (this.controlBar) {
-			this.controlBar.setProps({
-				disabled: true
-			});
-		}
-
-		if (this.openEditing) {
-			this.openEditing();
-		}
-	},
-
-
-	switchToPreview: function () {
-		if (this.controlBar) {
-			this.controlBar.setProps({
-				disabled: true
-			});
-		}
-
-		if (this.closeEditing) {
-			this.closeEditing();
-		}
-	},
-
-
-	gotoResources () {
-		if (this.gotoResources) {
-			this.gotoResources();
-		}
-	},
-
-
-	showAuditLogs: function () {
-		if (this.openAuditLog) {
-			this.openAuditLog();
-		}
+		showAuditLogs: function () {
+			if (this.openAuditLog) {
+				this.openAuditLog();
+			}
+		},
 	}
-});
+);

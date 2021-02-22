@@ -1,7 +1,12 @@
-
-%icon-fallback-link { background-image: url(/app/resources/images/file-icons/icon-www.png) !important; }
-%icon-fallback-unknow { background-image: url(/app/resources/images/file-icons/generic.png) !important; }
-%icon-fallback-download { background-image: url(/app/resources/images/file-icons/blank-download.png) !important; }
+%icon-fallback-link {
+	background-image: url(/app/resources/images/file-icons/icon-www.png) !important;
+}
+%icon-fallback-unknow {
+	background-image: url(/app/resources/images/file-icons/generic.png) !important;
+}
+%icon-fallback-download {
+	background-image: url(/app/resources/images/file-icons/blank-download.png) !important;
+}
 
 @mixin file-custom-icon() {
 	.icon {
@@ -29,12 +34,16 @@
 
 			&.www {
 				@extend %icon-fallback-link;
-				label { display: none; }
+				label {
+					display: none;
+				}
 			}
 
 			&.unknown {
 				@extend %icon-fallback-unknow;
-				label { display: none; }
+				label {
+					display: none;
+				}
 			}
 
 			label {
@@ -54,15 +63,24 @@
 			}
 
 			//Blue=Docs
-			&.doc, &.docx, &.pages, &.txt, &.plain {
+			&.doc,
+			&.docx,
+			&.pages,
+			&.txt,
+			&.plain {
 				color: $blue;
 			}
 			//Orange=Presentations
-			&.ppt, &.pptx, &.key {
+			&.ppt,
+			&.pptx,
+			&.key {
 				color: $orange;
 			}
 			//Green=Sheets
-			&.xls, &.xlsx, &.numbers, &.csv {
+			&.xls,
+			&.xlsx,
+			&.numbers,
+			&.csv {
 				color: $green;
 			}
 			//Red=PDF
@@ -70,7 +88,12 @@
 				color: $red;
 			}
 			//Yellow=Archive
-			&.zip, &.gz, &.tar, &.z, &.\7z, &.rar {
+			&.zip,
+			&.gz,
+			&.tar,
+			&.z,
+			&.\7z,
+			&.rar {
 				color: $yellow;
 			}
 		}

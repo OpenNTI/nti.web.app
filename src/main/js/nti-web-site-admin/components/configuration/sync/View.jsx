@@ -3,80 +3,93 @@ import { getService } from '@nti/web-client';
 import { DateTime, Flyout, Prompt } from '@nti/web-commons';
 
 export default class View extends React.Component {
-	attachFlyoutRef = x => this.flyout = x
+	attachFlyoutRef = x => (this.flyout = x);
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			isLocked: false,
-			loadingMeta: true
+			loadingMeta: true,
 		};
 	}
 
-	async componentDidMount () {
+	async componentDidMount() {
 		const service = await getService();
 
-		this.setState({ workspace: service.getWorkspace('SiteAdmin') }, this.__refreshSyncStatus);
+		this.setState(
+			{ workspace: service.getWorkspace('SiteAdmin') },
+			this.__refreshSyncStatus
+		);
 	}
 
-	__refreshSyncStatus () {
+	__refreshSyncStatus() {
 		const syncLink = this.__getLink('SyncMetadata');
 
-		if(!syncLink) {
+		if (!syncLink) {
 			return;
 		}
 
-		return getService().then((service) => {
-			return service.get(syncLink).then((resp) => {
-				if(!resp.is_locked && this.refreshInterval) {
+		return getService().then(service => {
+			return service.get(syncLink).then(resp => {
+				if (!resp.is_locked && this.refreshInterval) {
 					clearInterval(this.refreshInterval);
-				}
-				else if(resp.is_locked && !this.refreshInterval) {
-					this.refreshInterval = setInterval(() => { this.__refreshSyncStatus(); }, 5000);
+				} else if (resp.is_locked && !this.refreshInterval) {
+					this.refreshInterval = setInterval(() => {
+						this.__refreshSyncStatus();
+					}, 5000);
 				}
 
-				this.setState({isLocked: resp.is_locked, lockHolder: resp.holding_user,
+				this.setState({
+					isLocked: resp.is_locked,
+					lockHolder: resp.holding_user,
 					lastSyncedDate: new Date(resp.last_synchronized * 1000),
-					lastLocked: new Date(resp.last_locked * 1000), loadingMeta: false, errorMsg: null, loadingMsg: null});
+					lastLocked: new Date(resp.last_locked * 1000),
+					loadingMeta: false,
+					errorMsg: null,
+					loadingMsg: null,
+				});
 			});
 		});
 	}
 
-	__getLink (name) {
+	__getLink(name) {
 		const { workspace } = this.state;
 
-		if(!workspace || !workspace.Links) {
+		if (!workspace || !workspace.Links) {
 			return null;
 		}
 
-		const matches = workspace.Links.filter((x) => x.rel === name);
+		const matches = workspace.Links.filter(x => x.rel === name);
 
 		return matches.length > 0 ? matches[0].href : null;
 	}
 
-	onError (msg) {
-		this.setState({errorMsg : msg});
+	onError(msg) {
+		this.setState({ errorMsg: msg });
 	}
 
-	renderError () {
-		if(this.state.errorMsg) {
-			return (<div className="error">{this.state.errorMsg}</div>);
+	renderError() {
+		if (this.state.errorMsg) {
+			return <div className="error">{this.state.errorMsg}</div>;
 		}
 
 		return null;
 	}
 
-	renderLockedStatus () {
-		if(this.state.isLocked) {
-			return (<span className="sync-locked">Locked</span>);
-		}
-		else {
-			return (<span className="sync-unlocked">Unlocked</span>);
+	renderLockedStatus() {
+		if (this.state.isLocked) {
+			return <span className="sync-locked">Locked</span>;
+		} else {
+			return <span className="sync-unlocked">Unlocked</span>;
 		}
 	}
 
-	renderOptionsTrigger () {
-		return (<span className="refresh-meta"><i className="icon-settings"/></span>);
+	renderOptionsTrigger() {
+		return (
+			<span className="refresh-meta">
+				<i className="icon-settings" />
+			</span>
+		);
 	}
 
 	doRefresh = () => {
@@ -85,29 +98,40 @@ export default class View extends React.Component {
 		this.setState({ loadingMeta: true }, () => {
 			this.__refreshSyncStatus();
 		});
-	}
+	};
 
 	doResync = () => {
-		if(this.state.isLocked) {
+		if (this.state.isLocked) {
 			return;
 		}
 
 		this.flyout && this.flyout.dismiss();
 
 		Prompt.areYouSure('Re-syncing may take a while.').then(() => {
-			getService().then((service) => {
-				service.get(this.__getLink('SyncAllLibraries'));
+			getService()
+				.then(service => {
+					service.get(this.__getLink('SyncAllLibraries'));
 
-				this.setState({ errorMsg: null, loadingMsg: 'Starting sync...', loadingMeta: true }, () => {
-					this.refreshInterval = setInterval(() => { this.__refreshSyncStatus(); }, 5000);
+					this.setState(
+						{
+							errorMsg: null,
+							loadingMsg: 'Starting sync...',
+							loadingMeta: true,
+						},
+						() => {
+							this.refreshInterval = setInterval(() => {
+								this.__refreshSyncStatus();
+							}, 5000);
+						}
+					);
+				})
+				.catch(resp => {
+					this.onError(resp.message || 'Could not re-sync');
 				});
-			}).catch((resp) => {
-				this.onError(resp.message || 'Could not re-sync');
-			});
 		});
-	}
+	};
 
-	renderOptions () {
+	renderOptions() {
 		return (
 			<Flyout.Triggered
 				className="sync-options"
@@ -118,13 +142,18 @@ export default class View extends React.Component {
 			>
 				<div>
 					<div onClick={this.doRefresh}>Refresh Status</div>
-					<div className={this.state.isLocked ? 'disabled' : ''} onClick={this.doResync}>Re-sync</div>
+					<div
+						className={this.state.isLocked ? 'disabled' : ''}
+						onClick={this.doResync}
+					>
+						Re-sync
+					</div>
 				</div>
 			</Flyout.Triggered>
 		);
 	}
 
-	renderLockStatus () {
+	renderLockStatus() {
 		return (
 			<div>
 				<div className="label">Status</div>
@@ -136,14 +165,12 @@ export default class View extends React.Component {
 		);
 	}
 
-	renderLockHolder () {
-		if(this.state.isLocked && this.state.lockHolder) {
+	renderLockHolder() {
+		if (this.state.isLocked && this.state.lockHolder) {
 			return (
 				<div>
 					<div className="label">Lock Holder</div>
-					<div>
-						{this.state.lockHolder}
-					</div>
+					<div>{this.state.lockHolder}</div>
 				</div>
 			);
 		}
@@ -151,16 +178,17 @@ export default class View extends React.Component {
 		return null;
 	}
 
-	renderLockTime () {
-		if(this.state.isLocked && this.state.lastLocked) {
-			const formattedDate = DateTime.format(this.state.lastLocked, DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME);
+	renderLockTime() {
+		if (this.state.isLocked && this.state.lastLocked) {
+			const formattedDate = DateTime.format(
+				this.state.lastLocked,
+				DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME
+			);
 
 			return (
 				<div>
 					<div className="label">Lock Time</div>
-					<div>
-						{formattedDate}
-					</div>
+					<div>{formattedDate}</div>
 				</div>
 			);
 		}
@@ -168,9 +196,9 @@ export default class View extends React.Component {
 		return null;
 	}
 
-	renderSyncAllLibraries (syncAllLibraries) {
-		if(syncAllLibraries) {
-			return (<div className="sync-control">Sync All Libraries</div>);
+	renderSyncAllLibraries(syncAllLibraries) {
+		if (syncAllLibraries) {
+			return <div className="sync-control">Sync All Libraries</div>;
 		}
 
 		return null;
@@ -179,27 +207,37 @@ export default class View extends React.Component {
 	onRemoveSyncLock = () => {
 		const removeSyncLock = this.__getLink('RemoveSyncLock');
 
-		getService().then((service) => {
-			this.setState({errorMsg: null}, () => {
-				service.post(removeSyncLock).then(() => {
-					this.__refreshSyncStatus();
-				}).catch((resp) => {
-					this.onError(resp.message || 'Could not remove lock');
-				});
+		getService().then(service => {
+			this.setState({ errorMsg: null }, () => {
+				service
+					.post(removeSyncLock)
+					.then(() => {
+						this.__refreshSyncStatus();
+					})
+					.catch(resp => {
+						this.onError(resp.message || 'Could not remove lock');
+					});
 			});
 		});
-	}
+	};
 
-	renderRemoveSyncLock () {
-		if(this.state.isLocked && this.__getLink('RemoveSyncLock')) {
-			return (<span className="remove-lock" onClick={this.onRemoveSyncLock}>Remove Sync Lock</span>);
+	renderRemoveSyncLock() {
+		if (this.state.isLocked && this.__getLink('RemoveSyncLock')) {
+			return (
+				<span className="remove-lock" onClick={this.onRemoveSyncLock}>
+					Remove Sync Lock
+				</span>
+			);
 		}
 
 		return null;
 	}
 
-	renderFooter () {
-		const formattedDate = DateTime.format(this.state.lastSyncedDate, DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME);
+	renderFooter() {
+		const formattedDate = DateTime.format(
+			this.state.lastSyncedDate,
+			DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME
+		);
 
 		return (
 			<div className="footer">
@@ -208,8 +246,8 @@ export default class View extends React.Component {
 		);
 	}
 
-	render () {
-		if(!this.state.workspace) {
+	render() {
+		if (!this.state.workspace) {
 			return null;
 		}
 
@@ -217,14 +255,13 @@ export default class View extends React.Component {
 		const syncAllLink = this.__getLink('SyncAllLibraries');
 		const removeLink = this.__getLink('RemoveSyncLock');
 
-		if(!metaDataLink || !syncAllLink || !removeLink) {
+		if (!metaDataLink || !syncAllLink || !removeLink) {
 			return null;
 		}
 
-		if(this.state.loadingMeta) {
-			return (<div>{this.state.loadingMsg || 'Loading sync data...'}</div>);
-		}
-		else {
+		if (this.state.loadingMeta) {
+			return <div>{this.state.loadingMsg || 'Loading sync data...'}</div>;
+		} else {
 			return (
 				<div className="site-admin-sync">
 					<div className="title">

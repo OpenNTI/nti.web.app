@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
-import {Input} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { Input } from '@nti/web-commons';
 
 import Store from '../Store';
 
@@ -13,8 +13,8 @@ const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.admin.login.common.TextInput', {
 	remaining: {
 		one: '%(count)s Character Left',
-		other: '%(count)s Characters Left'
-	}
+		other: '%(count)s Characters Left',
+	},
 });
 
 TextInput.propTypes = {
@@ -22,9 +22,9 @@ TextInput.propTypes = {
 	name: PropTypes.string,
 	type: PropTypes.string,
 	setBrandProp: PropTypes.func,
-	maxLength: PropTypes.number
+	maxLength: PropTypes.number,
 };
-function TextInput ({value, name, type, setBrandProp, maxLength = Infinity}) {
+function TextInput({ value, name, type, setBrandProp, maxLength = Infinity }) {
 	/*
 		There is a react update priority issue here, where just broadcasting the change to
 		the store is causing the inputs to re-render and move focus to the end. To counteract
@@ -38,7 +38,7 @@ function TextInput ({value, name, type, setBrandProp, maxLength = Infinity}) {
 		}
 	}, [value]);
 
-	const onChange = (change) => {
+	const onChange = change => {
 		if (maxLength && change.length > maxLength) {
 			change = change.substr(0, maxLength);
 		}
@@ -49,21 +49,16 @@ function TextInput ({value, name, type, setBrandProp, maxLength = Infinity}) {
 
 	return (
 		<div className={cx('text-input', type)}>
-			<Input.TextArea
-				value={text}
-				onChange={onChange}
-				autoGrow
-			/>
+			<Input.TextArea value={text} onChange={onChange} autoGrow />
 			{maxLength && (
 				<Text.Small className={cx('remaining')}>
-					{t('remaining', {count: maxLength - text.length})}
+					{t('remaining', { count: maxLength - text.length })}
 				</Text.Small>
 			)}
 		</div>
 	);
 }
 
-export default Store
-	.monitor({
-		[Store.SetBrandProp]: 'setBrandProp'
-	})(TextInput);
+export default Store.monitor({
+	[Store.SetBrandProp]: 'setBrandProp',
+})(TextInput);

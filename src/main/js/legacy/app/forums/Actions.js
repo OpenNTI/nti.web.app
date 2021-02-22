@@ -1,13 +1,14 @@
 const Ext = require('@nti/extjs');
-const {Events} = require('@nti/web-session');
+const { Events } = require('@nti/web-session');
 
 const UserdataActions = require('legacy/app/userdata/Actions');
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 const Post = require('legacy/model/forums/Post');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const {isMe} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
+const { isMe } = require('legacy/util/Globals');
 
 const ForumStore = require('./StateStore');
 
@@ -22,7 +23,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 		this.ForumStore = ForumStore.getInstance();
 	},
-
 
 	/*
 	 * Save a topic comment
@@ -46,24 +46,34 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			depth = comment.get('depth');
 		}
 
-		return comment.saveData({url: postLink})
+		return comment
+			.saveData({ url: postLink })
 			.then(function (response) {
-				var rec = isEdit ? comment : lazy.ParseUtils.parseItems(response)[0];
+				var rec = isEdit
+					? comment
+					: lazy.ParseUtils.parseItems(response)[0];
 
-				rec.getInterfaceInstance()
-					.then((obj) => {
-						const eventChoices = obj.isBlogComment ?
-							{updated: Events.BLOG_COMMENT_UPDATED, created: Events.BLOG_COMMENT_CREATED} :
-							{updated: Events.TOPIC_COMMENT_UPDATED, created: Events.TOPIC_COMMENT_CREATED};
+				rec.getInterfaceInstance().then(obj => {
+					const eventChoices = obj.isBlogComment
+						? {
+								updated: Events.BLOG_COMMENT_UPDATED,
+								created: Events.BLOG_COMMENT_CREATED,
+						  }
+						: {
+								updated: Events.TOPIC_COMMENT_UPDATED,
+								created: Events.TOPIC_COMMENT_CREATED,
+						  };
 
-						Events.emit(isEdit ? eventChoices.updated : eventChoices.created, obj);
-					});
+					Events.emit(
+						isEdit ? eventChoices.updated : eventChoices.created,
+						obj
+					);
+				});
 
 				//TODO: increment PostCount in topic the same way we increment reply count in notes.
 				if (!isEdit) {
 					topic.set('PostCount', topic.get('PostCount') + 1);
-				}
-				else {
+				} else {
 					// Note: reset the depth, since editing shouldn't affect it
 					// and it's non-persistent field.
 					rec.set('depth', depth);
@@ -84,23 +94,39 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				}
 
 				if (err.code === 'MaxFileSizeUploadLimitError') {
-					let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
-					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					let maxSize = FilePicker.getHumanReadableFileSize(
+							err.max_bytes
+						),
+						currentSize = FilePicker.getHumanReadableFileSize(
+							err.provided_bytes
+						);
+					err.message +=
+						' Max File Size: ' +
+						maxSize +
+						'. Your uploaded file size: ' +
+						currentSize;
 				}
 				if (err.code === 'MaxAttachmentsExceeded') {
 					err.message += ' Max Number of files: ' + err.constraint;
 				}
 
-				let msg = err && err.message || 'Failed to save topic comment';
-				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+				let msg =
+					(err && err.message) || 'Failed to save topic comment';
+				alert({ title: 'Attention', msg: msg, icon: 'warning-red' });
 
 				return Promise.reject(err);
 			});
 	},
 
-
-	saveTopic: function (editorCmp, record, forum, title, tags, body, autoPublish) {
+	saveTopic: function (
+		editorCmp,
+		record,
+		forum,
+		title,
+		tags,
+		body,
+		autoPublish
+	) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : Post.create(),
 			me = this;
@@ -111,17 +137,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		const original = {
 			tags: post.get('tags'),
 			title: post.get('title'),
-			body: post.get('body')
+			body: post.get('body'),
 		};
 
 		post.set({
-			'title': title,
-			'body': body,
-			'tags': tags || []
+			title: title,
+			body: body,
+			tags: tags || [],
 		});
 
 		if (isEdit) {
-			record.set({'title': title});
+			record.set({ title: title });
 		}
 
 		const url = isEdit ? undefined : forum && forum.getLink('add');
@@ -131,16 +157,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				code: 'MissingLink',
 				forum: forum.raw,
 				message: 'Forum missing "add" link.',
-				responseText: null // don't blow up a consumer
+				responseText: null, // don't blow up a consumer
 			});
 		}
 
-		return post.saveData({url})
+		return post
+			.saveData({ url })
 			.catch(resason => {
 				post.set(original);
 				return Promise.reject(resason);
 			})
-			.then((resp) => {
+			.then(resp => {
 				try {
 					const json = JSON.parse(resp);
 
@@ -149,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 						{
 							NTIID: record.getId(),
 							title: json.title,
-							headline: json
+							headline: json,
 						}
 					);
 				} catch (e) {
@@ -158,8 +185,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 				return resp;
 			})
-			.then (function (response) {
-				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];
+			.then(function (response) {
+				var entry = isEdit
+					? record
+					: lazy.ParseUtils.parseItems(response)[0];
 
 				if (autoPublish !== undefined) {
 					if (autoPublish !== entry.isPublished()) {
@@ -192,20 +221,35 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			});
 	},
 
-
 	deleteObject: function (record, cmp, callback) {
-		var idToDestroy, me = this;
+		var idToDestroy,
+			me = this;
 		if (!record.get('href')) {
-			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
+			record.set(
+				'href',
+				record.getLink('contents').replace(/\/contents$/, '') ||
+					'no-luck'
+			);
 		}
 		idToDestroy = record.get('NTIID');
 
-		function maybeDeleteFromStore (id, store) {
+		function maybeDeleteFromStore(id, store) {
 			var r;
 			if (store && !store.buffered) {
-				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
+				r = store.findRecord(
+					'NTIID',
+					idToDestroy,
+					0,
+					false,
+					true,
+					true
+				);
 				if (!r) {
-					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);
+					console.warn(
+						'Could not remove, the store did not have item with id: ' +
+							idToDestroy,
+						r
+					);
 					return;
 				}
 
@@ -219,9 +263,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				success: function () {
 					me.ForumStore.onTopicDeleted(record);
 
-					Events.emit(Events.TOPIC_DELETED, {	NTIID: record.getId() });
+					Events.emit(Events.TOPIC_DELETED, {
+						NTIID: record.getId(),
+					});
 
-					me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+					me.UserDataStore.applyToStoresThatWantItem(
+						maybeDeleteFromStore,
+						record
+					);
 
 					//Delete anything left that we know of
 					Ext.StoreManager.each(function (s) {
@@ -231,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					Ext.callback(callback, null, [cmp]);
 					fulfill();
 				},
-				failure (reason) {
+				failure(reason) {
 					let msg = 'Unable to delete.';
 
 					if (reason && reason.status === 403) {
@@ -242,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 						alert({ title: 'Attention', msg, icon: 'warning-red' });
 					}, 500);
 					reject();
-				}
+				},
 			});
 		});
 	},
@@ -254,11 +303,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			recordForStore;
 
 		actions.applyToStoresThatWantItem(function (id, store) {
-			var storeRecord,
-				storeHeadline;
+			var storeRecord, storeHeadline;
 
 			if (store) {
-				storeRecord = store.findRecord('NTIID', topic.get('NTIID'), 0, false, true, true);
+				storeRecord = store.findRecord(
+					'NTIID',
+					topic.get('NTIID'),
+					0,
+					false,
+					true,
+					true
+				);
 
 				//if there is already a record in the store just update its values
 				if (storeRecord) {
@@ -268,12 +323,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					if (storeHeadline && headlineJSON) {
 						storeHeadline.set(headlineJSON);
 					}
-
 				} else {
 					if (!recordForStore) {
 						//Each store gets its own copy of the record. A null value indicates we already added one to a
 						//store, so we need a new instance. Read it out of the original raw value.
-						recordForStore = lazy.ParseUtils.parseItems([topic.raw])[0];
+						recordForStore = lazy.ParseUtils.parseItems([
+							topic.raw,
+						])[0];
 					}
 
 					//The store will handle making all the threading/placement, etc
@@ -284,5 +340,5 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				}
 			}
 		}, topic);
-	}
+	},
 });

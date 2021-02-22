@@ -1,27 +1,31 @@
-import {getService} from '@nti/web-client';
+import { getService } from '@nti/web-client';
 
 import BasicStore from '../BasicStore';
 
 export default class SearchablePagedStore extends BasicStore {
-	static convertBatch (batch, requestedSize) {
+	static convertBatch(batch, requestedSize) {
 		const nextLink = batch.getLink('batch-next');
-		const loadNext = !nextLink || (requestedSize && requestedSize > batch.Items.length) ?
-			null :
-			async () => {
-				const service = await getService();
-				const nextBatch = await service.getBatch(nextLink);
+		const loadNext =
+			!nextLink || (requestedSize && requestedSize > batch.Items.length)
+				? null
+				: async () => {
+						const service = await getService();
+						const nextBatch = await service.getBatch(nextLink);
 
-				return SearchablePagedStore.convertBatch(nextBatch, requestedSize);
-			};
+						return SearchablePagedStore.convertBatch(
+							nextBatch,
+							requestedSize
+						);
+				  };
 
 		return {
 			items: batch.Items,
 			loadNext,
-			total: batch.Total
+			total: batch.Total,
 		};
 	}
 
-	constructor () {
+	constructor() {
 		super();
 
 		this._searchTerm = null;
@@ -34,36 +38,35 @@ export default class SearchablePagedStore extends BasicStore {
 		this._loadNextPage = null;
 	}
 
-
-	get error () {
+	get error() {
 		return this._error;
 	}
 
-	get searchTerm () {
+	get searchTerm() {
 		return this._searchTerm;
 	}
 
-	get total () {
+	get total() {
 		return this._total;
 	}
 
-	get items () {
+	get items() {
 		return this._items;
 	}
 
-	get loading () {
+	get loading() {
 		return this._loading;
 	}
 
-	get loadingNextPage () {
+	get loadingNextPage() {
 		return this._loadingNextPage;
 	}
 
-	get hasNextPage () {
+	get hasNextPage() {
 		return !!this._loadNextPage;
 	}
 
-	async load () {
+	async load() {
 		this._loading = true;
 		this.emitChange('loading');
 
@@ -71,7 +74,9 @@ export default class SearchablePagedStore extends BasicStore {
 		this._loadNextPage = null;
 
 		try {
-			const {items, total, loadNext} = await (this.searchTerm ? this.loadSearchTerm(this.searchTerm) : this.loadInitial());
+			const { items, total, loadNext } = await (this.searchTerm
+				? this.loadSearchTerm(this.searchTerm)
+				: this.loadInitial());
 
 			this._items = items;
 			this._loadNextPage = loadNext;
@@ -86,8 +91,10 @@ export default class SearchablePagedStore extends BasicStore {
 		}
 	}
 
-	async loadNextPage () {
-		if (!this._loadNextPage) { return; }
+	async loadNextPage() {
+		if (!this._loadNextPage) {
+			return;
+		}
 
 		const loadNextPage = this._loadNextPage;
 
@@ -96,7 +103,7 @@ export default class SearchablePagedStore extends BasicStore {
 		this.emitChange('loadingNextPage', 'hasNextPage');
 
 		try {
-			const {items, loadNext} = await loadNextPage();
+			const { items, loadNext } = await loadNextPage();
 
 			this._items = [...this._items, ...items];
 			this._loadNextPage = loadNext;
@@ -111,15 +118,15 @@ export default class SearchablePagedStore extends BasicStore {
 	}
 
 	// inserts item at the beginning of the list
-	insert (item) {
-		if(item) {
+	insert(item) {
+		if (item) {
 			this._items = [item, ...this._items];
 			this._total += 1;
 			this.emitChange('items', 'total');
 		}
 	}
 
-	updateSearchTerm (term) {
+	updateSearchTerm(term) {
 		this._loading = true;
 		this._searchTerm = term;
 		this.emitChange('loading', 'searchTerm');
@@ -141,12 +148,12 @@ export default class SearchablePagedStore extends BasicStore {
 	 * @param  {string} term term to search on
 	 * @returns {Object}      with the items and loadNext function
 	 */
-	loadSearchTerm (term) {}
+	loadSearchTerm(term) {}
 
 	/**
 	 * Return the items and loadNext function for a given search term
 	 * @override
 	 * @returns {Object}      with the items and loadNext function
 	 */
-	loadInitial () {}
+	loadInitial() {}
 }

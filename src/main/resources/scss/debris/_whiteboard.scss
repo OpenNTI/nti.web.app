@@ -1,4 +1,3 @@
-
 @mixin whiteboard-toolbar-common {
 	margin: 0;
 	padding: 0;
@@ -13,7 +12,7 @@
 	height: 80px;
 }
 
-@mixin button-base($size:24px, $r:5px) {
+@mixin button-base($size: 24px, $r: 5px) {
 	cursor: pointer;
 	display: block;
 	border-radius: $r;
@@ -31,7 +30,9 @@
 }
 
 .color {
-	&.x-toolbar-item { margin: 0; }
+	&.x-toolbar-item {
+		margin: 0;
+	}
 
 	display: inline-block;
 	padding: 8px 7px;
@@ -48,16 +49,19 @@
 	.whiteboard-color-button {
 		@include color-button-base;
 
-		background-image:
-			linear-gradient(
-				to right bottom,
-				var(--quad-grey) 45%,
-				rgba(244, 82, 82, 0.7) 50%,
-				var(--quad-grey) 55%
-			);
+		background-image: linear-gradient(
+			to right bottom,
+			var(--quad-grey) 45%,
+			rgba(244, 82, 82, 0.7) 50%,
+			var(--quad-grey) 55%
+		);
 
-		span.whiteboard-color-inner { display: none; }
-		span.whiteboard-color-icon { display: none; }
+		span.whiteboard-color-inner {
+			display: none;
+		}
+		span.whiteboard-color-icon {
+			display: none;
+		}
 
 		span.whiteboard-color-icon-el {
 			@include color-button-base;
@@ -68,34 +72,108 @@
 			text-indent: -1em;
 			border-width: 0;
 			opacity: 0.5;
-			background-image:
-				linear-gradient(
-					107deg,
-					rgba(0, 0, 0, 0) 0%,
-					rgba(255, 255, 255, 0) 42%,
-					rgba(255, 255, 255, 0.21) 51%,
-					#fff 100%
-				);
+			background-image: linear-gradient(
+				107deg,
+				rgba(0, 0, 0, 0) 0%,
+				rgba(255, 255, 255, 0) 42%,
+				rgba(255, 255, 255, 0.21) 51%,
+				#fff 100%
+			);
 		}
 	}
 
-	&.black { em.button,.whiteboard-color-button { background: #333; border-color: #333; } }
-	&.grey1 { em.button,.whiteboard-color-button { background: #858585; border-color: #707070; } }
-	&.grey2 { em.button,.whiteboard-color-button { background: #e1e1e1; border-color: #acacac; } }
-	&.white { em.button,.whiteboard-color-button { background: #fff; border-color: #b3b3b3; div { opacity: 0.9; } } }
-	&.red { em.button,.whiteboard-color-button { background: #d34f39; border-color: #c6452f; } }
-	&.blue { em.button,.whiteboard-color-button { background: #2b89c5; border-color: #2880b9; } }
-	&.green { em.button,.whiteboard-color-button { background: #a0c94c; border-color: #82a835; } }
-	&.orange { em.button,.whiteboard-color-button { background: var(--primary-orange); border-color: #d97704; } }
-	&.magenta { em.button,.whiteboard-color-button { background: #b42789; border-color: #b42789; } }
-	&.purple { em.button,.whiteboard-color-button { background: #6f3d93; border-color: #6f3d93; } }
-	&.yellow { em.button,.whiteboard-color-button { background: #fff02a; border-color: #d9d15d; div { opacity: 0.93; } } }
+	&.black {
+		em.button,
+		.whiteboard-color-button {
+			background: #333;
+			border-color: #333;
+		}
+	}
+	&.grey1 {
+		em.button,
+		.whiteboard-color-button {
+			background: #858585;
+			border-color: #707070;
+		}
+	}
+	&.grey2 {
+		em.button,
+		.whiteboard-color-button {
+			background: #e1e1e1;
+			border-color: #acacac;
+		}
+	}
+	&.white {
+		em.button,
+		.whiteboard-color-button {
+			background: #fff;
+			border-color: #b3b3b3;
+			div {
+				opacity: 0.9;
+			}
+		}
+	}
+	&.red {
+		em.button,
+		.whiteboard-color-button {
+			background: #d34f39;
+			border-color: #c6452f;
+		}
+	}
+	&.blue {
+		em.button,
+		.whiteboard-color-button {
+			background: #2b89c5;
+			border-color: #2880b9;
+		}
+	}
+	&.green {
+		em.button,
+		.whiteboard-color-button {
+			background: #a0c94c;
+			border-color: #82a835;
+		}
+	}
+	&.orange {
+		em.button,
+		.whiteboard-color-button {
+			background: var(--primary-orange);
+			border-color: #d97704;
+		}
+	}
+	&.magenta {
+		em.button,
+		.whiteboard-color-button {
+			background: #b42789;
+			border-color: #b42789;
+		}
+	}
+	&.purple {
+		em.button,
+		.whiteboard-color-button {
+			background: #6f3d93;
+			border-color: #6f3d93;
+		}
+	}
+	&.yellow {
+		em.button,
+		.whiteboard-color-button {
+			background: #fff02a;
+			border-color: #d9d15d;
+			div {
+				opacity: 0.93;
+			}
+		}
+	}
 }
 
 .x-panel-nt,
 .x-menu-nt {
 	&.color-picker {
-		.x-menu-body { padding: 0; border-radius: 3px; }
+		.x-menu-body {
+			padding: 0;
+			border-radius: 3px;
+		}
 
 		overflow: visible;
 
@@ -112,8 +190,15 @@
 }
 
 .color-palette {
-	.x-panel-nt .x-menu-body &.x-menu-item { padding: 5px; margin: 0; }
-	.color { float: left; clear: right; padding: 5px; }
+	.x-panel-nt .x-menu-body &.x-menu-item {
+		padding: 5px;
+		margin: 0;
+	}
+	.color {
+		float: left;
+		clear: right;
+		padding: 5px;
+	}
 
 	overflow: hidden;
 	width: 155px;
@@ -153,7 +238,8 @@
 
 	.x-btn-new-medium,
 	.x-btn-history-medium {
-		&, .x-btn-button {
+		&,
+		.x-btn-button {
 			width: 50px;
 			height: 30px;
 		}
@@ -163,23 +249,42 @@
 			left: 0;
 			width: 50px;
 			height: 30px;
-			background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
+			background: url(../images/old_sprites/spr_whiteboard.png) 0 0
+				no-repeat;
 
-			&.undo { background-position: -325px -1335px; }
-			&.redo { background-position: -425px -1335px; }
-			&.new-page { background-position: -525px -1335px; }
+			&.undo {
+				background-position: -325px -1335px;
+			}
+			&.redo {
+				background-position: -425px -1335px;
+			}
+			&.new-page {
+				background-position: -525px -1335px;
+			}
 		}
 
 		&.x-over .x-btn-icon-el {
-			&.undo { background-position: -325px -1435px; }
-			&.redo { background-position: -425px -1435px; }
-			&.new-page { background-position: -525px -1435px; }
+			&.undo {
+				background-position: -325px -1435px;
+			}
+			&.redo {
+				background-position: -425px -1435px;
+			}
+			&.new-page {
+				background-position: -525px -1435px;
+			}
 		}
 
 		&.x-pressed .x-btn-icon-el {
-			&.undo { background-position: -325px -1235px; }
-			&.redo { background-position: -425px -1235px; }
-			&.new-page { background-position: -525px -1235px; }
+			&.undo {
+				background-position: -325px -1235px;
+			}
+			&.redo {
+				background-position: -425px -1235px;
+			}
+			&.new-page {
+				background-position: -525px -1235px;
+			}
 		}
 	}
 }
@@ -204,7 +309,9 @@
 
 		padding-left: 6px;
 
-		.x-toolbar-text { color: #8b8b8b; }
+		.x-toolbar-text {
+			color: #8b8b8b;
+		}
 
 		&.text-options {
 			padding: 0 0 0 40px;
@@ -286,15 +393,27 @@
 			}
 
 			&.x-over .x-btn-icon-el {
-				&.bold { background-position: -36px -1436px; }
-				&.italic { background-position: -136px -1436px; }
-				&.underline { background-position: -236px -1436px; }
+				&.bold {
+					background-position: -36px -1436px;
+				}
+				&.italic {
+					background-position: -136px -1436px;
+				}
+				&.underline {
+					background-position: -236px -1436px;
+				}
 			}
 
 			&.x-pressed .x-btn-icon-el {
-				&.bold { background-position: -36px -1236px !important; }
-				&.italic { background-position: -136px -1236px !important; }
-				&.underline { background-position: -236px -1236px !important; }
+				&.bold {
+					background-position: -36px -1236px !important;
+				}
+				&.italic {
+					background-position: -136px -1236px !important;
+				}
+				&.underline {
+					background-position: -236px -1236px !important;
+				}
 			}
 
 			.x-btn-button {
@@ -306,11 +425,18 @@
 					position: absolute;
 					top: 0;
 					left: 0;
-					background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
+					background: url(../images/old_sprites/spr_whiteboard.png) 0
+						0 no-repeat;
 
-					&.bold { background-position: -36px -1336px; }
-					&.italic { background-position: -136px -1336px; }
-					&.underline { background-position: -236px -1336px; }
+					&.bold {
+						background-position: -36px -1336px;
+					}
+					&.italic {
+						background-position: -136px -1336px;
+					}
+					&.underline {
+						background-position: -236px -1336px;
+					}
 				}
 			}
 		}
@@ -320,12 +446,17 @@
 			opacity: 0.6;
 
 			&.x-btn-over,
-			&.x-btn-pressed { opacity: 1; }
-			&.x-item-disabled { opacity: 0.4; }
+			&.x-btn-pressed {
+				opacity: 1;
+			}
+			&.x-item-disabled {
+				opacity: 0.4;
+			}
 
 			.x-btn-arrow-right,
 			.x-btn-split-right {
-				background: url(../images/elements/menu-arrow-down-active.png) right 20px no-repeat;
+				background: url(../images/elements/menu-arrow-down-active.png)
+					right 20px no-repeat;
 				padding-right: 15px !important;
 
 				.x-btn-inner {
@@ -380,7 +511,8 @@
 				&.whiteboard-tool-option-split-right {
 					display: block;
 					padding-right: 15px;
-					background: url(../images/elements/split-light-nib.png) right 14px no-repeat;
+					background: url(../images/elements/split-light-nib.png)
+						right 14px no-repeat;
 					margin-right: 2px;
 
 					//for poly
@@ -421,76 +553,155 @@
 				left: 0;
 				width: 32px;
 				height: 32px;
-				background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_whiteboard.png) 0 0
+					no-repeat;
 
 				&.stroke {
-					&.fine { background-position: -34px -1034px; }
-					&.small { background-position: -134px -1034px; }
-					&.medium { background-position: -234px -1034px; }
-					&.large { background-position: -334px -1034px; }
+					&.fine {
+						background-position: -34px -1034px;
+					}
+					&.small {
+						background-position: -134px -1034px;
+					}
+					&.medium {
+						background-position: -234px -1034px;
+					}
+					&.large {
+						background-position: -334px -1034px;
+					}
 				}
 
 				&.shape {
-					&.line { background-position: -34px -434px; }
-					&.square { background-position: -134px -434px; }
-					&.circle { background-position: -234px -434px; }
-					&.triangle { background-position: -334px -434px; }
-					&.poly { background-position: -434px -434px; }
+					&.line {
+						background-position: -34px -434px;
+					}
+					&.square {
+						background-position: -134px -434px;
+					}
+					&.circle {
+						background-position: -234px -434px;
+					}
+					&.triangle {
+						background-position: -334px -434px;
+					}
+					&.poly {
+						background-position: -434px -434px;
+					}
 				}
 
 				&.move {
-					&.back { background-position: -34px -1634px; }
-					&.forward { background-position: -134px -1634px; }
-					&.duplicate { background-position: -234px -1634px; }
-					&.delete { background-position: -334px -1634px; }
+					&.back {
+						background-position: -34px -1634px;
+					}
+					&.forward {
+						background-position: -134px -1634px;
+					}
+					&.duplicate {
+						background-position: -234px -1634px;
+					}
+					&.delete {
+						background-position: -334px -1634px;
+					}
 				}
 			}
 
 			&.x-pressed .whiteboard-tool-option-icon-el {
 				&.stroke {
-					&.fine { background-position: -34px -934px !important; }
-					&.small { background-position: -134px -934px !important; }
-					&.medium { background-position: -234px -934px !important; }
-					&.large { background-position: -334px -934px !important; }
+					&.fine {
+						background-position: -34px -934px !important;
+					}
+					&.small {
+						background-position: -134px -934px !important;
+					}
+					&.medium {
+						background-position: -234px -934px !important;
+					}
+					&.large {
+						background-position: -334px -934px !important;
+					}
 				}
 
 				&.shape {
-					&.line { background-position: -34px -334px !important; }
-					&.square { background-position: -134px -334px !important; }
-					&.circle { background-position: -234px -334px !important; }
-					&.triangle { background-position: -334px -334px !important; }
-					&.poly { background-position: -434px -334px !important; }
+					&.line {
+						background-position: -34px -334px !important;
+					}
+					&.square {
+						background-position: -134px -334px !important;
+					}
+					&.circle {
+						background-position: -234px -334px !important;
+					}
+					&.triangle {
+						background-position: -334px -334px !important;
+					}
+					&.poly {
+						background-position: -434px -334px !important;
+					}
 				}
 
 				&.move {
-					&.back { background-position: -34px -1534px !important; }
-					&.forward { background-position: -134px -1534px !important; }
-					&.duplicate { background-position: -234px -1534px !important; }
-					&.delete { background-position: -334px -1534px !important; }
+					&.back {
+						background-position: -34px -1534px !important;
+					}
+					&.forward {
+						background-position: -134px -1534px !important;
+					}
+					&.duplicate {
+						background-position: -234px -1534px !important;
+					}
+					&.delete {
+						background-position: -334px -1534px !important;
+					}
 				}
 			}
 
 			&.x-over .whiteboard-tool-option-icon-el {
 				&.stroke {
-					&.fine { background-position: -34px -1134px; }
-					&.small { background-position: -134px -1134px; }
-					&.medium { background-position: -234px -1134px; }
-					&.large { background-position: -334px -1134px; }
+					&.fine {
+						background-position: -34px -1134px;
+					}
+					&.small {
+						background-position: -134px -1134px;
+					}
+					&.medium {
+						background-position: -234px -1134px;
+					}
+					&.large {
+						background-position: -334px -1134px;
+					}
 				}
 
 				&.shape {
-					&.line { background-position: -34px -534px; }
-					&.square { background-position: -134px -534px; }
-					&.circle { background-position: -234px -534px; }
-					&.triangle { background-position: -334px -534px; }
-					&.poly { background-position: -434px -534px; }
+					&.line {
+						background-position: -34px -534px;
+					}
+					&.square {
+						background-position: -134px -534px;
+					}
+					&.circle {
+						background-position: -234px -534px;
+					}
+					&.triangle {
+						background-position: -334px -534px;
+					}
+					&.poly {
+						background-position: -434px -534px;
+					}
 				}
 
 				&.move {
-					&.back { background-position: -34px -1734px; }
-					&.forward { background-position: -134px -1734px; }
-					&.duplicate { background-position: -234px -1734px; }
-					&.delete { background-position: -334px -1734px; }
+					&.back {
+						background-position: -34px -1734px;
+					}
+					&.forward {
+						background-position: -134px -1734px;
+					}
+					&.duplicate {
+						background-position: -234px -1734px;
+					}
+					&.delete {
+						background-position: -334px -1734px;
+					}
 				}
 			}
 		}
@@ -504,7 +715,9 @@
 			background: none;
 			position: relative;
 
-			.whiteboard-tool-inner { display: none; }
+			.whiteboard-tool-inner {
+				display: none;
+			}
 
 			.whiteboard-tool-icon-el {
 				position: absolute;
@@ -513,14 +726,27 @@
 
 				@include whiteboard-tool-button-common;
 
-				background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_whiteboard.png) 0 0
+					no-repeat;
 
-				&.move { background-position: -10px -110px; }
-				&.pencil { background-position: -110px -110px; }
-				&.shape { background-position: -210px -110px; }
-				&.text { background-position: -310px -110px; }
-				&.image { background-position: -410px -110px; }
-				&.eraser { background-position: -510px -110px; }
+				&.move {
+					background-position: -10px -110px;
+				}
+				&.pencil {
+					background-position: -110px -110px;
+				}
+				&.shape {
+					background-position: -210px -110px;
+				}
+				&.text {
+					background-position: -310px -110px;
+				}
+				&.image {
+					background-position: -410px -110px;
+				}
+				&.eraser {
+					background-position: -510px -110px;
+				}
 			}
 		}
 
@@ -529,21 +755,45 @@
 		}
 
 		&.x-pressed .whiteboard-tool-icon-el {
-			&.move { background-position: -10px -10px !important; }
-			&.pencil { background-position: -110px -10px !important; }
-			&.shape { background-position: -210px -10px !important; }
-			&.text { background-position: -310px -10px !important; }
-			&.image { background-position: -410px -10px !important; }
-			&.eraser { background-position: -510px -10px !important; }
+			&.move {
+				background-position: -10px -10px !important;
+			}
+			&.pencil {
+				background-position: -110px -10px !important;
+			}
+			&.shape {
+				background-position: -210px -10px !important;
+			}
+			&.text {
+				background-position: -310px -10px !important;
+			}
+			&.image {
+				background-position: -410px -10px !important;
+			}
+			&.eraser {
+				background-position: -510px -10px !important;
+			}
 		}
 
 		&.x-over .whiteboard-tool-icon-el {
-			&.move { background-position: -10px -210px; }
-			&.pencil { background-position: -110px -210px; }
-			&.shape { background-position: -210px -210px; }
-			&.text { background-position: -310px -210px; }
-			&.image { background-position: -410px -210px; }
-			&.eraser { background-position: -510px -210px; }
+			&.move {
+				background-position: -10px -210px;
+			}
+			&.pencil {
+				background-position: -110px -210px;
+			}
+			&.shape {
+				background-position: -210px -210px;
+			}
+			&.text {
+				background-position: -310px -210px;
+			}
+			&.image {
+				background-position: -410px -210px;
+			}
+			&.eraser {
+				background-position: -510px -210px;
+			}
 		}
 	}
 
@@ -562,11 +812,21 @@
 		line-height: 1;
 		background: url(../images/old_sprites/spr_whiteboard.png) no-repeat;
 
-		&[value="fine"] { background-position: -16px -732px; }
-		&[value="thin"] { background-position: -116px -732px; }
-		&[value="medium"] { background-position: -216px -732px; }
-		&[value="heavy"] { background-position: -316px -732px; }
-		&[value="thick"] { background-position: -416px -732px; }
+		&[value='fine'] {
+			background-position: -16px -732px;
+		}
+		&[value='thin'] {
+			background-position: -116px -732px;
+		}
+		&[value='medium'] {
+			background-position: -216px -732px;
+		}
+		&[value='heavy'] {
+			background-position: -316px -732px;
+		}
+		&[value='thick'] {
+			background-position: -416px -732px;
+		}
 	}
 }
 
@@ -580,21 +840,47 @@
 		padding: 0;
 
 		.stroke {
-			background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
+			background: url(../images/old_sprites/spr_whiteboard.png) 0 0
+				no-repeat;
 
-			&.fine { background-position: -16px -740px; height: 20px; }
-			&.thin { background-position: -116px -740px; height: 20px; }
-			&.medium { background-position: -216px -740px; height: 20px; }
-			&.heavy { background-position: -316px -736px; height: 27px; }
-			&.thick { background-position: -416px -734px; height: 32px; }
+			&.fine {
+				background-position: -16px -740px;
+				height: 20px;
+			}
+			&.thin {
+				background-position: -116px -740px;
+				height: 20px;
+			}
+			&.medium {
+				background-position: -216px -740px;
+				height: 20px;
+			}
+			&.heavy {
+				background-position: -316px -736px;
+				height: 27px;
+			}
+			&.thick {
+				background-position: -416px -734px;
+				height: 32px;
+			}
 		}
 
 		&.x-menu-item-over .stroke {
-			&.fine { background-position: -16px -840px; }
-			&.thin { background-position: -116px -840px; }
-			&.medium { background-position: -216px -840px; }
-			&.heavy { background-position: -316px -836px; }
-			&.thick { background-position: -416px -834px; }
+			&.fine {
+				background-position: -16px -840px;
+			}
+			&.thin {
+				background-position: -116px -840px;
+			}
+			&.medium {
+				background-position: -216px -840px;
+			}
+			&.heavy {
+				background-position: -316px -836px;
+			}
+			&.thick {
+				background-position: -416px -834px;
+			}
 		}
 	}
 }
@@ -627,7 +913,7 @@
 				box-shadow: inset 0 0 0 5px white;
 				background: rgba(63, 179, 246, 0.05);
 
-				@include animate(pulseIn,0.5s);
+				@include animate(pulseIn, 0.5s);
 			}
 		}
 
@@ -665,7 +951,8 @@
 			background: #fafafa;
 			border-top: 1px solid var(--tertiary-grey-alt);
 
-			.include,.reply {
+			.include,
+			.reply {
 				color: #a8a8a8;
 				cursor: pointer;
 				font-family: var(--body-font-family);
@@ -696,11 +983,15 @@
 				}
 
 				&:hover {
-					&::after { @include sprite($checkbox-light-unchecked_hover); }
+					&::after {
+						@include sprite($checkbox-light-unchecked_hover);
+					}
 				}
 
 				&.checked {
-					&::after { @include sprite($checkbox-light-checked); }
+					&::after {
+						@include sprite($checkbox-light-checked);
+					}
 
 					&:hover::after {
 						@include sprite($checkbox-light-checked_hover);
@@ -720,8 +1011,12 @@
 			}
 
 			.editor-active & {
-				.reply { display: none; }
-				.include { display: block; }
+				.reply {
+					display: none;
+				}
+				.include {
+					display: block;
+				}
 			}
 		}
 	}

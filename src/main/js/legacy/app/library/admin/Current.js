@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 const CoursesStateStore = require('../courses/StateStore');
 
 require('../courses/Current');
-
 
 module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 	extend: 'NextThought.app.library.courses.Current',
@@ -20,13 +19,12 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 		shouldShow: function () {
 			var CourseStore = CoursesStateStore.getInstance();
 
-			return CourseStore.onceFavoritesLoaded()
-				.then(function () {
-					var admin = CourseStore.getFavoriteAdminCourses();
+			return CourseStore.onceFavoritesLoaded().then(function () {
+				var admin = CourseStore.getFavoriteAdminCourses();
 
-					return admin.length;
-				});
-		}
+				return admin.length;
+			});
+		},
 	},
 
 	items: [],
@@ -52,7 +50,10 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 
 	onSeeAllClick: function () {
 		if (this.pushRoute) {
-			this.pushRoute(getString('NextThought.view.library.View.administeredCourses'), '/admin');
+			this.pushRoute(
+				getString('NextThought.view.library.View.administeredCourses'),
+				'/admin'
+			);
 		}
-	}
+	},
 });

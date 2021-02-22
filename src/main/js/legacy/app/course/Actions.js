@@ -32,5 +32,5 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 		const partURL = part ? `/${part}` : '';
 
 		return `/course/${encodeForURI(id)}${partURL}`;
-	}
+	},
 });

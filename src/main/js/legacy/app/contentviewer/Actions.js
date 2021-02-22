@@ -1,12 +1,13 @@
 const Ext = require('@nti/extjs');
-const {Survey} = require('@nti/web-assessment');
+const { Survey } = require('@nti/web-assessment');
 
 const PromptActions = require('legacy/app/prompt/Actions');
 const PageInfo = require('legacy/model/PageInfo');
 const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const {guidGenerator} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
+const { guidGenerator } = require('legacy/util/Globals');
 
 const AttachmentWindow = require('./components/attachment/Window');
 
@@ -16,8 +17,7 @@ require('legacy/util/Content');
 
 const TOPIC_EMBED = 'application/vnd.nextthought.app.embededtopic';
 
-
-function buildPageInfoForAssignment (assignment, contents, regenerate) {
+function buildPageInfoForAssignment(assignment, contents, regenerate) {
 	const ntiid = assignment.getId();
 	const assessmentItems = [assignment];
 	const pageInfo = PageInfo.create({
@@ -27,16 +27,22 @@ function buildPageInfoForAssignment (assignment, contents, regenerate) {
 		DoNotLoadAnnotations: true,
 		isFakePageInfo: true,
 		content: Ext.DomHelper.markup([
-			{tag: 'head', cn: [
-				{tag: 'title', html: assignment.get('title')}
-			]},
-			{tag: 'body', cn: [{
-				cls: 'page-contents',
+			{
+				tag: 'head',
+				cn: [{ tag: 'title', html: assignment.get('title') }],
+			},
+			{
+				tag: 'body',
 				cn: [
-					{'data-ntiid': ntiid, ntiid: ntiid, cn: contents}
-				]
-			}]}
-		])
+					{
+						cls: 'page-contents',
+						cn: [
+							{ 'data-ntiid': ntiid, ntiid: ntiid, cn: contents },
+						],
+					},
+				],
+			},
+		]),
 	});
 
 	pageInfo.regenerate = regenerate;
@@ -88,9 +94,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								{
 									tag: 'meta',
 									name: 'icon',
-									content: data.thumbnail
-								}
-							]
+									content: data.thumbnail,
+								},
+							],
 						},
 						{
 							tag: 'body',
@@ -109,14 +115,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 											{
 												tag: 'span',
 												cls: 'description',
-												html: data.description
-											}
-										])
+												html: data.description,
+											},
+										]),
 									},
 									data.domSpec
-								)
-							}
-						}
+								),
+							},
+						},
 					]),
 					Links: [
 						{
@@ -127,9 +133,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								'/' +
 								pageURI +
 								'/UserGeneratedData',
-							rel: 'UserGeneratedData'
-						}
-					]
+							rel: 'UserGeneratedData',
+						},
+					],
 				});
 
 				pageInfo.hideControls = true;
@@ -140,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		});
 	},
 
-	getExternalToolAssetPageInfo (data, bundle) {
+	getExternalToolAssetPageInfo(data, bundle) {
 		const ntiid = data.get ? data.get('NTIID') : data.NTIID;
 		const href = data.getLink('Launch');
 		const pageURI = encodeURIComponent('Pages(' + ntiid + ')');
@@ -157,9 +163,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 						{
 							tag: 'meta',
 							name: 'icon',
-							content: data.thumbnail
-						}
-					]
+							content: data.thumbnail,
+						},
+					],
 				},
 				{
 					tag: 'body',
@@ -169,7 +175,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 							{
 								tag: 'object',
 								cls: 'nticard-iframe',
-								type: 'application/vnd.nextthought.nticard-iframe',
+								type:
+									'application/vnd.nextthought.nticard-iframe',
 								'data-ntiid': ntiid,
 								'data-href': `${href}?target=iframe&width=669`,
 								html: Ext.DomHelper.markup([
@@ -177,13 +184,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 									{
 										tag: 'span',
 										cls: 'description',
-										html: data.description
-									}
-								])
-							}
-						]
-					}
-				}
+										html: data.description,
+									},
+								]),
+							},
+						],
+					},
+				},
 			]),
 			Links: [
 				{
@@ -194,9 +201,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 						'/' +
 						pageURI +
 						'/UserGeneratedData',
-					rel: 'UserGeneratedData'
-				}
-			]
+					rel: 'UserGeneratedData',
+				},
+			],
 		});
 
 		pageInfo.hideControls = true;
@@ -206,37 +213,39 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		return Promise.resolve(pageInfo);
 	},
 
-	getContentsForAssignment (assignment) {
+	getContentsForAssignment(assignment) {
 		const title = assignment && assignment.get('title');
 		const description = assignment && assignment.get('content');
 		let contents = [];
 
 		if (title) {
-			contents.push({ cls: 'chapter title', html: Ext.util.Format.htmlEncode(title) });
+			contents.push({
+				cls: 'chapter title',
+				html: Ext.util.Format.htmlEncode(title),
+			});
 		}
 
 		if (description) {
 			contents.push({
 				cls: 'sidebar assignment-description',
-				html: description
+				html: description,
 			});
 		}
 
 		return Promise.resolve(contents);
 	},
 
-	getContentsForRegularAssignment (assignment, bundle) {
+	getContentsForRegularAssignment(assignment, bundle) {
 		return this.getContentsForAssignment(assignment, bundle).then(
-			async (contents) => {
+			async contents => {
 				const parts = await Promise.all(
-					(assignment?.get('parts') ?? [])
-						.map((part) => {
-							if (part.get('IsSummary')) {
-								return part.fetchFromServer();
-							}
+					(assignment?.get('parts') ?? []).map(part => {
+						if (part.get('IsSummary')) {
+							return part.fetchFromServer();
+						}
 
-							return part;
-						})
+						return part;
+					})
 				);
 
 				let part = parts && parts[0];
@@ -256,11 +265,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 							{
 								tag: 'param',
 								name: 'canindividual',
-								value: true
+								value: true,
 							},
 							{ tag: 'param', name: 'ntiid', value: ntiid },
-							{ html: '&nbsp;' }
-						]
+							{ html: '&nbsp;' },
+						],
 					});
 
 					return acc;
@@ -269,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		);
 	},
 
-	getRegularAssignmentPageInfo (assignment, bundle) {
+	getRegularAssignmentPageInfo(assignment, bundle) {
 		return this.getContentsForRegularAssignment(assignment, bundle).then(
 			contents => {
 				return buildPageInfoForAssignment(
@@ -286,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		);
 	},
 
-	getContentsForDiscussionAssignment (assignment, bundle, student) {
+	getContentsForDiscussionAssignment(assignment, bundle, student) {
 		return this.getContentsForAssignment(assignment, bundle).then(
 			contents => {
 				return assignment
@@ -304,10 +313,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								{
 									tag: 'param',
 									name: 'canindividual',
-									value: true
+									value: true,
 								},
-								{ tag: 'param', name: 'ntiid', value: ntiid }
-							]
+								{ tag: 'param', name: 'ntiid', value: ntiid },
+							],
 						});
 
 						return contents;
@@ -324,9 +333,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								{
 									tag: 'param',
 									name: 'canindividual',
-									value: true
-								}
-							]
+									value: true,
+								},
+							],
 						});
 
 						return contents;
@@ -335,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		);
 	},
 
-	getDiscussionAssignmentPageInfo (assignment, bundle, student) {
+	getDiscussionAssignmentPageInfo(assignment, bundle, student) {
 		return this.getContentsForDiscussionAssignment(
 			assignment,
 			bundle,
@@ -354,14 +363,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		});
 	},
 
-	getAssignmentPageInfo (assignment, bundle, student) {
+	getAssignmentPageInfo(assignment, bundle, student) {
 		return assignment.isDiscussion
 			? this.getDiscussionAssignmentPageInfo(assignment, bundle, student)
 			: this.getRegularAssignmentPageInfo(assignment, bundle);
 	},
 
-
-	async getSurveyPageInfo (surveyModel, bundleModel) {
+	async getSurveyPageInfo(surveyModel, bundleModel) {
 		const survey = await surveyModel.getInterfaceInstance();
 		const bundle = await bundleModel.getInterfaceInstance();
 
@@ -381,9 +389,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 				{
 					Class: 'Link',
 					href: `/dataserver2/users/${userURI}/${pageURI}/UserGeneratedData`,
-					rel: 'UserGeneratedData'
-				}
-			]
+					rel: 'UserGeneratedData',
+				},
+			],
 		});
 
 		pageInfo.isMock = true;
@@ -408,7 +416,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 		this.PromptActions.prompt('attachment-preview-mode', {
 			record: rec,
-			parent: parentRecord
+			parent: parentRecord,
 		});
-	}
+	},
 });

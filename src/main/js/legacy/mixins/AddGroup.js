@@ -2,37 +2,54 @@ const Ext = require('@nti/extjs');
 
 const Actions = require('legacy/app/groups/Actions');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 	attachAddGroupControl: function (parent, tag) {
 		var link;
 		this.addGroupParent = parent;
 		this.addGroupTag = tag;
-		this.addGroupDom = link = Ext.DomHelper.append(this.addGroupParent,
+		this.addGroupDom = link = Ext.DomHelper.append(
+			this.addGroupParent,
 			{
 				tag: this.addGroupTag,
 				cls: 'add-group-action selection-list-item',
 				role: 'button',
 				children: [
 					{ tag: 'a', href: '#', html: 'Create New List' },
-					{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
-						{ cls: 'clear' },
-						{ tag: 'input', type: 'text', cls: 'new-group-input' },
-						{ cls: 'save-button save-button-disabled', html: 'Add' }
-					]}
-				]
-			}, true);
+					{
+						cls: 'input-wrap empty',
+						style: { display: 'none' },
+						cn: [
+							{ cls: 'clear' },
+							{
+								tag: 'input',
+								type: 'text',
+								cls: 'new-group-input',
+							},
+							{
+								cls: 'save-button save-button-disabled',
+								html: 'Add',
+							},
+						],
+					},
+				],
+			},
+			true
+		);
 
 		link.down('a').on('click', this.addGroupClicked, this);
 		link.down('.clear').on('click', this.addGroupClearBox, this);
-		link.down('.save-button').on('click', function () {
-			this.submitNewGroup(link.down('input').dom.value);
-		}, this);
+		link.down('.save-button').on(
+			'click',
+			function () {
+				this.submitNewGroup(link.down('input').dom.value);
+			},
+			this
+		);
 		link.down('input').on({
 			scope: this,
 			keypress: this.newGroupKeyPressed,
 			keyup: this.keyUp,
-			keydown: this.newGroupKeyDown
+			keydown: this.newGroupKeyDown,
 		});
 	},
 
@@ -46,9 +63,9 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 
 	newGroupKeyDown: function (event) {
 		var specialKeys = {
-			27: true,	//Ext.EventObject.prototype.ESC
-			8: true,	//Ext.EventObject.prototype.BACKSPACE
-			46: true	//Ext.EventObject.prototype.DELETE
+			27: true, //Ext.EventObject.prototype.ESC
+			8: true, //Ext.EventObject.prototype.BACKSPACE
+			46: true, //Ext.EventObject.prototype.DELETE
 		};
 
 		Ext.fly(event.getTarget()).removeCls('error');
@@ -61,8 +78,12 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 
 	keyUp: function (event) {
 		var len = event.getTarget().value.trim().length;
-		this.addGroupDom.down('.input-wrap')[(len > 0) ? 'removeCls' : 'addCls']('empty');
-		this.addGroupDom.down('.save-button')[(len > 0) ? 'removeCls' : 'addCls']('save-button-disabled');
+		this.addGroupDom
+			.down('.input-wrap')
+			[len > 0 ? 'removeCls' : 'addCls']('empty');
+		this.addGroupDom
+			.down('.save-button')
+			[len > 0 ? 'removeCls' : 'addCls']('save-button-disabled');
 	},
 
 	newGroupKeyPressed: function (event) {
@@ -71,8 +92,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 			event.stopEvent();
 			this.addGroupClearBox();
 			return false;
-		}
-		else if (k === event.ENTER) {
+		} else if (k === event.ENTER) {
 			event.stopEvent();
 			this.submitNewGroup(event.getTarget().value);
 			return false;
@@ -102,11 +122,12 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		}
 
 		input.blur();
-		me.GroupActions.createList(groupName, friends)
-			.then(function (success) {
-				if (!success) { input.addCls('error'); }
-				me.afterGroupAdd(groupName);
-			});
+		me.GroupActions.createList(groupName, friends).then(function (success) {
+			if (!success) {
+				input.addCls('error');
+			}
+			me.afterGroupAdd(groupName);
+		});
 
 		delete this.newListInputBoxActive;
 	},
@@ -124,12 +145,15 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		this.newListInputBoxActive = true;
 
 		// Make sure nothing steals focus while the input is visible
-		input.un('blur').on('blur', function () {
-			if (input.isVisible()) {
-				input.focus(200);
-			}
-		}).focus();
+		input
+			.un('blur')
+			.on('blur', function () {
+				if (input.isVisible()) {
+					input.focus(200);
+				}
+			})
+			.focus();
 
 		return false;
-	}
+	},
 });

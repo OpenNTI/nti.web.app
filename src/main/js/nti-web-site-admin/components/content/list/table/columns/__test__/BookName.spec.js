@@ -6,11 +6,17 @@ import BookName from '../BookName';
 
 describe('Site admin content table book name column test', () => {
 	test('Test name', () => {
-		const colCmp = renderer.create(<BookName item={{
-			title: 'book name',
-			getID: () => 'bookName',
-			getDefaultAssetRoot () { return 'testRoot'; }
-		}}/>);
+		const colCmp = renderer.create(
+			<BookName
+				item={{
+					title: 'book name',
+					getID: () => 'bookName',
+					getDefaultAssetRoot() {
+						return 'testRoot';
+					},
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

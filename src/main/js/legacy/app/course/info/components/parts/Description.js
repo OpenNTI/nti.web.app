@@ -1,134 +1,272 @@
 const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
-module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Description', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-info-description',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.info.components.parts.Description',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.course-info-description',
 
-	ui: 'course-info',
-	cls: 'description-fields',
+		ui: 'course-info',
+		cls: 'description-fields',
 
-	renderTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'richDescription', cn: [
-			{ cls: 'body', html: '{richDescription:htmlDecode}'}
-		]},
+		renderTpl: Ext.DomHelper.markup([
+			{
+				tag: 'tpl',
+				if: 'richDescription',
+				cn: [{ cls: 'body', html: '{richDescription:htmlDecode}' }],
+			},
 
-		{tag: 'tpl', 'if': '!richDescription', cn: [
-			{ cls: 'body', html: '{description:htmlEncode}' }
-		]},
+			{
+				tag: 'tpl',
+				if: '!richDescription',
+				cn: [{ cls: 'body', html: '{description:htmlEncode}' }],
+			},
 
-		{ cls: 'fields', cn: [
-			{ cls: 'row', cn: [
-				{ cls: 'cell', cn: [
-					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.prereqs}}}' },
-					{ cls: 'value', cn: { tag: 'tpl', 'for': 'prerequisites', cn: {html: '{.}'}} }
-				] },
-				{ cls: 'cell', cn: [
-					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.hours}}}'},
-					{ cls: 'value {enrollmentStatus:lowercase}', cn: [
+			{
+				cls: 'fields',
+				cn: [
+					{
+						cls: 'row',
+						cn: [
+							{
+								cls: 'cell',
+								cn: [
+									{
+										cls: 'label',
+										html:
+											'{{{NextThought.view.courseware.info.parts.Description.prereqs}}}',
+									},
+									{
+										cls: 'value',
+										cn: {
+											tag: 'tpl',
+											for: 'prerequisites',
+											cn: { html: '{.}' },
+										},
+									},
+								],
+							},
+							{
+								cls: 'cell',
+								cn: [
+									{
+										cls: 'label',
+										html:
+											'{{{NextThought.view.courseware.info.parts.Description.hours}}}',
+									},
+									{
+										cls:
+											'value {enrollmentStatus:lowercase}',
+										cn: [
+											{
+												tag: 'tpl',
+												if: 'creditHours',
+												cn: {
+													cls: 'enroll-for-credit',
+													cn: [
+														'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}',
+														{ tag: 'br' },
+														{
+															tag: 'tpl',
+															for: 'credit',
+															cn: [
+																'{%' +
+																	'var e = values.get("Enrollment"); ' +
+																	'values["enrollUrl"] = e && e.url; ' +
+																	'values["enrollLabel"] = e && e.label;\n' +
+																	'%}',
+																{
+																	tag: 'a',
+																	href:
+																		'{enrollUrl}',
+																	html:
+																		'{enrollLabel}',
+																},
+																{ tag: 'br' },
+															],
+														},
+													],
+												},
+											},
 
-						{ tag: 'tpl', 'if': 'creditHours', cn: {
-							cls: 'enroll-for-credit', cn: [
-								'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}', {tag: 'br'},
-								{ tag: 'tpl', 'for': 'credit', cn: [
-									'{%' +
-										'var e = values.get("Enrollment"); ' +
-										'values["enrollUrl"] = e && e.url; ' +
-										'values["enrollLabel"] = e && e.label;\n' +
-									'%}',
-									{ tag: 'a', href: '{enrollUrl}', html: '{enrollLabel}'}, {tag: 'br'}
-								] }
-							] }
-						},
+											{
+												cls: 'open',
+												cn: [
+													'{inopen} ',
+													{
+														cls: 'red',
+														tag: 'span',
+														html: '{nocredit}',
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+					{
+						cls: 'row',
+						cn: [
+							{
+								cls: 'cell',
+								cn: [
+									{ cls: 'label', html: '{courseId}' },
+									{ cls: 'value', html: '{title}' },
+								],
+							},
+							{
+								cls: 'cell',
+								cn: [
+									{ cls: 'label', html: '{schoolLabel}' },
+									{ cls: 'value', html: '{school}' },
+								],
+							},
+						],
+					},
+					{
+						cls: 'row',
+						cn: [
+							{
+								cls: 'cell',
+								cn: [
+									{
+										cls: 'label',
+										html:
+											'{{{NextThought.view.courseware.info.parts.Description.start}}}',
+									},
+									{
+										cls: 'value',
+										html: '{startDate:date("F j, Y")}',
+									},
+								],
+							},
+							{
+								cls: 'cell',
+								cn: [
+									{
+										tag: 'tpl',
+										if: 'duration',
+										cn: {
+											cls: 'cell cell1third',
+											cn: [
+												{
+													cls: 'label',
+													html:
+														'{{{NextThought.view.courseware.info.parts.Description.duration}}}',
+												},
+												{
+													cls: 'value',
+													html:
+														'{duration} {durationUnits}',
+												},
+											],
+										},
+									},
+									{
+										cls: 'cell cell2thirds',
+										cn: [
+											{
+												cls: 'label',
+												html:
+													'{{{NextThought.view.courseware.info.parts.Description.days}}}',
+											},
+											{
+												cls: 'value',
+												cn: [
+													{
+														tag: 'tpl',
+														if: 'days',
+														cn: [
+															{
+																tag: 'span',
+																html: '{days}',
+															},
+															{
+																tag: 'span',
+																html: '{times}',
+															},
+														],
+													},
+													{
+														tag: 'tpl',
+														if: '!days',
+														cn:
+															'{{{NextThought.view.courseware.info.parts.Description.online}}}',
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		]),
 
-						{ cls: 'open', cn: [
-							'{inopen} ', { cls: 'red', tag: 'span', html: '{nocredit}' }
-						] }
+		config: {
+			info: null,
+		},
 
-					] }
-				] }
-			]},
-			{ cls: 'row', cn: [
-				{ cls: 'cell', cn: [
-					{ cls: 'label', html: '{courseId}'},
-					{ cls: 'value', html: '{title}' }
-				]},
-				{ cls: 'cell', cn: [
-					{ cls: 'label', html: '{schoolLabel}'},
-					{ cls: 'value', html: '{school}' }
-				]}
-			]},
-			{ cls: 'row', cn: [
-				{ cls: 'cell', cn: [
-					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.start}}}'},
-					{ cls: 'value', html: '{startDate:date("F j, Y")}' }
-				]},
-				{ cls: 'cell', cn: [
-					{ tag: 'tpl', 'if': 'duration', cn: { cls: 'cell cell1third', cn: [
-						{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.duration}}}'},
-						{ cls: 'value', html: '{duration} {durationUnits}' }
-					]}},
-					{ cls: 'cell cell2thirds', cn: [
-						{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.days}}}'},
-						{ cls: 'value', cn: [
-							{ tag: 'tpl', 'if': 'days', cn: [
-								{ tag: 'span', html: '{days}'},
-								{ tag: 'span', html: '{times}'}
-							]
-							},{ tag: 'tpl', 'if': '!days', cn: '{{{NextThought.view.courseware.info.parts.Description.online}}}' }
-						] }
-					]}
-				] }
-			]}
-		] }
-	]),
+		beforeRender: function () {
+			var i = this.getInfo() || { get: Ext.emptyFn },
+				s = i.get('Schedule') || {},
+				c = (i.get('Credit') || [])[0],
+				p = Ext.Array.pluck(i.get('Prerequisites') || [], 'title'),
+				start = Ext.Date.format(i.get('StartDate'), 'Y-m-d');
 
-	config: {
-		info: null
-	},
+			function fo(d) {
+				var date = Ext.Date.parse([start, d].join('T'), 'c');
+				return Ext.Date.format(date, 'g:i a');
+			}
 
-	beforeRender: function () {
-		var i = this.getInfo() || {get: Ext.emptyFn},
-			s = i.get('Schedule') || {},
-			c = (i.get('Credit') || [])[0],
-			p = Ext.Array.pluck(i.get('Prerequisites') || [], 'title'),
-			start = Ext.Date.format(i.get('StartDate'), 'Y-m-d');
+			if (p.join() === '') {
+				p = [
+					getString(
+						'NextThought.view.courseware.info.parts.Description.noprereqs'
+					),
+				];
+			}
 
-		function fo (d) {
-			var date = Ext.Date.parse([start, d].join('T'), 'c');
-			return Ext.Date.format(date, 'g:i a');
-		}
+			this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, {
+				description: i.get('Description'),
+				richDescription: i.get('RichDescription'),
+				prerequisites: p,
+				courseId: i.get('ProviderUniqueID'),
+				title: i.get('Title'),
+				school: i.get('ProviderDepartmentTitle'),
+				schoolLabel: getString(
+					'NextThought.view.courseware.info.parts.Description.schoollabel'
+				), //Department
+				durationUnits: getString(
+					'NextThought.view.courseware.info.parts.Description.durationunits'
+				),
+				duration: Math.floor(new Duration(i.get('Duration')).inWeeks()),
+				startDate: i.get('StartDate'),
+				days: (s.days || []).join('/'), //eww
+				times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
 
-		if (p.join() === '') {
-			p = [getString('NextThought.view.courseware.info.parts.Description.noprereqs')];
-		}
+				credit: i.get('Credit'),
+				creditHours: c && c.get('Hours'),
+				//enrollLabel: e.label,
+				//enrollUrl: e.url,
 
-		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {}, {
-			description: i.get('Description'),
-			richDescription: i.get('RichDescription'),
-			prerequisites: p,
-			courseId: i.get('ProviderUniqueID'),
-			title: i.get('Title'),
-			school: i.get('ProviderDepartmentTitle'),
-			schoolLabel: getString('NextThought.view.courseware.info.parts.Description.schoollabel'), //Department
-			durationUnits: getString('NextThought.view.courseware.info.parts.Description.durationunits'),
-			duration: Math.floor(new Duration(i.get('Duration')).inWeeks()),
-			startDate: i.get('StartDate'),
-			days: (s.days || []).join('/'),//eww
-			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
+				enrollmentStatus: this.enrollmentStatus,
 
-			credit: i.get('Credit'),
-			creditHours: c && c.get('Hours'),
-			//enrollLabel: e.label,
-			//enrollUrl: e.url,
-
-			enrollmentStatus: this.enrollmentStatus,
-
-			nocredit: getString('course-info.description-widget.for-no-credit'),
-			inopen: getString('course-info.description-widget.open-enrolled')
-		});
+				nocredit: getString(
+					'course-info.description-widget.for-no-credit'
+				),
+				inopen: getString(
+					'course-info.description-widget.open-enrolled'
+				),
+			});
+		},
 	}
-});
+);

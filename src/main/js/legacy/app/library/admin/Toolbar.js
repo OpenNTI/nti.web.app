@@ -12,10 +12,10 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 	statics: {
 		shouldShow: function () {
 			return Service.getWorkspace('SiteAdmin');
-		}
+		},
 	},
 
-	initComponent () {
+	initComponent() {
 		this.callParent(arguments);
 
 		this.CourseStore = CoursesStateStore.getInstance();
@@ -38,9 +38,11 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 		// if AdminLevels link is missing, we won't be able to create a course anyway,
 		// so drive create button by this link
 		const canCreate =
-			Service.getWorkspace('Courses')
-			&& Service.getWorkspace('Courses').Links
-			&& Service.getWorkspace('Courses').Links.some(x => x.rel === 'AdminLevels');
+			Service.getWorkspace('Courses') &&
+			Service.getWorkspace('Courses').Links &&
+			Service.getWorkspace('Courses').Links.some(
+				x => x.rel === 'AdminLevels'
+			);
 
 		this.add({
 			xtype: 'react',
@@ -48,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			handleNav: handleNav,
 			onCourseCreated: onCourseCreated,
 			onCourseModified: onCourseModified,
-			canCreate: canCreate
+			canCreate: canCreate,
 		});
-	}
+	},
 });

@@ -1,17 +1,18 @@
 const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
 const Commons = require('@nti/web-commons');
-const {wait} = require('@nti/lib-commons');
-const {EmbedInput} = require('@nti/web-video');
+const { wait } = require('@nti/lib-commons');
+const { EmbedInput } = require('@nti/web-video');
 
 const AnnotationUtils = require('legacy/util/Annotations');
 const DomUtils = require('legacy/util/Dom');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const RangeUtils = require('legacy/util/Ranges');
 const SharingUtils = require('legacy/util/Sharing');
-const {guidGenerator: guidFn} = require('legacy/util/Globals');
-const {isFeature} = require('legacy/util/Globals');
+const { guidGenerator: guidFn } = require('legacy/util/Globals');
+const { isFeature } = require('legacy/util/Globals');
 const TabIndexTracker = require('legacy/util/TabIndexTracker');
 const Globals = require('legacy/util/Globals');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
@@ -39,42 +40,68 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	cls: 'editor',
 	headerTplOrder: '{toolbar}{title}',
 
-	titleTpl: Ext.DomHelper.markup(
-		[
-			{tag: 'tpl', 'if': 'enableTitle', cn: {
+	titleTpl: Ext.DomHelper.markup([
+		{
+			tag: 'tpl',
+			if: 'enableTitle',
+			cn: {
 				cls: 'title title-container',
 				cn: [
-					{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
-				]
-			}}
-		]),
+					{
+						tag: 'input',
+						tabIndex: -1,
+						type: 'text',
+						placeholder: 'Title...',
+					},
+				],
+			},
+		},
+	]),
 
 	renderSelectors: {
 		saveButtonEl: '.action.save',
-		saveControlsEl: '.save-controls'
+		saveControlsEl: '.save-controls',
 	},
 
-	toolbarTpl: Ext.DomHelper.markup(
-		[
-			{
-				cls: 'aux', cn: [
-					{tag: 'tpl', 'if': 'enableShareControls', cn: {
-						cls: 'recipients'
-					}},
-					{tag: 'tpl', 'if': 'enablePublishControls', cn: {
-						cls: 'action publish on'
-					}},
-					{tag: 'tpl', 'if': 'enableTags', cn: {
-						cls: 'tags'
-					}}
-				]
-			}
-		]),
+	toolbarTpl: Ext.DomHelper.markup([
+		{
+			cls: 'aux',
+			cn: [
+				{
+					tag: 'tpl',
+					if: 'enableShareControls',
+					cn: {
+						cls: 'recipients',
+					},
+				},
+				{
+					tag: 'tpl',
+					if: 'enablePublishControls',
+					cn: {
+						cls: 'action publish on',
+					},
+				},
+				{
+					tag: 'tpl',
+					if: 'enableTags',
+					cn: {
+						cls: 'tags',
+					},
+				},
+			],
+		},
+	]),
 
-	renderTpl: Ext.DomHelper.markup(
-		[
-			'{header}',
-			{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}', cn: [
+	renderTpl: Ext.DomHelper.markup([
+		'{header}',
+		{
+			tag: 'form',
+			cls: 'common-form',
+			enctype: '{enctype}',
+			autocomplete: '{autocomplete}',
+			novalidate: true,
+			name: '{name}',
+			cn: [
 				{
 					cls: 'main',
 					cn: [
@@ -86,108 +113,164 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 							unselectable: 'off',
 							tabIndex: -1,
 							cn: [
-								{ //inner div for IE
+								{
+									//inner div for IE
 									//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-									html: '\u2060'
-								}
-							]
+									html: '\u2060',
+								},
+							],
 						},
-						{cls: 'dropzone', cn: [
-							{tag: 'input', type: 'file'}
-						]}
-					]
-				}
-			]}
-			, {
-				cls: 'footer',
-				cn: [{
+						{
+							cls: 'dropzone',
+							cn: [{ tag: 'input', type: 'file' }],
+						},
+					],
+				},
+			],
+		},
+		{
+			cls: 'footer',
+			cn: [
+				{
 					cls: 'left',
 					cn: [
-						{ tag: 'tpl', 'if': 'enableTextControls', cn: {
-							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
-								cls: 'popctr', cn: {
-									cls: 'popover', cn: [
-										{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
-										{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
-										{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
-									]
-								}
-							}
-						}},
-						{ tag: 'tpl', 'if': 'enableObjectControls', cn: {
-							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
-								cls: 'popctr', cn: {
-									cls: 'popover', cn: [
-										{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
-										{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } },
-										{ tag: 'tpl', 'if': 'enableFileUpload', cn: [
-											{cls: 'control upload', 'data-qtip': 'Add an Attachment', cn: [
-												{ tag: 'input', type: 'file'}
-											]}
-										]}
-									]
-								}
-							}
-						}}
-					]
+						{
+							tag: 'tpl',
+							if: 'enableTextControls',
+							cn: {
+								cls: 'action text-controls',
+								'data-qtip': 'Formatting Options',
+								cn: {
+									cls: 'popctr',
+									cn: {
+										cls: 'popover',
+										cn: [
+											{
+												cls: 'control bold',
+												tabIndex: -1,
+												'data-qtip': 'Bold',
+											},
+											{
+												cls: 'control italic',
+												tabIndex: -1,
+												'data-qtip': 'Italic',
+											},
+											{
+												cls: 'control underline',
+												tabIndex: -1,
+												'data-qtip': 'Underline',
+											},
+										],
+									},
+								},
+							},
+						},
+						{
+							tag: 'tpl',
+							if: 'enableObjectControls',
+							cn: {
+								cls: 'action object-controls',
+								'data-qtip': 'Insert Object',
+								cn: {
+									cls: 'popctr',
+									cn: {
+										cls: 'popover',
+										cn: [
+											{
+												cls: 'control whiteboard',
+												'data-qtip':
+													'Create a whiteboard',
+											},
+											{
+												tag: 'tpl',
+												if: 'enableVideo',
+												cn: {
+													cls: 'control video',
+													'data-qtip':
+														'Embed a video',
+												},
+											},
+											{
+												tag: 'tpl',
+												if: 'enableFileUpload',
+												cn: [
+													{
+														cls: 'control upload',
+														'data-qtip':
+															'Add an Attachment',
+														cn: [
+															{
+																tag: 'input',
+																type: 'file',
+															},
+														],
+													},
+												],
+											},
+										],
+									},
+								},
+							},
+						},
+					],
 				},
 				{
 					cls: 'right save-controls',
 					cn: [
-						{cls: 'action save', html: 'Save'},
-						{cls: 'action cancel', html: 'Cancel'}
-					]
-				}
-				]
-			}
-		]),
+						{ cls: 'action save', html: 'Save' },
+						{ cls: 'action cancel', html: 'Cancel' },
+					],
+				},
+			],
+		},
+	]),
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
 
 	//default value (U+200B -- allow the cursor into the placeholder div, but don't take any space)
 	defaultValue: '\u200B',
 
-	REGEX_INITIAL_CHAR: /\u200B|\u2060/ig,
+	REGEX_INITIAL_CHAR: /\u200B|\u2060/gi,
 
 	//used to identify and strip out
 
-	wbThumbnailTpm: Ext.DomHelper.createTemplate(
-		{
-			contentEditable: false,
-			cls: 'whiteboard-divider',
-			unselectable: 'on',
-			cn: [
-				{
-					cls: 'whiteboard-wrapper',
-					onclick: 'void(0)',
-					cn: [
-						{
-							tag: 'img',
-							src: '{0}',
-							id: '{1}',
-							cls: 'wb-thumbnail object-part',
-							alt: 'Whiteboard Thumbnail',
-							unselectable: 'on',
-							border: 0
-						},
-						{
-							cls: 'fill', unselectable: 'on'
-						},
-						{
-							cls: 'centerer',
-							unselectable: 'on',
-							cn: [
-								{
-									unselectable: 'on',
-									cls: 'edit',
-									html: 'Edit'
-								}
-							]
-						}
-					]
-				}
-			]
-		}).compile(),
+	wbThumbnailTpm: Ext.DomHelper.createTemplate({
+		contentEditable: false,
+		cls: 'whiteboard-divider',
+		unselectable: 'on',
+		cn: [
+			{
+				cls: 'whiteboard-wrapper',
+				onclick: 'void(0)',
+				cn: [
+					{
+						tag: 'img',
+						src: '{0}',
+						id: '{1}',
+						cls: 'wb-thumbnail object-part',
+						alt: 'Whiteboard Thumbnail',
+						unselectable: 'on',
+						border: 0,
+					},
+					{
+						cls: 'fill',
+						unselectable: 'on',
+					},
+					{
+						cls: 'centerer',
+						unselectable: 'on',
+						cn: [
+							{
+								unselectable: 'on',
+								cls: 'edit',
+								html: 'Edit',
+							},
+						],
+					},
+				],
+			},
+		],
+	}).compile(),
 
 	// FIXME: copied from above but we probably don't need all this
 	videoThumbnailTpm: Ext.DomHelper.createTemplate({
@@ -195,116 +278,124 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		cls: 'video-thumbnail object-part body-divider',
 		alt: 'Embedded Video Thumbnail',
 		unselectable: 'on',
-		border: 0
+		border: 0,
 	}).compile(),
 
 	unknownPartTemplate: Ext.DomHelper.createTemplate({
 		contentEditable: false,
 		id: '{1}',
 		cls: 'object-part unknown body-divider',
-		unselectable: 'on'
+		unselectable: 'on',
 	}).compile(),
 
 	// TODO: all this part related stuff should end up in mixins or objects or something.
 	// this doesn't seem particularily scalable.
 	objectThumbnailTemplates: {
 		'application/vnd.nextthought.canvas': 'wbThumbnailTpm',
-		'application/vnd.nextthought.embeddedvideo': 'videoThumbnailTpm'
+		'application/vnd.nextthought.embeddedvideo': 'videoThumbnailTpm',
 	},
 
 	onThumbnailInsertedMap: {
 		'application/vnd.nextthought.canvas': 'onWhiteboardThumbnailInserted',
-		'application/vnd.nextthought.embeddedvideo': 'onVideoThumbnailInserted'
+		'application/vnd.nextthought.embeddedvideo': 'onVideoThumbnailInserted',
 	},
 
 	partConverters: {
 		'<img.+wb-thumbnail.+?>': 'whiteboardPart',
-		'.+?video-thumbnail.+?>': 'videoPart'
+		'.+?video-thumbnail.+?>': 'videoPart',
 	},
 
 	partRenderer: {
 		'application/vnd.nextthought.canvas': 'addWhiteboard',
 		'application/vnd.nextthought.embeddedvideo': 'addVideo',
-		'application/vnd.nextthought.contentfile': 'setAttachmentPreviewFromModel'
+		'application/vnd.nextthought.contentfile':
+			'setAttachmentPreviewFromModel',
 	},
 
-	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
+	tabTpl: Ext.DomHelper.createTemplate({ html: '\t' }).compile(),
 
-	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{html: '{placeholder}'}, //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
-		{
-			cls: 'attachment-part',
-			'data-fileName': '{filename}',
-			name: '{name}',
-			id: '{name}',
-			contentEditable: false,
-			unselectable: 'on',
-			cn: [
-				{
-					cls: 'icon-wrapper',
-					unselectable: 'on',
-					cn: [
-						{
-							cls: 'icon {extension} {iconCls}',
-							style: 'background-image: url(\'{url}\');',
-							unselectable: 'on',
-							cn: [
-								{
-									tag: 'label',
-									html: '{extension}',
-									unselectable: 'on'
-								}
-							]
-						}
-					]
-				},
-				{
-					cls: 'meta',
-					contentEditable: false,
-					unselectable: 'on',
-					cn: [
-						{
-							cls: 'text',
-							unselectable: 'on',
-							cn: [
-								{
-									tag: 'span',
-									cls: 'title',
-									unselectable: 'on',
-									html: '{filename}'
-								},{
-									tag: 'span right',
-									cls: 'size',
-									unselectable: 'on',
-									html: '{size}'
-								}
-							]
-						},{
-							cls: 'controls',
-							unselectable: 'on',
-							cn: [
-								{
-									tag: 'span',
-									cls: 'delete',
-									'data-action': 'delete',
-									unselectable: 'on',
-									html: 'Delete'
-								}
-							]
-						}
-					]
-				}
-			]
-		},
-		{html: '{placeholder}'} //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
-	])),
+	attachmentPreviewTpl: new Ext.XTemplate(
+		Ext.DomHelper.markup([
+			{ html: '{placeholder}' }, //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
+			{
+				cls: 'attachment-part',
+				'data-fileName': '{filename}',
+				name: '{name}',
+				id: '{name}',
+				contentEditable: false,
+				unselectable: 'on',
+				cn: [
+					{
+						cls: 'icon-wrapper',
+						unselectable: 'on',
+						cn: [
+							{
+								cls: 'icon {extension} {iconCls}',
+								style: "background-image: url('{url}');",
+								unselectable: 'on',
+								cn: [
+									{
+										tag: 'label',
+										html: '{extension}',
+										unselectable: 'on',
+									},
+								],
+							},
+						],
+					},
+					{
+						cls: 'meta',
+						contentEditable: false,
+						unselectable: 'on',
+						cn: [
+							{
+								cls: 'text',
+								unselectable: 'on',
+								cn: [
+									{
+										tag: 'span',
+										cls: 'title',
+										unselectable: 'on',
+										html: '{filename}',
+									},
+									{
+										tag: 'span right',
+										cls: 'size',
+										unselectable: 'on',
+										html: '{size}',
+									},
+								],
+							},
+							{
+								cls: 'controls',
+								unselectable: 'on',
+								cn: [
+									{
+										tag: 'span',
+										cls: 'delete',
+										'data-action': 'delete',
+										unselectable: 'on',
+										html: 'Delete',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{ html: '{placeholder}' }, //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
+		])
+	),
 
 	AttachmentMap: {},
 	ObjectURLMap: {},
 
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
-		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+		data.renderSelectors = Ext.applyIf(
+			data.renderSelectors || {},
+			cls.superclass.renderSelectors
+		);
 
 		//allow a header template to be defined
 		data.headerTpl = data.headerTpl || cls.superclass.headerTpl || false;
@@ -312,13 +403,16 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		//merge in subclass's templates
-		var tpl = this.prototype.renderTpl.replace('{header}', data.headerTpl || ''),
+		var tpl = this.prototype.renderTpl.replace(
+				'{header}',
+				data.headerTpl || ''
+			),
 			o = data.headerTplOrder || this.prototype.headerTplOrder || '',
-			topTpl = o.replace('{title}', data.titleTpl || '')
+			topTpl = o
+				.replace('{title}', data.titleTpl || '')
 				.replace('{toolbar}', data.toolbarTpl || '');
 
 		tpl = tpl.replace('{extra}', topTpl || '');
-
 
 		if (!data.renderTpl) {
 			data.renderTpl = tpl;
@@ -330,11 +424,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	beforeRender: function () {
-		this.maybeResizeContentBox = Ext.Function.createBuffered(this.maybeResizeContentBox, 400);//typical key press spacing?
+		this.maybeResizeContentBox = Ext.Function.createBuffered(
+			this.maybeResizeContentBox,
+			400
+		); //typical key press spacing?
 		this.callParent(arguments);
 
 		this.enableVideo = this.enableVideo && Service.canEmbedVideo();
-		this.enableFileUpload = isFeature('file-upload') && this.enableFileUpload;
+		this.enableFileUpload =
+			isFeature('file-upload') && this.enableFileUpload;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			cancelLabel: this.cancelButtonLabel,
@@ -351,7 +449,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			placeholderText: this.placeholderText,
 			enctype: this.enctype || 'multipart/form-data',
 			autocomplete: this.autocomplete || 'off',
-			name: this.formName || 'form'
+			name: this.formName || 'form',
 		});
 
 		if (this.enableShareControls || this.enablePublishControls) {
@@ -366,13 +464,18 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		this.setupEditor();
 
 		this.mon(this.el.down('.action.cancel'), 'click', this.onCancel, this);
-		this.mon(this.saveButtonEl, 'click', function (e) {
-			if (e.getTarget('.disabled')) {
-				e.stopEvent();
-				return;
-			}
-			this.onSave(e);
-		}, this);
+		this.mon(
+			this.saveButtonEl,
+			'click',
+			function (e) {
+				if (e.getTarget('.disabled')) {
+					e.stopEvent();
+					return;
+				}
+				this.onSave(e);
+			},
+			this
+		);
 
 		//Hide it, if it's empty.
 		aux = this.el.down('.aux');
@@ -381,7 +484,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
-		document.execCommand( 'enableObjectResizing', false, false );
+		document.execCommand('enableObjectResizing', false, false);
 
 		this.maybeEnableSave();
 
@@ -405,7 +508,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				html.classList.remove(this.htmlCls);
 			});
 		}
-
 	},
 
 	showTitle: function () {
@@ -431,12 +533,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (!el) {
 			return;
 		}
-		el.set({'data-error-tip': undefined});
+		el.set({ 'data-error-tip': undefined });
 		Ext.defer(el.removeCls, 1, el, ['error-tip']);
 	},
 
 	markError: function (el, message) {
-		el.addCls('error-tip').set({'data-error-tip': message});
+		el.addCls('error-tip').set({ 'data-error-tip': message });
 	},
 
 	onCancel: function (e) {
@@ -474,7 +576,13 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		this.fireEvent('save', this, this.record, v, this.saveCallback || Ext.emptyFn);
+		this.fireEvent(
+			'save',
+			this,
+			this.record,
+			v,
+			this.saveCallback || Ext.emptyFn
+		);
 	},
 
 	setupEditor: function () {
@@ -500,7 +608,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.tagsEl = el.down('.tags');
 		if (me.tagsEl) {
-			me.tags = Ext.widget('tags', {renderTo: me.tagsEl, tabIndex: tabTracker.next()});
+			me.tags = Ext.widget('tags', {
+				renderTo: me.tagsEl,
+				tabIndex: tabTracker.next(),
+			});
 			me.on('destroy', 'destroy', me.tags);
 			me.mon(me.tags, 'blur', function () {
 				var e = el.down('.content');
@@ -510,33 +621,39 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.publishEl = el.down('.action.publish');
 		if (me.publishEl) {
-			me.mon(me.publishEl, 'click', function togglePublish (e) {
+			me.mon(me.publishEl, 'click', function togglePublish(e) {
 				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 				me.publishEl[action]('on');
 			});
 		}
 
-		(new Ce(el.query('.action:not([tabindex]),.content'))).set({tabIndex: tabTracker.next()});
+		new Ce(el.query('.action:not([tabindex]),.content')).set({
+			tabIndex: tabTracker.next(),
+		});
 
 		me.objectControlsEl = el.down('.action.object-controls');
 		if (me.objectControlsEl) {
-			me.objectControlsEl.set({'data-tiptext': me.objectControlsEl.getAttribute('data-qtip')});
+			me.objectControlsEl.set({
+				'data-tiptext': me.objectControlsEl.getAttribute('data-qtip'),
+			});
 			me.mon(me.objectControlsEl, 'click', me.toggleObjectsPopover, me);
 		}
 
 		me.styleControlsEl = el.down('.action.text-controls');
 		if (me.styleControlsEl) {
-			me.styleControlsEl.set({'data-tiptext': me.styleControlsEl.getAttribute('data-qtip')});
+			me.styleControlsEl.set({
+				'data-tiptext': me.styleControlsEl.getAttribute('data-qtip'),
+			});
 			me.mon(me.styleControlsEl, 'click', me.showStylePopover, me);
 		}
 		me.mon(new Ce(el.query('.left .action')), {
 			scope: me,
-			click: me.editorContentAction
+			click: me.editorContentAction,
 		});
 
 		me.mon(new Ce(el.query('.text-controls .control')), {
 			scope: me,
-			click: me.fontStyleAction
+			click: me.fontStyleAction,
 		});
 
 		me.mon(el, {
@@ -551,7 +668,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					content.scrollTo('top', oldScroll.top);
 					me.collapseToEnd();
 				}
-			}
+			},
 		});
 
 		me.contentEl = el.down('.content');
@@ -567,10 +684,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 						me.onCancel(e);
 					}
 				}
-			}
+			},
 		});
 
-		function stop (e) {e.stopPropagation();}
+		function stop(e) {
+			e.stopPropagation();
+		}
 		me.mon(me.contentEl, {
 			scope: me,
 			keydown: 'onKeyDown',
@@ -581,7 +700,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			contextmenu: 'handleContext',
 			mouseup: 'onMouseUp',
 			mousedown: stop,
-			mousemove: stop
+			mousemove: stop,
 		});
 
 		me.on('destroy', function () {
@@ -605,14 +724,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		el = Ext.getDom(el);
 		if (typeof el.selectionStart === 'number') {
 			el.selectionStart = el.selectionEnd = el.value.length;
-		}
-		else if (el.createTextRange !== undefined) {
+		} else if (el.createTextRange !== undefined) {
 			el.focus();
 			range = el.createTextRange();
 			range.collapse(false);
 			range.select();
-		}
-		else if (document.createRange) {
+		} else if (document.createRange) {
 			range = document.createRange();
 			range.selectNodeContents(el);
 			range.collapse(false);
@@ -636,8 +753,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					scrollParentEl: scrollParentEl,
 					tabIndex: tabTracker && tabTracker.next(),
 					ownerCls: this.xtype,
-					value: me.sharingValue
-
+					value: me.sharingValue,
 				});
 
 				if (!SharingUtils.canSharePublicly()) {
@@ -645,25 +761,37 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				}
 
 				this.on('destroy', 'destroy', me.sharedList);
-				this.mon(me.sharedList, 'cancel-indicated', function () {
-					this.fireEvent('cancel');
-				}, me);
-				this.mon(me.sharedList, 'sync-height', function () {
-					this.maybeResizeContentBox();
-				}, me);
+				this.mon(
+					me.sharedList,
+					'cancel-indicated',
+					function () {
+						this.fireEvent('cancel');
+					},
+					me
+				);
+				this.mon(
+					me.sharedList,
+					'sync-height',
+					function () {
+						this.maybeResizeContentBox();
+					},
+					me
+				);
 			} else {
 				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
 			}
 		}
 	},
 
-	stop: function (e) { e.stopPropagation(); },
+	stop: function (e) {
+		e.stopPropagation();
+	},
 
 	setupTitleEl: function (me, tabTracker) {
 		me.titleWrapEl = me.el.down('.title');
 		me.titleEl = me.el.down('.title input');
 		if (me.titleEl) {
-			me.titleEl.set({tabIndex: tabTracker.next()});
+			me.titleEl.set({ tabIndex: tabTracker.next() });
 			me.mon(me.titleEl, {
 				click: 'stop',
 				mousedown: 'stop',
@@ -671,17 +799,23 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				keyup: 'stop',
 				keydown: function (e) {
 					var t = e.getTarget();
-					Ext.callback((t || {}).setAttribute, t, ['value', t.value], 1);
+					Ext.callback(
+						(t || {}).setAttribute,
+						t,
+						['value', t.value],
+						1
+					);
 					e.stopPropagation();
 					me.clearError(me.titleWrapEl);
-				}
+				},
 			});
 		}
 	},
 
-
 	setupFileUploadField: function () {
-		if (!this.enableFileUpload) { return; }
+		if (!this.enableFileUpload) {
+			return;
+		}
 
 		let dom = this.el.dom,
 			input = dom && dom.querySelector('.control.upload input'),
@@ -692,14 +826,19 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
 		}
 		if (dragInput) {
-			dragInput.addEventListener('dragenter', this.onDragEnter.bind(this));
+			dragInput.addEventListener(
+				'dragenter',
+				this.onDragEnter.bind(this)
+			);
 			dragInput.addEventListener('dragend', this.onDragLeave.bind(this));
 		}
 		if (dropzone) {
-			dropzone.addEventListener('change', this.onFileInputChange.bind(this));
+			dropzone.addEventListener(
+				'change',
+				this.onFileInputChange.bind(this)
+			);
 		}
 	},
-
 
 	onFileInputChange: function (e) {
 		var input = e.target,
@@ -716,7 +855,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-
 	onFileChange: function (file) {
 		var guid = guidGenerator();
 
@@ -732,30 +870,45 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		this.setAttachmentPreviewFromInput(file, guid);
 	},
 
-
 	//FIXME: D.R.Y.
 	setAttachmentPreviewFromInput: function (file, name) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setAttachmentPreviewFromInput.bind(this, file));
+			this.on(
+				'afterrender',
+				this.setAttachmentPreviewFromInput.bind(this, file)
+			);
 			return;
 		}
 
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
+			size = FilePicker.getHumanReadableFileSize(
+				parseFloat(file.size),
+				1
+			),
 			iconData = this.getFileIconDataFromFile(file, name),
 			type = Mime.extension(file.type),
-			data = {size: size, filename: file.name, name: name, extension: type, placeholder: this.defaultValue},
-			focusNode, isSelectionInContent;
+			data = {
+				size: size,
+				filename: file.name,
+				name: name,
+				extension: type,
+				placeholder: this.defaultValue,
+			},
+			focusNode,
+			isSelectionInContent;
 
 		// Apply icon data
-		data = { ...data, ...iconData};
+		data = { ...data, ...iconData };
 
 		//Need to see if we have a selection and it is in our content element
 		if (document && document.getSelection) {
 			focusNode = document.getSelection().focusNode;
 			focusNode = focusNode ? Ext.fly(focusNode) : null;
-			isSelectionInContent = focusNode && (focusNode.is('.content') || focusNode.parent('.content', true));
+			isSelectionInContent =
+				focusNode &&
+				(focusNode.is('.content') ||
+					focusNode.parent('.content', true));
 		}
 
 		if (focusNode && isSelectionInContent) {
@@ -776,14 +929,20 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	//FIXME: D.R.Y.
 	setAttachmentPreviewFromModel: function (model) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
+			this.on(
+				'afterrender',
+				this.setAttachmentPreviewFromModel.bind(this, model)
+			);
 			return;
 		}
 
 		let data = model && model.isModel ? model.getData() : model,
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
+			size = FilePicker.getHumanReadableFileSize(
+				parseFloat(data.size),
+				1
+			),
 			iconData = this.getFileIconDataFromValue(data),
 			type = data.contentType || data.FileMimeType || '';
 
@@ -795,9 +954,8 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			...data,
 			...iconData,
 			name: data.name || guidGenerator(),
-			size: size ? size : data.size
+			size: size ? size : data.size,
 		};
-
 
 		this.trackedParts[data.name] = data;
 
@@ -808,11 +966,9 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		wait().then(this.maybeResizeContentBox.bind(this, true));
 	},
 
-
 	isImage: function (type) {
-		return (/[/.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+		return /[/.](gif|jpg|jpeg|tiff|png)$/i.test(type);
 	},
-
 
 	//FIXME: D.R.Y.
 	getFileIconDataFromFile: function (file, name) {
@@ -822,8 +978,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (isImage) {
 			obj.url = this.createObjectURL(file, name);
-		}
-		else {
+		} else {
 			obj = this.getFallbackIconData(type);
 		}
 
@@ -834,7 +989,8 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	getFileIconDataFromValue: function (model) {
 		let data = model && model.isModel ? model.getData() : model,
 			type = data.contentType || data.FileMimeType,
-			isImage = this.isImage(type), obj = {};
+			isImage = this.isImage(type),
+			obj = {};
 
 		if (isImage) {
 			obj.url = data.url;
@@ -845,24 +1001,23 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		return obj;
 	},
 
-
 	getFallbackIconData: function (type) {
 		return RelatedWork.getIconForMimeType(type);
 	},
-
 
 	createObjectURL: function (file, name) {
 		var url = Globals.getURLObject();
 
 		this.cleanUpObjectURL(name);
 
-		if (!url) { return null; }
+		if (!url) {
+			return null;
+		}
 
 		this.ObjectURLMap[name] = url.createObjectURL(file);
 
 		return this.ObjectURLMap[name];
 	},
-
 
 	cleanUpObjectURL: function (name) {
 		var url = Globals.getURLObject(),
@@ -874,8 +1029,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				url.revokeObjectURL(objectURL);
 				delete this.ObjectURLMap[name];
 			}
-		}
-		else {
+		} else {
 			for (let key in this.ObjectURLMap) {
 				if (this.ObjectURLMap.hasOwnProperty(key)) {
 					objectURL = this.ObjectURLMap[key];
@@ -887,7 +1041,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 	},
-
 
 	onDragEnter: function (e) {
 		let dom = this.el && this.el.dom,
@@ -901,7 +1054,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-
 	onDragLeave: function (e) {
 		let dom = this.el && this.el.dom,
 			dragInput = dom && dom.querySelector('.dropzone');
@@ -914,11 +1066,9 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-
 	onDrop: function (e) {
 		e.preventDefault();
 	},
-
 
 	activate: function () {
 		this.maybeEnableSave();
@@ -933,12 +1083,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	disable: function () {
 		this.deactivate();
 		this.el.addCls(['active', 'disabled']);
-		this.el.down('.content').set({'contenteditable': undefined});
+		this.el.down('.content').set({ contenteditable: undefined });
 	},
 
 	enable: function () {
 		this.el.removeCls('disabled');
-		this.el.down('.content').set({'contenteditable': 'true'});
+		this.el.down('.content').set({ contenteditable: 'true' });
 	},
 
 	deactivate: function () {
@@ -955,16 +1105,19 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	handlePaste: function (e, elem) {
-
 		elem = e.getTarget('.content', Number.MAX_VALUE);
 		if (!elem) {
-			console.log('Could not paste, the target was not found:', e.getTarget());
+			console.log(
+				'Could not paste, the target was not found:',
+				e.getTarget()
+			);
 			e.stopEvent();
 			return false;
 		}
 		var be = e.browserEvent,
 			cd = be ? be.clipboardData : null,
-			sel = window.getSelection(), types,
+			sel = window.getSelection(),
+			types,
 			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
 			docFrag = document.createDocumentFragment(),
 			offScreenBuffer = document.createElement('div');
@@ -979,12 +1132,14 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			types = Ext.toArray(cd.types).toString();
 
 			if (/text\/html/.test(types)) {
-				offScreenBuffer.innerHTML = DomUtils.sanitizeExternalContentForInput(cd.getData('text/html'));
-			}
-			else if (/text\/plain/.test(types)) {
+				offScreenBuffer.innerHTML = DomUtils.sanitizeExternalContentForInput(
+					cd.getData('text/html')
+				);
+			} else if (/text\/plain/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
 			}
-		} else if (window.clipboardData) {//IE
+		} else if (window.clipboardData) {
+			//IE
 			offScreenBuffer.innerHTML = window.clipboardData.getData('Text');
 		}
 
@@ -1008,20 +1163,26 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	processPaste: function (offScreenBuffer, savedRange, elem) {
 		Ext.fly(offScreenBuffer).select('script,meta,iframe').remove();
 
-		var pasteData = offScreenBuffer.innerHTML, range, frag;
+		var pasteData = offScreenBuffer.innerHTML,
+			range,
+			frag;
 
 		try {
 			range = RangeUtils.restoreSavedRange(savedRange);
 		} catch (e) {
-			console.log('Error recreating rangeDesc during processPaste.', savedRange, pasteData);
+			console.log(
+				'Error recreating rangeDesc during processPaste.',
+				savedRange,
+				pasteData
+			);
 			document.body.removeChild(offScreenBuffer);
 			return;
 		}
 
 		try {
 			pasteData = pasteData
-				.replace(/\s*(style|class)=".+?"\s*/ig, ' ')
-				.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;');
+				.replace(/\s*(style|class)=".+?"\s*/gi, ' ')
+				.replace(/<span.*?>&nbsp;<\/span>/gi, '&nbsp;');
 
 			frag = range.createContextualFragment(pasteData);
 			range.deleteContents();
@@ -1031,8 +1192,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			this.lastRange = range;
 			window.getSelection().removeAllRanges();
 			window.getSelection().addRange(range);
-		}
-		catch (e2) {
+		} catch (e2) {
 			console.log(pasteData, e2);
 		}
 		elem.focus();
@@ -1063,8 +1223,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				s.removeAllRanges();
 			}
 			s.addRange(this.lastRange);
-		}
-		else if (s.rangeCount > 0) {
+		} else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
 		}
 	},
@@ -1076,8 +1235,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (typeof offset !== 'number') {
 			range.selectNodeContents(n);
 			range.collapse(false);
-		}
-		else {
+		} else {
 			range.setStart(n, offset);
 			range.setEnd(n, offset);
 		}
@@ -1115,9 +1273,11 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				n = s && s.focusNode,
 				o = s && s.focusOffset,
 				ao = s && s.anchorOffset,
-				v = n && n.nodeValue, r,
+				v = n && n.nodeValue,
+				r,
 				modKey = e.altKey || e.ctrlKey,
-				badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
+				badRange =
+					n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
 			this.detectAndFixDanglingNodes();
 			if (badRange) {
@@ -1134,14 +1294,13 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				if (modKey) {
 					//tab next
 					this.el.down('.save').focus();
-				}
-				else if (e.shiftKey) {
+				} else if (e.shiftKey) {
 					//tab back
-					if (this.tags) {//may not be needed
+					if (this.tags) {
+						//may not be needed
 						this.tags.focus();
 					}
-				}
-				else {
+				} else {
 					e.stopEvent();
 
 					if (v === null && !Ext.isTextNode(n)) {
@@ -1155,8 +1314,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					if (v) {
 						v = v.substr(0, o) + '\t' + v.substr(o);
 						n.nodeValue = v;
-					}
-					else if (!badRange) {
+					} else if (!badRange) {
 						console.warn('Replacing n from' + n);
 						n = this.tabTpl.overwrite(n).firstChild;
 						o = 0;
@@ -1165,16 +1323,19 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					this.moveCaret(n, o + 1);
 					return false;
 				}
-			}
-			else if (e.getKey() === e.DELETE || e.getKey() === e.BACKSPACE) {
-				if (Ext.isIE && a === n && a.childNodes[ao] === undefined && a.childNodes[ao - 1]) {
+			} else if (e.getKey() === e.DELETE || e.getKey() === e.BACKSPACE) {
+				if (
+					Ext.isIE &&
+					a === n &&
+					a.childNodes[ao] === undefined &&
+					a.childNodes[ao - 1]
+				) {
 					s.removeAllRanges();
 					r = document.createRange();
 					r.selectNode(a.childNodes[ao - 1]);
 					s.addRange(r);
 				}
-			}
-			else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT) {
+			} else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT) {
 				//keeps the slides from transitioninng in the presentation view
 				e.stopPropagation();
 			}
@@ -1233,7 +1394,11 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		Ext.each(buttonsName, function (bn) {
 			var b = me.el.down('.' + bn);
 			if (b) {
-				b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
+				b[
+					Ext.Array.contains(me.typingAttributes, bn)
+						? 'addCls'
+						: 'removeCls'
+				]('selected');
 			}
 		});
 	},
@@ -1260,11 +1425,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	applyTypingAttributesToEditable: function () {
-		var actions = this.supportedTypingAttributes, me = this;
+		var actions = this.supportedTypingAttributes,
+			me = this;
 		Ext.each(actions, function (action) {
 			try {
-				if (document.queryCommandSupported(action) &&
-					document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
+				if (
+					document.queryCommandSupported(action) &&
+					document.queryCommandState(action) !==
+						Ext.Array.contains(me.getTypingAttributes(), action)
+				) {
 					document.execCommand(action, false, false);
 				}
 			} catch (e) {
@@ -1281,14 +1450,14 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (t.is('.whiteboard')) {
 			this.addWhiteboard();
-		}
-		else if (t.is('.video')) {
+		} else if (t.is('.video')) {
 			this.addVideo();
 		}
 	},
 
 	fontStyleAction: function (e) {
-		var t = e.getTarget('.control', undefined, true), action;
+		var t = e.getTarget('.control', undefined, true),
+			action;
 		if (t) {
 			action = (t.getAttribute('class') || '').split(' ')[1];
 			this.toggleTypingAttribute(action);
@@ -1300,7 +1469,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			e.stopPropagation();
 		}
 
-		const isTextControl = c => (c && !!Ext.fly(c).parent('.text-controls'));
+		const isTextControl = c => c && !!Ext.fly(c).parent('.text-controls');
 
 		if (el && !isTextControl(e.getTarget('.control'))) {
 			const state = el && el.hasCls('selected');
@@ -1309,7 +1478,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			const content = this.el.down('.content');
 
 			el[action]('selected');
-			el.set({'data-qtip': tip});
+			el.set({ 'data-qtip': tip });
 			const oldScroll = content.getScroll();
 			content.focus();
 			content.scrollTo('top', oldScroll.top);
@@ -1319,7 +1488,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 	hidePopover: function (el) {
 		el.removeCls('selected');
-		el.set({'data-qtip': el.getAttribute('data-tiptext')});
+		el.set({ 'data-qtip': el.getAttribute('data-tiptext') });
 	},
 
 	toggleObjectsPopover: function (e) {
@@ -1358,15 +1527,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		var attrs = this.getTypingAttributes().slice();
 		if (Ext.Array.contains(attrs, action)) {
 			Ext.Array.remove(attrs, action);
-		}
-		else {
+		} else {
 			Ext.Array.push(attrs, action);
 		}
 		this.setTypingAttributes(attrs);
 	},
 
 	detectTypingAttributes: function () {
-		var actions = this.supportedTypingAttributes, attrs = [];
+		var actions = this.supportedTypingAttributes,
+			attrs = [];
 		Ext.each(actions, function (action) {
 			try {
 				if (document.queryCommandState(action)) {
@@ -1380,9 +1549,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	handleClick: function (e) {
-		var guid, p, fnName, mime,
+		var guid,
+			p,
+			fnName,
+			mime,
 			content = e.getTarget('.content'),
-			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper') || e.getTarget('.attachment-part');
+			t =
+				e.getTarget('.object-part') ||
+				e.getTarget('.whiteboard-wrapper') ||
+				e.getTarget('.attachment-part');
 
 		//make sure the content el gets focus when you click it, if its not already active
 		//fixs issue where it would take two clicks to focus content from the usertokenfield
@@ -1412,7 +1587,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				return;
 			}
 
-
 			p = this.getPart(Ext.getDom(guid).outerHTML);
 			if (!p) {
 				return;
@@ -1423,12 +1597,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			if (fnName && Ext.isFunction(this[fnName])) {
 				this[fnName](p, guid, true, e);
 			}
-		}
-		else {
+		} else {
 			this.detectTypingAttributes(e);
 		}
 	},
-
 
 	handleAttachmentPartAction: function (parent, event) {
 		var e = event.getTarget(),
@@ -1450,7 +1622,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			this.maybeEnableSave();
 		}
 	},
-
 
 	checkTrackedParts: function () {
 		var me = this;
@@ -1487,7 +1658,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			Class: 'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
 			embedURL: url,
-			type: type
+			type: type,
 		};
 	},
 
@@ -1501,22 +1672,32 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		if (!data || e) {
-			EmbedInput.show((data || {}).embedURL)
-				.then((source) => {
-					const part = this.createVideoPart(source.href, source.service);
+			EmbedInput.show((data || {}).embedURL).then(source => {
+				const part = this.createVideoPart(source.href, source.service);
 
-					this.insertObjectThumbnail(this.el.down('.content'), guid, part, append);
-				});
-		}
-		else {
-			this.insertObjectThumbnail(me.el.down('.content'), guid, data, append);
+				this.insertObjectThumbnail(
+					this.el.down('.content'),
+					guid,
+					part,
+					append
+				);
+			});
+		} else {
+			this.insertObjectThumbnail(
+				me.el.down('.content'),
+				guid,
+				data,
+				append
+			);
 		}
 	},
 
 	addWhiteboard: function (data, guid, append) {
-		data = data || void undefined;//force the falsy value of data to always be undefinded.
+		data = data || void undefined; //force the falsy value of data to always be undefinded.
 
-		var me = this, wbWin, content;
+		var me = this,
+			wbWin,
+			content;
 
 		if (typeof guid !== 'string') {
 			guid = guidGenerator();
@@ -1530,7 +1711,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		//pop open a whiteboard:
-		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
+		wbWin = Ext.widget('wb-window', {
+			width: 802,
+			value: data,
+			closeAction: 'hide',
+			cancelOnce: false,
+		});
 		content = me.el.down('.content');
 		//remember the whiteboard window:
 		wbWin.guid = guid;
@@ -1541,9 +1727,13 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			Ext.fly(Ext.query('.nav-helper')[0]).hide();
 		}
 
-
 		if (data) {
-			me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
+			me.insertObjectThumbnail(
+				content,
+				guid,
+				wbWin.down('whiteboard-editor'),
+				append
+			);
 		}
 
 		//hook into the window's save and cancel operations:
@@ -1562,7 +1752,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					me.cleanTrackedParts(guid);
 					wbWin.close();
 				}
-			}
+			},
 		});
 
 		if (!data) {
@@ -1572,12 +1762,14 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 	__insertIntoRange: function (el, range) {
 		var content = this.el.dom.querySelector('.content'),
-			parent, i, node,
+			parent,
+			i,
+			node,
 			potentialParents = content.childNodes,
 			endContainer = range.endContainer,
 			after;
 
-		function insertAfter (n, target) {
+		function insertAfter(n, target) {
 			if (target.nextSibling) {
 				content.insertBefore(n, target.nextSibling);
 			} else {
@@ -1623,8 +1815,11 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 	insertPartAtSelection: function (html) {
 		var content = this.el.down('.content', true),
-			sel, range, el,
-			i, length,
+			sel,
+			range,
+			el,
+			i,
+			length,
 			part;
 
 		if (window.getSelection) {
@@ -1639,8 +1834,16 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				el = document.createElement('div');
 				el.innerHTML = html;
 
-				if (Ext.fly(range.startContainer).hasCls('body-divider') || Ext.fly(range.startContainer).is('.body-divider *')) {
-					part = Ext.fly(range.startContainer).up('.body-divider', false, true) || range.startContainer;
+				if (
+					Ext.fly(range.startContainer).hasCls('body-divider') ||
+					Ext.fly(range.startContainer).is('.body-divider *')
+				) {
+					part =
+						Ext.fly(range.startContainer).up(
+							'.body-divider',
+							false,
+							true
+						) || range.startContainer;
 
 					//get the next sibling so insertBefore will be after the body divider
 					part = part && part.nextSibling;
@@ -1649,13 +1852,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					if (part) {
 						content.insertBefore(el, part);
 					} else {
-					// otherwise just append it to the content
+						// otherwise just append it to the content
 						content.appendChild(el);
 					}
 				} else {
 					this.__insertIntoRange(el, range);
 				}
-
 
 				for (i = 0, length = el.childNodes.length; i < length; i++) {
 					//insertBefore removes its from the child list so always insert the first one
@@ -1667,19 +1869,25 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 				el.parentNode.removeChild(el);
 			}
-		}
-		/*else if(document.selection && document.selection.type != "Control") {
+		} else {
+			/*else if(document.selection && document.selection.type != "Control") {
 		 // IE < 9
 		 document.selection.createRange().pasteHTML(html);
 		 }*/
-		else {
 			return false;
 		}
 		return true;
 	},
 
-	insertObjectThumbnail: function (content, guid, obj, append, scrollIntoView) {
-		var me = this, re = me.REGEX_INITIAL_CHAR,
+	insertObjectThumbnail: function (
+		content,
+		guid,
+		obj,
+		append,
+		scrollIntoView
+	) {
+		var me = this,
+			re = me.REGEX_INITIAL_CHAR,
 			el = Ext.get(guid),
 			mime = (obj || obj.data).MimeType,
 			placeholder,
@@ -1692,13 +1900,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			callback;
 
 		//We need empty divs to allow to insert text before or after an object.
-		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
+		placeholder = Ext.DomHelper.createTemplate({ html: me.defaultValue });
 
 		if (!el) {
-
 			Ext.each(content.query('> div'), function (n) {
-				var v = n.firstChild === n.lastChild && n.firstChild && n.firstChild.nodeValue;
-				if (v && (v.length === 1 && re.test(v))) {
+				var v =
+					n.firstChild === n.lastChild &&
+					n.firstChild &&
+					n.firstChild.nodeValue;
+				if (v && v.length === 1 && re.test(v)) {
 					Ext.removeNode(n);
 				}
 			});
@@ -1715,32 +1925,36 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			}
 
 			htmlCfg = [
-				{html: me.defaultValue},
-				thumbTpl.apply(['', guid]) ,
-				{html: me.defaultValue}
+				{ html: me.defaultValue },
+				thumbTpl.apply(['', guid]),
+				{ html: me.defaultValue },
 			];
 
 			//Need to see if we have a selection and it is in our content element
 			if (document && document.getSelection) {
 				focusNode = document.getSelection().focusNode;
 				focusNode = focusNode ? Ext.fly(focusNode) : null;
-				isSelectionInContent = focusNode && (focusNode.is('.content') || focusNode.parent('.content', true));
+				isSelectionInContent =
+					focusNode &&
+					(focusNode.is('.content') ||
+						focusNode.parent('.content', true));
 			}
 
 			if (!append && isSelectionInContent) {
 				//If we support insertHTML use it
-				handled = this.insertPartAtSelection(Ext.DomHelper.markup(htmlCfg));
+				handled = this.insertPartAtSelection(
+					Ext.DomHelper.markup(htmlCfg)
+				);
 
 				if (!handled) {
-					console.log('Falling back to old style appending of thumbnail');
+					console.log(
+						'Falling back to old style appending of thumbnail'
+					);
 					Ext.DomHelper.append(content, htmlCfg);
-				}
-				else {
+				} else {
 					console.log('Inserted thumbnail at selection');
 				}
-
-			}
-			else {
+			} else {
 				console.log('Appending thumbnail');
 				Ext.DomHelper.append(content, htmlCfg);
 			}
@@ -1751,29 +1965,35 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		callback = Ext.Function.createBuffered(function (node) {
-			me.fireEvent('size-changed');
+		callback = Ext.Function.createBuffered(
+			function (node) {
+				me.fireEvent('size-changed');
 
-			//Make sure save is enabled
-			me.maybeEnableSave();
-			me.hideObjectsPopover();
+				//Make sure save is enabled
+				me.maybeEnableSave();
+				me.hideObjectsPopover();
 
-			//scroll them into view
-			if (scrollIntoView && node) {
-				Ext.defer(function () {
-					node.scrollIntoView(me.el.down('.content'), false, true);
-				}, 100);
-			}
-			me.focus(true);
-			Ext.defer(me.maybeResizeContentBox, 1, me);
-
-		},100, me);
+				//scroll them into view
+				if (scrollIntoView && node) {
+					Ext.defer(function () {
+						node.scrollIntoView(
+							me.el.down('.content'),
+							false,
+							true
+						);
+					}, 100);
+				}
+				me.focus(true);
+				Ext.defer(me.maybeResizeContentBox, 1, me);
+			},
+			100,
+			me
+		);
 
 		onInsertedFn = me.onThumbnailInsertedMap[mime];
 		if (onInsertedFn && Ext.isFunction(me[onInsertedFn])) {
 			me[onInsertedFn](obj, guid, placeholder, callback);
-		}
-		else {
+		} else {
 			callback.call(me, Ext.get(guid));
 		}
 	},
@@ -1796,13 +2016,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			Ext.fly(p).remove();
 			callback(wbt);
 		});
-
 	},
 
 	onVideoThumbnailInserted: function (obj, guid, placeholder, callback) {
 		var el = Ext.get(guid);
 		if (el) {
-			el.set({'data-href': obj.embedURL, 'data-type': obj.type});
+			el.set({ 'data-href': obj.embedURL, 'data-type': obj.type });
 		}
 		callback(el);
 	},
@@ -1829,7 +2048,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		this.clearAttachmentFilesParts();
 	},
 
-
 	clearAttachmentFilesParts: function () {
 		// Empty the map.
 		for (let k of Object.keys(this.AttachmentMap)) {
@@ -1837,7 +2055,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		this.cleanUpObjectURL();
 	},
-
 
 	whiteboardPart: function (wp) {
 		var me = this,
@@ -1849,11 +2066,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	videoPart: function (vp) {
-		var hrefRegex = (/.*?data-href="(.*?)".*?/).exec(vp),
-			typeRegex = (/.*?data-type="(.*?)".*?/).exec(vp),
+		var hrefRegex = /.*?data-href="(.*?)".*?/.exec(vp),
+			typeRegex = /.*?data-type="(.*?)".*?/.exec(vp),
 			href = hrefRegex && hrefRegex[1],
 			type = typeRegex && typeRegex[1];
-
 
 		if (!href || !type) {
 			return null;
@@ -1869,9 +2085,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	getPart: function (part) {
-		var me = this, p;
+		var me = this,
+			p;
 
-		function convert (regex, fn) {
+		function convert(regex, fn) {
 			if (new RegExp(regex, 'i').test(part) && me[fn]) {
 				p = me[fn](part);
 			}
@@ -1884,7 +2101,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 	getBody: function (parts) {
 		const objectPartRegex = /class=".*object-part.*"/i;
-		const stripTrailingBreak = (text) =>
+		const stripTrailingBreak = text =>
 			text.replace(/<br\/?>$/i, '').replace(this.REGEX_INITIAL_CHAR, '');
 
 		parts = parts || [];
@@ -1892,7 +2109,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		const r = [];
 
 		for (let i = 0; i < parts.length; i++) {
-			let p = null;//reset after each iteration.
+			let p = null; //reset after each iteration.
 			let part = parts[i];
 			//if its a whiteboard do our thing
 			if (objectPartRegex.test(part)) {
@@ -1919,8 +2136,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				//otherwise push us onto the previos part which should be an array
 				if (r.length === 0 || !Ext.isArray(r[r.length - 1])) {
 					r.push([part]);
-				}
-				else {
+				} else {
 					r[r.length - 1].push(part);
 				}
 			}
@@ -1936,7 +2152,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		const dom = document.createElement('div'); //leave outside the loop.
 
 		return r.filter(function (o) {
-
 			if (!Ext.isString(o)) {
 				return true;
 			}
@@ -1945,10 +2160,11 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				return false;
 			}
 
-			const tmp = (dom.innerHTML = o, dom.textContent); //remove all html, and just get text.
+			const tmp = ((dom.innerHTML = o), dom.textContent); //remove all html, and just get text.
 
 			const tags = ['img']; //add queries to this array.
-			const hasPictorialElements = dom.querySelectorAll(tags.join(',')).length > 0;
+			const hasPictorialElements =
+				dom.querySelectorAll(tags.join(',')).length > 0;
 
 			//Filter out empty body parts that parse to either no text, or whitespace only text.
 			return hasPictorialElements || !Ext.isEmpty(tmp.trim());
@@ -1956,8 +2172,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	collapseToEnd: function () {
-		var s, me = this,
-			c = Ext.getDom(me.el.down('.content')), r,
+		var s,
+			me = this,
+			c = Ext.getDom(me.el.down('.content')),
+			r,
 			content = c && c.innerHTML;
 		if (content) {
 			try {
@@ -1968,9 +2186,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				r.collapse(false);
 				me.lastRange = r;
 				s.addRange(me.lastRange);
-
-			}
-			catch (e) {
+			} catch (e) {
 				console.warn('focus issue: ' + e.message, '\n\n\n', content);
 			}
 		}
@@ -1989,23 +2205,22 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	maybeEnableSave: function (silent) {
-
-		var me = this, body,
+		var me = this,
+			body,
 			r = isNoteBodyEmpty(),
 			cls = 'disabled',
 			forceSubmissionCheck = false;
 
-		function isNoteBodyEmpty () {
+		function isNoteBodyEmpty() {
 			var d = Ext.getDom(me.el.down('.content')),
 				html = d && d.innerHTML,
 				parts = d && d.querySelectorAll('.object-part');
 
 			return {
 				clearPlaceholder: parts.length > 0 || !DomUtils.isEmpty(html),
-				enableSave: parts.length > 0 || !DomUtils.isEmpty(html)
+				enableSave: parts.length > 0 || !DomUtils.isEmpty(html),
 			};
 		}
-
 
 		if (r.enableSave && this.saveButtonEl.hasCls(cls)) {
 			this.saveButtonEl.removeCls(cls);
@@ -2022,12 +2237,18 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			if (body.length <= 1 && Ext.isEmpty(body[0])) {
 				me.setValue('', true);
 			}
-
 		}
 
-		this.fireEvent('enable-save', r.enableSave, silent, forceSubmissionCheck);
+		this.fireEvent(
+			'enable-save',
+			r.enableSave,
+			silent,
+			forceSubmissionCheck
+		);
 
-		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
+		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls'](
+			'show-placeholder'
+		);
 	},
 
 	editBody: function (body, silent) {
@@ -2039,19 +2260,18 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		Ext.each(body, function (part) {
 			var d = document.createElement('div'),
-				mime, fnName;
+				mime,
+				fnName;
 			if (typeof part === 'string') {
 				d.innerHTML += part.replace(me.REGEX_INITIAL_CHAR, '');
 				c.appendChild(d);
-			}
-			else {
+			} else {
 				//Ok its some part.	 Look it up in our registry
 				mime = (part.data || part).MimeType;
 				fnName = mime ? me.partRenderer[mime] || '' : undefined;
 				if (fnName && Ext.isFunction(me[fnName])) {
 					me[fnName](part, undefined, true);
-				}
-				else {
+				} else {
 					//TODO Shoot a part we don't understand.  We need to be graceful
 					//to this, but all we can do here is drop it.  Problem with that is
 					//when we save we gather the parts out of content and dropping it here
@@ -2059,19 +2279,23 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					//is we keep an array of parts we don't understand.	 Render them as a ?
 					//or something and then on save we can index into the array and make sure
 					//we don't drop misunderstood parts.  What do you think J?
-					console.warn('Found a part we don\'t understand.  Inserting placeholder', part);
+					console.warn(
+						"Found a part we don't understand.  Inserting placeholder",
+						part
+					);
 					me.injectUnknownPart(part);
 				}
 			}
 		});
 
-		Ext.fly(c).select('a[href]').set({target: '_blank'});
+		Ext.fly(c).select('a[href]').set({ target: '_blank' });
 		this.maybeEnableSave(silent);
 		return me;
 	},
 
 	injectUnknownPart: function (part) {
-		var me = this, guid = guidGenerator();
+		var me = this,
+			guid = guidGenerator();
 
 		this.trackedParts[guid] = part;
 
@@ -2096,7 +2320,11 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				let dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
 
-				let html = div.getHTML() || div.dom.textContent || div.dom.innerText || '';
+				let html =
+					div.getHTML() ||
+					div.dom.textContent ||
+					div.dom.innerText ||
+					'';
 
 				if (div.is('.attachment-part')) {
 					html = this.getAttachmentPart(div);
@@ -2107,8 +2335,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 				if (div.is('.object-part')) {
 					html = '';
 					dom = Ext.getDom(div);
-				}
-				else {
+				} else {
 					div = div.down('.object-part');
 					if (div) {
 						html = '';
@@ -2122,21 +2349,18 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 					html = tmp.innerHTML || '';
 				}
 
-
 				let cleaned = html.replace(this.REGEX_INITIAL_CHAR, '');
 				//if the html was only the no width space(s) don't add it to the parts
 				if (!(html.length > 0 && cleaned.length === 0)) {
 					out.push(html);
 				}
-			}
-			catch (er) {
+			} catch (er) {
 				console.warn('Oops, ' + er.message);
 			}
 		});
 
 		return out;
 	},
-
 
 	getAttachmentPart: function (el) {
 		const name = el && el.getAttribute && el.getAttribute('name');
@@ -2146,15 +2370,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (!part) {
 			part = {
 				MimeType: 'application/vnd.nextthought.contentfile',
-				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
+				filename:
+					el && el.getAttribute && el.getAttribute('data-fileName'),
 				name: name,
-				file: this.AttachmentMap[name]
+				file: this.AttachmentMap[name],
 			};
 		}
 
 		return part;
 	},
-
 
 	/**
 	 * @returns {Object} Returns the value of the editor.
@@ -2165,24 +2389,21 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			sharingInfo: this.sharedList ? this.sharedList.getValue() : null,
 			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
-			tags: this.tags ? this.tags.getValue() : undefined
+			tags: this.tags ? this.tags.getValue() : undefined,
 		};
 	},
 
-
 	// TO BE overriden but subclasses
 	getMimeType: function () {},
-
 
 	hasFiles: function () {
 		return Object.keys(this.AttachmentMap).length > 0;
 	},
 
-
 	setTitle: function (title) {
 		var t = this.titleEl;
 		if (t) {
-			t.set({value: title});
+			t.set({ value: title });
 		}
 	},
 
@@ -2233,7 +2454,9 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	reset: function () {
-		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
+		var buttonsName = ['bold', 'italic', 'underline'],
+			me = this,
+			selection;
 		this.contentEl.innerHTML = '<div>' + this.defaultValue + '</div>';
 		this.contentEl.addCls('show-placeholder');
 
@@ -2247,7 +2470,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (this.titleWrapEl) {
 			this.clearError(this.titleWrapEl);
 		}
-
 
 		try {
 			this.styleControlsEl.removeCls('selected');
@@ -2268,28 +2490,33 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 			//Make sure the body is also reset
 			this.setValue('');
-		}
-		catch (e) {
-			console.log('Removing all ranges from selection failed: ', e.message);
+		} catch (e) {
+			console.log(
+				'Removing all ranges from selection failed: ',
+				e.message
+			);
 		}
 	},
 
 	lock: function () {
 		if (Ext.getDom(this.contentEl)) {
-			this.contentEl.set({contentEditable: false});
+			this.contentEl.set({ contentEditable: false });
 		}
 	},
 
 	unlock: function () {
 		if (Ext.getDom(this.contentEl)) {
-			this.contentEl.set({contentEditable: true});
+			this.contentEl.set({ contentEditable: true });
 		}
-	}
+	},
 });
 
-const Editor = module.exports = exports =	Ext.define('NextThought.editor.Editor', {
-	extend: 'NextThought.editor.AbstractEditor',
-	alias: 'widget.nti-editor'
-});
+const Editor = (module.exports = exports = Ext.define(
+	'NextThought.editor.Editor',
+	{
+		extend: 'NextThought.editor.AbstractEditor',
+		alias: 'widget.nti-editor',
+	}
+));
 
 Editor.AbstractEditor = AbstractEditor;

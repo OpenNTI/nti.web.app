@@ -6,181 +6,190 @@ const StoreUtils = require('legacy/util/Store');
 require('legacy/mixins/Router');
 require('../../../user/components/membership/parts/Membership');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.community.components.membership.Index',
+	{
+		extend:
+			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		alias: 'widget.profile-community-membership',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.community.components.membership.Index', {
-	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
-	alias: 'widget.profile-community-membership',
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		title: 'Community Members',
+		cls: 'memberships full community two-column',
+		profileRouteRoot: '/user',
+		PAGE_SIZE: 100,
 
-	title: 'Community Members',
-	cls: 'memberships full community two-column',
-	profileRouteRoot: '/user',
-	PAGE_SIZE: 100,
+		entryTpl: new Ext.XTemplate(
+			Ext.DomHelper.markup({
+				cls: 'entry',
+				'data-route': '{route}',
+				cn: ['{member:avatar}', { cls: 'name', html: '{name}' }],
+			})
+		),
 
-	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', 'data-route': '{route}', cn: [
-			'{member:avatar}',
-			{cls: 'name', html: '{name}'}
-		]
-	})),
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'title', html: '{title}' },
+			{ cls: 'entries' },
+			{ cls: 'loading hidden', html: 'Loading...' },
+			{
+				cls: 'error hidden',
+				html: 'There was an error loading members.',
+			},
+			{ cls: 'load-more hidden', html: 'Load More' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'title', html: '{title}'},
-		{cls: 'entries'},
-		{cls: 'loading hidden', html: 'Loading...'},
-		{cls: 'error hidden', html: 'There was an error loading members.'},
-		{cls: 'load-more hidden', html: 'Load More'}
-	]),
+		renderSelectors: {
+			titleEl: '.title',
+			entriesEl: '.entries',
+			loadingEl: '.loading',
+			errorEl: '.error',
+			loadMoreEl: '.load-more',
+		},
 
-	renderSelectors: {
-		titleEl: '.title',
-		entriesEl: '.entries',
-		loadingEl: '.loading',
-		errorEl: '.error',
-		loadMoreEl: '.load-more'
-	},
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.initRouter();
 
-		this.initRouter();
+			this.addRoute('/', this.showMembership.bind(this));
 
-		this.addRoute('/', this.showMembership.bind(this));
+			this.addDefaultRoute('/');
 
-		this.addDefaultRoute('/');
+			this.on({
+				activate: this.startResourceViewed.bind(this),
+				deactivate: this.stopResourceViewed.bind(this),
+			});
+		},
 
-		this.on({
-			'activate': this.startResourceViewed.bind(this),
-			'deactivate': this.stopResourceViewed.bind(this)
-		});
-	},
+		startResourceViewed: function () {
+			var id = this.activeEntity && this.activeEntity.getId();
 
-	startResourceViewed: function () {
-		var id = this.activeEntity && this.activeEntity.getId();
+			if (id && !this.hasCurrentTimer) {
+				AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
 
-		if (id && !this.hasCurrentTimer) {
-			AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
+				this.hasCurrentTimer = true;
+			}
+		},
 
-			this.hasCurrentTimer = true;
-		}
-	},
+		stopResourceViewed: function () {
+			var id = this.activeEntity && this.activeEntity.getId();
 
-	stopResourceViewed: function () {
-		var id = this.activeEntity && this.activeEntity.getId();
+			if (id && this.hasCurrentTimer) {
+				AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
+				delete this.hasCurrentTimer;
+			}
+		},
 
-		if (id && this.hasCurrentTimer) {
-			AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
-			delete this.hasCurrentTimer;
-		}
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			this.mon(this.loadMoreEl, 'click', this.onLoadMore.bind(this));
+		},
 
-		this.mon(this.loadMoreEl, 'click', this.onLoadMore.bind(this));
-	},
+		updateEntity: function (entity) {
+			if (!this.rendered) {
+				this.on('afterrender', this.updateEntity.bind(this));
+				return;
+			}
 
-	updateEntity: function (entity) {
-		if (!this.rendered) {
-			this.on('afterrender', this.updateEntity.bind(this));
-			return;
-		}
+			if (this.activeEntity === entity) {
+				return;
+			} else {
+				this.stopResourceViewed();
+			}
 
-		if (this.activeEntity === entity) {
-			return;
-		} else {
-			this.stopResourceViewed();
-		}
+			this.membersLink = entity.getLink('members');
+			this.activeEntity = entity;
+			this.removeAll();
+			this.loadPage(1);
 
-		this.membersLink = entity.getLink('members');
-		this.activeEntity = entity;
-		this.removeAll();
-		this.loadPage(1);
+			this.startResourceViewed();
+		},
 
-		this.startResourceViewed();
-	},
+		showMembership: function () {
+			this.setTitle('Members');
+		},
 
-	showMembership: function () {
-		this.setTitle('Members');
-	},
-
-	loadPage: function (page) {
-		var params = {
-			batchSize: this.PAGE_SIZE,
-			batchStart: (page - 1) * this.PAGE_SIZE
-		};
-
-		this.showLoading();
-		this.currentPage = page;
-
-		StoreUtils.loadBatch(this.membersLink, params)
-			.then(this.onBatchLoad.bind(this))
-			.catch(this.onBatchError.bind(this));
-	},
-
-	onLoadMore: function () {
-		if (this.currentPage) {
-			this.loadPage(this.currentPage + 1);
-		}
-	},
-
-	onBatchError: function () {
-		this.showError();
-	},
-
-	onBatchLoad: function (batch) {
-		// var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
-
-		this.removeLoading();
-		this.removeError();
-
-		if (batch.ItemCount < this.PAGE_SIZE) {
-			this.hideLoadMore();
-		} else {
-			this.showLoadMore();
-		}
-
-		if (batch.ItemCount) {
-			this.addMembers(batch.Items);
-		}
-	},
-
-	showLoadMore: function () {
-		this.loadMoreEl.removeCls('hidden');
-	},
-
-	hideLoadMore: function () {
-		this.loadMoreEl.addCls('hidden');
-	},
-
-	showLoading: function () {
-		this.loadingEl.removeCls('hidden');
-	},
-
-	removeLoading: function () {
-		this.loadingEl.addCls('hidden');
-	},
-
-	showError: function () {
-		this.errorEl.removeCls('hidden');
-	},
-
-	removeError: function () {
-		this.errorEl.addCls('hidden');
-	},
-
-	addMembers: function (members) {
-		members = members || [];
-
-		members.map(function (member) {
-			return {
-				route: member.getURLPart(),
-				name: member.getName(),
-				member: member
+		loadPage: function (page) {
+			var params = {
+				batchSize: this.PAGE_SIZE,
+				batchStart: (page - 1) * this.PAGE_SIZE,
 			};
-		}).forEach(this.addEntry.bind(this));
+
+			this.showLoading();
+			this.currentPage = page;
+
+			StoreUtils.loadBatch(this.membersLink, params)
+				.then(this.onBatchLoad.bind(this))
+				.catch(this.onBatchError.bind(this));
+		},
+
+		onLoadMore: function () {
+			if (this.currentPage) {
+				this.loadPage(this.currentPage + 1);
+			}
+		},
+
+		onBatchError: function () {
+			this.showError();
+		},
+
+		onBatchLoad: function (batch) {
+			// var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
+
+			this.removeLoading();
+			this.removeError();
+
+			if (batch.ItemCount < this.PAGE_SIZE) {
+				this.hideLoadMore();
+			} else {
+				this.showLoadMore();
+			}
+
+			if (batch.ItemCount) {
+				this.addMembers(batch.Items);
+			}
+		},
+
+		showLoadMore: function () {
+			this.loadMoreEl.removeCls('hidden');
+		},
+
+		hideLoadMore: function () {
+			this.loadMoreEl.addCls('hidden');
+		},
+
+		showLoading: function () {
+			this.loadingEl.removeCls('hidden');
+		},
+
+		removeLoading: function () {
+			this.loadingEl.addCls('hidden');
+		},
+
+		showError: function () {
+			this.errorEl.removeCls('hidden');
+		},
+
+		removeError: function () {
+			this.errorEl.addCls('hidden');
+		},
+
+		addMembers: function (members) {
+			members = members || [];
+
+			members
+				.map(function (member) {
+					return {
+						route: member.getURLPart(),
+						name: member.getName(),
+						member: member,
+					};
+				})
+				.forEach(this.addEntry.bind(this));
+		},
 	}
-});
+);

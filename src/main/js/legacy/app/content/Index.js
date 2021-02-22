@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -17,13 +17,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 	layout: {
 		type: 'card',
-		deferredRender: true
+		deferredRender: true,
 	},
 
-
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'navigation-container'},
-		{id: '{id}-body', cn: ['{%this.renderContainer(out,values)%}']}
+		{ cls: 'navigation-container' },
+		{ id: '{id}-body', cn: ['{%this.renderContainer(out,values)%}'] },
 	]),
 
 	initComponent: function () {
@@ -36,12 +35,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.WindowStateStore = WindowsStateStore.getInstance();
 
 		this.on({
-			'beforedeactivate': this.onBeforeDeactivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
+			beforedeactivate: this.onBeforeDeactivate.bind(this),
+			deactivate: this.onDeactivate.bind(this),
 		});
 	},
 
-	beforeDestroy () {
+	beforeDestroy() {
 		if (this.navigationCmp) {
 			this.navigationCmp.destroy();
 			delete this.navigationCmp;
@@ -63,7 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	onQuickLinkNav: function (tilte, route) {},
 
 	getRouteTitle: function () {
-		if (!this.activeBundle) { return ''; }
+		if (!this.activeBundle) {
+			return '';
+		}
 
 		var data = this.activeBundle.asUIData();
 
@@ -89,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
-				bodyView: this
+				bodyView: this,
 			});
 		}
 
@@ -137,7 +138,6 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			item.fireEvent('activate');
 		}
 
-
 		this.getLayout().setActiveItem(item);
 	},
 
@@ -150,31 +150,26 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.applyState(this.activeState);
 	},
 
-
-	setCmpRouteState (xtype, state) {
+	setCmpRouteState(xtype, state) {
 		this.ROUTE_STATES = this.ROUTE_STATES || {};
 
 		this.ROUTE_STATES[xtype] = state;
 	},
 
-
-	getCmpRouteState (xtype) {
-		return  (this.ROUTE_STATES || {})[xtype];
+	getCmpRouteState(xtype) {
+		return (this.ROUTE_STATES || {})[xtype];
 	},
 
-
-	clearRouteStates () {
+	clearRouteStates() {
 		this.ROUTE_STATES = {};
 		this.SHADOW_ROOTS = {};
 	},
 
-
-	clearRouteStateFor (xtype) {
+	clearRouteStateFor(xtype) {
 		if (this.ROUTE_STATES) {
 			delete this.ROUTE_STATES[xtype];
 		}
 	},
-
 
 	getRoot: function (xtype) {
 		var shadow = this.SHADOW_ROOTS && this.SHADOW_ROOTS[xtype];
@@ -182,28 +177,33 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return shadow || '';
 	},
 
-
 	__loadBundle: function (useWhiteMask) {
 		var bundle = this.activeBundle;
 
 		this.navBarConfig = {
-			cmp: this.getNavigation()
+			cmp: this.getNavigation(),
 		};
 
 		this.NavigationActions.updateNavBar(this.navBarConfig);
 
 		this.usingWhiteMask = useWhiteMask;
 
-		this.NavigationActions.setActiveContent(bundle, useWhiteMask, useWhiteMask);
+		this.NavigationActions.setActiveContent(
+			bundle,
+			useWhiteMask,
+			useWhiteMask
+		);
 	},
 
-
-	updateActiveContent () {
-		this.NavigationActions.setActiveContent(this.activeBundle, this.usingWhiteMask, this.usingWhiteMask);
+	updateActiveContent() {
+		this.NavigationActions.setActiveContent(
+			this.activeBundle,
+			this.usingWhiteMask,
+			this.usingWhiteMask
+		);
 	},
 
-
-	renderNavigationCmp (cmp, props) {
+	renderNavigationCmp(cmp, props) {
 		if (!this.rendered) {
 			this.on('afterrender', () => this.setNavigationCmp(cmp, props));
 			return;
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			xtype: 'react',
 			component: cmp,
 			renderTo: container,
-			...props
+			...props,
 		});
 	},
 
@@ -245,20 +245,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			this.NavigationActions.updateNavBar(navConfig);
 		} else if (this.hasAlternateNav) {
 			delete this.hasAlternateNav;
-			this.NavigationActions.updateNavBar({showNavCmp: true});
+			this.NavigationActions.updateNavBar({ showNavCmp: true });
 		}
 
 		me.activeState = {
-			active: tab || active
+			active: tab || active,
 		};
 
 		me.applyState(me.activeState);
 
-		function updateInactive () {
+		function updateInactive() {
 			wait().then(me.setItemBundle.bind(me, inactive, me.activeBundle));
 		}
 
-		return me.setItemBundle(active, me.activeBundle)
+		return me
+			.setItemBundle(active, me.activeBundle)
 			.then(me.setActiveItem.bind(me, active))
 			.then(function () {
 				var item = me.getItem(active);
@@ -271,8 +272,6 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			});
 	},
 
-
-
 	getRouteForPageInfo: function (pageInfo, path) {
 		var id = pageInfo.getId();
 
@@ -281,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return {
 			path: '/content/' + id,
 			isFull: true,
-			isAccessible: true
+			isAccessible: true,
 		};
 	},
 
@@ -302,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 		return {
 			path: '/discussions/' + forumId,
-			isFull: true
+			isFull: true,
 		};
-	}
+	},
 });

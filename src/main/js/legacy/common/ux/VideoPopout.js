@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const Commons = require('@nti/web-commons');
-const {wait} = require('@nti/lib-commons');
-
+const { wait } = require('@nti/lib-commons');
 
 module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 	extend: 'Ext.panel.Panel',
@@ -22,12 +21,14 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
-		this.on('destroy', function () { Ext.EventManager.removeResizeListener(me.syncSize, me);});
+		this.on('destroy', function () {
+			Ext.EventManager.removeResizeListener(me.syncSize, me);
+		});
 
 		me.add({
 			xtype: 'video-roll',
 			store: config.store,
-			data: config.data
+			data: config.data,
 		});
 
 		me.task = {
@@ -40,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 					Ext.getBody().dom.removeChild(m);
 					Ext.getBody().appendChild(m);
 				}
-			}
+			},
 		};
 
 		Ext.TaskManager.start(me.task);
@@ -70,14 +71,20 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
-			scope: this,
-			click: this.close
-		});
+		this.mon(
+			Ext.DomHelper.append(
+				this.el,
+				{ cls: 'close', 'data-qtip': 'close' },
+				true
+			),
+			{
+				scope: this,
+				click: this.close,
+			}
+		);
 
 		Commons.Prompt.Manager.suspendEscapeListener();
 
-		wait()
-			.then(this.syncSize.bind(this));
-	}
+		wait().then(this.syncSize.bind(this));
+	},
 });

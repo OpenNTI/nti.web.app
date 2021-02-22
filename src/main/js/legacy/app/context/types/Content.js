@@ -26,8 +26,7 @@ require('../components/cards/Video');
 require('../components/Default');
 require('../components/list/Content');
 
-const {getURL} = Globals;
-
+const { getURL } = Globals;
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 	statics: {
@@ -35,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		canHandle: function (obj) {
 			return obj instanceof PageInfo || obj instanceof Survey;
-		}
+		},
 	},
 
 	constructor: function (config) {
@@ -51,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		this.maxWidth = config.maxWidth || 574;
 	},
 
-	parse (obj, contextKind) {
+	parse(obj, contextKind) {
 		if (obj instanceof Survey) {
 			return this.parseSurvey(obj, contextKind);
 		}
@@ -59,12 +58,18 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		return this.parsePageInfo(obj, contextKind);
 	},
 
-	async parseSurvey (obj, contextKind) {
+	async parseSurvey(obj, contextKind) {
 		const container = await Service.getObject(obj.get('ContainerId'));
-		const fakePage = await this.ContentActions.getSurveyPageInfo(obj, container);
+		const fakePage = await this.ContentActions.getSurveyPageInfo(
+			obj,
+			container
+		);
 
 		const content = fakePage.get('content') || '';
-		const xml = (new DOMParser()).parseFromString(`<!DOCTYPE html><html>${content.trim()}</html>`, 'text/html');
+		const xml = new DOMParser().parseFromString(
+			`<!DOCTYPE html><html>${content.trim()}</html>`,
+			'text/html'
+		);
 
 		if (xml.querySelector('parsererror')) {
 			return Promise.resolve('');
@@ -80,18 +85,25 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		return Promise.all([
 			Service.request(link),
-			Service.getObjectOfType(contentPackage, 'application/vnd.nextthought.contentpackage')
+			Service.getObjectOfType(
+				contentPackage,
+				'application/vnd.nextthought.contentpackage'
+			),
 		]).then(function (results) {
 			var xml = results[0],
 				content = results[1];
 
-			xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+			xml = new DOMParser().parseFromString(xml, 'text/xml');
 
 			if (xml.querySelector('parsererror')) {
 				return Promise.resolve('');
 			}
 
-			return me.__parseNode(xml, content && content.get('root'), contextKind);
+			return me.__parseNode(
+				xml,
+				content && content.get('root'),
+				contextKind
+			);
 		});
 	},
 
@@ -99,16 +111,23 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
-			cid = this.container, config, cleanContext;
+			cid = this.container,
+			config,
+			cleanContext;
 
 		try {
-			if (this.range.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
+			if (
+				this.range.isEmpty &&
+				page &&
+				page.getAttribute('data-page-ntiid') === cid
+			) {
 				return '';
 			}
 
-			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
+			context =
+				doc &&
+				RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
 			cleanContext = this.__fixUpContext(context, root);
-
 
 			config = {
 				type: this.self.type,
@@ -116,17 +135,16 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 				fullContext: cleanContext,
 				containerId: cid,
 				record: this.record,
-				doNavigate: this.doNavigate
+				doNavigate: this.doNavigate,
 			};
 
 			if (contextKind === 'card') {
-				return Ext.apply(config, {xtype: 'context-content-card'});
+				return Ext.apply(config, { xtype: 'context-content-card' });
 			} else if (contextKind === 'list') {
 				return Ext.widget('context-content-list', config);
 			}
 
 			return Ext.widget('context-default', config);
-
 		} catch (e) {
 			console.error('Faild to load content context:', e);
 		}
@@ -134,11 +152,16 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 	//TODO: clean this up to not rely on ext so much.
 	__fixUpContext: function (n, root) {
-		var node = Ext.get(n), dom, data,
+		var node = Ext.get(n),
+			dom,
+			data,
 			imgs = n && n.querySelectorAll('img'),
-			maxWidth = this.maxWidth, c;
+			maxWidth = this.maxWidth,
+			c;
 
-		if (!node) { return;}
+		if (!node) {
+			return;
+		}
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
@@ -154,40 +177,48 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		//Remove video objects for now, in the future we should show the video player
 		node.select('object[type*=ntivideo]').remove();
 
-		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function (i) {
-			var e = Ext.get(i);
-			//only strip off the style for width that are too wide.
-			if (i.style && parseInt(i.style.width, 10) >= maxWidth) {
-				e.setStyle({width: undefined});
+		Ext.each(
+			node.query('span[itemprop~=nti-data-markupenabled]'),
+			function (i) {
+				var e = Ext.get(i);
+				//only strip off the style for width that are too wide.
+				if (i.style && parseInt(i.style.width, 10) >= maxWidth) {
+					e.setStyle({ width: undefined });
+				}
 			}
-		});
+		);
 
 		Ext.each(node.query('iframe'), function (i) {
 			var e = Ext.get(i),
-				w, h, r;
+				w,
+				h,
+				r;
 			if (e.parent('div.externalvideo')) {
 				w = parseInt(e.getAttribute('width'), 10);
 				h = parseInt(e.getAttribute('height'), 10);
 				r = h !== 0 ? w / h : 0;
 				if (w >= maxWidth && r !== 0) {
-					e.set({width: maxWidth, height: maxWidth / r});
+					e.set({ width: maxWidth, height: maxWidth / r });
 				}
-			}
-			else {
+			} else {
 				e.remove();
 			}
 		});
 
-		Ext.each(node.query('.application-highlight'), function (h) {
-			if (this.record.isModifiable()) {
-				Ext.fly(h).addCls('highlight-mouse-over');
-			}
-		}, this);
+		Ext.each(
+			node.query('.application-highlight'),
+			function (h) {
+				if (this.record.isModifiable()) {
+					Ext.fly(h).addCls('highlight-mouse-over');
+				}
+			},
+			this
+		);
 
 		// Fix up URL for external links
 		Ext.each(node.query('a[target=_blank]'), function (a) {
 			var url = a.getAttribute('href'),
-				isExternalNTILink = !(/^(http(s)?:)/i.test(url));
+				isExternalNTILink = !/^(http(s)?:)/i.test(url);
 
 			if (isExternalNTILink) {
 				url = root + url;
@@ -195,7 +226,6 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 				a.setAttribute('href', url);
 			}
 		});
-
 
 		this.__fixCards(node, root);
 
@@ -213,20 +243,31 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		//	Ext.fly(c).remove();
 		// });
 
-
-
-		if (node.query('object[type*=ntislidevideo][itemprop$=card]').length > 0) {
+		if (
+			node.query('object[type*=ntislidevideo][itemprop$=card]').length > 0
+		) {
 			c = node.query('object[type*=ntislidevideo][itemprop$=card]')[0];
 			data = MediaviewerOverlayedPanel.getData(c);
 			dom = new Ext.XTemplate(SlideVideo.prototype.renderTpl).apply(data);
-			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
+			dom = Ext.DomHelper.createDom({
+				cls: 'content-launcher',
+				html: dom,
+			});
 			return dom;
 		}
 
 		if (node.query('object[type$=slide]').length) {
-			data = Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
-			dom = new Ext.XTemplate(PartsSlide && PartsSlide.prototype.contextTpl).apply({image: root + data});
-			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
+			data = Slide.getParamFromDom(
+				node.query('object[type$=slide]')[0],
+				'slideimage'
+			);
+			dom = new Ext.XTemplate(
+				PartsSlide && PartsSlide.prototype.contextTpl
+			).apply({ image: root + data });
+			dom = Ext.DomHelper.createDom({
+				cls: 'content-launcher',
+				html: dom,
+			});
 			return dom;
 		}
 
@@ -245,7 +286,11 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			var src = img.getAttribute('src');
 
 			if (!Globals.ROOT_URL_PATTERN.test(src)) {
-				src = '/' + Globals.trimRoute(root) + '/' + Globals.trimRoute(src);
+				src =
+					'/' +
+					Globals.trimRoute(root) +
+					'/' +
+					Globals.trimRoute(src);
 				img.setAttribute('src', src);
 			}
 		});
@@ -254,20 +299,22 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 	},
 
 	__fixCards: function (node, root) {
-		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
-				cls: 'content-card',
-				html: Card.prototype.renderTpl
-			})),
+		var cardTpl = new Ext.XTemplate(
+				Ext.DomHelper.markup({
+					cls: 'content-card',
+					html: Card.prototype.renderTpl,
+				})
+			),
 			slideDeckTpl = Ext.DomHelper.createTemplate({
 				cls: 'content-launcher',
-				html: Slidedeck.prototype.renderTpl.html
+				html: Slidedeck.prototype.renderTpl.html,
 			}),
 			contentLauncherTpl = Ext.DomHelper.createTemplate({
 				cls: 'content-launcher',
-				html: Launcher.prototype.renderTpl.html
+				html: Launcher.prototype.renderTpl.html,
 			});
 
-		function fixLink (link) {
+		function fixLink(link) {
 			if (link && Globals.ROOT_URL_PATTERN.test(link)) {
 				link = getURL(link);
 			} else if (link) {
@@ -306,5 +353,5 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			contentLauncherTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
-	}
+	},
 });

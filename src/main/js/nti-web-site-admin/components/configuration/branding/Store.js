@@ -1,7 +1,7 @@
-import {Stores} from '@nti/lib-store';
-import {ObjectUtils} from '@nti/lib-commons';
-import {Theme} from '@nti/web-commons';
-import {Events} from '@nti/web-session';
+import { Stores } from '@nti/lib-store';
+import { ObjectUtils } from '@nti/lib-commons';
+import { Theme } from '@nti/web-commons';
+import { Events } from '@nti/web-session';
 import { getService } from '@nti/web-client';
 
 import {
@@ -14,7 +14,7 @@ import {
 	CAN_EDIT_EMAIL_ASSET,
 	CAN_RESET,
 	MimeTypes,
-	AssetTypeMap
+	AssetTypeMap,
 } from './constants';
 
 const CHANGED = '_changed';
@@ -23,10 +23,8 @@ const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
 const DeletedAssets = Symbol('deleted assets');
 
-
 export default class ThemeEditorStore extends Stores.SimpleStore {
-
-	constructor () {
+	constructor() {
 		super();
 		this[Load]();
 	}
@@ -40,23 +38,27 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @returns {undefined}
 	 */
 	setAsset = (type, item) => {
-		const {source, filename, file} = item || {};
+		const { source, filename, file } = item || {};
 		const track = !!file;
 
 		if (this[DeletedAssets]?.[type]) {
 			delete this[DeletedAssets][type];
 		}
 
-		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
-			source,
-			file,
-			href: source,
-			filename,
-			MimeType: MimeTypes.Image,
-		}, track);
-	}
+		this.setBrandProp(
+			`${ASSETS}.${AssetTypeMap[type] || type}`,
+			{
+				source,
+				file,
+				href: source,
+				filename,
+				MimeType: MimeTypes.Image,
+			},
+			track
+		);
+	};
 
-	clearAsset = (type) => {
+	clearAsset = type => {
 		this[DeletedAssets] = this[DeletedAssets] || {};
 		this[DeletedAssets][type] = true;
 
@@ -65,13 +67,13 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			file: null,
 			href: null,
 			filename: null,
-			MimeType: MimeTypes.Image
+			MimeType: MimeTypes.Image,
 		});
-	}
+	};
 
 	setThemeProp = (path, value) => {
 		this.setBrandProp(`theme.${path}`, value);
-	}
+	};
 
 	setBrandProp = (path, value, trackChange = true) => {
 		const brand = this.get(SITE_BRAND);
@@ -79,18 +81,21 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		this.set(MODIFIED, true);
 
 		if (trackChange) {
-			this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
+			this.set(
+				CHANGED,
+				ObjectUtils.set(this.get(CHANGED) || {}, path, value)
+			);
 		}
 
 		this[RebuildTheme]();
-	}
+	};
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
 		const theme = Theme.buildTheme(this.ThemeProperties);
 		theme.setOverrides(Theme.siteBrandToTheme(brand));
 		this.set(THEME, theme);
 		this.set(ERROR, null);
-	}
+	};
 
 	[Load] = async () => {
 		if (this[Loading]) {
@@ -112,24 +117,20 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(MODIFIED, false);
 			this.set(CHANGED, undefined);
 			this[RebuildTheme](brand);
-		}
-		catch (e) {
+		} catch (e) {
 			this.set(ERROR, e);
-		}
-		finally {
+		} finally {
 			this.set(LOADING, false);
 		}
-	}
+	};
 
-	get [CAN_RESET] () {
+	get [CAN_RESET]() {
 		const brand = this.get(SITE_BRAND);
 
 		return brand && brand.hasLink('delete');
 	}
 
-
-	cancel = this[Load]
-
+	cancel = this[Load];
 
 	reset = async () => {
 		const brand = this.get(SITE_BRAND);
@@ -139,22 +140,21 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			const newBrand = this.get(SITE_BRAND);
 
 			Events.emit(Events.THEME_UPDATED, newBrand);
-		}
-		catch (e) {
+		} catch (e) {
 			this.set(ERROR, e);
 		}
-	}
+	};
 
-	getFormData () {
+	getFormData() {
 		const brand = this.get(SITE_BRAND);
 		const formData = new FormData();
 		let data = {
 			...this.get(CHANGED),
-			theme: {...brand.theme}
+			theme: { ...brand.theme },
 		};
 
 		const fileFilter = (key, value) => {
-			const {file, filename, ...v} = value || {};
+			const { file, filename, ...v } = value || {};
 			const deleted = this[DeletedAssets]?.[key];
 
 			//If its not an image don't filter it
@@ -168,17 +168,16 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			} else {
 				formData.append(key, file, filename);
 			}
-
 		};
 
 		data = ObjectUtils.filter(data, fileFilter, true);
 
 		formData.append('__json__', JSON.stringify(data));
-		
+
 		return formData;
 	}
 
-	save = async (form) => {
+	save = async form => {
 		try {
 			this.set(LOADING, true);
 			const brand = this.get(SITE_BRAND);
@@ -191,12 +190,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(MODIFIED, false);
 
 			return resp;
-		}
-		catch (e) {
+		} catch (e) {
 			this.set(ERROR, e);
-		}
-		finally {
+		} finally {
 			this.set(LOADING, false);
 		}
-	}
+	};
 }

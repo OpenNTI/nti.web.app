@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-const {Navigation} = require('@nti/web-content');
+const { Navigation } = require('@nti/web-content');
 
 const BundleStateStore = require('./StateStore');
 
@@ -25,12 +25,16 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	 * @returns {Promise}			fulfills with the route for the bundle, once the animation is done
 	 */
 	transitionToBundle: function (bundle, libraryCard) {
-		const rememberedRoute = Navigation.RememberedRoutes.getRememberedRoute([bundle.get ? bundle.get('NTIID') : bundle]);
+		const rememberedRoute = Navigation.RememberedRoutes.getRememberedRoute([
+			bundle.get ? bundle.get('NTIID') : bundle,
+		]);
 
-		return Promise.resolve(stripApp(rememberedRoute || this.getRootRouteForId(bundle)));
+		return Promise.resolve(
+			stripApp(rememberedRoute || this.getRootRouteForId(bundle))
+		);
 	},
 
 	getRootRouteForId: function (id) {
 		return '/bundle/' + encodeForURI(id);
-	}
+	},
 });

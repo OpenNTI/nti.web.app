@@ -2,14 +2,12 @@ const Ext = require('@nti/extjs');
 
 require('./RelatedWork');
 
-
 module.exports = exports = Ext.define('NextThought.model.AssignmentRef', {
 	extend: 'NextThought.model.RelatedWork',
 
 	isAssignmentRef: true,
 
-
-	getAssignmentId () {
+	getAssignmentId() {
 		return this.get('Target-NTIID');
-	}
+	},
 });

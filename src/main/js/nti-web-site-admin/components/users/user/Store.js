@@ -1,8 +1,8 @@
-import {User} from '@nti/web-client';
-import {Stores} from '@nti/lib-store';
+import { User } from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
 
 export default class UserStore extends Stores.SimpleStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set('loading', false);
@@ -10,30 +10,35 @@ export default class UserStore extends Stores.SimpleStore {
 		this.set('error', null);
 	}
 
-
-	get user () {
+	get user() {
 		return this.get('user');
 	}
 
-
-
-	async loadUser (user) {
-		if (this.user && user === this.user.getID()) { return; }
+	async loadUser(user) {
+		if (this.user && user === this.user.getID()) {
+			return;
+		}
 
 		this.set('user', null);
 		this.set('loading', true);
 		this.emitChange('loading');
 
 		try {
-			const resolved = await User.resolve({entity: user});
+			const resolved = await User.resolve({ entity: user });
 
 			let hasBooks = false;
 			let hasCourses = true; // inexpensive way to know this?  for now, always true
 
-			if(resolved.hasLink('UserBundleRecords')) {
-				const bookRecords = await resolved.fetchLink('UserBundleRecords');
+			if (resolved.hasLink('UserBundleRecords')) {
+				const bookRecords = await resolved.fetchLink(
+					'UserBundleRecords'
+				);
 
-				if(bookRecords && bookRecords.Items && bookRecords.Items.length > 0) {
+				if (
+					bookRecords &&
+					bookRecords.Items &&
+					bookRecords.Items.length > 0
+				) {
 					hasBooks = true;
 				}
 			}
@@ -51,9 +56,10 @@ export default class UserStore extends Stores.SimpleStore {
 		}
 	}
 
-
-	unloadUser (user) {
-		if (this.user && user !== this.user.getID()) { return; }
+	unloadUser(user) {
+		if (this.user && user !== this.user.getID()) {
+			return;
+		}
 
 		this.set('user', null);
 		this.emitChange('user');

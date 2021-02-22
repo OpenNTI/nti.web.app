@@ -1,27 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DateTime} from '@nti/web-commons';
-import {Event} from '@nti/web-calendar';
+import { DateTime } from '@nti/web-commons';
+import { Event } from '@nti/web-calendar';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
+import { scoped } from '@nti/lib-locale';
 
 import styles from './Header.css';
 
 const t = scoped('lessonitems.events.webinar', {
-	type: 'webinar'
+	type: 'webinar',
 });
 
 const cx = classnames.bind(styles);
 
 export default class Header extends React.Component {
-	render () {
+	render() {
 		const {
-			item: {
-				title,
-				webinar,
-				completed,
-				expired
-			}
+			item: { title, webinar, completed, expired },
 		} = this.props;
 
 		const nearestSession = webinar.getNearestSession();
@@ -30,7 +25,11 @@ export default class Header extends React.Component {
 
 		return (
 			<header className={cx('header')}>
-				<DateTime.DateIcon minimal date={startTime} className={cx('start-date')} />
+				<DateTime.DateIcon
+					minimal
+					date={startTime}
+					className={cx('start-date')}
+				/>
 				<h1 className={cx('title')}>{title}</h1>
 				<Event.Availability
 					{...{
@@ -38,7 +37,7 @@ export default class Header extends React.Component {
 						startTime,
 						endTime,
 						completed,
-						expired
+						expired,
 					}}
 				/>
 			</header>
@@ -50,9 +49,9 @@ Header.propTypes = {
 	item: PropTypes.shape({
 		title: PropTypes.string,
 		webinar: PropTypes.shape({
-			getNearestSession: PropTypes.func.isRequired
+			getNearestSession: PropTypes.func.isRequired,
 		}).isRequired,
 		completed: PropTypes.bool,
-		expired: PropTypes.bool
-	}).isRequired
+		expired: PropTypes.bool,
+	}).isRequired,
 };

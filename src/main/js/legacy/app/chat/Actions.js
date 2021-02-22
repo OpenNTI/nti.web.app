@@ -1,12 +1,13 @@
 const Ext = require('@nti/extjs');
-const {default: Logger} = require('@nti/util-logger');
+const { default: Logger } = require('@nti/util-logger');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
 const Toaster = require('legacy/common/toast/Manager');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const LoginStateStore = require('legacy/login/StateStore');
 const PresenceInfo = require('legacy/model/PresenceInfo');
 
@@ -15,7 +16,7 @@ const ChatStateStore = require('./StateStore');
 require('legacy/common/Actions');
 require('legacy/model/MessageInfo');
 
-const {isMe} = Globals;
+const { isMe } = Globals;
 const logger = Logger.get('nextthought:extjs:app:chat:Actions');
 
 module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
@@ -31,9 +32,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var store = this.ChatStore;
 
 		this.channelMap = {
-			'DEFAULT': this.onMessageDefaultChannel.bind(this),
-			'WHISPER': this.onMessageDefaultChannel.bind(this),
-			'STATE': this.onReceiveStateChannel.bind(this)
+			DEFAULT: this.onMessageDefaultChannel.bind(this),
+			WHISPER: this.onMessageDefaultChannel.bind(this),
+			STATE: this.onReceiveStateChannel.bind(this),
 		};
 
 		if (window.Service && !store.loading && !store.hasFinishedLoad) {
@@ -50,15 +51,36 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		me.ChatStore.setLoaded();
 
 		socket.register({
-			'chat_setPresenceOfUsersTo': me.handleSetPresence.bind(me),
-			'disconnect': me.createHandlerForChatEvents(me.onSocketDisconnect, 'disconnect'),
-			'serverkill': me.createHandlerForChatEvents(me.onSocketDisconnect, 'serverkill'),
-			'chat_exitedRoom': me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
-			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
-			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
-			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow'),
-			'chat_enteredRoom': me.onEnteredRoom.bind(me),
-			'socket-new-sessionid': me.createHandlerForChatEvents(me.onNewSocketConnection.bind(me), 'socket-new-sessionid')
+			chat_setPresenceOfUsersTo: me.handleSetPresence.bind(me),
+			disconnect: me.createHandlerForChatEvents(
+				me.onSocketDisconnect,
+				'disconnect'
+			),
+			serverkill: me.createHandlerForChatEvents(
+				me.onSocketDisconnect,
+				'serverkill'
+			),
+			chat_exitedRoom: me.createHandlerForChatEvents(
+				me.onExitedRoom,
+				'chat_exitedRoom'
+			),
+			chat_roomMembershipChanged: me.createHandlerForChatEvents(
+				me.onMembershipOrModerationChanged,
+				'chat_roomMembershipChanged'
+			),
+			chat_recvMessage: me.createHandlerForChatEvents(
+				me.onMessage,
+				'chat_recvMessage'
+			),
+			chat_recvMessageForShadow: me.createHandlerForChatEvents(
+				me.onMessage,
+				'chat_recvMessageForShadow'
+			),
+			chat_enteredRoom: me.onEnteredRoom.bind(me),
+			'socket-new-sessionid': me.createHandlerForChatEvents(
+				me.onNewSocketConnection.bind(me),
+				'socket-new-sessionid'
+			),
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -75,8 +97,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	handleSetPresence: function (msg) {
-		var me = this, key,
-			store = me.ChatStore, value;
+		var me = this,
+			key,
+			store = me.ChatStore,
+			value;
 
 		for (key in msg) {
 			if (msg.hasOwnProperty(key)) {
@@ -89,7 +113,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	changePresence: function (type, show, status, c) {
 		var socket = this.ChatStore.getSocket(),
 			username = $AppConfig.username,
-			newPresence = (type && type.isPresenceInfo) ? type : PresenceInfo.createPresenceInfo(username, type, show, status),
+			newPresence =
+				type && type.isPresenceInfo
+					? type
+					: PresenceInfo.createPresenceInfo(
+							username,
+							type,
+							show,
+							status
+					  ),
 			callback = c ? c : function () {};
 
 		if (!newPresence.isOnline()) {
@@ -102,21 +134,26 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	onNewSocketConnection: function () {
 		var me = this;
 		logger.debug('created a new connection');
-		$AppConfig.Preferences.getPreference('ChatPresence/Active')
-			.then(function (value) {
+		$AppConfig.Preferences.getPreference('ChatPresence/Active').then(
+			function (value) {
 				if (value) {
-					me.changePresence(value.get('type'), value.get('show'), value.get('status'));
+					me.changePresence(
+						value.get('type'),
+						value.get('show'),
+						value.get('status')
+					);
 				} else {
 					me.changePresence('available');
 				}
-			});
+			}
+		);
 	},
 
-	createChatRoom (users, options) {
-		return new Promise((fulfill) => {
+	createChatRoom(users, options) {
+		return new Promise(fulfill => {
 			this.ChatStore.on({
 				single: true,
-				'show-window': fulfill
+				'show-window': fulfill,
 			});
 
 			this.startChat(users, options);
@@ -124,7 +161,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	startChat: function (users, options) {
-		var ri, m, me = this,
+		var ri,
+			m,
+			me = this,
 			socket = this.ChatStore.getSocket();
 
 		options = options || {};
@@ -132,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			options.ContainerId = Globals.CONTENT_ROOT;
 		}
 
-		if(!Ext.isArray(users)) {
+		if (!Ext.isArray(users)) {
 			users = users && users.isModel ? users.get('Username') : users;
 			users = [users];
 		}
@@ -144,45 +183,60 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		if (ri) {
 			if ((options || {}).silent === true) {
 				this.onEnteredRoom(ri);
-			}
-			else {
+			} else {
 				this.ChatStore.showChatWindow(ri);
 			}
-		}
-		else {
+		} else {
 			//If there were no existing rooms, create a new one.
-			m = {'Occupants': users};
+			m = { Occupants: users };
 
 			//no occupants required if there's a container id and it's a class/study room etc.
-			if (options.ContainerId && this.ChatStore.isPersistantRoomId(options.ContainerId)) {
+			if (
+				options.ContainerId &&
+				this.ChatStore.isPersistantRoomId(options.ContainerId)
+			) {
 				m.Occupants = [];
 			}
-			socket.emit('chat_enterRoom', Ext.apply(m, options), me.shouldShowRoom.bind(me, options));
+			socket.emit(
+				'chat_enterRoom',
+				Ext.apply(m, options),
+				me.shouldShowRoom.bind(me, options)
+			);
 		}
 	},
 
 	shouldShowRoom: function (options, msg) {
 		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
-		var rInfo = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0];
+		var rInfo =
+			msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0];
 		if (rInfo) {
 			if ((options || {}).silent === true) {
 				this.onEnteredRoom(rInfo);
-			}
-			else {
+			} else {
 				this.ChatStore.showChatWindow(rInfo);
 			}
 		} else {
-			alert({title: 'Error', msg: 'Unable to start your chat at this time. Please try again later.', icon: 'warning-red'});
+			alert({
+				title: 'Error',
+				msg:
+					'Unable to start your chat at this time. Please try again later.',
+				icon: 'warning-red',
+			});
 		}
 	},
 
 	onEnteredRoom: function (msg) {
-		var me = this, w,
-			roomInfo = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0],
+		var me = this,
+			w,
+			roomInfo =
+				msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0],
 			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2);
+			isGroupChat = occupants.length > 2;
 
-		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : lazy.ParseUtils.parseItems([roomInfo])[0];
+		roomInfo =
+			roomInfo && roomInfo.isModel
+				? roomInfo
+				: lazy.ParseUtils.parseItems([roomInfo])[0];
 		roomInfo.setOriginalOccupants(occupants.slice());
 		w = me.openChatWindow(roomInfo);
 
@@ -211,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var w = this.ChatStore.getChatWindow(roomInfo);
 
 		if (!w) {
-			w =	 Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
+			w = Ext.widget({ xtype: 'chat-window', roomInfo: roomInfo });
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 			this.ChatStore.putRoomInfoIntoSession(roomInfo);
 			// this.fillInHistoryForOccupants(roomInfo.get('Occupants'), w);
@@ -221,25 +275,29 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	resolveWindowForUsers: function (roomInfoId, users) {
 		var me = this,
-			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
+			allUsers = Ext.Array.unique(
+				users.slice().concat($AppConfig.userObject.get('Username'))
+			),
 			occupantsKey = Ext.Array.sort(allUsers).join('_'),
 			win = this.ChatStore.getWindow(occupantsKey);
 
-		return new Promise( function (fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Service.getObject(roomInfoId)
-				.then( function (obj) {
+				.then(function (obj) {
 					// If we have an existing window with the same occupants but different roomInfo.
 					// Get the new roomInfo and then update the window rather than creating another one.
 					if (win) {
 						me.ChatStore.replaceChatRoomInfo(win, obj);
-					}
-					else {
+					} else {
 						me.openChatWindow(obj);
 					}
 					fulfill(obj);
 				})
-				.catch( function () {
-					logger.debug('Could not resolve roomInfo for: ', roomInfoId);
+				.catch(function () {
+					logger.debug(
+						'Could not resolve roomInfo for: ',
+						roomInfoId
+					);
 					reject();
 				});
 		});
@@ -248,7 +306,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	canShowChat: function (roomInfo) {
 		var creator = roomInfo && roomInfo.get('Creator'),
 			isGroupChat = roomInfo && roomInfo.isGroupChat();
-		if (isMe(creator) || !isGroupChat || this.ChatStore.isOccupantsKeyAccepted(roomInfo.getOccupantsKey())) {
+		if (
+			isMe(creator) ||
+			!isGroupChat ||
+			this.ChatStore.isOccupantsKeyAccepted(roomInfo.getOccupantsKey())
+		) {
 			return true;
 		}
 
@@ -258,49 +320,56 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	presentInvationationToast: function (roomInfo) {
 		var me = this,
 			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2);
+			isGroupChat = occupants.length > 2;
 
 		//Rules for auto-accepting are getting complicated, I will enumerate them here:
 		//1) if it's not a group chat, accept if the creator is a contact.
 		//2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
 		//3) if you created it, accept
 
-		if ( this.canShowChat(roomInfo)) {
+		if (this.canShowChat(roomInfo)) {
 			return Promise.resolve();
 		}
 
 		return new Promise(function (fulfill, reject) {
-			UserRepository.getUser(roomInfo.get('Creator'))
-				.then(function (u) {
-					if(me.invitationToast && me.invitationToast.roomId === IdCache.getIdentifier(roomInfo.getId())) {
-						// if we have a invitation toast for a roomInfo, don't create another one.
-						return;
-					}
+			UserRepository.getUser(roomInfo.get('Creator')).then(function (u) {
+				if (
+					me.invitationToast &&
+					me.invitationToast.roomId ===
+						IdCache.getIdentifier(roomInfo.getId())
+				) {
+					// if we have a invitation toast for a roomInfo, don't create another one.
+					return;
+				}
 
-					//at this point, window has been created but not accepted.
-					me.invitationToast = Toaster.makeToast({
-						roomId: IdCache.getIdentifier(roomInfo.getId()),
-						title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
-						message: isGroupChat ?
-							'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
-							'<span>' + u.getName() + '</span> would like to chat.',
-						iconCls: 'icons-chat-32',
-						buttons: [
-							{
-								label: 'decline',
-								callback: reject
-							},
-							{
-								label: 'accept',
-								callback: fulfill
-							}
-						],
-						callback: function () {
-							delete me.invitationToast;
+				//at this point, window has been created but not accepted.
+				me.invitationToast = Toaster.makeToast({
+					roomId: IdCache.getIdentifier(roomInfo.getId()),
+					title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
+					message: isGroupChat
+						? "You've been invited to chat with <span>" +
+						  (occupants.length - 1) +
+						  '</span> friends.'
+						: '<span>' +
+						  u.getName() +
+						  '</span> would like to chat.',
+					iconCls: 'icons-chat-32',
+					buttons: [
+						{
+							label: 'decline',
+							callback: reject,
 						},
-						scope: me
-					});
+						{
+							label: 'accept',
+							callback: fulfill,
+						},
+					],
+					callback: function () {
+						delete me.invitationToast;
+					},
+					scope: me,
 				});
+			});
 		});
 	},
 
@@ -310,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		return function () {
 			if (me.availableForChat) {
 				fn.apply(me, arguments);
-			}else if (me.debug) {
+			} else if (me.debug) {
 				logger.info('Dropped ' + eventName + ' handling');
 			}
 		};
@@ -326,7 +395,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			return;
 		}
 		this.clearErrorForRoom(room);
-		this.postMessage(room, val, mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
+		this.postMessage(
+			room,
+			val,
+			mid,
+			channel,
+			recipients,
+			Ext.bind(me.sendAckHandler, me)
+		);
 
 		f.focus();
 	},
@@ -336,7 +412,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			message = [message];
 		}
 
-		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'},
+		var m = {
+				ContainerId: room.getId(),
+				body: message,
+				Class: 'MessageInfo',
+			},
 			messageRecord,
 			socket = this.ChatStore.getSocket();
 
@@ -349,7 +429,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (ack) {
 			messageRecord = lazy.ParseUtils.parseItems([m]);
-			messageRecord = messageRecord && messageRecord.length > 0 ? messageRecord[0] : null;
+			messageRecord =
+				messageRecord && messageRecord.length > 0
+					? messageRecord[0]
+					: null;
 			ack = Ext.bind(ack, null, [messageRecord], true);
 		}
 
@@ -360,12 +443,28 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
 	publishChatStatus: function (room, newStatus, username) {
-		var channel = 'STATE', oldStatus;
-		username = username && Ext.isString(username) ? username : $AppConfig.username;
+		var channel = 'STATE',
+			oldStatus;
+		username =
+			username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if (oldStatus !== newStatus) {
-			logger.info('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
-			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn);
+			logger.info(
+				'transitioning room state for: ',
+				$AppConfig.username,
+				' from ',
+				oldStatus,
+				' to ',
+				newStatus
+			);
+			this.postMessage(
+				room,
+				{ state: newStatus },
+				null,
+				channel,
+				null,
+				Ext.emptyFn
+			);
 		}
 	},
 
@@ -388,7 +487,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			// NOTE: If the getObject call on the roomInfoId fails, go ahead and create a new chat room
 			this.resolveWindowForUsers(cid, occupants)
 				.then(me.onMessage.bind(me, msg, opts))
-				.catch(me.startChat.bind(me, occupants, {silent: true}));
+				.catch(me.startChat.bind(me, occupants, { silent: true }));
 			return;
 		}
 
@@ -457,18 +556,25 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		if (!w) {
 			return;
 		}
-		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
+		this.updateChatState(
+			sender,
+			'active',
+			w,
+			room.get('Occupants').length > 2
+		);
 		if (isMe(sender) && w.down('chat-view')) {
-			w.down('chat-view').fireEvent('status-change', {state: 'active'}); //start active timer.
+			w.down('chat-view').fireEvent('status-change', { state: 'active' }); //start active timer.
 		}
 	},
 
 	/* CLIENT EVENTS */
 
 	sendAckHandler: function (result, m) {
-		function isError (r) {
+		function isError(r) {
 			var errorCode = 'error-type';
-			return r.hasOwnProperty(errorCode) && r[errorCode] === 'client-error';
+			return (
+				r.hasOwnProperty(errorCode) && r[errorCode] === 'client-error'
+			);
 		}
 
 		if (isError(result)) {
@@ -489,7 +595,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var o = c.up('[roomInfo]');
 
 		if (!o) {
-			logger.error('The component', c, 'has no parent component with a roomInfo');
+			logger.error(
+				'The component',
+				c,
+				'has no parent component with a roomInfo'
+			);
 			return null;
 		}
 
@@ -501,7 +611,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (!msg) {
 			//TODO what to do here, pop up something generic.
-			logger.error('No message object tied to error.	 Dropping error', errorObject);
+			logger.error(
+				'No message object tied to error.	 Dropping error',
+				errorObject
+			);
 			return;
 		}
 
@@ -513,9 +626,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		view = win ? win.down('chat-view') : null;
 		if (view) {
 			view.showError(errorObject);
-		}
-		else {
-			logger.warn('Error sending chat message but no chat view to show it in', msg, errorObject);
+		} else {
+			logger.warn(
+				'Error sending chat message but no chat view to show it in',
+				msg,
+				errorObject
+			);
 		}
 	},
 
@@ -529,9 +645,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		view = win ? win.down('chat-view') : null;
 		if (view) {
 			view.clearError();
-		}
-		else {
-			logger.error('Unable to clear error for messages window', arguments);
+		} else {
+			logger.error(
+				'Unable to clear error for messages window',
+				arguments
+			);
 		}
 	},
 
@@ -551,12 +669,21 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	onMembershipOrModerationChanged: function (msg) {
 		var newRoomInfo = lazy.ParseUtils.parseItems([msg])[0],
-			oldRoomInfo = newRoomInfo && this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
+			oldRoomInfo =
+				newRoomInfo &&
+				this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
 			occupants = newRoomInfo && newRoomInfo.get('Occupants'),
 			toast;
 
-		if (newRoomInfo && newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
-			logger.info('Transient moderation change encountered, ignoring', newRoomInfo);
+		if (
+			newRoomInfo &&
+			newRoomInfo.get('Moderators').length === 0 &&
+			newRoomInfo.get('Moderated')
+		) {
+			logger.info(
+				'Transient moderation change encountered, ignoring',
+				newRoomInfo
+			);
 			return null;
 		}
 
@@ -564,14 +691,23 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.ChatStore.updateRoomInfo(newRoomInfo);
 
 		//if membership falls to just me, and we have a toast, DESTROY!
-		if (occupants.length === 1 && occupants[0] === $AppConfig.userObject.get('Username')) {
-			toast = Ext.ComponentQuery.query('toast[roomId=' + IdCache.getIdentifier(newRoomInfo.getId()) + ']');
+		if (
+			occupants.length === 1 &&
+			occupants[0] === $AppConfig.userObject.get('Username')
+		) {
+			toast = Ext.ComponentQuery.query(
+				'toast[roomId=' +
+					IdCache.getIdentifier(newRoomInfo.getId()) +
+					']'
+			);
 			if (toast && toast.length === 1) {
 				toast[0].close();
 			}
 
 			if (oldRoomInfo) {
-				this.ChatStore.removeSessionObject(oldRoomInfo.getOccupantsKey());
+				this.ChatStore.removeSessionObject(
+					oldRoomInfo.getOccupantsKey()
+				);
 			}
 		}
 
@@ -591,7 +727,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.onOccupantsChanged(newRoomInfo, left, added, leftMods, addedMods);
 	},
 
-	onOccupantsChanged: function (newRoomInfo, peopleWhoLeft, peopleWhoArrived) {
+	onOccupantsChanged: function (
+		newRoomInfo,
+		peopleWhoLeft,
+		peopleWhoArrived
+	) {
 		var win = this.ChatStore.getChatWindow(newRoomInfo),
 			log = win ? win.logView : null;
 
@@ -605,32 +745,41 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		 */
 		Ext.each(peopleWhoLeft, function (p) {
 			if (!isMe(p)) {
-				UserRepository.getUser(p, function (u) {
-					var name = u.getName();
-					if (log) {
-						log.addNotification(name + ' has left the chat...');
-					}
-				}, this);
+				UserRepository.getUser(
+					p,
+					function (u) {
+						var name = u.getName();
+						if (log) {
+							log.addNotification(name + ' has left the chat...');
+						}
+					},
+					this
+				);
 			}
 		});
 
 		Ext.each(peopleWhoArrived, function (p) {
 			if (!isMe(p)) {
-				UserRepository.getUser(p, function (u) {
-					var name = u.getName();
-					if (log) {
-						log.addNotification(name + ' entered the chat...');
-					}
-				}, this);
+				UserRepository.getUser(
+					p,
+					function (u) {
+						var name = u.getName();
+						if (log) {
+							log.addNotification(name + ' entered the chat...');
+						}
+					},
+					this
+				);
 			}
 		});
 	},
 
 	leaveRoom: function (room) {
-		if (!room) { return; }
+		if (!room) {
+			return;
+		}
 
 		var socket = this.ChatStore.getSocket();
-
 
 		// We want to remove the cached room when a user exits a room.
 		// However, we would like to keep the occupants key in the accepted list.
@@ -639,16 +788,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.ChatStore.removeSessionObject(room.getOccupantsKey());
 
 		if (this.isModerator(room)) {
-			logger.info('leaving room but I\'m a moderator, relinquish control');
-			socket.emit('chat_makeModerated', room.getId(), false,
-				function () {
-					//unmoderate called, now exit
-					logger.info('unmoderated, now exiting room');
-					socket.emit('chat_exitRoom', room.getId());
-				}
-			);
-		}
-		else {
+			logger.info("leaving room but I'm a moderator, relinquish control");
+			socket.emit('chat_makeModerated', room.getId(), false, function () {
+				//unmoderate called, now exit
+				logger.info('unmoderated, now exiting room');
+				socket.emit('chat_exitRoom', room.getId());
+			});
+		} else {
 			//im not a moderator, just leave
 			socket.emit('chat_exitRoom', room.getId());
 		}
@@ -660,22 +806,24 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (transcripts && transcripts.isLoading()) {
 			transcripts.on({
-				load: this.fillInHistoryForOccupants.bind(this, occupants, win)
+				load: this.fillInHistoryForOccupants.bind(this, occupants, win),
 			});
 			return;
 		}
 
-		win.onceRendered.
-			then(function () {
-				win.logView.addMask();
-			});
+		win.onceRendered.then(function () {
+			win.logView.addMask();
+		});
 
 		Promise.all(me.loadHistoryForOccupants(occupants))
 			.then(function (historyItems) {
 				me.addMessagesForTranscript(win, historyItems);
 			})
 			.catch(function () {
-				logger.warn('Failed to load one of the chat transcripts: ', arguments);
+				logger.warn(
+					'Failed to load one of the chat transcripts: ',
+					arguments
+				);
 			});
 	},
 
@@ -698,19 +846,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (win.rendered) {
 			win.logView.removeMask();
-		}
-		else {
-			win.onceRendered
-				.then(function () {
-					win.logView.removeMask();
-				});
+		} else {
+			win.onceRendered.then(function () {
+				win.logView.removeMask();
+			});
 		}
 	},
 
 	sortMessages: function (messages) {
-		function timeSort (a, b) {
-			var aRaw = a.raw || {CreatedTime: 0},
-				bRaw = b.raw || {CreatedTime: 0};
+		function timeSort(a, b) {
+			var aRaw = a.raw || { CreatedTime: 0 },
+				bRaw = b.raw || { CreatedTime: 0 };
 
 			return aRaw.CreatedTime - bRaw.CreatedTime;
 		}
@@ -724,7 +870,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			return [];
 		}
 
-		var summaries = [], me = this,
+		var summaries = [],
+			me = this,
 			transcripts = this.ChatStore.getTranscripts();
 
 		occupants = (occupants || []).slice();
@@ -750,7 +897,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var id = this.ChatStore.getTranscriptIdForRoomInfo(roomInfo);
 
 		if (!id) {
-			return Promise.reject({'error': 'cannot retrieve transcript without a transcript id.'});
+			return Promise.reject({
+				error: 'cannot retrieve transcript without a transcript id.',
+			});
 		}
 
 		return Service.getObject(id);
@@ -761,14 +910,32 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	zoomWhiteboard: function (cmp, data) {
-		Ext.widget('wb-window', { width: 802, value: data, readonly: true}).show();
+		Ext.widget('wb-window', {
+			width: 802,
+			value: data,
+			readonly: true,
+		}).show();
 	},
 
 	replyToWhiteboard: function (wbData, cmp, midReplyOf, channel, recipients) {
-		this.ChatStore.fireEvent('show-whiteboard', wbData, cmp, midReplyOf, channel, recipients);
+		this.ChatStore.fireEvent(
+			'show-whiteboard',
+			wbData,
+			cmp,
+			midReplyOf,
+			channel,
+			recipients
+		);
 	},
 
 	sendWhiteboard: function (chatEntryWidget, mid, channel, recipients) {
-		this.ChatStore.fireEvent('show-whiteboard', null, chatEntryWidget, mid, channel, recipients);
-	}
+		this.ChatStore.fireEvent(
+			'show-whiteboard',
+			null,
+			chatEntryWidget,
+			mid,
+			channel,
+			recipients
+		);
+	},
 });

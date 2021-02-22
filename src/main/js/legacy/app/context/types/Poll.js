@@ -7,14 +7,13 @@ require('../components/Question');
 require('../components/list/Question');
 require('../components/cards/Question');
 
-
 module.exports = exports = Ext.define('NextThought.app.context.types.Poll', {
 	statics: {
 		type: 'poll',
 
 		canHandle: function (obj) {
 			return obj instanceof Poll;
-		}
+		},
 	},
 
 	constructor: function (config) {
@@ -37,23 +36,23 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Poll', {
 				xtype: 'question-context-card',
 				type: this.self.type,
 				question: poll,
-				record: this.record
+				record: this.record,
 			};
 		} else if (kind === 'list') {
 			cmp = Ext.widget('question-context-list', {
 				type: this.self.type,
 				question: poll,
-				record: this.record
+				record: this.record,
 			});
 		} else {
 			cmp = Ext.widget('question-context', {
 				type: this.self.type,
 				question: poll,
 				doNavigate: this.doNavigate,
-				record: this.record
+				record: this.record,
 			});
 		}
 
 		return cmp;
-	}
+	},
 });

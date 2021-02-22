@@ -1,38 +1,40 @@
 const Ext = require('@nti/extjs');
 
 const DomUtils = require('legacy/util/Dom');
-const {guidGenerator} = require('legacy/util/Globals');
+const { guidGenerator } = require('legacy/util/Globals');
 
 const Video = require('./Video');
-
 
 module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
 	idProperty: 'NTIID',
 
 	fields: [
-		{name: 'mediaId', type: 'string'},
-		{name: 'start', type: 'float', defaultValue: 0.0},
-		{name: 'end', type: 'float', defaultValue: -1.0},
-		{name: 'sourceIndex', type: 'int', defaultValue: 0},
-		{name: 'sources', type: 'VideoSources'},
-		{name: 'dom-clone', type: 'auto'},
-		{name: 'NTIID', type: 'string'},
-		{name: 'transcripts', type: 'auto'},
-		{name: 'title', type: 'string'},
-		{name: 'description', type: 'string'},
-		{name: 'section', type: 'string'},
-		{name: 'duration', type: 'Synthetic', persist: false,
+		{ name: 'mediaId', type: 'string' },
+		{ name: 'start', type: 'float', defaultValue: 0.0 },
+		{ name: 'end', type: 'float', defaultValue: -1.0 },
+		{ name: 'sourceIndex', type: 'int', defaultValue: 0 },
+		{ name: 'sources', type: 'VideoSources' },
+		{ name: 'dom-clone', type: 'auto' },
+		{ name: 'NTIID', type: 'string' },
+		{ name: 'transcripts', type: 'auto' },
+		{ name: 'title', type: 'string' },
+		{ name: 'description', type: 'string' },
+		{ name: 'section', type: 'string' },
+		{
+			name: 'duration',
+			type: 'Synthetic',
+			persist: false,
 			fn: function () {
 				return '';
-			}
+			},
 		},
-		{name: 'comments', type: 'int', defaultValue: 0},
-		{name: 'poster', type: 'VideoPoster'},
-		{name: 'thumbnail', type: 'VideoPoster'},
-		{name: 'progress', type: 'string', persist: false},
-		{name: 'slidedeck', type: 'string', persist: false},
-		{name: 'label', type: 'string', persist: false}
+		{ name: 'comments', type: 'int', defaultValue: 0 },
+		{ name: 'poster', type: 'VideoPoster' },
+		{ name: 'thumbnail', type: 'VideoPoster' },
+		{ name: 'progress', type: 'string', persist: false },
+		{ name: 'slidedeck', type: 'string', persist: false },
+		{ name: 'label', type: 'string', persist: false },
 	],
 
 	statics: {
@@ -66,8 +68,11 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		},
 
 		fromDom: function (dom, videoIndex) {
-			function getParam (name) {
-				var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
+			function getParam(name) {
+				var el = Ext.DomQuery.select(
+					'param[name="' + name + '"]',
+					dom
+				)[0];
 				return el ? el.getAttribute('value') : null;
 			}
 			dom = Ext.getDom(dom);
@@ -76,14 +81,20 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				title = getParam('title'),
 				videoIndexId = getParam('video-ntiid'),
 				o = {
-					'title': title,
-					'sources': el.query('object[type$=videosource]').map(DomUtils.parseDomObject),
+					title: title,
+					sources: el
+						.query('object[type$=videosource]')
+						.map(DomUtils.parseDomObject),
 					'dom-clone': frag,
-					'NTIID': dom.getAttribute('data-ntiid')
+					NTIID: dom.getAttribute('data-ntiid'),
 				},
 				sourceComparator = function (a, b) {
-					var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];
-					if ($a !== $b) {c = $a < $b ? -1 : 1;}
+					var c = 0,
+						$a = a['attribute-data-priority'],
+						$b = b['attribute-data-priority'];
+					if ($a !== $b) {
+						c = $a < $b ? -1 : 1;
+					}
 					return c;
 				};
 
@@ -98,11 +109,9 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			return this.create(o);
 		},
 
-
 		fromURL: function (url) {
-
 			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-			function parseYoutubeIdOut (uri) {
+			function parseYoutubeIdOut(uri) {
 				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/,
 					match = uri.match(regExp);
 				if (match && match[2].length === 11) {
@@ -111,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				return null;
 			}
 
-			function parseVimeoId (uri) {
+			function parseVimeoId(uri) {
 				var regExp = /^.*vimeo(:\/\/|\.com\/)(.+)/i,
 					match = uri.match(regExp);
 				if (match && match[2]) {
@@ -120,8 +129,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				return null;
 			}
 
-
-			function parseKalturaInformation (uri) {
+			function parseKalturaInformation(uri) {
 				var kalturaRegex = /^kaltura:\/\/([^/]+)\/([^/]+)\/{0,1}/i,
 					match = uri.match(kalturaRegex);
 
@@ -135,30 +143,35 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			if (/^kaltura:/i.test(url)) {
 				let kalturaSource = parseKalturaInformation(url);
 				if (!kalturaSource) {
-					console.error('Kaltura video specified but did not resolve.', url);
+					console.error(
+						'Kaltura video specified but did not resolve.',
+						url
+					);
 				}
 				source = {
 					service: 'kaltura',
-					source: kalturaSource
+					source: kalturaSource,
 				};
-			}
-			else {
+			} else {
 				source = {
 					source: [youtubeId || vimeoId || url],
-					service: youtubeId ? 'youtube' :
-						vimeoId ? 'vimeo' :
-							'html5'
+					service: youtubeId
+						? 'youtube'
+						: vimeoId
+						? 'vimeo'
+						: 'html5',
 				};
 			}
 
-			return this.create({mediaId: guidGenerator(), sources: [source]});
-		}
+			return this.create({ mediaId: guidGenerator(), sources: [source] });
+		},
 	},
 
 	usesService: function (service) {
 		return Ext.Array.contains(
 			Ext.Array.pluck(this.get('sources'), 'service'),
-			service);
+			service
+		);
 	},
 
 	getSources: function (service) {
@@ -187,18 +200,21 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 
 	getAssociatedVideoId: function () {
 		var frag = this.get('dom-clone'),
-			video = (frag && frag.querySelector('object[type$=ntivideo]')) || this.get('NTIID');
+			video =
+				(frag && frag.querySelector('object[type$=ntivideo]')) ||
+				this.get('NTIID');
 
-		return (video && video.getAttribute && video.getAttribute('data-ntiid')) || video;
+		return (
+			(video && video.getAttribute && video.getAttribute('data-ntiid')) ||
+			video
+		);
 	},
 
-
-	getTranscripts () {
+	getTranscripts() {
 		return Video.getTranscripts(this.get('transcripts'));
 	},
 
-
-	getCaptions () {
+	getCaptions() {
 		return Video.getCaptions(this.get('transcripts'));
-	}
+	},
 });

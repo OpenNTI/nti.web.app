@@ -4,15 +4,15 @@ import { TestUtils } from '@nti/web-client';
 import { Date as DateUtils } from '@nti/lib-commons';
 
 import ActiveTimes from '../ActiveTimes';
-import {mockActiveTimeData} from '../../../dashboard/widgets/__test__/active-time-data';
+import { mockActiveTimeData } from '../../../dashboard/widgets/__test__/active-time-data';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 const { MockDate } = DateUtils;
 
-const getMockService = (hasData) => {
+const getMockService = hasData => {
 	return {
 		get: () => {
-			if(hasData) {
+			if (hasData) {
 				return mockActiveTimeData;
 			}
 
@@ -20,13 +20,13 @@ const getMockService = (hasData) => {
 		},
 		getBatch: () => {
 			return {
-				getLink: () => 'mockActiveTimes'
+				getLink: () => 'mockActiveTimes',
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (hasData) => {
+const onBefore = hasData => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(hasData));
 };
@@ -50,10 +50,10 @@ describe('Site admin user course enrollment overview active times widget (has da
 
 	test('Basic render test', async () => {
 		const enrollment = {
-			getLink: () => 'mockAnalytics'
+			getLink: () => 'mockAnalytics',
 		};
 
-		const cmp = renderer.create(<ActiveTimes enrollment={enrollment}/>);
+		const cmp = renderer.create(<ActiveTimes enrollment={enrollment} />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -71,10 +71,10 @@ describe('Site admin user course enrollment overview active times widget (has no
 
 	test('Basic render test', async () => {
 		const enrollment = {
-			getLink: () => 'mockAnalytics'
+			getLink: () => 'mockAnalytics',
 		};
 
-		const cmp = renderer.create(<ActiveTimes enrollment={enrollment}/>);
+		const cmp = renderer.create(<ActiveTimes enrollment={enrollment} />);
 
 		jest.runAllTimers();
 		await flushPromises();

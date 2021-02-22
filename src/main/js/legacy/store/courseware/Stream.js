@@ -6,26 +6,23 @@ const {
 	isSameSecond: isSame,
 } = require('date-fns');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const StoreUtils = require('legacy/util/Store');
 
-
 module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
-
 	params: {
 		NonEmptyBucketCount: 2,
-		BucketSize: 50
+		BucketSize: 50,
 	},
 
 	EMPTY_BIN: {
 		BucketItemCount: 0,
-		Items: []
+		Items: [],
 	},
 
-
 	constructor: function (config) {
-
 		//A map of start date to bin
 		this.WEEK_MAP = {};
 
@@ -42,11 +39,10 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 
 		this.url = config.url;
 		this.latestBinDate = endOfISOWeek(new Date()).getTime();
-		this.params.Oldest = (config.startDate || new Date(0)).getTime() / 1000;//the server is expecting seconds
+		this.params.Oldest = (config.startDate || new Date(0)).getTime() / 1000; //the server is expecting seconds
 
 		this.__loadNextBatch();
 	},
-
 
 	__loadNextBatch: function () {
 		var me = this;
@@ -82,7 +78,6 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		return me.loadingPromise;
 	},
 
-
 	__binItems: function (bins) {
 		var i, key;
 
@@ -92,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			this.WEEK_RANGES.push({
 				start: startOfISOWeek(new Date(bins[i].OldestTimestamp * 1000)), //timestamps are in seconds
 				end: new Date(bins[i].MostRecentTimestamp * 1000),
-				key: key
+				key: key,
 			});
 
 			bins[i].Items = lazy.ParseUtils.parseItems(bins[i]);
@@ -107,9 +102,9 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		}
 	},
 
-
 	__getCachedBin: function (date) {
-		var ranges = this.WEEK_RANGES, i,
+		var ranges = this.WEEK_RANGES,
+			i,
 			range;
 
 		for (i = 0; i < ranges.length; i++) {
@@ -120,7 +115,6 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			}
 		}
 	},
-
 
 	__getOrLoadBin: function (date) {
 		var me = this,
@@ -137,7 +131,8 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			return Promise.resolve(me.EMPTY_BIN);
 		}
 
-		return me.__loadNextBatch()
+		return me
+			.__loadNextBatch()
 			.then(function () {
 				return me.__getOrLoadBin(date);
 			})
@@ -146,11 +141,9 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			});
 	},
 
-
 	getWeek: function (date) {
-		return this.__getOrLoadBin(date)
-			.then(function (bin) {
-				return bin.Items;
-			});
-	}
+		return this.__getOrLoadBin(date).then(function (bin) {
+			return bin.Items;
+		});
+	},
 });

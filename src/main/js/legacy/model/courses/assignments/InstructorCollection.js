@@ -1,7 +1,8 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const SharedInstance = require('legacy/cache/SharedInstance');
 const GradeBookSummaries = require('legacy/store/courseware/GradeBookSummaries');
 const StudentHistoryItems = require('legacy/store/courseware/StudentHistoryItems');
@@ -14,258 +15,283 @@ const UsersCourseAssignmentHistoryItemContainer = require('../../courseware/User
 
 require('./BaseCollection');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.courses.assignments.InstructorCollection',
+	{
+		extend: 'NextThought.model.courses.assignments.BaseCollection',
 
-module.exports = exports = Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
-	extend: 'NextThought.model.courses.assignments.BaseCollection',
+		constructor: function () {
+			this.callParent(arguments);
 
-	constructor: function () {
-		this.callParent(arguments);
+			this.GradeCache = this.__createGradeCache();
+			this.HistoryItemCache = this.__createHistoryItemCache();
+			this.HistoryItemContainerCache = this.__createHistoryItemContainerCache();
+		},
 
-		this.GradeCache = this.__createGradeCache();
-		this.HistoryItemCache = this.__createHistoryItemCache();
-		this.HistoryItemContainerCache = this.__createHistoryItemContainerCache();
-	},
+		__getIdOf: function (obj) {
+			return Ext.isString(obj) ? obj : obj.getId();
+		},
 
-	__getIdOf: function (obj) {
-		return Ext.isString(obj) ? obj : obj.getId();
-	},
+		__createGradeCache: function () {
+			return SharedInstance.create({
+				getKeyForRecord: function (record) {
+					var userName = record.get
+							? record.get('Username')
+							: record.Username,
+						assignmentId = record.get
+							? record.get('AssignmentId')
+							: record.AssignmentId;
 
-	__createGradeCache: function () {
-		return SharedInstance.create({
-			getKeyForRecord: function (record) {
-				var userName = record.get ? record.get('Username') : record.Username,
-					assignmentId = record.get ? record.get('AssignmentId') : record.AssignmentId;
-
-				return userName + '/' + assignmentId;
-			}
-		});
-	},
-
-	__createHistoryItemCache: function () {
-		var me = this;
-
-		return SharedInstance.create({
-			getKeyForRecord: function (record) {
-				var user = record.get ? record.get('Creator') : record.Creator,
-					// historyItem = record.getHistoryItem && record.getHistoryItem(),
-					// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
-					userName = me.__getIdOf(user),
-					assignmentId = record.get('AssignmentId');
-
-				return userName + '/' + assignmentId;
-			}
-		});
-	},
-
-	__createHistoryItemContainerCache: function () {
-		var me = this;
-
-		return SharedInstance.create({
-			getKeyForRecord: function (record) {
-				var user = record.get ? record.get('Creator') : record.Creator,
-					// historyItem = record.getHistoryItem && record.getHistoryItem(),
-					// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
-					userName = me.__getIdOf(user),
-					assignmentId = record.get('AssignmentId');
-
-				return userName + '/' + assignmentId;
-			}
-		});
-	},
-
-	/**
-	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
-	 * @param  {string} assignment NTIID of the assignment
-	 * @param  {boolean} useCache -
-	 * @returns {Promse}			   fulfills with the history item
-	 */
-	getHistoryItem: function (assignment, useCache) {
-		return Promise.reject();
-	},
-
-	/**
-	 * Get the HistoryItemSummaries for an assignment
-	 * returns a store that can be paged, filtered, and searched through
-	 *
-	 * @param  {string} assignment NTIID of the assignment
-	 * @returns {Store}			  store proxied to load the summaries
-	 */
-	getAssignmentHistory: function (assignment) {
-		return AssignmentHistoryItems.create({
-			url: assignment.getLink('GradeBookByAssignment'),
-			GradeCache: this.GradeCache,
-			HistoryItemCache: this.HistoryItemCache,
-			HistoryItemContainerCache: this.HistoryItemContainerCache,
-			assignment: assignment,
-			assignments: this
-		});
-	},
-
-	/**
-	 * Get the HistoryItemSummaries for a user
-	 * returns a store that can be pages, filtered, and searched though
-	 *
-	 * @param {string} historyLink link to the assignment histories for a user
-	 * @param {string} [studentId] [description]
-	 * @returns {Store}		store proxied to load the summaries
-	 */
-	getStudentHistory: function (historyLink, studentId) {
-		return StudentHistoryItems.create({
-			url: historyLink,
-			GradeCache: this.GradeCache,
-			HistoryItemCache: this.HistoryItemCache,
-			HistoryItemContainerCache: this.HistoryItemContainerCache,
-			assignments: this,
-			student: studentId,
-			pageSize: this.getCount() //load all of the history item for a student
-		});
-	},
-
-	/**
-	 * Returns the gradebook entry for an assignment
-	 * @param  {string} assignment NTIID of the assignment
-	 * @returns {Promise}		   fulfills with the gradebook entry
-	 */
-	getGradeBookEntry: function (assignment) {
-		return Promise.resolve();
-	},
-
-	/**
-	 * Returns the grade for a user on an assignment
-	 * @param  {string} assignment NTIID of the assignment
-	 * @param  {string} user	   Username of the user
-	 * @returns {Promise}			fulfills with the grade
-	 */
-	getGradeFor: function (assignment, user) {
-		user = this.__getIdOf(user);
-		assignment = this.__getIdOf(assignment);
-
-		var grade = this.GradeCache.findRecord(user + '/' + assignment);
-
-		if (grade) {
-			return Promise.resolve(grade);
-		}
-
-		return Promise.resolve(this.createPlaceholderGrade(assignment, user));
-	},
-
-	/**
-	 * Returns a store with summaries for all the users
-	 * @returns {Store}		pageable, sortable, searchable list of user summaries
-	 */
-	getGradeSummaries: function () {
-		var gradeBook = this.get('GradeBook');
-
-		return GradeBookSummaries.create({
-			url: gradeBook && gradeBook.getLink('GradeBookSummary'),
-			GradeCache: this.GradeCache,
-			HistoryItemCache: this.HistoryItemCache,
-			HistoryItemContainerCache: this.HistoryItemContainerCache,
-			assignments: this
-		});
-	},
-
-	getHistory: function () {
-		if (this.__loadHistoryRequest) { return this.__loadHistoryRequest; }
-
-		var link = this.get('HistoryURL');
-
-		if (!link) {
-			return Promise.reject('No History Link');
-		}
-
-		this.__loadHistoryRequest = Service.request(link)
-			.then(function (response) {
-				return lazy.ParseUtils.parseItems(response)[0];
-			})
-			.catch(function (reason) {
-				if (reason && reason.status === 404) {
-					return UsersCourseAssignmentHistory.getEmpty();
-				}
-
-				return reason;
+					return userName + '/' + assignmentId;
+				},
 			});
+		},
 
-		return this.__loadHistoryRequest;
-	},
+		__createHistoryItemCache: function () {
+			var me = this;
 
-	getCreateGradeLink: function () {
-		var gradebook = this.getGradeBook();
+			return SharedInstance.create({
+				getKeyForRecord: function (record) {
+					var user = record.get
+							? record.get('Creator')
+							: record.Creator,
+						// historyItem = record.getHistoryItem && record.getHistoryItem(),
+						// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
+						userName = me.__getIdOf(user),
+						assignmentId = record.get('AssignmentId');
 
-		return gradebook && gradebook.getLink('SetGrade');
-	},
-
-	createPlaceholderGrade: function (assignment, user) {
-		var href = this.getCreateGradeLink(),
-			grade = Grade.create({
-				href: href,
-				AssignmentId: this.__getIdOf(assignment),
-				Username: this.__getIdOf(user),
-				IsExcused: false
+					return userName + '/' + assignmentId;
+				},
 			});
+		},
 
-		//pass the update flag to force incase we already have a cached instance
-		//so it will be updated to a placeholder
-		grade = this.GradeCache.getRecord(grade, null, true);
+		__createHistoryItemContainerCache: function () {
+			var me = this;
 
-		grade.isPlaceholder = true;
+			return SharedInstance.create({
+				getKeyForRecord: function (record) {
+					var user = record.get
+							? record.get('Creator')
+							: record.Creator,
+						// historyItem = record.getHistoryItem && record.getHistoryItem(),
+						// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
+						userName = me.__getIdOf(user),
+						assignmentId = record.get('AssignmentId');
 
-		return grade;
-	},
+					return userName + '/' + assignmentId;
+				},
+			});
+		},
 
-	createPlaceholderHistoryItem: function (assignment, user) {
-		var grade = this.createPlaceholderGrade(assignment, user),
-			historyItem = UsersCourseAssignmentHistoryItem.create({
+		/**
+		 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
+		 * @param  {string} assignment NTIID of the assignment
+		 * @param  {boolean} useCache -
+		 * @returns {Promse}			   fulfills with the history item
+		 */
+		getHistoryItem: function (assignment, useCache) {
+			return Promise.reject();
+		},
+
+		/**
+		 * Get the HistoryItemSummaries for an assignment
+		 * returns a store that can be paged, filtered, and searched through
+		 *
+		 * @param  {string} assignment NTIID of the assignment
+		 * @returns {Store}			  store proxied to load the summaries
+		 */
+		getAssignmentHistory: function (assignment) {
+			return AssignmentHistoryItems.create({
+				url: assignment.getLink('GradeBookByAssignment'),
+				GradeCache: this.GradeCache,
+				HistoryItemCache: this.HistoryItemCache,
+				HistoryItemContainerCache: this.HistoryItemContainerCache,
+				assignment: assignment,
+				assignments: this,
+			});
+		},
+
+		/**
+		 * Get the HistoryItemSummaries for a user
+		 * returns a store that can be pages, filtered, and searched though
+		 *
+		 * @param {string} historyLink link to the assignment histories for a user
+		 * @param {string} [studentId] [description]
+		 * @returns {Store}		store proxied to load the summaries
+		 */
+		getStudentHistory: function (historyLink, studentId) {
+			return StudentHistoryItems.create({
+				url: historyLink,
+				GradeCache: this.GradeCache,
+				HistoryItemCache: this.HistoryItemCache,
+				HistoryItemContainerCache: this.HistoryItemContainerCache,
+				assignments: this,
+				student: studentId,
+				pageSize: this.getCount(), //load all of the history item for a student
+			});
+		},
+
+		/**
+		 * Returns the gradebook entry for an assignment
+		 * @param  {string} assignment NTIID of the assignment
+		 * @returns {Promise}		   fulfills with the gradebook entry
+		 */
+		getGradeBookEntry: function (assignment) {
+			return Promise.resolve();
+		},
+
+		/**
+		 * Returns the grade for a user on an assignment
+		 * @param  {string} assignment NTIID of the assignment
+		 * @param  {string} user	   Username of the user
+		 * @returns {Promise}			fulfills with the grade
+		 */
+		getGradeFor: function (assignment, user) {
+			user = this.__getIdOf(user);
+			assignment = this.__getIdOf(assignment);
+
+			var grade = this.GradeCache.findRecord(user + '/' + assignment);
+
+			if (grade) {
+				return Promise.resolve(grade);
+			}
+
+			return Promise.resolve(
+				this.createPlaceholderGrade(assignment, user)
+			);
+		},
+
+		/**
+		 * Returns a store with summaries for all the users
+		 * @returns {Store}		pageable, sortable, searchable list of user summaries
+		 */
+		getGradeSummaries: function () {
+			var gradeBook = this.get('GradeBook');
+
+			return GradeBookSummaries.create({
+				url: gradeBook && gradeBook.getLink('GradeBookSummary'),
+				GradeCache: this.GradeCache,
+				HistoryItemCache: this.HistoryItemCache,
+				HistoryItemContainerCache: this.HistoryItemContainerCache,
+				assignments: this,
+			});
+		},
+
+		getHistory: function () {
+			if (this.__loadHistoryRequest) {
+				return this.__loadHistoryRequest;
+			}
+
+			var link = this.get('HistoryURL');
+
+			if (!link) {
+				return Promise.reject('No History Link');
+			}
+
+			this.__loadHistoryRequest = Service.request(link)
+				.then(function (response) {
+					return lazy.ParseUtils.parseItems(response)[0];
+				})
+				.catch(function (reason) {
+					if (reason && reason.status === 404) {
+						return UsersCourseAssignmentHistory.getEmpty();
+					}
+
+					return reason;
+				});
+
+			return this.__loadHistoryRequest;
+		},
+
+		getCreateGradeLink: function () {
+			var gradebook = this.getGradeBook();
+
+			return gradebook && gradebook.getLink('SetGrade');
+		},
+
+		createPlaceholderGrade: function (assignment, user) {
+			var href = this.getCreateGradeLink(),
+				grade = Grade.create({
+					href: href,
+					AssignmentId: this.__getIdOf(assignment),
+					Username: this.__getIdOf(user),
+					IsExcused: false,
+				});
+
+			//pass the update flag to force incase we already have a cached instance
+			//so it will be updated to a placeholder
+			grade = this.GradeCache.getRecord(grade, null, true);
+
+			grade.isPlaceholder = true;
+
+			return grade;
+		},
+
+		createPlaceholderHistoryItem: function (assignment, user) {
+			var grade = this.createPlaceholderGrade(assignment, user),
+				historyItem = UsersCourseAssignmentHistoryItem.create({
+					Creator: user,
+					AssignmentId: assignment.getId(),
+					Grade: grade,
+					item: assignment,
+				});
+
+			//pass the update flag to force incase we already have a cached instance
+			//so it will be updated to a placeholder
+			historyItem = this.HistoryItemCache.getRecord(
+				historyItem,
+				null,
+				true
+			);
+
+			historyItem.isPlaceholder = true;
+			historyItem.collection = this;
+
+			return historyItem;
+		},
+
+		createPlaceholderHistoryItemContainer: function (assignment, user) {
+			let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
 				Creator: user,
 				AssignmentId: assignment.getId(),
-				Grade: grade,
-				item: assignment
+				item: assignment,
+				Items: [this.createPlaceholderHistoryItem(assignment, user)],
 			});
 
-		//pass the update flag to force incase we already have a cached instance
-		//so it will be updated to a placeholder
-		historyItem = this.HistoryItemCache.getRecord(historyItem, null, true);
+			//pass the update flag to force incase we already have a cached instance
+			//so it will be updated to a placeholder
+			historyItem = this.HistoryItemContainerCache.getRecord(
+				historyItem,
+				null,
+				true
+			);
 
-		historyItem.isPlaceholder = true;
-		historyItem.collection = this;
+			historyItem.isPlaceholder = true;
+			historyItem.collection = this;
 
-		return historyItem;
-	},
+			return historyItem;
+		},
 
-	createPlaceholderHistoryItemContainer: function (assignment, user) {
-		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
-			Creator: user,
-			AssignmentId: assignment.getId(),
-			item: assignment,
-			Items: [this.createPlaceholderHistoryItem(assignment, user)]
-		});
+		createPlaceholderHistoryItemContainerWithItem(assignment, user, item) {
+			let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
+				Creator: user,
+				AssignmentId: assignment.getId(),
+				item: assignment,
+				Items: [item],
+			});
 
-		//pass the update flag to force incase we already have a cached instance
-		//so it will be updated to a placeholder
-		historyItem = this.HistoryItemContainerCache.getRecord(historyItem, null, true);
+			//pass the update flag to force incase we already have a cached instance
+			//so it will be updated to a placeholder
+			historyItem = this.HistoryItemContainerCache.getRecord(
+				historyItem,
+				null,
+				true
+			);
 
-		historyItem.isPlaceholder = true;
-		historyItem.collection = this;
+			historyItem.isPlaceholder = true;
+			historyItem.collection = this;
 
-		return historyItem;
-	},
-
-
-	createPlaceholderHistoryItemContainerWithItem (assignment, user, item) {
-		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
-			Creator: user,
-			AssignmentId: assignment.getId(),
-			item: assignment,
-			Items: [item]
-		});
-
-		//pass the update flag to force incase we already have a cached instance
-		//so it will be updated to a placeholder
-		historyItem = this.HistoryItemContainerCache.getRecord(historyItem, null, true);
-
-		historyItem.isPlaceholder = true;
-		historyItem.collection = this;
-
-		return historyItem;
+			return historyItem;
+		},
 	}
-});
+);

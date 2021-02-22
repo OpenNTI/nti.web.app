@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-const {DateTime, Avatar} = require('@nti/web-commons');
+const { DateTime, Avatar } = require('@nti/web-commons');
 
-const {getString} = require('legacy/util/Localization');
-const {isMe} = require('legacy/util/Globals');
+const { getString } = require('legacy/util/Localization');
+const { isMe } = require('legacy/util/Globals');
 const FriendsList = require('legacy/model/FriendsList');
 const User = require('legacy/model/User');
 
@@ -23,120 +23,139 @@ const AVATAR_COLORS = [
 	'#F4511E',
 ];
 
-function getFieldValue (value, name) {
+function getFieldValue(value, name) {
 	return (value && value.get && value.get(name)) || (value && value[name]);
 }
 
-const NTIFormat =
-module.exports = exports = Ext.define('NextThought.util.Format', {
+const NTIFormat = (module.exports = exports = Ext.define(
+	'NextThought.util.Format',
+	{
+		currencyInfo: {
+			USD: {
+				sign: '$',
+				decimals: 2,
+			},
+		},
 
-	currencyInfo: {
-		'USD' : {
-			sign: '$',
-			decimals: 2
-		}
-	},
+		currency: function (value, currency) {
+			var info = this.currencyInfo[currency] || {},
+				sign = info.sign || currency,
+				decimals = info.decimals,
+				end = info.end || !info.sign;
 
+			return Ext.util.Format.currency(value, sign, decimals, end);
+		},
 
-	currency: function (value, currency) {
-		var info = this.currencyInfo[currency] || {},
-			sign = info.sign || currency,
-			decimals = info.decimals,
-			end = info.end || !info.sign;
+		ago: function (value /*, max, format*/) {
+			return DateTime.fromNow(value);
+		},
 
-		return Ext.util.Format.currency(value, sign, decimals, end);
-	},
+		avatarURL: function (value) {
+			const getField = getFieldValue.bind(null, value);
+			const deactivated = getField('Deactivated') || !value;
+			return (!deactivated && getField('avatarURL')) || User.BLANK_AVATAR;
+		},
 
-	ago: function (value/*, max, format*/) {
-		return DateTime.fromNow(value);
-	},
+		avatar: function (value, cls) {
+			const getField = getFieldValue.bind(null, value);
+			var avatar = getField('avatarURL'),
+				bgColor = getField('avatarBGColor'),
+				initials = getField('avatarInitials'),
+				deactivated = getField('Deactivated'),
+				className = getField('Class'),
+				defaultAvatar =
+					className && className !== 'User'
+						? FriendsList.BLANK_AVATAR
+						: User.BLANK_AVATAR,
+				clsList = [cls || 'avatar', 'avatar-container'],
+				cn = [];
 
+			function getURL(link) {
+				return 'url(' + link + ')';
+			}
 
-	avatarURL: function (value) {
-		const getField = getFieldValue.bind(null, value);
-		const deactivated = getField('Deactivated') || (!value);
-		return (!deactivated && getField('avatarURL')) || User.BLANK_AVATAR;
-	},
+			if (className) {
+				clsList.push(className);
+			}
 
+			clsList = clsList.join(' ');
 
-	avatar: function (value, cls) {
-		const getField = getFieldValue.bind(null, value);
-		var avatar = getField('avatarURL'),
-			bgColor = getField('avatarBGColor'),
-			initials = getField('avatarInitials'),
-			deactivated = getField('Deactivated'),
-			className = getField('Class'),
-			defaultAvatar = className && className !== 'User' ? FriendsList.BLANK_AVATAR : User.BLANK_AVATAR,
-			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
+			// attempt to pull avatar color through the Avatar component color class logic
+			// If we get a color class, extract the index, subtract one to zero index and pull
+			// from the AVATAR_COLORS constant.  If we can't get that for some reason, use
+			// whatever is defined as the background color by default
+			var colorClass = Avatar.getColorClass(getField('Username'));
+			var colorIndex =
+				colorClass &&
+				colorClass.substring(colorClass.lastIndexOf('-') + 1);
+			var colorToUse = colorIndex
+				? AVATAR_COLORS[parseInt(colorIndex, 10)]
+				: '#' + bgColor;
 
+			if (!deactivated && avatar) {
+				cn.push({
+					cls: 'profile avatar-pic',
+					style: { backgroundImage: getURL(avatar) },
+				});
+			} else if (!deactivated && initials) {
+				cn.push({
+					cls: 'fallback avatar-pic initials',
+					style: { 'background-color': colorToUse },
+					cn: { cls: 'inner', html: initials },
+				});
+			} else {
+				cn.push({
+					cls: 'fallback avatar-pic',
+					style: { backgroundImage: getURL(defaultAvatar) },
+				});
+			}
 
+			return Ext.DomHelper.markup({ cls: clsList, cn: cn });
+		},
 
-		function getURL (link) {
-			return 'url(' + link + ')';
-		}
+		background: function (value) {
+			var background =
+				(value && value.get && value.get('backgroundURL')) ||
+				(value && value.backgroundURL);
 
-		if (className) {
-			clsList.push(className);
-		}
+			if (!background) {
+				return Ext.DomHelper.markup({ cls: 'profile background-pic' });
+			}
 
-		clsList = clsList.join(' ');
+			return Ext.DomHelper.markup({
+				cls: 'user-background-container',
+				cn: [
+					{
+						cls: 'profile background-pic',
+						style: { backgroundImage: 'url(' + background + ')' },
+					},
+				],
+			});
+		},
 
-		// attempt to pull avatar color through the Avatar component color class logic
-		// If we get a color class, extract the index, subtract one to zero index and pull
-		// from the AVATAR_COLORS constant.  If we can't get that for some reason, use
-		// whatever is defined as the background color by default
-		var colorClass = Avatar.getColorClass(getField('Username'));
-		var colorIndex = colorClass && colorClass.substring(colorClass.lastIndexOf('-') + 1);
-		var colorToUse = colorIndex ? AVATAR_COLORS[parseInt(colorIndex, 10)] : '#' + bgColor;
+		boolStr: function (value, trueString, falseString) {
+			trueString = trueString && getString(trueString);
+			falseString = falseString && getString(falseString);
+			return value ? trueString || '' : falseString || '';
+		},
 
-		if (!deactivated && avatar) {
-			cn.push({cls: 'profile avatar-pic', style: {backgroundImage: getURL(avatar)}});
-		} else if (!deactivated && initials) {
-			cn.push({cls: 'fallback avatar-pic initials', style: {'background-color': colorToUse}, cn: {cls: 'inner', html: initials}});
-		} else {
-			cn.push({cls: 'fallback avatar-pic', style: {backgroundImage: getURL(defaultAvatar)}});
-		}
+		displayName: function (value, me) {
+			if (isMe(value) && me) {
+				return me;
+			}
 
-		return Ext.DomHelper.markup({cls: clsList, cn: cn});
-	},
+			if (Ext.isString(value)) {
+				return 'Resolving';
+			}
 
+			return value && (value.displayName || value);
+		},
 
-	background: function (value) {
-		var background = (value && value.get && value.get('backgroundURL')) || (value && value.backgroundURL);
-
-		if (!background) {
-			return Ext.DomHelper.markup({cls: 'profile background-pic'});
-		}
-
-		return Ext.DomHelper.markup({cls: 'user-background-container', cn: [
-			{cls: 'profile background-pic', style: {backgroundImage: 'url(' + background + ')'}}
-		]});
-	},
-
-
-	boolStr: function (value, trueString, falseString) {
-		trueString = trueString && getString(trueString);
-		falseString = falseString && getString(falseString);
-		return value ? (trueString || '') : (falseString || '');
-	},
-
-	displayName: function (value, me) {
-		if (isMe(value) && me) {
-			return me;
-		}
-
-		if (Ext.isString(value)) {
-			return 'Resolving';
-		}
-
-		return value && (value.displayName || value);
-	},
-
-	pluralIf: function (value) {
-		return (value && this.plural.apply(this, arguments)) || '';
+		pluralIf: function (value) {
+			return (value && this.plural.apply(this, arguments)) || '';
+		},
 	}
-
-}).create();
+).create());
 
 Ext.util.Format.ntiCurrency = NTIFormat.currency.bind(NTIFormat);
 Ext.util.Format.ago = NTIFormat.ago;

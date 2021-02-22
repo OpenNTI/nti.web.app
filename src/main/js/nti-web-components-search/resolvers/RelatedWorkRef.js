@@ -1,12 +1,15 @@
 export default {
-	handles (targetMimeType) {
-		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
+	handles(targetMimeType) {
+		targetMimeType = targetMimeType.replace(
+			'application/vnd.nextthought.',
+			''
+		);
 		targetMimeType = targetMimeType.replace('.', '-');
 
-		if(targetMimeType === 'relatedworkref') {
+		if (targetMimeType === 'relatedworkref') {
 			return true;
 		} else {
 			return false;
 		}
-	}
+	},
 };

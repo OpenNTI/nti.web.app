@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
-
 	fillScreen: function (node, paddingBottom) {
-		if (!node) { return; }
+		if (!node) {
+			return;
+		}
 
 		var me = this,
 			resizeHandler = me.sizeNode.bind(me, node, paddingBottom);
@@ -18,7 +18,6 @@ module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 		resizeHandler.call();
 	},
 
-
 	sizeNode: function (node, paddingBottom) {
 		var rect = node.getBoundingClientRect(),
 			scrollTop = Ext.getBody().getScrollTop(),
@@ -28,5 +27,5 @@ module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 		if (height >= 0) {
 			node.style.minHeight = height + 'px';
 		}
-	}
+	},
 });

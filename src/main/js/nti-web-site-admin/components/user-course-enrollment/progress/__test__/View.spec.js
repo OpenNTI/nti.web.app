@@ -8,14 +8,19 @@ describe('Site admin user course enrollment progress view', () => {
 	test('Basic render test', async () => {
 		const course = {
 			hasLink: () => true,
-			getContentDataSource: () => ({loadPage: () => {}, getTotalCount: () => 0})
+			getContentDataSource: () => ({
+				loadPage: () => {},
+				getTotalCount: () => 0,
+			}),
 		};
 
 		const enrollment = {};
 
 		// this component will show an "unable to load" message in the snapshot, which is ok.  The underlying Progress
 		// widget (in nti-web-course) should be tested on its own
-		const cmp = renderer.create(<View course={course} enrollment={enrollment}/>);
+		const cmp = renderer.create(
+			<View course={course} enrollment={enrollment} />
+		);
 
 		const tree = cmp.toJSON();
 
@@ -27,7 +32,7 @@ describe('Site admin user course enrollment progress view', () => {
 	test('Basic render test (no course)', async () => {
 		const enrollment = {};
 
-		const cmp = renderer.create(<View enrollment={enrollment}/>);
+		const cmp = renderer.create(<View enrollment={enrollment} />);
 
 		const tree = cmp.toJSON();
 
@@ -37,7 +42,7 @@ describe('Site admin user course enrollment progress view', () => {
 	test('Basic render test (no enrollment)', async () => {
 		const course = {};
 
-		const cmp = renderer.create(<View course={course}/>);
+		const cmp = renderer.create(<View course={course} />);
 
 		const tree = cmp.toJSON();
 

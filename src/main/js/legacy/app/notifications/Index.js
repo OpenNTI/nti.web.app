@@ -8,7 +8,6 @@ const NotificationsStateStore = require('./StateStore');
 require('legacy/mixins/Router');
 require('./components/Stream');
 
-
 module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notifications-index',
@@ -17,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 	fullwidth: true,
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	items: [],
@@ -37,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 
 		this.on({
 			activate: this.onActivate.bind(this),
-			deactivate: this.onDeactivate.bind(this)
+			deactivate: this.onDeactivate.bind(this),
 		});
 	},
 
@@ -65,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 
 		me.NavActions.setActiveContent(null);
 		me.NavActions.updateNavBar({
-			hideBranding: true
+			hideBranding: true,
 		});
 
 		me.setTitle('Notifications');
@@ -79,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 
 	buildStream: function () {
 		this.stream = this.add({
-			xtype: 'notifications-stream-list'
+			xtype: 'notifications-stream-list',
 		});
 
 		this.addChildRouter(this.stream);
@@ -87,5 +86,5 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		if (this.isActive) {
 			this.stream.onActivate();
 		}
-	}
+	},
 });

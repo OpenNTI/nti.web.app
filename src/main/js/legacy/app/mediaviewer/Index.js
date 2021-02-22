@@ -1,4 +1,4 @@
-const {resolve} = require('path');
+const { resolve } = require('path');
 
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
@@ -17,14 +17,13 @@ require('legacy/mixins/State');
 require('./components/reader/parts/Transcript');
 require('./components/View');
 
-
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-window-view',
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
+		State: 'NextThought.mixins.State',
 	},
 
 	layout: 'none',
@@ -44,9 +43,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 	showMediaView: function (route, subRoute) {
 		var basePath = route.precache.basePath,
-			rec = route.precache.rec || (route.object.id && decodeFromURI(route.object.id)) || null,
+			rec =
+				route.precache.rec ||
+				(route.object.id && decodeFromURI(route.object.id)) ||
+				null,
 			options = route.precache.options || {},
-			me = this, id;
+			me = this,
+			id;
 
 		id = decodeFromURI(route.params.id);
 
@@ -55,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			basePath = roots ? roots[0] : basePath;
 		}
 
-		if (this.activeMediaView && (this.mediaId === id)) {
+		if (this.activeMediaView && this.mediaId === id) {
 			// We are already there.
 			this.activeMediaView.hideGridViewer();
 			return Promise.resolve();
@@ -78,24 +81,22 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 				currentBundle: me.currentBundle,
 				autoShow: true,
 				handleNavigation: me.handleNavigation.bind(me),
-				parentContainer: this
+				parentContainer: this,
 			});
 		}
 
 		if (this.video && this.video.getId() === this.mediaId) {
 			this.__presentVideo(this.videoId, basePath, options);
-		}
-		else if (this.slidedeck && this.slidedeck.getId() === this.mediaId) {
+		} else if (this.slidedeck && this.slidedeck.getId() === this.mediaId) {
 			this.__presentSlidedeck(this.slidedeckId, this.slidedeck, options);
-		}
-		else {
+		} else {
 			this.resolveVideo(this.mediaId)
 				.then(function (video) {
 					me.video = video;
 					me.videoId = me.mediaId;
 					me.slidedeckId = me.video.get('slidedeck') || '';
 
-					if(me.slidedeckId) {
+					if (me.slidedeckId) {
 						me.__presentSlidedeck(me.slidedeckId, null, options);
 					} else {
 						delete me.slidedeck;
@@ -111,58 +112,70 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	__presentVideo: function (videoId, basePath, options) {
-		if (this.isDestroyed) { return; }
-		var me = this, prec = Promise.resolve();
+		if (this.isDestroyed) {
+			return;
+		}
+		var me = this,
+			prec = Promise.resolve();
 
-		if(options.rec) {
-			prec = options.rec.isModel ? Promise.resolve(options.rec) : Service.getObject(options.rec);
+		if (options.rec) {
+			prec = options.rec.isModel
+				? Promise.resolve(options.rec)
+				: Service.getObject(options.rec);
 		}
 
-		Promise.all([
-			me.resolveVideo(videoId),
-			prec
-		])
-			.then(([videoRec, record]) => {
-				if(record) {
+		Promise.all([me.resolveVideo(videoId), prec]).then(
+			([videoRec, record]) => {
+				if (record) {
 					options.rec = record;
 				}
 				me.video = videoRec;
 				me.transcript = TranscriptItem.fromVideo(me.video, basePath);
 				me.activeMediaView.setContent(me.video, me.transcript, options);
-			});
+			}
+		);
 	},
 
 	__presentSlidedeck: function (slidedeckId, slidedeck, options) {
-		if (this.isDestroyed) { return; }
+		if (this.isDestroyed) {
+			return;
+		}
 		var me = this,
-			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId),
+			p =
+				slidedeck && slidedeck.isModel
+					? Promise.resolve(slidedeck)
+					: Service.getObject(slidedeckId),
 			prec = Promise.resolve();
 
-		if(options.rec) {
-			prec = options.rec.isModel ? Promise.resolve(options.rec) : Service.getObject(options.rec);
+		if (options.rec) {
+			prec = options.rec.isModel
+				? Promise.resolve(options.rec)
+				: Service.getObject(options.rec);
 		}
 
-		Promise.all([
-			p,
-			prec
-		])
-			.then(([deck, record]) => {
-				if (!(deck instanceof Slidedeck)) {
-					return Promise.reject('Not a Slidedeck');
-				}
+		Promise.all([p, prec]).then(([deck, record]) => {
+			if (!(deck instanceof Slidedeck)) {
+				return Promise.reject('Not a Slidedeck');
+			}
 
-				if(record) { options.rec = record; }
+			if (record) {
+				options.rec = record;
+			}
 
-				me.slidedeck = deck;
-				me.slidedeckId = slidedeckId;
-				delete me.video;
-				delete me.videoId;
+			me.slidedeck = deck;
+			me.slidedeckId = slidedeckId;
+			delete me.video;
+			delete me.videoId;
 
-				me.MediaActions.buildSlidedeckPlaylist(deck)
-					.then((obj) => {
-						me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
-					});
+			me.MediaActions.buildSlidedeckPlaylist(deck).then(obj => {
+				me.activeMediaView.setSlidedeckContent(
+					deck,
+					obj.videos,
+					obj.items,
+					options
+				);
 			});
+		});
 	},
 
 	showVideoGrid: function (route, subRoute) {
@@ -173,14 +186,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	__addKeyMapListeners: function () {
 		const keyMap = new Ext.util.KeyMap({
 			target: document,
-			binding: [{
-				key: Ext.EventObject.ESC,
-				fn: this.exitViewer,
-				scope: this
-			}]
+			binding: [
+				{
+					key: Ext.EventObject.ESC,
+					fn: this.exitViewer,
+					scope: this,
+				},
+			],
 		});
 
-		this.on('destroy', function () {keyMap.destroy(false);});
+		this.on('destroy', function () {
+			keyMap.destroy(false);
+		});
 	},
 
 	afterRender: function () {
@@ -209,25 +226,30 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			return Promise.resolve(this.video);
 		}
 
-		return this.currentBundle.getVideoForId(id)
-			.catch(e => e ? Promise.reject(e) : null)
+		return this.currentBundle
+			.getVideoForId(id)
+			.catch(e => (e ? Promise.reject(e) : null))
 			.then(o => o || Service.getObject(id))
 			.then(o =>
-				o instanceof Slidedeck ? Promise.reject() : PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
+				o instanceof Slidedeck
+					? Promise.reject()
+					: PlaylistItem.create({
+							NTIID: o.ntiid || o.NTIID,
+							...(o.raw || o),
+					  })
 			);
 	},
 
 	getContext: function () {
 		var me = this;
 
-		return me.resolveVideo(me.mediaId)
-			.catch(function () {
-				if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
-					return me.slidedeck;
-				}
+		return me.resolveVideo(me.mediaId).catch(function () {
+			if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
+				return me.slidedeck;
+			}
 
-				return Service.getObject(me.mediaId);
-			});
+			return Service.getObject(me.mediaId);
+		});
 	},
 
 	containsId: function (contextRecord, id) {
@@ -280,22 +302,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 		try {
 			this.Router.root.pushRootRoute(null, parentPath);
-		}
-		catch (e) {
+		} catch (e) {
 			(Ext.isEmpty(this.parentLesson)
 				? Promise.reject()
-				: this.__navigateToParent(this.parentLesson))
-				.catch(() => this.pushRootRoute('Library', '/library'));
+				: this.__navigateToParent(this.parentLesson)
+			).catch(() => this.pushRootRoute('Library', '/library'));
 		}
 	},
 
 	__navigateToParent: function (lesson) {
-		return this.PathActions.getPathToObject(lesson)
-			.then(path => {
-				// Get rid of the pageInfo part,
-				// since we want to navigate to the CourseOutlineNode.
-				path.pop();
-				this.Router.root.attemptToNavigateToPath(path);
-			});
-	}
+		return this.PathActions.getPathToObject(lesson).then(path => {
+			// Get rid of the pageInfo part,
+			// since we want to navigate to the CourseOutlineNode.
+			path.pop();
+			this.Router.root.attemptToNavigateToPath(path);
+		});
+	},
 });

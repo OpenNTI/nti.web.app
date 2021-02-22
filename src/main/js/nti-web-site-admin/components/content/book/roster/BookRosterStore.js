@@ -1,37 +1,39 @@
-import {getService} from '@nti/web-client';
-import {Stores, Mixins} from '@nti/lib-store';
-import {mixin} from '@nti/lib-decorators';
-import {decorate} from '@nti/lib-commons';
+import { getService } from '@nti/web-client';
+import { Stores, Mixins } from '@nti/lib-store';
+import { mixin } from '@nti/lib-decorators';
+import { decorate } from '@nti/lib-commons';
 
 const PAGE_SIZE = 20;
 
 class BookRosterStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set('searchTerm', null);
 		this.set('loading', true);
 	}
 
-	get hasBook () {
+	get hasBook() {
 		return !!this.get('book');
 	}
 
-	loadPage (pageNumber) {
+	loadPage(pageNumber) {
 		this.set('pageNumber', pageNumber);
 
 		this.load();
 	}
 
-	async loadBook (book) {
-		if (this.get('book') === book) { return; }
+	async loadBook(book) {
+		if (this.get('book') === book) {
+			return;
+		}
 
 		this.set('book', book);
 
 		this.load();
 	}
 
-	async load () {
+	async load() {
 		this.set('loading', true);
 		this.emitChange('loading');
 
@@ -41,18 +43,21 @@ class BookRosterStore extends Stores.BoundStore {
 
 		let params = {
 			batchSize: PAGE_SIZE,
-			batchStart
+			batchStart,
 		};
 
 		const searchTerm = this.searchTerm;
 
-		if(this.searchTerm) {
+		if (this.searchTerm) {
 			params.searchTerm = this.searchTerm;
 		}
 
-		const result = await service.getBatch(this.get('book').getLink('users'), params);
+		const result = await service.getBatch(
+			this.get('book').getLink('users'),
+			params
+		);
 
-		if(this.searchTerm !== searchTerm) {
+		if (this.searchTerm !== searchTerm) {
 			return;
 		}
 
@@ -60,7 +65,7 @@ class BookRosterStore extends Stores.BoundStore {
 			items: result.Items,
 			loading: false,
 			numPages: Math.ceil(result.Total / PAGE_SIZE),
-			pageNumber: result.BatchPage
+			pageNumber: result.BatchPage,
 		});
 
 		this.emitChange('items', 'loading');

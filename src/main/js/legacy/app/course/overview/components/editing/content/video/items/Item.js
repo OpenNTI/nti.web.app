@@ -4,85 +4,89 @@ const MoveInfo = require('legacy/model/app/MoveInfo');
 
 require('legacy/mixins/dnd/OrderingItem');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.video.items.Item',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.overview-editing-video-items-item',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Item', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-video-items-item',
+		mixins: {
+			OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
+		},
 
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
+		cls: 'video-items-item',
 
-	cls: 'video-items-item',
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'thumbnail' },
+			{ tag: 'tpl', if: 'isAdvanced', cn: [{ cls: 'close' }] },
+			{
+				cls: 'meta',
+				cn: [
+					{ cls: 'title', html: '{title:htmlEncode}' },
+					{
+						cls: 'providers',
+						cn: [
+							{
+								tag: 'tpl',
+								for: 'providers',
+								cn: [{ tag: 'span', html: '{label}' }],
+							},
+						],
+					},
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'thumbnail'},
-		{tag: 'tpl', 'if': 'isAdvanced', cn: [
-			{cls: 'close'}
-		]},
-		{cls: 'meta', cn: [
-			{cls: 'title', html: '{title:htmlEncode}'},
-			{cls: 'providers', cn: [
-				{tag: 'tpl', 'for': 'providers', cn: [
-					{tag: 'span', html: '{label}'}
-				]}
-			]}
-		]}
-	]),
+		renderSelectors: {
+			thumbnailEl: '.thumbnail',
+			closeEl: '.close',
+		},
 
+		initComponent: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		thumbnailEl: '.thumbnail',
-		closeEl: '.close'
-	},
+			this.setDataTransfer(
+				new MoveInfo({
+					OriginContainer: null,
+					OriginIndex: this.index,
+				})
+			);
 
+			this.setDataTransfer(this.item);
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
+		beforeRender: function () {
+			this.callParent(arguments);
 
-		this.setDataTransfer(new MoveInfo({
-			OriginContainer: null,
-			OriginIndex: this.index
-		}));
+			var sources = this.item.get('sources');
 
-		this.setDataTransfer(this.item);
-	},
+			this.renderData = Ext.apply(this.renderData || {}, {
+				title: this.item.get('title'),
+				providers: sources.map(function (source) {
+					return { label: source.service };
+				}),
+				isAdvanced: true,
+			});
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			var thumbnail = this.thumbnailEl;
 
-		var sources = this.item.get('sources');
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.item.get('title'),
-			providers: sources.map(function (source) {
-				return {label: source.service};
-			}),
-			isAdvanced: true
-		});
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		var thumbnail = this.thumbnailEl;
-
-		this.item.resolveThumbnail()
-			.then(function (poster) {
+			this.item.resolveThumbnail().then(function (poster) {
 				thumbnail.setStyle('backgroundImage', 'url(' + poster + ')');
 			});
 
-		if (this.closeEl) {
-			this.mon(this.closeEl, 'click', this.onClose.bind(this));
-		}
-	},
+			if (this.closeEl) {
+				this.mon(this.closeEl, 'click', this.onClose.bind(this));
+			}
+		},
 
-
-	onClose: function () {
-		if (this.removeItem) {
-			this.removeItem(this.item);
-		}
+		onClose: function () {
+			if (this.removeItem) {
+				this.removeItem(this.item);
+			}
+		},
 	}
-});
+);

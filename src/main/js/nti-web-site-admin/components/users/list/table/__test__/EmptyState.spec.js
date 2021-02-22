@@ -15,7 +15,9 @@ describe('Site admin user table empty state test', () => {
 	});
 
 	test('Test custom wording', () => {
-		const emptyStateCmp = renderer.create(<EmptyState message="this is custom text"/>);
+		const emptyStateCmp = renderer.create(
+			<EmptyState message="this is custom text" />
+		);
 
 		const tree = emptyStateCmp.toJSON();
 

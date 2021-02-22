@@ -1,8 +1,6 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.util.CSS', {
-
 	getOrMakeSheet: function (id) {
 		var sheet = document.getElementById(id);
 		if (!sheet) {
@@ -13,7 +11,6 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 		}
 		return sheet.sheet;
 	},
-
 
 	getRule: function (sheet, selector) {
 		if (Ext.isString(sheet)) {
@@ -34,9 +31,10 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 		return rules[newRule];
 	},
 
-
 	set: function (rule, values, makeImportant) {
-		var hyphenated, property, s = rule.style,
+		var hyphenated,
+			property,
+			s = rule.style,
 			importance = (makeImportant && 'important') || '',
 			re = /([A-Z])/g;
 
@@ -48,7 +46,5 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 		}
 
 		//console.debug(rule.cssText);
-	}
-
-
+	},
 }).create();

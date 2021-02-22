@@ -3,7 +3,6 @@ require('legacy/model/Base');
 
 const Badge = require('legacy/model/openbadges/Badge');
 
-
 module.exports = exports = Ext.define('NextThought.model.Change', {
 	extend: 'NextThought.model.Base',
 	NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
@@ -12,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.Change', {
 		this.callParent(arguments);
 
 		this.changeTypeToModel = {
-			BadgeEarned: Badge
+			BadgeEarned: Badge,
 		};
 	},
 
@@ -22,11 +21,35 @@ module.exports = exports = Ext.define('NextThought.model.Change', {
 		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
-		{ name: 'IsNewlyMentioned', type: 'boolean'},
-		{ name: 'CreatedTime', mapping: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date(0) },
-		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'},
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
+		{ name: 'IsNewlyMentioned', type: 'boolean' },
+		{
+			name: 'CreatedTime',
+			mapping: 'Last Modified',
+			type: 'date',
+			persist: false,
+			dateFormat: 'timestamp',
+			defaultValue: new Date(0),
+		},
+		{
+			name: 'EventTime',
+			mapping: 'Last Modified',
+			type: 'groupByTime',
+			affectedBy: 'Last Modified',
+		},
+		{
+			name: 'GroupingField',
+			mapping: 'Last Modified',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'Last Modified',
+		},
+		{
+			name: 'NotificationGroupingField',
+			mapping: 'CreatedTime',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'CreatedTime',
+		},
 	],
 
 	getItemValue: function (field) {
@@ -40,13 +63,14 @@ module.exports = exports = Ext.define('NextThought.model.Change', {
 	},
 
 	getItem: function () {
-		var e, item = this.get('Item'),
+		var e,
+			item = this.get('Item'),
 			changeModel = this.changeTypeToModel[this.get('ChangeType')];
 
 		if (!item && changeModel) {
 			item = changeModel.create({
 				'Last Modified': this.get('Last Modified'),
-				isEmpty: true
+				isEmpty: true,
 			});
 
 			this.set('Item', item);
@@ -54,12 +78,14 @@ module.exports = exports = Ext.define('NextThought.model.Change', {
 
 		if (item && !item.get('EventTime')) {
 			if (!item.fields.getByKey('EventTime')) {
-				item.fields.add(Ext.data.Field.create({name: 'EventTime', type: 'date'}));
+				item.fields.add(
+					Ext.data.Field.create({ name: 'EventTime', type: 'date' })
+				);
 			}
 
 			e = item.editing;
 			item.editing = true;
-			item.set({EventTime: this.get('Last Modified')});
+			item.set({ EventTime: this.get('Last Modified') });
 			item.editing = e;
 		}
 
@@ -68,5 +94,5 @@ module.exports = exports = Ext.define('NextThought.model.Change', {
 
 	isNotable: function () {
 		return !!(this.raw || {})[this.NOTABLE_PROPERTY];
-	}
+	},
 });

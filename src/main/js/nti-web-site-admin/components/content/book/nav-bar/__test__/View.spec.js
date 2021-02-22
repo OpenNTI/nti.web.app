@@ -9,10 +9,12 @@ describe.skip('Site admin user book nav bar test', () => {
 	test('Basic render test', async () => {
 		const book = {
 			title: 'book1',
-			getDefaultAssetRoot () { return 'testRoot'; }
+			getDefaultAssetRoot() {
+				return 'testRoot';
+			},
 		};
 
-		const cmp = renderer.create(<View book={book}/>);
+		const cmp = renderer.create(<View book={book} />);
 
 		const tree = cmp.toJSON();
 

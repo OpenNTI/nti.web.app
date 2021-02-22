@@ -1,45 +1,43 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.components.parts.Links',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.enrollment-link',
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Links', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-link',
+		cls: 'enrollment-link',
 
-	cls: 'enrollment-link',
+		renderTpl: Ext.DomHelper.markup([{ tag: 'a', html: '{text}' }]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{tag: 'a', html: '{text}'}
-	]),
+		beforeRender: function () {
+			this.callParent(arguments);
 
+			this.renderData = Ext.apply(this.renderData || {}, {
+				text: this.text,
+			});
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.enableBubble([this.eventName]);
+		},
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			text: this.text
-		});
+		afterRender: function () {
+			this.callParent(arguments);
 
-		this.enableBubble([this.eventName]);
-	},
+			var me = this;
 
+			if (me.otherCls) {
+				me.addCls(me.otherCls);
+			}
 
-	afterRender: function () {
-		this.callParent(arguments);
+			me.mon(me.el, 'click', function () {
+				var args = [me.eventName];
 
-		var me = this;
+				args = args.concat(me.args);
 
-		if (me.otherCls) {
-			me.addCls(me.otherCls);
-		}
+				args.push(me);
 
-		me.mon(me.el, 'click', function () {
-			var args = [me.eventName];
-
-			args = args.concat(me.args);
-
-			args.push(me);
-
-			me.fireEvent.apply(me, args);
-		});
+				me.fireEvent.apply(me, args);
+			});
+		},
 	}
-});
+);

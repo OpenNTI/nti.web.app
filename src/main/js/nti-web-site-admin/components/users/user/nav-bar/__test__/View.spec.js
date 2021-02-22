@@ -19,12 +19,12 @@ const onAfter = () => {
 	tearDownTestClient();
 };
 
-const getUser = (hasTranscriptLink) => {
+const getUser = hasTranscriptLink => {
 	return {
 		Username: 'testUser',
 		getID: () => 'testUser',
 		hasLink: () => hasTranscriptLink,
-		email: 'testUser@test.com'
+		email: 'testUser@test.com',
 	};
 };
 
@@ -36,7 +36,7 @@ describe('Site admin user info nav bar test', () => {
 	test('Basic render test (has transcript link)', async () => {
 		const user = getUser(true);
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		const tree = cmp.toJSON();
 
@@ -46,7 +46,7 @@ describe('Site admin user info nav bar test', () => {
 	test('Basic render test (has no transcript link)', async () => {
 		const user = getUser(false);
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		const tree = cmp.toJSON();
 

@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const DndDropzone = require('legacy/app/dnd/Dropzone');
 
-
 /**
  * Handle adding and removing listeners for dropping actions
  *
@@ -19,15 +18,19 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		if (!this.Dropzone) {
 			this.Dropzone = new DndDropzone({
 				getDropzoneTarget: this.getDropzoneTarget.bind(this),
-				getDropzoneBoundingClientRect: this.getDropzoneBoundingClientRect.bind(this),
+				getDropzoneBoundingClientRect: this.getDropzoneBoundingClientRect.bind(
+					this
+				),
 				onDragEnter: this.onDragEnter && this.onDragEnter.bind(this),
 				onDragLeave: this.onDragLeave && this.onDragLeave.bind(this),
 				onDragOver: this.onDragOver && this.onDragOver.bind(this),
 				onDragDrop: this.onDragDrop && this.onDragDrop.bind(this),
-				onInvalidDrop: this.onInvalidDrop && this.onInvalidDrop.bind(this),
-				onInvalidOver: this.onInvalidOver && this.onInvalidOver.bind(this),
+				onInvalidDrop:
+					this.onInvalidDrop && this.onInvalidDrop.bind(this),
+				onInvalidOver:
+					this.onInvalidOver && this.onInvalidOver.bind(this),
 				onDragStart: this.onDragStart && this.onDragStart.bind(this),
-				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this)
+				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this),
 			});
 
 			this.on('destroy', () => {
@@ -48,7 +51,14 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		if (target) {
 			rect = target.getBoundingClientRect();
 		} else {
-			rect = {top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0};
+			rect = {
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: 0,
+				width: 0,
+				height: 0,
+			};
 		}
 
 		return rect;
@@ -61,7 +71,10 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		this.initDropzone();
 
 		if (!this.rendered) {
-			this.on('afterrender', this.Dropzone.enableDropzone.bind(this.Dropzone));
+			this.on(
+				'afterrender',
+				this.Dropzone.enableDropzone.bind(this.Dropzone)
+			);
 		} else {
 			this.Dropzone.enableDropzone();
 		}
@@ -74,7 +87,10 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		this.initDropzone();
 
 		if (!this.rendered) {
-			this.on('afterrender', this.Dropzone.disableDropzone.bind(this.Dropzone));
+			this.on(
+				'afterrender',
+				this.Dropzone.disableDropzone.bind(this.Dropzone)
+			);
 		} else {
 			this.Dropzone.disableDropzone();
 		}
@@ -102,5 +118,5 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		var handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		return handlers.length > 0;
-	}
+	},
 });

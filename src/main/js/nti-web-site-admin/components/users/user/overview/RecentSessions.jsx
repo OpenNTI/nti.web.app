@@ -1,58 +1,73 @@
 import './RecentSessions.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DateTime, Loading} from '@nti/web-commons';
-import {scoped} from '@nti/lib-locale';
+import { DateTime, Loading } from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
 
 const LABELS = {
 	title: 'Recent Sessions',
 	noSessions: 'No recent sessions',
-	today: 'Today'
+	today: 'Today',
 };
 
-const t = scoped('nti-web-site-admins.components.users.user.overview.recentsessions', LABELS);
+const t = scoped(
+	'nti-web-site-admins.components.users.user.overview.recentsessions',
+	LABELS
+);
 
 export default class RecentSessions extends React.Component {
 	static propTypes = {
 		historicalSessions: PropTypes.arrayOf(PropTypes.object),
-		loading: PropTypes.bool
-	}
+		loading: PropTypes.bool,
+	};
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 	}
 
-	renderHeader () {
-		return (<div className="header"><div className="title">{t('title')}</div></div>);
+	renderHeader() {
+		return (
+			<div className="header">
+				<div className="title">{t('title')}</div>
+			</div>
+		);
 	}
 
-	renderItem = (item) => {
+	renderItem = item => {
 		const today = new Date();
 		const itemDate = new Date(item.SessionStartTime * 1000);
 
 		let dayLabel = DateTime.format(itemDate, DateTime.WEEKDAY);
 
-		if(DateTime.format(today, DateTime.DATE) === DateTime.format(itemDate, DateTime.DATE)) {
+		if (
+			DateTime.format(today, DateTime.DATE) ===
+			DateTime.format(itemDate, DateTime.DATE)
+		) {
 			dayLabel = t('today');
 		}
 
 		return (
 			<div key={item.SessionStartTime} className="item">
-				<div className="time">{DateTime.format(itemDate, DateTime.MONTH_ABBR_DAY_YEAR_TIME)}</div>
+				<div className="time">
+					{DateTime.format(
+						itemDate,
+						DateTime.MONTH_ABBR_DAY_YEAR_TIME
+					)}
+				</div>
 				<div className="day">{dayLabel}</div>
 			</div>
 		);
-	}
+	};
 
-	renderItems () {
+	renderItems() {
 		const { loading, historicalSessions } = this.props;
 
-		if(loading) {
-			return <Loading.Mask/>;
+		if (loading) {
+			return <Loading.Mask />;
 		}
 
-		if(!historicalSessions || historicalSessions.length === 0) {
-			return (<div className="no-sessions">{t('noSessions')}</div>);
+		if (!historicalSessions || historicalSessions.length === 0) {
+			return <div className="no-sessions">{t('noSessions')}</div>;
 		}
 
 		return (
@@ -62,7 +77,7 @@ export default class RecentSessions extends React.Component {
 		);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="user-recent-sessions">
 				{this.renderHeader()}

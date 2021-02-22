@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-const {Viewer} = require('@nti/web-discussions');
-const {UserDataThreader} = require('@nti/lib-interfaces');
+const { Viewer } = require('@nti/web-discussions');
+const { UserDataThreader } = require('@nti/lib-interfaces');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const ContainerContext = require('legacy/app/context/ContainerContext');
@@ -12,19 +12,22 @@ require('legacy/app/windows/components/Header');
 require('legacy/app/windows/components/Loading');
 require('./Main');
 
-function getReplies (record) {
-	return (record?.children || [])
-		.reduce((acc, child) => {
-			const replies = getReplies(child);
+function getReplies(record) {
+	return (record?.children || []).reduce((acc, child) => {
+		const replies = getReplies(child);
 
-			if (child.placeholder) { return [...acc, ...replies]; }
+		if (child.placeholder) {
+			return [...acc, ...replies];
+		}
 
-			return [...acc, child, ...replies];
-		}, []);
+		return [...acc, child, ...replies];
+	}, []);
 }
 
-async function getRootNote (record) {
-	if (!record.placeholder) { return record.getInterfaceInstance(); }
+async function getRootNote(record) {
+	if (!record.placeholder) {
+		return record.getInterfaceInstance();
+	}
 
 	const replies = getReplies(record);
 
@@ -32,41 +35,73 @@ async function getRootNote (record) {
 		throw new Error('No note thread');
 	}
 
-	const interfaces = await Promise.all(replies.map(x => x.getInterfaceInstance()));
+	const interfaces = await Promise.all(
+		replies.map(x => x.getInterfaceInstance())
+	);
 	const thread = UserDataThreader.thread(interfaces);
 
 	return thread[0];
 }
 
+module.exports = exports = Ext.define(
+	'NextThought.app.annotations.note.Window',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.note-panel-window',
+		layout: 'none',
+		cls: 'note-window',
 
-module.exports = exports = Ext.define('NextThought.app.annotations.note.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.note-panel-window',
-	layout: 'none',
-	cls: 'note-window',
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.loadingEl = this.add({ xtype: 'window-loading' });
 
-		this.loadingEl = this.add({xtype: 'window-loading'});
+			if (this.record.get('inReplyTo')) {
+				this.loadRoot();
+			} else {
+				this.loadNote(this.record);
+			}
+		},
 
-		if (this.record.get('inReplyTo')) {
-			this.loadRoot();
-		} else {
-			this.loadNote(this.record);
-		}
-	},
+		afterRender() {
+			this.callParent(arguments);
 
+			this.mon(this.el, 'click', e => this.ignoreEvent(e));
+		},
 
-	afterRender () {
-		this.callParent(arguments);
+		async loadNote(record) {
+			try {
+				const note = await getRootNote(record);
 
-		this.mon(this.el, 'click', (e) => this.ignoreEvent(e));
-	},
+				if (this.loadingEl) {
+					this.remove(this.loadingEl, true);
+					delete this.loadingEl;
+				}
 
-	async loadNote (record) {
-		try {
-			const note = await getRootNote(record);
+				this.add({
+					baseroute: global?.location?.pathname.replace(/\/?$/, ''),
+					// addHistory: true,
+					xtype: 'react',
+					component: Viewer,
+					discussion: note,
+					dialog: true,
+					onClose: this.doClose.bind(this),
+				});
+			} catch (e) {
+				alert('Unable to open note.');
+				this.doClose();
+			}
+		},
+
+		xloadNote: function (record) {
+			var context = ContainerContext.create({
+				container: record.get('ContainerId'),
+				range: record.get('applicableRange'),
+				contextRecord: record,
+				doNavigate: this.doNavigate.bind(this),
+			});
+
+			this.headerCmp.showPathFor(record, null, 3);
 
 			if (this.loadingEl) {
 				this.remove(this.loadingEl, true);
@@ -74,70 +109,51 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 			}
 
 			this.add({
-				baseroute: global?.location?.pathname.replace(/\/?$/, ''),
-				// addHistory: true,
-				xtype: 'react',
-				component: Viewer,
-				discussion: note,
-				dialog: true,
-				onClose: this.doClose.bind(this)
+				xtype: 'note-main-view',
+				triggerAnalyticsViews: true,
+				record: record,
+				readerContext: context,
+				doClose: this.doClose.bind(this),
+				state: this.state,
+				scrollingParent: this.scrollingParent,
+				scrollToId:
+					record.getId() !== this.record.getId()
+						? this.record.getId()
+						: null,
 			});
-		} catch (e) {
-			alert('Unable to open note.');
-			this.doClose();
-		}
+
+			this.fireEvent('note-panel-set');
+		},
+
+		loadRoot: function () {
+			var root = this.record.get('references')[0];
+
+			Service.getObject(root).then(
+				this.loadNote.bind(this),
+				this.loadParent.bind(this)
+			);
+		},
+
+		loadParent: function () {
+			var parent = this.record.get('inReplyTo');
+
+			Service.getObject(parent).then(
+				this.loadNote.bind(this),
+				this.loadNote.bind(this, this.record)
+			);
+		},
+
+		allowNavigation: function () {
+			var panel = this.down('note-main-view');
+
+			if (!panel) {
+				return true;
+			}
+
+			return panel.allowNavigation();
+		},
 	},
-
-	xloadNote: function (record) {
-		var context = ContainerContext.create({
-			container: record.get('ContainerId'),
-			range: record.get('applicableRange'),
-			contextRecord: record,
-			doNavigate: this.doNavigate.bind(this)
-		});
-
-		this.headerCmp.showPathFor(record, null, 3);
-
-		if (this.loadingEl) {
-			this.remove(this.loadingEl, true);
-			delete this.loadingEl;
-		}
-
-		this.add({
-			xtype: 'note-main-view',
-			triggerAnalyticsViews: true,
-			record: record,
-			readerContext: context,
-			doClose: this.doClose.bind(this),
-			state: this.state,
-			scrollingParent: this.scrollingParent,
-			scrollToId: record.getId() !== this.record.getId() ? this.record.getId() : null
-		});
-
-		this.fireEvent('note-panel-set');
-	},
-
-	loadRoot: function () {
-		var root = this.record.get('references')[0];
-
-		Service.getObject(root)
-			.then(this.loadNote.bind(this), this.loadParent.bind(this));
-	},
-
-	loadParent: function () {
-		var parent = this.record.get('inReplyTo');
-
-		Service.getObject(parent)
-			.then(this.loadNote.bind(this), this.loadNote.bind(this, this.record));
-	},
-
-	allowNavigation: function () {
-		var panel = this.down('note-main-view');
-
-		if (!panel) { return true; }
-
-		return panel.allowNavigation();
+	function () {
+		WindowsStateStore.register(Note.mimeType, this);
 	}
-}, function () {
-	WindowsStateStore.register(Note.mimeType, this);
-});
+);

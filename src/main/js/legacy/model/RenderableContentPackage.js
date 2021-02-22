@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 require('./ContentPackage');
 
@@ -9,12 +9,14 @@ const SUCCESS = 'Success';
 const PENDING = 'Pending';
 const FAILED = 'Failed';
 
-function monitorRenderJob (renderJob, onFinish) {
+function monitorRenderJob(renderJob, onFinish) {
 	let stop = false;
 	let timeout;
 
-	function onInterval (job) {
-		if (stop) { return; }
+	function onInterval(job) {
+		if (stop) {
+			return;
+		}
 
 		if (job.State === SUCCESS || job.State === FAILED) {
 			onFinish(job.State, job);
@@ -23,7 +25,7 @@ function monitorRenderJob (renderJob, onFinish) {
 
 		timeout = setTimeout(() => {
 			Service.request(Service.getLinkFrom(job.Links, 'QueryRenderJob'))
-				.then((newJob) => {
+				.then(newJob => {
 					onInterval(JSON.parse(newJob));
 				})
 				.catch(() => {
@@ -40,71 +42,69 @@ function monitorRenderJob (renderJob, onFinish) {
 	};
 }
 
+module.exports = exports = Ext.define(
+	'NextThought.model.RenderableContentPackage',
+	{
+		extend: 'NextThought.model.ContentPackage',
 
-module.exports = exports = Ext.define('NextThought.model.RenderableContentPackage', {
-	extend: 'NextThought.model.ContentPackage',
+		mimeType: 'application/vnd.nextthought.renderablecontentpackage',
 
-	mimeType: 'application/vnd.nextthought.renderablecontentpackage',
+		isRenderableContentPackage: true,
 
-	isRenderableContentPackage: true,
+		fields: [
+			{ name: 'isPublished', type: 'bool' },
+			{ name: 'isRendered', type: 'bool' },
+			{ name: 'LatestRenderJob', type: 'auto' },
+		],
 
-	fields: [
-		{name: 'isPublished', type: 'bool'},
-		{name: 'isRendered', type: 'bool'},
-		{name: 'LatestRenderJob', type: 'auto'}
-	],
+		constructor() {
+			this.callParent(arguments);
 
+			wait().then(() => this.startMonitor());
+		},
 
-	constructor () {
-		this.callParent(arguments);
+		onSync(record) {
+			record.stopMonitor();
+			this.startMonitor();
+		},
 
-		wait()
-			.then(() => this.startMonitor());
-	},
+		shouldAllowTocLoad() {
+			return this.isRendered();
+		},
 
+		stopMonitor() {
+			if (this.__stopMonitor) {
+				this.__stopMonitor();
+			}
+		},
 
-	onSync (record) {
-		record.stopMonitor();
-		this.startMonitor();
-	},
+		startMonitor() {
+			const renderJob = this.get('LatestRenderJob');
 
+			if (renderJob && renderJob.State === PENDING) {
+				this.__stopMonitor = monitorRenderJob(
+					this.get('LatestRenderJob'),
+					(status, job) => {
+						this.set('index', job.index);
+						this.set('index_jsonp', job.index_jsonp);
 
-	shouldAllowTocLoad () {
-		return this.isRendered();
-	},
+						this.LatestRenderJobStatus = status;
+						this.fireEvent('update');
 
+						if (this.__onRenderFinish) {
+							this.__onRenderFinish();
+						}
+					}
+				);
+			}
+		},
 
-	stopMonitor () {
-		if (this.__stopMonitor) {
-			this.__stopMonitor();
-		}
-	},
+		isRendered() {
+			return (
+				this.get('isRendered') || this.LatestRenderJobStatus === SUCCESS
+			);
+		},
 
-
-	startMonitor () {
-		const renderJob = this.get('LatestRenderJob');
-
-		if (renderJob && renderJob.State === PENDING) {
-			this.__stopMonitor = monitorRenderJob(this.get('LatestRenderJob'), (status, job) => {
-				this.set('index', job.index);
-				this.set('index_jsonp', job.index_jsonp);
-
-				this.LatestRenderJobStatus = status;
-				this.fireEvent('update');
-
-				if (this.__onRenderFinish) {
-					this.__onRenderFinish();
-				}
-			});
-		}
-	},
-
-
-	isRendered () {
-		return this.get('isRendered') || this.LatestRenderJobStatus === SUCCESS;
-	},
-
-
-	__setImage () {}
-});
-
+		__setImage() {},
+	}
+);

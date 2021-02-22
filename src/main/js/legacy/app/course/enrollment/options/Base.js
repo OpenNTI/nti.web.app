@@ -1,25 +1,30 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
-module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.Base', {
-	NAME: '', //the name of the option
+module.exports = exports = Ext.define(
+	'NextThought.app.course.enrollment.options.Base',
+	{
+		NAME: '', //the name of the option
 
-	EnrolledWordingKey: '',//key to pass to get string to get Enrolled wording
+		EnrolledWordingKey: '', //key to pass to get string to get Enrolled wording
 
-	/**
-	 * get the enrolled wording for this option if we haven't already
-	 * @returns {string} the wording for this option
-	 */
-	getEnrolledWording: function () {
-		if (!this.EnrolledWordingKey) { return ''; }
+		/**
+		 * get the enrolled wording for this option if we haven't already
+		 * @returns {string} the wording for this option
+		 */
+		getEnrolledWording: function () {
+			if (!this.EnrolledWordingKey) {
+				return '';
+			}
 
-		this.EnrolledWording = this.EnrolledWording || getString(this.EnrolledWordingKey);
+			this.EnrolledWording =
+				this.EnrolledWording || getString(this.EnrolledWordingKey);
 
-		return this.EnrolledWording;
-	},
+			return this.EnrolledWording;
+		},
 
-	/*
+		/*
 	Enrollment steps are object that contain info about which views/forms users need to fill out before
 		they are enrolled in a course.
 
@@ -40,100 +45,106 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 	 */
 
-	__stepTpl: {
-		xtype: '',
-		name: '',
-		enrollmentOption: {},
-		isActive: false,
-		isComplete: function () {},
-		comlete: function () {},
-		done: function (cmp) {
-			cmp.fireEvent('step-completed');
+		__stepTpl: {
+			xtype: '',
+			name: '',
+			enrollmentOption: {},
+			isActive: false,
+			isComplete: function () {},
+			comlete: function () {},
+			done: function (cmp) {
+				cmp.fireEvent('step-completed');
+			},
+			error: function (cmp) {
+				cmp.fireEvent('step-error');
+			},
 		},
-		error: function (cmp) {
-			cmp.fireEvent('step-error');
-		}
-	},
 
-	//make sure the steps have all the functions that need to be on there
-	__addStep: function (cfg, steps) {
-		steps.push(Ext.applyIf(cfg, this.__stepTpl));
-	},
+		//make sure the steps have all the functions that need to be on there
+		__addStep: function (cfg, steps) {
+			steps.push(Ext.applyIf(cfg, this.__stepTpl));
+		},
 
+		buildEnrollmentSteps: function (course) {},
 
-	buildEnrollmentSteps: function (course) {},
+		/**
+		 * The wording to present to the user for how state this enrollment option is in for the enrollment card.
+		 * Each state looks like, no fields are implicitly required here required means the ui
+		 * could look weird with out it
+		 *
+		 * {
+		 *		title: String, //required, short description of what this state is
+		 *		information: String, //required, longer description of the state, present some options to the user
+		 *		warning: String, //red text below the information, ex cutoff for picking this option
+		 *		drop: String, //text about how to drop this option
+		 *		cls: String, //cls to add the card, we have styles for enrolled, checkbox, pending, rejected, and down
+		 *		links: Array, //a list of links to show on this action,
+		 *		buttonText: String, //text to show in the button with this option is active
+		 * }
+		 *
+		 * @type {Object}
+		 */
+		ENROLLMENT_STATES: null,
 
+		/**
+		 * if we haven't gotten this.ENROLLMENT_STATES get the string and get the value for this enrollment option
+		 * @param  {string} state the state to get strings for
+		 * @returns {Object}		  the different wordings for this state
+		 */
+		getEnrollmentState: function (state) {
+			var def = this.DefaultStrings || {};
 
-	/**
-	 * The wording to present to the user for how state this enrollment option is in for the enrollment card.
-	 * Each state looks like, no fields are implicitly required here required means the ui
-	 * could look weird with out it
-	 *
-	 * {
-	 *		title: String, //required, short description of what this state is
-	 *		information: String, //required, longer description of the state, present some options to the user
-	 *		warning: String, //red text below the information, ex cutoff for picking this option
-	 *		drop: String, //text about how to drop this option
-	 *		cls: String, //cls to add the card, we have styles for enrolled, checkbox, pending, rejected, and down
-	 *		links: Array, //a list of links to show on this action,
-	 *		buttonText: String, //text to show in the button with this option is active
-	 * }
-	 *
-	 * @type {Object}
-	 */
-	ENROLLMENT_STATES: null,
+			this.ENROLLMENT_STATES =
+				this.ENROLLMENT_STATES ||
+				getString('EnrollmentText')[this.NAME] ||
+				def;
 
+			return this.ENROLLMENT_STATES
+				? this.ENROLLMENT_STATES[state] || def[state]
+				: {};
+		},
 
-	/**
-	 * if we haven't gotten this.ENROLLMENT_STATES get the string and get the value for this enrollment option
-	 * @param  {string} state the state to get strings for
-	 * @returns {Object}		  the different wordings for this state
-	 */
-	getEnrollmentState: function (state) {
-		var def = this.DefaultStrings || {};
+		DateFormat: 'F j, g:i A T',
 
-		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME] || def;
+		getWording: function (state, data) {
+			var text = this.getEnrollmentState(state),
+				prop,
+				key;
 
-		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] || def[state] : {};
-	},
+			if (!text) {
+				console.error('No enrollment state defined', this.NAME, state);
+				return {};
+			}
 
-	DateFormat: 'F j, g:i A T',
+			text = Ext.clone(text);
 
-	getWording: function (state, data) {
-		var text = this.getEnrollmentState(state),
-			prop, key;
+			for (prop in data) {
+				if (data.hasOwnProperty(prop)) {
+					key = '{' + prop + '}';
+					text.information = text.information.replace(
+						key,
+						data[prop]
+					);
+					text.title = text.title.replace(key, data[prop]);
 
-		if (!text) {
-			console.error('No enrollment state defined', this.NAME, state);
-			return {};
-		}
+					if (text.warning) {
+						text.warning = text.warning.replace(key, data[prop]);
+					}
 
-		text = Ext.clone(text);
-
-		for (prop in data) {
-			if (data.hasOwnProperty(prop)) {
-				key = '{' + prop + '}';
-				text.information = text.information.replace(key, data[prop]);
-				text.title = text.title.replace(key, data[prop]);
-
-				if (text.warning) {
-					text.warning = text.warning.replace(key, data[prop]);
-				}
-
-				if (text.drop) {
-					text.drop = text.drop.replace(key, data[prop]);
+					if (text.drop) {
+						text.drop = text.drop.replace(key, data[prop]);
+					}
 				}
 			}
-		}
 
-		return text;
-	},
+			return text;
+		},
 
-	__getEnrollmentText: function (course, option) {
-		// var details = this.__getOptionDetails(course, option);
-	},
+		__getEnrollmentText: function (course, option) {
+			// var details = this.__getOptionDetails(course, option);
+		},
 
-	/*
+		/*
 		Enrollment details for the option have the following information
 		{
 			Name: String, // the name of the option
@@ -146,25 +157,26 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 	 */
 
-	/**
-	 * Parse out all the information needed to build the enrollment text
-	 * @param  {Object} course	details about the course
-	 * @param  {Object} option details about the option
-	 * @returns {Object}			parsed details
-	 */
-	__getOptionDetails: function (course, option) {},
+		/**
+		 * Parse out all the information needed to build the enrollment text
+		 * @param  {Object} course	details about the course
+		 * @param  {Object} option details about the option
+		 * @returns {Object}			parsed details
+		 */
+		__getOptionDetails: function (course, option) {},
 
-	/**
-	 * Returns an object
-	 *
-	 *	{
-	 *		loaded: Promise that fulfills with all the course data
-	 *		IsEnrlled: Boolean if they are enrolled in that option
-	 *	}
-	 *
-	 * @param {CourseCatalogEnrty} course the course we are looking at
-	 * @param {Object} details parsed enrollment details for the course
-	 * @returns {Object} -
-	 */
-	buildEnrollmentDetails: function (course, details) {}
-});
+		/**
+		 * Returns an object
+		 *
+		 *	{
+		 *		loaded: Promise that fulfills with all the course data
+		 *		IsEnrlled: Boolean if they are enrolled in that option
+		 *	}
+		 *
+		 * @param {CourseCatalogEnrty} course the course we are looking at
+		 * @param {Object} details parsed enrollment details for the course
+		 * @returns {Object} -
+		 */
+		buildEnrollmentDetails: function (course, details) {},
+	}
+);

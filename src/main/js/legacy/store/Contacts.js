@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
-const {isMe} = require('legacy/util/Globals');
+const { isMe } = require('legacy/util/Globals');
 const ChatStateStore = require('legacy/app/chat/StateStore');
-const lazy = require('legacy/util/lazy-require')
-	.get('GroupsStateStore', ()=> require('legacy/app/groups/StateStore'));
-
+const lazy = require('legacy/util/lazy-require').get('GroupsStateStore', () =>
+	require('legacy/app/groups/StateStore')
+);
 
 module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	extend: 'Ext.data.Store',
@@ -21,10 +21,11 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		{
 			property: 'displayName',
 			direction: 'ASC',
-			transform: function (value) { return value && value.toLowerCase(); }
-		}
+			transform: function (value) {
+				return value && value.toLowerCase();
+			},
+		},
 	],
-
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -36,16 +37,15 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 			'contacts-added': this.addContacts.bind(this),
 			'contacts-removed': this.removeContacts.bind(this),
 			'contacts-refreshed': this.refreshContacts.bind(this),
-			'load': this.friendsListStoreLoad.bind(this)
+			load: this.friendsListStoreLoad.bind(this),
 		});
 
 		if (this.trackPresence) {
 			this.mon(this.ChatStore, {
-				'presence-changed': this.onPresenceChange.bind(this)
+				'presence-changed': this.onPresenceChange.bind(this),
 			});
 		}
 	},
-
 
 	friendsListStoreLoad: function (store, records) {
 		this.parentLoaded = true;
@@ -53,10 +53,14 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	},
 
 	onPresenceChange: function (username, rec) {
-		if (!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))) {
+		if (
+			!rec.isPresenceInfo ||
+			(this.flStore && !this.flStore.isContact(username))
+		) {
 			return;
 		}
-		var fn = rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
+		var fn =
+			rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
 		this[fn]([username]);
 	},
 
@@ -65,9 +69,13 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	},
 
 	indexOfId: function (id) {
-		return (this.snapshot || this.data).findIndexBy(function (rec) {
-			return rec.isEqual(rec.get('Username'), id);
-		}, this, 0);
+		return (this.snapshot || this.data).findIndexBy(
+			function (rec) {
+				return rec.isEqual(rec.get('Username'), id);
+			},
+			this,
+			0
+		);
 	},
 
 	doesItemPassFilter: function (item) {
@@ -84,10 +92,15 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	},
 
 	addContacts: function (contacts) {
-		var toAdd = [], me = this;
+		var toAdd = [],
+			me = this;
 		UserRepository.getUser(contacts, function (users) {
 			Ext.each(users, function (user) {
-				if (!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())) {
+				if (
+					!isMe(user) &&
+					me.doesItemPassFilter(user) &&
+					!me.contains(user.getId())
+				) {
 					toAdd.push(user);
 				}
 			});
@@ -98,7 +111,8 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	},
 
 	removeContacts: function (contacts) {
-		var toRemove = [], me = this;
+		var toRemove = [],
+			me = this;
 		Ext.each(contacts, function (contact) {
 			var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
 			if (idx >= 0) {
@@ -114,5 +128,5 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		//TODO smarter merge here
 		this.removeAll();
 		this.addContacts(listStore.getContacts());
-	}
+	},
 });

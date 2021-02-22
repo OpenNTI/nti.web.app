@@ -1,9 +1,10 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const StoreUtils = require('legacy/util/Store');
 const LoginStateStore = require('legacy/login/StateStore');
 
@@ -13,7 +14,7 @@ const StoreStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
 
-const {getURL} = Globals;
+const { getURL } = Globals;
 
 module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -29,43 +30,47 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	},
 
 	loadPurchasables: function () {
-		return this.LoginStore.getService()
-			.then((service) => {
-				const collection = service && service.getCollection('store', 'store');
-				const link = collection && service.getLinkFrom(collection.Links, 'get_purchasables');
+		return this.LoginStore.getService().then(service => {
+			const collection =
+				service && service.getCollection('store', 'store');
+			const link =
+				collection &&
+				service.getLinkFrom(collection.Links, 'get_purchasables');
 
+			if (!link) {
+				return;
+			}
 
-				if (!link) { return; }
+			this.Store.setLoading();
 
-				this.Store.setLoading();
-
-				StoreUtils.loadItems(getURL(link))
-					.then(this.__updateLibraryWithPurchasables.bind(this))
-					.then(x => this.Store.setPurchasables(x))
-					.then(x => this.Store.setLoaded());
-			});
+			StoreUtils.loadItems(getURL(link))
+				.then(this.__updateLibraryWithPurchasables.bind(this))
+				.then(x => this.Store.setPurchasables(x))
+				.then(x => this.Store.setLoaded());
+		});
 	},
 
 	__updateLibraryWithPurchasables: function (items) {
 		var library = this.ContentStore;
 
-		return library.onceLoaded()
-			.then(() => {
-				(items || []).forEach(function (p) {
-					(p.get('Items') || []).forEach(function (itemId) {
-						var title = library.getTitle(itemId);
+		return library.onceLoaded().then(() => {
+			(items || []).forEach(function (p) {
+				(p.get('Items') || []).forEach(function (itemId) {
+					var title = library.getTitle(itemId);
 
-						if (title) {
-							title.set('sample', !p.get('Activated'));
-						}
-						else {
-							console.debug('This purchasable item is not in the library:', itemId);
-						}
-					});
+					if (title) {
+						title.set('sample', !p.get('Activated'));
+					} else {
+						console.debug(
+							'This purchasable item is not in the library:',
+							itemId
+						);
+					}
 				});
-
-				return items;
 			});
+
+			return items;
+		});
 	},
 
 	/**
@@ -78,7 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} failure -
 	 * @returns {void}
 	 */
-	createEnrollmentPurchase: function (sender, desc, cardinfo, success, failure) {
+	createEnrollmentPurchase: function (
+		sender,
+		desc,
+		cardinfo,
+		success,
+		failure
+	) {
 		let tokenObject;
 
 		if (sender.lockPurchaseAction) {
@@ -88,12 +99,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		sender.lockPurchaseAction = true;
 
-		function onPriced (pricing) {
+		function onPriced(pricing) {
 			delete sender.lockPurchaseAction;
-			success.call(null, {pricing, tokenObject});
+			success.call(null, { pricing, tokenObject });
 		}
 
-		function onFail (reason) {
+		function onFail(reason) {
 			delete sender.lockPurchaseAction;
 			failure.call(null, reason);
 		}
@@ -103,22 +114,31 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				onFail({
 					Type: 'FormError',
 					Message: 'Invalid Email',
-					field: 'from'
+					field: 'from',
 				});
 			} else if (desc.receiver && !Globals.isEmail(desc.receiver)) {
 				onFail({
 					Type: 'FormError',
 					Message: 'Invalid Email',
-					field: 'receiver'
+					field: 'receiver',
 				});
 			} else {
-				cardinfo.creditCard.createToken(cardinfo)
-					.then((token) => {
+				cardinfo.creditCard
+					.createToken(cardinfo)
+					.then(token => {
 						tokenObject = token;
-						this.priceEnrollmentPurchase(this, desc, onPriced, onFail);
+						this.priceEnrollmentPurchase(
+							this,
+							desc,
+							onPriced,
+							onFail
+						);
 					})
-					.catch((reason) => {
-						console.error('An error occurred during the token generation for purchasable', reason);
+					.catch(reason => {
+						console.error(
+							'An error occurred during the token generation for purchasable',
+							reason
+						);
 						onFail(reason);
 					});
 			}
@@ -209,7 +229,10 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			pricingLink = purchasable && purchasable.getLink('pricing');
 
 		if (!pricingLink) {
-			console.error('Must supply a purchasable with a pricing link', arguments);
+			console.error(
+				'Must supply a purchasable with a pricing link',
+				arguments
+			);
 			Ext.Error.raise('Must supply a purchasable');
 		}
 
@@ -270,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			jsonData: data,
 			method: 'POST',
 			scope: this,
-			callback: callback
+			callback: callback,
 		});
 	},
 
@@ -278,14 +301,22 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		return Service.post(url, data);
 	},
 
-	__attemptPurchase: function (purchaseDescription, tokenObject, expectedPrice, linkName) {
+	__attemptPurchase: function (
+		purchaseDescription,
+		tokenObject,
+		expectedPrice,
+		linkName
+	) {
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = tokenObject.id,
 			url = purchasable && purchasable.getLink(linkName),
 			data;
 
 		if (!purchasable || !tokenId) {
-			console.error('Invalid arugments supplied to submit purchase', arguments);
+			console.error(
+				'Invalid arugments supplied to submit purchase',
+				arguments
+			);
 			return Promise.reject();
 		}
 
@@ -298,8 +329,8 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			token: tokenId,
 			purchasableID: purchasable.getId(),
 			context: {
-				AllowVendorUpdates: purchaseDescription.subscribe
-			}
+				AllowVendorUpdates: purchaseDescription.subscribe,
+			},
 		};
 
 		if (purchaseDescription.sender !== undefined) {
@@ -338,8 +369,9 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			data.expectedAmount = expectedPrice;
 		}
 
-		return Service.post(url, data)
-			.then(this.__parsePurchaseAttempt.bind(this));
+		return Service.post(url, data).then(
+			this.__parsePurchaseAttempt.bind(this)
+		);
 	},
 
 	__parsePurchaseAttempt: function (response) {
@@ -360,20 +392,21 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 	__pollPurchaseAttempt: function (purchaseAttempt) {
 		var me = this,
-			startedPollingAt = (new Date()).getTime(),
+			startedPollingAt = new Date().getTime(),
 			maxWaitInMillis = 2 * 60 * 1000, //2 minutes
 			pollingIntervalInMillis = 5 * 1000; //5 seconds
 
-		function poll (attempt) {
+		function poll(attempt) {
 			var url = attempt.getLink('get_purchase_attempt');
 
-			return Service.request(url)
-				.then(me.__parsePurchaseAttempt.bind(me));
+			return Service.request(url).then(
+				me.__parsePurchaseAttempt.bind(me)
+			);
 		}
 
 		return new Promise(function (fulfill, reject) {
-			function process (delay, attempt) {
-				var now = (new Date()).getTime();
+			function process(delay, attempt) {
+				var now = new Date().getTime();
 
 				if (attempt && attempt.isComplete()) {
 					if (attempt.isSuccess()) {
@@ -412,31 +445,46 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} failure failure callback
 	 * @returns {void}
 	 */
-	submitEnrollmentPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+	submitEnrollmentPurchase: function (
+		sender,
+		purchaseDescription,
+		tokenObject,
+		pricingInfo,
+		success,
+		failure
+	) {
 		var me = this;
 
 		if (sender.lockPurchaseAction) {
-			console.error('window already locked aborting submitEnrollmentPurchase', arguments);
+			console.error(
+				'window already locked aborting submitEnrollmentPurchase',
+				arguments
+			);
 			failure.call(null, {
-				Message: 'Purchase already in progress'
+				Message: 'Purchase already in progress',
 			});
 			return;
 		}
 
 		sender.lockPurchaseAction = true;
 
-		function done () {
+		function done() {
 			delete sender.lockPurchaseAction;
 		}
 
-		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'purchase')
+		me.__attemptPurchase(
+			purchaseDescription,
+			tokenObject,
+			pricingInfo.get('PurchasePrice'),
+			'purchase'
+		)
 			.then(me.__pollPurchaseAttempt.bind(me))
 			.then(function (attempt) {
 				done();
 
 				success.call(null, {
 					Message: 'Purchase attempt success',
-					purchaseAttempt: attempt
+					purchaseAttempt: attempt,
 				});
 			})
 			.catch(function (attempt) {
@@ -445,12 +493,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				if (attempt && attempt.isPurchaseAttempt) {
 					failure.call(null, {
 						Message: 'Purchase attempt failed',
-						purchaseAttempt: attempt
+						purchaseAttempt: attempt,
 					});
 				} else {
 					failure.call(null, {
 						Message: '',
-						tokenObject: tokenObject
+						tokenObject: tokenObject,
 					});
 				}
 			});
@@ -467,31 +515,46 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} failure failure callback
 	 * @returns {void}
 	 */
-	submitGiftPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+	submitGiftPurchase: function (
+		sender,
+		purchaseDescription,
+		tokenObject,
+		pricingInfo,
+		success,
+		failure
+	) {
 		var me = this;
 
 		if (sender.lockPurchaseAction) {
-			console.error('window already locked aborting submitGirfPurchase', arguments);
+			console.error(
+				'window already locked aborting submitGirfPurchase',
+				arguments
+			);
 			failure.call(null, {
-				Message: 'Purchase already in progress'
+				Message: 'Purchase already in progress',
 			});
 			return;
 		}
 
 		sender.lockPurchaseAction = true;
 
-		function done () {
+		function done() {
 			delete sender.lockPurchaseAction;
 		}
 
-		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'gift_stripe_payment')
+		me.__attemptPurchase(
+			purchaseDescription,
+			tokenObject,
+			pricingInfo.get('PurchasePrice'),
+			'gift_stripe_payment'
+		)
 			.then(me.__pollPurchaseAttempt.bind(me))
 			.then(function (attempt) {
 				done();
 
 				success.call(null, {
 					Message: 'Purchase attempt success',
-					purchaseAttempt: attempt
+					purchaseAttempt: attempt,
 				});
 			})
 			.catch(function (attempt) {
@@ -500,12 +563,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				if (attempt && attempt.isPurchaseAttempt) {
 					failure.call(null, {
 						Message: 'Purchase attempt failed',
-						purchaseAttempt: attempt
+						purchaseAttempt: attempt,
 					});
 				} else {
 					failure.call(null, {
 						Message: '',
-						tokenObject: tokenObject
+						tokenObject: tokenObject,
 					});
 				}
 			});
@@ -522,11 +585,22 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param  {Function} failure	failure callback
 	 * @returns {void}
 	 */
-	redeemGift: function (sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
+	redeemGift: function (
+		sender,
+		purchasable,
+		token,
+		allowVendorUpdates,
+		ntiid,
+		success,
+		failure
+	) {
 		var url = purchasable && purchasable.getLink('redeem_gift');
 
 		if (sender.lockPurchaseAction) {
-			console.error('Window already locked aborting redeem gift', arguments);
+			console.error(
+				'Window already locked aborting redeem gift',
+				arguments
+			);
 			failure.call();
 			return;
 		}
@@ -539,14 +613,14 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		sender.lockPurchaseAction = true;
 
-		function done () {
+		function done() {
 			delete sender.lockPurchaseAction;
 		}
 
 		Service.post(url, {
 			code: token,
 			AllowVendorUpdates: allowVendorUpdates,
-			NTIID: ntiid
+			NTIID: ntiid,
 		})
 			.then(function (response) {
 				var courseInstance = lazy.ParseUtils.parseItems(response)[0];
@@ -561,11 +635,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 				if (!json) {
 					json = {
-						Message: 'An unknown error occurred. Please try again later.'
+						Message:
+							'An unknown error occurred. Please try again later.',
 					};
 				}
 
 				failure.call(null, json);
 			});
-	}
+	},
 });

@@ -4,21 +4,16 @@ const AnalyticsUtil = require('legacy/util/Analytics');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.BaseProgress', {
 	extend: 'NextThought.model.Base',
 
-	fields: [
-		{name: 'Items', type: 'auto'}
-	],
-
+	fields: [{ name: 'Items', type: 'auto' }],
 
 	getProgress: function (id) {
 		var items = this.get('Items');
 
 		return items[id];
 	},
-
 
 	hasBeenViewed: function (id) {
 		var progress = this.getProgress(id),
@@ -29,5 +24,5 @@ module.exports = exports = Ext.define('NextThought.model.BaseProgress', {
 		}
 
 		return hasBeenViewed;
-	}
+	},
 });

@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .course-resources-reading-list-item {
 	display: flex;
@@ -43,7 +43,8 @@
 		}
 	}
 
-	.published, .modified {
+	.published,
+	.modified {
 		flex: 0 0 150px;
 		color: var(--tertiary-grey);
 		font-size: 0.875rem;

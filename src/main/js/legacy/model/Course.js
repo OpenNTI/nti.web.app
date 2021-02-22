@@ -21,15 +21,26 @@ module.exports = exports = Ext.define('NextThought.model.Course', {
 		{ name: 'Items', type: 'auto', persist: false },
 		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
 		{ name: 'StartDate', type: 'ISODate', persist: false },
-		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
-		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function (v, r) {
-			return r && r.hasHistory();
-		}}
+		{
+			name: 'courseName',
+			type: 'string',
+			persist: false,
+			defaultValue: '',
+		},
+		{
+			name: 'HasHistory',
+			type: 'bool',
+			persist: false,
+			affectedBy: 'Last Modified',
+			convert: function (v, r) {
+				return r && r.hasHistory();
+			},
+		},
 	],
 
 	isCourse: true,
 
 	hasHistory: function () {
 		return Boolean(this.getLink('history'));
-	}
+	},
 });

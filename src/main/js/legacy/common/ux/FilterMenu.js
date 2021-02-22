@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 require('./FilterMenuItem');
 require('./SearchItem');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.filter-menupanel',
@@ -20,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		ui: 'nt',
 		xtype: 'filter-menu-item',
 		group: 'main-filter-group',
-		plain: true
+		plain: true,
 	},
 
 	searchPlaceHolderText: 'Search',
@@ -34,15 +33,18 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 	initComponent: function () {
 		this.callParent(arguments);
 		if (!Ext.isArray(this.filters)) {
-			console.warn('Need an array of filter menu item configs... blanking out filters list');
+			console.warn(
+				'Need an array of filter menu item configs... blanking out filters list'
+			);
 			this.filters = [];
 		}
 
-		this.add([].concat(
-			{ xtype: 'label', text: 'Display' },
-			this.filters,
-			{ xtype: 'search-menu-item', placeholder: this.searchPlaceHolderText }
-		));
+		this.add(
+			[].concat({ xtype: 'label', text: 'Display' }, this.filters, {
+				xtype: 'search-menu-item',
+				placeholder: this.searchPlaceHolderText,
+			})
+		);
 
 		this.search = this.down('search-menu-item');
 		this.search.enableBubble('commit', 'changed');
@@ -50,14 +52,15 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		this.on({
 			buffer: 10,
 			commit: 'onSearch',
-			changed: 'onSearch'
+			changed: 'onSearch',
 		});
 
-		this.on({commit: 'hide', checkchange: 'onFilter'});
+		this.on({ commit: 'hide', checkchange: 'onFilter' });
 	},
 
 	setState: function (filter, search) {
-		var item = this.down('[filter="' + filter + '"]') || this.down('[filter]');
+		var item =
+			this.down('[filter="' + filter + '"]') || this.down('[filter]');
 
 		if (item) {
 			if (!item.setChecked) {
@@ -89,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 
 	getFilterLabel: function (count) {
 		var search = this.search && this.search.getValue(),
-			item = this.down('menuitem[checked]') || {text: ''},
+			item = this.down('menuitem[checked]') || { text: '' },
 			prefix = item.text;
 
 		if (search) {
@@ -97,5 +100,5 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		}
 
 		return Ext.String.format('{0} ({1})', prefix, count || item.count || 0);
-	}
+	},
 });

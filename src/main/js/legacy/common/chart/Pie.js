@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
 module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	extend: 'Ext.Component',
@@ -8,19 +7,33 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	ui: 'chart',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'canvas', id: '{id}-canvasEl'},
-		{id: '{id}-titleEl', cls: 'label title', html: '{title}'},
-		{id: '{id}-legendEl', tag: 'ul', cls: 'legend'}
+		{ tag: 'canvas', id: '{id}-canvasEl' },
+		{ id: '{id}-titleEl', cls: 'label title', html: '{title}' },
+		{ id: '{id}-legendEl', tag: 'ul', cls: 'legend' },
 	]),
 
 	childEls: ['canvasEl', 'titleEl', 'legendEl'],
 
-	legendary: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ tag: 'tpl', 'for': 'series', cn: [
-			{ tag: 'li', cls: 'series label', html: '{label}', style: {color: '{color}'}, 'data-value': '{percent}', 'data-sub': '{sub}', 'data-qtip': '{sub}'}
-		]},
-		{ tag: 'li', cls: 'total label', html: 'Total: {total}' }
-	])),
+	legendary: new Ext.XTemplate(
+		Ext.DomHelper.markup([
+			{
+				tag: 'tpl',
+				for: 'series',
+				cn: [
+					{
+						tag: 'li',
+						cls: 'series label',
+						html: '{label}',
+						style: { color: '{color}' },
+						'data-value': '{percent}',
+						'data-sub': '{sub}',
+						'data-qtip': '{sub}',
+					},
+				],
+			},
+			{ tag: 'li', cls: 'total label', html: 'Total: {total}' },
+		])
+	),
 
 	config: {
 		title: '',
@@ -30,42 +43,41 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 			// {value: 12, label: 'foo'},
 			// {value: 30, label: 'bar'},
 			// {value: 23, label: 'baz'}
-		]
+		],
 	},
-
-
 
 	updateSeries: function (value) {
 		const sum = (a, v) => a + v.value;
 		const total = value && value.reduce && value.reduce(sum, 0);
 		const colors = this.colors;
 
-		const percent = (v) => total === 0 ? 0 : v.value / total;
+		const percent = v => (total === 0 ? 0 : v.value / total);
 
-		function str (p, i) {
+		function str(p, i) {
 			return {
 				percent: (p * 100).toFixed(0),
 				label: value[i].label,
 				color: colors[i % colors.length],
-				sub: value[i].value
+				sub: value[i].value,
 			};
 		}
 
 		this.data = (value && value.map && value.map(percent)) || [];
 
 		if (this.rendered) {
-			this.legendary.overwrite(this.legendEl, {total: total, series: this.data.map(str)});
+			this.legendary.overwrite(this.legendEl, {
+				total: total,
+				series: this.data.map(str),
+			});
 			this.redraw();
 		}
 	},
-
 
 	beforeRender: function () {
 		this.addCls('pie');
 		this.callParent(arguments);
 		this.renderData.title = this.getTitle();
 	},
-
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -82,30 +94,30 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 		this.updateSeries(this.getSeries());
 	},
 
-
 	redraw: function () {
-		if (!this.context) {return;}
+		if (!this.context) {
+			return;
+		}
 		this.context.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawPie();
 	},
 
-
-	percentToRadians: function (percent) { return ((percent * 360) * Math.PI) / 180; },
-
+	percentToRadians: function (percent) {
+		return (percent * 360 * Math.PI) / 180;
+	},
 
 	sumTo: function (i) {
-		var sum = 0, j = 0;
+		var sum = 0,
+			j = 0;
 		for (j; j < i; j++) {
 			sum += this.data[j];
 		}
 		return sum;
 	},
 
-
 	drawSegment: function (i) {
 		var ctx = this.context,
 			radius = Math.floor(this.canvas.width / 4),
-
 			startingAngle = this.percentToRadians(this.sumTo(i)),
 			arcSize = this.percentToRadians(this.data[i]),
 			endingAngle = startingAngle + arcSize,
@@ -115,8 +127,10 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 
 		ctx.beginPath();
 
-		ctx.moveTo(endingRadius * Math.cos(startingAngle),
-			endingRadius * Math.sin(startingAngle));
+		ctx.moveTo(
+			endingRadius * Math.cos(startingAngle),
+			endingRadius * Math.sin(startingAngle)
+		);
 
 		ctx.arc(0, 0, radius, startingAngle, endingAngle, false);
 		ctx.arc(0, 0, radius * 0.5, endingAngle, startingAngle, true);
@@ -134,12 +148,12 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 		ctx.restore();
 	},
 
-
 	drawPie: function () {
 		var ctx = this.context,
 			centerX = this.canvas.width / 2,
 			centerY = this.canvas.height / 2 - 10,
-			len = this.data.length, i = 0;
+			len = this.data.length,
+			i = 0;
 
 		ctx.save();
 		try {
@@ -157,10 +171,8 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 			for (i; i < len; i++) {
 				this.drawSegment(i);
 			}
-
-
 		} finally {
 			ctx.restore();
 		}
-	}
+	},
 });

@@ -3,21 +3,20 @@ const Ext = require('@nti/extjs');
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
 
-
 module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.nti.roster',
 
-	timeout: 3600000,//hour
+	timeout: 3600000, //hour
 	appendId: false,
 
 	headers: {
-		'Accept': 'application/vnd.nextthought.collection+json',
-		'Content-Type': 'application/json'
+		Accept: 'application/vnd.nextthought.collection+json',
+		'Content-Type': 'application/json',
 	},
 
 	reader: {
-		totalProperty: (data) => {
+		totalProperty: data => {
 			return data.FilteredTotalItemCount || data.TotalItemCount;
 		},
 		type: 'json',
@@ -25,7 +24,9 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 		readRecords: function () {
 			var data = this.self.prototype.readRecords.apply(this, arguments),
 				list = (data && data.records) || [],
-				i = list.length - 1, o, u;
+				i = list.length - 1,
+				o,
+				u;
 
 			for (i; i >= 0; i--) {
 				o = list[i] && list[i].raw;
@@ -37,8 +38,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 			}
 
 			return data;
-		}
-
+		},
 	},
 
 	noCache: false,
@@ -55,15 +55,14 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	startParam: 'batchStart',
 	limitParam: 'batchSize',
 
-
 	setSource: function (source) {
 		//ForCredit, or Open
 		this.source = source;
 	},
 
-
-	setURL: function (url) { this.url = url; },
-
+	setURL: function (url) {
+		this.url = url;
+	},
 
 	buildUrl: function (request) {
 		var p = request.params;
@@ -76,7 +75,10 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 			const filters = p.filter;
 			delete p.filter;
 			Ext.decode(filters).forEach(filter => {
-				if (filter.property === 'LegacyEnrollmentStatus' && filter.value !== '*') {
+				if (
+					filter.property === 'LegacyEnrollmentStatus' &&
+					filter.value !== '*'
+				) {
 					p.filter = filter.property + filter.value;
 				} else if (filter.property === 'usernameSearchTerm') {
 					p.usernameSearchTerm = filter.value;
@@ -87,21 +89,24 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 		if (p && p.sort) {
 			const dir = {
 				asc: 'ascending',
-				desc: 'descending'
+				desc: 'descending',
 			};
 			const sort = Ext.decode(p.sort)[0];
 			p.sortOn = sort.property;
-			p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
+			p.sortOrder =
+				dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
 			delete p.sort;
 		}
-
 
 		if (this.source === '*') {
 			return this.url;
 		}
 
-		return Ext.String.urlAppend(this.url, Ext.Object.toQueryString({
-			filter: 'LegacyEnrollmentStatus' + (this.source || 'ForCredit')
-		}));
-	}
+		return Ext.String.urlAppend(
+			this.url,
+			Ext.Object.toQueryString({
+				filter: 'LegacyEnrollmentStatus' + (this.source || 'ForCredit'),
+			})
+		);
+	},
 });

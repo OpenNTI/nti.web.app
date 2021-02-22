@@ -9,67 +9,87 @@ const DEFAULT = 'Default';
 const REQUIRED = 'Required';
 const OPTIONAL = 'Optional';
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.typeswitcher.Switcher', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.outline-editing-type-switcher',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.typeswitcher.Switcher',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+		alias: 'widget.outline-editing-type-switcher',
 
-	title: 'Pick New Type',
+		title: 'Pick New Type',
 
-	initComponent () {
-		this.callParent(arguments);
+		initComponent() {
+			this.callParent(arguments);
 
-		const index = this.parentRecord && this.parentRecord.indexOfId(this.record.getId());
+			const index =
+				this.parentRecord &&
+				this.parentRecord.indexOfId(this.record.getId());
 
-		this.lockedPosition = {
-			parentRecord: this.parentRecord,
-			index: index
-		};
-	},
+			this.lockedPosition = {
+				parentRecord: this.parentRecord,
+				index: index,
+			};
+		},
 
+		getTypes() {
+			const types = this.group ? this.group.getTypes() : [];
+			const { record } = this;
 
-	getTypes () {
-		const types = this.group ? this.group.getTypes() : [];
-		const {record} = this;
+			//Filter out the editor for the current type
+			return types.filter(type => {
+				const { editor } = type;
 
-		//Filter out the editor for the current type
-		return types.filter((type) => {
-			const {editor} = type;
+				return editor && !editor.getEditorForRecord(record);
+			});
+		},
 
-			return editor && !editor.getEditorForRecord(record);
-		});
-	},
+		onSave() {
+			const doSave = this.callParent(arguments);
 
-
-	onSave () {
-		const doSave = this.callParent(arguments);
-
-		return doSave
-			.then((result) => {
+			return doSave.then(result => {
 				return this.removeOldRecord()
-					.then(() => result, () => result)
+					.then(
+						() => result,
+						() => result
+					)
 					.then(() => {
 						// if not a completable course, just return result
-						if(!this.bundle || !this.bundle.get('CompletionPolicy')) {
+						if (
+							!this.bundle ||
+							!this.bundle.get('CompletionPolicy')
+						) {
 							return result;
 						}
 
 						// apply require status
-						const basedOnDefault = this.record.get('IsCompletionDefaultState');
-						const isRequired = this.record.get('CompletionRequired');
-						const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+						const basedOnDefault = this.record.get(
+							'IsCompletionDefaultState'
+						);
+						const isRequired = this.record.get(
+							'CompletionRequired'
+						);
+						const requiredValue = basedOnDefault
+							? DEFAULT
+							: isRequired
+							? REQUIRED
+							: OPTIONAL;
 
 						const targetId = getTargetId(result);
-						return saveRequireStatus(this.bundle, targetId, requiredValue);
+						return saveRequireStatus(
+							this.bundle,
+							targetId,
+							requiredValue
+						);
 					});
 			});
-	},
+		},
 
+		removeOldRecord() {
+			if (this.parentRecord) {
+				return this.parentRecord.removeRecord(this.record);
+			}
 
-	removeOldRecord () {
-		if (this.parentRecord) {
-			return this.parentRecord.removeRecord(this.record);
-		}
-
-		return Promise.resolve();
+			return Promise.resolve();
+		},
 	}
-});
+);

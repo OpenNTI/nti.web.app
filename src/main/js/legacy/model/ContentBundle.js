@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'))
-	.get('ContentUtils', ()=> require('legacy/util/Content'));
-const {getURL} = require('legacy/util/Globals');
+	.get('ParseUtils', () => require('legacy/util/Parsing'))
+	.get('ContentUtils', () => require('legacy/util/Content'));
+const { getURL } = require('legacy/util/Globals');
 
 const ForumsBoard = require('./forums/Board');
 
@@ -15,7 +15,6 @@ require('./forums/ContentBoard');
 require('./ContentPackage');
 require('./RenderableContentPackage');
 
-
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	alternateClassName: 'NextThought.model.ContentPackageBundle',
 	extend: 'NextThought.model.Base',
@@ -23,29 +22,41 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		'application/vnd.nextthought.contentpackagebundle',
 		'application/vnd.nextthought.coursecontentpackagebundle',
 		'application/vnd.nextthought.contentbundle',
-		'application/vnd.nextthought.publishablecontentpackagebundle'
+		'application/vnd.nextthought.publishablecontentpackagebundle',
 	],
 
 	mixins: {
-		'BundleLike': 'NextThought.mixins.BundleLike',
-		'PresentationResources': 'NextThought.mixins.PresentationResources'
+		BundleLike: 'NextThought.mixins.BundleLike',
+		PresentationResources: 'NextThought.mixins.PresentationResources',
 	},
 
 	isBundle: true,
 
 	fields: [
 		{ name: 'ContentPackages', type: 'arrayItem' },
-		{ name: 'LegacyContentPackages', type: 'array', convert: (v, r) => {
-			return (r.get('ContentPackages') || []).filter(x => !x.isRenderableContentPackage);
-		}},
-		{ name: 'RenderableContentPackages', type: 'array', convert: (v, r) => {
-			return (r.get('ContentPackages') || []).filter(x => x.isRenderableContentPackage);
-		}},
+		{
+			name: 'LegacyContentPackages',
+			type: 'array',
+			convert: (v, r) => {
+				return (r.get('ContentPackages') || []).filter(
+					x => !x.isRenderableContentPackage
+				);
+			},
+		},
+		{
+			name: 'RenderableContentPackages',
+			type: 'array',
+			convert: (v, r) => {
+				return (r.get('ContentPackages') || []).filter(
+					x => x.isRenderableContentPackage
+				);
+			},
+		},
 		{ name: 'DCCreator', type: 'auto' },
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
 
-		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator'},
+		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator' },
 
 		{ name: 'PlatformPresentationResources', type: 'auto' },
 		{ name: 'contributors', type: 'auto' },
@@ -63,20 +74,30 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 		{ name: 'icon', type: 'string' },
 		{ name: 'thumb', type: 'string' },
-		{ name: 'background', type: 'string'},
-		{ name: 'vendorIcon', type: 'string'}
+		{ name: 'background', type: 'string' },
+		{ name: 'vendorIcon', type: 'string' },
 	],
 
 	statics: {
 		fromPackage: function (contentPackage) {
 			var id = contentPackage.get('NTIID') + '-auto-bundle',
-				reader = lazy.ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
-				data = Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw),
+				reader = lazy.ParseUtils.getReaderFor({
+					MimeType: 'application/vnd.nextthought.contentbundle',
+				}),
+				data = Ext.applyIf(
+					{ ContentPackages: [contentPackage], href: '/' },
+					contentPackage.raw
+				),
 				convertedValues,
-				record = this.create(undefined, id, data, convertedValues = {});
+				record = this.create(
+					undefined,
+					id,
+					data,
+					(convertedValues = {})
+				);
 			reader.convertRecordData(convertedValues, data, record);
 			return record;
-		}
+		},
 	},
 
 	constructor: function () {
@@ -101,17 +122,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			id: this.getId(),
 			isBundle: true,
 			title: this.get('title'),
-			label: this.get('byline') || this.get('author'),//TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
+			label: this.get('byline') || this.get('author'), //TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
 			author: this.get('author'),
 			byline: this.get('byline'),
 			icon: this.get('icon'),
 			thumb: this.get('thumb'),
-			vendorIcon: this.get('vendorIcon')
+			vendorIcon: this.get('vendorIcon'),
 		};
 	},
 
 	getDefaultAssetRoot: function () {
-		var root = ([this].concat(this.get('ContentPackages')))
+		var root = [this]
+			.concat(this.get('ContentPackages'))
 			.reduce(function (agg, o) {
 				return agg || o.get('root');
 			}, null);
@@ -132,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			me.getBackgroundImage(),
 			me.getVendorIcon(),
 			me.getIconImage(),
-			me.__ensureAsset('thumb')
+			me.__ensureAsset('thumb'),
 		]);
 	},
 
@@ -158,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('thumb');
 	},
 
-	getTocFor (contentPackageID, status) {
+	getTocFor(contentPackageID, status) {
 		const p = this.getContentPackage(contentPackageID);
 
 		return Promise.resolve(p && p.getToc(status));
@@ -167,15 +189,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	getTocs: function (status) {
 		var packages = this.get('ContentPackages');
 
-		packages = packages
-			.map(function (pack) {
-				return pack.getToc(status).catch(() => null);
-			});
+		packages = packages.map(function (pack) {
+			return pack.getToc(status).catch(() => null);
+		});
 
-		return Promise.all(packages)
-			.then((results) => {
-				return results.filter(x => x);
-			});
+		return Promise.all(packages).then(results => {
+			return results.filter(x => x);
+		});
 	},
 
 	getTitle: function () {
@@ -190,20 +210,17 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.get('icon');
 	},
 
-
-	getContentPackageContaining (id) {
+	getContentPackageContaining(id) {
 		return lazy.ContentUtils.getContentPackageContainingReading(id, this);
 	},
 
-
-	__addContentPackage (contentPackage) {
+	__addContentPackage(contentPackage) {
 		const packages = this.getContentPackages();
 
 		this.set('ContentPackages', [...packages, contentPackage]);
 	},
 
-
-	syncContentPackage (contentPackage) {
+	syncContentPackage(contentPackage) {
 		const original = this.getContentPackage(contentPackage.get('NTIID'));
 
 		if (original) {
@@ -213,13 +230,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-
-	hasContentPackage (id) {
+	hasContentPackage(id) {
 		return !!this.getContentPackage(id);
 	},
 
-
-	getContentPackage (id) {
+	getContentPackage(id) {
 		const packages = this.get('ContentPackages');
 
 		for (let p of packages) {
@@ -239,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
-	getNonRenderableContentRoots () {
+	getNonRenderableContentRoots() {
 		return (this.get('ContentPackages') || [])
 			.filter(content => !content.isRenderableContentPackage)
 			.map(content => content && content.get('root'));
@@ -269,13 +284,17 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
-		const tocRequest = firstPackage ? firstPackage.getToc(status) : Promise.resolve();
+		const tocRequest = firstPackage
+			? firstPackage.getToc(status)
+			: Promise.resolve();
 
-		return tocRequest
-			.then(function (toc) {
-				if (!toc) { return null; }
+		return tocRequest.then(function (toc) {
+			if (!toc) {
+				return null;
+			}
 
-				return Ext.applyIf({
+			return Ext.applyIf(
+				{
 					toc: toc,
 					location: toc.documentElement,
 					NTIID: firstPage,
@@ -283,9 +302,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 					title: firstPackage,
 					root: firstPackage.get('root'),
 					getIcon: () => uiData.icon,
-					getPathLabel: () => Promise.resolve(uiData.title)
-				}, uiData);
-			});
+					getPathLabel: () => Promise.resolve(uiData.title),
+				},
+				uiData
+			);
+		});
 	},
 
 	getFirstPage: function () {
@@ -307,18 +328,23 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return false;
 	},
 
-	getPublicScope: function () { return this.getScope('public'); },
-	getRestrictedScope: function () { return this.getScope('restricted'); },
+	getPublicScope: function () {
+		return this.getScope('public');
+	},
+	getRestrictedScope: function () {
+		return this.getScope('restricted');
+	},
 
 	//i don't think this is used
-
 
 	getScope: function (scope) {
 		var s = (this.get('Scopes') || {})[scope] || '';
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
-		return s.filter(function (v) {return !Ext.isEmpty(v);});
+		return s.filter(function (v) {
+			return !Ext.isEmpty(v);
+		});
 	},
 
 	hasForumList: function () {
@@ -333,7 +359,8 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		var me = this,
 			b;
 
-		return me.resolveBoard()
+		return me
+			.resolveBoard()
 			.then(function (board) {
 				var contents = board.getLink('contents');
 
@@ -345,13 +372,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 				json = JSON.parse(json);
 				json.Items = lazy.ParseUtils.parseItems(json.Items);
 
-				var store = ForumsBoard.buildContentsStoreFromData(me.getId() + '-board', json.Items);
+				var store = ForumsBoard.buildContentsStoreFromData(
+					me.getId() + '-board',
+					json.Items
+				);
 
-				return [{
-					title: '',
-					store: store,
-					board: b
-				}];
+				return [
+					{
+						title: '',
+						store: store,
+						board: b,
+					},
+				];
 			});
 	},
 
@@ -359,19 +391,26 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		var me = this,
 			link = me.getLink('DiscussionBoard'),
 			//get the cached request, or make a new one.
-			p = me.__BoardResolver || (((link && Service.request(link)) || Promise.reject('No Discussion Board Link'))
-				//parse
-				.then(lazy.ParseUtils.parseItems.bind(lazy.ParseUtils))
-				//unwrap from the array
-				.then(function (items) {
-					if (items.length > 1) {console.warn('Too many items found.');}
-					return items[0];
-				})
-				//if we fail, delete the cached promise, and resume failure. :P
-				.catch(function (reason) {
-					delete me.__BoardResolver;
-					return Promise.reject(reason);
-				}));
+			p =
+				me.__BoardResolver ||
+				(
+					(link && Service.request(link)) ||
+					Promise.reject('No Discussion Board Link')
+				)
+					//parse
+					.then(lazy.ParseUtils.parseItems.bind(lazy.ParseUtils))
+					//unwrap from the array
+					.then(function (items) {
+						if (items.length > 1) {
+							console.warn('Too many items found.');
+						}
+						return items[0];
+					})
+					//if we fail, delete the cached promise, and resume failure. :P
+					.catch(function (reason) {
+						delete me.__BoardResolver;
+						return Promise.reject(reason);
+					});
 
 		//cache the current request
 		this.__BoardResolver = p;
@@ -379,19 +418,22 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return p;
 	},
 
-	represents: function (/*catalogEntry*/) {return false;},
+	represents: function (/*catalogEntry*/) {
+		return false;
+	},
 
 	getVideosByContentPackage: function () {
 		var contentPackages = this.get('ContentPackages'),
 			videoMap = {};
 
-		return Promise.all(contentPackages.map(function (contentPackage) {
-			return contentPackage.getVideos()
-				.then(function (videos) {
+		return Promise.all(
+			contentPackages.map(function (contentPackage) {
+				return contentPackage.getVideos().then(function (videos) {
 					videoMap[contentPackage.get('NTIID')] = videos;
 				});
-		})).then(function () {
+			})
+		).then(function () {
 			return videoMap;
 		});
-	}
+	},
 });

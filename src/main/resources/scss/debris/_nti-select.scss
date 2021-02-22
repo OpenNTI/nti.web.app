@@ -8,7 +8,13 @@
 	cursor: pointer;
 	font: normal 400 14px/40px var(--body-font-family);
 
-	@include icon($mv-dropdown-arrow_hover, $side: after, $top: 50%, $right: 10px, $left: auto);
+	@include icon(
+		$mv-dropdown-arrow_hover,
+		$side: after,
+		$top: 50%,
+		$right: 10px,
+		$left: auto
+	);
 
 	&::after {
 		margin-top: -4px;

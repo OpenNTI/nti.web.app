@@ -1,438 +1,504 @@
 const Ext = require('@nti/extjs');
-const {Publish, Constants} = require('@nti/web-commons');
+const { Publish, Constants } = require('@nti/web-commons');
 
 require('legacy/common/form/fields/DateTimeComponent');
 
-const {PUBLISH_STATES} = Constants;
-const getPublishState = value => PUBLISH_STATES[value] || (value instanceof Date ? PUBLISH_STATES.SCHEDULE : null);
+const { PUBLISH_STATES } = Constants;
+const getPublishState = value =>
+	PUBLISH_STATES[value] ||
+	(value instanceof Date ? PUBLISH_STATES.SCHEDULE : null);
 
-module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.PublishState', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.assignment-inline-publish-editor',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.assessment.components.editing.PublishState',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.assignment-inline-publish-editor',
 
-	cls: 'inline-publish-editor',
+		cls: 'inline-publish-editor',
 
-	layout: 'none',
-	items: [],
+		layout: 'none',
+		items: [],
 
-	initComponent () {
-		this.callParent(arguments);
+		initComponent() {
+			this.callParent(arguments);
 
-		this.onPublishCheckChanged = this.onPublishCheckChanged.bind(this);
-		this.onScheduleCheckChanged = this.onScheduleCheckChanged.bind(this);
-		this.onDraftCheckChanged = this.onDraftCheckChanged.bind(this);
+			this.onPublishCheckChanged = this.onPublishCheckChanged.bind(this);
+			this.onScheduleCheckChanged = this.onScheduleCheckChanged.bind(
+				this
+			);
+			this.onDraftCheckChanged = this.onDraftCheckChanged.bind(this);
 
-		const group = 'publish-state-' + this.id;
+			const group = 'publish-state-' + this.id;
 
-		// Used to set the default time for the DateTimeComponent
-		const defaultTime = new Date();
-		defaultTime.setHours(0,0,0,0);
+			// Used to set the default time for the DateTimeComponent
+			const defaultTime = new Date();
+			defaultTime.setHours(0, 0, 0, 0);
 
-		this.add([
-			{
-				xtype: 'box',
-				isPublish: true,
-				autoEl: {
-					cls: 'label publish',
-					cn: [
-						{cls: 'nti-radio', cn: [
+			this.add([
+				{
+					xtype: 'box',
+					isPublish: true,
+					autoEl: {
+						cls: 'label publish',
+						cn: [
 							{
-								tag: 'input',
-								type: 'radio',
-								cls: 'publish-now',
-								name: group,
-								'id': 'publish-state-radio-' + this.id
+								cls: 'nti-radio',
+								cn: [
+									{
+										tag: 'input',
+										type: 'radio',
+										cls: 'publish-now',
+										name: group,
+										id: 'publish-state-radio-' + this.id,
+									},
+									{
+										tag: 'label',
+										for: 'publish-state-radio-' + this.id,
+										html: 'Publish',
+									},
+								],
 							},
-							{tag: 'label', 'for': 'publish-state-radio-' + this.id, html: 'Publish'}
-						]}
-					]
-				}
-			},
-			{
-				xtype: 'container',
-				layout: 'none',
-				isPublishContainer: true,
-				cls: 'publish-container container hidden',
-				items: [
-					{xtype: 'box', autoEl: {cls: 'publish-label', html: 'Assignment is visible to students'}}
-				]
-			},
-			{
-				xtype: 'box',
-				isSchedule: true,
-				autoEl: {
-					cls: 'label schedule',
-					cn: [
-						{cls: 'nti-radio', cn: [
-							{
-								tag: 'input',
-								type: 'radio',
-								cls: 'schedule',
-								name: group,
-								'id': 'schedule-state-radio-' + this.id
+						],
+					},
+				},
+				{
+					xtype: 'container',
+					layout: 'none',
+					isPublishContainer: true,
+					cls: 'publish-container container hidden',
+					items: [
+						{
+							xtype: 'box',
+							autoEl: {
+								cls: 'publish-label',
+								html: 'Assignment is visible to students',
 							},
-							{tag: 'label', 'for': 'schedule-state-radio-' + this.id, html: 'Schedule'}
-						]}
-					]
-				}
-			},
-			{
-				xtype: 'container',
-				layout: 'none',
-				isScheduleContainer: true,
-				cls: 'schedule-container container hidden',
-				items: [
-					{xtype: 'box', autoEl: {cls: 'schedule-label', html: ''}},
-					{
-						xtype: 'date-time-component',
-						isAvailableEditor: true,
-						currentDate: true,
-						value: null,
-						onChange: (value) => {
-							this.updateScheduleSelect(value);
-							this.updateScheduleLabel();
-							this.clearError();
 						},
-						defaultTime
-					}
-				]
-			},
-			{
-				xtype: 'box',
-				isDraftLabel: true,
-				autoEl: {
-					cls: 'label draft',
-					cn: [
-						{cls: 'nti-radio', cn: [
+					],
+				},
+				{
+					xtype: 'box',
+					isSchedule: true,
+					autoEl: {
+						cls: 'label schedule',
+						cn: [
 							{
-								tag: 'input',
-								type: 'radio',
-								cls: 'draft',
-								name: group,
-								'id': 'draft-state-radio-' + this.id
+								cls: 'nti-radio',
+								cn: [
+									{
+										tag: 'input',
+										type: 'radio',
+										cls: 'schedule',
+										name: group,
+										id: 'schedule-state-radio-' + this.id,
+									},
+									{
+										tag: 'label',
+										for: 'schedule-state-radio-' + this.id,
+										html: 'Schedule',
+									},
+								],
 							},
-							{tag: 'label', 'for': 'draft-state-radio-' + this.id, html: 'Draft'}
-						]}
-					]
+						],
+					},
+				},
+				{
+					xtype: 'container',
+					layout: 'none',
+					isScheduleContainer: true,
+					cls: 'schedule-container container hidden',
+					items: [
+						{
+							xtype: 'box',
+							autoEl: { cls: 'schedule-label', html: '' },
+						},
+						{
+							xtype: 'date-time-component',
+							isAvailableEditor: true,
+							currentDate: true,
+							value: null,
+							onChange: value => {
+								this.updateScheduleSelect(value);
+								this.updateScheduleLabel();
+								this.clearError();
+							},
+							defaultTime,
+						},
+					],
+				},
+				{
+					xtype: 'box',
+					isDraftLabel: true,
+					autoEl: {
+						cls: 'label draft',
+						cn: [
+							{
+								cls: 'nti-radio',
+								cn: [
+									{
+										tag: 'input',
+										type: 'radio',
+										cls: 'draft',
+										name: group,
+										id: 'draft-state-radio-' + this.id,
+									},
+									{
+										tag: 'label',
+										for: 'draft-state-radio-' + this.id,
+										html: 'Draft',
+									},
+								],
+							},
+						],
+					},
+				},
+				{
+					xtype: 'container',
+					layout: 'none',
+					isDraftContainer: true,
+					cls: 'draft-container container hidden',
+					items: [
+						{
+							xtype: 'box',
+							autoEl: {
+								cls: 'draft-label',
+								html: 'Currently not visible to any students',
+							},
+						},
+					],
+				},
+			]);
+		},
+
+		afterRender() {
+			this.callParent(arguments);
+
+			const query = selector => this.el.dom.querySelector(selector);
+
+			this.publishContainer = query('.publish-container');
+			this.scheduleContainer = query('.schedule-container');
+			this.draftContainer = query('.draft-container');
+
+			this.publishLabel = query('.publish-label');
+			this.scheduleLabel = query('.schedule-label');
+			this.draftLabel = query('.draft-label');
+
+			this.publishRadioLabel = query('.label.publish');
+			this.scheduleRadioLabel = query('.label.schedule');
+			this.draftRadioLabel = query('.label.draft');
+
+			this.publishRadio = query('input.publish-now');
+			this.scheduleRadio = query('input.schedule');
+			this.draftRadio = query('input.draft');
+
+			this.publishRadio.addEventListener(
+				'change',
+				this.onPublishCheckChanged
+			);
+			this.scheduleRadio.addEventListener(
+				'change',
+				this.onScheduleCheckChanged
+			);
+			this.draftRadio.addEventListener(
+				'change',
+				this.onDraftCheckChanged
+			);
+
+			this.on('destroy', () => {
+				if (
+					this.publishRadio &&
+					this.publishRadio.removeEventListener
+				) {
+					this.publishRadio.removeEventListener(
+						'change',
+						this.onPublishCheckChanged
+					);
 				}
-			},
-			{
-				xtype: 'container',
-				layout: 'none',
-				isDraftContainer: true,
-				cls: 'draft-container container hidden',
-				items: [
-					{xtype: 'box', autoEl: {cls: 'draft-label', html: 'Currently not visible to any students'}}
-				]
-			},
-		]);
 
-	},
+				if (
+					this.scheduleRadio &&
+					this.scheduleRadio.removeEventListener
+				) {
+					this.scheduleRadio.removeEventListener(
+						'change',
+						this.onScheduleCheckChanged
+					);
+				}
 
+				if (this.draftRadio && this.draftRadio.removeEventListener) {
+					this.draftRadio.removeEventListener(
+						'change',
+						this.onDraftCheckChanged
+					);
+				}
+			});
 
-	afterRender () {
-		this.callParent(arguments);
+			this.setAssignment(this.assignment);
+		},
 
-		const query = (selector) => this.el.dom.querySelector(selector);
+		updateScheduleSelect(date) {
+			if (!this.selectedDate) {
+				this.selectedDate = new Date();
+				this.selectedDate.setDate(1);
+			}
+			this.selectedDate = date;
+			const editor = this.getScheduleEditor();
+			editor.selectDate(this.selectedDate);
+		},
 
-		this.publishContainer = query('.publish-container');
-		this.scheduleContainer = query('.schedule-container');
-		this.draftContainer = query('.draft-container');
+		getScheduleEditor() {
+			return this.down('[isAvailableEditor]');
+		},
 
-		this.publishLabel = query('.publish-label');
-		this.scheduleLabel = query('.schedule-label');
-		this.draftLabel = query('.draft-label');
+		showContainer(show) {
+			const containers = [
+				this.publishContainer,
+				this.scheduleContainer,
+				this.draftContainer,
+			];
 
-		this.publishRadioLabel = query('.label.publish');
-		this.scheduleRadioLabel = query('.label.schedule');
-		this.draftRadioLabel = query('.label.draft');
+			for (let container of containers) {
+				if (container === show) {
+					container.classList.remove('hidden');
+				} else {
+					container.classList.add('hidden');
+				}
+			}
+		},
 
-		this.publishRadio = query('input.publish-now');
-		this.scheduleRadio = query('input.schedule');
-		this.draftRadio = query('input.draft');
+		checkOption(check) {
+			const options = [
+				this.publishRadio,
+				this.scheduleRadio,
+				this.draftRadio,
+			];
 
-		this.publishRadio.addEventListener('change', this.onPublishCheckChanged);
-		this.scheduleRadio.addEventListener('change', this.onScheduleCheckChanged);
-		this.draftRadio.addEventListener('change', this.onDraftCheckChanged);
-
-		this.on('destroy', () => {
-			if (this.publishRadio && this.publishRadio.removeEventListener) {
-				this.publishRadio.removeEventListener('change', this.onPublishCheckChanged);
+			for (let option of options) {
+				option.checked = check === option;
 			}
 
-			if (this.scheduleRadio && this.scheduleRadio.removeEventListener) {
-				this.scheduleRadio.removeEventListener('change', this.onScheduleCheckChanged);
-			}
+			this.onPublishCheckChanged();
+			this.onScheduleCheckChanged();
+			this.onDraftCheckChanged();
+		},
 
-			if (this.draftRadio && this.draftRadio.removeEventListener) {
-				this.draftRadio.removeEventListener('change', this.onDraftCheckChanged);
-			}
-		});
+		hasPublishingLinks() {
+			return (
+				this.assignment.hasLink('publish') ||
+				this.assignment.hasLink('unpublish')
+			);
+		},
 
-		this.setAssignment(this.assignment);
-	},
-
-
-	updateScheduleSelect (date) {
-		if (!this.selectedDate) { this.selectedDate = new Date(); this.selectedDate.setDate(1); }
-		this.selectedDate = date;
-		const editor = this.getScheduleEditor();
-		editor.selectDate(this.selectedDate);
-	},
-
-
-	getScheduleEditor () {
-		return this.down('[isAvailableEditor]');
-	},
-
-	showContainer (show) {
-		const containers = [
-			this.publishContainer,
-			this.scheduleContainer,
-			this.draftContainer
-		];
-
-
-		for (let container of containers) {
-			if (container === show) {
-				container.classList.remove('hidden');
+		maybeDisableDraft(assignment) {
+			if (assignment.canUnpublish()) {
+				this.enableRadioLabel(this.draftRadioLabel);
+				this.enableRadio(this.draftRadio);
 			} else {
-				container.classList.add('hidden');
+				this.disableRadioLabel(this.draftRadioLabel);
+				this.disableRadio(this.draftRadio);
 			}
-		}
-	},
+		},
 
+		maybeDisablePublish(assignment) {
+			if (assignment.canPublish()) {
+				this.enableRadioLabel(this.publishRadioLabel);
+				this.enableRadioLabel(this.scheduleRadioLabel);
+			} else {
+				this.disableRadioLabel(this.publishRadioLabel);
+				this.disableRadioLabel(this.scheduleRadioLabel);
+			}
+		},
 
-	checkOption (check) {
-		const options = [
-			this.publishRadio,
-			this.scheduleRadio,
-			this.draftRadio
-		];
+		setAssignment(assignment) {
+			this.assignment = assignment;
 
-		for (let option of options) {
-			option.checked = check === option;
-		}
+			if (!this.rendered) {
+				return;
+			}
 
-		this.onPublishCheckChanged();
-		this.onScheduleCheckChanged();
-		this.onDraftCheckChanged();
-	},
+			// Determine weather or not to show the publish controls:
+			// Reset (present when submissions, hidden for content backed & no submissions & non-instructors),
+			// Publishing (present when no submissions, hidden for content backed & submissions),
+			// Date Edit Start (present when no submissions, hidden when there are submissions)
+			const isPublishable =
+				(!this.assignment.hasLink('Reset') &&
+					this.hasPublishingLinks()) ||
+				(this.assignment.hasLink('date-edit-start') &&
+					!this.assignment.hasLink('Reset'));
 
-	hasPublishingLinks () {
-		return this.assignment.hasLink('publish') || this.assignment.hasLink('unpublish');
-	},
+			if (isPublishable) {
+				this.show();
+			} else {
+				this.hide();
+			}
 
+			const available = assignment.get('availableBeginning');
+			const value = Publish.evaluatePublishStateFor({
+				isPublished: () =>
+					assignment &&
+					((!!assignment.get('PublicationState') && !available) ||
+						available < Date.now()),
+				getPublishDate: () => assignment && available,
+			});
 
-	maybeDisableDraft (assignment) {
-		if (assignment.canUnpublish()) {
-			this.enableRadioLabel(this.draftRadioLabel);
-			this.enableRadio(this.draftRadio);
-		} else {
-			this.disableRadioLabel(this.draftRadioLabel);
-			this.disableRadio(this.draftRadio);
-		}
-	},
+			const state = getPublishState(value);
 
+			// Determine the publish state
+			if (state === PUBLISH_STATES.PUBLISH) {
+				this.setPublishAssignment(assignment);
+			} else if (state === PUBLISH_STATES.SCHEDULE) {
+				this.setScheduleAssignment(assignment);
+			} else if (state === PUBLISH_STATES.DRAFT) {
+				this.setDraftAssignment(assignment);
+			}
 
-	maybeDisablePublish (assignment) {
-		if (assignment.canPublish()) {
+			if (
+				this.assignment.hasLink('date-edit-start') &&
+				!this.hasPublishingLinks()
+			) {
+				this.disableRadio(this.draftRadio);
+				this.disableRadioLabel(this.draftRadioLabel);
+			}
+
+			this.updateScheduleLabel();
+		},
+
+		setPublishAssignment(assignment) {
+			const editor = this.getScheduleEditor();
+
+			this.maybeDisableDraft(assignment);
+
 			this.enableRadioLabel(this.publishRadioLabel);
 			this.enableRadioLabel(this.scheduleRadioLabel);
-		} else {
-			this.disableRadioLabel(this.publishRadioLabel);
-			this.disableRadioLabel(this.scheduleRadioLabel);
-		}
-	},
 
+			editor.selectDate(null);
+			this.checkOption(this.publishRadio);
+		},
 
-	setAssignment (assignment) {
-		this.assignment = assignment;
+		setScheduleAssignment(assignment) {
+			const editor = this.getScheduleEditor();
 
-		if (!this.rendered) { return; }
+			this.maybeDisableDraft(assignment);
+			this.selectedDate = assignment.get('availableBeginning');
+			editor.selectDate(assignment.get('availableBeginning'));
 
-		// Determine weather or not to show the publish controls:
-		// Reset (present when submissions, hidden for content backed & no submissions & non-instructors),
-		// Publishing (present when no submissions, hidden for content backed & submissions),
-		// Date Edit Start (present when no submissions, hidden when there are submissions)
-		const isPublishable = (!this.assignment.hasLink('Reset') && this.hasPublishingLinks()) || (this.assignment.hasLink('date-edit-start') && !this.assignment.hasLink('Reset'));
+			this.checkOption(this.scheduleRadio);
+		},
 
-		if(isPublishable) {
-			this.show();
-		} else {
-			this.hide();
-		}
+		setDraftAssignment(assignment) {
+			this.maybeDisablePublish(assignment);
 
-		const available = assignment.get('availableBeginning');
-		const value = Publish.evaluatePublishStateFor({
-			isPublished: () => assignment && (!!assignment.get('PublicationState') && !available || available < Date.now()),
-			getPublishDate: () => assignment && available
-		});
+			this.enableRadioLabel(this.draftRadioLabel);
+			this.checkOption(this.draftRadio);
+		},
 
-		const state = getPublishState(value);
+		updateScheduleLabel() {
+			const label = this.scheduleLabel;
+			const date = this.getSelectedDate();
 
-		// Determine the publish state
-		if (state === PUBLISH_STATES.PUBLISH) {
-			this.setPublishAssignment(assignment);
-		} else if (state === PUBLISH_STATES.SCHEDULE) {
-			this.setScheduleAssignment(assignment);
-		} else if (state === PUBLISH_STATES.DRAFT) {
-			this.setDraftAssignment(assignment);
-		}
+			if (!label) {
+				return;
+			}
 
-		if(this.assignment.hasLink('date-edit-start') && (!this.hasPublishingLinks())) {
-			this.disableRadio(this.draftRadio);
-			this.disableRadioLabel(this.draftRadioLabel);
-		}
+			if (!date) {
+				label.innerText =
+					'When do you want students to have access to the assignment?';
+			} else {
+				label.innerText =
+					'Assignment will be available to students on ' +
+					Ext.Date.format(date, 'F j \\a\\t g:i A\\.');
+			}
+		},
 
-		this.updateScheduleLabel();
-	},
+		onPublishCheckChanged() {
+			const checked = this.publishRadio.checked;
 
+			if (checked) {
+				this.showContainer(this.publishContainer);
+			} else {
+				this.publishContainer.classList.add('hidden');
+			}
+		},
 
-	setPublishAssignment (assignment) {
-		const editor = this.getScheduleEditor();
+		onScheduleCheckChanged() {
+			const checked = this.scheduleRadio.checked;
 
-		this.maybeDisableDraft(assignment);
+			if (checked) {
+				this.showContainer(this.scheduleContainer);
+			} else {
+				this.scheduleContainer.classList.add('hidden');
+			}
+		},
 
-		this.enableRadioLabel(this.publishRadioLabel);
-		this.enableRadioLabel(this.scheduleRadioLabel);
+		onDraftCheckChanged() {
+			const checked = this.draftRadio.checked;
 
-		editor.selectDate(null);
-		this.checkOption(this.publishRadio);
-	},
+			if (checked) {
+				this.showContainer(this.draftContainer);
+			} else {
+				this.draftContainer.classList.add('hidden');
+			}
+		},
 
+		validate() {
+			const scheduleChecked = this.scheduleRadio.checked;
+			const editor = this.getScheduleEditor();
+			const date = this.getSelectedDate();
+			let valid = true;
 
+			if (scheduleChecked && !date) {
+				editor.showDateError('Please enter a date.');
+				valid = false;
+			}
 
-	setScheduleAssignment (assignment) {
-		const editor = this.getScheduleEditor();
+			return valid;
+		},
 
-		this.maybeDisableDraft(assignment);
-		this.selectedDate = assignment.get('availableBeginning');
-		editor.selectDate(assignment.get('availableBeginning'));
+		getValues() {
+			const publishChecked = this.publishRadio.checked;
+			const scheduleChecked = this.scheduleRadio.checked;
+			const date = this.getSelectedDate();
 
-		this.checkOption(this.scheduleRadio);
-	},
+			let values = {
+				published: false,
+				available: null,
+			};
 
+			if (publishChecked) {
+				values.published = true;
+			} else if (scheduleChecked) {
+				values.published = true;
+				values.available = date;
+			}
 
-	setDraftAssignment (assignment) {
-		this.maybeDisablePublish(assignment);
+			return values;
+		},
 
-		this.enableRadioLabel(this.draftRadioLabel);
-		this.checkOption(this.draftRadio);
-	},
+		getSelectedDate() {
+			return this.selectedDate;
+		},
 
+		enableRadioLabel(label) {
+			label.classList.remove('disabled');
+			label.removeAttribute('data-qtip');
+		},
 
-	updateScheduleLabel () {
-		const label = this.scheduleLabel;
-		const date = this.getSelectedDate();
+		disableRadioLabel(label, reason) {
+			label.classList.add('disabled');
 
-		if (!label) { return; }
+			if (reason) {
+				label.addAttribute('data-qtip', reason);
+			}
+		},
 
-		if (!date) {
-			label.innerText = 'When do you want students to have access to the assignment?';
-		} else {
-			label.innerText = 'Assignment will be available to students on ' + Ext.Date.format(date, 'F j \\a\\t g:i A\\.');
-		}
-	},
+		disableRadio(radio) {
+			radio.disabled = true;
+			radio.classList.add('disabled');
+		},
 
-
-	onPublishCheckChanged () {
-		const checked = this.publishRadio.checked;
-
-		if (checked) {
-			this.showContainer(this.publishContainer);
-		} else {
-			this.publishContainer.classList.add('hidden');
-		}
-	},
-
-
-	onScheduleCheckChanged () {
-		const checked = this.scheduleRadio.checked;
-
-		if (checked) {
-			this.showContainer(this.scheduleContainer);
-		} else {
-			this.scheduleContainer.classList.add('hidden');
-		}
-	},
-
-
-	onDraftCheckChanged () {
-		const checked = this.draftRadio.checked;
-
-		if (checked) {
-			this.showContainer(this.draftContainer);
-		} else {
-			this.draftContainer.classList.add('hidden');
-		}
-	},
-
-
-	validate () {
-		const scheduleChecked = this.scheduleRadio.checked;
-		const editor = this.getScheduleEditor();
-		const date = this.getSelectedDate();
-		let valid = true;
-
-		if (scheduleChecked && !date) {
-			editor.showDateError('Please enter a date.');
-			valid = false;
-		}
-
-		return valid;
-	},
-
-
-	getValues () {
-		const publishChecked = this.publishRadio.checked;
-		const scheduleChecked = this.scheduleRadio.checked;
-		const date = this.getSelectedDate();
-
-		let values = {
-			published: false,
-			available: null
-		};
-
-		if (publishChecked) {
-			values.published = true;
-		} else if (scheduleChecked) {
-			values.published = true;
-			values.available = date;
-		}
-
-		return values;
-	},
-
-
-	getSelectedDate () {
-		return this.selectedDate;
-	},
-
-
-	enableRadioLabel (label) {
-		label.classList.remove('disabled');
-		label.removeAttribute('data-qtip');
-	},
-
-
-	disableRadioLabel (label, reason) {
-		label.classList.add('disabled');
-
-		if (reason) {
-			label.addAttribute('data-qtip', reason);
-		}
-	},
-
-
-	disableRadio (radio) {
-		radio.disabled = true;
-		radio.classList.add('disabled');
-	},
-
-
-	enableRadio (radio) {
-		radio.disabled = false;
-		radio.classList.remove('disabled');
+		enableRadio(radio) {
+			radio.disabled = false;
+			radio.classList.remove('disabled');
+		},
 	}
-});
+);

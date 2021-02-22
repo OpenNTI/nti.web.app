@@ -1,11 +1,9 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.JSONValue', {
-
 	ignoredKeyMap: {
 		config: true,
-		initialConfig: true
+		initialConfig: true,
 	},
 
 	asJSON: function () {
@@ -18,22 +16,28 @@ module.exports = exports = Ext.define('NextThought.mixins.JSONValue', {
 			result = {};
 
 		//if it's not an obj, return
-		if (!obj || typeof obj !== 'object') {return obj;}
+		if (!obj || typeof obj !== 'object') {
+			return obj;
+		}
 
 		Ext.Object.each(obj, function (k, v) {
-			if (!Ext.isFunction(v) && k.charAt(0) !== '_' && !m.hasOwnProperty(k)) {
+			if (
+				!Ext.isFunction(v) &&
+				k.charAt(0) !== '_' &&
+				!m.hasOwnProperty(k)
+			) {
 				if (Ext.isArray(v)) {
 					result[k] = [];
 					Ext.each(v, function (a) {
 						result[k].push(me.getJSONObject(a));
 					});
-				}
-				else if (typeof v === 'object') {
+				} else if (typeof v === 'object') {
 					result[k] = me.getJSONObject(v);
+				} else {
+					result[k] = v;
 				}
-				else {result[k] = v;}
 			}
 		});
 		return result;
-	}
+	},
 });

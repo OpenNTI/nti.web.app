@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames/bind';
-import {Theme} from '@nti/web-commons';
+import { Theme } from '@nti/web-commons';
 
 import Styles from './Styles.css';
 
 const cx = classnames.bind(Styles);
 
-export default function CertificatePreviewSidebar () {
+export default function CertificatePreviewSidebar() {
 	const hideLogo = Theme.useTheme()?.getRoot()?.suppressCertificateLogo;
 	const backgroundColor = Theme.useThemeProperty('sidebar.backgroundColor');
 
@@ -18,10 +18,16 @@ export default function CertificatePreviewSidebar () {
 
 	return (
 		<div className={cx('side-bar')} style={styles}>
-			<Theme.Asset name="sidebar.image" className={cx('side-bar-image')} />
+			<Theme.Asset
+				name="sidebar.image"
+				className={cx('side-bar-image')}
+			/>
 			{!hideLogo && (
 				<div className={cx('logo-container')}>
-					<Theme.Asset name="sidebar.logo" className={cx('sidebar-logo')} />
+					<Theme.Asset
+						name="sidebar.logo"
+						className={cx('sidebar-logo')}
+					/>
 				</div>
 			)}
 		</div>

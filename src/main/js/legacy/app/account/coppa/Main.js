@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 
 require('legacy/util/Localization');
-
 
 module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 	extend: 'Ext.container.Container',
@@ -13,98 +12,168 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 	layout: 'none',
 
 	items: [
-		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
-			{xtype: 'container', name: 'realname', layout: 'hbox',
-				defaults: {
+		{
+			xtype: 'container',
+			layout: 'anchor',
+			cls: 'input-wrapper',
+			items: [
+				{
+					xtype: 'container',
+					name: 'realname',
+					layout: 'hbox',
+					defaults: {
+						xtype: 'simpletext',
+						flex: 1,
+					},
+					items: [
+						{
+							cls: 'firstname input-box',
+							name: 'firstname',
+							placeholder: getString(
+								'NextThought.view.account.coppa.Main.first-name'
+							),
+						},
+						{
+							cls: 'lastname input-box',
+							name: 'lastname',
+							placeholder: getString(
+								'NextThought.view.account.coppa.Main.last-name'
+							),
+						},
+					],
+				},
+				{
 					xtype: 'simpletext',
-					flex: 1
+					name: 'email',
+					cls: 'input-box',
+					inputType: 'email',
+					placeholder: getString(
+						'NextThought.view.account.coppa.Main.email'
+					),
 				},
-				items: [
-					{cls: 'firstname input-box', name: 'firstname', placeholder: getString('NextThought.view.account.coppa.Main.first-name')},
-					{cls: 'lastname input-box', name: 'lastname', placeholder: getString('NextThought.view.account.coppa.Main.last-name')}
-				]
-			},
-			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.coppa.Main.email')},
-			{xtype: 'box', autoEl: {tag: 'h3', html: getString('NextThought.view.account.coppa.Main.optional')}},
-			{xtype: 'checkbox', name: 'opt_in_email_communication', boxLabel: getString('NextThought.view.account.coppa.Main.updates')},
-			{xtype: 'box', name: 'affiliationBox', autoEl: {tag: 'div', cls: 'what-school', html: getString('NextThought.view.account.coppa.Main.school')}},
-			{
-				xtype: 'combobox',
-				name: 'affiliation',
-				typeAhead: true,
-				forceAll: true,
-				valueField: 'school',
-				displayField: 'school',
-				multiSelect: false,
-				enableKeyEvents: true,
-				queryMode: 'remote',
-				cls: 'combo-box',
-				anchor: '100%',
-				hideTrigger: true,
-				listConfig: {
-					ui: 'nt',
-					plain: true,
-					showSeparator: false,
-					shadow: false,
-					frame: false,
-					border: false,
-					cls: 'x-menu',
-					baseCls: 'x-menu',
-					itemCls: 'x-menu-item no-border',
-					emptyText: '<div class="x-menu-item">' + getString('NextThought.view.account.coppa.Main.no-school') + '</div>',
-					xhooks: {
-						initComponent: function () {
-							this.callParent(arguments);
-							this.itemSelector = '.x-menu-item';
-						}
-					}
+				{
+					xtype: 'box',
+					autoEl: {
+						tag: 'h3',
+						html: getString(
+							'NextThought.view.account.coppa.Main.optional'
+						),
+					},
 				},
-				listeners: {
-					change: function () {
-						var store = this.store;
-						store.suspendEvents();
-						store.clearFilter();
-						store.resumeEvents();
-						store.filter({
-							property: 'school',
-							anyMatch: true,
-							value: this.getValue()
-						});
-						this.expand();
-					}
-				}
-			}
-		]},
-		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn: [
-				{cls: 'error-field'},
-				{cls: 'error-desc'}
-			]}
+				{
+					xtype: 'checkbox',
+					name: 'opt_in_email_communication',
+					boxLabel: getString(
+						'NextThought.view.account.coppa.Main.updates'
+					),
+				},
+				{
+					xtype: 'box',
+					name: 'affiliationBox',
+					autoEl: {
+						tag: 'div',
+						cls: 'what-school',
+						html: getString(
+							'NextThought.view.account.coppa.Main.school'
+						),
+					},
+				},
+				{
+					xtype: 'combobox',
+					name: 'affiliation',
+					typeAhead: true,
+					forceAll: true,
+					valueField: 'school',
+					displayField: 'school',
+					multiSelect: false,
+					enableKeyEvents: true,
+					queryMode: 'remote',
+					cls: 'combo-box',
+					anchor: '100%',
+					hideTrigger: true,
+					listConfig: {
+						ui: 'nt',
+						plain: true,
+						showSeparator: false,
+						shadow: false,
+						frame: false,
+						border: false,
+						cls: 'x-menu',
+						baseCls: 'x-menu',
+						itemCls: 'x-menu-item no-border',
+						emptyText:
+							'<div class="x-menu-item">' +
+							getString(
+								'NextThought.view.account.coppa.Main.no-school'
+							) +
+							'</div>',
+						xhooks: {
+							initComponent: function () {
+								this.callParent(arguments);
+								this.itemSelector = '.x-menu-item';
+							},
+						},
+					},
+					listeners: {
+						change: function () {
+							var store = this.store;
+							store.suspendEvents();
+							store.clearFilter();
+							store.resumeEvents();
+							store.filter({
+								property: 'school',
+								anyMatch: true,
+								value: this.getValue(),
+							});
+							this.expand();
+						},
+					},
+				},
+			],
 		},
-		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{
-				xtype: 'box',
-				cls: 'privacyLink',
-				width: 365,
-				autoEl: {
-					tag: 'a',
-					html: getString('NextThought.view.account.coppa.Main.view-policy'),
-					href: '#'
-				}
+		{
+			xtype: 'box',
+			hidden: true,
+			name: 'error',
+			autoEl: {
+				cls: 'error-box',
+				tag: 'div',
+				cn: [{ cls: 'error-field' }, { cls: 'error-desc' }],
 			},
-			{
-				xtype: 'button',
-				ui: 'primary',
-				scale: 'medium',
-				name: 'submit',
-				text: getString('NextThought.view.account.coppa.Main.submit'),
-				handler: function () {
-					var main = this.up('coppa-main-view');
+		},
+		{
+			xtype: 'container',
+			cls: 'submit',
+			layout: { type: 'hbox', pack: 'end' },
+			items: [
+				{
+					xtype: 'box',
+					cls: 'privacyLink',
+					width: 365,
+					autoEl: {
+						tag: 'a',
+						html: getString(
+							'NextThought.view.account.coppa.Main.view-policy'
+						),
+						href: '#',
+					},
+				},
+				{
+					xtype: 'button',
+					ui: 'primary',
+					scale: 'medium',
+					name: 'submit',
+					text: getString(
+						'NextThought.view.account.coppa.Main.submit'
+					),
+					handler: function () {
+						var main = this.up('coppa-main-view');
 
-					main.submit();
-				}
-			}
-		]}
+						main.submit();
+					},
+				},
+			],
+		},
 	],
 
 	initComponent: function () {
@@ -114,16 +183,18 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		this.store = new Ext.data.ArrayStore({
 			storeId: 'schoolStore',
 			autoLoad: true,
-			fields: [{
-				mapping: 0,
-				name: 'school',
-				type: 'string'
-			}],
+			fields: [
+				{
+					mapping: 0,
+					name: 'school',
+					type: 'string',
+				},
+			],
 			proxy: {
 				type: 'ajax',
 				url: '/resources/misc/school-data.json',
-				reader: 'array'
-			}
+				reader: 'array',
+			},
 		});
 
 		this.down('combobox').bindStore(this.store);
@@ -138,16 +209,33 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			realname = u.get('realname'),
 			// email = u.get('email'),
 			aff = u.get('affiliation'),
-			fn, ln;
+			fn,
+			ln;
 
-		fn = (realname.indexOf(' ') > 0) ? realname.substring(0, realname.indexOf(' ')) : realname;
-		ln = (realname.indexOf(' ') > 0) ? realname.substring(realname.indexOf(' ')) : null;
+		fn =
+			realname.indexOf(' ') > 0
+				? realname.substring(0, realname.indexOf(' '))
+				: realname;
+		ln =
+			realname.indexOf(' ') > 0
+				? realname.substring(realname.indexOf(' '))
+				: null;
 
-		if (fn) {this.down('[name=firstname]').update(fn);}
-		if (ln) {this.down('[name=lastname]').update(ln);}
-		if (aff) {this.down('[name=affiliation]').setValue(aff);}
-		this.down('[name=opt_in_email_communication]').setValue(u.get('opt_in_email_communication'));
-		this.getEl().down('.privacyLink').on('click', this.openChildPrivacyWindow, this);
+		if (fn) {
+			this.down('[name=firstname]').update(fn);
+		}
+		if (ln) {
+			this.down('[name=lastname]').update(ln);
+		}
+		if (aff) {
+			this.down('[name=affiliation]').setValue(aff);
+		}
+		this.down('[name=opt_in_email_communication]').setValue(
+			u.get('opt_in_email_communication')
+		);
+		this.getEl()
+			.down('.privacyLink')
+			.on('click', this.openChildPrivacyWindow, this);
 	},
 
 	getValues: function () {
@@ -162,10 +250,9 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			firstname: firstname,
 			lastname: lastname,
 			realname: firstname + ' ' + lastname,
-			'opt_in_email_communication': check,
-			affiliation: affiliation
+			opt_in_email_communication: check,
+			affiliation: affiliation,
 		};
-
 	},
 
 	setError: function (error) {
@@ -174,7 +261,9 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function (f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {
+			f.removeCls('error');
+		});
 
 		//make main error field show up
 		box.el.down('.error-field').update(error.field.replace('_', ' '));
@@ -193,7 +282,9 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
-			title: getString('NextThought.view.account.coppa.Main.policy-title'),
+			title: getString(
+				'NextThought.view.account.coppa.Main.policy-title'
+			),
 			closeAction: 'hide',
 			width: '60%',
 			height: '75%',
@@ -204,16 +295,19 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 				cls: 'padded',
 				autoEl: {
 					tag: 'iframe',
-					src: $AppConfig.userObject.getLink('childrens-privacy') || 'data:text/html,' + encodeURIComponent(Globals.SAD_FACE),
+					src:
+						$AppConfig.userObject.getLink('childrens-privacy') ||
+						'data:text/html,' +
+							encodeURIComponent(Globals.SAD_FACE),
 					frameBorder: 0,
 					marginWidth: 0,
 					marginHeight: 0,
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto'
-				}
-			}
+					style: 'overflow-x: hidden; overflow-y:auto',
+				},
+			},
 		});
 
 		w.show();
@@ -226,5 +320,5 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		this.handleSubmit(values)
 			.always(win.close.bind(win))
 			.catch(this.setError.bind(this));
-	}
+	},
 });

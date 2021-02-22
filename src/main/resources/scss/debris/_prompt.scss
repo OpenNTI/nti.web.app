@@ -15,7 +15,9 @@
 	-ms-flex-pack: center;
 
 	&.covered {
-		.body-container, .prompt-header, .prompt-footer {
+		.body-container,
+		.prompt-header,
+		.prompt-footer {
 			opacity: 0.05;
 		}
 
@@ -182,7 +184,8 @@
 			display: none;
 		}
 
-		.save, .cancel {
+		.save,
+		.cancel {
 			display: inline-block;
 			line-height: 45px;
 			font-size: 0.875em;

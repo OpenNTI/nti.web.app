@@ -17,7 +17,6 @@ require('legacy/mixins/State');
 
 require('../content/Index');
 
-
 module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 	extend: 'NextThought.app.content.Index',
 	alias: 'widget.bundle-view-container',
@@ -25,26 +24,26 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 
 	mixins: {
 		State: 'NextThought.mixins.State',
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	items: [
 		{
 			xtype: 'bundle-forum',
-			id: 'bundle-forum'
+			id: 'bundle-forum',
 		},
 		{
 			xtype: 'bundle-content',
-			id: 'bundle-content'
+			id: 'bundle-content',
 		},
 		{
 			xtype: 'bundle-notebook',
-			id: 'bundle-notebook'
+			id: 'bundle-notebook',
 		},
 		{
 			xtype: 'bundle-community',
-			id: 'bundle-community'
-		}
+			id: 'bundle-community',
+		},
 	],
 
 	initComponent: function () {
@@ -75,123 +74,129 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		ntiid = ntiid.toLowerCase();
 
 		//if we are setting my current bundle no need to do anything
-		if (me.activeBundle && (me.activeBundle.get('NTIID') || '').toLowerCase() === ntiid) {
+		if (
+			me.activeBundle &&
+			(me.activeBundle.get('NTIID') || '').toLowerCase() === ntiid
+		) {
 			me.getActiveBundle = Promise.resolve(me.activeBundle);
 		} else {
-			me.getActiveBundle = me.ContentStore.onceLoaded()
-				.then(function () {
-					var current;
-					//if the bundle was cached no need to look for it
-					if (bundle && (bundle.getId() || '').toLowerCase() === ntiid) {
-						current = bundle;
-					} else {
-						current = me.ContentStore.findContentBy(function (content) {
-							return content.get('NTIID').toLowerCase() === ntiid;
-						});
-					}
+			me.getActiveBundle = me.ContentStore.onceLoaded().then(function () {
+				var current;
+				//if the bundle was cached no need to look for it
+				if (bundle && (bundle.getId() || '').toLowerCase() === ntiid) {
+					current = bundle;
+				} else {
+					current = me.ContentStore.findContentBy(function (content) {
+						return content.get('NTIID').toLowerCase() === ntiid;
+					});
+				}
 
-					if (!current) {
-						return Promise.reject('No bundle found for:', ntiid);
-					}
+				if (!current) {
+					return Promise.reject('No bundle found for:', ntiid);
+				}
 
-					me.activeBundle = current;
+				me.activeBundle = current;
 
-					return current;
-				});
+				return current;
+			});
 		}
 
 		return me.getActiveBundle;
 	},
 
-	applyState () {
-		if (!this.activeBundle) { return; }
+	applyState() {
+		if (!this.activeBundle) {
+			return;
+		}
 
-		this.activeBundle.getInterfaceInstance()
-			.then((content) => {
-				if (this.navigationCmp && this.navigationCmp.content === content) {
-					this.navigationCmp.componentInstance.forceUpdate();
-					return;
-				}
+		this.activeBundle.getInterfaceInstance().then(content => {
+			if (this.navigationCmp && this.navigationCmp.content === content) {
+				this.navigationCmp.componentInstance.forceUpdate();
+				return;
+			}
 
-				this.renderNavigationCmp(BundleNavigation, {
-					content,
-					baseroute: this.getBaseRoute(),
-					getRouteFor: (obj, context) => {
-						if (obj !== content) { return; }
-
-						const base = `/app/bundle/${encodeForURI(content.getID())}/`;
-						let part = '';
-
-						if (context === 'content') {
-							part = 'content';
-						} else if (context === 'discussions') {
-							part = 'discussions';
-						} else if (context === 'notebook') {
-							part = 'notebook';
-						} else if (context === 'community') {
-							part = 'community';
-						}
-
-						return `${base}${part}/`;
+			this.renderNavigationCmp(BundleNavigation, {
+				content,
+				baseroute: this.getBaseRoute(),
+				getRouteFor: (obj, context) => {
+					if (obj !== content) {
+						return;
 					}
-				});
+
+					const base = `/app/bundle/${encodeForURI(
+						content.getID()
+					)}/`;
+					let part = '';
+
+					if (context === 'content') {
+						part = 'content';
+					} else if (context === 'discussions') {
+						part = 'discussions';
+					} else if (context === 'notebook') {
+						part = 'notebook';
+					} else if (context === 'community') {
+						part = 'community';
+					}
+
+					return `${base}${part}/`;
+				},
 			});
+		});
 
 		this.navigation.useCommonTabs();
 	},
 
-
 	showContent: function (route, subRoute) {
 		this.contentRoute = subRoute;
 
-		return this.setActiveView('bundle-content', [
-			'bundle-forum'
-		]).then(function (item) {
-			if (item.handleRoute) {
-				item.handleRoute(subRoute, route);
+		return this.setActiveView('bundle-content', ['bundle-forum']).then(
+			function (item) {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
 			}
-		});
+		);
 	},
 
 	showDiscussions: function (route, subRoute) {
 		this.discussionsRoute = subRoute;
 
-		return this.setActiveView('bundle-forum', [
-			'bundle-forum'
-		]).then(function (item) {
-			if (item.handleRoute) {
-				item.handleRoute(subRoute, route);
+		return this.setActiveView('bundle-forum', ['bundle-forum']).then(
+			function (item) {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
 			}
-		});
+		);
 	},
 
-	showNotebook (route, subRoute) {
+	showNotebook(route, subRoute) {
 		this.notebookRoute = subRoute;
 
-		return this.setActiveView('bundle-notebook', [
-			'bundle-forum'
-		]).then(item => {
-			if(item.handleRoute) {
-				item.handleRoute(subRoute, route);
+		return this.setActiveView('bundle-notebook', ['bundle-forum']).then(
+			item => {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
 			}
-		});
+		);
 	},
 
-	showCommunity (route, subRoute) {
+	showCommunity(route, subRoute) {
 		this.communityRoute = subRoute;
 
-		return this.setActiveView('bundle-community', [
-			'bundle-forum'
-		]).then((item) => {
-			if (item.handleRoute) {
-				item.handleRoute(subRoute, route);
+		return this.setActiveView('bundle-community', ['bundle-forum']).then(
+			item => {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
 			}
-		});
+		);
 	},
 
 	getRouteForPath: function (path, bundle) {
 		var root = path[0] || {},
-			isAccessible = !!bundle,//this.ContentStore.hasContent(bundle),
+			isAccessible = !!bundle, //this.ContentStore.hasContent(bundle),
 			subPath = path.slice(1),
 			route;
 
@@ -208,16 +213,17 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			route = {
 				path: '',
 				isFull: path.length <= 0,
-				isAccessible: isAccessible
+				isAccessible: isAccessible,
 			};
 		}
 
-		route.isAccessible = route.isAccessible === false ? false : isAccessible;
+		route.isAccessible =
+			route.isAccessible === false ? false : isAccessible;
 
 		return route;
 	},
 
-	getRouteForForum (forum, path) {
+	getRouteForForum(forum, path) {
 		const forumPart = encodeForURI(forum.getId());
 		const topic = path && path[0];
 		const comment = path && path[1];
@@ -235,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return {
 			path: route,
 			noWindow: true,
-			isFull: true
+			isFull: true,
 		};
-	}
+	},
 });

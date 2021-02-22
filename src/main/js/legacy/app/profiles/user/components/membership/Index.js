@@ -6,80 +6,79 @@ require('legacy/mixins/Router');
 require('./parts/Communities');
 require('./parts/Groups');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.membership.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.user-profile-membership',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.user-profile-membership',
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		cls: 'memberships-container',
 
-	cls: 'memberships-container',
+		items: [
+			{ xtype: 'profile-user-membership-communities' },
+			{ xtype: 'profile-user-membership-groups' },
+		],
 
-	items: [
-		{xtype: 'profile-user-membership-communities'},
-		{xtype: 'profile-user-membership-groups'}
-	],
+		initComponent: function () {
+			this.callParent(arguments);
 
+			this.initRouter();
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.addRoute('/', this.onRoute.bind(this));
 
-		this.initRouter();
+			this.addDefaultRoute('/');
 
-		this.addRoute('/', this.onRoute.bind(this));
+			this.communitiesCmp = this.down(
+				'profile-user-membership-communities'
+			);
+			this.groupsCmp = this.down('profile-user-membership-groups');
 
-		this.addDefaultRoute('/');
+			this.on({
+				activate: this.startResourceViewed.bind(this),
+				deactivate: this.stopResourceViewed.bind(this),
+			});
+		},
 
-		this.communitiesCmp = this.down('profile-user-membership-communities');
-		this.groupsCmp = this.down('profile-user-membership-groups');
+		startResourceViewed: function () {
+			var id = this.activeUser && this.activeUser.getId();
 
-		this.on({
-			'activate': this.startResourceViewed.bind(this),
-			'deactivate': this.stopResourceViewed.bind(this)
-		});
-	},
+			if (id && !this.hasCurrentTimer) {
+				AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
 
+				this.hasCurrentTimer = true;
+			}
+		},
 
-	startResourceViewed: function () {
-		var id = this.activeUser && this.activeUser.getId();
+		stopResourceViewed: function () {
+			var id = this.activeUser && this.activeUser.getId();
 
-		if (id && !this.hasCurrentTimer) {
-			AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
+			if (id && this.hasCurrentTimer) {
+				AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
+				delete this.hasCurrentTimer;
+			}
+		},
 
-			this.hasCurrentTimer = true;
-		}
-	},
+		userChanged: function (user, isMe) {
+			if (this.activeUser !== user) {
+				this.stopResourceViewed();
+			}
 
+			this.activeUser = user;
 
-	stopResourceViewed: function () {
-		var id = this.activeUser && this.activeUser.getId();
+			this.startResourceViewed();
 
-		if (id && this.hasCurrentTimer) {
-			AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
-			delete this.hasCurrentTimer;
-		}
-	},
+			return Promise.all([
+				this.communitiesCmp.setUser(user, isMe),
+				this.groupsCmp.setUser(user, isMe),
+			]);
+		},
 
-
-	userChanged: function (user, isMe) {
-		if (this.activeUser !== user) {
-			this.stopResourceViewed();
-		}
-
-		this.activeUser = user;
-
-		this.startResourceViewed();
-
-		return Promise.all([
-			this.communitiesCmp.setUser(user, isMe),
-			this.groupsCmp.setUser(user, isMe)
-		]);
-	},
-
-
-	onRoute: function () {
-		this.setTitle('Membership');
+		onRoute: function () {
+			this.setTitle('Membership');
+		},
 	}
-});
+);

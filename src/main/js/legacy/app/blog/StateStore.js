@@ -7,5 +7,5 @@ module.exports = exports = Ext.define('NextThought.app.blog.StateStore', {
 
 	onBlogDeleted: function (blog) {
 		this.fireEvent('blog-deleted', blog.getId());
-	}
+	},
 });

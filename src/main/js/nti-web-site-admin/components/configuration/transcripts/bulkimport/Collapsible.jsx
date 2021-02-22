@@ -4,26 +4,28 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 export default class Collapsible extends React.Component {
-
 	static propTypes = {
 		label: PropTypes.string,
 		labelOpened: PropTypes.string,
-		children: PropTypes.any
-	}
+		children: PropTypes.any,
+	};
 
-	state = {}
+	state = {};
 
-	toggle = () => this.setState({open: !this.state.open})
+	toggle = () => this.setState({ open: !this.state.open });
 
-	render () {
+	render() {
 		const {
-			props: {label, labelOpened = label, children},
-			state: {open}
+			props: { label, labelOpened = label, children },
+			state: { open },
 		} = this;
 
 		return (
-			<div className={cx('collapsible', {open})}>
-				<div className="collapsible-label" onClick={this.toggle}>{open ? labelOpened : label} <i className="icon-chevron-down" /></div>
+			<div className={cx('collapsible', { open })}>
+				<div className="collapsible-label" onClick={this.toggle}>
+					{open ? labelOpened : label}{' '}
+					<i className="icon-chevron-down" />
+				</div>
 				<div className="collapsible-content">{children}</div>
 			</div>
 		);

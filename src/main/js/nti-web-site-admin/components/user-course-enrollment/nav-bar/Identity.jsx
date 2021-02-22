@@ -1,34 +1,37 @@
 import './Identity.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DisplayName, Presentation} from '@nti/web-commons';
-import {scoped} from '@nti/lib-locale';
+import { Avatar, DisplayName, Presentation } from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
 
 const DEFAULT_TEXT = {
 	activityFor: 'Activity for',
-	in: 'in'
+	in: 'in',
 };
 
 const t = scoped('nti-site-admin.users.user.Identity', DEFAULT_TEXT);
 
 SiteAdminUserIdentity.propTypes = {
-	enrollment: PropTypes.object
+	enrollment: PropTypes.object,
 };
-export default function SiteAdminUserIdentity ({enrollment}) {
-	const {UserProfile: user, Username, CatalogEntry} = (enrollment || {});
+export default function SiteAdminUserIdentity({ enrollment }) {
+	const { UserProfile: user, Username, CatalogEntry } = enrollment || {};
 
-	if(!enrollment) {
+	if (!enrollment) {
 		return null;
 	}
 
 	return (
 		<div className="site-admin-user-enrollment-identity">
 			<div className="profile-image">
-				<Presentation.Asset contentPackage={CatalogEntry} type="landing">
-					<img className="enrollment-course-image"/>
+				<Presentation.Asset
+					contentPackage={CatalogEntry}
+					type="landing"
+				>
+					<img className="enrollment-course-image" />
 				</Presentation.Asset>
 				<div className="user-avatar">
-					<Avatar entity={user || Username}/>
+					<Avatar entity={user || Username} />
 				</div>
 			</div>
 			<div className="enrollment-info">

@@ -1,118 +1,114 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.prompt.components.Footer',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.prompt-footer',
 
-module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer', {
-	extend: 'Ext.Component',
-	alias: 'widget.prompt-footer',
+		cls: 'prompt-footer',
 
-	cls: 'prompt-footer',
+		renderTpl: Ext.DomHelper.markup([
+			{ tag: 'a', cls: 'cancel', html: 'Cancel' },
+			{ tag: 'a', cls: 'save disabled', tabindex: '1', html: 'Ok' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{tag: 'a', cls: 'cancel', html: 'Cancel'},
-		{tag: 'a', cls: 'save disabled', tabindex: '1', html: 'Ok'}
-	]),
+		renderSelectors: {
+			cancelEl: '.cancel',
+			saveEl: '.save',
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		cancelEl: '.cancel',
-		saveEl: '.save'
-	},
+			if (this.saveText !== undefined) {
+				this.setSaveText(this.saveText);
+			}
 
+			if (this.cancelText) {
+				this.setCancelText(this.cancelText);
+			}
 
-	afterRender: function () {
-		this.callParent(arguments);
+			if (this.saveEnabled) {
+				this.enableSave();
+			} else {
+				this.disableSave();
+			}
 
-		if (this.saveText !== undefined) {
-			this.setSaveText(this.saveText);
-		}
+			this.mon(this.saveEl, 'keypress', this.handleKeyPress.bind(this));
+			this.mon(this.el, 'click', this.handleClick.bind(this));
+		},
 
-		if (this.cancelText) {
-			this.setCancelText(this.cancelText);
-		}
+		enableSave: function () {
+			if (!this.rendered) {
+				this.saveEnabled = true;
+				return;
+			}
 
-		if (this.saveEnabled) {
-			this.enableSave();
-		} else {
-			this.disableSave();
-		}
+			this.saveEl.removeCls('disabled');
+		},
 
-		this.mon(this.saveEl, 'keypress', this.handleKeyPress.bind(this));
-		this.mon(this.el, 'click', this.handleClick.bind(this));
-	},
+		disableSave: function () {
+			if (!this.rendered) {
+				delete this.saveEnabled;
+				return;
+			}
 
+			this.saveEl.addCls('disabled');
+		},
 
-	enableSave: function () {
-		if (!this.rendered) {
-			this.saveEnabled = true;
-			return;
-		}
+		setSaveText: function (text) {
+			if (!this.rendered) {
+				this.saveText = text;
+				return;
+			}
 
-		this.saveEl.removeCls('disabled');
-	},
+			this[text ? 'removeCls' : 'addCls']('hidden');
 
+			this.saveEl.update(text || '');
+		},
 
-	disableSave: function () {
-		if (!this.rendered) {
-			delete this.saveEnabled;
-			return;
-		}
+		setCancelText: function (text) {
+			if (!this.rendered) {
+				this.cancelText = text;
+				return;
+			}
 
-		this.saveEl.addCls('disabled');
-	},
+			this.cancelEl.update(text);
+		},
 
+		handleKeyPress: function (e) {
+			if (e.getTarget('.disabled')) {
+				return;
+			}
 
-	setSaveText: function (text) {
-		if (!this.rendered) {
-			this.saveText = text;
-			return;
-		}
+			if (e.charCode === e.ENTER && e.getTarget('.save')) {
+				this.onSave();
+			}
+		},
 
-		this[text ? 'removeCls' : 'addCls']('hidden');
+		handleClick: function (e) {
+			if (e.getTarget('.disabled')) {
+				return;
+			}
 
-		this.saveEl.update(text || '');
-	},
+			if (e.getTarget('.save')) {
+				this.onSave();
+			} else if (e.getTarget('.cancel')) {
+				this.onCancel();
+			}
+		},
 
+		onSave: function () {
+			if (this.doSave) {
+				this.doSave();
+			}
+		},
 
-	setCancelText: function (text) {
-		if (!this.rendered) {
-			this.cancelText = text;
-			return;
-		}
-
-		this.cancelEl.update(text);
-	},
-
-
-	handleKeyPress: function (e) {
-		if (e.getTarget('.disabled')) { return; }
-
-		if (e.charCode === e.ENTER && e.getTarget('.save')) {
-			this.onSave();
-		}
-	},
-
-
-	handleClick: function (e) {
-		if (e.getTarget('.disabled')) { return; }
-
-		if (e.getTarget('.save')) {
-			this.onSave();
-		} else if (e.getTarget('.cancel')) {
-			this.onCancel();
-		}
-	},
-
-
-	onSave: function () {
-		if (this.doSave) {
-			this.doSave();
-		}
-	},
-
-
-	onCancel: function () {
-		if (this.doCancel) {
-			this.doCancel();
-		}
+		onCancel: function () {
+			if (this.doCancel) {
+				this.doCancel();
+			}
+		},
 	}
-});
+);

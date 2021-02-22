@@ -8,7 +8,6 @@ require('legacy/common/ux/ImagePopout');
 
 require('./Roll');
 
-
 module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-image-roll',
@@ -22,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 				var thumb = images[0];
 				return thumb && thumb.url;
 			});
-		}
+		},
 	},
 
 	constructor: function (config) {
@@ -32,21 +31,28 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 
 		Ext.apply(config, {
 			layout: 'fit',
-			items: [{
-				xtype: 'content-launcher',
-				data: this.self.getData(config.contentElement, config.reader),
-				listeners: {
-					scope: this,
-					launch: 'showImageRole'
-				}
-			}]
+			items: [
+				{
+					xtype: 'content-launcher',
+					data: this.self.getData(
+						config.contentElement,
+						config.reader
+					),
+					listeners: {
+						scope: this,
+						launch: 'showImageRole',
+					},
+				},
+			],
 		});
 
 		this.callParent([config]);
 	},
 
 	showImageRole: function (data) {
-		this.imagePopout = Ext.widget('image-lightbox', { data: data.items }).show();
+		this.imagePopout = Ext.widget('image-lightbox', {
+			data: data.items,
+		}).show();
 		this.on('destroy', this.imagePopout.destroy.bind(this.imagePopout));
-	}
+	},
 });

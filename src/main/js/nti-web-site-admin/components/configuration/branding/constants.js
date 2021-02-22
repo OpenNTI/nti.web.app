@@ -14,15 +14,10 @@ export const CAN_EDIT_EMAIL_ASSET = 'can-edit-email';
 export const CAN_RESET = 'can-reset';
 
 export const AssetTypeMap = {
-	'fullLogo': 'full_logo'
+	fullLogo: 'full_logo',
 };
 
-export const scopes = [
-	BRAND_COLOR,
-	LIBRARY,
-	ASSETS,
-	SITE,
-];
+export const scopes = [BRAND_COLOR, LIBRARY, ASSETS, SITE];
 
 export const MimeTypes = {
 	[SITE_BRAND]: 'application/vnd.nextthought.sitebrand',

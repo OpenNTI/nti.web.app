@@ -5,7 +5,7 @@
 		cursor: pointer;
 	}
 
-	i[class^=icon-chevron] {
+	i[class^='icon-chevron'] {
 		display: inline-block;
 		font-size: 10px;
 		font-weight: bold;
@@ -20,7 +20,7 @@
 	}
 
 	&.open {
-		i[class^=icon-chevron] {
+		i[class^='icon-chevron'] {
 			transform: rotate(180deg);
 		}
 

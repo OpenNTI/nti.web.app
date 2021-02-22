@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 
 const AbstractStorage = require('legacy/cache/AbstractStorage');
-const {swallow} = require('legacy/util/Globals');
+const { swallow } = require('legacy/util/Globals');
 
 require('legacy/common/StateStore');
-
 
 module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -38,7 +37,9 @@ module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
 
 		//attempt to parse the current state in the local storage
 		try {
-			this.currentState = JSON.parse(this.storage.getItem(this['stateKey']));
+			this.currentState = JSON.parse(
+				this.storage.getItem(this['stateKey'])
+			);
 		} catch (e) {
 			swallow(e);
 		} finally {
@@ -80,5 +81,5 @@ module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
 		var current = this.getCurrentState();
 
 		return current[key];
-	}
+	},
 });

@@ -7,7 +7,7 @@ import View from '../View';
 //TODO: make this more useful
 describe.skip('Site admin advanced nav bar test', () => {
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<View/>);
+		const cmp = renderer.create(<View />);
 
 		const tree = cmp.toJSON();
 

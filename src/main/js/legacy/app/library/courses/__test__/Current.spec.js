@@ -2,7 +2,7 @@
 // require('legacy/model/courses/CourseInstance');
 // const Current = require('legacy/app/library/courses/Current');
 
-describe.skip ('Current Courses Widget', () => {
+describe.skip('Current Courses Widget', () => {
 	// let CurrentCourseCmp;
 	// let containerEl;
 
@@ -17,7 +17,6 @@ describe.skip ('Current Courses Widget', () => {
 	// 	// });
 
 	// });
-
 
 	// afterEach (() => {
 	// 	if (CurrentCourseCmp && !CurrentCourseCmp.isDestroyed) {

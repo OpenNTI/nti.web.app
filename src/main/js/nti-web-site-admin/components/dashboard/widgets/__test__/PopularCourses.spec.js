@@ -11,7 +11,7 @@ const getMockService = (numberOfCourses, hasBatchPrev) => {
 		getCollection: () => {
 			return {
 				hasLink: () => true,
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		getWorkspace: () => {
@@ -20,32 +20,33 @@ const getMockService = (numberOfCourses, hasBatchPrev) => {
 		getBatch: () => {
 			let Items = [];
 
-			for(let i = 0; i < numberOfCourses; i++) {
+			for (let i = 0; i < numberOfCourses; i++) {
 				const index = i + 1;
 
 				Items.push({
 					Title: 'course' + index,
 					ProviderUniqueID: 'COURSE' + index,
 					TotalEnrolledCount: 100 - index,
-					getDefaultAssetRoot () { return 'testRoot'; }
+					getDefaultAssetRoot() {
+						return 'testRoot';
+					},
 				});
 			}
 
 			return Promise.resolve({
 				Items,
 				Total: Items.length,
-				getLink: (link) => {
-					if(link === 'batch-prev') {
+				getLink: link => {
+					if (link === 'batch-prev') {
 						return hasBatchPrev;
-					}
-					else if(link === 'batch-next') {
+					} else if (link === 'batch-next') {
 						return numberOfCourses > 4;
 					}
 
 					return false;
-				}
+				},
 			});
-		}
+		},
 	};
 };
 
@@ -66,7 +67,7 @@ describe('Site admin dashboard widget popular courses (5 items, no previous)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses/>);
+		const cmp = renderer.create(<PopularCourses />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -83,7 +84,7 @@ describe('Site admin dashboard widget popular courses (3 items, has previous)', 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses/>);
+		const cmp = renderer.create(<PopularCourses />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -100,7 +101,7 @@ describe('Site admin dashboard widget popular courses (no items, no previous)', 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses/>);
+		const cmp = renderer.create(<PopularCourses />);
 
 		jest.runAllTimers();
 		await flushPromises();

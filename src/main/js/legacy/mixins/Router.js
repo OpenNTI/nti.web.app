@@ -8,8 +8,7 @@ const Globals = require('legacy/util/Globals');
 require('./routing/Path');
 require('./routing/Object');
 
-
-function setObjHash (route, obj) {
+function setObjHash(route, obj) {
 	const id = encodeForURI(obj.get('NTIID'));
 	const [path] = route.path.split('#');
 
@@ -18,17 +17,15 @@ function setObjHash (route, obj) {
 	return route;
 }
 
-function shouldAddObjectForCommunityCase (path, obj) {
+function shouldAddObjectForCommunityCase(path, obj) {
 	return (path[0].isBundle && path[1]?.isBoard) || path[0].isCommunity;
 }
-
 
 module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	mixins: {
 		Path: 'NextThought.mixins.routing.Path',
-		Object: 'NextThought.mixins.routing.Object'
+		Object: 'NextThought.mixins.routing.Object',
 	},
-
 
 	initRouter: function () {
 		if (this.__routerInitialized) {
@@ -42,14 +39,12 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 		this.Router = {
 			PathActions: PathActions.create(),
-			WindowActions: WindowsActions.create()
+			WindowActions: WindowsActions.create(),
 		};
 	},
 
-
 	addChildRouter: function (cmp) {
 		cmp.__parentRouter = this;
-
 
 		if (!this.Router) {
 			this.initRouter();
@@ -67,13 +62,12 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		// this.mixins.Object.addChildRouter.call(this, cmp);
 	},
 
-
 	__handleObjectNav: function (fragment, edit, result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
 			result = {
-				route: result
+				route: result,
 			};
 		}
 
@@ -88,19 +82,17 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		this.pushRoute(result.title || '', result.route, result.precache);
 	},
 
-
 	__handleObjectRoute: function (result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
 			result = {
-				route: result
+				route: result,
 			};
 		}
 
 		this.replaceRoute(result.title || '', result.route, result.precache);
 	},
-
 
 	__handleNoObjectNavigation: function (object, fragment, edit) {
 		if (this.__parentRouter) {
@@ -108,13 +100,19 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-
 	navigateToObject: function (object, fragment, edit) {
-		return this.mixins.Object.handleObject.call(this, object)
+		return this.mixins.Object.handleObject
+			.call(this, object)
 			.then(this.__handleObjectNav.bind(this, fragment, edit))
-			.catch(this.__handleNoObjectNavigation.bind(this, object, fragment, edit));
+			.catch(
+				this.__handleNoObjectNavigation.bind(
+					this,
+					object,
+					fragment,
+					edit
+				)
+			);
 	},
-
 
 	/**
 	 * Try to figure out the path to an object, and if we can get a full path navigate to it
@@ -135,13 +133,17 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	attemptToNavigateToObject: function (obj, monitors) {
 		var me = this,
 			objId = obj && obj.getId(),
-			WindowStore = this.Router.WindowActions && this.Router.WindowActions.WindowStore,
+			WindowStore =
+				this.Router.WindowActions &&
+				this.Router.WindowActions.WindowStore,
 			hasWindow = objId && this.Router.WindowActions.hasWindow(obj);
 
 		monitors = monitors || {};
 
-		monitors.doNavigateToFullPath = monitors.doNavigateToFullPath || me.doNavigateToFullPath.bind(me);
-		monitors.onFailedToGetFullPath = monitors.onFailedToGetFullPath || me.onFailedToGetFullPath.bind(me);
+		monitors.doNavigateToFullPath =
+			monitors.doNavigateToFullPath || me.doNavigateToFullPath.bind(me);
+		monitors.onFailedToGetFullPath =
+			monitors.onFailedToGetFullPath || me.onFailedToGetFullPath.bind(me);
 
 		if (hasWindow && obj && obj.isModel) {
 			WindowStore.cacheObject(obj.getId(), obj, null, monitors);
@@ -178,7 +180,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			});
 	},
 
-
 	attemptToNavigateToPath: function (path) {
 		var route = this.getRouteForPath(path);
 
@@ -189,53 +190,56 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-
 	doNavigateToFullPath: function (obj, route) {
 		var path = route.path,
 			objId = obj && obj.getId(),
 			hasWindow = objId && this.Router.WindowActions.hasWindow(obj),
-			windowRoute = hasWindow && this.Router.WindowActions.getRouteForObject(obj);
+			windowRoute =
+				hasWindow && this.Router.WindowActions.getRouteForObject(obj);
 
-		objId = objId && (isNTIID(objId) ? encodeForURI(objId) : encodeURIComponent(objId));
+		objId =
+			objId &&
+			(isNTIID(objId) ? encodeForURI(objId) : encodeURIComponent(objId));
 
 		if (hasWindow && !route.noWindow) {
-			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(windowRoute);
+			path =
+				Globals.trimRoute(path) + '/' + Globals.trimRoute(windowRoute);
 		}
 
 		this.pushRootRoute('', path);
 	},
 
-
-	onFailedToGetFullPath: function (obj/*, route*/) {
+	onFailedToGetFullPath: function (obj /*, route*/) {
 		this.WindowActions.pushWindow(obj);
 
 		return Promise.reject();
 	},
 
-
 	__handleNoObjectRoute: function (object) {
 		var me = this,
 			children = me.__childRouters || [];
 
-		Promise.first(children.map(function (child) {
-			if (child.handleObject) {
-				return child.handleObject(object);
-			}
+		Promise.first(
+			children.map(function (child) {
+				if (child.handleObject) {
+					return child.handleObject(object);
+				}
 
-			return Promise.reject();
-		})).then(me.__handleObjectRoute.bind(me))
+				return Promise.reject();
+			})
+		)
+			.then(me.__handleObjectRoute.bind(me))
 			.catch(function () {
 				me.replaceRootRoute('', '/');
 			});
 	},
 
-
 	handleObject: function (object) {
-		this.mixins.Object.handleObject.call(this, object)
+		this.mixins.Object.handleObject
+			.call(this, object)
 			.then(this.__handleObjectRoute.bind(this))
 			.then(this.__handleNoObjectRoute.bind(this, object));
 	},
-
 
 	/**
 	 * Return the current context
@@ -243,7 +247,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * @returns {Object|string} An object or string describing the current context
 	 */
 	getContext: function () {},
-
 
 	/**
 	 * Returns an array of the current context the view is in
@@ -256,9 +259,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			currentTitle = me.getRouteTitle(),
 			myContext = me.getContext(),
 			child = me.getActiveItem(),
-			childContext = child && child.getCurrentContext && child.getCurrentContext();
+			childContext =
+				child && child.getCurrentContext && child.getCurrentContext();
 
-		function addContext (c) {
+		function addContext(c) {
 			if (Ext.isArray(c)) {
 				context = context.concat(c);
 			} else if (c) {
@@ -274,15 +278,12 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			childContext = Promise.resolve(childContext);
 		}
 
-		return Promise.all([
-			myContext,
-			childContext
-		]).then(function (results) {
+		return Promise.all([myContext, childContext]).then(function (results) {
 			var my = {
 				route: currentRoute,
 				title: currentTitle,
 				obj: results[0],
-				cmp: me
+				cmp: me,
 			};
 
 			addContext(my);
@@ -291,7 +292,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			return context;
 		});
 	},
-
 
 	/**
 	 * Return the active cmp for this route
@@ -305,7 +305,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		return item || {};
 	},
 
-
 	/**
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
@@ -315,9 +314,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	allowNavigation: function () {
 		var activeItem = this.getActiveItem();
 
-		return activeItem && activeItem.allowNavigation ? activeItem.allowNavigation() : true;
+		return activeItem && activeItem.allowNavigation
+			? activeItem.allowNavigation()
+			: true;
 	},
-
 
 	/**
 	 * Before changing routes, go down the active route and call onDeactivate
@@ -339,12 +339,15 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-
-	isRouteDifferent (route) {
+	isRouteDifferent(route) {
 		let routeParts = this.getRouteParts(route);
 		let current = this.getCurrentFullRoute();
 		let currentParts = current && this.getRouteParts(current);
 
-		return !current || Globals.trimRoute(currentParts.route.path) !== Globals.trimRoute(routeParts.route.path);
-	}
+		return (
+			!current ||
+			Globals.trimRoute(currentParts.route.path) !==
+				Globals.trimRoute(routeParts.route.path)
+		);
+	},
 });

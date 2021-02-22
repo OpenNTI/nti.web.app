@@ -1,18 +1,21 @@
-import { User, getAppUsername} from '@nti/web-client';
+import { User, getAppUsername } from '@nti/web-client';
 
 export default {
-	handles (targetMimeType) {
-		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
+	handles(targetMimeType) {
+		targetMimeType = targetMimeType.replace(
+			'application/vnd.nextthought.',
+			''
+		);
 		targetMimeType = targetMimeType.replace('.', '-');
 
-		if(targetMimeType === ('messageinfo')) {
+		if (targetMimeType === 'messageinfo') {
 			return true;
 		} else {
 			return false;
 		}
 	},
 
-	resolveTitle (obj/*, hit*/) {
+	resolveTitle(obj /*, hit*/) {
 		const sharedWith = obj.sharedWith.filter(function (u) {
 			let id = u;
 
@@ -20,7 +23,7 @@ export default {
 				id = u.getId();
 			}
 
-			if(getAppUsername() === id) {
+			if (getAppUsername() === id) {
 				return false;
 			} else {
 				return true;
@@ -29,16 +32,19 @@ export default {
 
 		let title = Promise.all(
 			sharedWith.map(u =>
-				User.resolve({entityId : u})
-					.catch(() => {
-						//Implement the fallback logic in User.resolve() so that this catch isn't posible to hit
-						return {alias: 'Unknown' };
-					})
+				User.resolve({ entityId: u }).catch(() => {
+					//Implement the fallback logic in User.resolve() so that this catch isn't posible to hit
+					return { alias: 'Unknown' };
+				})
 			)
 		).then(function (users) {
-			if (!Array.isArray(users)) { users = [users]; }
+			if (!Array.isArray(users)) {
+				users = [users];
+			}
 
-			users = users.map(function (u) { return u.alias; });
+			users = users.map(function (u) {
+				return u.alias;
+			});
 
 			if (users.length === 1) {
 				return 'Chat with ' + users[0];
@@ -50,11 +56,10 @@ export default {
 			}
 		});
 
-
 		return title;
 	},
 
-	resolvePath (obj, hit, getBreadCrumb) {
+	resolvePath(obj, hit, getBreadCrumb) {
 		return null;
-	}
+	},
 };

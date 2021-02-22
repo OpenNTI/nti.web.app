@@ -2,8 +2,7 @@ const Ext = require('@nti/extjs');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
-const {isMe} = require('legacy/util/Globals');
-
+const { isMe } = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	extend: 'Ext.Component',
@@ -12,35 +11,52 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	cls: 'chat-transcript',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'divider', cn: [{tag: 'span', html: '{today}{time:date("F j")}'}] },
+		{
+			cls: 'divider',
+			cn: [{ tag: 'span', html: '{today}{time:date("F j")}' }],
+		},
 
-		{tag: 'tpl', 'for': 'messages', cn: [
-
-			{cls: 'message {me} {moderatedCls}', 'data-guid': '{guid}', cn: [
-				{cls: 'control', tag: 'span'},
-				{cls: 'time', html: '{time:date("g:i:s A")}'},
-				{ cls: 'wrap', cn: [
-					{cls: 'name {me}', html: '{name:ellipsis(50)}'},
-					{cls: 'body', html: '{body}'}
-				]}
-			]}
-
-		]}
-
+		{
+			tag: 'tpl',
+			for: 'messages',
+			cn: [
+				{
+					cls: 'message {me} {moderatedCls}',
+					'data-guid': '{guid}',
+					cn: [
+						{ cls: 'control', tag: 'span' },
+						{ cls: 'time', html: '{time:date("g:i:s A")}' },
+						{
+							cls: 'wrap',
+							cn: [
+								{
+									cls: 'name {me}',
+									html: '{name:ellipsis(50)}',
+								},
+								{ cls: 'body', html: '{body}' },
+							],
+						},
+					],
+				},
+			],
+		},
 	]),
 
 	initComponent: function () {
-		var d = this.renderData = Ext.apply(this.renderData || {},{
+		var d = (this.renderData = Ext.apply(this.renderData || {}, {
 				time: this.time,
-				messages: this.formatMessages(this.messages)
-			}),
-
+				messages: this.formatMessages(this.messages),
+			})),
 			t = this.time || 0,
 			now = new Date(),
 			day = t.getDate(),
 			year = t.getFullYear(),
 			mo = t.getMonth();
-		if (now.getDate() === day && now.getMonth() === mo && now.getFullYear() === year) {
+		if (
+			now.getDate() === day &&
+			now.getMonth() === mo &&
+			now.getFullYear() === year
+		) {
 			delete d.time;
 			d.today = 'Today';
 		}
@@ -51,24 +67,28 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	afterRender: function () {
 		this.callParent(arguments);
 		var r = this.el.down('.reply');
-		if (r) {r.remove();}
+		if (r) {
+			r.remove();
+		}
 		this.el.on('click', this.click, this);
-		Ext.each(this.el.query('.control'), function (c) {
-			this.mon(Ext.fly(c), 'click', this.onControlClick, this);
-		}, this);
+		Ext.each(
+			this.el.query('.control'),
+			function (c) {
+				this.mon(Ext.fly(c), 'click', this.onControlClick, this);
+			},
+			this
+		);
 	},
 
-
 	formatMessages: function (messages) {
-		var m = [], me = this;
+		var m = [],
+			me = this;
 
-
-
-		function getEl (guid) {
+		function getEl(guid) {
 			return me.getEl().down('[data-guid=' + guid + ']');
 		}
 
-		Ext.Array.sort(messages, function (a,b) {
+		Ext.Array.sort(messages, function (a, b) {
 			var k = 'CreatedTime';
 
 			a = a.get(k);
@@ -84,42 +104,41 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 					moderatedCls: msg.hasBeenModerated()
 						? 'moderated'
 						: msg.hasBeenFlagged()
-							? 'confirmFlagged'
-							: '',
+						? 'confirmFlagged'
+						: '',
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,
 					time: msg.get('CreatedTime'),
 					body: 'Loading...',
-					msg: msg	  //just pass the message back
+					msg: msg, //just pass the message back
 				};
-
 
 			UserRepository.getUser(creator, function (u) {
 				try {
 					o.name = u.getName();
-				}
-				//if this throws an error, o = null, and we've already rendered.
-				catch (er) {
+				} catch (er) {
+					//if this throws an error, o = null, and we've already rendered.
 					getEl(guid).down('.name').update(u.getName());
 				}
 			});
 
-			msg.compileBodyContent(function (text) {
-				try {
-					o.body = text;
-				}
-				//if this throws an error, o = null, and we've already rendered.
-				catch (er) {
-					getEl(guid).down('.body').update(text);
-					getEl(guid).down('.body .reply').remove();
-				}
-
-
-			}, me, me.generateClickHandler, 225);
+			msg.compileBodyContent(
+				function (text) {
+					try {
+						o.body = text;
+					} catch (er) {
+						//if this throws an error, o = null, and we've already rendered.
+						getEl(guid).down('.body').update(text);
+						getEl(guid).down('.body .reply').remove();
+					}
+				},
+				me,
+				me.generateClickHandler,
+				225
+			);
 
 			m.push(o);
-
 
 			o = null;
 		});
@@ -127,8 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		return m;
 	},
 
-
-	generateClickHandler: function (id,data) {
+	generateClickHandler: function (id, data) {
 		if (this.readOnlyWBsData === undefined) {
 			this.readOnlyWBsData = {};
 		}
@@ -137,11 +155,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 	click: function (e) {
 		e.stopEvent();
-		var me = this, t = e.getTarget('.whiteboard-container', null, true), guid,
+		var me = this,
+			t = e.getTarget('.whiteboard-container', null, true),
+			guid,
 			a = e.getTarget('a');
 
-		if (!t && !a) { return;}
-
+		if (!t && !a) {
+			return;
+		}
 
 		if (t) {
 			guid = t.up('.body-divider').getAttribute('id');
@@ -149,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 				me.fireEvent('show-whiteboard', me, me.readOnlyWBsData[guid]);
 				//Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 			}
-		}else {
+		} else {
 			if (me.fireEvent('navigate-to-href', me, a.href)) {
 				return false;
 			}
@@ -157,7 +178,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 		return false;
 	},
-
 
 	onControlClick: function (evt, dom, opts) {
 		var message = evt.getTarget('.message');
@@ -167,7 +187,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		this.up('chat-transcript-window').fireEvent('control-clicked');
 	},
 
-
 	toggleModerationPanel: function () {
 		this.el.toggleCls('moderating');
 		Ext.each(this.el.query('.flagged'), function (d) {
@@ -176,6 +195,5 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		Ext.each(this.el.query('.control.checked'), function (d) {
 			Ext.fly(d).removeCls('checked');
 		});
-	}
-
+	},
 });

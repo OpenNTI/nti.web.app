@@ -2,113 +2,184 @@ const Ext = require('@nti/extjs');
 
 require('legacy/common/components/Collection');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.library.components.Collection',
+	{
+		extend: 'NextThought.common.components.Collection',
+		alias: 'widget.library-collection',
 
-module.exports = exports = Ext.define('NextThought.app.library.components.Collection', {
-	extend: 'NextThought.common.components.Collection',
-	alias: 'widget.library-collection',
+		ui: 'library-collection',
+		store: 'ContentBundles',
+		cls: 'books',
+		rowSpan: 1,
 
-	ui: 'library-collection',
-	store: 'ContentBundles',
-	cls: 'books',
-	rowSpan: 1,
+		tpl: Ext.DomHelper.markup([
+			//{ cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
+			//	'aria-hidden': 'true', cn: [
+			//		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
+			//	]
+			//}},
+			{
+				tag: 'ul',
+				cls: 'library-grid',
+				role: 'group',
+				'aria-label': '{name}',
+				cn: {
+					tag: 'tpl',
+					for: 'items',
+					cn: ['{entry}'],
+				},
+			},
+		]),
 
-	tpl: Ext.DomHelper.markup([
-		//{ cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
-		//	'aria-hidden': 'true', cn: [
-		//		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
-		//	]
-		//}},
-		{ tag: 'ul', cls: 'library-grid', 'role': 'group', 'aria-label': '{name}', cn: {
-			tag: 'tpl', 'for': 'items', cn: ['{entry}']}
-		}
-	]),
+		entryTpl: Ext.DomHelper.markup({
+			tag: 'li',
+			cls:
+				'library-grid-item item {featured} allow-zoom {archived} {upcoming} {completed}',
+			role: 'link',
+			'aria-label': '{title}',
+			cn: [
+				{ cls: 'cover', cn: [{ tag: 'img', src: '{icon}' }] },
+				{
+					cls: 'controls',
+					cn: [
+						{
+							tag: 'tpl',
+							if: 'preview',
+							cn: { cls: 'preview', html: '{preview}' },
+						},
+						{
+							tag: 'tpl',
+							if: 'badge',
+							cn: [
+								{
+									tag: 'tpl',
+									if: 'completed',
+									cn: {
+										cls: 'badge completed',
+										cn: [
+											{
+												tag: 'i',
+												cls:
+													'icon-check completed-check',
+											},
+											{
+												tag: 'span',
+												cls: 'text',
+												html: '{badge}',
+											},
+										],
+									},
+								},
+								{
+									tag: 'tpl',
+									if: '!completed',
+									cn: [{ cls: 'badge', html: '{badge}' }],
+								},
+							],
+						},
+					],
+				},
+				{ tag: 'tpl', if: 'enableSettings', cn: { cls: 'settings' } },
+				{
+					tag: 'tpl',
+					if: 'sample',
+					cn: { cls: 'sample', 'data-qtip': 'Sample' },
+				}, //store - sample flag
+				{
+					cls: 'meta',
+					'aria-hidden': 'true',
+					cn: [
+						{ cls: 'courseName', html: '{courseName}' }, //course name/id
+						{ cls: 'semester', html: '{semester}' },
+						{
+							tag: 'tpl',
+							if: 'title',
+							cn: {
+								cls: 'title',
+								html: '{title}',
+								'data-qtip':
+									'{[values.title.length>40?Ext.String.htmlEncode(values.title):""]}',
+							},
+						},
+						{
+							tag: 'tpl',
+							if: 'byline',
+							cn: {
+								cls: 'author',
+								html: '{byline}',
+								//it will likely be clipped if its longer than 20 chars, so add a tip if it is
+								'data-qtip':
+									'{[values.byline.length>20?Ext.String.htmlEncode(values.byline):""]}',
+							},
+						},
+						{
+							tag: 'tpl',
+							if: '(!byline && author)',
+							cn: {
+								cls: 'author',
+								html: '{author}',
+								//it will likely be clipped if its longer than 20 chars, so add a tip if it is
+								'data-qtip':
+									'{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}',
+							},
+						},
+						{ cls: 'description', html: '{description}' },
+					],
+				},
+				{
+					tag: 'tpl',
+					if: 'progress',
+					cn: {
+						cls: 'progress',
+						style: 'width: {progress * 100}%',
+					},
+				},
+			],
+		}),
 
-	entryTpl: Ext.DomHelper.markup({
-		tag: 'li',
-		cls: 'library-grid-item item {featured} allow-zoom {archived} {upcoming} {completed}',
-		'role': 'link',
-		'aria-label': '{title}',
-		cn: [
-			{ cls: 'cover', cn: [
-				{tag: 'img', src: '{icon}'}
-			]},
-			{ cls: 'controls', cn: [
-				{ tag: 'tpl', 'if': 'preview', cn: {cls: 'preview', html: '{preview}'}},
-				{ tag: 'tpl', 'if': 'badge', cn: [
-					{tag: 'tpl', 'if': 'completed', cn: {
-						cls: 'badge completed',
-						cn: [
-							{tag: 'i', cls: 'icon-check completed-check'},
-							{tag: 'span', cls: 'text', html: '{badge}'}
-						]
-					}},
-					{tag: 'tpl', 'if': '!completed', cn: [
-						{cls: 'badge', html: '{badge}'}
-					]}
-				]}
-			]},
-			{ tag: 'tpl', 'if': 'enableSettings', cn: { cls: 'settings'}},
-			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
-			{ cls: 'meta', 'aria-hidden': 'true', cn: [
-				{ cls: 'courseName', html: '{courseName}' },  //course name/id
-				{ cls: 'semester', html: '{semester}'},
-				{ tag: 'tpl', 'if': 'title', cn: { cls: 'title', html: '{title}',
-					'data-qtip': '{[values.title.length>40?Ext.String.htmlEncode(values.title):""]}' } },
-				{ tag: 'tpl', 'if': 'byline', cn: { cls: 'author', html: '{byline}',
-					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
-					'data-qtip': '{[values.byline.length>20?Ext.String.htmlEncode(values.byline):""]}' } },
-				{ tag: 'tpl', 'if': '(!byline && author)', cn: { cls: 'author', html: '{author}',
-					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
-					'data-qtip': '{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}' } },
-				{ cls: 'description', html: '{description}' }
-			]},
-			{tag: 'tpl', 'if': 'progress', cn: {
-				cls: 'progress', style: 'width: {progress * 100}%'
-			}}
-		]
-	}),
+		constructor: function () {
+			this.callParent(arguments);
 
+			if (this.store) {
+				// Force the selection model to construct now. & bind the store... don't wait until render.
+				// Fixes an initialization bug where the nav bar remains 'empty' after a refresh.
+				this.bindStore(this.store);
+			}
+		},
 
-	constructor: function () {
-		this.callParent(arguments);
+		afterRender: function () {
+			this.callParent(arguments);
 
-		if (this.store) {
-			// Force the selection model to construct now. & bind the store... don't wait until render.
-			// Fixes an initialization bug where the nav bar remains 'empty' after a refresh.
-			this.bindStore(this.store);
-		}
-	},
+			if (!Ext.is.iOS) {
+				this.addCls('allow-zoom');
+			}
+		},
 
+		prepareData: function (data, index, record) {
+			var i = this.callParent(arguments),
+				catalog =
+					record.getCourseCatalogEntry &&
+					record.getCourseCatalogEntry();
 
-	afterRender: function () {
-		this.callParent(arguments);
+			if (record.getIconImage) {
+				record.getIconImage();
+			}
+			if (catalog && catalog.get('Preview')) {
+				i.preview = 'preview';
+			}
 
-		if (!Ext.is.iOS) {
-			this.addCls('allow-zoom');
-		}
-	},
+			return i;
+		},
 
-	prepareData: function (data, index, record) {
-		var i = this.callParent(arguments),
-			catalog = record.getCourseCatalogEntry && record.getCourseCatalogEntry();
+		handleSelect: function (selModel, record) {
+			selModel.deselect(record);
 
-		if (record.getIconImage) {
-			record.getIconImage();
-		}
-		if (catalog && catalog.get('Preview')) {
-			i.preview = 'preview';
-		}
+			var node = this.getNodeByRecord(record);
 
-		return i;
-	},
-
-	handleSelect: function (selModel, record) {
-		selModel.deselect(record);
-
-		var node = this.getNodeByRecord(record);
-
-		if (this.navigate) {
-			this.navigate(record, node);
-		}
+			if (this.navigate) {
+				this.navigate(record, node);
+			}
+		},
 	}
-});
+);

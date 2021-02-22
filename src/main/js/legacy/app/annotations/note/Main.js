@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const ImageZoomView = require('legacy/common/ux/ImageZoomView');
 const SlideDeck = require('legacy/common/ux/SlideDeck');
 const Globals = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const CommonOverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');
 const CommonCard = require('legacy/common/components/cards/Card');
 const MediaviewerOverlayedPanel = require('legacy/app/mediaviewer/content/OverlayedPanel');
@@ -19,58 +19,72 @@ require('legacy/mixins/Searchable');
 
 require('./Panel');
 
-
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	extend: 'NextThought.app.annotations.note.Panel',
 	alias: 'widget.note-main-view',
 
 	mixins: {
-		Searchable: 'NextThought.mixins.Searchable'
+		Searchable: 'NextThought.mixins.Searchable',
 	},
 
 	root: true,
 	enableTitle: true,
-	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
+	highlightTpl: Ext.DomHelper.createTemplate({
+		tag: 'span',
+		cls: 'highlight',
+		html: '{0}',
+	}),
 
-	purchasableTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'bookcover', style: {backgroundImage: 'url({img})'}},
-		{cls: 'meta', cn: [
-			{cls: 'title', html: '{title}'},
-			{cls: 'byline', html: '{number}'},
-			{cls: 'button target', html: '{target}'}
-		]}
-	])),
+	purchasableTpl: new Ext.XTemplate(
+		Ext.DomHelper.markup([
+			{ cls: 'bookcover', style: { backgroundImage: 'url({img})' } },
+			{
+				cls: 'meta',
+				cn: [
+					{ cls: 'title', html: '{title}' },
+					{ cls: 'byline', html: '{number}' },
+					{ cls: 'button target', html: '{target}' },
+				],
+			},
+		])
+	),
 
-	noAccessTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'no-access', html: 'You do not have access to this content.'}
-	])),
+	noAccessTpl: new Ext.XTemplate(
+		Ext.DomHelper.markup([
+			{
+				cls: 'no-access',
+				html: 'You do not have access to this content.',
+			},
+		])
+	),
 
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'note main-view',
 			cn: [
-				{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
+				{ cls: 'avatar-wrapper', cn: ['{user:avatar}'] },
 				{
 					cls: 'meta',
 					cn: [
-						{ cls: 'controls', cn: [
-							{ cls: 'favorite' },
-							{ cls: 'like' }
-						] },
-						{ cls: 'title'},
-						{ cls: 'name-wrap', cn: [
-							{ tag: 'span', cls: 'name' },
-							{ tag: 'span', cls: 'time'},
-							{ tag: 'span', cls: 'shared-to' }
-						]}
-					]
+						{
+							cls: 'controls',
+							cn: [{ cls: 'favorite' }, { cls: 'like' }],
+						},
+						{ cls: 'title' },
+						{
+							cls: 'name-wrap',
+							cn: [
+								{ tag: 'span', cls: 'name' },
+								{ tag: 'span', cls: 'time' },
+								{ tag: 'span', cls: 'shared-to' },
+							],
+						},
+					],
 				},
 				{ cls: 'clear' },
 				{
-					cls: 'context', cn: [
-						{tag: 'canvas'},
-						{tag: 'span', cls: 'text'}
-					]
+					cls: 'context',
+					cn: [{ tag: 'canvas' }, { tag: 'span', cls: 'text' }],
 				},
 				{ cls: 'body' },
 				{
@@ -79,25 +93,38 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 						{
 							cls: 'reply-options',
 							cn: [
-								{ cls: 'link reply', html: '{{{NextThought.view.annotations.note.Main.reply}}}' },
-								{ cls: 'link share', html: '{{{NextThought.view.annotations.note.Main.share}}}' },
-								{ cls: 'link more', 'data-qtip': '{{{NextThought.view.annotations.note.Main.options}}}', html: '&nbsp;'}
-							]
-						}
-					]
-				}
-			]
+								{
+									cls: 'link reply',
+									html:
+										'{{{NextThought.view.annotations.note.Main.reply}}}',
+								},
+								{
+									cls: 'link share',
+									html:
+										'{{{NextThought.view.annotations.note.Main.share}}}',
+								},
+								{
+									cls: 'link more',
+									'data-qtip':
+										'{{{NextThought.view.annotations.note.Main.options}}}',
+									html: '&nbsp;',
+								},
+							],
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '{id}-body',
 			cls: 'note-replies',
-			cn: ['{%this.renderContainer(out,values)%}']
-		}
+			cn: ['{%this.renderContainer(out,values)%}'],
+		},
 	]),
 
 	renderSelectors: {
 		avatar: '.avatar-wrapper',
-		contextContainer: '.context'
+		contextContainer: '.context',
 	},
 
 	afterRender: function () {
@@ -114,47 +141,49 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 					me.setRecord(bRecord);
 				}
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(Globals.getError(e));
 		}
 
 		this.initSearch();
 	},
 
-
 	getRangePositionAdjustments: function (key) {
 		const scrollTop = Ext.getBody().getScrollTop();
 
-		return {top: -1 * (this.el.getY() - scrollTop), left: -1 * this.el.getX()};
+		return {
+			top: -1 * (this.el.getY() - scrollTop),
+			left: -1 * this.el.getX(),
+		};
 	},
-
 
 	createEditor: function () {
 		this.callParent();
-		this.editor.el.down('.title')
+		this.editor.el
+			.down('.title')
 			.setVisibilityMode(Ext.Element.DISPLAY)
 			.addCls('small')
 			.hide();
 	},
 
 	fillInReplies: function () {
-		var r = this.record, me = this;
+		var r = this.record,
+			me = this;
 		this.removeAll(true);
 
-		return wait()
-			.then(function () {
-				if (me.isDestroyed) {
-					return Promise.reject();
-				}
+		return wait().then(function () {
+			if (me.isDestroyed) {
+				return Promise.reject();
+			}
 
-				me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-				return me.loadReplies(r)
-					.then(function () {
-						me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-						return Promise.resolve();
-					});
+			me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
+			return me.loadReplies(r).then(function () {
+				me.record.notifyObserversOfFieldChange(
+					'AdjustedReferenceCount'
+				);
+				return Promise.resolve();
 			});
+		});
 	},
 
 	disable: function () {
@@ -163,8 +192,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	},
 
 	fixUpCopiedContext: function (n) {
-		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
-			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
+		var node = Ext.get(n),
+			cardTpl,
+			slideDeckTpl,
+			slideVideoTpl,
+			maxWidth = 574; //shortcut, probably should figure out how wide the context is...but that returns 0
 		// when queried at this point.
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
@@ -178,59 +210,83 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		node.select('.redactionAction .controls').remove();
 
-		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function (i) {
-			var e = Ext.get(i);
-			//only strip off the style for width that are too wide.
-			if (parseInt(i.style.width, 10) >= maxWidth) {
-				e.setStyle({width: undefined});
+		Ext.each(
+			node.query('span[itemprop~=nti-data-markupenabled]'),
+			function (i) {
+				var e = Ext.get(i);
+				//only strip off the style for width that are too wide.
+				if (parseInt(i.style.width, 10) >= maxWidth) {
+					e.setStyle({ width: undefined });
+				}
 			}
-		});
+		);
 
 		Ext.each(node.query('iframe'), function (i) {
 			var e = Ext.get(i),
-				w, h, r;
+				w,
+				h,
+				r;
 			if (e.parent('div.externalvideo')) {
 				w = parseInt(e.getAttribute('width'), 10);
 				h = parseInt(e.getAttribute('height'), 10);
 				r = h !== 0 ? w / h : 0;
 				if (w >= maxWidth && r !== 0) {
-					e.set({width: maxWidth, height: maxWidth / r});
+					e.set({ width: maxWidth, height: maxWidth / r });
 				}
-			}
-			else {
+			} else {
 				e.remove();
 			}
 		});
 
-		node.select('[itemprop~=nti-data-markupenabled] a').on('click', this.contextAnnotationActions, this);
+		node.select('[itemprop~=nti-data-markupenabled] a').on(
+			'click',
+			this.contextAnnotationActions,
+			this
+		);
 		this.on('markupenabled-action', this.commentOnAnnototableImage);
 
-		Ext.each(node.query('.application-highlight'), function (h) {
-			if (this.record.isModifiable()) {
-				Ext.fly(h).addCls('highlight-mouse-over');
-			}
-		}, this);
+		Ext.each(
+			node.query('.application-highlight'),
+			function (h) {
+				if (this.record.isModifiable()) {
+					Ext.fly(h).addCls('highlight-mouse-over');
+				}
+			},
+			this
+		);
 
-		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: CommonCard.prototype.renderTpl.html});
+		cardTpl = Ext.DomHelper.createTemplate({
+			cls: 'content-card',
+			html: CommonCard.prototype.renderTpl.html,
+		});
 		Ext.each(node.query('object[type*=nticard]'), function (c) {
 			var d = CommonOverlayedPanel.getData(c);
 			cardTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: MediaviewerSlidedeck.prototype.renderTpl.html});
+		slideDeckTpl = Ext.DomHelper.createTemplate({
+			cls: 'content-launcher',
+			html: MediaviewerSlidedeck.prototype.renderTpl.html,
+		});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function (c) {
 			var d = MediaviewerDeckOverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: MediaviewerSlideVideo.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function (c) {
-			var d = MediaviewerOverlayedPanel.getData(c);
-			slideVideoTpl.insertAfter(c, d, false);
-			Ext.fly(c).remove();
+		slideVideoTpl = Ext.DomHelper.createTemplate({
+			cls: 'content-launcher',
+			html: MediaviewerSlideVideo.prototype.renderTpl.html,
 		});
+		Ext.each(
+			node.query('object[type*=ntislidevideo][itemprop$=card]'),
+			function (c) {
+				var d = MediaviewerOverlayedPanel.getData(c);
+				slideVideoTpl.insertAfter(c, d, false);
+				Ext.fly(c).remove();
+			}
+		);
 
 		if (node.query('object[type$=slide]').length) {
 			this.context.up('.context').addCls('slide');
@@ -245,20 +301,27 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	},
 
 	addAdditionalRecordListeners: function (record) {
-		record.addObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
+		record.addObserverForField(
+			this,
+			'sharedWith',
+			'fillInShareFromFieldChange'
+		);
 	},
 
 	removeAdditionalRecordListeners: function (record) {
-		record.removeObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
+		record.removeObserverForField(
+			this,
+			'sharedWith',
+			'fillInShareFromFieldChange'
+		);
 	},
 
 	fillInShareFromFieldChange: function (field, value) {
 		var me = this;
 
-		UserRepository.getUser(value)
-			.then(function (users) {
-				me.fillInShare(users);
-			});
+		UserRepository.getUser(value).then(function (users) {
+			me.fillInShare(users);
+		});
 	},
 
 	setRecord: function (r) {
@@ -272,10 +335,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		var me = this;
 
 		if (me.readerContext) {
-			me.contextLoad = me.readerContext.load()
-				.then(function (context) {
-					me.setContext(context);
-				});
+			me.contextLoad = me.readerContext.load().then(function (context) {
+				me.setContext(context);
+			});
 		}
 
 		me.callParent(arguments);
@@ -293,7 +355,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	onRemove: function (cmp) {
 		var c = this.items.getCount();
 		console.log('removed child, it was deleting: ', cmp.deleting);
-		if (cmp.deleting && c === 0 && (!this.record || this.record.placeholder)) {
+		if (
+			cmp.deleting &&
+			c === 0 &&
+			(!this.record || this.record.placeholder)
+		) {
 			this.record.destroy();
 			this.destroy();
 
@@ -321,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 	setPurchasableContext: function (ntiid) {
 		//It doesn't look like anything was calling this, it would've been blowing up anyway
-		console.error('setPurchasableContext is no longer used, don\'t use it.');
+		console.error("setPurchasableContext is no longer used, don't use it.");
 		// var me = this, el,
 		// 	course = CourseWareUtils.courseForNtiid(ntiid),
 		// 	content = ContentUtils.purchasableForContentNTIID(ntiid);
@@ -358,41 +424,48 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	contextAnnotationActions: function (e, dom) {
 		e.stopEvent();
 		var action = (dom.getAttribute('href') || '').replace('#', ''),
-			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
+			d = Ext.fly(dom)
+				.up('[itemprop~=nti-data-markupenabled]')
+				.down('img'),
 			img = d && d.is('img') ? d.dom : null,
 			me = this;
 
-		function openSlideDeck () {
+		function openSlideDeck() {
 			me.up('note-window').close();
 			SlideDeck.openFromDom(dom, me.reader);
 		}
 
-
 		if (/^mark$/i.test(action)) {
-			this.commentOnAnnototableImage(img/*, action*/);
-		}
-		else if (/^zoom$/i.test(action)) {
+			this.commentOnAnnototableImage(img /*, action*/);
+		} else if (/^zoom$/i.test(action)) {
 			ImageZoomView.zoomImage(dom, this.reader, this);
-		}
-		else if (/^slide$/.test(action)) {
+		} else if (/^slide$/.test(action)) {
 			if (this.editorActive()) {
-
 				Ext.Msg.show({
-					msg: getString('NextThought.view.annotations.note.Main.editor-warning-msg'),
+					msg: getString(
+						'NextThought.view.annotations.note.Main.editor-warning-msg'
+					),
 					scope: me,
 					//We need to bitwise OR these two, so stop the lint.
 					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 					icon: 'warning-red',
-					title: getString('NextThought.view.annotations.note.Main.editor-warning-title'),
-					buttonText: {ok: 'caution:' + getString('NextThought.view.annotations.note.Main.ok')},
+					title: getString(
+						'NextThought.view.annotations.note.Main.editor-warning-title'
+					),
+					buttonText: {
+						ok:
+							'caution:' +
+							getString(
+								'NextThought.view.annotations.note.Main.ok'
+							),
+					},
 					fn: function (str) {
 						if (str === 'ok') {
 							openSlideDeck();
 						}
-					}
+					},
 				});
-			}
-			else {
+			} else {
 				openSlideDeck();
 			}
 		}
@@ -415,14 +488,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		}
 
 		// Wait for context and all replies to be loaded before doing search.
-		return Promise.all(ps)
-			.then(function () {
-				return wait();
-			});
+		return Promise.all(ps).then(function () {
+			return wait();
+		});
 	},
 
 	getSearchScrollTarget: function () {
-		var targetEl = this.el && this.el.up('.window-container') || this.el;
+		var targetEl = (this.el && this.el.up('.window-container')) || this.el;
 		return targetEl;
 	},
 
@@ -436,12 +508,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	},
 
 	resizeMathJax: function (/*node*/) {
-		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
+		var e = Ext.select('div.equation .mi')
+			.add(Ext.select('div.equation .mn'))
+			.add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size', '13px');
 	},
 
 	allowNavigation: function () {
-		var msg = 'You are currently creating a comment. Would you like to leave without saving?',
+		var msg =
+				'You are currently creating a comment. Would you like to leave without saving?',
 			hasChildEditor = this.el.down('.note.editor-active');
 
 		if (!this.editor.isActive() && !hasChildEditor) {
@@ -449,9 +524,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		}
 
 		if (this.editMode) {
-			msg = 'You are currently editing a note. Would you like to leave without saving?';
+			msg =
+				'You are currently editing a note. Would you like to leave without saving?';
 		} else if (hasChildEditor) {
-			msg = 'You are currently editing a comment. Would you like to leave without saving?';
+			msg =
+				'You are currently editing a comment. Would you like to leave without saving?';
 		}
 
 		return new Promise(function (fulfill, reject) {
@@ -462,14 +539,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 					primary: {
 						text: 'Leave',
 						cls: 'caution',
-						handler: fulfill
+						handler: fulfill,
 					},
 					secondary: {
 						text: 'Stay',
-						handler: reject
-					}
-				}
+						handler: reject,
+					},
+				},
 			});
 		});
-	}
+	},
 });

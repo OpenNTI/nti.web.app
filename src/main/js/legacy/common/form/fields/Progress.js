@@ -1,95 +1,97 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const FilePicker = require('./FilePicker');
 
+module.exports = exports = Ext.define(
+	'NextThought.common.form.fields.Progress',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.form-progress',
+		cls: 'save-progress',
+		UPDATE_RATE: 300,
 
-module.exports = exports = Ext.define('NextThought.common.form.fields.Progress', {
-	extend: 'Ext.Component',
-	alias: 'widget.form-progress',
-	cls: 'save-progress',
-	UPDATE_RATE: 300,
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'progress-bar', cn: [{ cls: 'bar' }] },
+			{
+				cls: 'out-of',
+				cn: [
+					{ tag: 'span', cls: 'current' },
+					{ tag: 'span', html: 'of' },
+					{ tag: 'span', cls: 'total' },
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'progress-bar', cn: [
-			{cls: 'bar'}
-		]},
-		{cls: 'out-of', cn: [
-			{tag: 'span', cls: 'current'},
-			{tag: 'span', html: 'of'},
-			{tag: 'span', cls: 'total'}
-		]}
-	]),
+		renderSelectors: {
+			barEl: '.progress-bar .bar',
+			currentEl: '.out-of .current',
+			totalEl: '.out-of .total',
+		},
 
-	renderSelectors: {
-		barEl: '.progress-bar .bar',
-		currentEl: '.out-of .current',
-		totalEl: '.out-of .total'
-	},
+		initComponent: function () {
+			this.callParent(arguments);
+		},
 
-	initComponent: function () {
-		this.callParent(arguments);
-	},
+		onceDone: function () {
+			return Promise.resolve();
+		},
 
-	onceDone: function () {
-		return Promise.resolve();
-	},
+		showError: function () {
+			//TODO: fill this out
+		},
 
-	showError: function () {
-		//TODO: fill this out
-	},
+		setProgress: function (loaded, total) {
+			this.progress = {
+				percent: Math.round((loaded / total) * 100),
+				loaded: loaded,
+				total: total,
+			};
 
-	setProgress: function (loaded, total) {
-		this.progress = {
-			percent: Math.round((loaded / total) * 100),
-			loaded: loaded,
-			total: total
-		};
+			if (!this.running) {
+				this.start();
+			}
 
-		if (!this.running) {
-			this.start();
-		}
+			console.log(this.progress);
+		},
 
+		start: function () {
+			if (!this.rendered) {
+				this.on('afterrender', this.update.bind(this));
+				return;
+			}
 
-		console.log(this.progress);
-	},
+			this.running = true;
 
-	start: function () {
-		if (!this.rendered) {
-			this.on('afterrender', this.update.bind(this));
-			return;
-		}
+			this.update();
+		},
 
-		this.running = true;
+		stop: function () {
+			delete this.running;
 
-		this.update();
-	},
+			this.update();
+			return wait(this.UPDATE_RATE);
+		},
 
-	stop: function () {
-		delete this.running;
+		update: function () {
+			var progress = this.progress || {},
+				total = progress.total || 0,
+				loaded = progress.loaded || 0,
+				percent = progress.percent || 0,
+				unit = FilePicker.getUnit(total);
 
-		this.update();
-		return wait(this.UPDATE_RATE);
-	},
+			total = FilePicker.getHumanReadableFileSize(total, 2, unit);
+			loaded = FilePicker.getHumanReadableFileSize(loaded, 2, unit);
 
-	update: function () {
-		var progress = this.progress || {},
-			total = progress.total || 0,
-			loaded = progress.loaded || 0,
-			percent = progress.percent || 0,
-			unit = FilePicker.getUnit(total);
+			loaded = loaded.replace(unit, '').trim();
 
-		total = FilePicker.getHumanReadableFileSize(total, 2, unit);
-		loaded = FilePicker.getHumanReadableFileSize(loaded, 2, unit);
+			this.barEl.dom.style.width = percent + '%';
+			this.currentEl.update(loaded);
+			this.totalEl.update(total);
 
-		loaded = loaded.replace(unit, '').trim();
-
-		this.barEl.dom.style.width = percent + '%';
-		this.currentEl.update(loaded);
-		this.totalEl.update(total);
-
-		if (this.running) {
-			setTimeout(this.update.bind(this), this.UPDATE_RATE);
-		}
+			if (this.running) {
+				setTimeout(this.update.bind(this), this.UPDATE_RATE);
+			}
+		},
 	}
-});
+);

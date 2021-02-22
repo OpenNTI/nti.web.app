@@ -2,42 +2,40 @@ const Ext = require('@nti/extjs');
 
 require('../Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.conflict.DestructiveChallenge',
+	{
+		extend: 'NextThought.model.Base',
 
-module.exports = exports = Ext.define('NextThought.model.conflict.DestructiveChallenge', {
-	extend: 'NextThought.model.Base',
+		statics: {
+			mimeType: 'application/vnd.nextthought.destructivechallenge',
 
-	statics: {
+			MESSAGE_OVERRIDES: {},
+		},
+
 		mimeType: 'application/vnd.nextthought.destructivechallenge',
 
-		MESSAGE_OVERRIDES: {}
-	},
+		fields: [
+			{ name: 'message', type: 'string' },
+			{ name: 'code', type: 'string' },
+		],
 
-	mimeType: 'application/vnd.nextthought.destructivechallenge',
+		getMessage: function () {
+			var code = this.get('code');
 
-	fields: [
-		{name: 'message', type: 'string'},
-		{name: 'code', type: 'string'}
-	],
+			return this.self.MESSAGE_OVERRIDES[code] || this.get('message');
+		},
 
+		getForceLink: function () {
+			return this.getLink('confirm');
+		},
 
-	getMessage: function () {
-		var code = this.get('code');
+		isPut: function () {
+			return this.getLinkMethod('confirm') === 'PUT';
+		},
 
-		return this.self.MESSAGE_OVERRIDES[code] || this.get('message');
-	},
-
-
-	getForceLink: function () {
-		return this.getLink('confirm');
-	},
-
-
-	isPut: function () {
-		return this.getLinkMethod('confirm') === 'PUT';
-	},
-
-
-	isPost: function () {
-		return this.getLinkMethod('confirm') === 'POST';
+		isPost: function () {
+			return this.getLinkMethod('confirm') === 'POST';
+		},
 	}
-});
+);

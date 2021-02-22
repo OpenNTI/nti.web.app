@@ -6,13 +6,16 @@ import Select from '../Select';
 
 describe('Site admin user table select column test', () => {
 	test('Test not selected', () => {
-		const colCmp = renderer.create(<Select
-			isSelected={(item)=>{
-				return item.id === 'selectedUser';
-			}}
-			item={{
-				id: 'unselectedUser'
-			}}/>);
+		const colCmp = renderer.create(
+			<Select
+				isSelected={item => {
+					return item.id === 'selectedUser';
+				}}
+				item={{
+					id: 'unselectedUser',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 
@@ -21,13 +24,16 @@ describe('Site admin user table select column test', () => {
 	});
 
 	test('Test selected', () => {
-		const colCmp = renderer.create(<Select
-			isSelected={(item)=>{
-				return item.id === 'selectedUser';
-			}}
-			item={{
-				id: 'selectedUser'
-			}}/>);
+		const colCmp = renderer.create(
+			<Select
+				isSelected={item => {
+					return item.id === 'selectedUser';
+				}}
+				item={{
+					id: 'selectedUser',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

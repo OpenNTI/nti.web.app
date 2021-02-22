@@ -1,4 +1,3 @@
-
 .x-component-toast-message {
 	background: rgba(255, 255, 255, 0.95);
 	border: 4px solid var(--border-blue);
@@ -26,7 +25,9 @@
 		display: inline-block;
 		float: left;
 		margin: 5px 2px;
-		& + .wrapper { margin-left: 50px; }
+		& + .wrapper {
+			margin-left: 50px;
+		}
 	}
 
 	.title {
@@ -43,8 +44,12 @@
 		font-weight: 600;
 		color: var(--secondary-grey);
 
-		a,span {
-			&,&:link,&:active,&:visited {
+		a,
+		span {
+			&,
+			&:link,
+			&:active,
+			&:visited {
 				color: var(--primary-blue);
 				text-decoration: none;
 				cursor: none;
@@ -57,7 +62,9 @@
 		overflow: hidden;
 		text-align: right;
 
-		&:not(:empty) { margin-top: 10px; }
+		&:not(:empty) {
+			margin-top: 10px;
+		}
 
 		.toast-button {
 			margin: 0 10px;

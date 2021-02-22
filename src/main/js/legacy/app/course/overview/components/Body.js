@@ -5,322 +5,346 @@ require('./EditingControls');
 require('./Lesson');
 require('./editing/Index');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.Body',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.course-overview-body',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.Body', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-overview-body',
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		layout: 'none',
 
-	layout: 'none',
+		items: [{ xtype: 'course-overview-editing-controls' }],
 
-	items: [
-		{xtype: 'course-overview-editing-controls'}
-	],
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			var me = this;
 
-		var me = this;
+			me.editingControlsCmp = me.down('course-overview-editing-controls');
 
-		me.editingControlsCmp = me.down('course-overview-editing-controls');
+			me.editingControlsCmp.openEditing = function () {
+				if (me.openEditing) {
+					me.openEditing();
+				}
+			};
 
-		me.editingControlsCmp.openEditing = function () {
-			if (me.openEditing) {
-				me.openEditing();
+			me.editingControlsCmp.closeEditing = function () {
+				if (me.closeEditing) {
+					me.closeEditing();
+				}
+			};
+
+			me.editingControlsCmp.openAuditLog = function () {
+				if (me.openAuditLog) {
+					me.openAuditLog();
+				}
+			};
+
+			me.editingControlsCmp.gotoResources = function () {
+				if (me.gotoResources) {
+					me.gotoResources();
+				}
+			};
+
+			me.editingControlsCmp.hide();
+		},
+
+		onRouteActivate() {
+			this.isActive = true;
+
+			const lesson = this.getLesson();
+			// const editor = this.getEditor();
+
+			if (lesson && lesson.onRouteActivate) {
+				lesson.onRouteActivate();
 			}
-		};
 
-		me.editingControlsCmp.closeEditing = function () {
-			if (me.closeEditing) {
-				me.closeEditing();
-			}
-		};
-
-		me.editingControlsCmp.openAuditLog = function () {
-			if (me.openAuditLog) {
-				me.openAuditLog();
-			}
-		};
-
-		me.editingControlsCmp.gotoResources = function () {
-			if (me.gotoResources) {
-				me.gotoResources();
-			}
-		};
-
-		me.editingControlsCmp.hide();
-	},
-
-
-	onRouteActivate () {
-		this.isActive = true;
-
-		const lesson = this.getLesson();
-		// const editor = this.getEditor();
-
-		if (lesson && lesson.onRouteActivate) {
-			lesson.onRouteActivate();
-		}
-
-		// if (editor && editor.onRouteActivate) {
-		// 	editor.onRouteActivate();
-		// }
-
-		if (this.hasEditingControls) {
-			this.editingControlsCmp.show();
-		}
-	},
-
-
-	onRouteDeactivate () {
-		delete this.isActive;
-
-		const lesson = this.getLesson();
-		const editor = this.getEditor();
-
-		this.editingControlsCmp.hide();
-
-		if (lesson && lesson.onRouteDeactivate) {
-			lesson.onRouteDeactivate();
-		}
-
-		if (editor && editor.onRouteDeactivate) {
-			editor.onRouteDeactivate();
-		}
-	},
-
-	showEditControls: function () {
-		this.hasEditingControls = true;
-
-		if (!this.editingControlsCmp.isHidden() || !this.isActive) { return; }
-
-		this.addCls('has-editing-controls');
-		this.editingControlsCmp.show();
-		this.editingControlsCmp.showNotEditing();
-
-		if (this.isEditing) {
-			this.showEditing();
-		} else {
-			this.showNotEditing();
-		}
-	},
-
-	hideEditControls: function () {
-		this.removeCls('has-editing-controls');
-		delete this.hasEditingControls;
-		this.editingControlsCmp.hide();
-	},
-
-	showEditing: function () {
-		this.isEditing = true;
-
-		if (this.hasEditingControls) {
-			this.editingControlsCmp.showEditing();
-		}
-	},
-
-	showNotEditing: function () {
-		delete this.isEditing;
-
-		if (this.hasEditingControls) {
-			this.editingControlsCmp.showNotEditing();
-		}
-	},
-
-	clear: function () {
-		var lesson = this.down('course-overview-lesson');
-
-		if (lesson) {
-			lesson.destroy();
-		}
-	},
-
-
-	getActiveItem () {
-		return this.getEditor() || this.getLesson();
-	},
-
-	getLesson: function (addIfNotThere) {
-		var lesson = this.down('course-overview-lesson[isLessonView]');
-
-		if (!lesson && addIfNotThere) {
-			lesson = this.add({
-				xtype: 'course-overview-lesson',
-				bundle: this.currentBundle,
-				handleMediaViewerRoute: this.handleMediaViewerRoute
-			});
-
-			this.addChildRouter(lesson);
-		}
-
-		return lesson;
-	},
-
-	getEditor: function (addIfNotThere) {
-		var editor = this.down('overview-editing');
-
-		if (!editor && addIfNotThere) {
-			editor = this.add({
-				xtype: 'overview-editing',
-				bundle: this.currentBundle,
-				navigateToOutlineNode: this.navigateToOutlineNode
-			});
-
-			this.addChildRouter(editor);
-		}
-
-		return editor;
-	},
-
-	getEmptyState: function (addIfNotThere) {
-		var emptyState = this.down('[isEmptyState]'),
-			me = this;
-
-		if (!emptyState && addIfNotThere) {
-
-			var cmps = [
-				{ html: 'There is no lesson to display.'}
-			];
+			// if (editor && editor.onRouteActivate) {
+			// 	editor.onRouteActivate();
+			// }
 
 			if (this.hasEditingControls) {
-				cmps.push({ tag: 'a', cls: 'edit', html: 'Get started editing here.'});
+				this.editingControlsCmp.show();
+			}
+		},
+
+		onRouteDeactivate() {
+			delete this.isActive;
+
+			const lesson = this.getLesson();
+			const editor = this.getEditor();
+
+			this.editingControlsCmp.hide();
+
+			if (lesson && lesson.onRouteDeactivate) {
+				lesson.onRouteDeactivate();
 			}
 
-			emptyState = this.add({
-				isEmptyState: true,
-				cls: 'empty-state',
-				xtype: 'container',
-				layout: 'none',
-				items: [{
-					xtype: 'box',
-					autoEl: {
-						cls: 'empty-text',
-						cn: cmps
-					},
-					listeners: {
-						click: {
-							element: 'el',
-							fn: function (e) {
-								if (!e.getTarget('.edit')) { return; }
+			if (editor && editor.onRouteDeactivate) {
+				editor.onRouteDeactivate();
+			}
+		},
 
-								if (me.isEditing) {
-									if (me.showNewUnit) { me.showNewUnit(); }
-								} else {
-									if (me.openEditing) { me.openEditing(); }
-								}
-							}
-						}
-					}
-				}]
-			});
-		}
+		showEditControls: function () {
+			this.hasEditingControls = true;
 
-		return emptyState;
-	},
+			if (!this.editingControlsCmp.isHidden() || !this.isActive) {
+				return;
+			}
 
-	getLessonTop: function () {
-		var lesson = this.getLesson(),
-			editor = this.getEditor(),
-			empty = this.getEmptyState(),
-			rect;
+			this.addCls('has-editing-controls');
+			this.editingControlsCmp.show();
+			this.editingControlsCmp.showNotEditing();
 
-		if (lesson && lesson.isVisible()) {
-			rect = lesson && lesson.el && lesson.el.dom && lesson.el.dom.getBoundingClientRect();
-		} else if (editor && editor.isVisible()) {
-			rect = editor && editor.el && editor.el.dom && editor.el.dom.getBoundingClientRect();
-		} else if (empty && empty.isVisible()) {
-			rect = empty && empty.el && empty.el.dom && empty.el.dom.getBoundingClientRect();
-		}
+			if (this.isEditing) {
+				this.showEditing();
+			} else {
+				this.showNotEditing();
+			}
+		},
 
-		return rect ? rect.top : 0;
-	},
+		hideEditControls: function () {
+			this.removeCls('has-editing-controls');
+			delete this.hasEditingControls;
+			this.editingControlsCmp.hide();
+		},
 
-	setActiveBundle: function (bundle) {
-		var lesson = this.getLesson(),
-			editor = this.getEditor();
+		showEditing: function () {
+			this.isEditing = true;
 
-		if (lesson) {
-			lesson.setActiveBundle(bundle);
-		}
+			if (this.hasEditingControls) {
+				this.editingControlsCmp.showEditing();
+			}
+		},
 
-		if (editor) {
-			editor.setActiveBundle(bundle);
-		}
+		showNotEditing: function () {
+			delete this.isEditing;
 
-		this.currentBundle = bundle;
-	},
+			if (this.hasEditingControls) {
+				this.editingControlsCmp.showNotEditing();
+			}
+		},
 
-	setOutline: function (outline, outlineInterface) {
-		this.currentOutline = outline;
-		this.outlineInterface = outlineInterface;
-	},
+		clear: function () {
+			var lesson = this.down('course-overview-lesson');
 
-	maybeShowContent (id, route, subRoute) {
-		const lesson = this.getLesson(true);
+			if (lesson) {
+				lesson.destroy();
+			}
+		},
 
-		return lesson.maybeShowContent(id, route, subRoute);
-	},
+		getActiveItem() {
+			return this.getEditor() || this.getLesson();
+		},
 
-	isShowingContent () {
-		const lesson = this.getLesson();
+		getLesson: function (addIfNotThere) {
+			var lesson = this.down('course-overview-lesson[isLessonView]');
 
-		return lesson && lesson.isShowingContent();
-	},
+			if (!lesson && addIfNotThere) {
+				lesson = this.add({
+					xtype: 'course-overview-lesson',
+					bundle: this.currentBundle,
+					handleMediaViewerRoute: this.handleMediaViewerRoute,
+				});
 
-	showOutlineNode: function (record, doNotCache, subRoute) {
-		var lesson = this.getLesson(true),
-			editor = this.getEditor(),
-			emptyState = this.getEmptyState();
+				this.addChildRouter(lesson);
+			}
 
-		if (editor) {
-			editor.hide();
-		}
+			return lesson;
+		},
 
-		if (emptyState) {
-			emptyState.hide();
-		}
+		getEditor: function (addIfNotThere) {
+			var editor = this.down('overview-editing');
 
-		lesson.show();
+			if (!editor && addIfNotThere) {
+				editor = this.add({
+					xtype: 'overview-editing',
+					bundle: this.currentBundle,
+					navigateToOutlineNode: this.navigateToOutlineNode,
+				});
 
-		return lesson.renderLesson(record, doNotCache, subRoute);
-	},
+				this.addChildRouter(editor);
+			}
 
-	editOutlineNode: function (record) {
-		var editor = this.getEditor(true),
-			lesson = this.getLesson(),
-			emptyState = this.getEmptyState();
+			return editor;
+		},
 
-		if (lesson) {
-			lesson.hide();
-		}
+		getEmptyState: function (addIfNotThere) {
+			var emptyState = this.down('[isEmptyState]'),
+				me = this;
 
-		if (emptyState) {
-			emptyState.hide();
-		}
+			if (!emptyState && addIfNotThere) {
+				var cmps = [{ html: 'There is no lesson to display.' }];
 
-		editor.show();
+				if (this.hasEditingControls) {
+					cmps.push({
+						tag: 'a',
+						cls: 'edit',
+						html: 'Get started editing here.',
+					});
+				}
 
-		return editor.editOutlineNode(record, this.currentOutline, this.outlineInterface);
-	},
+				emptyState = this.add({
+					isEmptyState: true,
+					cls: 'empty-state',
+					xtype: 'container',
+					layout: 'none',
+					items: [
+						{
+							xtype: 'box',
+							autoEl: {
+								cls: 'empty-text',
+								cn: cmps,
+							},
+							listeners: {
+								click: {
+									element: 'el',
+									fn: function (e) {
+										if (!e.getTarget('.edit')) {
+											return;
+										}
 
-	showEmptyState: function () {
-		var emptyState = this.getEmptyState(true),
-			editor = this.getEditor(),
-			lesson = this.getLesson();
+										if (me.isEditing) {
+											if (me.showNewUnit) {
+												me.showNewUnit();
+											}
+										} else {
+											if (me.openEditing) {
+												me.openEditing();
+											}
+										}
+									},
+								},
+							},
+						},
+					],
+				});
+			}
 
-		if (editor) {
-			editor.hide();
-		}
+			return emptyState;
+		},
 
-		if (lesson) {
-			lesson.hide();
-		}
+		getLessonTop: function () {
+			var lesson = this.getLesson(),
+				editor = this.getEditor(),
+				empty = this.getEmptyState(),
+				rect;
 
-		emptyState.show();
+			if (lesson && lesson.isVisible()) {
+				rect =
+					lesson &&
+					lesson.el &&
+					lesson.el.dom &&
+					lesson.el.dom.getBoundingClientRect();
+			} else if (editor && editor.isVisible()) {
+				rect =
+					editor &&
+					editor.el &&
+					editor.el.dom &&
+					editor.el.dom.getBoundingClientRect();
+			} else if (empty && empty.isVisible()) {
+				rect =
+					empty &&
+					empty.el &&
+					empty.el.dom &&
+					empty.el.dom.getBoundingClientRect();
+			}
 
-		return Promise.resolve();
+			return rect ? rect.top : 0;
+		},
+
+		setActiveBundle: function (bundle) {
+			var lesson = this.getLesson(),
+				editor = this.getEditor();
+
+			if (lesson) {
+				lesson.setActiveBundle(bundle);
+			}
+
+			if (editor) {
+				editor.setActiveBundle(bundle);
+			}
+
+			this.currentBundle = bundle;
+		},
+
+		setOutline: function (outline, outlineInterface) {
+			this.currentOutline = outline;
+			this.outlineInterface = outlineInterface;
+		},
+
+		maybeShowContent(id, route, subRoute) {
+			const lesson = this.getLesson(true);
+
+			return lesson.maybeShowContent(id, route, subRoute);
+		},
+
+		isShowingContent() {
+			const lesson = this.getLesson();
+
+			return lesson && lesson.isShowingContent();
+		},
+
+		showOutlineNode: function (record, doNotCache, subRoute) {
+			var lesson = this.getLesson(true),
+				editor = this.getEditor(),
+				emptyState = this.getEmptyState();
+
+			if (editor) {
+				editor.hide();
+			}
+
+			if (emptyState) {
+				emptyState.hide();
+			}
+
+			lesson.show();
+
+			return lesson.renderLesson(record, doNotCache, subRoute);
+		},
+
+		editOutlineNode: function (record) {
+			var editor = this.getEditor(true),
+				lesson = this.getLesson(),
+				emptyState = this.getEmptyState();
+
+			if (lesson) {
+				lesson.hide();
+			}
+
+			if (emptyState) {
+				emptyState.hide();
+			}
+
+			editor.show();
+
+			return editor.editOutlineNode(
+				record,
+				this.currentOutline,
+				this.outlineInterface
+			);
+		},
+
+		showEmptyState: function () {
+			var emptyState = this.getEmptyState(true),
+				editor = this.getEditor(),
+				lesson = this.getLesson();
+
+			if (editor) {
+				editor.hide();
+			}
+
+			if (lesson) {
+				lesson.hide();
+			}
+
+			emptyState.show();
+
+			return Promise.resolve();
+		},
 	}
-});
+);

@@ -3,12 +3,11 @@ const Ext = require('@nti/extjs');
 
 const PromptStateStore = require('./StateStore');
 
-
 module.exports = exports = Ext.define('NextThought.app.prompt.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	statics: {
-		DELETED: 'deleted'
+		DELETED: 'deleted',
 	},
 
 	constructor: function () {
@@ -19,5 +18,5 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Actions', {
 
 	prompt: function (type, data) {
 		return this.PromptStateStore.openPrompt(type, data);
-	}
+	},
 });

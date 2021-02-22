@@ -5,7 +5,6 @@ require('../filter/FilterGroup');
 require('../filter/Filter');
 require('legacy/model/Hit');
 
-
 module.exports = exports = Ext.define('NextThought.store.Hit', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Hit',
@@ -16,8 +15,8 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 		type: 'nti',
 		reader: {
 			type: 'nti',
-			root: 'Items'
-		}
+			root: 'Items',
+		},
 	},
 
 	loadRecords: function (records, options) {
@@ -36,5 +35,5 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 		}
 
 		return this.callParent(arguments);
-	}
+	},
 });

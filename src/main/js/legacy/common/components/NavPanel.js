@@ -2,78 +2,70 @@ const Ext = require('@nti/extjs');
 
 const NavStore = require('legacy/app/navigation/StateStore');
 
+module.exports = exports = Ext.define(
+	'NextThought.common.components.NavPanel',
+	{
+		extend: 'Ext.container.Container',
+		//alias: Extend, do not use this directly
 
-module.exports = exports = Ext.define('NextThought.common.components.NavPanel', {
-	extend: 'Ext.container.Container',
-	//alias: Extend, do not use this directly
+		layout: 'none',
 
-	layout: 'none',
+		cls: 'navigation-panel',
 
-	cls: 'navigation-panel',
+		navigation: { xtype: 'box', autoEl: { html: 'navigation' } },
+		body: { xtype: 'box', autoEl: { html: 'body' } },
 
-	navigation: { xtype: 'box', autoEl: {html: 'navigation'}},
-	body: {xtype: 'box', autoEl: {html: 'body'}},
+		onClassExtended: function (cls, data) {
+			if (data.cls) {
+				data.cls = [cls.superclass.cls, data.cls].join(' ');
+			}
+		},
 
+		initComponent: function () {
+			this.callParent(arguments);
 
-	onClassExtended: function (cls, data) {
-		if (data.cls) {
-			data.cls = [cls.superclass.cls, data.cls].join(' ');
-		}
-	},
+			this.NavStore = NavStore.getInstance();
 
+			this.alignNavigation = this.alignNavigation.bind(this);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.add([this.navigation, this.body]);
 
-		this.NavStore = NavStore.getInstance();
+			this.navigation = this.items.first();
+			this.body = this.items.last();
 
-		this.alignNavigation = this.alignNavigation.bind(this);
+			this.navigation.addCls('navigation-view floating');
+			this.body.addCls('body-view');
 
-		this.add([
-			this.navigation,
-			this.body
-		]);
+			this.mon(this.NavStore, 'message-bar-open', this.alignNavigation);
+			this.mon(this.NavStore, 'message-bar-close', this.alignNavigation);
+		},
 
-		this.navigation = this.items.first();
-		this.body = this.items.last();
+		afterRender: function () {
+			this.callParent(arguments);
 
-		this.navigation.addCls('navigation-view floating');
-		this.body.addCls('body-view');
+			var me = this;
 
-		this.mon(this.NavStore, 'message-bar-open', this.alignNavigation);
-		this.mon(this.NavStore, 'message-bar-close', this.alignNavigation);
-	},
+			me.alignNavigation();
 
+			Ext.EventManager.onWindowResize(me.alignNavigation, me, false);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			if (this.contentOnly) {
+				this.addCls('content-only');
+			}
 
-		var me = this;
+			this.on('destroy', function () {
+				Ext.EventManager.removeResizeListener(me.alignNavigation, me);
+			});
+		},
 
-		me.alignNavigation();
+		alignNavigation: function () {},
 
-		Ext.EventManager.onWindowResize(me.alignNavigation, me, false);
+		getActiveItem: function () {
+			return this.body.getLayout().getActiveItem();
+		},
 
-		if (this.contentOnly) {
-			this.addCls('content-only');
-		}
-
-		this.on('destroy', function () {
-			Ext.EventManager.removeResizeListener(me.alignNavigation, me);
-		});
-	},
-
-
-	alignNavigation: function () {
-	},
-
-
-	getActiveItem: function () {
-		return this.body.getLayout().getActiveItem();
-	},
-
-
-	setActiveItem: function (item) {
-		this.body.getLayout().setActiveItem(item);
+		setActiveItem: function (item) {
+			this.body.getLayout().setActiveItem(item);
+		},
 	}
-});
+);

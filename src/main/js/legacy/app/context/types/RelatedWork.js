@@ -9,38 +9,41 @@ require('../components/cards/Slide');
 require('../components/cards/Video');
 require('../components/list/RelatedWork');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.context.types.RelatedWork',
+	{
+		statics: {
+			type: 'relatedwork',
 
-module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork', {
-	statics: {
-		type: 'relatedwork',
+			canHandle: function (obj) {
+				return (
+					obj &&
+					obj.get &&
+					(obj.get('Class') === 'RelatedWork' ||
+						obj.get('Class') === 'NTICard')
+				);
+			},
+		},
 
-		canHandle: function (obj) {
-			return obj && obj.get && (obj.get('Class') === 'RelatedWork' || obj.get('Class') === 'NTICard');
-		}
-	},
+		constructor: function (config) {
+			this.callParent(arguments);
+			Ext.applyIf(this, config || {});
 
-	constructor: function (config) {
-		this.callParent(arguments);
-		Ext.applyIf(this, config || {});
+			this.PathActions = PathActions.create();
+		},
 
-		this.PathActions = PathActions.create();
-	},
+		getCourseFor(obj) {
+			if (this.course) {
+				return Promise.resolve(this.course);
+			}
 
-
-	getCourseFor (obj) {
-		if (this.course) {
-			return Promise.resolve(this.course);
-		}
-
-		return this.PathActions.getPathToObject(obj)
-			.then(path => {
+			return this.PathActions.getPathToObject(obj).then(path => {
 				return this.PathActions.getRootBundleFromPath(path);
 			});
-	},
+		},
 
-	parse: function (obj, kind) {
-		return this.getCourseFor(obj)
-			.then((course) => {
+		parse: function (obj, kind) {
+			return this.getCourseFor(obj).then(course => {
 				var cmp;
 
 				if (kind === 'card') {
@@ -48,21 +51,21 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 						xtype: 'context-relatedwork-card',
 						type: this.self.type,
 						content: obj,
-						course: course
+						course: course,
 					};
 				} else if (kind === 'list') {
 					cmp = Ext.widget('context-relatedwork-list', {
 						type: this.self.type,
 						content: obj,
 						course: course,
-						record: this.contextRecord
+						record: this.contextRecord,
 					});
 				} else if (obj && obj.get && obj.get('Class') === 'NTICard') {
 					cmp = Ext.widget('context-relatedwork-card', {
 						type: this.self.type,
 						content: obj,
 						course: course,
-						record: this.contextRecord
+						record: this.contextRecord,
 					});
 				} else {
 					cmp = Ext.widget('context-relatedwork-card', {
@@ -70,11 +73,11 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 						content: obj,
 						course: course,
 						record: this.contextRecord,
-						doNavigate: this.doNavigate
+						doNavigate: this.doNavigate,
 					});
 				}
 				return cmp;
 			});
-
+		},
 	}
-});
+);

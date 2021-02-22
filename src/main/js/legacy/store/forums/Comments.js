@@ -1,8 +1,9 @@
 const Ext = require('@nti/extjs');
 
 require('../NTI');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 
 const OPEN_THREADS = Symbol('Open Threads');
@@ -23,14 +24,17 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 			root: 'Items',
 			totalProperty: 'FilteredTotalItemCount',
 			readRecords: function (resp) {
-				var data = this.self.prototype.readRecords.apply(this, arguments);
+				var data = this.self.prototype.readRecords.apply(
+					this,
+					arguments
+				);
 				this.currentPage = resp.BatchPage;
 				return data;
-			}
+			},
 		},
 		headers: {
-			'Accept': 'application/vnd.nextthought.collection+json'
-		}
+			Accept: 'application/vnd.nextthought.collection+json',
+		},
 	},
 
 	constructor: function () {
@@ -49,28 +53,34 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		});
 	},
 
-
-	addExpandCollapseFilter () {
+	addExpandCollapseFilter() {
 		this.addFilter({
-			filterFn: (record) => {
-				if (this[OPEN_THREADS][ALL]) { return true; }
+			filterFn: record => {
+				if (this[OPEN_THREADS][ALL]) {
+					return true;
+				}
 
 				const references = record.get('references');
 
-				if (!references || !references.length) { return true; }
+				if (!references || !references.length) {
+					return true;
+				}
 
-				return references.some((ref) => this[OPEN_THREADS][ref]);
-			}
+				return references.some(ref => this[OPEN_THREADS][ref]);
+			},
 		});
 	},
 
-	expandAllCommentThreads () {
+	expandAllCommentThreads() {
 		this[OPEN_THREADS][ALL] = true;
 
 		this.filter();
 
 		this.each(comment => {
-			if (comment.get('depth') === 0 && comment.get('ReferencedByCount') > 0) {
+			if (
+				comment.get('depth') === 0 &&
+				comment.get('ReferencedByCount') > 0
+			) {
 				this.showCommentThread(comment, true);
 			}
 		});
@@ -78,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		delete this[OPEN_THREADS][ALL];
 	},
 
-	collapseAllCommentThreads () {
+	collapseAllCommentThreads() {
 		this[OPEN_THREADS] = {};
 
 		this.filter();
@@ -118,16 +128,19 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	},
 
 	__loadCommentThread: function (comment) {
-		var url = comment.getLink('replies'), req;
+		var url = comment.getLink('replies'),
+			req;
 
-		if (!url) { return; }
+		if (!url) {
+			return;
+		}
 
 		req = {
 			url: url,
 			scope: this,
 			method: 'GET',
 			params: {
-				accept: comment.get('MimeType')
+				accept: comment.get('MimeType'),
 			},
 			callback: function (q, s, r) {
 				if (!s) {
@@ -135,18 +148,23 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 					return;
 				}
 
-				var flatList, json = Ext.decode(r.responseText, true),
-					items = json && lazy.ParseUtils.parseItems(json), tree;
+				var flatList,
+					json = Ext.decode(r.responseText, true),
+					items = json && lazy.ParseUtils.parseItems(json),
+					tree;
 
 				items.push(comment);
 				tree = items && UtilUserDataThreader.threadUserData(items);
 
-				flatList = this.__flattenReplies(tree[0].children, comment.get('depth') || 0);
+				flatList = this.__flattenReplies(
+					tree[0].children,
+					comment.get('depth') || 0
+				);
 
 				comment.set('repliesLoaded', true);
 
 				this.__insertFlatThread(flatList, comment);
-			}
+			},
 		};
 
 		Ext.Ajax.request(req);
@@ -155,17 +173,21 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	__flattenReplies: function (tree, currentDepth) {
 		var flatTree = [];
 
-		function commentCompare (a, b) {
+		function commentCompare(a, b) {
 			a = a.get('CreatedTime');
 			b = b.get('CreatedTime');
 
-			if (a === b) { return 0;}
+			if (a === b) {
+				return 0;
+			}
 
-			return (a < b) ? -1 : 1;
+			return a < b ? -1 : 1;
 		}
 
-		function flattenThread (thread, depth) {
-			if (!thread || Ext.Object.isEmpty(thread) || Ext.isEmpty(thread)) { return; }
+		function flattenThread(thread, depth) {
+			if (!thread || Ext.Object.isEmpty(thread) || Ext.isEmpty(thread)) {
+				return;
+			}
 			thread.sort(commentCompare);
 
 			thread.forEach(function (t) {
@@ -252,7 +274,9 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	insertSingleRecord: function (record) {
 		this.__clearFilters();
 
-		var parentId = record.get('inReplyTo'), i, current,
+		var parentId = record.get('inReplyTo'),
+			i,
+			current,
 			parent = this.getById(parentId),
 			parentIndex = parent && this.indexOf(parent),
 			count = this.getCount(),
@@ -276,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 			record.set({
 				depth: depth + 1,
-				threadShowing: true
+				threadShowing: true,
 			});
 			record.threadLoaded = true;
 
@@ -296,5 +320,5 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		} finally {
 			this.__applyFilters();
 		}
-	}
+	},
 });

@@ -30,7 +30,7 @@
 			width: 22%;
 		}
 
-		input[name="invitation_codes"] {
+		input[name='invitation_codes'] {
 			width: 100%;
 			font-size: 14px;
 			margin-bottom: 1.25em;
@@ -57,7 +57,7 @@
 			width: 90px;
 		}
 
-		.redeem[disabled="disabled"] {
+		.redeem[disabled='disabled'] {
 			background-color: var(--tertiary-grey);
 			cursor: inherit;
 		}
@@ -69,7 +69,7 @@
 				pointer-events: none;
 			}
 
-			input[name="invitation_codes"] {
+			input[name='invitation_codes'] {
 				box-shadow: 0 0 0 1px var(--primary-red);
 			}
 		}

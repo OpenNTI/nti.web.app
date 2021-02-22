@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
 module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	extend: 'Ext.Component',
@@ -9,13 +8,13 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	cls: 'grade',
 
 	autoEl: {
-		tag: 'canvas'
+		tag: 'canvas',
 	},
 
 	config: {
 		color: '#40b450',
 		grade: 90,
-		pixelDensity: 2
+		pixelDensity: 2,
 	},
 
 	afterRender: function () {
@@ -31,7 +30,6 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 		this.redraw();
 	},
 
-
 	updateGrade: function () {
 		try {
 			this.redraw();
@@ -40,14 +38,14 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 		}
 	},
 
-
 	redraw: function () {
-		if (!this.context) {return;}
+		if (!this.context) {
+			return;
+		}
 		this.context.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawCircle();
 		this.drawDot();
 	},
-
 
 	getGradeLetter: function () {
 		var g = this.getGrade();
@@ -66,16 +64,15 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 		return g;
 	},
 
-
 	setFont: function (font) {
 		this.context.font = [
 			font.style || 'normal',
 			font.variant || 'normal',
-			font.weight || 'normal', (font.size || 10) + 'px',
-			font.family || '"Open Sans"'
+			font.weight || 'normal',
+			(font.size || 10) + 'px',
+			font.family || '"Open Sans"',
 		].join(' ');
 	},
-
 
 	drawCircle: function () {
 		var ctx = this.context,
@@ -87,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 			grade = (this.getGrade() || 0).toString(10),
 			font = {
 				size: Math.floor(radius * 0.8),
-				weight: '300'
+				weight: '300',
 			};
 
 		ctx.save();
@@ -96,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 			ctx.translate(centerX, centerY);
 			ctx.rotate(-Math.PI / 2);
 			ctx.beginPath();
-			ctx.arc(0, 0, radius, 0, (2 * Math.PI) * (grade / 100), false);
+			ctx.arc(0, 0, radius, 0, 2 * Math.PI * (grade / 100), false);
 			ctx.lineWidth = stroke;
 			ctx.fillStyle = this.getColor();
 			ctx.strokeStyle = this.getColor();
@@ -124,11 +121,10 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 		}
 	},
 
-
 	drawDot: function () {
 		var ctx = this.context,
 			slope = this.canvas.height / this.canvas.width,
-			centerY = (this.canvas.height / 2) + (this.canvas.width / 4),
+			centerY = this.canvas.height / 2 + this.canvas.width / 4,
 			centerX = centerY / slope,
 			radius = Math.floor(this.canvas.width * 0.09),
 			textbox,
@@ -136,12 +132,11 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 			nudge = this.getPixelDensity(),
 			font = {
 				size: Math.floor(radius),
-				weight: 'bold'
+				weight: 'bold',
 			};
 
 		ctx.save();
 		try {
-
 			ctx.setTransform(1, 0, 0, 1, centerX, centerY);
 			ctx.beginPath();
 			ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
@@ -163,9 +158,13 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 			//ctx.shadowOffsetX = -1;
 			//ctx.shadowOffsetY = -1;
 
-			ctx.fillText(grade, Math.floor(-textbox.width / 2) + nudge, font.size / 3);
+			ctx.fillText(
+				grade,
+				Math.floor(-textbox.width / 2) + nudge,
+				font.size / 3
+			);
 		} finally {
 			ctx.restore();
 		}
-	}
+	},
 });

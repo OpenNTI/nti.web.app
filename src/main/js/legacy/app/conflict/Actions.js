@@ -4,15 +4,12 @@ const DestructiveChallenge = require('./types/DestructiveChallenge');
 
 require('legacy/common/Actions');
 
-
 module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	getTypes: function () {
 		if (!this.types) {
-			this.types = [
-				new DestructiveChallenge()
-			];
+			this.types = [new DestructiveChallenge()];
 		}
 
 		return this.types;
@@ -22,7 +19,6 @@ module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
 		var types = this.getTypes(),
 			handler;
 
-
 		handler = types.reduce(function (acc, type) {
 			if (type && type.getType && type.getType() === conflict.mimeType) {
 				acc = type;
@@ -31,10 +27,12 @@ module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
 			return acc;
 		}, null);
 
-		return handler ? handler.resolve(conflict, data) : this.defaultHandler(conflict, data);
+		return handler
+			? handler.resolve(conflict, data)
+			: this.defaultHandler(conflict, data);
 	},
 
 	defaultHandler: function (conflict, data) {
 		//TODO: fill this out
-	}
+	},
 });

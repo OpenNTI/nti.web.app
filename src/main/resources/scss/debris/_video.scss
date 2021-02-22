@@ -37,7 +37,7 @@
 
 		.play {
 			position: relative;
-			top: -1.375em;//half the line-height
+			top: -1.375em; //half the line-height
 			left: -50%;
 		}
 
@@ -69,7 +69,8 @@
 		min-width: 45px;
 		color: #fff;
 
-		.blur-clip,.blur {
+		.blur-clip,
+		.blur {
 			border-radius: 5em;
 			position: absolute;
 			top: 0;
@@ -91,8 +92,10 @@
 
 		.error {
 			background-color: rgba(0, 0, 0, 0.68);
-			-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 3px 0 black;
-			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 3px 0 black;
+			-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+				0 0 3px 0 black;
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+				0 0 3px 0 black;
 			border-radius: 5em;
 			overflow: hidden;
 			padding: 0 15px;
@@ -104,9 +107,9 @@
 
 		.label {
 			background-color: rgba(0, 0, 0, 0.68);
-			box-shadow:
-				inset 0 0 0 1px rgba(255, 255, 255, 0.15), //stroke
-						0 0 3px 0 black; //shadow
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+				//stroke
+				0 0 3px 0 black; //shadow
 
 			border-radius: 5em;
 			overflow: hidden;
@@ -126,21 +129,27 @@
 			width: 50px;
 			border-radius: 50px;
 
-			@include icon($play, $position:absolute, $top:2px, $left:5px);
+			@include icon($play, $position: absolute, $top: 2px, $left: 5px);
 		}
 
 		&.transcripts {
 			.label {
 				padding-right: 60px;
 
-				@include icon($play-transcript,$top:3px,$right:3px, $left:auto);
+				@include icon(
+					$play-transcript,
+					$top: 3px,
+					$right: 3px,
+					$left: auto
+				);
 			}
 		}
 	}
 }
 
 .content-video-container {
-	&.playing, .no-poster {
+	&.playing,
+	.no-poster {
 		.content-video-curtain {
 			display: none;
 		}
@@ -163,7 +172,13 @@
 			box-shadow: 0 0 3px 0 #000;
 			border-radius: 48px;
 
-			@include icon($play, $position: absolute, $side: after, $top: 50%, $left: 50%);
+			@include icon(
+				$play,
+				$position: absolute,
+				$side: after,
+				$top: 50%,
+				$left: 50%
+			);
 
 			&::after {
 				margin: -21px 0 0 -21px;

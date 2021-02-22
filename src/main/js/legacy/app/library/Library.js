@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	alias: 'widget.library-view-container',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	layout: 'card',
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		this.addDefaultRoute('/');
 
 		this.on({
-			deactivate: this.onDeactivate.bind(this)
+			deactivate: this.onDeactivate.bind(this),
 		});
 	},
 
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 
 		this.NavActions.updateNavBar({
 			noLibraryLink: xtype === 'library-home',
-			darkStyle: true
+			darkStyle: true,
 		});
 
 		this.NavActions.setActiveContent(null);
@@ -68,7 +68,6 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		if (!old) {
 			cmp.fireEvent('activate');
 		}
-
 
 		return cmp;
 	},
@@ -103,5 +102,5 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		var cmp = this.setActiveView('library-communities');
 
 		return cmp.handleRoute(subRoute, route.precache);
-	}
+	},
 });

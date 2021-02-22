@@ -2,11 +2,9 @@ const Ext = require('@nti/extjs');
 
 const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
-
 	constructor: function () {
-		function onAfterRender () {
+		function onAfterRender() {
 			const me = this;
 
 			if (me.flagEl) {
@@ -17,20 +15,23 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 			me.listenForFlagChanges(me.record);
 		}
 
-		this.on('afterrender', onAfterRender, this, {single: true});
+		this.on('afterrender', onAfterRender, this, { single: true });
 	},
 
-
 	flagActionClickHandler: function (e) {
-		if (e && e.stopEvent) {e.stopEvent();}
+		if (e && e.stopEvent) {
+			e.stopEvent();
+		}
 		var me = this,
 			rec = me.getRecord();
 		me.flagging = true;
 		TemplatesForNotes.reportInappropriate(function (btn) {
 			delete me.flagging;
-			if (btn === 'ok') { rec.flag(me); }});
+			if (btn === 'ok') {
+				rec.flag(me);
+			}
+		});
 	},
-
 
 	tearDownFlagging: function () {
 		if (this.flagEl) {
@@ -42,27 +43,28 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 		this.stopListeningForFlagChanges(this.record);
 	},
 
-
 	getRecord: function () {
 		return this.record;
 	},
-
 
 	listenForFlagChanges: function (record) {
 		record.addObserverForField(this, 'flagged', this.markAsFlagged, this);
 	},
 
 	stopListeningForFlagChanges: function (record) {
-		record.removeObserverForField(this, 'flagged', this.markAsFlagged, this);
+		record.removeObserverForField(
+			this,
+			'flagged',
+			this.markAsFlagged,
+			this
+		);
 	},
-
 
 	reflectFlagged: function (record) {
 		if (this.flagEl) {
 			this.markAsFlagged(record.isFlagged());
 		}
 	},
-
 
 	markAsFlagged: function (field, value) {
 		var flagged = value === undefined ? field : value,
@@ -72,5 +74,5 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 		}
 		this.flagEl[method]('on');
 		this.flagEl.update(flagged ? 'Reported' : 'Report');
-	}
+	},
 });

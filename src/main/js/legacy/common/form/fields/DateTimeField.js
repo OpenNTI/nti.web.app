@@ -4,675 +4,776 @@ const LegacySearchComboBox = require('./LegacySearchComboBox');
 
 require('legacy/util/Scrolling');
 
+module.exports = exports = Ext.define(
+	'NextThought.common.form.fields.DateTimeField',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.date-time-field',
 
-module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeField', {
-	extend: 'Ext.Component',
-	alias: 'widget.date-time-field',
-
-	statics: {
-		//http://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
-		isLeapYear: function (year) {
-			return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
-		}
-	},
-
-	INVALID_DATE: 'Please enter a valid date.',
-	INVALID_TIME: 'Please enter a valid time.',
-	YEARS_IN_PAST: 5,
-	YEARS_IN_FUTURE: 5,
-	AM: 'AM',
-	PM: 'PM',
-	showCurrentDateSelect: true,
-
-	MONTHS: [
-		{longLabel: 'January', shortLabel: 'JAN', value: 0, days: 31},
-		{longLabel: 'February', shortLabel: 'FEB', value: 1, days: 28, leapDays: 29},
-		{longLabel: 'March', shortLabel: 'MAR', value: 2, days: 31},
-		{longLabel: 'April', shortLabel: 'APR', value: 3, days: 30},
-		{longLabel: 'May', shortLabel: 'MAY', value: 4, days: 31},
-		{longLabel: 'June', shortLabel: 'JUN', value: 5, days: 30},
-		{longLabel: 'July', shortLabel: 'JUL', value: 6, days: 31},
-		{longLabel: 'August', shortLabel: 'AUG', value: 7, days: 31},
-		{longLabel: 'September', shortLabel: 'SEP', value: 8, days: 30},
-		{longLabel: 'October', shortLabel: 'OCT', value: 9, days: 31},
-		{longLabel: 'November', shortLabel: 'NOV', value: 10, days: 30},
-		{longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31}
-	],
-
-	cls: 'date-time-field',
-
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'date', cn: [
-			{cls: 'container', cn: [
-				{cls: 'month', cn: [
-					{tag: 'span', cls: 'label', html: 'Month'},
-					{cls: 'month-input'}
-				]},
-				{cls: 'day', cn: [
-					{tag: 'span', cls: 'label', html: 'Day'},
-					{cls: 'day-input'}
-				]},
-				{cls: 'year', cn: [
-					{tag: 'span', cls: 'label', html: 'Year'},
-					{cls: 'year-input'}
-				]}
-			]},
-			{tag: 'span', cls: 'error'}
-		]},
-		{cls: 'time', cn: [
-			{tag: 'span', cls: 'label', html: 'Local Time'},
-			{cls: 'container', cn: [
-				{tag: 'input', type: 'number', cls: 'hour-input', min: '0', max: '24'},
-				{tag: 'span', cls: 'seperator', html: ':'},
-				{tag: 'input', type: 'number', cls: 'minute-input', min: '0', max: '59'},
-				{cls: 'meridiem-input'}
-			]},
-			{tag: 'span', cls: 'error'}
-		]},
-		{tag: 'tpl', 'if': 'currentDate', cn: [
-			{cls: 'select-current-date', cn: [
-				{tag: 'span', html: 'or '},
-				{tag: 'span', cls: 'link', html: 'Current Date/Time'}
-			]}
-		]}
-	]),
-
-	renderSelectors: {
-		monthLabel: '.month .label',
-		monthContainer: '.month-input',
-		dayLabel: '.day .label',
-		dayContainer: '.day-input',
-		yearLabel: '.year .label',
-		yearContainer: '.year-input',
-		timeLabel: '.time .label',
-		hourInput: '.hour-input',
-		minuteInput: '.minute-input',
-		meridiemContainer: '.meridiem-input',
-		dateError: '.date .error',
-		timeError: '.time .error',
-		selectCurrentEl: '.select-current-date .link'
-	},
-
-	initComponent: function () {
-		this.callParent(arguments);
-
-		var upperBound = this.upperBound,
-			lowerBound = this.lowerBound;
-
-		if (!this.lowerBound) {
-			lowerBound = new Date();
-			lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST, 0, 1);
-		}
-
-		if (!this.upperBound) {
-			upperBound = new Date();
-			upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE, 0, 1);
-		}
-
-		// this.currentDate = this.currentDate;
-		this.lowerBound = this.lowerBound || lowerBound;
-		this.upperBound = this.upperBound || upperBound;
-
-		this.invalidDateMsg = this.invalidDateMsg || this.INVALID_DATE;
-		this.invalidTimeMsg = this.invalidTimeMsg || this.INVALID_TIME;
-
-		this.onParentScroll = this.closeSelects.bind(this);
-		this.onResize = this.closeSelects.bind(this);
-	},
-
-	beforeRender: function () {
-		this.callParent(arguments);
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			currentDate: this.showCurrentDateSelect
-		});
-	},
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		var me = this;
-
-		me.yearSelect = new LegacySearchComboBox({
-			editable: false,
-			onSelect: me.onYearChanged.bind(me),
-			renderTo: me.yearContainer,
-			onError: function () {
-				me.yearLabel.addCls('error');
+		statics: {
+			//http://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
+			isLeapYear: function (year) {
+				return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 			},
-			onRemoveError: function () {
-				me.yearLabel.removeCls('error');
+		},
+
+		INVALID_DATE: 'Please enter a valid date.',
+		INVALID_TIME: 'Please enter a valid time.',
+		YEARS_IN_PAST: 5,
+		YEARS_IN_FUTURE: 5,
+		AM: 'AM',
+		PM: 'PM',
+		showCurrentDateSelect: true,
+
+		MONTHS: [
+			{ longLabel: 'January', shortLabel: 'JAN', value: 0, days: 31 },
+			{
+				longLabel: 'February',
+				shortLabel: 'FEB',
+				value: 1,
+				days: 28,
+				leapDays: 29,
+			},
+			{ longLabel: 'March', shortLabel: 'MAR', value: 2, days: 31 },
+			{ longLabel: 'April', shortLabel: 'APR', value: 3, days: 30 },
+			{ longLabel: 'May', shortLabel: 'MAY', value: 4, days: 31 },
+			{ longLabel: 'June', shortLabel: 'JUN', value: 5, days: 30 },
+			{ longLabel: 'July', shortLabel: 'JUL', value: 6, days: 31 },
+			{ longLabel: 'August', shortLabel: 'AUG', value: 7, days: 31 },
+			{ longLabel: 'September', shortLabel: 'SEP', value: 8, days: 30 },
+			{ longLabel: 'October', shortLabel: 'OCT', value: 9, days: 31 },
+			{ longLabel: 'November', shortLabel: 'NOV', value: 10, days: 30 },
+			{ longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31 },
+		],
+
+		cls: 'date-time-field',
+
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'date',
+				cn: [
+					{
+						cls: 'container',
+						cn: [
+							{
+								cls: 'month',
+								cn: [
+									{
+										tag: 'span',
+										cls: 'label',
+										html: 'Month',
+									},
+									{ cls: 'month-input' },
+								],
+							},
+							{
+								cls: 'day',
+								cn: [
+									{ tag: 'span', cls: 'label', html: 'Day' },
+									{ cls: 'day-input' },
+								],
+							},
+							{
+								cls: 'year',
+								cn: [
+									{ tag: 'span', cls: 'label', html: 'Year' },
+									{ cls: 'year-input' },
+								],
+							},
+						],
+					},
+					{ tag: 'span', cls: 'error' },
+				],
+			},
+			{
+				cls: 'time',
+				cn: [
+					{ tag: 'span', cls: 'label', html: 'Local Time' },
+					{
+						cls: 'container',
+						cn: [
+							{
+								tag: 'input',
+								type: 'number',
+								cls: 'hour-input',
+								min: '0',
+								max: '24',
+							},
+							{ tag: 'span', cls: 'seperator', html: ':' },
+							{
+								tag: 'input',
+								type: 'number',
+								cls: 'minute-input',
+								min: '0',
+								max: '59',
+							},
+							{ cls: 'meridiem-input' },
+						],
+					},
+					{ tag: 'span', cls: 'error' },
+				],
+			},
+			{
+				tag: 'tpl',
+				if: 'currentDate',
+				cn: [
+					{
+						cls: 'select-current-date',
+						cn: [
+							{ tag: 'span', html: 'or ' },
+							{
+								tag: 'span',
+								cls: 'link',
+								html: 'Current Date/Time',
+							},
+						],
+					},
+				],
+			},
+		]),
+
+		renderSelectors: {
+			monthLabel: '.month .label',
+			monthContainer: '.month-input',
+			dayLabel: '.day .label',
+			dayContainer: '.day-input',
+			yearLabel: '.year .label',
+			yearContainer: '.year-input',
+			timeLabel: '.time .label',
+			hourInput: '.hour-input',
+			minuteInput: '.minute-input',
+			meridiemContainer: '.meridiem-input',
+			dateError: '.date .error',
+			timeError: '.time .error',
+			selectCurrentEl: '.select-current-date .link',
+		},
+
+		initComponent: function () {
+			this.callParent(arguments);
+
+			var upperBound = this.upperBound,
+				lowerBound = this.lowerBound;
+
+			if (!this.lowerBound) {
+				lowerBound = new Date();
+				lowerBound.setFullYear(
+					lowerBound.getFullYear() - this.YEARS_IN_PAST,
+					0,
+					1
+				);
 			}
-		});
 
-		me.monthSelect = new LegacySearchComboBox({
-			editable: false,
-			onSelect: me.onMonthChanged.bind(me),
-			renderTo: me.monthContainer,
-			onError: function () {
-				me.monthLabel.addCls('error');
-			},
-			onRemoveError: function () {
-				me.monthLabel.removeCls('error');
+			if (!this.upperBound) {
+				upperBound = new Date();
+				upperBound.setFullYear(
+					upperBound.getFullYear() + this.YEARS_IN_FUTURE,
+					0,
+					1
+				);
 			}
-		});
 
-		me.daySelect = new LegacySearchComboBox({
-			editable: false,
-			onSelect: me.onDayChanged.bind(me),
-			renderTo: me.dayContainer,
-			onError: function () {
-				me.dayLabel.addCls('error');
-			},
-			onRemoveError: function () {
-				me.dayLabel.removeCls('error');
+			// this.currentDate = this.currentDate;
+			this.lowerBound = this.lowerBound || lowerBound;
+			this.upperBound = this.upperBound || upperBound;
+
+			this.invalidDateMsg = this.invalidDateMsg || this.INVALID_DATE;
+			this.invalidTimeMsg = this.invalidTimeMsg || this.INVALID_TIME;
+
+			this.onParentScroll = this.closeSelects.bind(this);
+			this.onResize = this.closeSelects.bind(this);
+		},
+
+		beforeRender: function () {
+			this.callParent(arguments);
+
+			this.renderData = Ext.apply(this.renderData || {}, {
+				currentDate: this.showCurrentDateSelect,
+			});
+		},
+
+		afterRender: function () {
+			this.callParent(arguments);
+
+			var me = this;
+
+			me.yearSelect = new LegacySearchComboBox({
+				editable: false,
+				onSelect: me.onYearChanged.bind(me),
+				renderTo: me.yearContainer,
+				onError: function () {
+					me.yearLabel.addCls('error');
+				},
+				onRemoveError: function () {
+					me.yearLabel.removeCls('error');
+				},
+			});
+
+			me.monthSelect = new LegacySearchComboBox({
+				editable: false,
+				onSelect: me.onMonthChanged.bind(me),
+				renderTo: me.monthContainer,
+				onError: function () {
+					me.monthLabel.addCls('error');
+				},
+				onRemoveError: function () {
+					me.monthLabel.removeCls('error');
+				},
+			});
+
+			me.daySelect = new LegacySearchComboBox({
+				editable: false,
+				onSelect: me.onDayChanged.bind(me),
+				renderTo: me.dayContainer,
+				onError: function () {
+					me.dayLabel.addCls('error');
+				},
+				onRemoveError: function () {
+					me.dayLabel.removeCls('error');
+				},
+			});
+
+			me.meridiemSelect = new LegacySearchComboBox({
+				editable: false,
+				options: [this.AM, this.PM],
+				onSelect: me.onMeridiemChanged.bind(me),
+				renderTo: me.meridiemContainer,
+			});
+
+			me.mon(me.hourInput, {
+				keydown: function () {
+					me.hourInput.removeCls('error');
+					me.clearTimeError();
+
+					if (me.onChange) {
+						me.onChange();
+					}
+				},
+				change: me.onHourChanged.bind(me),
+			});
+
+			me.mon(me.minuteInput, {
+				keydown: function () {
+					me.minuteInput.removeCls('error');
+					me.clearTimeError();
+
+					if (me.onChange) {
+						me.onChange();
+					}
+				},
+				blur: function () {
+					me.setMinute(me.getMinutes());
+				},
+				change: me.onMinuteChanged.bind(me),
+			});
+
+			if (me.selectCurrentEl) {
+				me.mon(
+					me.selectCurrentEl,
+					'click',
+					me.selectCurrentDate.bind(me)
+				);
 			}
-		});
 
-		me.meridiemSelect = new LegacySearchComboBox({
-			editable: false,
-			options: [this.AM, this.PM],
-			onSelect: me.onMeridiemChanged.bind(me),
-			renderTo: me.meridiemContainer
-		});
+			me.on('destroy', function () {
+				me.yearSelect.destroy();
+				me.monthSelect.destroy();
+				me.daySelect.destroy();
+				me.meridiemSelect.destroy();
 
-		me.mon(me.hourInput, {
-			keydown: function () {
-				me.hourInput.removeCls('error');
-				me.clearTimeError();
+				me.removeScrollListener();
+				me.removeResizeListener();
+			});
 
-				if (me.onChange) {
-					me.onChange();
-				}
-			},
-			change: me.onHourChanged.bind(me)
-		});
+			me.addScrollListener();
+			me.addResizeListener();
 
-		me.mon(me.minuteInput, {
-			keydown: function () {
-				me.minuteInput.removeCls('error');
-				me.clearTimeError();
+			me.selectDate(me.currentDate);
+		},
 
-				if (me.onChange) {
-					me.onChange();
-				}
-			},
-			blur: function () {
-				me.setMinute(me.getMinutes());
-			},
-			change: me.onMinuteChanged.bind(me)
-		});
+		disable: function () {
+			this.hasBeenDisabled = true;
 
-		if (me.selectCurrentEl) {
-			me.mon(me.selectCurrentEl, 'click', me.selectCurrentDate.bind(me));
-		}
+			if (this.rendered) {
+				this.addCls('disabled');
+				// this.yearSelect.disable();
+				// this.monthSelect.disable();
+				// this.daySelect.disable();
+				// this.meridiemSelect.disable();
+				// this.hourInput.addCls('disabled');
+				// this.minuteInput.addCls('disabled');
+			}
+		},
 
-		me.on('destroy', function () {
-			me.yearSelect.destroy();
-			me.monthSelect.destroy();
-			me.daySelect.destroy();
-			me.meridiemSelect.destroy();
+		enable: function () {
+			this.hasBeenDisabled = null;
 
-			me.removeScrollListener();
-			me.removeResizeListener();
-		});
+			if (this.rendered) {
+				this.removeCls('disabled');
+				// this.yearSelect.enable();
+				// this.monthSelect.enable();
+				// this.daySelect.enable();
+				// this.meridiemSelect.enable();
+				// this.hourInput.removeCls('disabled');
+				// this.minuteInput.removeCls('disabled');
+			}
+		},
 
-		me.addScrollListener();
-		me.addResizeListener();
+		closeSelects: function () {
+			this.yearSelect.hideOptions();
+			this.monthSelect.hideOptions();
+			this.daySelect.hideOptions();
+			this.meridiemSelect.hideOptions();
+		},
 
-		me.selectDate(me.currentDate);
-	},
+		addScrollListener: function () {
+			var parent = this.scrollParent || window;
 
-	disable: function () {
-		this.hasBeenDisabled = true;
+			parent.addEventListener('scroll', this.onParentScroll);
+		},
 
-		if (this.rendered) {
-			this.addCls('disabled');
-			// this.yearSelect.disable();
-			// this.monthSelect.disable();
-			// this.daySelect.disable();
-			// this.meridiemSelect.disable();
-			// this.hourInput.addCls('disabled');
-			// this.minuteInput.addCls('disabled');
-		}
-	},
+		addResizeListener: function () {
+			Ext.EventManager.onWindowResize(this.onResize);
+		},
 
-	enable: function () {
-		this.hasBeenDisabled = null;
+		removeScrollListener: function () {
+			var parent = this.scrollParent || window;
 
-		if (this.rendered) {
-			this.removeCls('disabled');
-			// this.yearSelect.enable();
-			// this.monthSelect.enable();
-			// this.daySelect.enable();
-			// this.meridiemSelect.enable();
-			// this.hourInput.removeCls('disabled');
-			// this.minuteInput.removeCls('disabled');
-		}
-	},
+			parent.removeEventListener('scroll', this.onParentScroll);
+		},
 
-	closeSelects: function () {
-		this.yearSelect.hideOptions();
-		this.monthSelect.hideOptions();
-		this.daySelect.hideOptions();
-		this.meridiemSelect.hideOptions();
-	},
+		removeResizeListener: function () {
+			Ext.EventManager.removeResizeListener(this.onResize);
+		},
 
-	addScrollListener: function () {
-		var parent = this.scrollParent || window;
+		getSelectedDate: function () {
+			var year = this.getYear(),
+				month = this.getMonth(),
+				day = this.getDay(),
+				hour = this.getHours() || 0,
+				minutes = this.getMinutes() || 0;
 
-		parent.addEventListener('scroll', this.onParentScroll);
-	},
+			if (
+				year != null &&
+				month != null &&
+				day != null &&
+				hour <= 24 &&
+				minutes < 60
+			) {
+				return new Date(year, month, day, hour, minutes);
+			}
 
-	addResizeListener: function () {
-		Ext.EventManager.onWindowResize(this.onResize);
-	},
-
-	removeScrollListener: function () {
-		var parent = this.scrollParent || window;
-
-		parent.removeEventListener('scroll', this.onParentScroll);
-	},
-
-	removeResizeListener: function () {
-		Ext.EventManager.removeResizeListener(this.onResize);
-	},
-
-	getSelectedDate: function () {
-		var year = this.getYear(),
-			month = this.getMonth(),
-			day = this.getDay(),
-			hour = this.getHours() || 0,
-			minutes = this.getMinutes() || 0;
-
-		if (year != null && month != null && day != null && hour <= 24 && minutes < 60) {
-			return new Date(year, month, day, hour, minutes);
-		}
-
-		return null;
-	},
-
-	getYear: function () {
-		return this.yearSelect && this.yearSelect.getValue();
-	},
-
-	getMonth: function () {
-		return this.monthSelect && this.monthSelect.getValue();
-	},
-
-	getDay: function () {
-		return this.daySelect && this.daySelect.getValue();
-	},
-
-	getHours: function () {
-		var value = this.hourInput && this.hourInput.dom && this.hourInput.dom.value,
-			meridiem = this.meridiemSelect.getValue() || this.AM;
-
-		if (value == null || value === '') {
 			return null;
-		}
+		},
 
-		value = parseInt(value, 10);
+		getYear: function () {
+			return this.yearSelect && this.yearSelect.getValue();
+		},
 
-		if (!this.meridiemSelect.isDisabled()) {
-			if (meridiem === this.AM && value === 12) {
-				value = 0;
-			} else if (meridiem === this.PM && value < 12) {
-				value = value + 12;
+		getMonth: function () {
+			return this.monthSelect && this.monthSelect.getValue();
+		},
+
+		getDay: function () {
+			return this.daySelect && this.daySelect.getValue();
+		},
+
+		getHours: function () {
+			var value =
+					this.hourInput &&
+					this.hourInput.dom &&
+					this.hourInput.dom.value,
+				meridiem = this.meridiemSelect.getValue() || this.AM;
+
+			if (value == null || value === '') {
+				return null;
 			}
-		}
 
-		return value;
-	},
+			value = parseInt(value, 10);
 
-	getMinutes: function () {
-		var value = this.minuteInput && this.minuteInput.dom && this.minuteInput.dom.value;
-
-		if (value == null || value === '') {
-			return null;
-		}
-
-		value = parseInt(value, 10);
-
-		return value;
-	},
-
-	selectCurrentDate: function (date) {
-		this.selectDate(new Date());
-	},
-
-	selectDate: function (date) {
-		if (date && date < this.lowerBound) {
-			date = this.lowerBound;
-		} else if (date && date > this.upperBound) {
-			date = this.upperBound;
-		}
-
-		var year = date && date.getFullYear(),
-			month = date && date.getMonth(),
-			day = date && date.getDate(),
-			hour = date && date.getHours(),
-			minute = date && date.getMinutes();
-
-		this.setValues(year, month, day, hour, minute);
-	},
-
-	setValues: function (year, month, day, hour, minute) {
-		this.updateYearRange(year, month, day);
-		this.updateMonthRange(year, month, day);
-		this.updateDayRange(year, month, day);
-
-		this.setMinute(minute);
-		this.setHour(hour);
-		this.setDay(day);
-		this.setMonth(month);
-		this.setYear(year);
-	},
-
-	updateYearRange: function (year, month, day) {
-		var lower = this.lowerBound.getFullYear(),
-			upper = this.upperBound.getFullYear(),
-			i, years = [];
-
-		for (i = lower; i <= upper; i++) {
-			years.push(i);
-		}
-
-		this.yearSelect.addOptions(years);
-	},
-
-	updateMonthRange: function (year, month, day) {
-		var useShort = this.useShortDates,
-			months;
-
-		months = this.MONTHS.map(function (monthObj) {
-			return {
-				value: monthObj.value,
-				text: useShort ? monthObj.shortLabel : monthObj.longLabel
-			};
-		});
-
-		this.monthSelect.addOptions(months);
-	},
-
-	updateDayRange: function (year, month, day) {
-		month = this.MONTHS[month || 0];
-
-		var lower = 1,
-			upper = this.self.isLeapYear(year) && month.leapDays ? month.leapDays : month.days,
-			days = [], i;
-
-		for (i = lower; i <= upper; i++) {
-			days.push(i);
-		}
-
-		this.daySelect.addOptions(days);
-	},
-
-	setYear: function (year) {
-		this.yearSelect.removeError();
-		this.clearDateError();
-
-		if (!year) {
-			this.yearSelect.setValue('');
-			return;
-		}
-
-		var range = this.yearSelect.getOptions();
-
-		if (range.indexOf(year) < 0) {
-			if (range[0] > year) {
-				year = range[0];
-			} else if (range.last() < year) {
-				year = range.last();
+			if (!this.meridiemSelect.isDisabled()) {
+				if (meridiem === this.AM && value === 12) {
+					value = 0;
+				} else if (meridiem === this.PM && value < 12) {
+					value = value + 12;
+				}
 			}
-		}
 
-		this.yearSelect.setValue(year);
-	},
+			return value;
+		},
 
-	setMonth: function (month) {
-		this.monthSelect.removeError();
-		this.clearDateError();
+		getMinutes: function () {
+			var value =
+				this.minuteInput &&
+				this.minuteInput.dom &&
+				this.minuteInput.dom.value;
 
-		if (month === undefined) {
-			this.monthSelect.setValue('');
-			return;
-		}
-
-		var range = this.monthSelect.getOptions();
-
-		if (range.indexOf(month) < 0) {
-			if (range[0] > month) {
-				month = range[0];
-			} else if (range.last() < month) {
-				month = range.last();
+			if (value == null || value === '') {
+				return null;
 			}
-		}
 
-		this.monthSelect.setValue(month);
-	},
+			value = parseInt(value, 10);
 
-	setDay: function (day) {
-		this.daySelect.removeError();
-		this.clearDateError();
+			return value;
+		},
 
-		if (!day) {
-			this.daySelect.setValue('');
-			return;
-		}
+		selectCurrentDate: function (date) {
+			this.selectDate(new Date());
+		},
 
-		var range = this.daySelect.getOptions();
-
-		if (range.indexOf(day) < 0) {
-			if (range[0] > day) {
-				day = range[0];
-			} else if (range.last() < day) {
-				day = range.last();
+		selectDate: function (date) {
+			if (date && date < this.lowerBound) {
+				date = this.lowerBound;
+			} else if (date && date > this.upperBound) {
+				date = this.upperBound;
 			}
-		}
 
-		this.daySelect.setValue(day);
-	},
+			var year = date && date.getFullYear(),
+				month = date && date.getMonth(),
+				day = date && date.getDate(),
+				hour = date && date.getHours(),
+				minute = date && date.getMinutes();
 
-	setHour: function (hour) {
-		this.hourInput.removeCls('error');
-		this.clearTimeError();
+			this.setValues(year, month, day, hour, minute);
+		},
 
-		if (hour < 12) {
-			this.meridiemSelect.setValue(this.AM);
-		} else {
-			hour = hour - 12;
-			this.meridiemSelect.setValue(this.PM);
-		}
+		setValues: function (year, month, day, hour, minute) {
+			this.updateYearRange(year, month, day);
+			this.updateMonthRange(year, month, day);
+			this.updateDayRange(year, month, day);
 
-		this.meridiemSelect.enable();
+			this.setMinute(minute);
+			this.setHour(hour);
+			this.setDay(day);
+			this.setMonth(month);
+			this.setYear(year);
+		},
 
-		this.hourInput.dom.value = hour === 0 ? '12' : hour;
-	},
+		updateYearRange: function (year, month, day) {
+			var lower = this.lowerBound.getFullYear(),
+				upper = this.upperBound.getFullYear(),
+				i,
+				years = [];
 
-	setMinute: function (minute) {
-		this.minuteInput.removeCls('error');
-		this.clearTimeError();
+			for (i = lower; i <= upper; i++) {
+				years.push(i);
+			}
 
-		if (minute < 10) {
-			minute = '0' + minute;
-		}
+			this.yearSelect.addOptions(years);
+		},
 
-		this.minuteInput.dom.value = minute;
-	},
+		updateMonthRange: function (year, month, day) {
+			var useShort = this.useShortDates,
+				months;
 
-	onYearChanged: function (year) {
+			months = this.MONTHS.map(function (monthObj) {
+				return {
+					value: monthObj.value,
+					text: useShort ? monthObj.shortLabel : monthObj.longLabel,
+				};
+			});
 
+			this.monthSelect.addOptions(months);
+		},
 
-		this.setMonth(this.getMonth());
-		this.setDay(this.getDay());
+		updateDayRange: function (year, month, day) {
+			month = this.MONTHS[month || 0];
 
-		this.clearDateError();
+			var lower = 1,
+				upper =
+					this.self.isLeapYear(year) && month.leapDays
+						? month.leapDays
+						: month.days,
+				days = [],
+				i;
 
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+			for (i = lower; i <= upper; i++) {
+				days.push(i);
+			}
 
-	onMonthChanged: function (month) {
-		this.updateDayRange(this.getYear(), month, this.getDay());
+			this.daySelect.addOptions(days);
+		},
 
-		this.setDay(this.getDay());
+		setYear: function (year) {
+			this.yearSelect.removeError();
+			this.clearDateError();
 
-		this.clearDateError();
+			if (!year) {
+				this.yearSelect.setValue('');
+				return;
+			}
 
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+			var range = this.yearSelect.getOptions();
 
-	onDayChanged: function (day) {
-		this.clearDateError();
+			if (range.indexOf(year) < 0) {
+				if (range[0] > year) {
+					year = range[0];
+				} else if (range.last() < year) {
+					year = range.last();
+				}
+			}
 
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+			this.yearSelect.setValue(year);
+		},
 
-	onHourChanged: function (/*hour?*/) {
-		var hour = this.hourInput.dom.value,
-			meridiem = this.meridiemSelect.getValue();
+		setMonth: function (month) {
+			this.monthSelect.removeError();
+			this.clearDateError();
 
-		if (!meridiem) {
-			this.meridiemSelect.setValue(this.AM);
-			meridiem = this.AM;
-		}
+			if (month === undefined) {
+				this.monthSelect.setValue('');
+				return;
+			}
 
-		if (hour > 12) {
-			this.meridiemSelect.setValue(this.PM);
-			this.meridiemSelect.disable();
-		} else if (hour === 0) {
-			this.meridiemSelect.setValue(this.AM);
-			this.meridiemSelect.disable();
-		} else {
+			var range = this.monthSelect.getOptions();
+
+			if (range.indexOf(month) < 0) {
+				if (range[0] > month) {
+					month = range[0];
+				} else if (range.last() < month) {
+					month = range.last();
+				}
+			}
+
+			this.monthSelect.setValue(month);
+		},
+
+		setDay: function (day) {
+			this.daySelect.removeError();
+			this.clearDateError();
+
+			if (!day) {
+				this.daySelect.setValue('');
+				return;
+			}
+
+			var range = this.daySelect.getOptions();
+
+			if (range.indexOf(day) < 0) {
+				if (range[0] > day) {
+					day = range[0];
+				} else if (range.last() < day) {
+					day = range.last();
+				}
+			}
+
+			this.daySelect.setValue(day);
+		},
+
+		setHour: function (hour) {
+			this.hourInput.removeCls('error');
+			this.clearTimeError();
+
+			if (hour < 12) {
+				this.meridiemSelect.setValue(this.AM);
+			} else {
+				hour = hour - 12;
+				this.meridiemSelect.setValue(this.PM);
+			}
+
 			this.meridiemSelect.enable();
-		}
 
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+			this.hourInput.dom.value = hour === 0 ? '12' : hour;
+		},
 
-	onMinuteChanged: function (minute) {
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+		setMinute: function (minute) {
+			this.minuteInput.removeCls('error');
+			this.clearTimeError();
 
+			if (minute < 10) {
+				minute = '0' + minute;
+			}
 
-	onMeridiemChanged: function (meridiem) {
-		if (this.onChange) {
-			this.onChange();
-		}
-	},
+			this.minuteInput.dom.value = minute;
+		},
 
-	showDateError: function (error) {
-		this.dateError.update(error);
-	},
+		onYearChanged: function (year) {
+			this.setMonth(this.getMonth());
+			this.setDay(this.getDay());
 
-	clearDateError: function () {
-		this.dateError.update('');
-	},
+			this.clearDateError();
 
-	showTimeError: function (error) {
-		this.timeError.update(error);
-		this.timeLabel.addCls('error');
-	},
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-	clearTimeError: function () {
-		this.timeError.update('');
-		this.timeLabel.removeCls('error');
-	},
+		onMonthChanged: function (month) {
+			this.updateDayRange(this.getYear(), month, this.getDay());
 
-	onInvalidDate: function () {
-		this.showDateError(this.invalidDateMsg);
-	},
+			this.setDay(this.getDay());
 
-	onInvalidTime: function () {
-		this.showTimeError(this.invalidTimeMsg);
-	},
+			this.clearDateError();
 
-	onDateToLow: function () {
-		this.showDateError(this.dateToLowMsg || 'Please enter a date after ' + Ext.Date.format(this.lowerBound, 'F n, Y g:i A'));
-	},
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-	onDateToHigh: function () {
-		this.showDateError(this.dateToHighMsg || 'Please enter a date before ' + Ext.Date.format(this.upperBound, 'F n, Y g:i A'));
-	},
+		onDayChanged: function (day) {
+			this.clearDateError();
 
-	__validateValue: function (value) {
-		var isValid = true;
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-		if (this.lowerBound && value < this.lowerBound) {
-			isValid = false;
-			this.onDateToLow();
-		} else if (this.upperBound && value > this.upperBound) {
-			isValid = false;
-			this.onDateToHigh();
-		}
+		onHourChanged: function (/*hour?*/) {
+			var hour = this.hourInput.dom.value,
+				meridiem = this.meridiemSelect.getValue();
 
-		return isValid;
-	},
+			if (!meridiem) {
+				this.meridiemSelect.setValue(this.AM);
+				meridiem = this.AM;
+			}
 
-	__validateNoValue: function (year, month, day, hour, minute) {
-		//If all the values are null, then the value is null and its valid
-		if (year == null && month == null && day == null && hour == null && minute == null) {
-			return true;
-		}
+			if (hour > 12) {
+				this.meridiemSelect.setValue(this.PM);
+				this.meridiemSelect.disable();
+			} else if (hour === 0) {
+				this.meridiemSelect.setValue(this.AM);
+				this.meridiemSelect.disable();
+			} else {
+				this.meridiemSelect.enable();
+			}
 
-		if (year == null || month == null || day == null) {
-			this.onInvalidDate();
-		}
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-		if (year == null) {
-			this.yearSelect.showError();
-		}
+		onMinuteChanged: function (minute) {
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-		if (month == null) {
-			this.monthSelect.showError();
-		}
+		onMeridiemChanged: function (meridiem) {
+			if (this.onChange) {
+				this.onChange();
+			}
+		},
 
-		if (day == null) {
-			this.daySelect.showError();
-		}
+		showDateError: function (error) {
+			this.dateError.update(error);
+		},
 
-		if (hour > 24 || minute > 59) {
-			this.onInvalidTime();
-		}
+		clearDateError: function () {
+			this.dateError.update('');
+		},
 
-		if (hour > 24) {
-			this.hourInput.addCls('error');
-		}
+		showTimeError: function (error) {
+			this.timeError.update(error);
+			this.timeLabel.addCls('error');
+		},
 
-		if (minute > 59) {
-			this.minuteInput.addCls('error');
-		}
+		clearTimeError: function () {
+			this.timeError.update('');
+			this.timeLabel.removeCls('error');
+		},
 
+		onInvalidDate: function () {
+			this.showDateError(this.invalidDateMsg);
+		},
 
-		return false;
-	},
+		onInvalidTime: function () {
+			this.showTimeError(this.invalidTimeMsg);
+		},
 
-	validate: function () {
-		var year = this.getYear(),
-			month = this.getMonth(),
-			day = this.getDay(),
-			hour = this.getHours(),
-			minute = this.getMinutes(),
-			value = this.getSelectedDate(),
-			isValid;
+		onDateToLow: function () {
+			this.showDateError(
+				this.dateToLowMsg ||
+					'Please enter a date after ' +
+						Ext.Date.format(this.lowerBound, 'F n, Y g:i A')
+			);
+		},
 
-		if (value) {
-			isValid = this.__validateValue(value);
-		} else {
-			isValid = this.__validateNoValue(year, month, day, hour, minute);
-		}
+		onDateToHigh: function () {
+			this.showDateError(
+				this.dateToHighMsg ||
+					'Please enter a date before ' +
+						Ext.Date.format(this.upperBound, 'F n, Y g:i A')
+			);
+		},
 
-		return isValid;
+		__validateValue: function (value) {
+			var isValid = true;
+
+			if (this.lowerBound && value < this.lowerBound) {
+				isValid = false;
+				this.onDateToLow();
+			} else if (this.upperBound && value > this.upperBound) {
+				isValid = false;
+				this.onDateToHigh();
+			}
+
+			return isValid;
+		},
+
+		__validateNoValue: function (year, month, day, hour, minute) {
+			//If all the values are null, then the value is null and its valid
+			if (
+				year == null &&
+				month == null &&
+				day == null &&
+				hour == null &&
+				minute == null
+			) {
+				return true;
+			}
+
+			if (year == null || month == null || day == null) {
+				this.onInvalidDate();
+			}
+
+			if (year == null) {
+				this.yearSelect.showError();
+			}
+
+			if (month == null) {
+				this.monthSelect.showError();
+			}
+
+			if (day == null) {
+				this.daySelect.showError();
+			}
+
+			if (hour > 24 || minute > 59) {
+				this.onInvalidTime();
+			}
+
+			if (hour > 24) {
+				this.hourInput.addCls('error');
+			}
+
+			if (minute > 59) {
+				this.minuteInput.addCls('error');
+			}
+
+			return false;
+		},
+
+		validate: function () {
+			var year = this.getYear(),
+				month = this.getMonth(),
+				day = this.getDay(),
+				hour = this.getHours(),
+				minute = this.getMinutes(),
+				value = this.getSelectedDate(),
+				isValid;
+
+			if (value) {
+				isValid = this.__validateValue(value);
+			} else {
+				isValid = this.__validateNoValue(
+					year,
+					month,
+					day,
+					hour,
+					minute
+				);
+			}
+
+			return isValid;
+		},
 	}
-});
+);

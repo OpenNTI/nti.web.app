@@ -6,7 +6,8 @@ $over-color: #f4f3f3;
 		position: relative;
 		cursor: pointer;
 
-		&.x-item-selected, &.over {
+		&.x-item-selected,
+		&.over {
 			background-color: #f0f0f0;
 			box-shadow: inset -1px 0 0 0 #f4f4f4;
 		}
@@ -21,7 +22,7 @@ $over-color: #f4f3f3;
 				size: cover;
 				repeat: no-repeat;
 				position: center;
-			};
+			}
 		}
 
 		.presence {
@@ -43,11 +44,15 @@ $over-color: #f4f3f3;
 			top: 17px;
 			width: 18px;
 			height: 17px;
-			&:hover::after { @include sprite($add-contact_active); }
+			&:hover::after {
+				@include sprite($add-contact_active);
+			}
 		}
 
 		&.not-contact {
-			.presence { display: none; }
+			.presence {
+				display: none;
+			}
 
 			.nib {
 				display: block;
@@ -110,7 +115,8 @@ $over-color: #f4f3f3;
 		}
 	}
 
-	div.avatar, img {
+	div.avatar,
+	img {
 		float: left;
 		width: 32px;
 		height: 32px;
@@ -131,7 +137,8 @@ $over-color: #f4f3f3;
 	img {
 		&.public,
 		&.group {
-			background: url(../images/old_sprites/spr_groups_dark.png) 0 0 no-repeat;
+			background: url(../images/old_sprites/spr_groups_dark.png) 0 0
+				no-repeat;
 		}
 
 		&.group {
@@ -175,7 +182,8 @@ $over-color: #f4f3f3;
 		img.nib {
 			display: block;
 
-			&:active,&:hover {
+			&:active,
+			&:hover {
 				@include sprite($options_active);
 			}
 		}
@@ -202,7 +210,10 @@ $over-color: #f4f3f3;
 
 	.status {
 		color: var(--tertiary-grey);
-		font: { size: 8pt; weight: 500; }
+		font: {
+			size: 8pt;
+			weight: 500;
+		}
 	}
 }
 
@@ -266,7 +277,8 @@ $over-color: #f4f3f3;
 	}
 }
 
-.contact-popout .group-selection-list, .x-menu .group-selection-list {
+.contact-popout .group-selection-list,
+.x-menu .group-selection-list {
 	background: #fff;
 
 	.toolbar {
@@ -350,7 +362,9 @@ $over-color: #f4f3f3;
 					color: var(--secondary-grey) !important;
 					cursor: default;
 
-					img.delete-group { display: block !important; }
+					img.delete-group {
+						display: block !important;
+					}
 				}
 
 				&.selection-selected {
@@ -363,7 +377,9 @@ $over-color: #f4f3f3;
 
 				&.add-group-action {
 					background: none;
-					&::after { content: none; }
+					&::after {
+						content: none;
+					}
 
 					.input-wrap {
 						left: -5px;
@@ -377,7 +393,9 @@ $over-color: #f4f3f3;
 				}
 
 				a {
-					&:active, &:visited, &:link {
+					&:active,
+					&:visited,
+					&:link {
 						border: 0 dotted var(--secondary-grey);
 						border-bottom-width: 2px;
 						color: var(--secondary-grey);
@@ -436,7 +454,7 @@ $over-color: #f4f3f3;
 	right: 0;
 	background: #fafafa;
 
-	div[id$=list] {
+	div[id$='list'] {
 		position: absolute;
 		bottom: 125px;
 		top: 0;
@@ -448,7 +466,9 @@ $over-color: #f4f3f3;
 		}
 
 		.contact-row {
-			.presence { display: none; }
+			.presence {
+				display: none;
+			}
 
 			.nib {
 				display: block;
@@ -456,28 +476,37 @@ $over-color: #f4f3f3;
 				right: 10px;
 				width: 20px;
 				height: 20px;
-				&::after { @include sprite($checkbox-light-unchecked); }
-				&:hover::after { @include sprite($checkbox-light-unchecked_hover); }
+				&::after {
+					@include sprite($checkbox-light-unchecked);
+				}
+				&:hover::after {
+					@include sprite($checkbox-light-unchecked_hover);
+				}
 			}
 
 			&.checked {
 				.nib {
-					&::after { @include sprite($checkbox-light-checked); }
-					&:hover::after { @include sprite($checkbox-light-checked_hover); }
+					&::after {
+						@include sprite($checkbox-light-checked);
+					}
+					&:hover::after {
+						@include sprite($checkbox-light-checked_hover);
+					}
 				}
 			}
 		}
 	}
 
-	div[id$=tokens], div[id$=buttons] {
+	div[id$='tokens'],
+	div[id$='buttons'] {
 		border-top: 1px solid #dcdcdc;
 	}
 
-	div[id$=tokens] {
+	div[id$='tokens'] {
 		background: #fff;
 		position: absolute;
 		overflow: {
-			x:hidden;
+			x: hidden;
 			y: auto; //scroll;
 		}
 
@@ -492,7 +521,7 @@ $over-color: #f4f3f3;
 		}
 	}
 
-	div[id$=buttons] {
+	div[id$='buttons'] {
 		position: absolute;
 		overflow: hidden;
 		bottom: 0;
@@ -538,9 +567,7 @@ $over-color: #f4f3f3;
 .contacts-view {
 	position: relative;
 	overflow: hidden;
-	box-shadow:
-		inset -1px 0 0 0 #fff,
-		inset 1px 0 0 0 #fff;
+	box-shadow: inset -1px 0 0 0 #fff, inset 1px 0 0 0 #fff;
 
 	&.offline {
 		.contact-row::after {
@@ -644,8 +671,10 @@ $over-color: #f4f3f3;
 				border-left-width: 0;
 				padding-left: 35px;
 
-				@include icon($rhp-search,$top:11px,$left:9px);
-				&::after { opacity: 0.6; }
+				@include icon($rhp-search, $top: 11px, $left: 9px);
+				&::after {
+					opacity: 0.6;
+				}
 
 				input {
 					@include experimental(transition, opacity 0.5s);
@@ -681,7 +710,7 @@ $over-color: #f4f3f3;
 			&.group-chat {
 				right: 0;
 
-				@include icon($rhp-group-chat,$top:11px,$left:7px);
+				@include icon($rhp-group-chat, $top: 11px, $left: 7px);
 
 				&:hover::after {
 					@include sprite($rhp-group-chat_hover);
@@ -691,8 +720,12 @@ $over-color: #f4f3f3;
 
 		&.no-group-chat {
 			&.search .search,
-			.search { width: 260px !important; }
-			.group-chat { display: none; }
+			.search {
+				width: 260px !important;
+			}
+			.group-chat {
+				display: none;
+			}
 		}
 	}
 }
@@ -711,7 +744,8 @@ $over-color: #f4f3f3;
 			font-size: 16px;
 			font-style: italic;
 
-			&:active,&.active {
+			&:active,
+			&.active {
 				background-position: -56px 0;
 
 				&:hover {
@@ -735,7 +769,9 @@ div.add-group-action {
 	padding: 0 0 30px 15px;
 
 	a {
-		&:active, &:visited, &:link {
+		&:active,
+		&:visited,
+		&:link {
 			border: 0 dotted var(--secondary-grey);
 			border-bottom-width: 2px;
 			color: var(--secondary-grey);
@@ -823,7 +859,8 @@ div.contact-buttons {
 	}
 }
 
-.suggest-window, .profile-create-window {
+.suggest-window,
+.profile-create-window {
 	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 	background-color: white;
 
@@ -909,7 +946,8 @@ div.contact-buttons {
 						border: none;
 					}
 
-					&.remove-contact, &.selected {
+					&.remove-contact,
+					&.selected {
 						color: var(--primary-blue);
 						background: none;
 						border: none;
@@ -1022,7 +1060,12 @@ div.contact-buttons {
 							&.upload {
 								cursor: pointer;
 
-								@include icon($edit-15-white, $left:auto, $top: 7px, $right: 6px);
+								@include icon(
+									$edit-15-white,
+									$left: auto,
+									$top: 7px,
+									$right: 6px
+								);
 							}
 						}
 
@@ -1048,7 +1091,8 @@ div.contact-buttons {
 				.placeholder {
 					width: 214px;
 					height: 214px;
-					background: url('../images/backdrops/add-photo.png') 0 0 no-repeat;
+					background: url('../images/backdrops/add-photo.png') 0 0
+						no-repeat;
 					padding-top: 118px;
 					text-align: center;
 					font-style: normal !important;
@@ -1132,7 +1176,8 @@ div.contact-buttons {
 					display: none;
 				}
 
-				input, textarea {
+				input,
+				textarea {
 					width: 87%;
 					padding: 10px 13px;
 					margin-bottom: 15px;
@@ -1147,7 +1192,7 @@ div.contact-buttons {
 				}
 
 				&.locked {
-					@include icon($lock, $left:auto, $top: 13px, $right: 67px);
+					@include icon($lock, $left: auto, $top: 13px, $right: 67px);
 
 					&::after {
 						position: absolute;
@@ -1212,7 +1257,9 @@ div.contact-buttons {
 	.contact-card-container {
 		border: 0 solid #f2f2f2;
 		border-top-width: 1px;
-		&:first-of-type { border-top-width: 0; }
+		&:first-of-type {
+			border-top-width: 0;
+		}
 
 		.contact-card {
 			//
@@ -1243,7 +1290,7 @@ div.contact-buttons {
 			float: none;
 			display: none;
 
-			@include icon($options_active,$top: auto, $left: auto);
+			@include icon($options_active, $top: auto, $left: auto);
 
 			position: absolute;
 			margin-top: 10px;
@@ -1254,17 +1301,20 @@ div.contact-buttons {
 		.meta {
 			margin: 15px 0 0 160px;
 
-			[data-field],.separator {
+			[data-field],
+			.separator {
 				color: var(--primary-grey);
 				font: normal 500 14px/25px var(--body-font-family);
 			}
 
-			.separator { color: var(--tertiary-grey); }
+			.separator {
+				color: var(--tertiary-grey);
+			}
 
 			.name {
 				display: block;
 				padding-left: 10px;
-				margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
+				margin-left: -10px; //these two left margin/paddings allow overflow:hidden and still to get the decenders
 				margin-bottom: 5px;
 				font: italic 300 30px/40px var(--body-font-family);
 				color: var(--primary-blue);
@@ -1277,7 +1327,9 @@ div.contact-buttons {
 			}
 
 			@include add-to-contacts;
-			.add-to-contacts { display: none; }
+			.add-to-contacts {
+				display: none;
+			}
 
 			.actions {
 				margin: 0;
@@ -1286,7 +1338,9 @@ div.contact-buttons {
 				white-space: nowrap;
 				font: normal 700 10px/25px var(--body-font-family);
 
-				.chat,.message,.email {
+				.chat,
+				.message,
+				.email {
 					opacity: 0.8;
 					cursor: pointer;
 					display: inline-block;
@@ -1327,12 +1381,17 @@ div.contact-buttons {
 
 		&.not-contact {
 			.meta {
-				.name { max-width: 340px; }
-				.add-to-contacts { display: inline-block; }
+				.name {
+					max-width: 340px;
+				}
+				.add-to-contacts {
+					display: inline-block;
+				}
 			}
 		}
 
-		&:hover, &.active {
+		&:hover,
+		&.active {
 			.nib {
 				display: block;
 			}
@@ -1345,7 +1404,9 @@ div.contact-buttons {
 		overflow: hidden;
 
 		&:hover .x-component-nti-tool-action:not(.disabled) {
-			.icon.options::after { @include sprite($options-menu-card_hover); }
+			.icon.options::after {
+				@include sprite($options-menu-card_hover);
+			}
 		}
 
 		.x-component-nti-tool-action {
@@ -1357,10 +1418,13 @@ div.contact-buttons {
 				}
 			}
 
-			&:hover,&.over {
+			&:hover,
+			&.over {
 				&:not(.disabled) {
 					.icon {
-						&.options::after { @include sprite($options-menu_hover); }
+						&.options::after {
+							@include sprite($options-menu_hover);
+						}
 					}
 				}
 			}
@@ -1456,12 +1520,16 @@ div.contact-buttons {
 
 				&.Offline {
 					.meta {
-						&::before { background: var(--tertiary-grey); }
+						&::before {
+							background: var(--tertiary-grey);
+						}
 					}
 				}
 
 				&.idle {
-					.meta::before { background: #ebcd25; }
+					.meta::before {
+						background: #ebcd25;
+					}
 				}
 
 				.nib {
@@ -1503,7 +1571,9 @@ div.contact-buttons {
 					margin: 0;
 					height: 28px;
 
-					[data-field]:not(.name),.separator,.composite-line {
+					[data-field]:not(.name),
+					.separator,
+					.composite-line {
 						display: none;
 					}
 
@@ -1542,8 +1612,12 @@ div.contact-buttons {
 
 				&.not-contact {
 					.meta {
-						.name { max-width: 90px; }
-						.add-to-contacts { display: inline-block; }
+						.name {
+							max-width: 90px;
+						}
+						.add-to-contacts {
+							display: inline-block;
+						}
 					}
 				}
 			}
@@ -1561,7 +1635,8 @@ div.contact-buttons {
 			margin-top: 40px;
 		}
 
-		.group-panel, .list-panel {
+		.group-panel,
+		.list-panel {
 			padding: 35px 0;
 			margin-top: 5px;
 		}
@@ -1573,7 +1648,9 @@ div.contact-buttons {
 				padding: 0;
 			}
 
-			&.list, &.group, &.contact {
+			&.list,
+			&.group,
+			&.contact {
 				.outline-list {
 					margin-bottom: 40px;
 				}
@@ -1613,7 +1690,8 @@ div.contact-buttons {
 							}
 						}
 
-						&.create, &.suggest {
+						&.create,
+						&.suggest {
 							@include icon($editor-add, $top: 14px, $left: 10px);
 						}
 
@@ -1623,8 +1701,10 @@ div.contact-buttons {
 							border-left-width: 0;
 							padding-left: 35px;
 
-							@include icon($rhp-search,$top:11px,$left:9px);
-							&::after { opacity: 0.6; }
+							@include icon($rhp-search, $top: 11px, $left: 9px);
+							&::after {
+								opacity: 0.6;
+							}
 
 							&.half {
 								width: 50%;
@@ -1638,7 +1718,8 @@ div.contact-buttons {
 								position: absolute;
 								border: 0;
 								background: #fafafa;
-								font: normal 400 14px/25px var(--body-font-family);
+								font: normal 400 14px/25px
+									var(--body-font-family);
 								color: var(--primary-grey);
 								height: 40px;
 								top: 0;

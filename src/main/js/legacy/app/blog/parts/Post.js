@@ -1,11 +1,12 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const SharingUtils = require('legacy/util/Sharing');
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const Blog = require('legacy/store/Blog');
 
 const BlogActions = require('../Actions');
@@ -14,25 +15,37 @@ require('legacy/mixins/Searchable');
 require('./old/Topic');
 require('./Comment');
 
-const {isMe} = Globals;
-
+const { isMe } = Globals;
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	extend: 'NextThought.app.blog.parts.old.Topic',
 	alias: 'widget.profile-blog-post',
 
 	mixins: {
-		Searchable: 'NextThought.mixins.Searchable'
+		Searchable: 'NextThought.mixins.Searchable',
 	},
 
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
 
 	pathTpl: Ext.DomHelper.markup([
-		{cls: 'path', cn: [
-			{tag: 'span', cls: 'part back-part', 'data-qtip': '{path}', html: '{path}'},
-			{tag: 'span', cls: 'part title-part current', 'data-qtip': '{title}' , html: '{title}'}
-		]}
+		{
+			cls: 'path',
+			cn: [
+				{
+					tag: 'span',
+					cls: 'part back-part',
+					'data-qtip': '{path}',
+					html: '{path}',
+				},
+				{
+					tag: 'span',
+					cls: 'part title-part current',
+					'data-qtip': '{title}',
+					html: '{title}',
+				},
+			],
+		},
 	]),
 
 	constructor: function () {
@@ -45,19 +58,23 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		var r, headline = this.record.get('headline');
+		var r,
+			headline = this.record.get('headline');
 
-		this.renderData = Ext.apply(this.renderData || {},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			showName: true,
 			headerCls: 'blog-post',
 			path: 'Thoughts',
-			showPermissions: true
+			showPermissions: true,
 		});
 
 		r = this.renderData;
 
 		if (!headline || !headline.getData) {
-			console.warn('The record does not have a story field or it does not implement getData()', r);
+			console.warn(
+				'The record does not have a story field or it does not implement getData()',
+				r
+			);
 
 			Ext.defer(this.destroy, 1, this);
 			return;
@@ -70,13 +87,15 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	renderSelectors: {
-		publishStateEl: '.meta .state'
+		publishStateEl: '.meta .state',
 	},
 
 	setPath: function () {},
 
 	updateRecord: function (record, store) {
-		if (!record || !store) { return; }
+		if (!record || !store) {
+			return;
+		}
 
 		try {
 			var count = store.getCount(),
@@ -87,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 				this.prevPostEl.removeCls('disabled');
 			}
 
-			if (index < (count - 1)) {
+			if (index < count - 1) {
 				this.nextRecord = store.getAt(index + 1);
 				this.nextPostEl.removeCls('disabled');
 			}
@@ -97,12 +116,15 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	updateField: function (key, value) {
-		var el = this.el.down('.' + key), len;
+		var el = this.el.down('.' + key),
+			len;
 		if (el) {
 			if (Ext.isArray(value) && key === 'tags') {
 				len = value.length;
 
-				value = Ext.Array.filter(value, function (v) { return !lazy.ParseUtils.isNTIID(v); });
+				value = Ext.Array.filter(value, function (v) {
+					return !lazy.ParseUtils.isNTIID(v);
+				});
 				if (len !== value.length) {
 					this.setPublishAndSharingState();
 				}
@@ -116,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 
 	buildStore: function (fulfill, reject) {
 		this.store = Blog.create({
-			storeId: this.record.get('Class') + '-' + this.record.get('NTIID')
+			storeId: this.record.get('Class') + '-' + this.record.get('NTIID'),
 		});
 		this.store.proxy.url = this.getRecord().getLink('contents');
 
@@ -126,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			load: (s, recs) => {
 				this.loadComments(s, recs);
 				fulfill();
-			}
+			},
 		});
 
 		this.store.load();
@@ -138,16 +160,23 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 
 		if (!Ext.isEmpty(this.selectedSections)) {
 			commentId = this.selectedSections[1];
-			console.debug('Do something with this/these:', this.selectedSections);
+			console.debug(
+				'Do something with this/these:',
+				this.selectedSections
+			);
 			if (this.selectedSections[0] === 'comments' && !commentId) {
 				this.scrollToComment = true;
-			}
-			else if (commentId) {
+			} else if (commentId) {
 				this.scrollToComment = commentId;
 			}
 		}
 
-		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
+		this.record.addObserverForField(
+			this,
+			'sharedWith',
+			this.updateSharedWith,
+			this
+		);
 		this.initSearch();
 	},
 
@@ -160,8 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			return wait();
 		}
 
-		return this.initialLoad
-			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
+		return this.initialLoad.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
 	},
 
 	closeView: function () {
@@ -196,7 +224,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 				}
 
 				if (me.el && me.postCountEl) {
-					me.postCountEl.update(Ext.util.Format.plural(me.record.get('PostCount'), 'Comment'));
+					me.postCountEl.update(
+						Ext.util.Format.plural(
+							me.record.get('PostCount'),
+							'Comment'
+						)
+					);
 				}
 
 				me.editor.deactivate();
@@ -217,7 +250,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			disabled = Boolean(e.getTarget('.disabled'));
 
 		if (!disabled) {
-			this.fireEvent('navigate-post', this, this.record, direction ? 'prev' : 'next');
+			this.fireEvent(
+				'navigate-post',
+				this,
+				this.record,
+				direction ? 'prev' : 'next'
+			);
 		}
 
 		return false;
@@ -254,7 +292,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	updateSharedWith: function (field, value) {
-		var sharingInfo, tags,
+		var sharingInfo,
+			tags,
 			published = this.record.isPublished();
 
 		if (field === 'sharedWith') {
@@ -268,21 +307,37 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			tags = this.record.get('headline').get('tags');
 		}
 
-		SharingUtils.getTagSharingShortText(sharingInfo, tags, published, function (str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.update(str);
-			}
-		}, this);
-		SharingUtils.getTagSharingLongText(sharingInfo, tags, published, function (str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.set({'data-qtip': str});
-			}
-		}, this);
+		SharingUtils.getTagSharingShortText(
+			sharingInfo,
+			tags,
+			published,
+			function (str) {
+				if (this.publishStateEl) {
+					this.publishStateEl.update(str);
+				}
+			},
+			this
+		);
+		SharingUtils.getTagSharingLongText(
+			sharingInfo,
+			tags,
+			published,
+			function (str) {
+				if (this.publishStateEl) {
+					this.publishStateEl.set({ 'data-qtip': str });
+				}
+			},
+			this
+		);
 		this.publishStateEl[published ? 'removeCls' : 'addCls']('private');
 	},
 
 	addIncomingComment: function (item) {
-		if (this.isVisible() && item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))) {
+		if (
+			this.isVisible() &&
+			item.get('ContainerId') === this.record.getId() &&
+			isMe(this.record.get('Creator'))
+		) {
 			this.addComments(this.store, [item]);
 		}
 	},
@@ -291,19 +346,28 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		// console.debug('ready', arguments);
 
 		const scrollCommentIntoView = () => {
-			const el = (typeof (this.scrollToComment) === 'boolean')
-				? this.getTargetEl()
-				: this.el.down('[data-commentid="' + this.scrollToComment + '"]');
+			const el =
+				typeof this.scrollToComment === 'boolean'
+					? this.getTargetEl()
+					: this.el.down(
+							'[data-commentid="' + this.scrollToComment + '"]'
+					  );
 
 			if (el) {
-				Ext.defer(el.scrollIntoView, 500, el, [Ext.get('profile'), false, Globals.ANIMATE_NO_FLASH]);
+				Ext.defer(el.scrollIntoView, 500, el, [
+					Ext.get('profile'),
+					false,
+					Globals.ANIMATE_NO_FLASH,
+				]);
 			}
 		};
 
 		if (this.scrollToComment) {
 			const images = this.el.query('img');
 			Ext.each(images, function (img) {
-				img.onload = function () { scrollCommentIntoView(); };
+				img.onload = function () {
+					scrollCommentIntoView();
+				};
 			});
 			scrollCommentIntoView();
 		}
@@ -313,7 +377,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	getSearchHitConfig: function () {
 		return {
 			key: 'blog',
-			mainViewId: 'profile'
+			mainViewId: 'profile',
 		};
-	}
+	},
 });

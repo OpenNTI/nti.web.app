@@ -8,9 +8,10 @@
 
 	#{$selector} {
 		position: relative;
-		margin-right: -20px;//scrollbar buffer
+		margin-right: -20px; //scrollbar buffer
 
-		&::after, &::before {
+		&::after,
+		&::before {
 			content: '';
 			display: block;
 			clear: both;
@@ -29,15 +30,22 @@
 				$h: (100px * $i);
 				$m: (145px * $i) - $gridSpacing;
 
-				&.col-#{$i} { width: $s; }
+				&.col-#{$i} {
+					width: $s;
+				}
 
 				&.allow-flex.col-#{$i} {
 					max-width: $m;
 
-					@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
+					@include experimental-value(
+						width,
+						calc(#{(12.5% * $i)} - #{$gridSpacing})
+					);
 				}
 
-				&.row-#{$i} { height: $h; }
+				&.row-#{$i} {
+					height: $h;
+				}
 			}
 		}
 	}
@@ -130,7 +138,7 @@
 
 	.x-grid-view {
 		overflow: {
-			y: auto;//scroll
+			y: auto; //scroll
 			x: hidden;
 		}
 
@@ -171,7 +179,8 @@
 	}
 
 	.x-grid-row-over {
-		.x-grid-td, .x-grid-td.x-grid-cell.x-grid-cell-selected {
+		.x-grid-td,
+		.x-grid-td.x-grid-cell.x-grid-cell-selected {
 			background: #fafafa !important;
 		}
 

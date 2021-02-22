@@ -1,186 +1,209 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 const AssignmentStatus = require('../AssignmentStatus');
 
 const InlineEditor = require('./editing/InlineEditor');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.assessment.components.AssignmentStatus',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.course-assignment-status',
 
-module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-assignment-status',
+		statics: {
+			setActiveMenu: function (menu) {
+				this.activeMenu = menu;
+			},
 
-	statics: {
-		setActiveMenu: function (menu) {
-			this.activeMenu = menu;
+			getActiveMenu: function () {
+				return this.activeMenu;
+			},
+
+			closeActiveMenu: function () {
+				if (this.activeMenu && this.activeMenu.closeDueDateEditor) {
+					this.activeMenu.closeDueDateEditor();
+					delete this.activeMenu;
+				}
+			},
 		},
 
+		cls: 'assignment-status-container',
 
-		getActiveMenu: function () {
-			return this.activeMenu;
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'labels-container',
+				cn: [
+					{ cls: 'required-container' },
+					{ cls: 'status-container' },
+				],
+			},
+			{ cls: 'menu-container' },
+		]),
+
+		renderSelectors: {
+			statusEl: '.status-container',
+			requiredEl: '.required-container',
+			menuContainer: '.menu-container',
 		},
 
-		closeActiveMenu: function () {
-			if (this.activeMenu && this.activeMenu.closeDueDateEditor) {
-				this.activeMenu.closeDueDateEditor();
-				delete this.activeMenu;
-			}
-		}
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
-	cls: 'assignment-status-container',
-
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'labels-container', cn: [
-			{cls: 'required-container'},
-			{cls: 'status-container'}
-		]},
-		{cls: 'menu-container'}
-	]),
-
-	renderSelectors: {
-		statusEl: '.status-container',
-		requiredEl: '.required-container',
-		menuContainer: '.menu-container'
-	},
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		this.updateStatus();
-
-		this.mon(this.assignment, 'update', this.updateStatus.bind(this));
-
-		if (this.assignment.getDateEditingLink()) {
-			this.addCls(['editable']);
-
-			this.mon(this.statusEl, 'click', this.toggleDueDateEditor.bind(this));
-		}
-	},
-
-	setAssignment: function (assignment) {
-		this.assignment = assignment;
-		this.updateStatus();
-	},
-
-	setHistory: function (history) {
-		this.history = history;
-		this.updateStatus();
-	},
-
-	setStatus: function (status) {
-		this.status = Ext.DomHelper.markup({
-			cls: 'assignment-status', cn: [
-				{cls: 'status-item due', html: status}
-			]
-		});
-
-		if (this.rendered) {
 			this.updateStatus();
-		}
-	},
 
-	disableEditing: function () {
-		this.addCls('disabled');
-	},
+			this.mon(this.assignment, 'update', this.updateStatus.bind(this));
 
-	enableEditing: function () {
-		this.removeCls('disabled');
-	},
+			if (this.assignment.getDateEditingLink()) {
+				this.addCls(['editable']);
 
-	updateStatus: function () {
-		var me = this,
-			assignment = me.assignment,
-			history = (me.history && me.history.getMostRecentHistoryItem) ? me.history.getMostRecentHistoryItem() : me.history,
-			completed = history && history.get('completed'),
-			grade = history && history.get && history.get('Grade'),
-			status = me.status || AssignmentStatus.getStatusHTML({
-				due: assignment.getDueDate(),
-				start: assignment.get('availableBeginning'),
-				completed: !assignment.getDateEditingLink() && completed,
-				maxTime: assignment.isTimed && assignment.getMaxTime(),
-				duration: assignment.isTimed && history && history.getDuration(),
-				isExcused: grade && grade.get('IsExcused'),
-				isNoSubmitAssignment: assignment.isNoSubmit() || (history && history.isSyntheticSubmission()),
-				isDraft: assignment.isDraft()
+				this.mon(
+					this.statusEl,
+					'click',
+					this.toggleDueDateEditor.bind(this)
+				);
+			}
+		},
+
+		setAssignment: function (assignment) {
+			this.assignment = assignment;
+			this.updateStatus();
+		},
+
+		setHistory: function (history) {
+			this.history = history;
+			this.updateStatus();
+		},
+
+		setStatus: function (status) {
+			this.status = Ext.DomHelper.markup({
+				cls: 'assignment-status',
+				cn: [{ cls: 'status-item due', html: status }],
 			});
 
-		me.statusEl.dom.innerHTML = status;
+			if (this.rendered) {
+				this.updateStatus();
+			}
+		},
 
-		if(assignment.get('CompletionRequired')) {
-			me.requiredEl.dom.innerHTML = '<div class="required-label">required</div>';
-		}
+		disableEditing: function () {
+			this.addCls('disabled');
+		},
 
-		wait(100)
-			.then(function () {
+		enableEditing: function () {
+			this.removeCls('disabled');
+		},
+
+		updateStatus: function () {
+			var me = this,
+				assignment = me.assignment,
+				history =
+					me.history && me.history.getMostRecentHistoryItem
+						? me.history.getMostRecentHistoryItem()
+						: me.history,
+				completed = history && history.get('completed'),
+				grade = history && history.get && history.get('Grade'),
+				status =
+					me.status ||
+					AssignmentStatus.getStatusHTML({
+						due: assignment.getDueDate(),
+						start: assignment.get('availableBeginning'),
+						completed:
+							!assignment.getDateEditingLink() && completed,
+						maxTime: assignment.isTimed && assignment.getMaxTime(),
+						duration:
+							assignment.isTimed &&
+							history &&
+							history.getDuration(),
+						isExcused: grade && grade.get('IsExcused'),
+						isNoSubmitAssignment:
+							assignment.isNoSubmit() ||
+							(history && history.isSyntheticSubmission()),
+						isDraft: assignment.isDraft(),
+					});
+
+			me.statusEl.dom.innerHTML = status;
+
+			if (assignment.get('CompletionRequired')) {
+				me.requiredEl.dom.innerHTML =
+					'<div class="required-label">required</div>';
+			}
+
+			wait(100).then(function () {
 				delete me.status;
 			});
-	},
+		},
 
-	addDueDateEditor: function () {
-		this.dueDateEditor = new InlineEditor({
-			assignment: this.assignment,
-			onSave: this.closeDueDateEditor.bind(this),
-			onCancel: this.closeDueDateEditor.bind(this),
-			renderTo: this.menuContainer
-		});
+		addDueDateEditor: function () {
+			this.dueDateEditor = new InlineEditor({
+				assignment: this.assignment,
+				onSave: this.closeDueDateEditor.bind(this),
+				onCancel: this.closeDueDateEditor.bind(this),
+				renderTo: this.menuContainer,
+			});
 
-		this.on('destroy', this.dueDateEditor.destroy.bind(this.dueDateEditor));
-	},
+			this.on(
+				'destroy',
+				this.dueDateEditor.destroy.bind(this.dueDateEditor)
+			);
+		},
 
-	dueDateEditorVisible: function () {
-		if (!this.el) {
-			return false;
-		}
+		dueDateEditorVisible: function () {
+			if (!this.el) {
+				return false;
+			}
 
-		return this.el.hasCls('menu-open');
-	},
+			return this.el.hasCls('menu-open');
+		},
 
-	showDueDateEditor: function () {
-		var me = this;
+		showDueDateEditor: function () {
+			var me = this;
 
-		if (me.self.getActiveMenu() !== me) {
-			me.self.closeActiveMenu();
-		}
+			if (me.self.getActiveMenu() !== me) {
+				me.self.closeActiveMenu();
+			}
 
-		me.self.setActiveMenu(me);
+			me.self.setActiveMenu(me);
 
-		if (!me.dueDateEditor) {
-			me.addDueDateEditor();
-		}
+			if (!me.dueDateEditor) {
+				me.addDueDateEditor();
+			}
 
-		if (me.el) {
-			me.el.addCls('menu-open');
-		}
+			if (me.el) {
+				me.el.addCls('menu-open');
+			}
 
-		if (me.onEditorOpen) {
-			me.onEditorOpen();
-		}
-	},
+			if (me.onEditorOpen) {
+				me.onEditorOpen();
+			}
+		},
 
-	closeDueDateEditor: function (savedAssignment) {
-		if (this.el) {
-			this.el.removeCls('menu-open');
-			this.el.removeCls('allow-overflow');
-		}
+		closeDueDateEditor: function (savedAssignment) {
+			if (this.el) {
+				this.el.removeCls('menu-open');
+				this.el.removeCls('allow-overflow');
+			}
 
-		if (this.onEditorClose) {
-			this.onEditorClose(savedAssignment);
-		}
-	},
+			if (this.onEditorClose) {
+				this.onEditorClose(savedAssignment);
+			}
+		},
 
-	toggleDueDateEditor: function (e) {
-		if (e.getTarget('.disabled')) { return; }
+		toggleDueDateEditor: function (e) {
+			if (e.getTarget('.disabled')) {
+				return;
+			}
 
-		e.stopEvent();
+			e.stopEvent();
 
-		if (this.el.hasCls('menu-open')) {
-			this.closeDueDateEditor();
-		} else {
-			this.showDueDateEditor();
-			setTimeout(() => {
-				this.el.addCls('allow-overflow');
-			}, 500);
-		}
+			if (this.el.hasCls('menu-open')) {
+				this.closeDueDateEditor();
+			} else {
+				this.showDueDateEditor();
+				setTimeout(() => {
+					this.el.addCls('allow-overflow');
+				}, 500);
+			}
+		},
 	}
-});
+);

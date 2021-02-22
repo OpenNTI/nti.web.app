@@ -11,132 +11,127 @@ require('legacy/app/profiles/user/components/activity/Body');
 require('legacy/app/profiles/user/components/activity/Sidebar');
 require('legacy/app/stream/util/StreamSource');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.profiles.user.components.activity.Index',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.profile-user-activity',
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-user-activity',
+		STATE_KEY: 'profile_activity',
 
-	STATE_KEY: 'profile_activity',
+		mixins: {
+			Router: 'NextThought.mixins.Router',
+		},
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
+		cls: 'activity-page',
+		layout: 'none',
 
-	cls: 'activity-page',
-	layout: 'none',
+		items: [
+			{ xtype: 'profile-user-activity-body' },
+			{ xtype: 'profile-user-activity-sidebar' },
+		],
 
-	items: [
-		{xtype: 'profile-user-activity-body'},
-		{xtype: 'profile-user-activity-sidebar'}
-	],
+		initComponent: function () {
+			this.callParent(arguments);
 
-	initComponent: function () {
-		this.callParent(arguments);
+			this.flatPageStore = FlatPage.create();
+			this.UserDataActions = UserdataActions.create();
 
-		this.flatPageStore = FlatPage.create();
-		this.UserDataActions = UserdataActions.create();
+			this.UserDataActions.initPageStores(this);
+			this.UserDataActions.setupPageStoreDelegates(this);
 
-		this.UserDataActions.initPageStores(this);
-		this.UserDataActions.setupPageStoreDelegates(this);
+			this.initChildComponentRefs();
 
-		this.initChildComponentRefs();
+			this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(
+				this
+			);
 
-		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
+			this.sidebarCmp.setStreamCmp(this.streamCmp.getStreamCmp());
 
-		this.sidebarCmp.setStreamCmp(this.streamCmp.getStreamCmp());
+			this.initRouter();
 
-		this.initRouter();
+			this.addRoute('/', this.onRoute.bind(this));
 
-		this.addRoute('/', this.onRoute.bind(this));
+			this.addDefaultRoute('/');
 
-		this.addDefaultRoute('/');
+			this.stateKey = 'profile-activity-filters';
 
-		this.stateKey = 'profile-activity-filters';
+			this.on({
+				activate: this.onActivate.bind(this),
+				deactivate: this.onDeactivate.bind(this),
+			});
+		},
 
-		this.on({
-			activate: this.onActivate.bind(this),
-			deactivate: this.onDeactivate.bind(this)
-		});
-	},
+		startResourceViewed: function () {
+			var id = this.activeUser && this.activeUser.getId();
 
+			if (id && !this.hasCurrentTimer) {
+				AnalyticsUtil.startEvent(id, 'ProfileActivityView');
 
-	startResourceViewed: function () {
-		var id = this.activeUser && this.activeUser.getId();
+				this.hasCurrentTimer = true;
+			}
+		},
 
-		if (id && !this.hasCurrentTimer) {
-			AnalyticsUtil.startEvent(id, 'ProfileActivityView');
+		stopResourceViewed: function () {
+			var id = this.activeUser && this.activeUser.getId();
 
-			this.hasCurrentTimer = true;
-		}
-	},
+			if (id && this.hasCurrentTimer) {
+				AnalyticsUtil.stopEvent(id, 'ProfileActivityView');
+				delete this.hasCurrentTimer;
+			}
+		},
 
+		getSuggestedSharing: function () {
+			var community = Service.getFakePublishCommunity();
 
-	stopResourceViewed: function () {
-		var id = this.activeUser && this.activeUser.getId();
+			return UserSearch.create(community.getData());
+		},
 
-		if (id && this.hasCurrentTimer) {
-			AnalyticsUtil.stopEvent(id, 'ProfileActivityView');
-			delete this.hasCurrentTimer;
-		}
-	},
+		onActivate: function () {
+			this.startResourceViewed();
+			this.items.each(function (item) {
+				item.fireEvent('activate');
+			});
+		},
 
+		onDeactivate: function () {
+			this.stopResourceViewed();
+			this.items.each(function (item) {
+				item.fireEvent('deactivate');
+			});
+		},
 
-	getSuggestedSharing: function () {
-		var community = Service.getFakePublishCommunity();
+		initChildComponentRefs: function () {
+			this.streamCmp = this.down('profile-user-activity-body');
+			this.sidebarCmp = this.down('profile-user-activity-sidebar');
+		},
 
-		return UserSearch.create(community.getData());
-	},
+		userChanged: function (user, isMe) {
+			if (this.activeUser === user) {
+				return Promise.resolve();
+			}
 
+			this.stopResourceViewed();
 
-	onActivate: function () {
-		this.startResourceViewed();
-		this.items.each(function (item) {
-			item.fireEvent('activate');
-		});
-	},
+			this.activeUser = user;
+			this.isMe = isMe;
 
+			this.startResourceViewed();
 
-	onDeactivate: function () {
-		this.stopResourceViewed();
-		this.items.each(function (item) {
-			item.fireEvent('deactivate');
-		});
-	},
+			return Promise.all([
+				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
+				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments),
+			]);
+		},
 
+		onRoute: function (/*route, subRoute*/) {
+			this.setTitle('Activity');
 
-	initChildComponentRefs: function () {
-		this.streamCmp = this.down('profile-user-activity-body');
-		this.sidebarCmp = this.down('profile-user-activity-sidebar');
-	},
+			return this.streamCmp.fetchNewItems();
+		},
 
-
-	userChanged: function (user, isMe) {
-		if (this.activeUser === user) {
-			return Promise.resolve();
-		}
-
-		this.stopResourceViewed();
-
-		this.activeUser = user;
-		this.isMe = isMe;
-
-		this.startResourceViewed();
-
-		return Promise.all([
-			this.streamCmp.userChanged.apply(this.streamCmp, arguments),
-			this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-		]);
-	},
-
-
-	onRoute: function (/*route, subRoute*/) {
-		this.setTitle('Activity');
-
-		return this.streamCmp.fetchNewItems();
-	},
-
-
-	navigateToActivityItem: function (item) {
-		this.Router.root.attemptToNavigateToObject(item);
+		navigateToActivityItem: function (item) {
+			this.Router.root.attemptToNavigateToObject(item);
+		},
 	}
-});
+);

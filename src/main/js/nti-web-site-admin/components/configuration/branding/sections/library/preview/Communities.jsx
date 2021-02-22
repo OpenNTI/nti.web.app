@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from '@nti/web-commons';
+import { Text } from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import Avatar from './Avatar';
@@ -8,14 +8,13 @@ import styles from './Communities.css';
 
 const cx = classnames.bind(styles);
 
-
 const communities = [
 	{
 		title: 'Town Square',
-	}
+	},
 ];
 
-export default function Communities () {
+export default function Communities() {
 	return (
 		<Collection title="Communities">
 			<ul className={cx('items')}>
@@ -24,7 +23,9 @@ export default function Communities () {
 						<div className={cx('community-item')}>
 							<Avatar className={cx('community-avatar')} />
 							<Text.Condensed>
-								<span className={cx('item-title')}>{item.title}</span>
+								<span className={cx('item-title')}>
+									{item.title}
+								</span>
 							</Text.Condensed>
 						</div>
 					</li>

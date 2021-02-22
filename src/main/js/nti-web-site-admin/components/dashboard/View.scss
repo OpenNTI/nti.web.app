@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .admin-dashboard {
 	.admin-dashboard-widgets {
@@ -15,7 +15,11 @@
 		max-width: 300px;
 	}
 
-	.recently-created-users.dashboard-list-widget .items-container .item .info .name {
+	.recently-created-users.dashboard-list-widget
+		.items-container
+		.item
+		.info
+		.name {
 		max-width: 350px;
 	}
 

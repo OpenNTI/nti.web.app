@@ -58,7 +58,7 @@
 			font-size: 10px;
 			text-align: center;
 
-			input[type="file"] {
+			input[type='file'] {
 				opacity: 0;
 				width: 64px;
 				height: 26px;
@@ -70,7 +70,7 @@
 
 			&::before {
 				content: '';
-				background-image: url("/app/resources/images/icons/email.png");
+				background-image: url('/app/resources/images/icons/email.png');
 				background-repeat: no-repeat;
 				height: 14px;
 				width: 15px;
@@ -183,7 +183,7 @@
 						content: '';
 						display: block;
 						position: absolute;
-						background-image: url("/app/resources/images/icons/grey-x-8.png");
+						background-image: url('/app/resources/images/icons/grey-x-8.png');
 						width: 10px;
 						height: 11px;
 						background-repeat: no-repeat;
@@ -200,7 +200,7 @@
 
 					.x {
 						&::after {
-							background-image: url("/app/resources/images/icons/red-x-8.png");
+							background-image: url('/app/resources/images/icons/red-x-8.png');
 						}
 					}
 				}
@@ -219,7 +219,7 @@
 			word-break: break-all;
 			flex: 1 1 auto;
 
-			input[type="text"] {
+			input[type='text'] {
 				background-color: var(--panel-background);
 				text-transform: none;
 				font: normal 300 14px var(--body-font-family) !important;

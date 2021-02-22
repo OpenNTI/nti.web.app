@@ -5,12 +5,16 @@ import renderer from 'react-test-renderer';
 import LastSeen from '../LastSeen';
 
 describe('Site admin user table last seen column test', () => {
-	const verifyColumn = (date) => {
-		const colCmp = renderer.create(<LastSeen item={{
-			getLastSeenTime: () => {
-				return date;
-			}
-		}}/>);
+	const verifyColumn = date => {
+		const colCmp = renderer.create(
+			<LastSeen
+				item={{
+					getLastSeenTime: () => {
+						return date;
+					},
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

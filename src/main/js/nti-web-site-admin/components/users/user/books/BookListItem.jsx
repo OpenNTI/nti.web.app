@@ -1,28 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {Presentation} from '@nti/web-commons';
+import { Presentation } from '@nti/web-commons';
 
 export default class CourseEnrollmentListItem extends React.Component {
 	static propTypes = {
 		className: PropTypes.string,
-		book: PropTypes.object.isRequired
-	}
+		book: PropTypes.object.isRequired,
+	};
 
-
-	render () {
-		const {book, className, ...otherProps} = this.props;
+	render() {
+		const { book, className, ...otherProps } = this.props;
 
 		return (
-			<div className={cx('nti-course-enrollment-list-item', className)} {...otherProps}>
+			<div
+				className={cx('nti-course-enrollment-list-item', className)}
+				{...otherProps}
+			>
 				{this.renderIcon(book)}
 				{this.renderMeta(book)}
 			</div>
 		);
 	}
 
-
-	renderIcon (book) {
+	renderIcon(book) {
 		return (
 			<Presentation.Asset contentPackage={book} type="landing">
 				<img className="course-enrollment-icon" />
@@ -30,9 +31,8 @@ export default class CourseEnrollmentListItem extends React.Component {
 		);
 	}
 
-
-	renderMeta (book) {
-		const {label, title} = book.getPresentationProperties();
+	renderMeta(book) {
+		const { label, title } = book.getPresentationProperties();
 
 		return (
 			<div className="course-enrollment-meta">
@@ -42,5 +42,5 @@ export default class CourseEnrollmentListItem extends React.Component {
 		);
 	}
 
-	renderDates () {}
+	renderDates() {}
 }

@@ -1,6 +1,6 @@
 import Logger from '@nti/util-logger';
 
-import {LIBRARY, ASSETS, SITE} from '../constants';
+import { LIBRARY, ASSETS, SITE } from '../constants';
 
 import Library from './library';
 import Assets from './assets';
@@ -14,12 +14,10 @@ const scopes = {
 	[ASSETS]: Assets,
 };
 
-const warn = scope => () => (logger.warn(`No component for scope '${scope}'`), null);
+const warn = scope => () => (
+	logger.warn(`No component for scope '${scope}'`), null
+);
 
-export {
-	Library,
-	Assets,
-	Site,
-};
+export { Library, Assets, Site };
 
 export default scope => scopes[scope] || warn(scope);

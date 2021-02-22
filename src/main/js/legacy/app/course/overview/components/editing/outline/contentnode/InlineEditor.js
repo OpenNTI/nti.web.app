@@ -4,19 +4,22 @@ const CourseOutlineContentNode = require('legacy/model/courses/navigation/Course
 
 require('../InlineEditor');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.outline.InlineEditor',
+		alias: 'widget.overview-editing-contentnode-inline-editor',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.InlineEditor',
-	alias: 'widget.overview-editing-contentnode-inline-editor',
+		statics: {
+			creationText: 'Add Lesson',
 
-	statics: {
-		creationText: 'Add Lesson',
-
-		getTypes: function () {
-			return {
-				mimeType: CourseOutlineContentNode.mimeType,
-				types: []
-			};
-		}
+			getTypes: function () {
+				return {
+					mimeType: CourseOutlineContentNode.mimeType,
+					types: [],
+				};
+			},
+		},
 	}
-});
+);

@@ -1,4 +1,4 @@
-@import "notes";
+@import 'notes';
 
 $video-background: #242424;
 $slidedeck-controls-background: #161616;
@@ -18,21 +18,20 @@ $active-text-color: rgba(255, 255, 255, 1);
 	border-radius: 3px;
 	border: 1px solid black;
 	color: var(--tertiary-grey);
-	background-image:
-		linear-gradient(
-			to bottom,
-			$slidedeck-exit-button-gradient-top 0%,
-			$slidedeck-exit-button-gradient-bottom 100%
-		);
-	box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.13), 0 1px 0 0 rgba(255, 255, 255, 0.12);
+	background-image: linear-gradient(
+		to bottom,
+		$slidedeck-exit-button-gradient-top 0%,
+		$slidedeck-exit-button-gradient-bottom 100%
+	);
+	box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+		0 1px 0 0 rgba(255, 255, 255, 0.12);
 
 	&:active:not(.disabled) {
-		background-image:
-			linear-gradient(
-				to bottom,
-				$slidedeck-exit-button-gradient-bottom 0%,
-				$slidedeck-exit-button-gradient-top 100%
-			);
+		background-image: linear-gradient(
+			to bottom,
+			$slidedeck-exit-button-gradient-bottom 0%,
+			$slidedeck-exit-button-gradient-top 100%
+		);
 	}
 }
 
@@ -87,7 +86,9 @@ $active-text-color: rgba(255, 255, 255, 1);
 			border-bottom: 1px solid #2b2b2b;
 		}
 
-		.content, .x-mask, .x-mask-message {
+		.content,
+		.x-mask,
+		.x-mask-message {
 			background-color: $slidedeck-controls-background;
 			color: #999;
 		}
@@ -104,7 +105,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 			border-top: 1px solid #323232;
 
 			.left {
-				.action.text-controls, .action.object-controls {
+				.action.text-controls,
+				.action.object-controls {
 					border: 0 solid #1f1f1f;
 
 					&.selected {
@@ -112,7 +114,9 @@ $active-text-color: rgba(255, 255, 255, 1);
 						border-width: 1px;
 						background-color: #393939;
 
-						&::after { @include sprite($font_styles_default); }
+						&::after {
+							@include sprite($font_styles_default);
+						}
 					}
 
 					.popover {
@@ -126,22 +130,37 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 						.control {
 							&.bold {
-								&::after { @include sprite($bold-dark); }
-								&.selected::after { @include sprite($bold-dark_active); }
+								&::after {
+									@include sprite($bold-dark);
+								}
+								&.selected::after {
+									@include sprite($bold-dark_active);
+								}
 							}
 
 							&.italic {
-								&::after { @include sprite($italic-dark); }
-								&.selected::after { @include sprite($italic-dark_active); }
+								&::after {
+									@include sprite($italic-dark);
+								}
+								&.selected::after {
+									@include sprite($italic-dark_active);
+								}
 							}
 
 							&.underline {
-								&::after { @include sprite($underline-dark); }
-								&.selected::after { @include sprite($underline-dark_active); }
+								&::after {
+									@include sprite($underline-dark);
+								}
+								&.selected::after {
+									@include sprite($underline-dark_active);
+								}
 							}
 
 							&.whiteboard {
-								@include icon($editor-insert-image_hover, $top:10px);
+								@include icon(
+									$editor-insert-image_hover,
+									$top: 10px
+								);
 
 								&:hover::after {
 									@include sprite($editor-insert-image);
@@ -149,7 +168,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 							}
 
 							&.video {
-								@include icon($editor-insert-video_hover, $top:9px);
+								@include icon(
+									$editor-insert-video_hover,
+									$top: 9px
+								);
 
 								&:hover::after {
 									@include sprite($editor-insert-video);
@@ -160,7 +182,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 				}
 
 				.action.object-controls {
-					@include icon($editor-attach, $top:10px, $left:10px);
+					@include icon($editor-attach, $top: 10px, $left: 10px);
 
 					&.selected {
 						&::after {
@@ -218,7 +240,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				overflow: hidden;
 				padding: 7px 10px 0 0;
 
-				.prev, .next {
+				.prev,
+				.next {
 					width: 38px;
 					height: 34px;
 					float: right;
@@ -265,7 +288,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					}
 
 					&.disabled {
-						&, &:hover {
+						&,
+						&:hover {
 							&::after {
 								@include sprite($arrow-previous_disabled);
 							}
@@ -286,7 +310,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					}
 
 					&.disabled {
-						&, &:hover {
+						&,
+						&:hover {
 							&::after {
 								@include sprite($arrow-next_disabled);
 							}
@@ -342,7 +367,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 		.slidedeck-queue {
 			@include hardware-accelerate();
-			@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
+			@include scrollbar(
+				$track: $slidedeck-controls-background,
+				$nib: $slidedeck-primary-text-color
+			);
 			@include fixIEScrollbarGulf();
 			overflow: {
 				x: hidden;
@@ -408,7 +436,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 	}
 
 	.x-container-slide {
-		@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
+		@include scrollbar(
+			$track: $slidedeck-controls-background,
+			$nib: $slidedeck-primary-text-color
+		);
 		@include fixIEScrollbarGulf();
 		overflow: {
 			x: hidden;
@@ -428,7 +459,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
 			}
 
-			.left, .right {
+			.left,
+			.right {
 				position: absolute;
 				overflow: hidden;
 				top: 0;
@@ -436,7 +468,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				background: rgba(0, 0, 0, 0);
 
 				&:hover {
-					.next, .prev {
+					.next,
+					.prev {
 						display: block;
 					}
 				}
@@ -452,7 +485,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				right: 0;
 			}
 
-			.next, .prev {
+			.next,
+			.prev {
 				cursor: pointer;
 				display: none;
 				position: absolute;
@@ -488,7 +522,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				}
 
 				&.disabled {
-					&, &:hover {
+					&,
+					&:hover {
 						cursor: default;
 
 						&::after {
@@ -516,7 +551,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 				}
 
 				&.disabled {
-					&, &:hover {
+					&,
+					&:hover {
 						cursor: default;
 
 						&::after {
@@ -618,7 +654,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 			}
 
 			&.collapsed {
-				.note, .note.hover {
+				.note,
+				.note.hover {
 					border-color: #121212;
 					box-shadow: inset 0 1px 0 0 #3a3a3a;
 				}
@@ -639,13 +676,16 @@ $active-text-color: rgba(255, 255, 255, 1);
 			}
 
 			&:not(.collapsed) + .note-container {
-				.note, .note.hover {
+				.note,
+				.note.hover {
 					border-color: #1a1a1a;
 				}
 			}
 
 			.note {
-				&, &.hover, &.editor-active {
+				&,
+				&.hover,
+				&.editor-active {
 					border-color: #1a1a1a;
 					box-shadow: inset 0 1px 0 0 #3a3a3a;
 				}
@@ -663,10 +703,12 @@ $active-text-color: rgba(255, 255, 255, 1);
 					}
 
 					.controls {
-						.like, .favorite {
+						.like,
+						.favorite {
 							opacity: 0.2;
 
-							&:hover, &.on {
+							&:hover,
+							&.on {
 								opacity: 1;
 							}
 						}
@@ -1170,8 +1212,12 @@ $active-text-color: rgba(255, 255, 255, 1);
 						&:hover::after {
 							@include sprite($mv-grid-view_active);
 						}
-						&:not(.active):hover { opacity: 0.8; }
-						&.active:hover { opacity: 1; }
+						&:not(.active):hover {
+							opacity: 0.8;
+						}
+						&.active:hover {
+							opacity: 1;
+						}
 					}
 
 					.selected-mv-type {
@@ -1199,11 +1245,14 @@ $active-text-color: rgba(255, 255, 255, 1);
 								@include sprite($arrow-course-dropdown);
 							}
 
-							&:active, &:hover {
+							&:active,
+							&:hover {
 								color: #ababab;
 
 								&::before {
-									@include sprite($arrow-course-dropdown-light);
+									@include sprite(
+										$arrow-course-dropdown-light
+									);
 								}
 							}
 						}
@@ -1222,9 +1271,12 @@ $active-text-color: rgba(255, 255, 255, 1);
 								@include sprite($mv-transcript-focus);
 							}
 
-							&:hover, &:active {
+							&:hover,
+							&:active {
 								&::after {
-									@include sprite($mv-transcript-focus_active);
+									@include sprite(
+										$mv-transcript-focus_active
+									);
 								}
 							}
 						}
@@ -1234,7 +1286,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 								@include sprite($mv-video-focus);
 							}
 
-							&:hover, &:active {
+							&:hover,
+							&:active {
 								&::after {
 									@include sprite($mv-video-focus_active);
 								}
@@ -1247,7 +1300,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 							}
 
 							&.hasTranscript {
-								&:hover, &:active {
+								&:hover,
+								&:active {
 									&::after {
 										@include sprite($mv-full-view_active);
 									}
@@ -1325,7 +1379,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					size: cover;
 					position: center center;
 					repeat: no-repeat;
-				};
+				}
 			}
 
 			.meta {
@@ -1355,14 +1409,20 @@ $active-text-color: rgba(255, 255, 255, 1);
 						background: none;
 					}
 
-					span:empty::after, span:last-of-type::after {
+					span:empty::after,
+					span:last-of-type::after {
 						display: none;
 					}
 				}
 			}
 
 			&.viewed {
-				@include icon($circle-check-white-small, $top: 7px, $left: auto, $right: 58px);
+				@include icon(
+					$circle-check-white-small,
+					$top: 7px,
+					$left: auto,
+					$right: 58px
+				);
 
 				&::after {
 					z-index: 2;
@@ -1386,7 +1446,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 			&.selected,
 			&:hover {
 				.thumbnail {
-					@include icon($play,$top:68px,$left:138px);
+					@include icon($play, $top: 68px, $left: 138px);
 
 					&::after {
 						opacity: 0.6;
@@ -1442,7 +1502,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 		}
 
 		.body {
-			@include scrollbar($track:$slidedeck-controls-background, $nib:var(--secondary-grey));
+			@include scrollbar(
+				$track: $slidedeck-controls-background,
+				$nib: var(--secondary-grey)
+			);
 			@include flexItem($flex: 1 1 auto);
 
 			/* margin: 10px 0 0 1000px; */
@@ -1589,7 +1652,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 	}
 
 	.x-menu-item {
-		&.contact-card, &.no-results {
+		&.contact-card,
+		&.no-results {
 			background: #343434;
 
 			&.x-menu-item-over {
@@ -1604,7 +1668,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 	color: var(--tertiary-grey);
 }
 
-.x-container-transcript, .x-panel-transcript {
+.x-container-transcript,
+.x-panel-transcript {
 	overflow: {
 		y: auto; //scroll;
 		x: hidden;
@@ -1631,7 +1696,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 			cursor: pointer;
 
 			&:hover,
-			&.active, .active {
+			&.active,
+			.active {
 				background: var(--primary-blue);
 				color: #fff;
 			}
@@ -1657,7 +1723,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 				padding-left: 0;
 			}
 
-			&.active, &.current, &:active, &:hover {
+			&.active,
+			&.current,
+			&:active,
+			&:hover {
 				background: #313233;
 				border-radius: 3px;
 				color: $active-text-color;
@@ -1679,8 +1748,14 @@ $active-text-color: rgba(255, 255, 255, 1);
 					display: none;
 				}
 
-				@include icon($comment-small-dark,$position: absolute, $top:-4px);
-				&:hover::after { @include sprite($comment-small-dark_hover); }
+				@include icon(
+					$comment-small-dark,
+					$position: absolute,
+					$top: -4px
+				);
+				&:hover::after {
+					@include sprite($comment-small-dark_hover);
+				}
 			}
 		}
 
@@ -1729,8 +1804,14 @@ $active-text-color: rgba(255, 255, 255, 1);
 						display: none;
 					}
 
-					@include icon($comment-small-dark,$position: absolute, $top:-4px);
-					&:hover::after { @include sprite($comment-small-dark_hover); }
+					@include icon(
+						$comment-small-dark,
+						$position: absolute,
+						$top: -4px
+					);
+					&:hover::after {
+						@include sprite($comment-small-dark_hover);
+					}
 				}
 			}
 
@@ -1746,7 +1827,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 	.x-component-video-title {
 		margin-top: 40px;
 		color: $inactive-text-color;
-		padding-right: 60px;//leave room for the note gutter
+		padding-right: 60px; //leave room for the note gutter
 
 		.control-container {
 			position: absolute;
@@ -1764,8 +1845,14 @@ $active-text-color: rgba(255, 255, 255, 1);
 					display: none;
 				}
 
-				@include icon($comment-small-dark,$position: absolute, $top:-4px);
-				&:hover::after { @include sprite($comment-small-dark_hover); }
+				@include icon(
+					$comment-small-dark,
+					$position: absolute,
+					$top: -4px
+				);
+				&:hover::after {
+					@include sprite($comment-small-dark_hover);
+				}
 			}
 		}
 
@@ -1816,7 +1903,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					@include sprite($arrow-course-dropdown);
 				}
 
-				&:active, &:hover {
+				&:active,
+				&:hover {
 					color: #ababab;
 
 					&::before {
@@ -1839,7 +1927,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					@include sprite($mv-video-focus);
 				}
 
-				&:hover, &:active {
+				&:hover,
+				&:active {
 					&::after {
 						@include sprite($mv-video-focus_active);
 					}
@@ -1851,7 +1940,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					@include sprite($mv-transcript-focus);
 				}
 
-				&:hover, &:active {
+				&:hover,
+				&:active {
 					&::after {
 						@include sprite($mv-transcript-focus_active);
 					}
@@ -1863,7 +1953,8 @@ $active-text-color: rgba(255, 255, 255, 1);
 					@include sprite($mv-full-view);
 				}
 
-				&:hover, &:active {
+				&:hover,
+				&:active {
 					&::after {
 						@include sprite($mv-full-view_active);
 					}

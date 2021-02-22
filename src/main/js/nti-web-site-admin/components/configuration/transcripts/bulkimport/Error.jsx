@@ -4,16 +4,12 @@ import PropTypes from 'prop-types';
 import getError from './errors';
 
 export default class Error extends React.Component {
-
 	static propTypes = {
-		error: PropTypes.oneOfType([
-			PropTypes.object,
-			PropTypes.string
-		])
-	}
+		error: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+	};
 
-	render () {
-		const {error} = this.props;
+	render() {
+		const { error } = this.props;
 		const e = getError(error);
 
 		return !e ? null : (

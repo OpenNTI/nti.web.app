@@ -2,50 +2,55 @@ const Ext = require('@nti/extjs');
 
 require('./Content');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.context.components.cards.Video',
+	{
+		extend: 'NextThought.app.context.components.cards.Content',
+		alias: 'widget.context-video-card',
 
-module.exports = exports = Ext.define('NextThought.app.context.components.cards.Video', {
-	extend: 'NextThought.app.context.components.cards.Content',
-	alias: 'widget.context-video-card',
+		renderTpl: Ext.DomHelper.markup([
+			{
+				cls: 'context-image image-context',
+				cn: [
+					{ tag: 'img', cls: 'image', src: '{poster}' },
+					{ cls: 'title', html: '{title}' },
+					{ cls: 'text' },
+				],
+			},
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'context-image image-context', cn: [
-			{tag: 'img', cls: 'image', src: '{poster}'},
-			{cls: 'title', html: '{title}'},
-			{cls: 'text'}
-		]}
-	]),
+		renderSelectors: {
+			imageEl: '.image',
+			title: '.title',
+			text: '.text',
+		},
 
-	renderSelectors: {
-		imageEl: '.image',
-		title: '.title',
-		text: '.text'
-	},
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.applyIf(this.renderData || {}, {
+				title: this.video.get('title'),
+			});
+		},
 
-		this.renderData = Ext.applyIf(this.renderData || {}, {
-			title: this.video.get('title')
-		});
-	},
+		afterRender: function () {
+			this.callParent(arguments);
 
+			this.setPoster();
 
-	afterRender: function () {
-		this.callParent(arguments);
+			this.mon(this.video, 'resolved-poster', this.setPoster.bind(this));
+		},
 
-		this.setPoster();
+		setContent: function () {},
 
-		this.mon(this.video, 'resolved-poster', this.setPoster.bind(this));
-	},
+		setPoster: function () {
+			if (!this.imageEl) {
+				return;
+			}
 
-	setContent: function () {},
+			var poster = this.video.get('poster');
 
-
-	setPoster: function () {
-		if (!this.imageEl) { return; }
-
-		var poster = this.video.get('poster');
-
-		this.imageEl.dom.setAttribute('src', poster);
+			this.imageEl.dom.setAttribute('src', poster);
+		},
 	}
-});
+);

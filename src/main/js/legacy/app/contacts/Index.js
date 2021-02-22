@@ -18,14 +18,13 @@ const SHARING_LISTS_ACTIVE = /^\/sharing-lists/;
 
 const CONTACTS_ROUTE = /^\/contacts/;
 
-
 module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-index',
 	id: 'contacts-index',
 	title: 'Contacts',
 	mixins: {
-		Route: 'NextThought.mixins.Router'
+		Route: 'NextThought.mixins.Router',
 	},
 	items: [],
 	layout: 'none',
@@ -38,14 +37,14 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
-	onRouteDeactivate (newRoute) {
+	onRouteDeactivate(newRoute) {
 		if (!CONTACTS_ROUTE.test(newRoute)) {
 			this.contacts.destroy();
 			delete this.contacts;
 		}
 	},
 
-	showContacts (route) {
+	showContacts(route) {
 		const baseroute = this.getBaseRoute();
 
 		if (this.contacts) {
@@ -55,14 +54,16 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 				xtype: 'react',
 				component: Contacts,
 				baseroute: baseroute,
-				setTitle: (title) => {this.setTitle(title);}
+				setTitle: title => {
+					this.setTitle(title);
+				},
 			});
 		}
 
 		this.setUpNavigation(baseroute, route.path);
 	},
 
-	setUpNavigation (baseroute, path) {
+	setUpNavigation(baseroute, path) {
 		const navigation = this.getNavigation();
 
 		navigation.updateTitle('Contacts');
@@ -71,18 +72,18 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 			{
 				text: 'People',
 				route: '/',
-				active: CONTACTS_ACTIVE.test(path)
+				active: CONTACTS_ACTIVE.test(path),
 			},
 			{
 				text: 'Groups',
 				route: '/groups',
-				active: GROUPS_ACTIVE.test(path)
+				active: GROUPS_ACTIVE.test(path),
 			},
 			{
 				text: 'Sharing Lists',
 				route: '/sharing-lists',
-				active: SHARING_LISTS_ACTIVE.test(path)
-			}
+				active: SHARING_LISTS_ACTIVE.test(path),
+			},
 		];
 
 		navigation.setTabs(tabs);
@@ -94,14 +95,14 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 			hideBranding: true,
 			onBack: () => {
 				this.pushRootRoute('Library', '/library');
-			}
+			},
 		});
 	},
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
-				bodyView: this
+				bodyView: this,
 			});
 		}
 
@@ -110,5 +111,5 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 	onTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
-	}
+	},
 });

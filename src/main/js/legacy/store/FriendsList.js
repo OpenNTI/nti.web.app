@@ -20,13 +20,13 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		type: 'rest',
 		reader: {
 			type: 'nti',
-			root: 'Items'
+			root: 'Items',
 		},
 		headers: {
-			'Accept': 'application/vnd.nextthought.collection+json',
-			'Content-Type': 'application/vnd.nextthought.friendslist+json'
+			Accept: 'application/vnd.nextthought.collection+json',
+			'Content-Type': 'application/vnd.nextthought.friendslist+json',
 		},
-		model: 'NextThought.model.FriendsList'
+		model: 'NextThought.model.FriendsList',
 	},
 
 	sorters: [
@@ -35,8 +35,8 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 			direction: 'ASC',
 			transform: function (value) {
 				return value.toLowerCase();
-			}
-		}
+			},
+		},
 	],
 
 	constructor: function () {
@@ -47,10 +47,9 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 			add: this.contactsMaybeAdded,
 			remove: this.contactsMaybeRemoved,
 			update: this.contactsMaybeChanged,
-			refresh: this.fireContactsRefreshed
+			refresh: this.fireContactsRefreshed,
 		});
 	},
-
 
 	search: function (query) {
 		var fieldsToMatch = ['alias'],
@@ -72,7 +71,6 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		return matches;
 	},
 
-
 	//TODO make this a smart reload that requests new data with a proper last modified.
 	//If we receive more data we should merge it in appropriately.	Updating any existing objects
 	//whose last modified times are more recent, adding any new records and removing any records that
@@ -88,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 
 		//Pass along a flag so we know this is a reload
 		options = Ext.apply(options || {}, {
-			merge: true
+			merge: true,
 		});
 
 		return this.callParent([options]);
@@ -98,51 +96,66 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		//logger.debug('load records called with', arguments); <-- this log message kills firefox's native tools
 		if (options && options.merge) {
 			this.mergeRecords(records);
-		}
-		else {
+		} else {
 			this.callParent(arguments);
 		}
 	},
 
 	mergeRecords: function (newRecords) {
 		logger.debug('need to merge records', newRecords);
-		var oldRecordIds = Ext.Array.map(this.data.items, function (i) {return i.getId();}),
+		var oldRecordIds = Ext.Array.map(this.data.items, function (i) {
+				return i.getId();
+			}),
 			toAdd = [];
 
-		Ext.each(newRecords, function (rec) {
-			var current = this.getById(rec.getId()),
-				serverTime, localTime;
+		Ext.each(
+			newRecords,
+			function (rec) {
+				var current = this.getById(rec.getId()),
+					serverTime,
+					localTime;
 
-			//if we have one already merge based on last modified time
-			if (current) {
-				//If the current last mod is newer on server we move
-				//in.  In the webapp right now we should never
-				//have a local last mod that is newer so we warn.
-				serverTime = rec.get('Last Modified').getTime();
-				localTime = current.get('Last Modified').getTime();
+				//if we have one already merge based on last modified time
+				if (current) {
+					//If the current last mod is newer on server we move
+					//in.  In the webapp right now we should never
+					//have a local last mod that is newer so we warn.
+					serverTime = rec.get('Last Modified').getTime();
+					localTime = current.get('Last Modified').getTime();
 
-				if (serverTime > localTime) {
-					logger.debug('Merging', rec, ' into ', current);
-					current.set(rec.raw);
+					if (serverTime > localTime) {
+						logger.debug('Merging', rec, ' into ', current);
+						current.set(rec.raw);
+					} else if (serverTime < localTime) {
+						logger.warn(
+							'local last modified time < server last modified. What gives?',
+							current,
+							rec
+						);
+					}
+				} else {
+					toAdd.push(rec);
 				}
-				else if (serverTime < localTime) {
-					logger.warn('local last modified time < server last modified. What gives?', current, rec);
-				}
-			}
-			else {
-				toAdd.push(rec);
-			}
 
-			//now remove the id from oldRecordsIds
-			Ext.Array.remove(oldRecordIds, rec.getId());
-		}, this);
+				//now remove the id from oldRecordsIds
+				Ext.Array.remove(oldRecordIds, rec.getId());
+			},
+			this
+		);
 
 		//Any that are left in oldRecordsId no longer exist on the server
 		//so we remove them
-		logger.debug('Removing records with ids as part of merge', oldRecordIds);
-		Ext.each(oldRecordIds, function (id) {
-			this.removeAt(this.indexOfId(id));
-		}, this);
+		logger.debug(
+			'Removing records with ids as part of merge',
+			oldRecordIds
+		);
+		Ext.each(
+			oldRecordIds,
+			function (id) {
+				this.removeAt(this.indexOfId(id));
+			},
+			this
+		);
 
 		if (!Ext.isEmpty(toAdd)) {
 			logger.debug('Adding fls as part of merge', toAdd);
@@ -150,13 +163,11 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		}
 	},
 
-
 	fireContactsRefreshed: function () {
 		logger.debug('firing contacts refreshed');
 		this.fireEvent('contacts-refreshed', this);
 		this.fireEvent('contacts-updated');
 	},
-
 
 	/**
 	 * TODO: The following functions handling sending contacts-added and contacts-removed events probably need to be
@@ -167,7 +178,8 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 	 * @returns {boolean} true if something changed
 	 */
 	maybeFireContactsAdded: function (newFriends, noUpdatedEvent) {
-		var contactsWithDups, newContacts = [];
+		var contactsWithDups,
+			newContacts = [];
 
 		//logger.debug('Maybe added contacts', arguments);
 
@@ -212,9 +224,12 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		this.maybeFireContactsAdded(newFriends);
 	},
 
-
-	maybeFireContactsRemoved: function (possiblyRemoved, /*boolean private*/noUpdatedEvent) {
-		var contacts, contactsRemoved = [];
+	maybeFireContactsRemoved: function (
+		possiblyRemoved,
+		/*boolean private*/ noUpdatedEvent
+	) {
+		var contacts,
+			contactsRemoved = [];
 		//logger.debug('Maybe removed contacts', arguments);
 
 		if (Ext.isEmpty(possiblyRemoved)) {
@@ -243,16 +258,18 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		return false;
 	},
 
-
 	contactsMaybeRemoved: function (store, record) {
 		var possiblyRemoved = record.get('friends').slice();
 		this.maybeFireContactsRemoved(possiblyRemoved);
 	},
 
-
 	contactsMaybeChanged: function (store, record, operation, fields) {
 		var field = (fields && fields[0]) || fields,
-			newValue, oldValue, possibleAdds, possibleRemoves, fireUpdated;
+			newValue,
+			oldValue,
+			possibleAdds,
+			possibleRemoves,
+			fireUpdated;
 		logger.debug('Maybe updated contacts', arguments);
 
 		if (operation !== Ext.data.Model.EDIT || field !== 'friends') {
@@ -276,11 +293,11 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		}
 	},
 
-
 	eachUnfiltered: function (fn, scope) {
 		var data = this.snapshot ? this.snapshot.items : this.data.items,
 			dLen = data.length,
-			record, d;
+			record,
+			d;
 
 		for (d = 0; d < dLen; d++) {
 			record = data[d];
@@ -290,14 +307,25 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		}
 	},
 
-
-	findUnfiltered: function (property, value, start, anyMatch, caseSensitive, exactMatch) {
-		var fn = this.createFilterFn(property, value, anyMatch, caseSensitive, exactMatch),
+	findUnfiltered: function (
+		property,
+		value,
+		start,
+		anyMatch,
+		caseSensitive,
+		exactMatch
+	) {
+		var fn = this.createFilterFn(
+				property,
+				value,
+				anyMatch,
+				caseSensitive,
+				exactMatch
+			),
 			data = this.snapshot || this.data;
 
 		return fn ? data.findIndexBy(fn, null, start) : -1;
 	},
-
 
 	getAtUnfiltered: function (index) {
 		var data = this.snapshot || this.data;
@@ -305,13 +333,11 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		return data.getAt(index);
 	},
 
-
 	findRecordUnfiltered: function () {
 		var index = this.findUnfiltered.apply(this, arguments);
 
 		return index !== -1 ? this.getAtUnfiltered(index) : null;
 	},
-
 
 	/**
 	 *
@@ -340,7 +366,6 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		names = Ext.Array.remove(names, $AppConfig.username);
 		return names;
 	},
-
 
 	getConnections: function () {
 		var names = [];
@@ -373,5 +398,5 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		}
 
 		return Ext.Array.contains(this.getConnections(), username);
-	}
+	},
 });

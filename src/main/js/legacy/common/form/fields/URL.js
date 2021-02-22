@@ -2,22 +2,39 @@ const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
 
-
 module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	extend: 'Ext.Component',
 	alias: 'widget.url-field',
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'url-field', cn: [
-			{tag: 'input', type: 'text', placeholder: '{placeholder}', value: '{value}', tabindex: '1'},
-			{tag: 'tpl', 'if': 'required', cn: [
-				{tag: 'input', type: 'url', value: '{value}', required: true}
-			]},
-			{tag: 'tpl', 'if': '!required', cn: [
-				{tag: 'input', type: 'url', value: '{value}'}
-			]},
-			{tag: 'a', href: '', target: '_blank', html: 'Preview'}
-		]
+		cls: 'url-field',
+		cn: [
+			{
+				tag: 'input',
+				type: 'text',
+				placeholder: '{placeholder}',
+				value: '{value}',
+				tabindex: '1',
+			},
+			{
+				tag: 'tpl',
+				if: 'required',
+				cn: [
+					{
+						tag: 'input',
+						type: 'url',
+						value: '{value}',
+						required: true,
+					},
+				],
+			},
+			{
+				tag: 'tpl',
+				if: '!required',
+				cn: [{ tag: 'input', type: 'url', value: '{value}' }],
+			},
+			{ tag: 'a', href: '', target: '_blank', html: 'Preview' },
+		],
 	}),
 
 	defaultProtocol: 'http://',
@@ -27,9 +44,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		urlField: '.url-field',
 		previewEl: 'a',
 		inputEl: 'input[type=text]',
-		validationInput: 'input[type=url]'
+		validationInput: 'input[type=url]',
 	},
-
 
 	beforeRender: function () {
 		this.callParent(arguments);
@@ -38,10 +54,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 			name: this.schema.name,
 			placeholder: this.schema.placeholder || this.placeholder,
 			value: this.defaultValue,
-			required: this.schema.required
+			required: this.schema.required,
 		});
 	},
-
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -54,7 +69,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		}
 	},
 
-
 	focus: function () {
 		if (!this.rendered) {
 			this.focusOnRender = true;
@@ -64,21 +78,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		return this.inputEl && this.inputEl.dom.focus();
 	},
 
-
 	getInput: function () {
 		return this.inputEl && this.inputEl.dom;
 	},
-
 
 	getValidator: function () {
 		return this.validationInput && this.validationInput.dom;
 	},
 
-
-	appendToFormData (data) {
+	appendToFormData(data) {
 		data.append(this.schema.name, this.getValue());
 	},
-
 
 	getValue: function () {
 		let validator = this.getValidator();
@@ -92,38 +102,32 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		return value;
 	},
 
-
 	getErrors: function () {
 		var input = this.getValidator();
 
 		return {
 			missing: input.validity && input.validity.valueMissing,
-			invalidUrl: input.validity && input.validity.typeMismatch
+			invalidUrl: input.validity && input.validity.typeMismatch,
 		};
 	},
-
 
 	showError: function () {
 		this.urlField.addCls('error');
 	},
 
-
 	removeError: function () {
 		this.urlField.removeCls('error');
 	},
 
-
 	isEmpty: function () {
 		return !this.getValue();
 	},
-
 
 	isValid: function () {
 		var input = this.getValidator();
 
 		return !input.validity || input.validity.valid;
 	},
-
 
 	syncValidator: function (value) {
 		var parts = Globals.getURLParts(value),
@@ -137,7 +141,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 
 		return value;
 	},
-
 
 	attachInputListeners: function () {
 		if (this.inputEl) {
@@ -154,16 +157,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		}
 	},
 
-
 	onInputFocus: function () {
 		this.urlField.addCls('focused');
 	},
 
-
 	onInputBlur: function () {
 		this.urlField.removeCls('focused');
 	},
-
 
 	onInputChange: function (e) {
 		const input = this.getInput();
@@ -186,5 +186,5 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 			this.urlField.removeCls('valid');
 			this.previewEl.dom.setAttribute('href', '');
 		}
-	}
+	},
 });

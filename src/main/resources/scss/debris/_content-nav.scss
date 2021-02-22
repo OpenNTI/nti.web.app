@@ -3,7 +3,8 @@
 }
 
 .x-panel-notes-and-discussion {
-	&,.x-panel-body-default {
+	&,
+	.x-panel-body-default {
 		background: var(--panel-background);
 	}
 
@@ -30,13 +31,13 @@
 			left: 15px;
 
 			&.notepad {
-				@include icon($notepad,$position:absolute);
+				@include icon($notepad, $position: absolute);
 			}
 
 			&.discuss {
 				top: 22px;
 
-				@include icon($discussions,$position:absolute);
+				@include icon($discussions, $position: absolute);
 			}
 		}
 
@@ -50,8 +51,12 @@
 			color: var(--secondary-grey);
 
 			.x-tab-icon-el {
-				&.notepad::after { @include sprite($notepad_active); }
-				&.discuss::after { @include sprite($discussions_active); }
+				&.notepad::after {
+					@include sprite($notepad_active);
+				}
+				&.discuss::after {
+					@include sprite($discussions_active);
+				}
 			}
 		}
 	}

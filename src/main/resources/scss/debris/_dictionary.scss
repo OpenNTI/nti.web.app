@@ -1,4 +1,3 @@
-
 .dictionary-window {
 	@extend .nti-window;
 
@@ -10,7 +9,7 @@
 	}
 
 	&.north::before {
-		content: "";
+		content: '';
 		position: absolute;
 		z-index: 1;
 		top: -15px;
@@ -20,7 +19,7 @@
 	}
 
 	&.south::before {
-		content: "";
+		content: '';
 		position: absolute;
 		z-index: 1;
 		bottom: -14px;

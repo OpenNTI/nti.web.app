@@ -1,25 +1,24 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
-const {getService} = require('@nti/web-client');
+const { wait } = require('@nti/lib-commons');
+const { getService } = require('@nti/web-client');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 const LoginStateStore = require('legacy/login/StateStore');
 const FriendsList = require('legacy/model/FriendsList');
 const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
 
 const GroupsStateStore = require('./StateStore');
 
-const {guidGenerator, isMe, getURL} = Globals;
+const { guidGenerator, isMe, getURL } = Globals;
 
 require('legacy/common/Actions');
 
-
 module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 	extend: 'NextThought.common.Actions',
-
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -30,7 +29,6 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		this.LoginStore.registerLoginAction(this.loadFriendsList.bind(this));
 		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
 	},
-
 
 	loadFriendsList: function () {
 		var me = this,
@@ -49,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				load: function (listStore, records, success) {
 					me.__friendsListsLoaded(listStore, records, success);
 					fulfill();
-				}
+				},
 			});
 
 			store.proxy.url = getURL(collection.href);
@@ -57,7 +55,6 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			store.load();
 		});
 	},
-
 
 	loadGroupsList: function () {
 		var me = this,
@@ -72,16 +69,14 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			store.on({
 				load: function (/*listStore, records, success*/) {
 					fulfill();
-				}
+				},
 			});
 
 			store.proxy.url = getURL(collection.href);
 
 			store.load();
 		});
-
 	},
-
 
 	onLogin: function () {
 		var store = this.GroupStore.getFriendsList(),
@@ -95,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		}
 
 		store.on({
-			load: this.__friendsListsLoaded.bind(this)
+			load: this.__friendsListsLoaded.bind(this),
 		});
 
 		store.proxy.url = getURL(collection.href);
@@ -103,9 +98,9 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		store.load();
 	},
 
-
 	__friendsListsLoaded: function (listStore, records) {
-		var me = this, cid = this.GroupStore.getMyContactsId();
+		var me = this,
+			cid = this.GroupStore.getMyContactsId();
 
 		(records || []).forEach(function (record) {
 			var store;
@@ -120,76 +115,103 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			record.storeId = store.storeId;
 
 			if (!record.isDFL) {
-				console.debug('Resolving users from list:', record.get('Username'), 'potentially made # of requests:', record.get('friends').length);
-				UserRepository.getUser(record.get('friends'))
-					.then(function (friends) {
-						store.loadData(friends);
-						store.fireEvent('load', store, friends, true);
-					});
+				console.debug(
+					'Resolving users from list:',
+					record.get('Username'),
+					'potentially made # of requests:',
+					record.get('friends').length
+				);
+				UserRepository.getUser(record.get('friends')).then(function (
+					friends
+				) {
+					store.loadData(friends);
+					store.fireEvent('load', store, friends, true);
+				});
 			} else {
-				console.debug('Not resolving users from DFL:', record.get('Username'), 'potentially saved # of requests:', record.get('friends').length);
+				console.debug(
+					'Not resolving users from DFL:',
+					record.get('Username'),
+					'potentially saved # of requests:',
+					record.get('friends').length
+				);
 			}
 		});
 
 		this.__ensureContactsGroup.apply(this, arguments);
 	},
 
-
 	__setContactGroup: function (record) {
 		return this.GroupStore.setContactGroup(record);
 	},
-
 
 	getContactGroup: function () {
 		return this.GroupeStore.getContactGroup();
 	},
 
-
 	__ensureContactsGroup: function (store, records, success) {
-		var me = this, rec,
+		var me = this,
+			rec,
 			id = this.GroupStore.getMyContactsId();
 
 		if (!success) {
-			console.log('Store load failed with arguments. Expect empty contacts', arguments);
+			console.log(
+				'Store load failed with arguments. Expect empty contacts',
+				arguments
+			);
 			return;
 		}
 
 		rec = store.findRecordUnfiltered('Username', id, 0, false, true, true);
 
 		if (!rec) {
-			me.createGroupUnguarded('My Contacts', id, store.getContacts())
-				.then(function (record) {
-					if (record && record.isModel) {
-						record.hidden = true;
-						me.__setContactGroup(record);
-					} else {
-						alert({
-							icon: Ext.Msg.ERROR,
-							title: 'Oops! :(',
-							msg: 'There was an error initializing your contacts. ' +
-									'You will not be able to add/remove contacts until this is resolved. ' +
-									'This error has been reported and we are working on it.'
-						});
-						setTimeout(function () {
-							//ensure this is caught by the error reporter. (and not Ext's layout engine or event handlers)
-							Ext.Error.raise(JSON.stringify({
+			me.createGroupUnguarded(
+				'My Contacts',
+				id,
+				store.getContacts()
+			).then(function (record) {
+				if (record && record.isModel) {
+					record.hidden = true;
+					me.__setContactGroup(record);
+				} else {
+					alert({
+						icon: Ext.Msg.ERROR,
+						title: 'Oops! :(',
+						msg:
+							'There was an error initializing your contacts. ' +
+							'You will not be able to add/remove contacts until this is resolved. ' +
+							'This error has been reported and we are working on it.',
+					});
+					setTimeout(function () {
+						//ensure this is caught by the error reporter. (and not Ext's layout engine or event handlers)
+						Ext.Error.raise(
+							JSON.stringify({
 								msg: 'Failed to create contacts groupd',
-								object: record
-							}));
-						}, 1);
-					}
-				});
+								object: record,
+							})
+						);
+					}, 1);
+				}
+			});
 		} else {
 			rec.hidden = true;
 			me.__setContactGroup(rec);
 		}
 	},
 
-
-	createFriendsListUnguarded: function (displayName, username, friends, dynamic, callback, errorCallback, scope) {
+	createFriendsListUnguarded: function (
+		displayName,
+		username,
+		friends,
+		dynamic,
+		callback,
+		errorCallback,
+		scope
+	) {
 		var me = this,
 			rec = dynamic ? DynamicFriendsList.create() : FriendsList.create(),
-			store = dynamic ? me.GroupStore.getGroupsList() : me.GroupStore.getFriendsList();
+			store = dynamic
+				? me.GroupStore.getGroupsList()
+				: me.GroupStore.getFriendsList();
 
 		rec.set('Username', username);
 		//We used to set realname here, but we really want alias
@@ -208,8 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 					record.storeId = newStore.storeId;
 
-					wait(500)
-						.then(store.add.bind(store, [record]));
+					wait(500).then(store.add.bind(store, [record]));
 
 					if (callback) {
 						callback.call(scope, true, record, operation);
@@ -225,52 +246,76 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 					}
 
 					reject();
-				}
+				},
 			});
 		});
 	},
 
-
-	createGroupUnguarded: function (displayName, username, friends, callback, scope, error) {
-		return this.createFriendsListUnguarded(displayName, username, friends, false, callback, scope, error);
+	createGroupUnguarded: function (
+		displayName,
+		username,
+		friends,
+		callback,
+		scope,
+		error
+	) {
+		return this.createFriendsListUnguarded(
+			displayName,
+			username,
+			friends,
+			false,
+			callback,
+			scope,
+			error
+		);
 	},
 
-
-	deleteContact: function (user/*, groups*/) {
-		var username = (user && user.isModel) ? user.get('Username') : user;
+	deleteContact: function (user /*, groups*/) {
+		var username = user && user.isModel ? user.get('Username') : user;
 
 		return this.removeContact(null, username);
 	},
 
-
 	removeContact: function (record, contact) {
-		if (!record) { return this.removeContactFromAll(contact); }
+		if (!record) {
+			return this.removeContactFromAll(contact);
+		}
 
 		var store = this.GroupStore.getFriendsList(),
-			userId = typeof contact === 'string' ? contact : contact.get('Username'),
+			userId =
+				typeof contact === 'string' ? contact : contact.get('Username'),
 			count = Globals.getAsynchronousTaskQueueForList(store.getCount());
 
 		return new Promise(function (fulfill) {
-			function finish () {
+			function finish() {
 				if (!count.pop()) {
 					fulfill();
 				}
 			}
 
-			function revertEditOnError (group, oldValue) {
+			function revertEditOnError(group, oldValue) {
 				return function () {
-					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+					console.warn(
+						'membership adjustment failed reverting to old value',
+						group,
+						oldValue,
+						arguments
+					);
 					group.set('friends', oldValue);
 				};
 			}
 
-			function remove (rec) {
+			function remove(rec) {
 				var oldValue;
 				if (rec.hasFriend(userId)) {
 					oldValue = rec.get('friends').slice();
-					rec.removeFriend(userId).saveField('friends', undefined, finish, revertEditOnError(rec, oldValue));
-				}
-				else {
+					rec.removeFriend(userId).saveField(
+						'friends',
+						undefined,
+						finish,
+						revertEditOnError(rec, oldValue)
+					);
+				} else {
 					finish();
 				}
 			}
@@ -282,15 +327,13 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-
-	removeContactFromAll (username) {
+	removeContactFromAll(username) {
 		const userId = username.getId ? username.getId() : username;
 
 		return getService()
 			.then(service => service.getContacts())
 			.then(contactStore => contactStore.removeContact(userId));
 	},
-
 
 	//TODO: figure out what groupList is suppose to be, I can't tell from the old code
 	addContact: function (username, groupList) {
@@ -300,22 +343,37 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		}
 
 		const userId = username.getId ? username.getId() : username;
-		const groups = (groupList || []).map(g => g.getId ? g.getId() : g);
+		const groups = (groupList || []).map(g => (g.getId ? g.getId() : g));
 
 		return getService()
 			.then(service => service.getContacts())
 			.then(contactStore => contactStore.addContact(userId, groups));
 	},
 
-
-	createDFLUnguarded: function (displayName, username, friends, callback, error, scope) {
-		return this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
+	createDFLUnguarded: function (
+		displayName,
+		username,
+		friends,
+		callback,
+		error,
+		scope
+	) {
+		return this.createFriendsListUnguarded(
+			displayName,
+			username,
+			friends,
+			true,
+			callback,
+			error,
+			scope
+		);
 	},
-
 
 	createList: function (displayName, friends) {
 		if (!Service.canFriend()) {
-			Ext.Error.raise('Permission denied.	 AppUser is not allowed to create lists');
+			Ext.Error.raise(
+				'Permission denied.	 AppUser is not allowed to create lists'
+			);
 			return Promise.reject();
 		}
 
@@ -334,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				.catch(function (record, operation, response) {
 					var msg = response.message,
 						field = response.field;
-						// code = response.code;
+					// code = response.code;
 
 					if (msg) {
 						if (field) {
@@ -353,12 +411,16 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-
 	createGroupAndCode: function (btn) {
-		var w = btn.up('window'), username, displayName, me = this;
+		var w = btn.up('window'),
+			username,
+			displayName,
+			me = this;
 
 		if (!Service.canCreateDynamicGroups()) {
-			Ext.Error.raise('Permission denied.	 AppUser is not allowed to create dfls');
+			Ext.Error.raise(
+				'Permission denied.	 AppUser is not allowed to create dfls'
+			);
 			return Promise.reject();
 		}
 
@@ -378,7 +440,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				.catch(function (rec, operation, response) {
 					var msg = response && response.message,
 						field = response && response.field;
-						// code = response && response.code;
+					// code = response && response.code;
 
 					if (msg) {
 						//get the error from the error util
@@ -400,12 +462,13 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-
 	fetchGroupCode: function (record, displayName, success, onError) {
 		var link = record.getLink('default-trivial-invitation-code');
 
 		if (!link) {
-			Ext.callback(onError, this, ['Group code cannot be created for ' + displayName]);
+			Ext.callback(onError, this, [
+				'Group code cannot be created for ' + displayName,
+			]);
 			return Promise.reject();
 		}
 
@@ -415,64 +478,72 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				scope: this,
 				method: 'GET',
 				headers: {
-					Accept: 'application/json'
+					Accept: 'application/json',
 				},
 				callback: function (q, s, r) {
 					console.log(r.responseText);
-					var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
+					var result,
+						errorText =
+							"An error occurred generating 'Group Code' for " +
+							displayName;
 					if (s) {
 						result = Ext.decode(r.responseText, true);
 						result = result ? result.invitation_code : null;
 					}
 					if (!result) {
-						Ext.callback(onError, this, [errorText + ' : ' + r.status]);
+						Ext.callback(onError, this, [
+							errorText + ' : ' + r.status,
+						]);
 						reject(q, s, r);
-					}
-					else {
+					} else {
 						Ext.callback(success, this, [result]);
 						fulfill(result);
 					}
-				}
+				},
 			});
 		});
 	},
-
 
 	getGroupCode: function (record) {
 		var dn = record.get('displayName');
 		return this.fetchGroupCode(record, dn);
 	},
 
-
 	escapeGroupName: function (name) {
 		//Dataserver blows chunks if on @@ or @( at the beginning
 		//look for these things and yank them out.	This was happening
 		//when manipulating the list by the object url (say for deletion).
-		name = name.replace(/@@|@\(/ig, '');
-		return name.replace(/[^0-9A-Z\-@+._]/ig, '');
+		name = name.replace(/@@|@\(/gi, '');
+		return name.replace(/[^0-9A-Z\-@+._]/gi, '');
 	},
-
 
 	generateUsername: function (newGroupName) {
-		return this.escapeGroupName(newGroupName) + '-' + $AppConfig.username + '_' + guidGenerator();
+		return (
+			this.escapeGroupName(newGroupName) +
+			'-' +
+			$AppConfig.username +
+			'_' +
+			guidGenerator()
+		);
 	},
 
-
-	getAcceptsLink () {
+	getAcceptsLink() {
 		let collection = Service.getCollection('Invitations', 'Invitations');
 		let links = collection && collection.Links;
 
 		return Service.getLinkFrom(links || [], 'accept-invitations');
 	},
 
-
-	joinGroupWithCode: function (code/*, btn*/) {
-		var data = {'invitation_codes': [code]},
+	joinGroupWithCode: function (code /*, btn*/) {
+		var data = { invitation_codes: [code] },
 			url = this.getAcceptsLink(),
 			me = this;
 
 		if (!url) {
-			return Promise.reject({field: 'Code', message: 'There was an error applying your Group Code.'});
+			return Promise.reject({
+				field: 'Code',
+				message: 'There was an error applying your Group Code.',
+			});
 		}
 
 		return new Promise(function (fulfill, reject) {
@@ -482,28 +553,32 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				jsonData: Ext.encode(data),
 				method: 'POST',
 				headers: {
-					Accept: 'application/json'
+					Accept: 'application/json',
 				},
-				callback: function (q, success/*, r*/) {
+				callback: function (q, success /*, r*/) {
 					var store;
 
 					if (!success) {
-						reject({field: 'Group Code', message: 'The code you entered is not valid.'});
-					}
-					else {
+						reject({
+							field: 'Group Code',
+							message: 'The code you entered is not valid.',
+						});
+					} else {
 						store = me.GroupStore.getFriendsList();
 						if (store) {
-							console.warn('Performing expensive reload of friends list store.', store);
+							console.warn(
+								'Performing expensive reload of friends list store.',
+								store
+							);
 							store.reload();
 						}
 						me.loadGroupsList();
 						fulfill();
 					}
-				}
+				},
 			});
 		});
 	},
-
 
 	deleteGroup: function (record) {
 		if (record.get('Username') !== this.getMyContactsId()) {
@@ -512,16 +587,16 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 					if (!success) {
 						alert('Unable to delete group.');
 					}
-				}
+				},
 			});
 		}
 	},
 
-
 	leaveGroup: function (record) {
 		var link = record.getLink('my_membership'),
 			groupStore = this.GroupStore.getGroupsList(),
-			dn = record.get('displayName'), me = this;
+			dn = record.get('displayName'),
+			me = this;
 
 		if (!link) {
 			return Promise.reject('Unable to leave ' + dn);
@@ -533,7 +608,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				scope: this,
 				method: 'DELETE',
 				headers: {
-					Accept: 'application/json'
+					Accept: 'application/json',
 				},
 				callback: function (q, s, r) {
 					console.log(r.responseText);
@@ -547,24 +622,25 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 					if (Ext.isEmpty(result)) {
 						reject(errorText + ' : ' + r.status);
-					}
-					else {
+					} else {
 						//onSuccess instead of reloading the whole store
 						//lets try and just remove the one thing we need
 						me.GroupStore.getFriendsList().remove(record);
 						groupStore.remove(record);
 						fulfill();
 					}
-				}
+				},
 			});
 		});
 	},
 
-
 	getMyContactsId: function () {
 		if (!this.myContactsId) {
-			this.myContactsId = Ext.String.format('mycontacts-{0}', $AppConfig.username);
+			this.myContactsId = Ext.String.format(
+				'mycontacts-{0}',
+				$AppConfig.username
+			);
 		}
 		return this.myContactsId;
-	}
+	},
 });

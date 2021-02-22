@@ -3,32 +3,36 @@ const Ext = require('@nti/extjs');
 require('./CourseOutlineNode');
 require('legacy/mixins/AuditLog');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.courses.navigation.CourseOutlineContentNode',
+	{
+		extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
+		mimeType:
+			'application/vnd.nextthought.courses.courseoutlinecontentnode',
 
-module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
-	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
-	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
+		mixins: {
+			auditLog: 'NextThought.mixins.AuditLog',
+		},
 
-	mixins: {
-		auditLog: 'NextThought.mixins.AuditLog'
-	},
+		fields: [
+			{ name: 'publishBeginning', type: 'auto' },
+			{ name: 'publishEnding', type: 'number' },
+			{ name: 'PublicationState', type: 'string' },
+		],
 
-	fields: [
-		{name: 'publishBeginning', type: 'auto'},
-		{name: 'publishEnding', type: 'number'},
-		{name: 'PublicationState', type: 'string'}
-	],
+		statics: {
+			mimeType:
+				'application/vnd.nextthought.courses.courseoutlinecontentnode',
+		},
 
-	statics: {
-		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
-	},
+		getFirstContentNode: function () {
+			return this.isPublished() && this.get('isAvailable') ? this : null;
+		},
 
-	getFirstContentNode: function () {
-		return this.isPublished() && this.get('isAvailable') ? this : null;
-	},
+		isPublished: function () {
+			var state = this.get('PublicationState') || '';
 
-	isPublished: function () {
-		var state = this.get('PublicationState') || '';
-
-		return state.toLowerCase() === ('DefaultPublished').toLowerCase();
+			return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
+		},
 	}
-});
+);

@@ -1,6 +1,7 @@
 .overview-editing-parentselection {
 	&.locked {
-		& > .selection, & > .position {
+		& > .selection,
+		& > .position {
 			.active {
 				opacity: 0.8;
 				cursor: default;
@@ -19,7 +20,8 @@
 		margin-bottom: 0.5em;
 	}
 
-	& > .selection, & > .position {
+	& > .selection,
+	& > .position {
 		position: relative;
 		display: inline-block;
 		vertical-align: middle;
@@ -166,7 +168,7 @@
 			color: var(--primary-blue);
 
 			&::before {
-				content: "+";
+				content: '+';
 				padding-right: 0.5em;
 			}
 		}
@@ -210,7 +212,8 @@
 			color: white;
 		}
 
-		.back, .save {
+		.back,
+		.save {
 			display: inline-block;
 			line-height: 35px;
 			font-size: 0.875em;

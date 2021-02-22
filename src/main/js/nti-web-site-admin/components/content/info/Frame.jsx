@@ -1,24 +1,24 @@
 import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {LinkTo} from '@nti/web-routing';
-import {Loading, Layouts} from '@nti/web-commons';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {decodeFromURI} from '@nti/lib-ntiids';
+import { LinkTo } from '@nti/web-routing';
+import { Loading, Layouts } from '@nti/web-commons';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { decodeFromURI } from '@nti/lib-ntiids';
 
-import {getString} from 'legacy/util/Localization';
+import { getString } from 'legacy/util/Localization';
 
 import Store from './Store';
 import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
-	back: getString('NextThought.view.Navigation.back')
+	back: getString('NextThought.view.Navigation.back'),
 };
 const t = scoped('nti-site-admin.courses.info.Frame', DEFAULT_TEXT);
 
 class SiteAdminCourseView extends React.Component {
-	static deriveStoreKeyFromProps (props) {
+	static deriveStoreKeyFromProps(props) {
 		return props.courseID;
 	}
 
@@ -29,27 +29,24 @@ class SiteAdminCourseView extends React.Component {
 		loading: PropTypes.bool,
 		store: PropTypes.object,
 
-		children: PropTypes.element
-	}
+		children: PropTypes.element,
+	};
 
-	get store () {
+	get store() {
 		return this.props.store;
 	}
 
-
-	getCourseID (props = this.props) {
-		const {courseID} = props;
+	getCourseID(props = this.props) {
+		const { courseID } = props;
 
 		return decodeFromURI(courseID);
 	}
 
-
-	componentDidMount () {
+	componentDidMount() {
 		this.store.loadCourse(this.getCourseID());
 	}
 
-
-	componentDidUpdate (prevProps) {
+	componentDidUpdate(prevProps) {
 		const newID = this.getCourseID(this.props);
 		const oldID = this.getCourseID(prevProps);
 
@@ -58,22 +55,20 @@ class SiteAdminCourseView extends React.Component {
 		}
 	}
 
-
-	render () {
-		const {loading} = this.props;
+	render() {
+		const { loading } = this.props;
 
 		return (
 			<div className="site-admin-course-view">
 				{loading && this.renderHeader()}
-				{loading && (<Loading.Mask />)}
+				{loading && <Loading.Mask />}
 				{!loading && this.renderCourse()}
 			</div>
 		);
 	}
 
-
-	renderCourse () {
-		const {course, children} = this.props;
+	renderCourse() {
+		const { course, children } = this.props;
 
 		if (!course) {
 			return null;
@@ -86,15 +81,15 @@ class SiteAdminCourseView extends React.Component {
 					<NavBar course={course} />
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
-					{React.Children.map(children, (item) => {
-						return React.cloneElement(item, {course});
+					{React.Children.map(children, item => {
+						return React.cloneElement(item, { course });
 					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>
 		);
 	}
 
-	renderHeader () {
+	renderHeader() {
 		return (
 			<div className="header">
 				<LinkTo.Name name="site-admin.courses">
@@ -107,5 +102,5 @@ class SiteAdminCourseView extends React.Component {
 }
 
 export default decorate(SiteAdminCourseView, [
-	Store.connect({course: 'course', loading: 'loading'})
+	Store.connect({ course: 'course', loading: 'loading' }),
 ]);

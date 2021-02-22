@@ -2,38 +2,33 @@ const Ext = require('@nti/extjs');
 
 const AnimationFrame = require('./AnimationFrame');
 
-
 module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 	statics: {
-		getPageScrollingEl () {
+		getPageScrollingEl() {
 			return document.scrollingElement || document.documentElement;
 		},
 
-
-		getPageScrollingHeight () {
+		getPageScrollingHeight() {
 			return this.getPageScrollingEl().scrollHeight;
 		},
 
-
-		getPageHeight () {
+		getPageHeight() {
 			return document.documentElement.clientHeight;
 		},
 
-
-		getPageScrolling () {
+		getPageScrolling() {
 			if (!this.pageScrolling) {
 				this.pageScrolling = this.create({
 					el: this.getPageScrollingEl(),
 					heightOverride: Ext.Element.getViewportHeight(),
-					topOverride: 0
+					topOverride: 0,
 				});
 			}
 
 			return this.pageScrolling;
 		},
 
-
-		scrollCompletelyIntoView (node, container, padding = 0, duration = 500) {
+		scrollCompletelyIntoView(node, container, padding = 0, duration = 500) {
 			container = container || this.getPageScrollingEl();
 
 			const nodeRect = node.getBoundingClientRect();
@@ -47,87 +42,116 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 			} else if (nodeRect.top - containerRect.top < 0) {
 				scrollTop = nodeRect.top - padding;
 			} else if (nodeRect.bottom > containerRect.bottom) {
-				scrollTop = originalScrollTop + (nodeRect.bottom - containerRect.bottom - padding);
+				scrollTop =
+					originalScrollTop +
+					(nodeRect.bottom - containerRect.bottom - padding);
 			} else {
 				scrollTop = originalScrollTop;
 			}
 
-			if (scrollTop === originalScrollTop) { return; }
+			if (scrollTop === originalScrollTop) {
+				return;
+			}
 
 			scrollTop = Math.max(scrollTop, 0);
 
 			const direction = scrollTop > originalScrollTop ? 1 : -1;
 			const scrollDiff = direction * (scrollTop - originalScrollTop);
 
-			const animation = new AnimationFrame ((next, diff) => {
+			const animation = new AnimationFrame((next, diff) => {
 				const scrollDelta = scrollDiff * (diff / duration);
 				const currentScrollTop = container.scrollTop;
-				const newScrollTop = currentScrollTop + (direction * scrollDelta);
+				const newScrollTop = currentScrollTop + direction * scrollDelta;
 
 				container.scrollTop = newScrollTop;
 
-				if ((direction < 0 && newScrollTop > scrollTop) || (direction > 0 && newScrollTop < scrollTop)) { next(); }
+				if (
+					(direction < 0 && newScrollTop > scrollTop) ||
+					(direction > 0 && newScrollTop < scrollTop)
+				) {
+					next();
+				}
 			});
 
 			animation.start();
-		}
+		},
 	},
 
-	constructor (config) {
+	constructor(config) {
 		this.targetEl = config.el;
 
 		this.heightOverride = config.heightOverride;
 		this.topOverride = config.topOverride;
 
-		this.scrollingVelocity = config.scrollingVelocity || 1 / 1000;//in pixels/ms
+		this.scrollingVelocity = config.scrollingVelocity || 1 / 1000; //in pixels/ms
 
 		this.edgeScrollTolerance = config.edgeScrollTolerance || 30;
 
 		this.handlers = {
 			dragover: this.__onDragOver.bind(this),
-			dragleave: this.__onDragLeave.bind(this)
+			dragleave: this.__onDragLeave.bind(this),
 		};
 	},
 
-	__getTop () {
+	__getTop() {
 		const rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
-		return this.topOverride !== undefined ? this.topOverride : (rect && rect.top);
+		return this.topOverride !== undefined
+			? this.topOverride
+			: rect && rect.top;
 	},
 
-	__getHeight () {
+	__getHeight() {
 		const rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
-		return this.heightOverride !== undefined ? this.heightOverride : (rect && rect.height);
+		return this.heightOverride !== undefined
+			? this.heightOverride
+			: rect && rect.height;
 	},
 
-	scrollWhenDragNearEdges () {
+	scrollWhenDragNearEdges() {
 		if (this.targetEl && this.targetEl.addEventListener) {
-			this.targetEl.addEventListener('dragover', this.handlers.dragover, true);
-			this.targetEl.addEventListener('dragleave', this.handlers.dragleave, true);
+			this.targetEl.addEventListener(
+				'dragover',
+				this.handlers.dragover,
+				true
+			);
+			this.targetEl.addEventListener(
+				'dragleave',
+				this.handlers.dragleave,
+				true
+			);
 		} else {
 			console.error('Invalid targetEl');
 		}
 	},
 
-	unscrollWhenDragNearEdges () {
+	unscrollWhenDragNearEdges() {
 		if (this.targetEl && this.targetEl.removeEventListener) {
-			this.targetEl.removeEventListener('dragover', this.handlers.dragover, true);
-			this.targetEl.removeEventListener('dragleave', this.handlers.dragleave, true);
+			this.targetEl.removeEventListener(
+				'dragover',
+				this.handlers.dragover,
+				true
+			);
+			this.targetEl.removeEventListener(
+				'dragleave',
+				this.handlers.dragleave,
+				true
+			);
 		}
 
 		this.endDragOverScroll();
 	},
 
-	__onDragOver (e) {
+	__onDragOver(e) {
 		this.scrollIfNearEdge(e.clientX, e.clientY);
 	},
 
-	__onDragLeave () {
+	__onDragLeave() {
 		this.endDragOverScroll();
 	},
 
-	getScrollAnimationFn (direction) {
+	getScrollAnimationFn(direction) {
 		const velocity = this.scrollingVelocity;
 		const targetEl = this.targetEl;
 		// let lastScroll = targetEl.scrollTop;
@@ -141,21 +165,25 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 			// if (lastScroll !== scrollTop) { return; }
 
 			//If we are moving up and already at the top
-			if (direction < 0 && scrollTop <= 0) { return; }
+			if (direction < 0 && scrollTop <= 0) {
+				return;
+			}
 
 			//If we are moving down and already at the bottom
-			if (direction > 0 && (height + scrollTop) >= targetEl.scrollHeight) { return; }
+			if (direction > 0 && height + scrollTop >= targetEl.scrollHeight) {
+				return;
+			}
 
 			const distance = Math.ceil(diff * velocity);
 
-			targetEl.scrollTop = scrollTop + (direction * distance);
+			targetEl.scrollTop = scrollTop + direction * distance;
 			// lastScroll = targetEl.scrollTop;
 
 			next();
 		};
 	},
 
-	endDragOverScroll () {
+	endDragOverScroll() {
 		if (this.scrollingAnimation) {
 			this.scrollingAnimation.stop();
 		}
@@ -165,13 +193,13 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-	scrollIfNearEdge (x, y) {
+	scrollIfNearEdge(x, y) {
 		const top = this.__getTop();
 		const height = this.__getHeight();
 		const tol = this.edgeScrollTolerance;
 		const oldScrollDirection = this.dragScrollDirection;
 
-		const getNewScrollAnimation = (direction) => {
+		const getNewScrollAnimation = direction => {
 			//If we have changed direction create a new animation frame
 			if (oldScrollDirection !== direction) {
 				return new AnimationFrame(this.getScrollAnimationFn(direction));
@@ -186,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		if (y < top + tol) {
 			animation = getNewScrollAnimation(-1);
 			scrollDirection = -1;
-		} else if (y > (top + height) - tol) {
+		} else if (y > top + height - tol) {
 			animation = getNewScrollAnimation(1);
 			scrollDirection = 1;
 		}
@@ -195,12 +223,14 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 			this.endDragOverScroll();
 
 			if (animation) {
-				this.dragScrollStartTimeout = setTimeout(animation.start.bind(animation), 500);
+				this.dragScrollStartTimeout = setTimeout(
+					animation.start.bind(animation),
+					500
+				);
 				this.scrollingAnimation = animation;
 			}
 
 			this.dragScrollDirection = scrollDirection;
 		}
-
-	}
+	},
 });

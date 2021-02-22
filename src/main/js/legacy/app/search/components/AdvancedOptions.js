@@ -1,116 +1,115 @@
 const Ext = require('@nti/extjs');
 
-module.exports = exports = Ext.define('NextThought.app.search.components.AdvancedOptions', {
-	extend: 'Ext.Component',
-	alias: 'widget.search-advanced-menu',
+module.exports = exports = Ext.define(
+	'NextThought.app.search.components.AdvancedOptions',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.search-advanced-menu',
 
-	OPTIONS: {
-		'all': {
-			label: 'All',
-			accepts: []
+		OPTIONS: {
+			all: {
+				label: 'All',
+				accepts: [],
+			},
+			people: {
+				label: 'People',
+				accepts: ['user'],
+			},
+			social: {
+				label: 'Social',
+				accepts: [
+					'note',
+					'forums.personalblogcomment',
+					'forums.personalblogentrypost',
+					'forums.communityheadlinepost',
+					'forums.generalforumcomment',
+					'messageinfo', //Does chat results go here?
+				],
+			},
+			readings: {
+				label: 'Readings',
+				accepts: ['bookcontent'],
+			},
+			videos: {
+				label: 'Videos',
+				accepts: ['videotranscript', 'ntivideo'],
+			},
+			highlights: {
+				label: 'Highlights',
+				accepts: ['highlight'],
+			},
 		},
-		'people': {
-			label: 'People',
-			accepts: ['user']
-		},
-		'social': {
-			label: 'Social',
-			accepts: [
-				'note',
-				'forums.personalblogcomment',
-				'forums.personalblogentrypost',
-				'forums.communityheadlinepost',
-				'forums.generalforumcomment',
-				'messageinfo'//Does chat results go here?
-			]
-		},
-		'readings': {
-			label: 'Readings',
-			accepts: [
-				'bookcontent'
-			]
-		},
-		'videos': {
-			label: 'Videos',
-			accepts: [
-				'videotranscript',
-				'ntivideo'
-			]
-		},
-		'highlights': {
-			label: 'Highlights',
-			accepts: [
-				'highlight'
-			]
-		}
-	},
 
-	cls: 'search-advanced-menu search-advanced-menu-react',
+		cls: 'search-advanced-menu search-advanced-menu-react',
 
+		renderTpl: Ext.DomHelper.markup({
+			tag: 'tpl',
+			for: 'options',
+			cn: [
+				{
+					tag: 'span',
+					cls: 'search-option',
+					'data-type': '{type}',
+					html: '{label}',
+				},
+			],
+		}),
 
-	renderTpl: Ext.DomHelper.markup({
-		tag: 'tpl', 'for': 'options', cn: [
-			{tag: 'span', cls: 'search-option', 'data-type': '{type}', html: '{label}'}
-		]
-	}),
+		beforeRender: function () {
+			var options = this.OPTIONS,
+				keys = Object.keys(options) || [],
+				labels = [];
 
-
-	beforeRender: function () {
-		var options = this.OPTIONS,
-			keys = Object.keys(options) || [],
-			labels = [];
-
-		keys.forEach(function (key) {
-			labels.push({
-				type: key,
-				label: options[key].label
+			keys.forEach(function (key) {
+				labels.push({
+					type: key,
+					label: options[key].label,
+				});
 			});
-		});
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			options: labels
-		});
-	},
+			this.renderData = Ext.apply(this.renderData || {}, {
+				options: labels,
+			});
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	afterRender: function () {
-		this.callParent(arguments);
+			this.mon(this.el, 'click', this.doClick.bind(this));
+		},
 
-		this.mon(this.el, 'click', this.doClick.bind(this));
-	},
+		doClick: function (e) {
+			var option = e.getTarget('.search-option');
 
+			if (this.changeFilter && option) {
+				this.changeFilter(option.getAttribute('data-type'));
+			}
+		},
 
-	doClick: function (e) {
-		var option = e.getTarget('.search-option');
+		getMimeTypes: function (type) {
+			var option = this.OPTIONS[type];
 
-		if (this.changeFilter && option) {
-			this.changeFilter(option.getAttribute('data-type'));
-		}
-	},
+			return option && option.accepts;
+		},
 
+		selectType: function (type) {
+			if (!this.rendered) {
+				this.on('after', this.selectType.bind(this, type));
+				return;
+			}
 
-	getMimeTypes: function (type) {
-		var option = this.OPTIONS[type];
+			var option = this.el.down(
+					'.search-option[data-type="' + type + '"]'
+				),
+				active = this.el.down('.search-option.active');
 
-		return option && option.accepts;
-	},
+			if (active) {
+				active.removeCls('active');
+			}
 
-
-	selectType: function (type) {
-		if (!this.rendered) {
-			this.on('after', this.selectType.bind(this, type));
-			return;
-		}
-
-		var option = this.el.down('.search-option[data-type="' + type + '"]'),
-			active = this.el.down('.search-option.active');
-
-		if (active) {
-			active.removeCls('active');
-		}
-
-		if (option) {
-			option.addCls('active');
-		}
+			if (option) {
+				option.addCls('active');
+			}
+		},
 	}
-});
+);

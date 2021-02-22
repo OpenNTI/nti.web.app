@@ -6,13 +6,13 @@ import RecentSessions from '../RecentSessions';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfUsers) => {
+const getMockService = numberOfUsers => {
 	return {
 		Items: [
 			{
 				hasLink: () => true,
-				getLink: () => 'mockLink'
-			}
+				getLink: () => 'mockLink',
+			},
 		],
 		getWorkspace: () => {
 			return {};
@@ -20,9 +20,10 @@ const getMockService = (numberOfUsers) => {
 		get: () => {
 			let Items = [];
 
-			const startTime = (new Date().getTime() - 1000 * 60 * 60 * 3) / 1000;
+			const startTime =
+				(new Date().getTime() - 1000 * 60 * 60 * 3) / 1000;
 
-			for(let i = 0; i < numberOfUsers; i++) {
+			for (let i = 0; i < numberOfUsers; i++) {
 				const index = i + 1;
 				const timeAdd = i * 10;
 
@@ -31,19 +32,20 @@ const getMockService = (numberOfUsers) => {
 					getCreatedTime: () => new Date('10/30/2018'),
 					userAgent: i % 2 === 0 ? 'android' : 'chrome',
 					SessionStartTime: startTime + timeAdd,
-					SessionEndTime: i % 2 === 0 ? null : startTime + timeAdd + 60 * 5
+					SessionEndTime:
+						i % 2 === 0 ? null : startTime + timeAdd + 60 * 5,
 				});
 			}
 
 			return Promise.resolve({
 				Items,
-				Total: Items.length
+				Total: Items.length,
 			});
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfUsers) => {
+const onBefore = numberOfUsers => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfUsers));
 };
@@ -60,7 +62,7 @@ describe('Site admin dashboard widget recent sessions (5 sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions/>);
+		const cmp = renderer.create(<RecentSessions />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -77,7 +79,7 @@ describe('Site admin dashboard widget recent sessions (10 sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions/>);
+		const cmp = renderer.create(<RecentSessions />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -94,7 +96,7 @@ describe('Site admin dashboard widget recent sessions (no sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions/>);
+		const cmp = renderer.create(<RecentSessions />);
 
 		jest.runAllTimers();
 		await flushPromises();

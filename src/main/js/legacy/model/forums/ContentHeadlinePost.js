@@ -2,8 +2,10 @@ const Ext = require('@nti/extjs');
 
 require('./HeadlinePost');
 
-
-module.exports = exports = Ext.define('NextThought.model.forums.ContentHeadlinePost', {
-	extend: 'NextThought.model.forums.HeadlinePost',
-	mimeType: 'application/vnd.nextthought.forums.contentheadlinepost'
-});
+module.exports = exports = Ext.define(
+	'NextThought.model.forums.ContentHeadlinePost',
+	{
+		extend: 'NextThought.model.forums.HeadlinePost',
+		mimeType: 'application/vnd.nextthought.forums.contentheadlinepost',
+	}
+);

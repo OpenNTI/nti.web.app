@@ -1,7 +1,7 @@
 .community-override-paging-window {
 	justify-content: flex-start;
 	padding: 20px 0 0;
-	top: 70px;/* height of the header */
+	top: 70px; /* height of the header */
 
 	--prompt-paging-window-header-sticky-top: -20px;
 }

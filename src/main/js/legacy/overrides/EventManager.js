@@ -1,40 +1,44 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.overrides.EventManager',
+	function () {
+		var EM = Ext.EventManager,
+			normalizeEventExt = EM.normalizeEvent;
 
-module.exports = exports = Ext.define('NextThought.overrides.EventManager', function () {
+		function makeSafe(fn) {
+			return function () {
+				try {
+					return fn.apply(this, arguments);
+				} catch (e) {
+					console.warn(e.stack || e.message || e);
+					return null;
+				}
+			};
+		}
 
-	var EM = Ext.EventManager,
-		normalizeEventExt = EM.normalizeEvent;
+		Ext.apply(EM, {
+			xnormalizeEvent: function (eventName, fn) {
+				if (arguments.length > 2) {
+					console.error('i didnt account for this');
+				}
+				var nomEventName = eventName;
+				if (eventName === 'animationend') {
+					nomEventName = Ext.supports.CSS3TransitionEnd.replace(
+						/transitionend/,
+						eventName
+					);
+					console.debug('listinging on animationEnd', eventName);
+				}
 
-	function makeSafe (fn) {
-		return function () {
-			try {
-				return fn.apply(this, arguments);
-			} catch (e) {
-				console.warn(e.stack || e.message || e);
-				return null;
-			}
-		};
+				return normalizeEventExt.call(this, [nomEventName, fn]);
+			},
+
+			getEventCache: makeSafe(EM.getEventCache),
+			getEventListenerCache: makeSafe(EM.getEventListenerCache),
+			handleSingleEvent: makeSafe(EM.handleSingleEvent),
+		});
+
+		return {};
 	}
-
-	Ext.apply(EM, {
-		xnormalizeEvent: function (eventName, fn) {
-			if (arguments.length > 2) {
-				console.error('i didnt account for this');
-			}
-			var nomEventName = eventName;
-			if (eventName === 'animationend') {
-				nomEventName = Ext.supports.CSS3TransitionEnd.replace(/transitionend/, eventName);
-				console.debug('listinging on animationEnd', eventName);
-			}
-
-			return normalizeEventExt.call(this, [nomEventName, fn]);
-		},
-
-		getEventCache: makeSafe(EM.getEventCache),
-		getEventListenerCache: makeSafe(EM.getEventListenerCache),
-		handleSingleEvent: makeSafe(EM.handleSingleEvent)
-	});
-
-	return {};
-});
+);

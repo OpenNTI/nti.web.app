@@ -1,32 +1,32 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
-const {getString} = require('legacy/util/Localization');
+const { getString } = require('legacy/util/Localization');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const PageSource = require('legacy/util/PageSource');
 const RealPageSource = require('legacy/util/RealPageSource');
 const TopicNode = require('legacy/model/TopicNode');
 const PathActions = require('legacy/app/navigation/path/Actions');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/util/Parsing');
 require('legacy/app/navigation/path/Actions');
 
-
 const EMPTY_CONTENT_PACKAGE = {
-	'title': 'Untitled Reading',
-	'Class': 'RenderableContentPackage',
-	'MimeType': 'application/vnd.nextthought.renderablecontentpackage',
-	'content': ''
+	title: 'Untitled Reading',
+	Class: 'RenderableContentPackage',
+	MimeType: 'application/vnd.nextthought.renderablecontentpackage',
+	content: '',
 };
 
 module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	levelLabels: {
-		'NaN': '&sect;',
-		'0': getString('NextThought.view.content.Navigation.select-chapter'),
-		'1': getString('NextThought.view.content.Navigation.select-section')
+		NaN: '&sect;',
+		0: getString('NextThought.view.content.Navigation.select-chapter'),
+		1: getString('NextThought.view.content.Navigation.select-section'),
 	},
 
 	MAX_PATH_LENGTH: 2,
@@ -38,20 +38,39 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	getContentPath: function (ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
 
-		return ContentUtils.getPageID(ntiid, bundle)
-			.then(function (page) {
-				if (!page) {
-					return me.__getContentPathFromLineage(ntiid, bundle, parent, rootPageId, rootRoute);
-				}
+		return ContentUtils.getPageID(ntiid, bundle).then(function (page) {
+			if (!page) {
+				return me.__getContentPathFromLineage(
+					ntiid,
+					bundle,
+					parent,
+					rootPageId,
+					rootRoute
+				);
+			}
 
-				return me.__getContentPathFromTOC(page, ntiid, bundle, parent, rootPageId, rootRoute);
-			});
+			return me.__getContentPathFromTOC(
+				page,
+				ntiid,
+				bundle,
+				parent,
+				rootPageId,
+				rootRoute
+			);
+		});
 	},
 
-	__getContentPathFromLineage: function (ntiid, bundle, parent, rootPageId, rootRoute) {
+	__getContentPathFromLineage: function (
+		ntiid,
+		bundle,
+		parent,
+		rootPageId,
+		rootRoute
+	) {
 		const pathActions = PathActions.create();
 
-		return pathActions.getBreadCrumb(ntiid, bundle)
+		return pathActions
+			.getBreadCrumb(ntiid, bundle)
 			.then(function (path) {
 				return path.map(function (part) {
 					var route = part.ntiid ? encodeForURI(part.ntiid) : '';
@@ -63,20 +82,32 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			})
 			.then(function (path) {
 				if (bundle && bundle.getContentBreadCrumb) {
-					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
+					return bundle.getContentBreadCrumb(
+						path,
+						ntiid,
+						rootPageId,
+						parent
+					);
 				}
 
 				return path;
 			});
 	},
 
-	__getContentPathFromTOC: function (page, ntiid, bundle, parent, rootPageId, rootRoute) {
+	__getContentPathFromTOC: function (
+		page,
+		ntiid,
+		bundle,
+		parent,
+		rootPageId,
+		rootRoute
+	) {
 		var me = this;
 
 		return Promise.all([
 			ContentUtils.getLocation(page, bundle),
 			ContentUtils.getLineage(page, bundle),
-			ContentUtils.getRootForLocation(ntiid, bundle)
+			ContentUtils.getRootForLocation(ntiid, bundle),
 		])
 			.then(function (results) {
 				var location = results[0] && results[0][0],
@@ -105,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				if (rootIdx >= 0) {
 					leftOvers = lineage.slice(rootIdx);
 					// let leftOverLabels = labels.slice(rootIdx);
-					rootIdx += 1;//slice is not inclusive, so push the index one up so that our slice gets the new root.
+					rootIdx += 1; //slice is not inclusive, so push the index one up so that our slice gets the new root.
 					lineage = lineage.slice(0, rootIdx);
 					// labels = labels.slice(0, rootIdx);
 					//From this point on the logic should be unchanged... lineage manipulation is complete.
@@ -119,14 +150,36 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				}
 
 				if (location.location && location.location.tagName === 'toc') {
-					return me.buildContentRootPath(parentNode, location, ntiid, allowMenus, bundle, rootPageId, rootRoute);
+					return me.buildContentRootPath(
+						parentNode,
+						location,
+						ntiid,
+						allowMenus,
+						bundle,
+						rootPageId,
+						rootRoute
+					);
 				}
 
-				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute || '');
+				return me.buildContentPath(
+					parentNode,
+					location.location,
+					lineage,
+					leftOvers,
+					allowMenus,
+					bundle,
+					rootPageId,
+					rootRoute || ''
+				);
 			})
 			.then(function (path) {
 				if (bundle.getContentBreadCrumb) {
-					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
+					return bundle.getContentBreadCrumb(
+						path,
+						ntiid,
+						rootPageId,
+						parent
+					);
 				}
 
 				return path;
@@ -134,9 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	},
 
 	__getLevelLabel: function (level, levelName, useTocLevelName) {
-		var label = useTocLevelName ? 'Select ' + levelName : this.levelLabels[level], i;
+		var label = useTocLevelName
+				? 'Select ' + levelName
+				: this.levelLabels[level],
+			i;
 
-		if (label) { return label; }
+		if (label) {
+			return label;
+		}
 
 		label = ' Section';
 
@@ -158,44 +216,121 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return topic.getAttribute('ntiid');
 	},
 
-	buildContentPath: function (parentNode, topic, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute) {
+	buildContentPath: function (
+		parentNode,
+		topic,
+		lineage,
+		leftOvers,
+		allowMenus,
+		bundle,
+		rootPageId,
+		rootRoute
+	) {
 		var path = [],
-			i = 0, pathLength = 0,
+			i = 0,
+			pathLength = 0,
 			presentation = this.__getPresentationProps(parentNode, bundle),
-			MaxLevel = presentation && presentation.maxLevel || this.MAX_PATH_LENGTH,
-			levelName, levelLabel;
+			MaxLevel =
+				(presentation && presentation.maxLevel) || this.MAX_PATH_LENGTH,
+			levelName,
+			levelLabel;
 
-
-		if ((lineage.length + leftOvers.length) <= 1) {
+		if (lineage.length + leftOvers.length <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
-				levelLabel = this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName);
-				path.push(this.buildContentPathPart(levelLabel, this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+				levelName = ContentUtils.getFirstTopic(topic).getAttribute(
+					'level'
+				);
+				levelLabel = this.__getLevelLabel(
+					lineage.length,
+					levelName,
+					presentation.useTocLevelName
+				);
+				path.push(
+					this.buildContentPathPart(
+						levelLabel,
+						this.__getFirstTopic(topic),
+						parentNode,
+						true,
+						bundle,
+						rootPageId,
+						rootRoute
+					)
+				);
 			} else {
-				path.push(this.buildContentPathPart(this.__getLevelLabel(NaN), topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
+				path.push(
+					this.buildContentPathPart(
+						this.__getLevelLabel(NaN),
+						topic.getAttribute('ntiid'),
+						null,
+						false,
+						bundle,
+						rootPageId,
+						rootRoute
+					)
+				);
 			}
 		} else if (!bundle.isCourse && ContentUtils.hasChildren(topic)) {
 			levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
-			levelLabel = this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName);
-			path.push(this.buildContentPathPart(levelLabel, this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+			levelLabel = this.__getLevelLabel(
+				lineage.length,
+				levelName,
+				presentation.useTocLevelName
+			);
+			path.push(
+				this.buildContentPathPart(
+					levelLabel,
+					this.__getFirstTopic(topic),
+					parentNode,
+					true,
+					bundle,
+					rootPageId,
+					rootRoute
+				)
+			);
 		}
 
 		for (i; i < MaxLevel && i < lineage.length; i++) {
-			path.push(this.buildContentPathPart(null, lineage[i], parentNode, allowMenus, bundle, rootPageId, rootRoute));
+			path.push(
+				this.buildContentPathPart(
+					null,
+					lineage[i],
+					parentNode,
+					allowMenus,
+					bundle,
+					rootPageId,
+					rootRoute
+				)
+			);
 			pathLength++;
 		}
 
 		for (i = 0; pathLength < MaxLevel && i < leftOvers.length; i++) {
-			path.push(this.buildContentPathPart(null, leftOvers[i], parentNode, false, bundle, rootPageId, rootRoute));
+			path.push(
+				this.buildContentPathPart(
+					null,
+					leftOvers[i],
+					parentNode,
+					false,
+					bundle,
+					rootPageId,
+					rootRoute
+				)
+			);
 			pathLength++;
 		}
 
-		return Promise.all(path)
-			.then(p => p.reverse());
+		return Promise.all(path).then(p => p.reverse());
 	},
 
-
-	buildContentRootPath (parentNode, location, ntiid, allowMenus, bundle, rootPageId, rootRoute) {
+	buildContentRootPath(
+		parentNode,
+		location,
+		ntiid,
+		allowMenus,
+		bundle,
+		rootPageId,
+		rootRoute
+	) {
 		const part = {};
 
 		part.label = location.label || location.title;
@@ -204,18 +339,22 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		part.route = rootRoute;
 
 		if (allowMenus) {
-			return this.buildContentPathPartMenu(location, parentNode, bundle, rootRoute)
-				.then((siblings) => {
-					part.siblings = siblings;
+			return this.buildContentPathPartMenu(
+				location,
+				parentNode,
+				bundle,
+				rootRoute
+			).then(siblings => {
+				part.siblings = siblings;
 
-					if (!siblings.length) {
-						part.cls = 'locked';
-					} else {
-						part.cls = '';
-					}
+				if (!siblings.length) {
+					part.cls = 'locked';
+				} else {
+					part.cls = '';
+				}
 
-					return [part];
-				});
+				return [part];
+			});
 		} else {
 			part.cls = 'locked';
 		}
@@ -223,64 +362,81 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return [part];
 	},
 
-
-	buildContentPathPart: function (label, ntiid, parentNode, allowMenus, bundle, rootPageId, rootRoute) {
+	buildContentPathPart: function (
+		label,
+		ntiid,
+		parentNode,
+		allowMenus,
+		bundle,
+		rootPageId,
+		rootRoute
+	) {
 		if (!ntiid) {
 			return Promise.resolve({
 				label: label,
-				cls: 'no-children locked'
+				cls: 'no-children locked',
 			});
 		}
 
 		var me = this;
 
-		return ContentUtils.getLocation(ntiid, bundle)
-			.then(function (locations) {
-				var l = locations[0], route,
-					part = {};
+		return ContentUtils.getLocation(ntiid, bundle).then(function (
+			locations
+		) {
+			var l = locations[0],
+				route,
+				part = {};
 
-				part.label = (bundle.isCourse) ? l.label || label : label || l.label;
-				part.ntiid = l.NTIID;
+			part.label = bundle.isCourse ? l.label || label : label || l.label;
+			part.ntiid = l.NTIID;
 
-				if (rootPageId && rootPageId !== l.NTIID) {
-					route = encodeForURI(l.NTIID);
-				} else {
-					route = '';
-				}
+			if (rootPageId && rootPageId !== l.NTIID) {
+				route = encodeForURI(l.NTIID);
+			} else {
+				route = '';
+			}
 
-				part.route = Globals.trimRoute(rootRoute) + '/' + route;
+			part.route = Globals.trimRoute(rootRoute) + '/' + route;
 
-				if (allowMenus) {
-					return me.buildContentPathPartMenu(l, parentNode, bundle, rootRoute)
-						.then(function (siblings) {
-							part.siblings = siblings;
+			if (allowMenus) {
+				return me
+					.buildContentPathPartMenu(l, parentNode, bundle, rootRoute)
+					.then(function (siblings) {
+						part.siblings = siblings;
 
-							if (!siblings.length) {
-								part.cls = 'locked';
-							} else {
-								part.cls = '';
-							}
+						if (!siblings.length) {
+							part.cls = 'locked';
+						} else {
+							part.cls = '';
+						}
 
-							return part;
-						});
-				} else {
-					part.cls = 'locked';
-				}
+						return part;
+					});
+			} else {
+				part.cls = 'locked';
+			}
 
-				return part;
-			});
+			return part;
+		});
 	},
 
 	__getPresentationProps: function (ntiid, bundle) {
-		var presentationProps = bundle && bundle.getPresentationProperties && bundle.getPresentationProperties(ntiid),
-			numberProps = presentationProps && presentationProps.numbering || {},
+		var presentationProps =
+				bundle &&
+				bundle.getPresentationProperties &&
+				bundle.getPresentationProperties(ntiid),
+			numberProps =
+				(presentationProps && presentationProps.numbering) || {},
 			tocProps = presentationProps && presentationProps.toc,
-			num = 1, type = '1', sep = '.', suppress = false,
+			num = 1,
+			type = '1',
+			sep = '.',
+			suppress = false,
 			o = {
 				start: numberProps.start || num,
 				type: numberProps.type || type,
 				seperator: numberProps.separator || sep,
-				suppressed: numberProps.suppressed || suppress
+				suppressed: numberProps.suppressed || suppress,
 			};
 
 		if (tocProps) {
@@ -294,14 +450,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	styleList: function (num, style) {
 		var me = this,
 			formatters = {
-				'a': me.toBase26SansNumbers,
-				'A': function (n) {
+				a: me.toBase26SansNumbers,
+				A: function (n) {
 					return me.toBase26SansNumbers(n).toUpperCase();
 				},
-				'i': function (n) {
+				i: function (n) {
 					return me.toRomanNumeral(n).toLowerCase();
 				},
-				'I': me.toRomanNumeral
+				I: me.toRomanNumeral,
 			};
 
 		if (formatters[style]) {
@@ -313,16 +469,49 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
 	toRomanNumeral: function (num) {
-		var digits, key, roman, i, m = [];
+		var digits,
+			key,
+			roman,
+			i,
+			m = [];
 
 		digits = String(+num).split('');
-		key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
-			'', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
-			'', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+		key = [
+			'',
+			'C',
+			'CC',
+			'CCC',
+			'CD',
+			'D',
+			'DC',
+			'DCC',
+			'DCCC',
+			'CM',
+			'',
+			'X',
+			'XX',
+			'XXX',
+			'XL',
+			'L',
+			'LX',
+			'LXX',
+			'LXXX',
+			'XC',
+			'',
+			'I',
+			'II',
+			'III',
+			'IV',
+			'V',
+			'VI',
+			'VII',
+			'VIII',
+			'IX',
+		];
 		roman = '';
 		i = 3;
 		while (i--) {
-			roman = (key[+digits.pop() + (i * 10)] || '') + roman;
+			roman = (key[+digits.pop() + i * 10] || '') + roman;
 		}
 
 		m.length = +digits.join('') + 1;
@@ -340,17 +529,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return letter;
 	},
 
-	buildContentPathPartMenu: function (location, parentNode, bundle, rootRoute) {
+	buildContentPathPartMenu: function (
+		location,
+		parentNode,
+		bundle,
+		rootRoute
+	) {
 		var me = this,
 			p = bundle && bundle.getOutline && bundle.getOutline(),
 			currentNode = location ? location.location : null;
 
 		p = p || Promise.resolve(null);
 
-
 		return Promise.all([
 			p,
-			ContentUtils.getSiblings(currentNode, bundle)
+			ContentUtils.getSiblings(currentNode, bundle),
 		]).then(function (results) {
 			var //outline = results[0],
 				siblings = results[1] || [],
@@ -361,7 +554,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			currentNode = currentNode.getAttribute('ntiid');
 
 			visible = siblings.map(function (sibling) {
-				if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
+				if (
+					!/topic/i.test(sibling.tagName) ||
+					sibling.getAttribute('suppressed') === 'true'
+				) {
 					return Promise.resolve(null);
 				}
 
@@ -376,22 +572,32 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 			return Promise.all(visible)
 				.then(r => r.filter(Boolean))
-				.then(visibleItems => visibleItems.map(node => {
-					const label = node.getAttribute('label');
-					const text = presentation.suppress
-						? (me.styleList(num, presentation.type) + presentation.separate + label)
-						: label;
+				.then(visibleItems =>
+					visibleItems.map(node => {
+						const label = node.getAttribute('label');
+						const text = presentation.suppress
+							? me.styleList(num, presentation.type) +
+							  presentation.separate +
+							  label
+							: label;
 
-					num += 1;
+						num += 1;
 
-					return {
-						label: text,
-						title: text,
-						route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
-						ntiid: node.getAttribute('ntiid'),
-						cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
-					};
-				}));
+						return {
+							label: text,
+							title: text,
+							route:
+								Globals.trimRoute(rootRoute) +
+								'/' +
+								encodeForURI(node.getAttribute('ntiid')),
+							ntiid: node.getAttribute('ntiid'),
+							cls:
+								node.getAttribute('ntiid') === currentNode
+									? 'current'
+									: '',
+						};
+					})
+				);
 		});
 	},
 
@@ -408,19 +614,22 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				return ContentUtils.getNavigationInfo(ntiid, rootId, bundle);
 			})
 			.then(function (navInfo) {
-				return navInfo.isRealPages ?
-					RealPageSource.create(navInfo) :
-					PageSource.create(navInfo);
+				return navInfo.isRealPages
+					? RealPageSource.create(navInfo)
+					: PageSource.create(navInfo);
 			});
 	},
 
 	getTocStore: function (bundle, root) {
-		return bundle.getTocs()
+		return bundle
+			.getTocs()
 			.then(function (tocs) {
 				var toc = tocs[0];
 
 				if (tocs.length > 1) {
-					console.warn('Do not know how to handle multiple tocs here yet... Just use the first one');
+					console.warn(
+						'Do not know how to handle multiple tocs here yet... Just use the first one'
+					);
 				}
 
 				return toc;
@@ -429,12 +638,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				var rec,
 					store = new Ext.data.Store({
 						model: TopicNode,
-						data: toc
+						data: toc,
 					});
 
-				store.remove(store.getRange().filter(function (_) {
-					return _.get('supressed');
-				}));
+				store.remove(
+					store.getRange().filter(function (_) {
+						return _.get('supressed');
+					})
+				);
 
 				if (root) {
 					rec = store.getById(root);
@@ -442,14 +653,15 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 					if (rec) {
 						rec.set('isRoot', true);
 					} else {
-						console.warn('Strange, we set a root, but did not find it.');
+						console.warn(
+							'Strange, we set a root, but did not find it.'
+						);
 					}
 				}
 
 				return store;
 			});
 	},
-
 
 	/**
 	 * Get a lib interfaces content package from a bundle
@@ -459,11 +671,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	 * @param  {string} contentPackageNTIID the id of the contentPackage
 	 * @returns {Promise}            fulfills with the content package
 	 */
-	async getContentPackage (bundleModel, root, contentPackageNTIID) {
+	async getContentPackage(bundleModel, root, contentPackageNTIID) {
 		const bundle = await bundleModel.getInterfaceInstance();
-		return bundle.getPackage(root) || bundle.getPackage(contentPackageNTIID);
+		return (
+			bundle.getPackage(root) || bundle.getPackage(contentPackageNTIID)
+		);
 	},
-
 
 	/**
 	 * Create a content package and return a promise with the created package
@@ -477,18 +690,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 		let req = null;
 
-		if(link) {
-			req = Service.post(link, defaultPackage || EMPTY_CONTENT_PACKAGE)
-				.then((contentPackage) => {
-					const pack = lazy.ParseUtils.parseItems(JSON.parse(contentPackage))[0];
+		if (link) {
+			req = Service.post(
+				link,
+				defaultPackage || EMPTY_CONTENT_PACKAGE
+			).then(contentPackage => {
+				const pack = lazy.ParseUtils.parseItems(
+					JSON.parse(contentPackage)
+				)[0];
 
-					return bundle.updateFromServer().then(() => pack);
-				});
-		}
-		else {
+				return bundle.updateFromServer().then(() => pack);
+			});
+		} else {
 			req = Promise.reject('No link');
 		}
 
 		return req;
-	}
+	},
 });

@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
 
-const {guidGenerator} = require('legacy/util/Globals');
+const { guidGenerator } = require('legacy/util/Globals');
 
 Object.assign(Promise.prototype, {
-	always (fn) {
+	always(fn) {
 		return this.then(fn, fn);
-	}
+	},
 });
-
 
 Object.assign(Promise, {
 	wait: t => new Promise(f => setTimeout(f, t || 1)),
@@ -20,7 +19,7 @@ Object.assign(Promise, {
 	 * @param  {number} minWait the min time to wait
 	 * @returns {Function} see description
 	 */
-	minWait (minWait) {
+	minWait(minWait) {
 		const start = new Date();
 
 		return result => {
@@ -28,15 +27,13 @@ Object.assign(Promise, {
 			const duration = end - start;
 
 			if (duration < minWait) {
-				return Promise.wait(minWait - duration)
-					.then(() => result);
+				return Promise.wait(minWait - duration).then(() => result);
 			}
 
 			return Promise.resolve(result);
 		};
-	}
+	},
 });
-
 
 /**
  * Deferred promise.
@@ -51,8 +48,7 @@ Object.assign(Promise, {
  * I strongly recommend examining your code and your structure before commiting to using this as a final solution.
  */
 global.Deferred = Promise.Deferred = (function () {
-
-	function apply (d, src) {
+	function apply(d, src) {
 		var k;
 		for (k in src) {
 			if (src.hasOwnProperty(k) && d[k] === undefined) {
@@ -62,16 +58,19 @@ global.Deferred = Promise.Deferred = (function () {
 		return d;
 	}
 
-	function Deferred () {
+	function Deferred() {
 		var o = false;
-		function wtf (f, r) {
+		function wtf(f, r) {
 			o = {
 				id: guidGenerator(),
-				fulfill: function (value) {f(value);},
-				reject: function (reason) {r(reason);}
+				fulfill: function (value) {
+					f(value);
+				},
+				reject: function (reason) {
+					r(reason);
+				},
 			};
 		}
-
 
 		var p = new Promise(wtf);
 		if (!o) {
@@ -82,10 +81,9 @@ global.Deferred = Promise.Deferred = (function () {
 	}
 
 	return Deferred;
-}());
+})();
 
-
-global.Deferred.reject = (reason) => ({
+global.Deferred.reject = reason => ({
 	then: (...args) => Promise.reject(reason).then(...args),
 	catch: (...args) => Promise.reject(reason).catch(...args),
 	finally: (...args) => Promise.reject(reason).finally(...args),
@@ -101,45 +99,44 @@ global.Deferred.reject = (reason) => ({
  * @param  {Array} values An Array of values or functions that return value or a Promise.
  * @returns {Promise}	  fulfills with the first successful value in the array or rejects if none are.
  */
-Promise.first = Promise.first || function (values) {
-	if (!Array.isArray(values) || !values.length) {
-		return Promise.reject('No promise');
-	}
+Promise.first =
+	Promise.first ||
+	function (values) {
+		if (!Array.isArray(values) || !values.length) {
+			return Promise.reject('No promise');
+		}
 
-	return new Promise(function (fulfill, reject) {
-		var total = values.length;
+		return new Promise(function (fulfill, reject) {
+			var total = values.length;
 
-		function add (index) {
-			if (index >= total) {
-				reject('No promise in chain was successful');
-				return;
-			}
+			function add(index) {
+				if (index >= total) {
+					reject('No promise in chain was successful');
+					return;
+				}
 
-			var val = values[index];
+				var val = values[index];
 
-			if (!Ext.isFunction(val)) {
-				fulfill(val);
-				return;
-			}
+				if (!Ext.isFunction(val)) {
+					fulfill(val);
+					return;
+				}
 
-			val = val.call();
+				val = val.call();
 
-			if (val instanceof Promise) {
-				val
-					.then(fulfill)
-					.catch(function (reason) {
+				if (val instanceof Promise) {
+					val.then(fulfill).catch(function (reason) {
 						console.error('Promise in chain failed: ', reason);
 						add(index + 1);
 					});
-			} else {
-				fulfill(val);
+				} else {
+					fulfill(val);
+				}
 			}
-		}
 
-		add(0);
-	});
-};
-
+			add(0);
+		});
+	};
 
 module.exports = exports = Promise;
 Ext.define('NextThought.util.Promise', {});

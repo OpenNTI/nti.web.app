@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('legacy/common/StateStore');
 
-
 module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
@@ -11,9 +10,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 
 		register: function (type, cmp) {
 			this.TYPE_TO_CMP[type] = cmp;
-		}
+		},
 	},
-
 
 	getPromptCmp: function (type) {
 		//TODO: Create a basic prompt cmp to fall back to, similar to the native prompt
@@ -21,7 +19,6 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 
 		return cmp;
 	},
-
 
 	openPrompt: function (type, data) {
 		var me = this,
@@ -34,5 +31,5 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 		return new Promise(function (fulfill, reject) {
 			me.fireEvent('open-prompt', cmp, type, fulfill, reject, data);
 		});
-	}
+	},
 });

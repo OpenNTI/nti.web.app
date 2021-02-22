@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/mixins/GroupLike');
 require('legacy/mixins/Avatar');
 require('./Base');
-
 
 /**
  * See UserRepository#getUser() on how these are resolved.
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 
 	mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
-		Avatar: 'NextThought.mixins.Avatar'
+		Avatar: 'NextThought.mixins.Avatar',
 	},
 
 	isCommunity: true,
@@ -30,22 +30,25 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'backgroundURL', type: 'string'},
-		{ name: 'about', type: 'string'},
-		{ name: 'displayName', convert: function (v, r) {return r.getName();}},
+		{ name: 'backgroundURL', type: 'string' },
+		{ name: 'about', type: 'string' },
+		{
+			name: 'displayName',
+			convert: function (v, r) {
+				return r.getName();
+			},
+		},
 
 		//UI fields
-		{ name: 'avatarInitials', type: 'string', persist: false},
-		{ name: 'avatarBGColor', type: 'string', persist: false}
+		{ name: 'avatarInitials', type: 'string', persist: false },
+		{ name: 'avatarBGColor', type: 'string', persist: false },
 	],
-
 
 	constructor: function () {
 		this.callParent(arguments);
 
 		this.initAvatar();
 	},
-
 
 	getName: function () {
 		return this.get('alias') || this.get('realname');
@@ -68,29 +71,23 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 		return !!this.getLink('Activity');
 	},
 
-
 	isDefaultForum: function (forum) {
 		return forum && forum.get('title') === 'Forum';
 	},
 
-
 	getDefaultForum: function () {
-		return this.getForumList()
-			.then(function (forums) {
-				forums = forums.filter((forum) => forum.get('IsDefaultForum'));
+		return this.getForumList().then(function (forums) {
+			forums = forums.filter(forum => forum.get('IsDefaultForum'));
 
-				return forums[0];
-			});
+			return forums[0];
+		});
 	},
-
 
 	getForums: function () {
-		return this.getForumList()
-			.then(function (forums) {
-				return forums.filter((forum) => !forum.get('IsDefaultForum'));
-			});
+		return this.getForumList().then(function (forums) {
+			return forums.filter(forum => !forum.get('IsDefaultForum'));
+		});
 	},
-
 
 	getForumList: function (force) {
 		if (this.loadForumList && !force) {
@@ -110,7 +107,9 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 			.then(function (board) {
 				var content = board && board.getLink('contents');
 
-				return content ? Service.request(content) : Promise.reject('No contents link');
+				return content
+					? Service.request(content)
+					: Promise.reject('No contents link');
 			})
 			.then(function (response) {
 				var json = JSON.parse(response);
@@ -118,11 +117,14 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 				return lazy.ParseUtils.parseItems(json.Items);
 			})
 			.catch(function (reason) {
-				console.error('Failed to load forum list for community:', reason);
+				console.error(
+					'Failed to load forum list for community:',
+					reason
+				);
 
 				return [];
 			});
 
 		return this.loadForumList;
-	}
+	},
 });

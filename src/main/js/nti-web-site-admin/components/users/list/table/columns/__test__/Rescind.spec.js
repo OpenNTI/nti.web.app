@@ -6,13 +6,16 @@ import Rescind from '../Rescind';
 
 describe('Site admin user table join date column test', () => {
 	test('Test none selected', () => {
-		const colCmp = renderer.create(<Rescind
-			getSelectedCount={()=>{
-				return 0;
-			}}
-			item={{
-				receiver: 'invited1'
-			}}/>);
+		const colCmp = renderer.create(
+			<Rescind
+				getSelectedCount={() => {
+					return 0;
+				}}
+				item={{
+					receiver: 'invited1',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 
@@ -21,13 +24,16 @@ describe('Site admin user table join date column test', () => {
 	});
 
 	test('Test some selected', () => {
-		const colCmp = renderer.create(<Rescind
-			getSelectedCount={()=>{
-				return 5;
-			}}
-			item={{
-				receiver: 'invited1'
-			}}/>);
+		const colCmp = renderer.create(
+			<Rescind
+				getSelectedCount={() => {
+					return 5;
+				}}
+				item={{
+					receiver: 'invited1',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

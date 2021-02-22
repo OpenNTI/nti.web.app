@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme} from '@nti/web-commons';
+import { Theme } from '@nti/web-commons';
 
-import {ASSETS} from '../../constants';
-import {Title, Description} from '../../ParameterText';
+import { ASSETS } from '../../constants';
+import { Title, Description } from '../../ParameterText';
 
 import styles from './AssetItem.css';
 import ImageInput from './ImageInput';
@@ -12,31 +12,32 @@ import ImageInput from './ImageInput';
 const cx = classnames.bind(styles);
 
 const NameToTheme = {
-	'full_logo': 'fullLogo'
+	full_logo: 'fullLogo',
 };
 
-export default function AssetItem ({onChange, getText, name, onThumbClick}) {
-	const asset = Theme.useThemeProperty(`${ASSETS}.${NameToTheme[name] || name}`);
+export default function AssetItem({ onChange, getText, name, onThumbClick }) {
+	const asset = Theme.useThemeProperty(
+		`${ASSETS}.${NameToTheme[name] || name}`
+	);
 
 	const change = e => {
-		const {target: {files = []} = {}} = e;
+		const { target: { files = [] } = {} } = e;
 		if (files[0]) {
 			const file = files[0];
 			const reader = new FileReader();
 
 			reader.onload = () => {
-				const {result: source} = reader;
+				const { result: source } = reader;
 
 				onChange({
 					filename: file.name,
 					source,
-					file
+					file,
 				});
 			};
 			reader.readAsDataURL(file);
 		}
 	};
-
 
 	return (
 		<div className={cx('asset-item')}>
@@ -44,9 +45,13 @@ export default function AssetItem ({onChange, getText, name, onThumbClick}) {
 				<Title>{getText('title')}</Title>
 				<Description>{getText('description')}</Description>
 				<div className={cx('file-info')}>
-					{asset.filename && <span className={cx('filename')}>{asset.filename}</span>}
+					{asset.filename && (
+						<span className={cx('filename')}>{asset.filename}</span>
+					)}
 					<div>
-						<ImageInput name={name} onChange={change}>Change</ImageInput>
+						<ImageInput name={name} onChange={change}>
+							Change
+						</ImageInput>
 					</div>
 				</div>
 			</div>
@@ -62,5 +67,5 @@ AssetItem.propTypes = {
 	getText: PropTypes.func,
 	name: PropTypes.string,
 	edit: PropTypes.object,
-	onThumbClick: PropTypes.func
+	onThumbClick: PropTypes.func,
 };

@@ -1,24 +1,25 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.contentviewer.notepad.Container',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.notepad-item-container',
 
-module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Container', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.notepad-item-container',
+		layout: 'auto',
+		ui: 'notepad-item',
+		cls: 'note-container',
 
-	layout: 'auto',
-	ui: 'notepad-item',
-	cls: 'note-container',
+		isNotepadItemContainer: true,
 
-	isNotepadItemContainer: true,
+		listeners: {
+			remove: 'maybeCleanup',
+		},
 
-	listeners: {
-		remove: 'maybeCleanup'
-	},
-
-
-	maybeCleanup: function () {
-		if (!this.items.getCount()) {
-			this.destroy();
-		}
+		maybeCleanup: function () {
+			if (!this.items.getCount()) {
+				this.destroy();
+			}
+		},
 	}
-});
+);

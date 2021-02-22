@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Layouts} from '@nti/web-commons';
+import { Layouts } from '@nti/web-commons';
 
 import WhiteboardWindow from 'legacy/app/whiteboard/Window';
 
@@ -10,7 +10,7 @@ WebappWhiteboardEditor.propTypes = {
 
 	onClose: PropTypes.func,
 };
-export default function WebappWhiteboardEditor ({data, setData, onClose}) {
+export default function WebappWhiteboardEditor({ data, setData, onClose }) {
 	const windowRef = React.useRef(null);
 
 	const onUnmount = () => {
@@ -19,25 +19,25 @@ export default function WebappWhiteboardEditor ({data, setData, onClose}) {
 	};
 
 	const onMount = () => {
-		if (windowRef.current) { return; }
+		if (windowRef.current) {
+			return;
+		}
 
 		const wbWin = WhiteboardWindow.create({
 			width: 802,
 			value: data,
 			closeAction: 'hide',
-			cancelOnce: false
+			cancelOnce: false,
 		});
 
 		wbWin.on({
 			save: (win, wb) => setData?.(wb.getValue()),
-			cancel: () => onClose?.()
+			cancel: () => onClose?.(),
 		});
 
 		wbWin.show();
 		windowRef.current = wbWin;
 	};
 
-	return (
-		<Layouts.Uncontrolled onMount={onMount} onUnmount={onUnmount} />		
-	);
+	return <Layouts.Uncontrolled onMount={onMount} onUnmount={onUnmount} />;
 }

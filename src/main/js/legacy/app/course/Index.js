@@ -54,7 +54,6 @@ const INFO = 'course-info';
 const RESOURCES = 'course-resources';
 const SCORM = 'course-scorm-content';
 
-
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	extend: 'NextThought.app.content.Index',
 	alias: 'widget.course-view-container',
@@ -62,55 +61,54 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
+		State: 'NextThought.mixins.State',
 	},
 
 	// cls: 'x-component-course',
 
-
 	items: [
 		{
 			xtype: COMMUNITY,
-			id: COMMUNITY
+			id: COMMUNITY,
 		},
 		{
 			xtype: DASHBOARD,
-			id: DASHBOARD
+			id: DASHBOARD,
 		},
 		{
 			xtype: OVERVIEW,
-			id: OVERVIEW
+			id: OVERVIEW,
 		},
 		{
 			xtype: SCORM,
-			id: SCORM
+			id: SCORM,
 		},
 		{
 			xtype: ASSESSMENT,
-			id: ASSESSMENT
+			id: ASSESSMENT,
 		},
 		{
 			xtype: FORUM,
-			id: 'course-forum'
+			id: 'course-forum',
 		},
 		{
 			xtype: REPORTS,
-			id: REPORTS
+			id: REPORTS,
 		},
 		{
 			xtype: INFO,
-			id: INFO
+			id: INFO,
 		},
 		{
 			xtype: RESOURCES,
-			id: RESOURCES
+			id: RESOURCES,
 		},
 		{
 			xtype: 'bundle-content',
 			courseLevel: true,
 			id: 'course-content',
-			hideHeader: true
-		}
+			hideHeader: true,
+		},
 	],
 
 	initComponent: function () {
@@ -123,7 +121,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.ContentActions = ContentviewerActions.create();
 
 		//Get a "handled" rejected promise.
-		this.getActiveCourse = ((x) => (x = Promise.reject(), x.catch(()=>{}), x)());
+		this.getActiveCourse = x =>
+			((x = Promise.reject()), x.catch(() => {}), x)();
 
 		this.addRoute('/community', this.showCommunity.bind(this));
 		this.addRoute('/activity', this.showDashboard.bind(this));
@@ -140,10 +139,18 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		this.addRoute('/admin', this.setCourseAdminActive.bind(this));
 
-
-		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
-		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
-		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
+		this.addObjectHandler(
+			Assignment.mimeType,
+			this.getAssignmentRoute.bind(this)
+		);
+		this.addObjectHandler(
+			DiscussionAssignment.mimeType,
+			this.getAssignmentRoute.bind(this)
+		);
+		this.addObjectHandler(
+			'application/vnd.nextthought.courses.courseoutlinecontentnode',
+			this.getLessonRoute.bind(this)
+		);
 
 		// this.addObjectHandler([
 		// 	Topic.mimeType,
@@ -158,17 +165,20 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		// if a course is modified, we should force a reload of the active bundle
 		// so that things like the updated course ID/name are reflected
 		this.mon(this.CourseStore, {
-			'modified-course': (updatedEntry) => {
+			'modified-course': updatedEntry => {
 				const catalogEntry = this.activeBundle.getCourseCatalogEntry();
 				// only mark dirty if the active course is the one that was just modified
-				if(updatedEntry && updatedEntry.CourseNTIID === this.activeBundle.getId()) {
+				if (
+					updatedEntry &&
+					updatedEntry.CourseNTIID === this.activeBundle.getId()
+				) {
 					this.isCourseDirty = true;
 
 					catalogEntry.syncWithInterface(updatedEntry);
 					catalogEntry.clearAssetCache();
 					this.updateActiveContent();
 				}
-			}
+			},
 		});
 	},
 
@@ -184,23 +194,30 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.CourseViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-	gotoResources () {
+	gotoResources() {
 		this.pushRoute('Resources', '/resources');
 	},
 
-
-	gotoResource (reading) {
-		reading.NTIID ? this.pushRoute('', `/content/${encodeForURI(reading.NTIID)}/edit`) : this.pushRoute('', `/content/${encodeForURI(reading.get('NTIID'))}/edit`);
+	gotoResource(reading) {
+		reading.NTIID
+			? this.pushRoute('', `/content/${encodeForURI(reading.NTIID)}/edit`)
+			: this.pushRoute(
+					'',
+					`/content/${encodeForURI(reading.get('NTIID'))}/edit`
+			  );
 
 		this.setTitle(reading.DCTitle);
 	},
-
 
 	setActiveCourse: function (ntiid, course) {
 		var me = this;
 
 		//if we are setting my current course no need to do anything
-		if (!me.isCourseDirty && me.activeBundle && (me.activeBundle.getId() || '') === ntiid) {
+		if (
+			!me.isCourseDirty &&
+			me.activeBundle &&
+			(me.activeBundle.getId() || '') === ntiid
+		) {
 			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
 			me.clearRouteStates();
@@ -215,21 +232,30 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 							if (item.isCourse) {
 								return item;
 							}
-							return item.getCourseInstance ? item.getCourseInstance() : Promise.reject('getCourseInstance is not found.');
+							return item.getCourseInstance
+								? item.getCourseInstance()
+								: Promise.reject(
+										'getCourseInstance is not found.'
+								  );
 						})
 						.then(courseInstance => {
 							//If we got a different route than the course instance, replace the route
 							if (courseInstance.getId() !== ntiid) {
-								me.replaceRootRoute(courseInstance.getTitle() || '', `/course/${encodeForURI(courseInstance.getId())}`);
+								me.replaceRootRoute(
+									courseInstance.getTitle() || '',
+									`/course/${encodeForURI(
+										courseInstance.getId()
+									)}`
+								);
 							}
 
 							return courseInstance;
 						})
 						.then(c => c.prepareData())
 						.then(fulfill)
-						.catch((resp) => {
+						.catch(resp => {
 							if (resp) {
-								const [,error] = resp;
+								const [, error] = resp;
 
 								if (error.status === 0) {
 									return reject(error);
@@ -239,84 +265,88 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 							fulfill(null);
 						});
 				}
-			}).then((current) => {
+			}).then(current => {
 				if (!current) {
 					return Promise.reject('No Course found for: ', ntiid);
 				}
 
 				this.activeBundle = current;
 
-				return current.getWrapper()
-					.then((enrollment) => {
-						this.CourseStore.addCourse(enrollment);
+				return current.getWrapper().then(enrollment => {
+					this.CourseStore.addCourse(enrollment);
 
-						if(enrollment.isAdministrative) {
-							this.isAdmin = true;
-						} else {
-							this.isAdmin = false;
-						}
+					if (enrollment.isAdministrative) {
+						this.isAdmin = true;
+					} else {
+						this.isAdmin = false;
+					}
 
-						return current;
-					});
-
+					return current;
+				});
 			});
 		}
 
 		return me.getActiveCourse;
 	},
 
-
 	applyState: function (state) {
-		if (!this.activeBundle) { return; }
+		if (!this.activeBundle) {
+			return;
+		}
 
+		this.activeBundle.getInterfaceInstance().then(course => {
+			const shadowRoots = {
+				lessons: this.getRoot('course-overview'),
+			};
 
-		this.activeBundle.getInterfaceInstance()
-			.then((course) => {
-				const shadowRoots = {
-					'lessons': this.getRoot('course-overview')
-				};
+			shadowRoots.lessons =
+				shadowRoots.lessons && shadowRoots.lessons !== '/'
+					? `/app/course/${encodeForURI(course.getID())}/lessons${
+							shadowRoots.lessons
+					  }/`
+					: '';
 
-				shadowRoots.lessons = shadowRoots.lessons && shadowRoots.lessons !== '/' ? `/app/course/${encodeForURI(course.getID())}/lessons${shadowRoots.lessons}/` : '';
+			if (this.navigationCmp && this.navigationCmp.course === course) {
+				this.navigationCmp.setProps({ shadowRoots });
 
-				if (this.navigationCmp && this.navigationCmp.course === course) {
-					this.navigationCmp.setProps({shadowRoots});
+				return;
+			}
 
-					return;
-				}
-
-				this.renderNavigationCmp(CourseNavigation, {
-					course,
-					baseroute: this.getBaseRoute(),
-					shadowRoots,
-					exclude: ['videos'],
-					getRouteFor: (obj, context) => {
-						if (obj !== course) { return; }
-
-						const base = `/app/course/${encodeForURI(course.getID())}/`;
-						let part = '';
-
-						if (context === 'activity') {
-							part = 'activity';
-						} else if (context === 'community') {
-							part = 'community';
-						} else if (context === 'lessons') {
-							part = 'lessons';
-						} else if (context === 'assignments') {
-							part = 'assignments';
-						} else if (context === 'discussions') {
-							part = 'discussions';
-						} else if (context === 'info') {
-							part = 'info';
-						} else if (context === 'scorm') {
-							part = 'scormcontent';
-						} else if (context === 'content') {
-							part = 'content';
-						}
-
-						return `${base}${part}/`;
+			this.renderNavigationCmp(CourseNavigation, {
+				course,
+				baseroute: this.getBaseRoute(),
+				shadowRoots,
+				exclude: ['videos'],
+				getRouteFor: (obj, context) => {
+					if (obj !== course) {
+						return;
 					}
-				});
+
+					const base = `/app/course/${encodeForURI(course.getID())}/`;
+					let part = '';
+
+					if (context === 'activity') {
+						part = 'activity';
+					} else if (context === 'community') {
+						part = 'community';
+					} else if (context === 'lessons') {
+						part = 'lessons';
+					} else if (context === 'assignments') {
+						part = 'assignments';
+					} else if (context === 'discussions') {
+						part = 'discussions';
+					} else if (context === 'info') {
+						part = 'info';
+					} else if (context === 'scorm') {
+						part = 'scormcontent';
+					} else if (context === 'content') {
+						part = 'content';
+					}
+
+					return `${base}${part}/`;
+				},
 			});
+		});
 
 		this.navigation.useCommonTabs();
 	},
@@ -339,8 +369,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				AssessmentIndex,
 				ForumIndex,
 				ReportsIndex,
-				InfoIndex
-			], activeCmp;
+				InfoIndex,
+			],
+			activeCmp;
 
 		tabs = tabs.reduce(function (acc, cmp) {
 			acc[cmp.xtype] = cmp;
@@ -360,7 +391,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			active = inactive.shift();
 		}
 
-		return this.callParent([active, inactive, tab, navBarConfig, whiteMask]);
+		return this.callParent([
+			active,
+			inactive,
+			tab,
+			navBarConfig,
+			whiteMask,
+		]);
 	},
 
 	setCourseAdminActive: function (route, subRoute) {
@@ -381,22 +418,20 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		}
 	},
 
-
-	showCommunity (route, subRoute) {
+	showCommunity(route, subRoute) {
 		return this.setActiveView(COMMUNITY, [
 			OVERVIEW,
 			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
-			INFO
-		]).then((item) => {
+			INFO,
+		]).then(item => {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute);
 			}
 		});
 	},
-
 
 	showDashboard: function (route, subRoute) {
 		this.setCmpRouteState(DASHBOARD, subRoute);
@@ -407,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
-			INFO
+			INFO,
 		]).then(function (item) {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute, route.precache);
@@ -425,18 +460,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
-			INFO
-		]).then((item) => {
+			INFO,
+		]).then(item => {
 			if (item && item.handleRoute) {
 				item.gotoResources = () => this.gotoResources();
 
-				return item.handleRoute(subRoute, route.precache)
-					.then();
+				return item.handleRoute(subRoute, route.precache).then();
 			}
 		});
 	},
 
-	showScormContent (route, subRoute) {
+	showScormContent(route, subRoute) {
 		this.setCmpRouteState(SCORM, subRoute);
 
 		return this.setActiveView(SCORM, [
@@ -444,13 +478,12 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
-			INFO
+			INFO,
 		]).then(item => {
-			if(item && item.handleRoute) {
+			if (item && item.handleRoute) {
 				item.gotoResources = () => this.gotoResources();
 
-				return item.handleRoute(subRoute, route.precache)
-					.then();
+				return item.handleRoute(subRoute, route.precache).then();
 			}
 		});
 	},
@@ -468,7 +501,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			SCORM,
 			FORUM,
 			REPORTS,
-			INFO
+			INFO,
 		]).then(function (item) {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute, route.precache);
@@ -485,7 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			SCORM,
 			ASSESSMENT,
 			REPORTS,
-			INFO
+			INFO,
 		]).then(function (item) {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute, route.precache);
@@ -502,7 +535,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			SCORM,
 			ASSESSMENT,
 			FORUM,
-			INFO
+			INFO,
 		]);
 	},
 
@@ -515,7 +548,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			SCORM,
 			ASSESSMENT,
 			FORUM,
-			REPORTS
+			REPORTS,
 		]).then(function (item) {
 			if (item && item.handleRoute) {
 				item.handleRoute(subRoute, route.precache);
@@ -523,7 +556,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		});
 	},
 
-	showResources (route, subRoute) {
+	showResources(route, subRoute) {
 		const prevRoute = this.previousLessonRoute;
 		const navBarConfig = {
 			hideBranding: true,
@@ -531,21 +564,20 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			hideNavCmp: true,
 			onBack: () => {
 				this.pushRoute('', prevRoute || '');
-			}
+			},
 		};
 
 		this.setCmpRouteState(RESOURCES, subRoute);
 
-		return this.setActiveView(RESOURCES, [
-			DASHBOARD,
+		return this.setActiveView(
+			RESOURCES,
+			[DASHBOARD, OVERVIEW, SCORM, ASSESSMENT, FORUM, REPORTS],
 			OVERVIEW,
-			SCORM,
-			ASSESSMENT,
-			FORUM,
-			REPORTS
-		], OVERVIEW, navBarConfig, true).then((item) => {
+			navBarConfig,
+			true
+		).then(item => {
 			if (item && item.handleRoute) {
-				item.gotoResource = (id) => this.gotoResource(id);
+				item.gotoResource = id => this.gotoResource(id);
 
 				return item.handleRoute(subRoute, route.precache);
 			}
@@ -553,15 +585,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 	showContent: function (route, subRoute) {
-		return this.setActiveView('bundle-content[courseLevel]', [
-			DASHBOARD,
-			OVERVIEW,
-			SCORM,
-			ASSESSMENT,
-			FORUM,
-			REPORTS,
-			INFO
-		], OVERVIEW).then((item) => {
+		return this.setActiveView(
+			'bundle-content[courseLevel]',
+			[DASHBOARD, OVERVIEW, SCORM, ASSESSMENT, FORUM, REPORTS, INFO],
+			OVERVIEW
+		).then(item => {
 			item.onDelete = () => this.gotoResources();
 			item.gotoResources = () => this.gotoResources();
 
@@ -569,9 +597,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		});
 	},
 
-
-	showVideos (route, subRoute) {
-		const {id} = route.params;
+	showVideos(route, subRoute) {
+		const { id } = route.params;
 
 		return this.setActiveView(OVERVIEW, [
 			DASHBOARD,
@@ -579,12 +606,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
-			INFO
-		]).then((item) => {
+			INFO,
+		]).then(item => {
 			return item.showCourseMedia(id);
 		});
 	},
-
 
 	getCmp: function (xtype, cmpQuery) {
 		var cmp = this.down(cmpQuery || xtype);
@@ -597,7 +623,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return cmp;
 	},
 
-
 	getPageInfoRoute: function (obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID;
 
@@ -607,8 +632,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route: '/content/' + id,
 			title: obj.get ? obj.get('label') : obj.label,
 			precache: {
-				pageInfo: obj.isModel ? obj : null
-			}
+				pageInfo: obj.isModel ? obj : null,
+			},
 		};
 	},
 
@@ -621,10 +646,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route: '/content/' + id,
 			title: obj.get('label'),
 			precache: {
-				relatedWork: obj
-			}
+				relatedWork: obj,
+			},
 		};
-
 	},
 
 	getAssignmentRoute: function (obj) {
@@ -639,8 +663,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route: route,
 			title: obj.get ? obj.get('title') : obj.title,
 			precache: {
-				assignment: obj.isModel ? obj : null
-			}
+				assignment: obj.isModel ? obj : null,
+			},
 		};
 	},
 
@@ -656,15 +680,16 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route: route,
 			title: obj.get ? obj.get('title') : obj.title,
 			precache: {
-				lesson: obj.isModel ? obj : null
-			}
+				lesson: obj.isModel ? obj : null,
+			},
 		};
 	},
 
-
-	getTopicRoute (obj) {
+	getTopicRoute(obj) {
 		if (!obj.get) {
-			throw new Error('Can\'t resolve topic route for just an NTIID, need the full object');
+			throw new Error(
+				"Can't resolve topic route for just an NTIID, need the full object"
+			);
 		}
 
 		const boardId = obj.get('BoardNTIID');
@@ -686,16 +711,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route: `/discussions/${forumID}/object/${topicID}`,
 			title: obj.get('title'),
 			precache: {
-				topic: obj
-			}
+				topic: obj,
+			},
 		};
 	},
-
 
 	getRouteForPath: function (path, course) {
 		var root = path[0] || {},
 			subPath = path.slice(1),
-			page, assignment, i,
+			page,
+			assignment,
+			i,
 			route;
 
 		for (i = 0; i < subPath.length; i++) {
@@ -744,15 +770,14 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		} else {
 			route = {
 				path: '',
-				isFull: path.length <= 0
+				isFull: path.length <= 0,
 			};
 		}
 
 		return route;
 	},
 
-
-	isCourseMediaPath (path) {
+	isCourseMediaPath(path) {
 		let seenOutlineNode = false;
 		let seenVideo = false;
 
@@ -767,8 +792,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return seenVideo && !seenOutlineNode;
 	},
 
-
-	getRouteForForum (forum, path) {
+	getRouteForForum(forum, path) {
 		const forumPart = encodeForURI(forum.getId());
 		const topic = path && path[0];
 		const comment = path && path[1];
@@ -786,12 +810,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return {
 			path: route,
 			noWindow: true,
-			isFull: true
+			isFull: true,
 		};
 	},
 
-
-	getCourseMediaRoute (path) {
+	getCourseMediaRoute(path) {
 		let videoId;
 
 		for (let part of path) {
@@ -802,10 +825,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return {
 			path: `videos/${videoId}`,
-			isFull: true
+			isFull: true,
 		};
 	},
-
 
 	getRouteForAssignment: function (assignment, path) {
 		var cmp = this.down(ASSESSMENT),
@@ -816,8 +838,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return route;
 	},
 
-
-	getRouteForGrade (grade, path) {
+	getRouteForGrade(grade, path) {
 		const cmp = this.down(ASSESSMENT);
 		const route = cmp.getRouteForPath(path, grade);
 
@@ -825,7 +846,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return route;
 	},
-
 
 	getRouteForLesson: async function (lesson, path) {
 		const cmp = this.down(OVERVIEW);
@@ -836,31 +856,31 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return route;
 	},
 
-
 	getRouteForHistoryItem: function (historyItem, path) {
-		let	root = path[0],
+		let root = path[0],
 			route;
 
 		const AssignmentId = encodeForURI(root.get('AssignmentId'));
-		const submissionCreator = User.getUsernameForURL(root.get('SubmissionCreator'));
+		const submissionCreator = User.getUsernameForURL(
+			root.get('SubmissionCreator')
+		);
 
 		if (root instanceof UsersCourseAssignmentHistoryItemFeedback) {
-			route = Globals.isMe(submissionCreator) ?
-				`/assignments/${AssignmentId}/#feedback` :
-				`/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
+			route = Globals.isMe(submissionCreator)
+				? `/assignments/${AssignmentId}/#feedback`
+				: `/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
 
 			return {
 				path: route,
-				isFull: true
+				isFull: true,
 			};
 		}
 	},
 
-
-	getRouteForEvent (event, path) {
+	getRouteForEvent(event, path) {
 		return {
 			path: '/lessons/',
-			isFull: true
+			isFull: true,
 		};
-	}
+	},
 });

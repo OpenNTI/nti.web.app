@@ -5,12 +5,16 @@ import renderer from 'react-test-renderer';
 import JoinDate from '../JoinDate';
 
 describe('Site admin user table join date column test', () => {
-	const verifyColumn = (date) => {
-		const colCmp = renderer.create(<JoinDate item={{
-			getCreatedTime: () => {
-				return date;
-			}
-		}}/>);
+	const verifyColumn = date => {
+		const colCmp = renderer.create(
+			<JoinDate
+				item={{
+					getCreatedTime: () => {
+						return date;
+					},
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

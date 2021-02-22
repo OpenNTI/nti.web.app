@@ -4,7 +4,6 @@ const SharingUtils = require('legacy/util/Sharing');
 
 require('legacy/util/Sharing');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 	afterRender: function () {
 		this.registerDragZone(this.dragSelector || 'img');
@@ -12,11 +11,15 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 	},
 
 	registerDragZone: function (dragSelector) {
-		var me = this, el = this.getEl();
-		if (!el) {return;}
+		var me = this,
+			el = this.getEl();
+		if (!el) {
+			return;
+		}
 		this.dragZone = Ext.dd.DragZone.create(el, {
 			getDragData: function (e) {
-				var sourceEl = e.getTarget(dragSelector), d;
+				var sourceEl = e.getTarget(dragSelector),
+					d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
@@ -25,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d,
-						shared: me.record
+						shared: me.record,
 					};
 					return this.dragData;
 				}
@@ -33,17 +36,26 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 
 			getRepairXY: function () {
 				return this.dragData.repairXY;
-			}
+			},
 		});
 	},
 
 	registerDropZone: function (dropSelector) {
-		var me = this, el = me.getEl();
-		if (!el) {return;}
+		var me = this,
+			el = me.getEl();
+		if (!el) {
+			return;
+		}
 		this.dropZone = Ext.dd.DropZone.create(el, {
-			getTargetFromEvent: function (e) { return e.getTarget(dropSelector); },
-			onNodeEnter: function (target, dd, e, data) { Ext.fly(target).addCls('target-hover'); },
-			onNodeOut: function (target, dd, e, data) { Ext.fly(target).removeCls('target-hover'); },
+			getTargetFromEvent: function (e) {
+				return e.getTarget(dropSelector);
+			},
+			onNodeEnter: function (target, dd, e, data) {
+				Ext.fly(target).addCls('target-hover');
+			},
+			onNodeOut: function (target, dd, e, data) {
+				Ext.fly(target).removeCls('target-hover');
+			},
 
 			onNodeOver: function (target, dd, e, data) {
 				if (data && data.username) {
@@ -52,8 +64,11 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 			},
 
 			onNodeDrop: function (target, dd, e, data) {
-				return SharingUtils.shareWith(me.record, data.usernames || [data.username]);
-			}
+				return SharingUtils.shareWith(
+					me.record,
+					data.usernames || [data.username]
+				);
+			},
 		});
-	}
+	},
 });

@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.notifications.components.Header',
+	{
+		extend: 'Ext.Component',
+		alias: 'widget.notification-header',
 
-module.exports = exports = Ext.define('NextThought.app.notifications.components.Header', {
-	extend: 'Ext.Component',
-	alias: 'widget.notification-header',
+		cls: 'notification-header',
 
-	cls: 'notification-header',
-
-	renderTpl: Ext.DomHelper.markup(
-		{tag: 'h3', html: 'Notifications'}
-	)
-});
+		renderTpl: Ext.DomHelper.markup({ tag: 'h3', html: 'Notifications' }),
+	}
+);

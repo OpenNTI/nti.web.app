@@ -3,25 +3,21 @@ const Ext = require('@nti/extjs');
 require('./Base');
 require('./components/ListPage');
 
-
 module.exports = exports = Ext.define('NextThought.app.stream.List', {
 	extend: 'NextThought.app.stream.Base',
 	alias: 'widget.stream-list',
 	cls: 'list-stream',
 
-
 	getPageConfig: function (items) {
 		return {
 			xtype: 'stream-list-page',
-			records: items
+			records: items,
 		};
 	},
-
 
 	getPageCount: function () {
 		return this.PAGES.length;
 	},
-
 
 	fillInItems: function (items) {
 		var config = this.getPageConfig(items);
@@ -32,17 +28,18 @@ module.exports = exports = Ext.define('NextThought.app.stream.List', {
 		this.PAGES.push(this.insert(this.PAGES.length, config));
 	},
 
-
 	prependItems: function (items) {
 		var firstPage = this.PAGES[0];
 
-		if (!items.length) { return; }
+		if (!items.length) {
+			return;
+		}
 
-		if(firstPage) {
+		if (firstPage) {
 			firstPage.prependItems(items);
 		} else {
 			this.fillInItems(items);
 			this.removeEmpty();
 		}
-	}
+	},
 });

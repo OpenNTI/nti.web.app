@@ -1,87 +1,86 @@
 const Ext = require('@nti/extjs');
-const {ProgressWidgets} = require('@nti/web-course');
+const { ProgressWidgets } = require('@nti/web-course');
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.progress.Header', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-outline-progress-header',
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.outline.progress.Header',
+	{
+		extend: 'Ext.container.Container',
+		alias: 'widget.overview-outline-progress-header',
 
+		cls: 'outline-header',
 
-	cls: 'outline-header',
+		initComponent() {
+			this.callParent(arguments);
 
-
-	initComponent () {
-		this.callParent(arguments);
-
-		this.addHeader();
-	},
-
-
-	addHeader () {
-		if (!this.header) {
-			this.header = this.add({
-				xtype: 'react',
-				component: ProgressWidgets.OutlineHeader,
-				course: this.course
-			});
-		}
-	},
-
-
-	removeHeader () {
-		if (this.header) {
-			this.header.destroy();
-			delete this.header;
-		}
-	},
-
-
-	updateCourse (course, isEditing) {
-		if (this.isEditing && !isEditing) {
-			this.removeHeader();
 			this.addHeader();
-		}
+		},
 
-		this.isEditing = isEditing;
-		this.course = course;
+		addHeader() {
+			if (!this.header) {
+				this.header = this.add({
+					xtype: 'react',
+					component: ProgressWidgets.OutlineHeader,
+					course: this.course,
+				});
+			}
+		},
 
-		if (this.header) {
-			this.header.setProps({course});
-		}
-	},
+		removeHeader() {
+			if (this.header) {
+				this.header.destroy();
+				delete this.header;
+			}
+		},
 
+		updateCourse(course, isEditing) {
+			if (this.isEditing && !isEditing) {
+				this.removeHeader();
+				this.addHeader();
+			}
 
-	onBeforeRouteActivate () {
-		this.onRouteActivate();
-	},
+			this.isEditing = isEditing;
+			this.course = course;
 
+			if (this.header) {
+				this.header.setProps({ course });
+			}
+		},
 
-	onRouteActivate () {
-		clearTimeout(this.deactivateTimeout);
+		onBeforeRouteActivate() {
+			this.onRouteActivate();
+		},
 
-		if (!this.wasDeactivated) { return null; }
+		onRouteActivate() {
+			clearTimeout(this.deactivateTimeout);
 
-		this.wasDeactivated = false;
+			if (!this.wasDeactivated) {
+				return null;
+			}
 
-		this.addHeader();
+			this.wasDeactivated = false;
 
-		this.course.refreshPreferredAccess()
-			.then(() => {
-				if (!this.wasDeactivated) {
-					this.removeHeader();
-					this.addHeader();
-				}
-			}).catch(() => {
-				// need to handle this?
-			});
-	},
+			this.addHeader();
 
+			this.course
+				.refreshPreferredAccess()
+				.then(() => {
+					if (!this.wasDeactivated) {
+						this.removeHeader();
+						this.addHeader();
+					}
+				})
+				.catch(() => {
+					// need to handle this?
+				});
+		},
 
-	onRouteDeactivate () {
-		clearTimeout(this.deactivateTimeout);
-		this.deactivateTimeout = setTimeout(() => {
-			this.wasDeactivated = true;
+		onRouteDeactivate() {
+			clearTimeout(this.deactivateTimeout);
+			this.deactivateTimeout = setTimeout(() => {
+				this.wasDeactivated = true;
 
-			this.removeHeader();
-		}, 1000);
+				this.removeHeader();
+			}, 1000);
+		},
 	}
-});
+);

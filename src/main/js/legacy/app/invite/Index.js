@@ -3,12 +3,12 @@ const { extname } = require('path');
 const Ext = require('@nti/extjs');
 
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/common/form/Form');
 require('legacy/app/invite/EmailTokens');
-
 
 module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	extend: 'Ext.container.Container',
@@ -18,22 +18,31 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	layout: 'none',
 	items: [],
 	schema: [
-		{name: 'MimeType', type: 'hidden'},
-		{type: 'emailtoken', required: true, name:'emails', placeholder: 'Add an email address'},
-		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: '(Optional) Type a message...'}
+		{ name: 'MimeType', type: 'hidden' },
+		{
+			type: 'emailtoken',
+			required: true,
+			name: 'emails',
+			placeholder: 'Add an email address',
+		},
+		{
+			type: 'textarea',
+			cls: 'message-area',
+			name: 'message',
+			required: false,
+			placeholder: '(Optional) Type a message...',
+		},
 	],
 
-	accepts: [
-		'.csv'
-	],
+	accepts: ['.csv'],
 
 	getDefaultValues: function () {
 		return {
-			MimeType: UserCourseInvitations.mimeType
+			MimeType: UserCourseInvitations.mimeType,
 		};
 	},
 
-	initComponent () {
+	initComponent() {
 		this.callParent(arguments);
 
 		this.inviteUrl = this.record.getLink('SendCourseInvitations');
@@ -43,12 +52,12 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.add({
 			xtype: 'box',
 			html: `Invite others to take ${courseName}. Add a message below and we'll send your message along with a course link to the emails provided. Each email will receive a personalized invitation code. <a target="_blank" href="https://help.nextthought.com/guide/part3.html#course-roster">More Information</a>`,
-			cls: 'instructions'
+			cls: 'instructions',
 		});
 
 		this.unfocusedTokens = this.add({
 			xtype: 'email-tokens',
-			tokens: []
+			tokens: [],
 		});
 
 		this.form = this.add({
@@ -57,20 +66,26 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			action: this.inviteUrl,
 			defaultValues: this.getDefaultValues(),
 			onSuccess: this.onSuccess,
-			onError: this.onError
+			onError: this.onError,
 		});
 
 		this.button = this.add({
 			xtype: 'box',
-			autoEl: {cls: 'button', cn: [
-				{cls: 'control upload', 'data-qtip': 'Upload Contacts in CSV Format', html: 'BULK', cn: [
-					{ tag: 'input', accept:'.csv', type: 'file'}
-				]}
-			]}
+			autoEl: {
+				cls: 'button',
+				cn: [
+					{
+						cls: 'control upload',
+						'data-qtip': 'Upload Contacts in CSV Format',
+						html: 'BULK',
+						cn: [{ tag: 'input', accept: '.csv', type: 'file' }],
+					},
+				],
+			},
 		});
 	},
 
-	afterRender () {
+	afterRender() {
 		this.callParent(arguments);
 		const el = this.el,
 			emailTokenField = el.down('.email-token-field'),
@@ -84,25 +99,28 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		this.unfocusedTokens.addCls('hidden');
 		this.mon(tagInput, {
-			'keydown': () => this.maybeShowBulk(),
-			'focus': () => this.tagInputOnFocus()
+			keydown: () => this.maybeShowBulk(),
+			focus: () => this.tagInputOnFocus(),
 		});
 		this.mon(message, 'focus', () => this.messageOnFocus());
-		this.mon(emailTokenField, 'mouseup', () => setTimeout(()=> this.maybeShowBulk(),1));
-		this.mon(this.unfocusedTokens.el, 'click', () => this.unfocusedTokensClick());
-		this.mon(fileUpload, 'change', (e) => this.onFileInputChange(e));
+		this.mon(emailTokenField, 'mouseup', () =>
+			setTimeout(() => this.maybeShowBulk(), 1)
+		);
+		this.mon(this.unfocusedTokens.el, 'click', () =>
+			this.unfocusedTokensClick()
+		);
+		this.mon(fileUpload, 'change', e => this.onFileInputChange(e));
 	},
 
-
-	tagInputOnFocus () {
+	tagInputOnFocus() {
 		this.emailToken.classList.add('focused');
 		this.emailToken.classList.remove('hidden');
 		this.unfocusedTokens.addCls('hidden');
 	},
 
-	messageOnFocus () {
+	messageOnFocus() {
 		const tags = this.form.getValueOf('emails');
-		if(Array.isArray(tags) && tags.length > 0) {
+		if (Array.isArray(tags) && tags.length > 0) {
 			this.emailToken.classList.add('hidden');
 			this.unfocusedTokens.addTags(tags);
 			this.unfocusedTokens.removeCls('hidden');
@@ -110,31 +128,30 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.emailToken.classList.remove('focused');
 	},
 
-
-	unfocusedTokensClick () {
+	unfocusedTokensClick() {
 		this.unfocusedTokens.addCls('hidden');
 		this.emailToken.classList.remove('hidden');
 		this.emailToken.classList.add('focused');
 	},
 
-	maybeShowBulk () {
+	maybeShowBulk() {
 		let dom = this.el.dom,
 			token = dom && dom.querySelector('.email-token-field .token');
 
-		if(token || (this.tagInput.value !== '' && !token)) {
+		if (token || (this.tagInput.value !== '' && !token)) {
 			this.button.hide();
 		} else {
 			this.button.show();
 		}
 	},
 
-	onError (error) {
+	onError(error) {
 		console.log(error);
 	},
 
-	onSuccess () {},
+	onSuccess() {},
 
-	onFileInputChange (e) {
+	onFileInputChange(e) {
 		let input = e.getTarget(),
 			file = input && input.files && input.files[0];
 
@@ -149,28 +166,36 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		}
 	},
 
-	onFileChange (file) {
-		const me  = this;
+	onFileChange(file) {
+		const me = this;
 		let url = me.record.getLink('CheckCourseInvitationsCSV'),
 			submit = me.__submitFormData(me.getFormData(file), url, 'POST');
 
 		submit
-			.then( results => {
-				const courseInvitations = lazy.ParseUtils.parseItems(results)[0],
-					emails = courseInvitations && courseInvitations.get('Items').map(item => item.email),
+			.then(results => {
+				const courseInvitations = lazy.ParseUtils.parseItems(
+						results
+					)[0],
+					emails =
+						courseInvitations &&
+						courseInvitations.get('Items').map(item => item.email),
 					warnings = courseInvitations.get('Warnings'),
-					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items;
+					invalidEmails =
+						courseInvitations.get('InvalidEmails') &&
+						courseInvitations.get('InvalidEmails').Items;
 
 				me.button.hide();
 				me.form.setValue('emails', emails);
 
-				if (this.tagInput) { this.tagInput.focus(); }
+				if (this.tagInput) {
+					this.tagInput.focus();
+				}
 
-				if(invalidEmails || warnings) {
+				if (invalidEmails || warnings) {
 					me.showErrors(invalidEmails || [], warnings || '');
 				}
 			})
-			.catch( error => {
+			.catch(error => {
 				const bulkUploadError = JSON.parse(error.responseText).message;
 				me.showErrors(void 0, bulkUploadError);
 			})
@@ -179,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			});
 	},
 
-	__buildXHR (url, method, success, failure) {
+	__buildXHR(url, method, success, failure) {
 		var xhr = new XMLHttpRequest();
 
 		xhr.open(method || 'POST', url, true);
@@ -190,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 				} else {
 					failure({
 						status: xhr.status,
-						responseText: xhr.responseText
+						responseText: xhr.responseText,
 					});
 				}
 			}
@@ -201,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		return xhr;
 	},
 
-	__submitFormData (formData, url, method) {
+	__submitFormData(formData, url, method) {
 		var me = this;
 
 		return new Promise(function (fulfill, reject) {
@@ -222,51 +247,61 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		});
 	},
 
-	getFormData (file) {
+	getFormData(file) {
 		let formData = new FormData();
 
-		if(file) {
+		if (file) {
 			formData.append('csv', file);
 		}
 
 		return formData;
 	},
 
-	onSave () {
+	onSave() {
 		let changedValues = this.form.getChangedValues();
 		let values = {};
 
 		values.message = changedValues.message;
 		values.MimeType = changedValues.MimeType;
-		values.Items = changedValues.emails.map( email => ({ 'email': email }) );
+		values.Items = changedValues.emails.map(email => ({ email: email }));
 
-		return this.__submitJSON(values, this.inviteUrl, 'POST')
-			.catch( error => {
+		return this.__submitJSON(values, this.inviteUrl, 'POST').catch(
+			error => {
 				const inviteErrors = JSON.parse(error.responseText);
 
 				// treat 'warnings' and 'message' field the same. either way,
 				// it's an error message unrelated to 'invalidEmails'
-				let msg = inviteErrors && (inviteErrors.warnings || inviteErrors.message),
+				let msg =
+						inviteErrors &&
+						(inviteErrors.warnings || inviteErrors.message),
 					invalidEmails = inviteErrors.InvalidEmails,
 					emails = invalidEmails && invalidEmails.Items;
 
-				if(emails || msg) {
+				if (emails || msg) {
 					this.showErrors(emails || [], msg || '');
 				}
 				return Promise.reject('Unable to save');
-			});
+			}
+		);
 	},
 
-	showErrors (invalidEmails, msg = '') {
-		if(Array.isArray(invalidEmails) && invalidEmails.length !== 0) {
-			if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
+	showErrors(invalidEmails, msg = '') {
+		if (Array.isArray(invalidEmails) && invalidEmails.length !== 0) {
+			if (invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
 				invalidEmails.shift();
-				if(invalidEmails.length === 0) { return; }
+				if (invalidEmails.length === 0) {
+					return;
+				}
 			}
 
-			this.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${msg}`);
+			this.form.showErrorOn(
+				'emails',
+				`The following emails are invalid: ${invalidEmails.join(
+					', '
+				)}. ${msg}`
+			);
 		} else if (msg !== '') {
 			this.form.showErrorOn('emails', msg);
 		}
-	}
+	},
 });

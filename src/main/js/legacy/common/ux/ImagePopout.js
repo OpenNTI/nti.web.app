@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('../window/Window');
 
-
 module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 	//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
 	extend: 'NextThought.common.window.Window',
@@ -23,12 +22,14 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
-		this.on('destroy', function () { Ext.EventManager.removeResizeListener(me.syncSize, me);});
+		this.on('destroy', function () {
+			Ext.EventManager.removeResizeListener(me.syncSize, me);
+		});
 
 		me.add({
 			xtype: 'image-roll',
 			store: config.store,
-			data: config.data
+			data: config.data,
 		});
 
 		me.task = {
@@ -41,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 					Ext.getBody().dom.removeChild(m);
 					Ext.getBody().appendChild(m);
 				}
-			}
+			},
 		};
 
 		Ext.TaskManager.start(me.task);
@@ -64,10 +65,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
-			scope: this,
-			click: this.close
-		});
+		this.mon(
+			Ext.DomHelper.append(
+				this.el,
+				{ cls: 'close', 'data-qtip': 'close' },
+				true
+			),
+			{
+				scope: this,
+				click: this.close,
+			}
+		);
 	},
 
 	setPosition: function () {},
@@ -79,19 +87,20 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		}
 
 		var dom = this.el && this.el.dom,
-			myHeight = this.getHeight() + 35,//my width + the close button
+			myHeight = this.getHeight() + 35, //my width + the close button
 			myWidth = this.getWidth(),
 			viewHeight = Ext.Element.getViewHeight(),
 			viewWidth = Ext.Element.getViewWidth(),
-			top, left;
+			top,
+			left;
 
 		top = (viewHeight - myHeight) / 2;
 		left = (viewWidth - myWidth) / 2;
 
-		top = Math.max(top, 25);//account for the close button
+		top = Math.max(top, 25); //account for the close button
 		left = Math.max(left, 0);
 
 		dom.style.top = top + 'px';
 		dom.style.left = left + 'px';
-	}
+	},
 });

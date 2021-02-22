@@ -6,33 +6,33 @@ import View from '../View';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (numberOfCourses) => {
+const getMockService = numberOfCourses => {
 	let Items = [];
 
-	for(let i = 0; i < numberOfCourses; i++) {
+	for (let i = 0; i < numberOfCourses; i++) {
 		const index = i + 1;
 
 		Items.push({
 			getPresentationProperties: () => {
 				return {
 					label: 'Course' + index,
-					title: 'course' + index
+					title: 'course' + index,
 				};
 			},
-			hasLink: () => true
+			hasLink: () => true,
 		});
 	}
 
 	return {
 		getBatch: () => {
 			return {
-				Items
+				Items,
 			};
-		}
+		},
 	};
 };
 
-const onBefore = (numberOfCourses) => {
+const onBefore = numberOfCourses => {
 	jest.useFakeTimers();
 	setupTestClient(getMockService(numberOfCourses));
 };
@@ -51,10 +51,10 @@ describe('Site admin user course list test (5 courses)', () => {
 	test('Basic render test', async () => {
 		const user = {
 			getLink: () => 'mockLink',
-			hasLink: () => true
+			hasLink: () => true,
 		};
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -73,10 +73,10 @@ describe('Site admin user course list test (no courses)', () => {
 	test('Basic render test', async () => {
 		const user = {
 			getLink: () => 'mockLink',
-			hasLink: () => true
+			hasLink: () => true,
 		};
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();

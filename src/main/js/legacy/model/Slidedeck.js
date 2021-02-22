@@ -2,24 +2,23 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntislidedeck',
 
 	statics: {
-		mimeType: 'application/vnd.nextthought.ntislidedeck'
+		mimeType: 'application/vnd.nextthought.ntislidedeck',
 	},
 	idProperty: 'ID',
 	fields: [
-		{ name: 'Creator', type: 'string'},
-		{ name: 'Slides', type: 'auto', defaultValue: []},
-		{ name: 'Videos', type: 'auto', defaultValue: []},
-		{ name: 'title', type: 'string'},
+		{ name: 'Creator', type: 'string' },
+		{ name: 'Slides', type: 'auto', defaultValue: [] },
+		{ name: 'Videos', type: 'auto', defaultValue: [] },
+		{ name: 'title', type: 'string' },
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
 		{ name: 'description', type: 'string' },
-		{ name: 'href', type: 'string'}
+		{ name: 'href', type: 'string' },
 	],
 
 	containsSlide: function (slide) {
@@ -37,7 +36,6 @@ module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 		return result;
 	},
 
-
 	containsVideo: function (videoId) {
 		var videos = this.get('Videos') || [],
 			result = false;
@@ -50,5 +48,5 @@ module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 		});
 
 		return result;
-	}
+	},
 });

@@ -26,18 +26,20 @@ describe('Site admin user course enrollment nav bar test', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			Username: 'testUser'
+			Username: 'testUser',
 		};
 
 		const course = {
 			CatalogEntry: {
 				Title: 'course1',
-				getDefaultAssetRoot () { return 'testRoot'; }
+				getDefaultAssetRoot() {
+					return 'testRoot';
+				},
 			},
-			UserProfile: 'testUser'
+			UserProfile: 'testUser',
 		};
 
-		const cmp = renderer.create(<View user={user} enrollment={course}/>);
+		const cmp = renderer.create(<View user={user} enrollment={course} />);
 
 		const tree = cmp.toJSON();
 

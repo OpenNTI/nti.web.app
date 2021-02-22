@@ -5,20 +5,21 @@ const CourseOutlineCalendarNode = require('legacy/model/courses/navigation/Cours
 require('../outlinenode/Index');
 require('./Preview');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.outline.calendarnode.Index',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.outline.outlinenode.Index',
+		alias: 'widget.overview-editing.calendarnode',
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.calendarnode.Index', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Index',
-	alias: 'widget.overview-editing.calendarnode',
+		statics: {
+			getSupported: function () {
+				return CourseOutlineCalendarNode.mimeType;
+			},
+		},
 
-	statics: {
-		getSupported: function () {
-			return CourseOutlineCalendarNode.mimeType;
-		}
-	},
+		hideItemsIfEmpty: true,
 
-
-	hideItemsIfEmpty: true,
-
-
-	PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview'
-});
+		PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview',
+	}
+);

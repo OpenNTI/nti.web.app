@@ -38,17 +38,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	alias: 'widget.forum-container',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	isForumContainer: true,
 	layout: 'none',
 
-	items: [
-		{xtype: 'forum-view'}
-	],
+	items: [{ xtype: 'forum-view' }],
 
-	initComponent () {
+	initComponent() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -60,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView = this.down('forum-view');
 	},
 
-	onAddedToParentRouter () {
+	onAddedToParentRouter() {
 		this.forumView.pushRoute = this.pushRoute.bind(this);
 		this.forumView.pushRouteState = this.pushForumState.bind(this);
 		this.forumView.replaceRouteState = this.replaceForumState.bind(this);
@@ -71,24 +69,26 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView.onAddedToParentRouter();
 	},
 
-	replaceForumState (state, title, route, precache) {
+	replaceForumState(state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.replaceRouteState(state, title, route, precache);
 	},
 
-	pushForumState (state, title, route, precache) {
+	pushForumState(state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.pushRouteState(state, title, route, precache);
 	},
 
-	setCurrentBundle (bundle) {
+	setCurrentBundle(bundle) {
 		this.forumView.setCurrentBundle(bundle);
 	},
 
-	showForum (route) {
-		const { params: { forum }} = route;
+	showForum(route) {
+		const {
+			params: { forum },
+		} = route;
 
 		if (forum) {
 			this.forumView.loadForum(forum);
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		}
 	},
 
-	setFirstForum (forum) {
+	setFirstForum(forum) {
 		if (!forum) {
 			this.forumView.setEmptyState();
 			return;
@@ -108,5 +108,5 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 
 		this.forumView.setForum(record);
 		this.pushRoute(record.get('title'), id);
-	}
+	},
 });

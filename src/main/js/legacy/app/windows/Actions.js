@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 const WindowsStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
-
 
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -24,7 +24,9 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		if (lazy.ParseUtils.isNTIID(ntiid)) {
 			resolve = Service.getObject(ntiid);
 		} else if (ntiid.indexOf('uri:') === 0) {
-			resolve = Service.request(ntiid.replace(/^uri:/, '')).then(resp => lazy.ParseUtils.parseItems(resp)[0]);
+			resolve = Service.request(ntiid.replace(/^uri:/, '')).then(
+				resp => lazy.ParseUtils.parseItems(resp)[0]
+			);
 		} else {
 			resolve = Promise.resolve(ntiid);
 		}
@@ -57,7 +59,6 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		return '/object/' + id;
 	},
 
-
 	pushWindow: function (objectOrNTIID, state, el, monitors, precache) {
 		var id = objectOrNTIID,
 			mimeType;
@@ -67,7 +68,13 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		}
 
 		if (objectOrNTIID.isModel) {
-			this.WindowStore.cacheObject(id, objectOrNTIID, el, monitors, precache);
+			this.WindowStore.cacheObject(
+				id,
+				objectOrNTIID,
+				el,
+				monitors,
+				precache
+			);
 
 			if (objectOrNTIID.addMimeTypeToRoute) {
 				mimeType = objectOrNTIID.mimeType;
@@ -87,9 +94,10 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		this.WindowStore.fireCloseWindow();
 	},
 
-
 	showWindow: function (objectOrNTIID, state, el, monitors, precache) {
-		var me = this, id, cache,
+		var me = this,
+			id,
+			cache,
 			fetchObject;
 
 		if (typeof objectOrNTIID !== 'string') {
@@ -113,12 +121,26 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			fetchObject = Promise.resolve(objectOrNTIID);
 		}
 
-		return fetchObject.then(function (result) {
-			me.WindowStore.removeCache(id);
-			me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
-		}).catch(function (error) {
-			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
-		});
+		return fetchObject
+			.then(function (result) {
+				me.WindowStore.removeCache(id);
+				me.WindowStore.fireShowWindow(
+					result,
+					state,
+					el,
+					monitors,
+					precache
+				);
+			})
+			.catch(function (error) {
+				me.WindowStore.fireShowWindow(
+					error,
+					state,
+					el,
+					monitors,
+					precache
+				);
+			});
 	},
 
 	showWindowWithMimeType: function (id, mimeType, state, rawId) {
@@ -137,5 +159,5 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			.catch(function (error) {
 				me.WindowStore.fireShowWindow(error);
 			});
-	}
+	},
 });

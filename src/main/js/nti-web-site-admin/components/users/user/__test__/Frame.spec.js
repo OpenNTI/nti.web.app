@@ -14,14 +14,14 @@ const getMockService = () => {
 				fetchLink: () => {
 					return {};
 				},
-				avatarURL: 'someAvatarURL'
+				avatarURL: 'someAvatarURL',
 			};
 		},
 		getObject: () => {
 			return {
-				title: 'abc'
+				title: 'abc',
 			};
-		}
+		},
 	};
 };
 
@@ -42,7 +42,7 @@ describe.skip('Site admin user frame test', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<Frame userID="user1"/>);
+		const cmp = renderer.create(<Frame userID="user1" />);
 
 		jest.runAllTimers();
 		await flushPromises();

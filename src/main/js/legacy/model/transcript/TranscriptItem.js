@@ -1,64 +1,73 @@
 const Ext = require('@nti/extjs');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.transcript.TranscriptItem',
+	{
+		extend: 'Ext.data.Model',
 
-module.exports = exports = Ext.define('NextThought.model.transcript.TranscriptItem', {
-	extend: 'Ext.data.Model',
+		fields: [
+			{ name: 'url', type: 'string' },
+			{ name: 'jsonpUrl', type: 'string' },
+			{ name: 'contentType', type: 'string' },
+			{ name: 'content', type: 'auto' },
+			{ name: 'basePath', type: 'string' },
+			{ name: 'associatedVideoId', type: 'string' },
+			{ name: 'contentElement', type: 'auto' },
+			{ name: 'desired-time-start', type: 'number', persist: false },
+			{ name: 'desired-time-end', type: 'number', persist: false },
+		],
 
-	fields: [
-		{name: 'url', type: 'string'},
-		{name: 'jsonpUrl', type: 'string'},
-		{name: 'contentType', type: 'string'},
-		{name: 'content', type: 'auto'},
-		{name: 'basePath', type: 'string'},
-		{name: 'associatedVideoId', type: 'string'},
-		{name: 'contentElement', type: 'auto'},
-		{name: 'desired-time-start', type: 'number', persist: false},
-		{name: 'desired-time-end', type: 'number', persist: false}
-	],
+		statics: {
+			fromDom: function (el, basePath) {
+				var t = Ext.fly(el).down('object[type*=mediatranscript]'),
+					url,
+					type,
+					jsonpUrl,
+					assocVideoId;
 
-	statics: {
+				if (!t) {
+					return null;
+				}
 
-		fromDom: function (el, basePath) {
-			var t = Ext.fly(el).down('object[type*=mediatranscript]'),
-				url, type, jsonpUrl, assocVideoId;
+				url = Ext.fly(t).down('param[name=src]').getAttribute('value');
+				type = Ext.fly(t)
+					.down('param[name=type]')
+					.getAttribute('value');
+				jsonpUrl = Ext.fly(t)
+					.down('param[name=srcjsonp]')
+					.getAttribute('value');
+				assocVideoId =
+					Ext.fly(el).is('object[type$=ntivideo]') &&
+					Ext.fly(el).getAttribute('data-ntiid');
 
-			if (!t) {
-				return null;
-			}
+				return this.create({
+					url: url,
+					contentType: type,
+					jsonpUrl: jsonpUrl,
+					basePath: basePath,
+					contentElement: t,
+					associatedVideoId: assocVideoId,
+				});
+			},
 
-			url = Ext.fly(t).down('param[name=src]').getAttribute('value');
-			type = Ext.fly(t).down('param[name=type]').getAttribute('value');
-			jsonpUrl = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
-			assocVideoId = Ext.fly(el).is('object[type$=ntivideo]') && Ext.fly(el).getAttribute('data-ntiid');
+			fromVideo: function (v, basePath) {
+				var o = v.getTranscripts();
 
-			return this.create({
-				url: url,
-				contentType: type,
-				jsonpUrl: jsonpUrl,
-				basePath: basePath,
-				contentElement: t,
-				associatedVideoId: assocVideoId
-			});
+				//For now, since we only assume there is one transcript per video, we can do this:
+				o = o && o[0];
+
+				if (!o) {
+					return null;
+				}
+
+				return this.create({
+					url: o.src,
+					jsonpUrl: o.srcjsonp,
+					contentType: o.type,
+					basePath: basePath,
+					associatedVideoId: v.get('NTIID'),
+				});
+			},
 		},
-
-
-		fromVideo: function (v, basePath) {
-			var o = v.getTranscripts();
-
-			//For now, since we only assume there is one transcript per video, we can do this:
-			o = o && o[0];
-
-			if (!o) {
-				return null;
-			}
-
-			return this.create({
-				url: o.src,
-				jsonpUrl: o.srcjsonp,
-				contentType: o.type,
-				basePath: basePath,
-				associatedVideoId: v.get('NTIID')
-			});
-		}
 	}
-});
+);

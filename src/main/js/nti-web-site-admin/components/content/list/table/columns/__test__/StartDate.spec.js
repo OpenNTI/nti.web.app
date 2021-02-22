@@ -5,12 +5,16 @@ import renderer from 'react-test-renderer';
 import StartDate from '../StartDate';
 
 describe('Site admin content table start date column test', () => {
-	const verifyColumn = (date) => {
-		const colCmp = renderer.create(<StartDate item={{
-			getStartDate: () => {
-				return date;
-			}
-		}}/>);
+	const verifyColumn = date => {
+		const colCmp = renderer.create(
+			<StartDate
+				item={{
+					getStartDate: () => {
+						return date;
+					},
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

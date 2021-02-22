@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 const BatchInterface = require('legacy/store/BatchInterface');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 	BATCH_SIZE: 20,
 
@@ -15,7 +14,8 @@ module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 	},
 
 	getLog: function () {
-		var auditLink = this.getLink('recursive_audit_log') || this.getLink('audit_log');
+		var auditLink =
+			this.getLink('recursive_audit_log') || this.getLink('audit_log');
 
 		if (auditLink) {
 			return this.getCurrentBatch(auditLink);
@@ -28,10 +28,10 @@ module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 			params: {
 				batchSize: this.BATCH_SIZE,
 				sortOn: 'CreatedTime',
-				sortOrder: 'descending'
-			}
+				sortOrder: 'descending',
+			},
 		});
 
 		return this.currentBatch;
-	}
+	},
 });

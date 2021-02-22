@@ -1,8 +1,8 @@
-import {getService} from '@nti/web-client';
-import {Stores} from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
 
 export default class UserTranscriptStore extends Stores.SimpleStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set('items', []);
@@ -10,19 +10,19 @@ export default class UserTranscriptStore extends Stores.SimpleStore {
 		this.set('error', null);
 	}
 
-	get error () {
+	get error() {
 		return this._error;
 	}
 
-	get items () {
+	get items() {
 		return this._items;
 	}
 
-	get loading () {
+	get loading() {
 		return this._loading;
 	}
 
-	async loadTranscript (user) {
+	async loadTranscript(user) {
 		this.set('items', []);
 		this.set('loading', true);
 		this.emitChange('loading', 'items');
@@ -41,7 +41,7 @@ export default class UserTranscriptStore extends Stores.SimpleStore {
 
 			this.emitChange('items');
 		} catch (e) {
-			if(e.code !== 'UserEnrollmentsNotFound') {
+			if (e.code !== 'UserEnrollmentsNotFound') {
 				// we shouldn't show error info for this, just means no enrolled courses and the view will reflect that
 				this.set('error', e);
 				this.emitChange('error');
@@ -52,8 +52,7 @@ export default class UserTranscriptStore extends Stores.SimpleStore {
 		}
 	}
 
-
-	unloadTranscript () {
+	unloadTranscript() {
 		this.set('items', []);
 		this.emitChange('items');
 	}

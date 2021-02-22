@@ -1,8 +1,8 @@
-import {getService} from '@nti/web-client';
-import {Stores} from '@nti/lib-store';
+import { getService } from '@nti/web-client';
+import { Stores } from '@nti/lib-store';
 
 export default class CourseInfoStore extends Stores.SimpleStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set('loading', false);
@@ -10,14 +10,14 @@ export default class CourseInfoStore extends Stores.SimpleStore {
 		this.set('error', null);
 	}
 
-
-	get course () {
+	get course() {
 		return this.get('course');
 	}
 
-
-	async loadCourse (course) {
-		if (this.course && course === this.course.getID()) { return; }
+	async loadCourse(course) {
+		if (this.course && course === this.course.getID()) {
+			return;
+		}
 
 		this.set('course', null);
 		this.set('loading', true);
@@ -38,9 +38,10 @@ export default class CourseInfoStore extends Stores.SimpleStore {
 		}
 	}
 
-
-	unloadCourse (course) {
-		if (this.course && course !== this.course.getID()) { return; }
+	unloadCourse(course) {
+		if (this.course && course !== this.course.getID()) {
+			return;
+		}
 
 		this.set('course', null);
 		this.onChange('course');

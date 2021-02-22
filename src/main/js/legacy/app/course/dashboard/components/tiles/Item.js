@@ -2,105 +2,112 @@ const Ext = require('@nti/extjs');
 
 require('./BaseCmp');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.dashboard.components.tiles.Item',
+	{
+		extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
 
-module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Item', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
+		inheritableStatics: {
+			height: 200,
+		},
 
-	inheritableStatics: {
-		height: 200
-	},
+		cls: 'dashboard-item',
 
-	cls: 'dashboard-item',
+		renderTpl: Ext.DomHelper.markup([
+			{ cls: 'path', html: '{Path}' },
+			{ cls: 'title', html: '{Title}' },
+			{
+				cls: 'bullets',
+				cn: [
+					{
+						tag: 'tpl',
+						for: 'Bullets',
+						cn: [{ tag: 'span', cls: 'list-item', html: '{.}' }],
+					},
+				],
+			},
+			{ cls: 'footer', html: '{Footer}' },
+		]),
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'path', html: '{Path}'},
-		{cls: 'title', html: '{Title}'},
-		{cls: 'bullets', cn: [
-			{tag: 'tpl', 'for': 'Bullets', cn: [
-				{tag: 'span', cls: 'list-item', html: '{.}'}
-			]}
-		]},
-		{cls: 'footer', html: '{Footer}'}
-	]),
+		renderSelectors: {
+			pathEl: '.path',
+			titleEl: '.title',
+			bulletsEl: '.bullets',
+			footerEl: '.footer',
+		},
 
+		beforeRender: function () {
+			this.callParent(arguments);
 
-	renderSelectors: {
-		pathEl: '.path',
-		titleEl: '.title',
-		bulletsEl: '.bullets',
-		footerEl: '.footer'
-	},
+			var me = this,
+				renderData = {},
+				fields = {
+					Path: this.getPath(),
+					Title: this.getTitle(),
+					Bullets: this.getBullets(),
+					Footer: this.getFooter(),
+				};
 
+			Ext.Object.each(fields, function (key, value) {
+				//if the get* returns a promise what for it to fulfill and call set*
+				if (value instanceof Promise) {
+					value.then(me.callWhenRendered.bind(me, 'set' + key));
+					//else render with that value
+				} else {
+					renderData[key] = value;
+				}
+			});
 
-	beforeRender: function () {
-		this.callParent(arguments);
+			this.renderData = Ext.apply(this.renderData || {}, renderData);
+		},
 
-		var me = this, renderData = {},
-			fields = {
-				Path: this.getPath(),
-				Title: this.getTitle(),
-				Bullets: this.getBullets(),
-				Footer: this.getFooter()
-			};
-
-		Ext.Object.each(fields, function (key, value) {
-			//if the get* returns a promise what for it to fulfill and call set*
-			if (value instanceof Promise) {
-				value.then(me.callWhenRendered.bind(me, 'set' + key));
-			//else render with that value
-			} else {
-				renderData[key] = value;
+		callWhenRendered: function (name, value) {
+			if (!this.rendered) {
+				this.on('afterrender', this[name].bind(this, value));
+				return;
 			}
-		});
 
-		this.renderData = Ext.apply(this.renderData || {}, renderData);
-	},
+			this[name].call(this, value);
+		},
 
+		afterRender: function () {
+			this.callParent(arguments);
 
-	callWhenRendered: function (name, value) {
-		if (!this.rendered) {
-			this.on('afterrender', this[name].bind(this, value));
-			return;
-		}
+			this.mon(this.el, 'click', 'itemClicked');
+		},
 
-		this[name].call(this, value);
-	},
+		itemClicked: function (e) {
+			if (this.handleNavigation) {
+				this.handleNavigation();
+			}
+		},
 
+		getPath: function () {
+			return '';
+		},
+		getTitle: function () {
+			return '';
+		},
+		getBullets: function () {
+			return '';
+		},
+		getFooter: function () {
+			return '';
+		},
 
-	afterRender: function () {
-		this.callParent(arguments);
+		setPath: function (value) {
+			this.pathEl.update(value.join(' / '));
+		},
 
-		this.mon(this.el, 'click', 'itemClicked');
-	},
+		setTitle: function (value) {
+			this.titleEl.update(value);
+		},
 
+		//TODO: fill this out when we need it
+		setBullets: function () {},
 
-	itemClicked: function (e) {
-		if (this.handleNavigation) {
-			this.handleNavigation();
-		}
-	},
-
-
-	getPath: function () { return ''; },
-	getTitle: function () { return ''; },
-	getBullets: function () { return ''; },
-	getFooter: function () { return ''; },
-
-
-	setPath: function (value) {
-		this.pathEl.update(value.join(' / '));
-	},
-
-
-	setTitle: function (value) {
-		this.titleEl.update(value);
-	},
-
-	//TODO: fill this out when we need it
-	setBullets: function () {},
-
-
-	setFooter: function (value) {
-		this.footerEl.update(value);
+		setFooter: function (value) {
+			this.footerEl.update(value);
+		},
 	}
-});
+);

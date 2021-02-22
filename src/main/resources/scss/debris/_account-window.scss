@@ -1,4 +1,3 @@
-
 .account-window {
 	@extend .nti-window;
 
@@ -28,7 +27,8 @@
 	}
 
 	.x-btn-account-small {
-		&, .x-btn-button {
+		&,
+		.x-btn-button {
 			height: 35px;
 		}
 
@@ -72,7 +72,7 @@
 		}
 
 		&.no-dd::before {
-			content: "";
+			content: '';
 			position: absolute;
 			top: 234px;
 			left: 155px;
@@ -152,7 +152,8 @@
 				@include ellipse;
 			}
 
-			.username, .email {
+			.username,
+			.email {
 				max-width: 150px;
 				display: inline-block;
 				position: relative;
@@ -162,7 +163,9 @@
 
 				padding-left: 20px;
 
-				&:empty { display: none; }
+				&:empty {
+					display: none;
+				}
 
 				&::after {
 					content: ' ';
@@ -223,7 +226,8 @@
 				float: right;
 			}
 
-			&, .x-btn-button {
+			&,
+			.x-btn-button {
 				border-radius: 0 0 3px 0;
 			}
 
@@ -248,7 +252,9 @@
 
 			&.x-btn-disabled {
 				.x-btn-button {
-					span { opacity: 1; }
+					span {
+						opacity: 1;
+					}
 
 					cursor: default;
 					border-color: #d0d0d0;
@@ -269,9 +275,13 @@
 			position: relative;
 		}
 
-		.password-box, .x-container {
+		.password-box,
+		.x-container {
 			margin: 5px 0;
-			&, input { font-size: 14px; }
+			&,
+			input {
+				font-size: 14px;
+			}
 
 			input {
 				&:focus {
@@ -280,13 +290,15 @@
 				}
 
 				&.error {
-					&, &:focus {
+					&,
+					&:focus {
 						box-shadow: -4px 0 0 0 var(--primary-red);
 					}
 				}
 				//TODO - is not working
 				&.valid {
-					&, &:focus {
+					&,
+					&:focus {
 						box-shadow: -4px 0 0 0 var(--primary-green);
 					}
 				}
@@ -301,7 +313,7 @@
 				font-size: 14px;
 				font-weight: 500;
 				line-height: 25px;
-				border: 1px solid var(--border-grey);//#dcdcdc;
+				border: 1px solid var(--border-grey); //#dcdcdc;
 				border-left-width: 0;
 				background: #fff;
 				padding: 6px 10px;
@@ -413,7 +425,8 @@
 		height: 160px;
 		background-color: #fcfcfc;
 		border: 1px solid rgb(206, 206, 206);
-		box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0 2px inset;
+		box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px,
+			rgba(255, 255, 255, 0.498039) 0 2px inset;
 	}
 
 	.email-verify-wrapper {
@@ -519,7 +532,7 @@
 				}
 
 				&::after {
-					content: "|";
+					content: '|';
 					position: absolute;
 					right: 0;
 					color: var(--tertiary-grey);
@@ -643,7 +656,8 @@
 					opacity: 0.9;
 				}
 
-				&.decline, &.caution {
+				&.decline,
+				&.caution {
 					box-shadow: inset 1px 0 0 0 #dd4845;
 				}
 			}
@@ -655,7 +669,8 @@
 		}
 	}
 
-	.congrats-wrapper, .pending-wrapper {
+	.congrats-wrapper,
+	.pending-wrapper {
 		position: absolute;
 		top: 1px;
 		right: 0;
@@ -726,7 +741,8 @@
 			z-index: 2;
 			background-color: #fcfcfc;
 			border: 1px solid rgb(206, 206, 206);
-			box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0 2px inset;
+			box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px,
+				rgba(255, 255, 255, 0.498039) 0 2px inset;
 			backface-visibility: hidden;
 
 			&.front {

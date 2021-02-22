@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Layouts} from '@nti/web-commons';
+import { Layouts } from '@nti/web-commons';
 
 import BaseModel from 'legacy/model/Base';
 import ContainerContext from 'legacy/app/context/ContainerContext';
@@ -12,18 +12,19 @@ import Styles from './Context.css';
 const cx = classnames.bind(Styles);
 
 WebappDiscussion.propTypes = {
-	item: PropTypes.object
+	item: PropTypes.object,
 };
-export default function WebappDiscussion ({item}) {
+export default function WebappDiscussion({ item }) {
 	const contextRef = React.useRef(null);
 
-	const onMount = async (renderTo) => {
+	const onMount = async renderTo => {
 		const record = BaseModel.interfaceToModel(item);
 		const context = ContainerContext.create({
 			container: record.get('ContainerId'),
 			range: record.get('applicableRange'),
 			contextRecord: record,
-			doNavigate: (object) => WindowStore.getInstance().navigateToObject(object)
+			doNavigate: object =>
+				WindowStore.getInstance().navigateToObject(object),
 		});
 
 		const cmp = await context.load();
@@ -42,7 +43,12 @@ export default function WebappDiscussion ({item}) {
 		<div className={cx('note-window', 'discussion-context-override')}>
 			<div className="note main-view">
 				<div className="context">
-					<Layouts.Uncontrolled as="span" className="text" onMount={onMount} onUnmount={onUnmount} />
+					<Layouts.Uncontrolled
+						as="span"
+						className="text"
+						onMount={onMount}
+						onUnmount={onUnmount}
+					/>
 				</div>
 			</div>
 		</div>

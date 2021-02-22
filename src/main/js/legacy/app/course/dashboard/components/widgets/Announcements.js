@@ -2,29 +2,28 @@ const Ext = require('@nti/extjs');
 
 const Base = require('./Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.dashboard.components.widgets.Announcements',
+	{
+		extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
-module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Announcements', {
-	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+		statics: {
+			__BASE_WEIGHT: 3,
 
-	statics: {
+			__queryParams: {
+				sortOn: 'CreatedTime',
+				sortOrder: 'descending',
+			},
 
-		__BASE_WEIGHT: 3,
+			getWeight: function (record) {
+				var time = Base.getTimeWeight(record.get('Last Modified'));
 
-		__queryParams: {
-			sortOn: 'CreatedTime',
-			sortOrder: 'descending'
+				return this.__BASE_WEIGHT + time;
+			},
+
+			getTiles: function (course, startDate, endDate) {
+				return Promise.resolve([]);
+			},
 		},
-
-
-		getWeight: function (record) {
-			var time = Base.getTimeWeight(record.get('Last Modified'));
-
-			return this.__BASE_WEIGHT + time;
-		},
-
-
-		getTiles: function (course, startDate, endDate) {
-			return Promise.resolve([]);
-		}
 	}
-});
+);

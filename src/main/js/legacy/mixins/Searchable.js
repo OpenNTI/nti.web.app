@@ -4,10 +4,9 @@ const SearchStateStore = require('legacy/app/search/StateStore');
 
 require('./SearchHitHighlighting');
 
-
 module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	mixins: {
-		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting',
 	},
 
 	initSearch: function () {
@@ -25,8 +24,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 		var frags = hit.get('Fragments'),
 			frag = frags && (frags[fragIdx || 0] || frags[0]);
 
-		this.onceReadyForSearch()
-			.then(this.showSearchHit.bind(this, hit, frag));
+		this.onceReadyForSearch().then(
+			this.showSearchHit.bind(this, hit, frag)
+		);
 	},
 
 	/**
@@ -50,5 +50,5 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	clearSearchHit: function () {
 		this.SearchStore.clearHitForContainer(this.searchId);
 		this.mixins.SearchHighlighting.clearSearchHit.call(this);
-	}
+	},
 });

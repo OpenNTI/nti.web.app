@@ -1,4 +1,3 @@
-
 @mixin post-navigation {
 	padding: 0 17px 0 30px;
 	font: normal normal 0.75em/0 var(--body-font-family);
@@ -67,7 +66,9 @@
 
 			&.disabled {
 				cursor: default;
-				&::after { opacity: 0.5 !important; }
+				&::after {
+					opacity: 0.5 !important;
+				}
 			}
 
 			&.prev {
@@ -82,7 +83,9 @@
 }
 
 @mixin new-post {
-	&.owner { display: block; }
+	&.owner {
+		display: block;
+	}
 
 	display: none;
 	overflow: hidden;
@@ -136,7 +139,10 @@
 			font: normal 600 12px var(--body-font-family);
 			color: var(--tertiary-grey);
 
-			.count, .name, .link, .edit {
+			.count,
+			.name,
+			.link,
+			.edit {
 				color: var(--primary-blue);
 			}
 
@@ -265,7 +271,7 @@
 
 			.author {
 				width: 600px;
-				font: normal 600 0.65em/1  var(--body-font-family);
+				font: normal 600 0.65em/1 var(--body-font-family);
 				color: var(--primary-blue);
 
 				@include ellipse;
@@ -348,7 +354,8 @@
 		rgin-right: 4px;
 	}
 
-	.new-forum, .new-topic {
+	.new-forum,
+	.new-topic {
 		@include new-post;
 
 		display: block;
@@ -400,7 +407,8 @@
 			cursor: pointer;
 			color: var(--primary-blue);
 
-			&.only.me, &.private {
+			&.only.me,
+			&.private {
 				color: var(--primary-red);
 			}
 		}
@@ -418,7 +426,9 @@
 		.link {
 			color: var(--primary-blue);
 			cursor: pointer;
-			&.on { color: var(--primary-red); }
+			&.on {
+				color: var(--primary-red);
+			}
 		}
 
 		.comment-count {
@@ -483,7 +493,9 @@
 		}
 
 		a {
-			&:link,&:active,&:visited {
+			&:link,
+			&:active,
+			&:visited {
 				color: var(--primary-blue);
 				text-decoration: none;
 			}
@@ -516,7 +528,8 @@
 		margin: 25px 0 10px 0;
 	}
 
-	.comment-box,.x-component-forum-comment {
+	.comment-box,
+	.x-component-forum-comment {
 		.editor {
 			margin-right: 5px;
 			border: 1px solid #dcdcdc;
@@ -842,7 +855,8 @@
 			}
 		}
 
-		&[data-depth='1'], &[data-depth='0'] {
+		&[data-depth='1'],
+		&[data-depth='0'] {
 			border: 0 solid var(--panel-background-alt);
 			border-top-width: 1px;
 			padding-left: 0;
@@ -1091,8 +1105,10 @@
 	}
 }
 
-.blog-window, .email-window {
-	.blog-editor, .email-editor {
+.blog-window,
+.email-window {
+	.blog-editor,
+	.email-editor {
 		@include forum-post-editor;
 	}
 
@@ -1143,7 +1159,9 @@
 			.new-entry-btn {
 				@include new-post;
 
-				&.owner { display: inline-block; }
+				&.owner {
+					display: inline-block;
+				}
 
 				margin-left: 5px;
 				top: 8px;
@@ -1243,7 +1261,9 @@
 				margin-right: 20px;
 			}
 
-			.title { margin-top: 30px; }
+			.title {
+				margin-top: 30px;
+			}
 
 			.meta {
 				.state {
@@ -1270,7 +1290,8 @@
 				&.others {
 					position: relative;
 
-					&::after,&::before {
+					&::after,
+					&::before {
 						content: ' ';
 						position: relative;
 						top: -9px;
@@ -1358,7 +1379,8 @@
 		padding: 8px 15px;
 	}
 
-	.topic-post, .forum-comment-thread {
+	.topic-post,
+	.forum-comment-thread {
 		position: relative;
 		margin-top: 0;
 
@@ -1416,7 +1438,8 @@
 								padding-right: 20px;
 								cursor: pointer;
 
-								&.disabled, &.active {
+								&.disabled,
+								&.active {
 									color: var(--tertiary-grey);
 									cursor: default;
 								}
@@ -1482,7 +1505,10 @@
 			a {
 				margin: 0 4px;
 
-				&,&:visited,&:link,&:active {
+				&,
+				&:visited,
+				&:link,
+				&:active {
 					font-family: var(--body-font-family);
 					color: var(--primary-blue);
 					text-decoration: none;
@@ -1512,11 +1538,17 @@
 					white-space: nowrap;
 					font: normal 600 14px/50px var(--body-font-family);
 
-					@include icon($comment-small-dark_hover, $top: 15px, $left: 15px);
+					@include icon(
+						$comment-small-dark_hover,
+						$top: 15px,
+						$left: 15px
+					);
 				}
 			}
 
-			.x-grid-body { background: none; }
+			.x-grid-body {
+				background: none;
+			}
 
 			.nav-outline {
 				&::after {
@@ -1530,22 +1562,26 @@
 					}
 
 					.outline-row {
-						&, &:hover {
+						&,
+						&:hover {
 							background: var(--primary-blue);
 							box-shadow: inset -3px 1px 0 0 #107eed;
 							border-bottom-color: #107eed;
 
-							.author,.meta {
+							.author,
+							.meta {
 								color: #c5eaff;
 							}
 
-							.title { color: #fff; }
+							.title {
+								color: #fff;
+							}
 						}
 					}
 				}
 
 				.header {
-					@include icon($editor-add, $top:19px, $left: 28px);
+					@include icon($editor-add, $top: 19px, $left: 28px);
 				}
 
 				.outline-row {
@@ -1628,7 +1664,8 @@
 					font: normal 400 1.5em/2.1 var(--header-font-family);
 					padding-top: 5px;
 
-					&:hover, &:not(.x-item-selected):hover {
+					&:hover,
+					&:not(.x-item-selected):hover {
 						background-color: #fff;
 					}
 
@@ -1654,16 +1691,20 @@
 					font-size: 0.6em;
 					background: #fafafa !important;
 					font-weight: 600;
-					box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
+					box-shadow: inset 0 1px 0 0 #efefef,
+						inset 0 -1px 0 0 #efefef;
 					color: var(--secondary-grey);
 					text-transform: uppercase;
 
-					&:hover, &:not(.x-item-selected):hover {
-						box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
+					&:hover,
+					&:not(.x-item-selected):hover {
+						box-shadow: inset 0 1px 0 0 #efefef,
+							inset 0 -1px 0 0 #efefef;
 					}
 				}
 
-				&:hover, &:not(.x-item-selected):hover {
+				&:hover,
+				&:not(.x-item-selected):hover {
 					box-shadow: none;
 					background-color: var(--quad-grey);
 				}
@@ -1741,7 +1782,13 @@
 				display: block !important;
 				background: #fff;
 
-				@include icon($arrow-course-dropdown-light, $side:'before', $top: 20px, $left: auto, $right: 10px);
+				@include icon(
+					$arrow-course-dropdown-light,
+					$side: 'before',
+					$top: 20px,
+					$left: auto,
+					$right: 10px
+				);
 
 				&::before {
 					display: none;
@@ -1759,7 +1806,7 @@
 	}
 
 	div.x-component,
-	div.x-container, {
+	div.x-container {
 		.header-container {
 			.page {
 				vertical-align: top;
@@ -1818,7 +1865,8 @@
 					z-index: 0;
 				}
 
-				.delete-forum, .edit-forum {
+				.delete-forum,
+				.edit-forum {
 					color: var(--primary-red);
 					float: left;
 					line-height: 35px;
@@ -1873,19 +1921,35 @@
 							}
 
 							&.prev:not(.disabled) {
-								@include icon($arrow-up, $top: 10px, $left: 10px);
+								@include icon(
+									$arrow-up,
+									$top: 10px,
+									$left: 10px
+								);
 							}
 
 							&.prev.disabled {
-								@include icon($arrow-up_inactive, $top: 10px, $left: 10px);
+								@include icon(
+									$arrow-up_inactive,
+									$top: 10px,
+									$left: 10px
+								);
 							}
 
 							&.next:not(.disabled) {
-								@include icon($arrow-down, $top: 10px, $left: 10px);
+								@include icon(
+									$arrow-down,
+									$top: 10px,
+									$left: 10px
+								);
 							}
 
 							&.next.disabled {
-								@include icon($arrow-down_inactive, $top: 10px, $left: 10px);
+								@include icon(
+									$arrow-down_inactive,
+									$top: 10px,
+									$left: 10px
+								);
 							}
 						}
 					}

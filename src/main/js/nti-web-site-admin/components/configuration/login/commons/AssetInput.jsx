@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {scoped} from '@nti/lib-locale';
-import {Input, Text, Theme} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { Input, Text, Theme } from '@nti/web-commons';
 
 import Store from '../Store';
 
@@ -11,7 +11,7 @@ import Filename from './Filename';
 
 const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
-	change: 'Change'
+	change: 'Change',
 });
 
 AssetInput.propTypes = {
@@ -19,9 +19,9 @@ AssetInput.propTypes = {
 	setAsset: PropTypes.func,
 	setThemeProp: PropTypes.func,
 	hideFlag: PropTypes.string,
-	notSet: PropTypes.string
+	notSet: PropTypes.string,
 };
-function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
+function AssetInput({ name, setAsset, setThemeProp, hideFlag, notSet }) {
 	const asset = Theme.useThemeProperty(`assets.${name}`);
 
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
@@ -33,13 +33,12 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 			const reader = new FileReader();
 
 			reader.onload = () => {
-				const {result: source} = reader;
+				const { result: source } = reader;
 
 				setAsset(name, {
 					file,
 					filename: file.name,
-					source
-
+					source,
 				});
 
 				if (hideFlag) {
@@ -52,15 +51,22 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 	};
 
 	return (
-		<Input.FileInputWrapper  name={name} className={cx('asset-input')} onChange={onChange} >
-			{href && (<Filename className={cx('file-name')} file={asset.filename} />)}
-			<Text.Base className={cx('change')}>{href || !notSet ? t('change') : notSet}</Text.Base>
+		<Input.FileInputWrapper
+			name={name}
+			className={cx('asset-input')}
+			onChange={onChange}
+		>
+			{href && (
+				<Filename className={cx('file-name')} file={asset.filename} />
+			)}
+			<Text.Base className={cx('change')}>
+				{href || !notSet ? t('change') : notSet}
+			</Text.Base>
 		</Input.FileInputWrapper>
 	);
 }
 
-export default Store
-	.monitor({
-		[Store.SetAsset]: 'setAsset',
-		[Store.SetThemeProp]: 'setThemeProp'
-	})(AssetInput);
+export default Store.monitor({
+	[Store.SetAsset]: 'setAsset',
+	[Store.SetThemeProp]: 'setThemeProp',
+})(AssetInput);

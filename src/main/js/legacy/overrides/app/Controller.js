@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	override: 'Ext.app.Controller',
 
@@ -19,7 +18,6 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 		return ret;
 	},
 
-
 	/**
 	 * Much like the above function, this executes a command on each controller that implements it. Expecting
 	 * the value returned by each to be a promise or a value.  When all performances are done, the pool promise
@@ -32,15 +30,20 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	performAnd: function (functionName, ...args) {
 		var app = this.getApplication();
 
-		function perform (ctlr) {
+		function perform(ctlr) {
 			var f = ctlr[functionName];
-			return (f && typeof f.apply === 'function' && f.apply(ctlr, args)) || undefined;
+			return (
+				(f && typeof f.apply === 'function' && f.apply(ctlr, args)) ||
+				undefined
+			);
 			//the return value should be a promise to pool on. but if not, the all() function
 			// will wrap the value into a promise to meet the interface.
 		}
 
-		return Promise.all(app.controllers.items
-			.map(perform) //make a new array of promises/values
-			.filter(Ext.identityFn)); //filter out falsy entries and pass that to the all()
-	}
+		return Promise.all(
+			app.controllers.items
+				.map(perform) //make a new array of promises/values
+				.filter(Ext.identityFn)
+		); //filter out falsy entries and pass that to the all()
+	},
 });

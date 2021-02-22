@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme, Loading, Errors} from '@nti/web-commons';
+import { Theme, Loading, Errors } from '@nti/web-commons';
 
 import Card from '../../common/Card';
 import Controls from '../branding/Controls';
@@ -24,19 +24,20 @@ AdvancedLogin.propTypes = {
 	modified: PropTypes.bool,
 	theme: PropTypes.object,
 	save: PropTypes.func,
-	cancel: PropTypes.func
+	cancel: PropTypes.func,
 };
-function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
-	if (!theme) { return null; }
+function AdvancedLogin({ error, loading, modified, theme, save, cancel }) {
+	if (!theme) {
+		return null;
+	}
 
 	const [preview, setPreview] = React.useState(false);
 	const form = React.createRef();
 
-	const showPreview = (e) => {
+	const showPreview = e => {
 		if (e) {
 			e.preventDefault();
 			e.stopPropagation();
-
 		}
 
 		setPreview(true);
@@ -52,13 +53,25 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
 
 	return (
 		<Theme.Apply theme={theme}>
-			<form className={cx('login-root')} ref={form} onSubmit={showPreview}>
+			<form
+				className={cx('login-root')}
+				ref={form}
+				onSubmit={showPreview}
+			>
 				<Card>
 					{(modified || error) && (
 						<div className={cx('header')}>
 							<div className={cx('header-content')}>
-								<Controls onPreview={showPreview} onCancel={cancel} />
-								{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
+								<Controls
+									onPreview={showPreview}
+									onCancel={cancel}
+								/>
+								{error && (
+									<Errors.Bar
+										error={error}
+										className={cx('errorbar')}
+									/>
+								)}
 							</div>
 						</div>
 					)}
@@ -70,7 +83,9 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
 						<LoginButton />
 						<Assets />
 					</div>
-					{preview && (<Preview onCancel={hidePreview} onSave={onSave} />)}
+					{preview && (
+						<Preview onCancel={hidePreview} onSave={onSave} />
+					)}
 				</Card>
 				<Loading.Overlay large loading={loading} />
 			</form>
@@ -78,12 +93,11 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
 	);
 }
 
-export default Store
-	.connect({
-		[Store.Error]: 'error',
-		[Store.Loading]: 'loading',
-		[Store.Modified]: 'modified',
-		[Store.Theme]: 'theme',
-		[Store.Save]: 'save',
-		[Store.Cancel]: 'cancel'
-	})(AdvancedLogin);
+export default Store.connect({
+	[Store.Error]: 'error',
+	[Store.Loading]: 'loading',
+	[Store.Modified]: 'modified',
+	[Store.Theme]: 'theme',
+	[Store.Save]: 'save',
+	[Store.Cancel]: 'cancel',
+})(AdvancedLogin);

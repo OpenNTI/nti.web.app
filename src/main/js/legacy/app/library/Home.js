@@ -11,23 +11,27 @@ const CoursesCurrent = require('./courses/Current');
 
 require('legacy/mixins/Router');
 
-
 module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-home',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
 	},
 
 	layout: 'none',
 	cls: 'library-homepage library-page',
 
-	items: [{
-		xtype: 'box',
-		loadingCmp: true,
-		autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
-	}],
+	items: [
+		{
+			xtype: 'box',
+			loadingCmp: true,
+			autoEl: {
+				cls: 'loading-mask',
+				cn: { cls: 'load-text', html: 'Loading...' },
+			},
+		},
+	],
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -39,12 +43,14 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 				CommunitiesCurrent,
 				CoursesCurrent,
 				AdminCurrent,
-				ContentCurrent
+				ContentCurrent,
 			];
 
-		Promise.all(cmps.map(function (c) {
-			return c.shouldShow();
-		}))
+		Promise.all(
+			cmps.map(function (c) {
+				return c.shouldShow();
+			})
+		)
 			.then(function (showing) {
 				me.remove(loadingCmp, true);
 
@@ -52,12 +58,16 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 					if (showing[i]) {
 						me.add({
 							xtype: cmp.xtype,
-							navigateToAllCourses: me.navigateToAllCourses.bind(me),
+							navigateToAllCourses: me.navigateToAllCourses.bind(
+								me
+							),
 							pushRoute: me.pushRoute.bind(me),
 							pushRootRoute: me.pushRootRoute.bind(me),
 							navigateToBundle: me.navigateToBundle.bind(me),
 							navigateToCourse: me.navigateToCourse.bind(me),
-							navigateToCommunity: me.navigateToCommunity.bind(me)
+							navigateToCommunity: me.navigateToCommunity.bind(
+								me
+							),
 						});
 					}
 				});
@@ -66,7 +76,11 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 				me.remove(loadingCmp, true);
 
 				me.add({
-					xtype: 'box', autoEl: {cls: 'error-cmp', html: 'Failed to Load Library'}
+					xtype: 'box',
+					autoEl: {
+						cls: 'error-cmp',
+						html: 'Failed to Load Library',
+					},
 				});
 			});
 
@@ -77,33 +91,34 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	navigateToBundle: function (bundle, el) {
 		var me = this;
 
-		me.BundleViewActions.transitionToBundle(bundle, el)
-			.then(function (route) {
-				me.pushRootRoute(null, route, {bundle: bundle});
-			});
+		me.BundleViewActions.transitionToBundle(bundle, el).then(function (
+			route
+		) {
+			me.pushRootRoute(null, route, { bundle: bundle });
+		});
 	},
 
 	navigateToCourse: function (enrollment, el, subRoute) {
-		const instance = enrollment.get('Links').getRelLink('CourseInstance').ntiid;
+		const instance = enrollment.get('Links').getRelLink('CourseInstance')
+			.ntiid;
 
-		this.CourseViewActions.transitionToCourse(instance, el)
-			.then(route => {
-				this.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''));
-			});
+		this.CourseViewActions.transitionToCourse(instance, el).then(route => {
+			this.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''));
+		});
 	},
 
 	navigateToCommunity: function (community, el) {
 		var route = community.getProfileUrl();
 
 		if (route) {
-			this.pushRootRoute(null, route, {community: community});
+			this.pushRootRoute(null, route, { community: community });
 		}
 	},
 
 	navigateToAllCourses: function () {
 		this.pushRootRoute('Catalog', '/catalog', {
-		// this.pushRoute('All Courses', '/courses/available', {
-			closeURL: '/'
+			// this.pushRoute('All Courses', '/courses/available', {
+			closeURL: '/',
 		});
-	}
+	},
 });

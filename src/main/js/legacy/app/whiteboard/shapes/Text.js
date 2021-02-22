@@ -2,49 +2,52 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.whiteboard.shapes.Text',
+	{
+		extend: 'NextThought.app.whiteboard.shapes.Base',
 
-module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Text', {
-	extend: 'NextThought.app.whiteboard.shapes.Base',
+		constructor: function () {
+			this.calculatedAttributes = ['font-face'];
+			this.callParent(arguments);
+		},
 
-	constructor: function () {
-		this.calculatedAttributes = ['font-face'];
-		this.callParent(arguments);
-	},
+		draw: function (ctx, renderCallback) {
+			this.callParent(arguments);
 
-	draw: function (ctx,renderCallback) {
-		this.callParent(arguments);
+			if (!this.cache['font-face']) {
+				this.cache['font-face'] = '1px ' + this['font-face'];
+			}
 
-		if (!this.cache['font-face']) {
-			this.cache['font-face'] = '1px ' + this['font-face'];
-		}
+			ctx.font = this.cache['font-face'];
+			ctx.textAlign = 'left';
+			ctx.textBaseline = 'top';
 
-		ctx.font = this.cache['font-face'];
-		ctx.textAlign = 'left';
-		ctx.textBaseline = 'top';
+			var w = ctx.measureText(this.text).width,
+				h = 1.3,
+				x = -w / 2,
+				y = -h / 2;
 
-		var w = ctx.measureText(this.text).width,
-			h = 1.3,
-			x = -w / 2,
-			y = -h / 2;
+			if (this.cache.fill) {
+				ctx.fillText(this.text, x, y);
+			}
 
+			if (this.cache.stroke && this.strokeWidth) {
+				ctx.strokeText(this.text, x, y);
+			}
 
-		if (this.cache.fill) {
-			ctx.fillText(this.text, x, y);
-		}
+			this.bbox = {
+				x: x,
+				w: w,
+				y: y,
+				h: h,
+			};
 
-		if (this.cache.stroke && this.strokeWidth) {
-			ctx.strokeText(this.text, x, y);
-		}
+			if (this.selected === 'Hand') {
+				this.showNibs(ctx);
+			}
 
-		this.bbox = {
-			x: x,	w: w,
-			y: y,	h: h
-		};
-
-		if (this.selected === 'Hand') {
-			this.showNibs(ctx);
-		}
-
-		renderCallback.call(this);
+			renderCallback.call(this);
+		},
 	}
-});
+);

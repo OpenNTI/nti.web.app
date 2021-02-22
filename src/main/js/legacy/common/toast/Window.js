@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 	extend: 'Ext.Component',
 	alias: 'widget.toast',
@@ -11,38 +10,51 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 	plain: true,
 	width: 275,
 
-	renderTpl: Ext.DomHelper.markup([{
-		cls: 'close'
-	},{
-		cls: 'icon {iconCls}'
-	},{
-		cls: 'wrapper',
-		cn: [{
-			cls: 'title', html: '{title}'
-		},{
-			cls: 'message', html: '{message}'
-		}]
-	},{
-		cls: 'button-row'
-	}]),
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: 'close',
+		},
+		{
+			cls: 'icon {iconCls}',
+		},
+		{
+			cls: 'wrapper',
+			cn: [
+				{
+					cls: 'title',
+					html: '{title}',
+				},
+				{
+					cls: 'message',
+					html: '{message}',
+				},
+			],
+		},
+		{
+			cls: 'button-row',
+		},
+	]),
 
-	buttonTpl: Ext.DomHelper.createTemplate({ cls: 'toast-button {cls}', cn: ['{label}'] }).compile(),
+	buttonTpl: Ext.DomHelper.createTemplate({
+		cls: 'toast-button {cls}',
+		cn: ['{label}'],
+	}).compile(),
 
 	renderSelectors: {
 		closeEl: '.close',
 		icon: '.icon',
 		titleEl: '.title',
 		messageEl: '.message',
-		buttonRowEl: '.button-row'
+		buttonRowEl: '.button-row',
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title,
 			message: this.message,
-			iconCls: this.iconCls || undefined
+			iconCls: this.iconCls || undefined,
 		});
 	},
 
@@ -57,36 +69,41 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 
 	renderButton: function (button) {
 		var b = this.buttonTpl.append(this.buttonRowEl, button, true);
-		this.mon(b, 'click',
+		this.mon(
+			b,
+			'click',
 			Ext.Function.createSequence(
-				Ext.Function.createSequence(
-					this.setActedOn,
-					this.close, this),
+				Ext.Function.createSequence(this.setActedOn, this.close, this),
 
 				button.callback,
-				button.scope || this),
-			this, {buttonCfg: button});
+				button.scope || this
+			),
+			this,
+			{ buttonCfg: button }
+		);
 	},
 
-
-	setActedOn: function (clickEvent,dom,eOpts) {
+	setActedOn: function (clickEvent, dom, eOpts) {
 		this.actedOn = eOpts.buttonCfg || true;
 	},
 
-
 	close: function (e) {
-		if (e) { e.stopEvent(); }
+		if (e) {
+			e.stopEvent();
+		}
 		var size = Ext.dom.Element.getViewSize();
 		this.animate({
 			to: { top: size.height + 10 },
 			duration: 200,
 			listeners: {
 				afteranimate: this.destroy,
-				scope: this
-			}
+				scope: this,
+			},
 		});
 
-		Ext.callback(this.callback, this.scope || this, [this.actedOn || false]);
+		Ext.callback(this.callback, this.scope || this, [
+			this.actedOn || false,
+		]);
 		return false;
-	}
+	},
 });

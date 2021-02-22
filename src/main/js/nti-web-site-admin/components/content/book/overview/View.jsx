@@ -7,36 +7,36 @@ const { ActiveDays, ActiveUsers, ActiveTimes } = Widgets;
 
 export default class SiteAdminBookOverview extends React.Component {
 	static propTypes = {
-		course: PropTypes.object
-	}
+		course: PropTypes.object,
+	};
 
-	state = {}
+	state = {};
 
-	componentDidMount () {
-		const {course} = this.props;
+	componentDidMount() {
+		const { course } = this.props;
 
-		if(!this.state.resp && course && course.hasLink('users')) {
+		if (!this.state.resp && course && course.hasLink('users')) {
 			course.fetchLink('users').then(resp => {
-				this.setState({resp});
+				this.setState({ resp });
 			});
 		}
 	}
 
-	render () {
-		const {course} = this.props;
+	render() {
+		const { course } = this.props;
 
 		return (
 			<div className="site-admin-book-overview">
 				<div className="site-admin-row">
 					<div className="active-users">
-						<ActiveUsers entity={course}/>
+						<ActiveUsers entity={course} />
 					</div>
 				</div>
 				<div className="active-days">
-					<ActiveDays entity={course}/>
+					<ActiveDays entity={course} />
 				</div>
 				<div className="active-times">
-					<ActiveTimes course={course}/>
+					<ActiveTimes course={course} />
 				</div>
 			</div>
 		);

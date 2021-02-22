@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 	extend: 'Ext.data.writer.Json',
 	alias: 'writer.nti',
@@ -14,11 +13,10 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 			output = {},
 			key;
 
-		function getJSON (obj) {
+		function getJSON(obj) {
 			if (obj && Ext.isFunction(obj.asJSON)) {
 				obj = obj.asJSON();
-			}
-			else if (Ext.isArray(obj)) {
+			} else if (Ext.isArray(obj)) {
 				obj = Ext.Array.map(obj, getJSON);
 			}
 			return obj;
@@ -49,11 +47,14 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 		//to see when the bug is fixed and log it so we remove this extra step when possible.
 		if (request.action === 'destroy') {
 			if (!request.jsonData || request.jsonData.length === 0) {
-				console.warn('SAFE TO REMOVE EXTJS BUG WORKAROUND, request to delete has no jsonData', request);
+				console.warn(
+					'SAFE TO REMOVE EXTJS BUG WORKAROUND, request to delete has no jsonData',
+					request
+				);
 			}
 			delete request.jsonData;
 		}
 
 		return request;
-	}
+	},
 });

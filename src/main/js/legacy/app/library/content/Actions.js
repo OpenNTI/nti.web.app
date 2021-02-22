@@ -1,86 +1,103 @@
 const Ext = require('@nti/extjs');
 
 const StoreUtils = require('legacy/util/Store');
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 const LoginStateStore = require('legacy/login/StateStore');
-const lazy = require('legacy/util/lazy-require')
-	.get('ContentStateStore', ()=> require('./StateStore'));
+const lazy = require('legacy/util/lazy-require').get('ContentStateStore', () =>
+	require('./StateStore')
+);
 
 require('legacy/common/Actions');
 
+module.exports = exports = Ext.define(
+	'NextThought.app.library.content.Actions',
+	{
+		extend: 'NextThought.common.Actions',
 
-module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {
-	extend: 'NextThought.common.Actions',
+		constructor: function () {
+			this.callParent(arguments);
 
-	constructor: function () {
-		this.callParent(arguments);
+			this.ContentStore = lazy.ContentStateStore.getInstance();
+			this.LoginStore = LoginStateStore.getInstance();
 
-		this.ContentStore = lazy.ContentStateStore.getInstance();
-		this.LoginStore = LoginStateStore.getInstance();
+			this.mon(this.ContentStore, 'do-load', () => this.loadContent());
+		},
 
-		this.mon(this.ContentStore, 'do-load', () => this.loadContent());
-	},
+		loadContent: function () {
+			var store = this.ContentStore;
 
-	loadContent: function () {
-		var store = this.ContentStore;
+			if (store.isLoading()) {
+				return;
+			}
 
-		if (store.isLoading()) {
-			return;
-		}
+			store.setLoading();
 
-		store.setLoading();
+			return this.LoginStore.getService()
+				.then(service => {
+					if (!service) {
+						console.error('No Service document defined');
+						return;
+					}
 
-		return this.LoginStore.getService()
-			.then((service) => {
+					return Promise.all([
+						this.setUpContentBundles(
+							(
+								service.getCollection(
+									'VisibleContentBundles',
+									'ContentBundles'
+								) || {}
+							).href
+						),
+					]);
+				})
+				.then(() => {
+					store.setLoaded();
+				});
+		},
 
-				if (!service) {
-					console.error('No Service document defined');
-					return;
-				}
+		setUpContentPackages: function (link) {
+			if (!link) {
+				this.ContentStore.setContentPackages([]);
 
-				return Promise.all([
-					this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
-				]);
-			})
-			.then(() => {
-				store.setLoaded();
-			});
-	},
+				return Promise.resolve();
+			}
 
-	setUpContentPackages: function (link) {
-		if (!link) {
-			this.ContentStore.setContentPackages([]);
+			return StoreUtils.loadItems(getURL(link), null, 'titles').then(
+				this.ContentStore.setContentPackages.bind(this.ContentStore)
+			);
+		},
 
-			return Promise.resolve();
-		}
+		setUpContentBundles: function (link) {
+			if (!link) {
+				this.ContentStore.setContentBundles([]);
 
-		return StoreUtils.loadItems(getURL(link), null, 'titles')
-			.then(this.ContentStore.setContentPackages.bind(this.ContentStore));
-	},
+				return Promise.resolve();
+			}
 
-	setUpContentBundles: function (link) {
-		if (!link) {
-			this.ContentStore.setContentBundles([]);
+			return StoreUtils.loadItems(getURL(link), null, 'titles').then(
+				this.ContentStore.setContentBundles.bind(this.ContentStore)
+			);
+		},
 
-			return Promise.resolve();
-		}
+		findContent: function (id) {
+			return this.ContentStore.onceLoaded().then(
+				this.ContentStore.findContent.bind(this.ContentStore, id)
+			);
+		},
 
-		return StoreUtils.loadItems(getURL(link), null, 'titles')
-			.then(this.ContentStore.setContentBundles.bind(this.ContentStore));
-	},
+		findContentByPriority: function (fn) {
+			return this.ContentStore.onceLoaded().then(
+				this.ContentStore.findContentByPriority.bind(
+					this.ContentStore,
+					fn
+				)
+			);
+		},
 
-	findContent: function (id) {
-		return this.ContentStore.onceLoaded()
-			.then(this.ContentStore.findContent.bind(this.ContentStore, id));
-	},
-
-	findContentByPriority: function (fn) {
-		return this.ContentStore.onceLoaded()
-			.then(this.ContentStore.findContentByPriority.bind(this.ContentStore, fn));
-	},
-
-	findForNTIID: function (id) {
-		return this.ContentStore.onceLoaded()
-			.then(this.ContentStore.findForNTIID.bind(this.ContentStore, id));
+		findForNTIID: function (id) {
+			return this.ContentStore.onceLoaded().then(
+				this.ContentStore.findForNTIID.bind(this.ContentStore, id)
+			);
+		},
 	}
-});
+);

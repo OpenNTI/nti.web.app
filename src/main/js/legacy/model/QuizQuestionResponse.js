@@ -3,17 +3,19 @@ const Ext = require('@nti/extjs');
 require('./Base');
 require('./QuizQuestion');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.QuizQuestionResponse',
+	{
+		extend: 'NextThought.model.Base',
 
-module.exports = exports = Ext.define('NextThought.model.QuizQuestionResponse', {
-	extend: 'NextThought.model.Base',
+		fields: [
+			{ name: 'Assessment', type: 'boolean' },
+			{ name: 'Question', type: 'singleItem' },
+			{ name: 'Response', type: 'string' },
+		],
 
-	fields: [
-		{ name: 'Assessment', type: 'boolean' },
-		{ name: 'Question', type: 'singleItem'},
-		{ name: 'Response', type: 'string' }
-	],
-
-	proxy: {
-		type: 'memory'
+		proxy: {
+			type: 'memory',
+		},
 	}
-});
+);

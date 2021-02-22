@@ -10,22 +10,23 @@ const getMockService = () => {
 	return {
 		getBatch: () => {
 			return {
-				getLink: () => 'mockLink'
+				getLink: () => 'mockLink',
 			};
 		},
 		get: () => {
 			let historicalSessions = [];
 
-			for(let i = 0; i < 10; i++) {
+			for (let i = 0; i < 10; i++) {
 				historicalSessions.push({
-					SessionStartTime: (new Date('10/30/2017').getTime() / 1000) + (i * 60)
+					SessionStartTime:
+						new Date('10/30/2017').getTime() / 1000 + i * 60,
 				});
 			}
 
 			return Promise.resolve({
-				Items: historicalSessions
+				Items: historicalSessions,
 			});
-		}
+		},
 	};
 };
 
@@ -48,10 +49,10 @@ describe('Site admin user overview view', () => {
 	test('Basic render test', async () => {
 		const user = {
 			getLink: () => 'mockLink',
-			getCreatedTime: () => new Date('10/10/2017')
+			getCreatedTime: () => new Date('10/10/2017'),
 		};
 
-		const cmp = renderer.create(<View user={user}/>);
+		const cmp = renderer.create(<View user={user} />);
 
 		jest.runAllTimers();
 		await flushPromises();

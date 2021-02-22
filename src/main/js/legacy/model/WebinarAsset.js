@@ -10,8 +10,5 @@ module.exports = exports = Ext.define('NextThought.model.WebinarAsset', {
 		mimeType: 'application/vnd.nextthought.webinarasset',
 	},
 
-	fields: [
-		{name: 'webinar', type: 'object'}
-	]
-
+	fields: [{ name: 'webinar', type: 'object' }],
 });

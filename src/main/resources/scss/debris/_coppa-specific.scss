@@ -11,9 +11,7 @@
 
 	@include reset-window-border-radius(3px);
 
-	box-shadow:
-		0 0 50px 5px rgba(0, 0, 0, 0.3),
-		0 0 0 110px transparent;
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
 	background-color: var(--quad-grey);
 
 	.account-header-view {
@@ -87,7 +85,8 @@
 				white-space: nowrap;
 			}
 
-			input, .selectbox {
+			input,
+			.selectbox {
 				vertical-align: bottom;
 				color: var(--secondary-grey);
 				font: italic 500 14px/25px var(--body-font-family);
@@ -134,7 +133,8 @@
 			}
 
 			& > div {
-				span, .validation-message {
+				span,
+				.validation-message {
 					padding-left: 20px;
 					display: inline-block;
 					vertical-align: top;
@@ -150,24 +150,33 @@
 				}
 
 				&.invalid {
-					span, .validation-message { color: var(--primary-red); }
+					span,
+					.validation-message {
+						color: var(--primary-red);
+					}
 
-					input[data-required=true], .selectbox {
+					input[data-required='true'],
+					.selectbox {
 						box-shadow: inset 5px 0 0 0 var(--primary-red) !important;
 					}
 				}
 
 				&.valid {
-					span, .validation-message { color: var(--primary-green); }
+					span,
+					.validation-message {
+						color: var(--primary-green);
+					}
 
-					input[data-required=true], .selectbox {
+					input[data-required='true'],
+					.selectbox {
 						box-shadow: inset 5px 0 0 0 var(--primary-green) !important;
 					}
 				}
 			}
 		}
 
-		.continue, .save {
+		.continue,
+		.save {
 			display: inline-block;
 			cursor: pointer;
 			vertical-align: bottom;
@@ -221,7 +230,7 @@
 				position: relative;
 				font: normal normal 11px/45px var(--body-font-family);
 
-				input[type=checkbox] {
+				input[type='checkbox'] {
 					position: absolute;
 					clip: rect(0, 0, 0, 0);
 					clip: rect(0 0 0 0);
@@ -245,7 +254,8 @@
 					}
 
 					&:checked + div {
-						&, &:hover {
+						&,
+						&:hover {
 							&::before {
 								@include sprite($checkbox-14_active);
 							}
@@ -256,17 +266,19 @@
 
 			.fields {
 				& > div {
-					&.hidden { display: none; }
+					&.hidden {
+						display: none;
+					}
 
 					input {
-						&[data-required=true] {
+						&[data-required='true'] {
 							display: inline-block;
 							margin-bottom: 10px;
 							border-left-width: 0;
 							box-shadow: inset 5px 0 0 0 #a0a0a0;
 						}
 
-						&[name=last] {
+						&[name='last'] {
 							margin-bottom: 10px;
 							margin-left: 10px;
 						}
@@ -295,7 +307,8 @@
 			margin-bottom: 5px;
 		}
 
-		h3, .what-school {
+		h3,
+		.what-school {
 			margin-top: 40px;
 		}
 
@@ -309,27 +322,35 @@
 			position: relative;
 		}
 
-		.hidden { display: none; }
+		.hidden {
+			display: none;
+		}
 
 		textarea.input-box.error {
 			box-shadow: -4px 0 0 0 var(--primary-red);
 		}
 
-		.input-box, .combo-box {
+		.input-box,
+		.combo-box {
 			margin: 5px 0;
-			&, input, .x-form-item { font-size: 14px; }
+			&,
+			input,
+			.x-form-item {
+				font-size: 14px;
+			}
 
 			.x-form-cb-label-after {
 				margin-left: 10px;
 			}
 
 			&.error {
-				input, input:focus {
+				input,
+				input:focus {
 					box-shadow: -4px 0 0 0 var(--primary-red);
 				}
 			}
 
-			border: 1px solid var(--border-grey);//#dcdcdc;
+			border: 1px solid var(--border-grey); //#dcdcdc;
 			padding-right: 30px;
 			background: #fff;
 
@@ -355,7 +376,10 @@
 			}
 		}
 
-		textarea.input-box, .input-box input, textarea.combo-box, .combo-box input {
+		textarea.input-box,
+		.input-box input,
+		textarea.combo-box,
+		.combo-box input {
 			&::-ms-clear {
 				display: none;
 			}
@@ -384,7 +408,9 @@
 			.x-opera &,
 			.x-safari5 & {
 				width: 291px;
-				&[placeholder$="Name"] { width: 145px; }
+				&[placeholder$='Name'] {
+					width: 145px;
+				}
 			}
 
 			position: relative;
@@ -441,7 +467,8 @@
 			padding: 15px 10px;
 			overflow: hidden;
 
-			.privacyLink, .policy-link {
+			.privacyLink,
+			.policy-link {
 				text-decoration: none;
 				color: var(--primary-blue);
 				font-size: 12px;
@@ -566,7 +593,8 @@
 				cursor: text;
 			}
 
-			input, input:focus {
+			input,
+			input:focus {
 				background-color: var(--quad-grey);
 				box-shadow: -4px 0 0 0 var(--primary-green);
 			}

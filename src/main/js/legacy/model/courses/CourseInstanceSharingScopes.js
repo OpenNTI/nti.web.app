@@ -2,53 +2,51 @@ const Ext = require('@nti/extjs');
 require('../Base');
 require('./CourseInstanceSharingScope');
 
+module.exports = exports = Ext.define(
+	'NextThought.model.courses.CourseInstanceSharingScopes',
+	{
+		extend: 'NextThought.model.Base',
+		mimeType: [
+			'application/vnd.nextthought.courseinstancesharingscopes',
+			'application/vnd.nextthought.courses.courseinstancesharingscopes',
+		],
 
-module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceSharingScopes', {
-	extend: 'NextThought.model.Base',
-	mimeType: [
-		'application/vnd.nextthought.courseinstancesharingscopes',
-		'application/vnd.nextthought.courses.courseinstancesharingscopes',
-	],
+		fields: [
+			{ name: 'DefaultSharingScopeNTIID', type: 'string' },
+			{ name: 'Items', type: 'collectionItem' },
+		],
 
-	fields: [
-		{name: 'DefaultSharingScopeNTIID', type: 'string'},
-		{name: 'Items', type: 'collectionItem'}
-	],
+		getDefaultSharing: function () {
+			return this.get('DefaultSharingScopeNTIID');
+		},
 
+		getScope: function (name) {
+			//I assume this will always be a singular item, not an array/set of items...
+			//as in Public will map to a singular entity (a Community so far in my poking...)
+			return this.getFieldItem('Items', name);
+		},
 
-	getDefaultSharing: function () {
-		return this.get('DefaultSharingScopeNTIID');
-	},
+		containsDefault: function () {
+			return !!this.getDefaultScope();
+		},
 
+		getScopeForId: function (id) {
+			var items = this.get('Items') || [],
+				i;
 
-	getScope: function (name) {
-		//I assume this will always be a singular item, not an array/set of items...
-		//as in Public will map to a singular entity (a Community so far in my poking...)
-		return this.getFieldItem('Items', name);
-	},
-
-
-	containsDefault: function () {
-		return !!this.getDefaultScope();
-	},
-
-
-	getScopeForId: function (id) {
-		var items = this.get('Items') || [], i;
-
-		for (i = 0; i < items.length; i++) {
-			if (items[i].getId && items[i].getId() === id) {
-				return items[i];
+			for (i = 0; i < items.length; i++) {
+				if (items[i].getId && items[i].getId() === id) {
+					return items[i];
+				}
 			}
-		}
 
-		return null;
-	},
+			return null;
+		},
 
+		getDefaultScope: function () {
+			var defaultId = this.getDefaultSharing();
 
-	getDefaultScope: function () {
-		var defaultId = this.getDefaultSharing();
-
-		return this.getScopeForId(defaultId);
+			return this.getScopeForId(defaultId);
+		},
 	}
-});
+);

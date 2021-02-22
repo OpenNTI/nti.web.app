@@ -6,14 +6,14 @@ require('./editor/mixins/ShapeManipulation');
 require('./editor/mixins/ToolOptionsState');
 require('./editor/Tools');
 
-
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 	extend: 'Ext.panel.Panel',
-	alias:	'widget.whiteboard-editor',
+	alias: 'widget.whiteboard-editor',
 
 	mixins: {
-		interaction: 'NextThought.app.whiteboard.editor.mixins.ShapeManipulation',
-		toolState: 'NextThought.app.whiteboard.editor.mixins.ToolOptionsState'
+		interaction:
+			'NextThought.app.whiteboard.editor.mixins.ShapeManipulation',
+		toolState: 'NextThought.app.whiteboard.editor.mixins.ToolOptionsState',
 	},
 
 	MimeType: 'application/vnd.nextthought.canvas',
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 
 	items: [
 		{ xtype: 'whiteboard-tools', dock: 'top' },
-		{xtype: 'whiteboard-canvas', anchor: '100%'}
+		{ xtype: 'whiteboard-canvas', anchor: '100%' },
 	],
 
 	initComponent: function () {
@@ -49,12 +49,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 
 		if (parentWin && parentWin.readonly) {
 			this.toolbar.disable().hide();
-		}
-		else {
+		} else {
 			this.initMixin(this.toolbar, this.canvas);
 		}
 
-		this.mon(this.up('wb-window'), 'activate', function () {this.canvas.drawScene();}, this);
+		this.mon(
+			this.up('wb-window'),
+			'activate',
+			function () {
+				this.canvas.drawScene();
+			},
+			this
+		);
 
 		this.canvas.hasResized(this, this.getWidth(), this.getHeight());
 	},
@@ -62,7 +68,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 	reset: function () {
 		this.value = Ext.clone(this.initialConfig.value);
 		this.canvas.updateData(this.value);
-
 	},
 
 	getValue: function () {
@@ -71,5 +76,5 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 
 	getThumbnail: function (callback) {
 		return WhiteboardCanvas.getThumbnail(this.canvas.getData(), callback);
-	}
+	},
 });

@@ -20,39 +20,42 @@ const styles = require('./Prompt.css');
 
 require('../outline/Prompt');
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
-	alias: 'widget.overview-editing-content-editor',
-	cls: styles['overview-editing-content-editor-prompt'],
+module.exports = exports = Ext.define(
+	'NextThought.app.course.overview.components.editing.content.Prompt',
+	{
+		extend:
+			'NextThought.app.course.overview.components.editing.outline.Prompt',
+		alias: 'widget.overview-editing-content-editor',
+		cls: styles['overview-editing-content-editor-prompt'],
 
-	statics: {
+		statics: {
+			getCreators: function () {
+				return [
+					LessonoverviewChildCreation,
+					OverviewgroupChildCreation,
+					OutlinenodeChildCreation,
+				];
+			},
 
-		getCreators: function () {
-			return [
-				LessonoverviewChildCreation,
-				OverviewgroupChildCreation,
-				OutlinenodeChildCreation
-			];
+			getTypeEditors: function () {
+				return [
+					ContentlinkEditor,
+					OverviewgroupEditor,
+					VideoEditor,
+					DiscussionEditor,
+					LTIExternalToolAssetEditor,
+					PollEditor,
+					QuestionsetEditor,
+					ScormEditor,
+					SurveyEditor,
+					TimelineEditor,
+					WebinarEditor,
+					EventEditor,
+				];
+			},
 		},
-
-
-		getTypeEditors: function () {
-			return [
-				ContentlinkEditor,
-				OverviewgroupEditor,
-				VideoEditor,
-				DiscussionEditor,
-				LTIExternalToolAssetEditor,
-				PollEditor,
-				QuestionsetEditor,
-				ScormEditor,
-				SurveyEditor,
-				TimelineEditor,
-				WebinarEditor,
-				EventEditor
-			];
-		}
+	},
+	function () {
+		this.initRegistry();
 	}
-}, function () {
-	this.initRegistry();
-});
+);

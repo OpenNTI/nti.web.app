@@ -6,10 +6,14 @@ import InviteName from '../InviteName';
 
 describe('Site admin user table invite name column test', () => {
 	test('Test admin invitation', () => {
-		const colCmp = renderer.create(<InviteName item={{
-			receiver: 'adminUser1',
-			MimeType: 'application/vnd.nextthought.siteadmininvitation'
-		}}/>);
+		const colCmp = renderer.create(
+			<InviteName
+				item={{
+					receiver: 'adminUser1',
+					MimeType: 'application/vnd.nextthought.siteadmininvitation',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 
@@ -18,10 +22,14 @@ describe('Site admin user table invite name column test', () => {
 	});
 
 	test('Test learner invitation', () => {
-		const colCmp = renderer.create(<InviteName item={{
-			receiver: 'learnerUser1',
-			MimeType: 'application/vnd.nextthought.siteinvitation'
-		}}/>);
+		const colCmp = renderer.create(
+			<InviteName
+				item={{
+					receiver: 'learnerUser1',
+					MimeType: 'application/vnd.nextthought.siteinvitation',
+				}}
+			/>
+		);
 
 		const tree = colCmp.toJSON();
 

@@ -1,9 +1,9 @@
 export default {
-	handles (targetMimeType) {
+	handles(targetMimeType) {
 		return targetMimeType === 'application/vnd.nextthought.napoll';
 	},
 
-	resolveTitle () {
+	resolveTitle() {
 		return 'Poll';
-	}
+	},
 };

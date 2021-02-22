@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 
-const {getURL} = require('legacy/util/Globals');
+const { getURL } = require('legacy/util/Globals');
 
 require('../Base');
 require('./StripeConnectKey');
-
 
 module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {
 	extend: 'NextThought.model.Base',
@@ -25,10 +24,21 @@ module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
 		{ name: 'Items', type: 'auto', persist: false },
 		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
-		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
-		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function (v, r) {
-			return r && r.hasHistory();
-		}}
+		{
+			name: 'courseName',
+			type: 'string',
+			persist: false,
+			defaultValue: '',
+		},
+		{
+			name: 'HasHistory',
+			type: 'bool',
+			persist: false,
+			affectedBy: 'Last Modified',
+			convert: function (v, r) {
+				return r && r.hasHistory();
+			},
+		},
 	],
 
 	isActive: function () {
@@ -40,7 +50,9 @@ module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {
 	//TODO we want the pricing link on the actual purchasable
 	getLink: function (rel) {
 		if (rel === 'pricing') {
-			return getURL('/dataserver2/store/price_purchasable_with_stripe_coupon');
+			return getURL(
+				'/dataserver2/store/price_purchasable_with_stripe_coupon'
+			);
 		}
 		if (rel === 'purchase') {
 			return getURL('/dataserver2/store/post_stripe_payment');
@@ -66,5 +78,5 @@ module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {
 
 	isRedeemable: function () {
 		return !!this.getLink('redeem_gift');
-	}
+	},
 });

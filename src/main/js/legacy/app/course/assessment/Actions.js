@@ -1,74 +1,85 @@
 const Ext = require('@nti/extjs');
-const {scoped} = require('@nti/lib-locale');
+const { scoped } = require('@nti/lib-locale');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
+	require('legacy/util/Parsing')
+);
 
 require('legacy/model/assessment/Assignment');
 require('legacy/model/assessment/DiscussionAssignment');
 
 const t = scoped('nti-web-app.course.assessment.Actions', {
 	untitled: 'Untitled Assignment',
-	untitledSurvey: 'Untitled Survey'
+	untitledSurvey: 'Untitled Survey',
 });
 
 const ASSIGNMENT_TPL = {
-	'Class': 'Assignment',
-	'MimeType': 'application/vnd.nextthought.assessment.assignment',
-	'content': '',
-	'parts': [],
-	'title': 'Untitled Assignment'
+	Class: 'Assignment',
+	MimeType: 'application/vnd.nextthought.assessment.assignment',
+	content: '',
+	parts: [],
+	title: 'Untitled Assignment',
 };
 
 const DISCUSSION_TPL = {
-	'Class': 'DiscussionAssignment',
-	'MimeType': 'application/vnd.nextthought.assessment.discussionassignment',
-	'content': '',
-	'title': 'Untitled Assignment'
+	Class: 'DiscussionAssignment',
+	MimeType: 'application/vnd.nextthought.assessment.discussionassignment',
+	content: '',
+	title: 'Untitled Assignment',
 };
 
 const SurveyTpl = {
-	'Class': 'Survey',
-	'MimeType': 'application/vnd.nextthought.nasurvey',
-	'contents': '',
-	'title': 'Untitled Survey'
+	Class: 'Survey',
+	MimeType: 'application/vnd.nextthought.nasurvey',
+	contents: '',
+	title: 'Untitled Survey',
 };
 
-function createWithData (link, data) {
+function createWithData(link, data) {
 	if (!link) {
 		return Promise.reject('No Link');
 	}
 
 	return Service.post(link, data)
-		.then((resp) => {
+		.then(resp => {
 			return lazy.ParseUtils.parseItems(resp)[0];
 		})
-		.catch((reason) => {
+		.catch(reason => {
 			console.error('Failed to create assignment: ', reason);
 			return Promise.reject(reason);
 		});
 }
 
+module.exports = exports = Ext.define(
+	'NextThought.app.course.assessment.Actions',
+	{
+		extend: 'NextThought.common.Actions',
 
-module.exports = exports = Ext.define('NextThought.app.course.assessment.Actions', {
-	extend: 'NextThought.common.Actions',
+		createAssignmentIn(bundle) {
+			const link = bundle.getLink('CourseEvaluations');
 
-	createAssignmentIn (bundle) {
-		const link = bundle.getLink('CourseEvaluations');
+			return createWithData(link, {
+				...ASSIGNMENT_TPL,
+				title: t('untitled'),
+			});
+		},
 
-		return createWithData(link, {...ASSIGNMENT_TPL, title: t('untitled')});
-	},
+		createDiscussionAssignmentIn(bundle) {
+			const link = bundle.getLink('CourseEvaluations');
 
+			return createWithData(link, {
+				...DISCUSSION_TPL,
+				title: t('untitled'),
+			});
+		},
 
-	createDiscussionAssignmentIn (bundle) {
-		const link = bundle.getLink('CourseEvaluations');
+		createSurveyIn(bundle) {
+			const link = bundle.getLink('CourseEvaluations');
 
-		return createWithData(link, {...DISCUSSION_TPL, title: t('untitled')});
-	},
-
-	createSurveyIn (bundle) {
-		const link = bundle.getLink('CourseEvaluations');
-
-		return createWithData(link, {...SurveyTpl, title: t('untitledSurvey')});
+			return createWithData(link, {
+				...SurveyTpl,
+				title: t('untitledSurvey'),
+			});
+		},
 	}
-});
+);

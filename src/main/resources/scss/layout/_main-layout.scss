@@ -5,7 +5,8 @@ html.x-viewport {
 
 	--nt-app-top-offset: #{$header-height};
 
-	&.window-open, &.scroll-lock {
+	&.window-open,
+	&.scroll-lock {
 		overflow: hidden !important;
 	}
 

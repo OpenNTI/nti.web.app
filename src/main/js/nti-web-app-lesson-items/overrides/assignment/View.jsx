@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {decorate} from '@nti/lib-commons';
-import {Loading, Layouts} from '@nti/web-commons';
-import {Prompt as RoutePrompt} from '@nti/web-routing';
+import { decorate } from '@nti/lib-commons';
+import { Loading, Layouts } from '@nti/web-commons';
+import { Prompt as RoutePrompt } from '@nti/web-routing';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 
@@ -15,35 +15,35 @@ import Store from './Store';
 
 const cx = classnames.bind(Styles);
 
-const {Aside, Uncontrolled} = Layouts;
+const { Aside, Uncontrolled } = Layouts;
 
 const MIME_TYPES = {
 	'application/vnd.nextthought.assessment.discussionassignment': true,
 	'application/vnd.nextthought.assessment.timedassignment': true,
 	'application/vnd.nextthought.assessment.assignment': true,
-	'application/vnd.nextthought.assignmentref': true
+	'application/vnd.nextthought.assignmentref': true,
 };
 
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
+const handles = obj => {
+	const { location } = obj || {};
+	const { item } = location || {};
 
 	return item && MIME_TYPES[item.MimeType];
 };
 
 class NTIWebAppLessonItemsAssignment extends React.Component {
-	static deriveBindingFromProps (props) {
-		const {location = {}} = props;
+	static deriveBindingFromProps(props) {
+		const { location = {} } = props;
 
 		return {
 			assignment: location.item,
-			course: props.course
+			course: props.course,
 		};
 	}
 
 	static propTypes = {
 		location: PropTypes.shape({
-			item: PropTypes.object
+			item: PropTypes.object,
 		}),
 		course: PropTypes.object.isRequired,
 
@@ -58,19 +58,17 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		historyModel: PropTypes.object,
 		student: PropTypes.object,
 
-		updateHistoryItem: PropTypes.func
-	}
+		updateHistoryItem: PropTypes.func,
+	};
 
-	state = {}
+	state = {};
 
-	componentWillUnmount () {
-		this.setupAssignment =
-		this.setState = () => null;
+	componentWillUnmount() {
+		this.setupAssignment = this.setState = () => null;
 		this.tearDownAssignment();
 	}
 
-
-	setupAssignment = (renderTo) => {
+	setupAssignment = renderTo => {
 		this.tearDownAssignment();
 
 		const {
@@ -78,10 +76,12 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			assignmentModel,
 			historyModel,
 			student,
-			updateHistoryItem
+			updateHistoryItem,
 		} = this.props;
 
-		if (!renderTo || !assignmentModel) { return; }
+		if (!renderTo || !assignmentModel) {
+			return;
+		}
 
 		this.contentViewer = ContentViewer.create({
 			renderTo,
@@ -91,36 +91,44 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 				if (!item) {
 					this.setState({
 						activeHistoryItemModel: null,
-						activeAssignmentModel: assignment || this.state.activeAssignmentModel
+						activeAssignmentModel:
+							assignment || this.state.activeAssignmentModel,
 					});
 					return;
 				}
 
 				this.setState({
 					activeHistoryItemModel: item,
-					activeAssignmentModel: assignment || this.state.activeAssignmentModel,
+					activeAssignmentModel:
+						assignment || this.state.activeAssignmentModel,
 					remainingTime: null,
-					maxTime: null
+					maxTime: null,
 				});
 			},
 			showRemainingTime: (time, max) => {
-				if (this.state.activeHistoryItemModel) { return; }
+				if (this.state.activeHistoryItemModel) {
+					return;
+				}
 
 				this.setState({
 					remainingTime: time,
-					maxTime: max
+					maxTime: max,
 				});
 			},
 			handleNavigation: (title, route, precache) => {
-				const {handleNavigation} = this.props;
+				const { handleNavigation } = this.props;
 
 				if (handleNavigation) {
 					handleNavigation(title, `/assignment/${route}`, precache);
 				}
 			},
 			onAssignmentSubmitted: async (submittedId, historyItemLink) => {
-				const result = await updateHistoryItem(submittedId, historyItemLink);
-				const {historyModel:updatedHistory, container} = result || {};
+				const result = await updateHistoryItem(
+					submittedId,
+					historyItemLink
+				);
+				const { historyModel: updatedHistory, container } =
+					result || {};
 
 				if (updatedHistory && this.contentViewer) {
 					this.contentViewer.updateHistory(updatedHistory, container);
@@ -128,24 +136,22 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			},
 			assignment: assignmentModel,
 			historyItem: historyModel,
-			student
+			student,
 		});
-	}
-
+	};
 
 	tearDownAssignment = () => {
 		if (this.contentViewer) {
 			this.contentViewer.destroy();
 			delete this.contentViewer;
 		}
-	}
+	};
 
 	doStart = () => {
 		if (this.contentViewer && this.contentViewer.reader) {
 			return this.contentViewer.reader.doStartAssignment();
 		}
-	}
-
+	};
 
 	onRoute = async (cont, stop) => {
 		if (!this.contentViewer || !this.contentViewer.allowNavigation) {
@@ -159,13 +165,19 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		} catch (e) {
 			stop();
 		}
-	}
+	};
 
-
-	render () {
-		const {loading, error, assignmentModel} = this.props;
-		const {activeAssignmentModel, activeHistoryItemModel, maxTime, remainingTime} = this.state;
-		const timerProps = activeHistoryItemModel ? {} : {maxTime, remainingTime};
+	render() {
+		const { loading, error, assignmentModel } = this.props;
+		const {
+			activeAssignmentModel,
+			activeHistoryItemModel,
+			maxTime,
+			remainingTime,
+		} = this.state;
+		const timerProps = activeHistoryItemModel
+			? {}
+			: { maxTime, remainingTime };
 		// const {submitting} = this.state;
 
 		return (
@@ -189,15 +201,17 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		);
 	}
 
-	renderError () {
+	renderError() {
 		//TODO: figure this out
 		return null;
 	}
 
-
-	renderContent () {
+	renderContent() {
 		return (
-			<Uncontrolled onMount={this.setupAssignment} onUnmount={this.tearDownAssignment} />
+			<Uncontrolled
+				onMount={this.setupAssignment}
+				onUnmount={this.tearDownAssignment}
+			/>
 		);
 	}
 }
@@ -214,6 +228,6 @@ export default decorate(NTIWebAppLessonItemsAssignment, [
 		'historyModel',
 		'student',
 
-		'updateHistoryItem'
-	])
+		'updateHistoryItem',
+	]),
 ]);

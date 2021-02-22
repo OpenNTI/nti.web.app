@@ -1,29 +1,32 @@
 import './ChangeRole.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {scoped} from '@nti/lib-locale';
-import {DialogButtons, Avatar, Panels} from '@nti/web-commons';
-import {Connectors} from '@nti/lib-store';
+import { decorate } from '@nti/lib-commons';
+import { scoped } from '@nti/lib-locale';
+import { DialogButtons, Avatar, Panels } from '@nti/web-commons';
+import { Connectors } from '@nti/lib-store';
 
 const ADMIN = 'admin';
 const LEARNER = 'learner';
 
 const DEFAULT_TEXT = {
-	description: 'Changing a person\'s role will affect what features and permissions are available.',
-	subDescription: 'You can change a person\'s role at any time.',
+	description:
+		"Changing a person's role will affect what features and permissions are available.",
+	subDescription: "You can change a person's role at any time.",
 	people: 'People',
 	title: {
 		one: 'Change Roles (%(count)s Person)',
-		other: 'Change Roles (%(count)s People)'
+		other: 'Change Roles (%(count)s People)',
 	},
 	roles: 'Roles',
 	administrator: 'Administrator',
-	learner: 'Learner'
+	learner: 'Learner',
 };
 
-const t = scoped('nti-web-site-admin.componentsusers.list.table.ChangeRole', DEFAULT_TEXT);
-
+const t = scoped(
+	'nti-web-site-admin.componentsusers.list.table.ChangeRole',
+	DEFAULT_TEXT
+);
 
 class ChangeRole extends React.Component {
 	static propTypes = {
@@ -31,71 +34,89 @@ class ChangeRole extends React.Component {
 		removeAdmin: PropTypes.func.isRequired,
 		selectedUsers: PropTypes.array,
 		removing: PropTypes.bool,
-		onDismiss: PropTypes.func
+		onDismiss: PropTypes.func,
+	};
 
-	}
-
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
-			selectedType: props.removing ? ADMIN : LEARNER
+			selectedType: props.removing ? ADMIN : LEARNER,
 		};
 	}
 
-
-	state = {}
+	state = {};
 
 	onSave = () => {
-		const {onDismiss, selectedUsers, addAdmin, removeAdmin} = this.props;
-		const {selectedType} = this.state;
+		const { onDismiss, selectedUsers, addAdmin, removeAdmin } = this.props;
+		const { selectedType } = this.state;
 
-		if(selectedType === ADMIN) {
+		if (selectedType === ADMIN) {
 			addAdmin(selectedUsers);
-		}
-		else {
+		} else {
 			removeAdmin(selectedUsers);
 		}
 
 		onDismiss();
-	}
+	};
 
-	renderUser = (user) => {
-		return <div key={user.getID()} className="user"><Avatar entity={user}/></div>;
-	}
+	renderUser = user => {
+		return (
+			<div key={user.getID()} className="user">
+				<Avatar entity={user} />
+			</div>
+		);
+	};
 
-	renderOption (type) {
+	renderOption(type) {
 		const isSelected = this.state.selectedType === type;
 
 		return (
-			<div className="role-option" onClick={() => { this.setState({selectedType: type}); }}>
-				{isSelected ? <div className="radio selected"><div className="inner"/></div> : <div className="radio"/>}
-				<div className="label">{type === ADMIN ? t('administrator') : t('learner')}</div>
+			<div
+				className="role-option"
+				onClick={() => {
+					this.setState({ selectedType: type });
+				}}
+			>
+				{isSelected ? (
+					<div className="radio selected">
+						<div className="inner" />
+					</div>
+				) : (
+					<div className="radio" />
+				)}
+				<div className="label">
+					{type === ADMIN ? t('administrator') : t('learner')}
+				</div>
 			</div>
 		);
 	}
 
-	render () {
-		const {selectedUsers} = this.props;
+	render() {
+		const { selectedUsers } = this.props;
 
 		const buttons = [
 			{
 				label: 'Cancel',
 				className: 'cancel',
-				onClick: this.props.onDismiss
+				onClick: this.props.onDismiss,
 			},
 			{
 				label: 'Save',
 				className: 'save',
-				onClick: this.onSave
-			}
+				onClick: this.onSave,
+			},
 		];
-
 
 		return (
 			<div className="site-admin-change-role-dialog">
 				<div className="title">
-					<Panels.TitleBar title={t('title', { count: (selectedUsers || []).length })} iconAction={this.props.onDismiss} />
+					<Panels.TitleBar
+						title={t('title', {
+							count: (selectedUsers || []).length,
+						})}
+						iconAction={this.props.onDismiss}
+					/>
 				</div>
 				<div className="contents">
 					<div className="description-container">
@@ -116,16 +137,15 @@ class ChangeRole extends React.Component {
 						</div>
 					</div>
 				</div>
-				<DialogButtons buttons={buttons}/>
+				<DialogButtons buttons={buttons} />
 			</div>
 		);
 	}
 }
 
-
 export default decorate(ChangeRole, [
 	Connectors.Any.connect({
 		addAdmin: 'addAdmin',
-		removeAdmin: 'removeAdmin'
-	})
+		removeAdmin: 'removeAdmin',
+	}),
 ]);

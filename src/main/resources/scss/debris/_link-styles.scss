@@ -6,7 +6,10 @@
 
 	$thumbWidth: 80px;
 
-	a, a:link, a:visited, a:active {
+	a,
+	a:link,
+	a:visited,
+	a:active {
 		text-decoration: none;
 	}
 
@@ -45,7 +48,7 @@
 
 	.meta {
 		padding: 10px 45px 10px 0;
-		margin-left: $thumbWidth+15px;
+		margin-left: $thumbWidth + 15px;
 
 		.title {
 			font: normal 600 15px/20px var(--body-font-family);
@@ -71,7 +74,8 @@
 			max-height: 2rem; //line-height is 1rem, 2rem max-height limits this to two lines.
 		}
 
-		.title, .description {
+		.title,
+		.description {
 			overflow: hidden;
 			text-overflow: ellipsis;
 
@@ -86,10 +90,15 @@
 a[href] {
 	&.internal-link {
 		@include content-link-def;
-		&:active, &:hover, &:visited { @include content-link-def; }
+		&:active,
+		&:hover,
+		&:visited {
+			@include content-link-def;
+		}
 	}
 
-	#NTIContent &, #profile .profile-head & {
+	#NTIContent &,
+	#profile .profile-head & {
 		@include content-link-def;
 
 		line-height: inherit;
@@ -98,11 +107,13 @@ a[href] {
 }
 
 .content-card {
-	&, .note-window .note.main-view & {
+	&,
+	.note-window .note.main-view & {
 		@include content-card-def;
 	}
 
-	> a[target^=_blank] { // NTI-7651 - ensure entire card is clickable. tried to make the selector specific enough to not disrupt other uses; might make sense to broaden it.
+	> a[target^='_blank'] {
+		// NTI-7651 - ensure entire card is clickable. tried to make the selector specific enough to not disrupt other uses; might make sense to broaden it.
 		display: flex;
 
 		> * {
@@ -121,7 +132,8 @@ a[href] {
 }
 
 .content-launcher {
-	&, .note-window .note.main-view & {
+	&,
+	.note-window .note.main-view & {
 		@include content-card-def;
 
 		$thumbWidth: 150px;
@@ -132,7 +144,7 @@ a[href] {
 		}
 
 		.meta {
-			margin-left: $thumbWidth+15px;
+			margin-left: $thumbWidth + 15px;
 
 			.launcher-button {
 				margin: 5px 0;
@@ -167,7 +179,8 @@ a[href] {
 	}
 }
 
-.component-overlay, .content-editor {
+.component-overlay,
+.content-editor {
 	.content-card-target-container {
 		margin: 0 5px 0 0;
 		border: 1px solid var(--border-grey);
@@ -183,7 +196,16 @@ a[href] {
 			right: 0;
 			transform: translateY(-50%);
 
-			&, a, div a { &, &:link, &:hover, &:visited { text-decoration: none; } }
+			&,
+			a,
+			div a {
+				&,
+				&:link,
+				&:hover,
+				&:visited {
+					text-decoration: none;
+				}
+			}
 
 			padding: 0 5em;
 			text-align: center;

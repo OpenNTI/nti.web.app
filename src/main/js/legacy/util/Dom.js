@@ -1,9 +1,6 @@
 const Ext = require('@nti/extjs');
 
-
 module.exports = exports = Ext.define('NextThought.util.Dom', {
-
-
 	filterNodeList: function (nodeList, filter) {
 		var d = Array.prototype.slice.call(nodeList);
 
@@ -14,23 +11,24 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		return d.filter(filter);
 	},
 
-
-	isRootObject: function rootObjects (e) {
+	isRootObject: function rootObjects(e) {
 		var p = e.parentNode;
-		if (p && p.nodeName === 'OBJECT') { return false; }
+		if (p && p.nodeName === 'OBJECT') {
+			return false;
+		}
 		return p ? rootObjects(p) : true;
 	},
-
 
 	parseDomObject: function (objectDomEl) {
 		var obj = {},
 			id = Ext.get(objectDomEl).id;
 
-		function addValue (o, n, v) {
-			var c = o[n]; o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v;
+		function addValue(o, n, v) {
+			var c = o[n];
+			o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v;
 		}
 
-		function directChildNodes (t) {
+		function directChildNodes(t) {
 			return objectDomEl.querySelectorAll('#' + id + ' > ' + t);
 		}
 
@@ -50,7 +48,6 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		return obj;
 	},
 
-
 	asDomSpec: function () {
 		if (this instanceof Ext.Base) {
 			Ext.Error.raise('Apply this to a simple object not a ext class');
@@ -59,47 +56,53 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		var r = /^attribute-(.*)$/,
 			o = {
 				tag: 'object',
-				cn: []
+				cn: [],
 			};
 
-
 		Ext.Object.each(this, function (k, v) {
-			if (Ext.isFunction(v) || Ext.isEmpty(v)) {return;}
+			if (Ext.isFunction(v) || Ext.isEmpty(v)) {
+				return;
+			}
 
 			var n = (r.exec(k) || [])[1];
 			if (!Ext.isEmpty(n)) {
 				o[n] = v;
-			}
-			else {
-				o.cn.push({tag: 'param', name: k, value: v});
+			} else {
+				o.cn.push({ tag: 'param', name: k, value: v });
 			}
 		});
 		return o;
 	},
 
-
-	getVideosFromDom: function getVideosFromDom (contentElement) {
+	getVideosFromDom: function getVideosFromDom(contentElement) {
 		var me = this,
 			videoObjects = [];
 
 		if (contentElement) {
-			Ext.each(contentElement.querySelectorAll('object .naqvideo, object .ntivideo'), function (v) {
-				var o = me.parseDomObject(v),
-					s = [];
+			Ext.each(
+				contentElement.querySelectorAll(
+					'object .naqvideo, object .ntivideo'
+				),
+				function (v) {
+					var o = me.parseDomObject(v),
+						s = [];
 
-				o.sources = s;
+					o.sources = s;
 
-				Ext.each(v.querySelectorAll('object[type$=videosource]'), function (source) {
-					s.push(me.parseDomObject(source));
-				});
+					Ext.each(
+						v.querySelectorAll('object[type$=videosource]'),
+						function (source) {
+							s.push(me.parseDomObject(source));
+						}
+					);
 
-				videoObjects.push(o);
-			});
+					videoObjects.push(o);
+				}
+			);
 		}
 
 		return videoObjects;
 	},
-
 
 	getImagesFromDom: function (contentElement) {
 		var imageObjects = [];
@@ -112,15 +115,17 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 				current = i.getAttribute('data-nti-image-size'),
 				currentSrc = i.getAttribute('data-nti-image-' + current),
 				full = i.getAttribute('data-nti-image-full');
-				//half = i.getAttribute('data-nti-image-half'),
-				//quarter = i.getAttribute('data-nti-image-quarter');
+			//half = i.getAttribute('data-nti-image-half'),
+			//quarter = i.getAttribute('data-nti-image-quarter');
 
 			//if for some reason there is no current src search all the sizes to get the base substring
 			if (currentSrc) {
 				resourceIndex = src.indexOf(currentSrc);
 			} else {
 				sizes.every(function (s) {
-					resourceIndex = src.indexOf(i.getAttribute('data-nti-image-' + s));
+					resourceIndex = src.indexOf(
+						i.getAttribute('data-nti-image-' + s)
+					);
 
 					return resourceIndex < 0;
 				});
@@ -135,7 +140,6 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		});
 		return imageObjects;
 	},
-
 
 	/*
 	 * A terribly named function that adjust links displayed to the user.  Note this
@@ -163,15 +167,15 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			var href = Ext.fly(link).getAttribute('href') || '',
 				base = baseUrl.split('#')[0],
 				changeTarget = href.indexOf(base) !== 0,
-				isNTIDownloadLink = (/\/@@download$/i).test(href);
+				isNTIDownloadLink = /\/@@download$/i.test(href);
 
 			if (changeTarget) {
-				Ext.fly(link).set({target: '_blank'});
+				Ext.fly(link).set({ target: '_blank' });
 
 				// NOTE: Add an exception for NTI Download links.
 				// TODO: Figure out a better way to check this.
 				if (isNTIDownloadLink) {
-					Ext.fly(link).set({target: '_self'});
+					Ext.fly(link).set({ target: '_self' });
 				}
 			}
 		});
@@ -179,9 +183,10 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		return string ? dom.innerHTML : dom;
 	},
 
-
-	isEmpty: function isEmpty (value) {
-		var re = (isEmpty.re || /((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/ig);
+	isEmpty: function isEmpty(value) {
+		var re =
+			isEmpty.re ||
+			/((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/gi;
 
 		isEmpty.re = re;
 
@@ -190,7 +195,6 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		return value.replace(re, '') === '';
 	},
 
-
 	/**
 	 * recursively remove an elment (if removing a node produces an empty parent node, remove it too...until we get to the root)
 	 *
@@ -198,15 +202,16 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 * @returns {void}
 	 * @private
 	 */
-	__removeNodeRecursively: function remove (el) {
+	__removeNodeRecursively: function remove(el) {
 		var pn = el && el.parentNode;
-		if (!pn) {return;}
+		if (!pn) {
+			return;
+		}
 		pn.removeChild(el);
 		if (pn.childNodes.length === 0) {
 			remove(pn);
 		}
 	},
-
 
 	/**
 	 * Select the nodes we might want to remove.
@@ -220,46 +225,71 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 */
 	__pickUnsanitaryElements: function (root, cleanAttributes) {
 		var namespaced = /:/,
-			picked = [], tw, name, value, el, i,
+			picked = [],
+			tw,
+			name,
+			value,
+			el,
+			i,
 			notJs = /^(?!javascript:).*/i,
 			present = /.*/,
 			KEEP_ATTR_IF = {
 				style: present,
 				href: notJs,
-				src: notJs
+				src: notJs,
 			},
 			BAD_NODES = {
-				LINK: 1, STYLE: 1, META: 1, TITLE: 1, HEAD: 1,
-				SCRIPT: 1, OBJECT: 1, EMBED: 1, APPLET: 1
+				LINK: 1,
+				STYLE: 1,
+				META: 1,
+				TITLE: 1,
+				HEAD: 1,
+				SCRIPT: 1,
+				OBJECT: 1,
+				EMBED: 1,
+				APPLET: 1,
 			};
 
-		tw = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_ELEMENT, null, false);
+		tw = document.createTreeWalker(
+			root,
+			NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_ELEMENT,
+			null,
+			false
+		);
 		do {
 			el = tw.nextNode();
-			if (!el) {continue;}
+			if (!el) {
+				continue;
+			}
 
 			//Remove comments
-			if ((el.nodeType === Node.COMMENT_NODE) ||
+			if (
+				el.nodeType === Node.COMMENT_NODE ||
 				//remove nodes we deem bad
-				(BAD_NODES[el.tagName]) ||
+				BAD_NODES[el.tagName] ||
 				//remove empty nodes (maybe dangerous, images?, is there a way to know if an element is meant to be unary?)
 				//allow img and br tags
-				(el.childNodes.length === 0 && !/^(IMG|BR)$/i.test(el.tagName)) ||
+				(el.childNodes.length === 0 &&
+					!/^(IMG|BR)$/i.test(el.tagName)) ||
 				//remove elements that are effectively empty (whitespace only text node as their only child)
-				(el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE && el.childNodes[0].nodeValue.trim() === '') ||
+				(el.childNodes.length === 1 &&
+					el.childNodes[0].nodeType === Node.TEXT_NODE &&
+					el.childNodes[0].nodeValue.trim() === '') ||
 				//remove Office (xml namespaced) elements (that are empty)... need an would be nice to just
 				// find all patterns <(/?)FOO:BAR( ...?)> and delete them and leave the content they surround.
-				(namespaced.test(el.tagName) && el.childNodes.length === 0)) {
-
+				(namespaced.test(el.tagName) && el.childNodes.length === 0)
+			) {
 				picked.push(el);
-
 			} else if (cleanAttributes) {
 				//Clean attributes of elements we will not remove
 				i = el.attributes.length - 1;
 				for (i; i >= 0; i--) {
 					name = el.attributes[i].name;
 					value = el.getAttribute(name);
-					if (!KEEP_ATTR_IF[name] || !KEEP_ATTR_IF[name].test(value)) {
+					if (
+						!KEEP_ATTR_IF[name] ||
+						!KEEP_ATTR_IF[name].test(value)
+					) {
 						el.removeAttribute(name);
 					}
 				}
@@ -268,7 +298,6 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 
 		return picked;
 	},
-
 
 	/**
 	 * @param {string|Node} html markup/dom to clean
@@ -279,11 +308,12 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		//html = html.trim().replace(/[\n\r]+/g, ' ');
 
 		var offScreenBuffer = document.createElement('div'),
-			toRemove, i;
+			toRemove,
+			i;
 
 		if (typeof html === 'string') {
 			offScreenBuffer.innerHTML = html
-				.replace(/[\n\r]+/ig, ' ')
+				.replace(/[\n\r]+/gi, ' ')
 				// We explicitly need to remove control characters from the string...
 				// so this lint error needs to be surpassed here.
 				//eslint-disable-next-line no-control-regex
@@ -302,12 +332,11 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		//get the new html content...
 		html = offScreenBuffer.innerHTML;
 		offScreenBuffer.innerHTML = ''; //free up
-		return html;//return;
+		return html; //return;
 	},
 
-
 	enforceNumber: function (e) {
-		function between (key, lower, upper) {
+		function between(key, lower, upper) {
 			return lower <= key && key <= upper;
 		}
 
@@ -315,10 +344,11 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			maxLength = parseInt(input.getAttribute('size'), 10) || -1,
 			tooLong = (input.value || '').length + 1 > maxLength,
 			letter = e.getCharCode() || 13,
-			isArrow = between(letter, 37, 40),//left arrow, and down arrow
-			isNumber = between(letter, 48, 57) || between(letter, 95, 105),//numbers across the top and num pad
+			isArrow = between(letter, 37, 40), //left arrow, and down arrow
+			isNumber = between(letter, 48, 57) || between(letter, 95, 105), //numbers across the top and num pad
 			isAllowedCtrl = between(letter, 8, 9) || letter === 13, //backspace, tab, or enter
-			hasSelection = Math.abs(input.selectionStart - input.selectionEnd) !== 0,
+			hasSelection =
+				Math.abs(input.selectionStart - input.selectionEnd) !== 0,
 			ctrlPressed = e.ctrlKey; //ext maps the metaKey to ctrlKey
 
 		/*
@@ -328,11 +358,13 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			and 3.) the ctrl or meta key is not pressed
 			then stop the event and do not put the character in the input
 		 */
-		if (!ctrlPressed && ((maxLength >= 0 && tooLong && isNumber && !hasSelection) || !(isArrow || isNumber || isAllowedCtrl))) {
+		if (
+			!ctrlPressed &&
+			((maxLength >= 0 && tooLong && isNumber && !hasSelection) ||
+				!(isArrow || isNumber || isAllowedCtrl))
+		) {
 			e.stopEvent();
 			return false;
 		}
-	}
-
-
+	},
 }).create();

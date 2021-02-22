@@ -3,7 +3,10 @@
 	position: relative;
 
 	.item {
-		&.loading, &.empty, &.done, &.error {
+		&.loading,
+		&.empty,
+		&.done,
+		&.error {
 			position: relative;
 			background-color: white;
 			height: 50px;
@@ -57,8 +60,8 @@
 		.loading {
 			position: absolute;
 			color: var(--primary-grey);
-			line-height: 24px;//height of the spinner
-			padding-left: 30px;//width of the spinner + 6px
+			line-height: 24px; //height of the spinner
+			padding-left: 30px; //width of the spinner + 6px
 			top: 50%;
 			left: 50%;
 			margin-top: -12px;
