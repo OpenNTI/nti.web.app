@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const XRegExp = require('xregexp');
 const { default: Logger } = require('@nti/util-logger');
 
 const rangy = require('legacy/util/rangy');
