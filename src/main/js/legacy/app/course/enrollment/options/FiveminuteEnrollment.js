@@ -65,14 +65,13 @@ module.exports = exports = Ext.define(
 							}
 						});
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						var link = $AppConfig.userObject.getLink(
 							'fmaep.admission'
 						);
 
 						if (!link) {
-							console.error('No admit link');
-							return Promise.reject();
+							throw new Error('No admit link');
 						}
 
 						return Service.post(
