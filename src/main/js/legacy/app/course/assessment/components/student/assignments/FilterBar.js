@@ -295,7 +295,9 @@ module.exports = exports = Ext.define(
 		},
 
 		setSearch: function (value) {
-			this.searchEl.dom.value = value;
+			if (this.searchEl?.dom) {
+				this.searchEl.dom.value = value;
+			}
 			this.searchkey = value;
 		},
 
