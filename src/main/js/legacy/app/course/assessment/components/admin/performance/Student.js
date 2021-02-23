@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const { wait } = require('@nti/lib-commons');
+const { ignoreMissingLink, wait } = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
 
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define(
 
 		updateSummary() {
 			if (this.summary && this.summary.updatePredicted) {
-				this.summary.updatePredicted();
+				ignoreMissingLink(this.summary.updatePredicted());
 			}
 		},
 
