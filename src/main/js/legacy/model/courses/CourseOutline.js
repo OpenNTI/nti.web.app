@@ -145,11 +145,11 @@ module.exports = exports = Ext.define(
 			return load;
 		},
 
-		getOutlineContents: function (doNotCache) {
+		getOutlineContents: async function (doNotCache) {
 			var link = this.getLink('contents');
 
 			if (!link) {
-				return Promise.reject('No Link');
+				throw new Error('No Link');
 			}
 
 			return this.__loadContents(
@@ -160,13 +160,13 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		getAdminOutlineContents: function (doNotCache) {
+		getAdminOutlineContents: async function (doNotCache) {
 			var link = this.getLink('contents'),
 				parts = new URL(link, global.location.origin),
 				query = Ext.Object.fromQueryString(parts.search);
 
 			if (!link) {
-				return Promise.reject('No Link');
+				throw new Error('No Link');
 			}
 
 			delete query['omit_unpublished'];

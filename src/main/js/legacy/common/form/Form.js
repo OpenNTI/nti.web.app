@@ -843,14 +843,14 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * @param {string} url Link
 	 * @returns {Promise} Fulfilled with the submission results, or rejected with an error.
 	 */
-	submitTo: function (url) {
+	submitTo: async function (url) {
 		var me = this,
 			hasFiles = me.hasFiles(),
 			progress = me.saveProgressCmp,
 			submit;
 
 		if (!url) {
-			return Promise.reject('No Link Provided');
+			throw new Error('No Link');
 		}
 
 		if (progress) {

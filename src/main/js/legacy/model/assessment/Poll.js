@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 				return Ext.decode(response);
 			});
 		} else {
-			load = Promise.reject('No Link');
+			load = Promise.reject(new Error('No Link'));
 		}
 
 		me.__loadResultsPromise = load;

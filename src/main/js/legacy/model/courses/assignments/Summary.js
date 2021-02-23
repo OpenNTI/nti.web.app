@@ -31,11 +31,11 @@ module.exports = exports = Ext.define(
 			return this.get('AvailableFinalGrade');
 		},
 
-		updatePredicted() {
+		async updatePredicted() {
 			const link = this.getLink('CurrentGrade');
 
 			if (!link) {
-				return Promise.reject('No Link');
+				throw new Error('No Link');
 			}
 
 			return Service.request(link)

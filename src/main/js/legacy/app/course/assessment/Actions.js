@@ -35,19 +35,18 @@ const SurveyTpl = {
 	title: 'Untitled Survey',
 };
 
-function createWithData(link, data) {
+async function createWithData(link, data) {
 	if (!link) {
-		return Promise.reject('No Link');
+		throw new Error('No Link');
 	}
 
-	return Service.post(link, data)
-		.then(resp => {
-			return lazy.ParseUtils.parseItems(resp)[0];
-		})
-		.catch(reason => {
-			console.error('Failed to create assignment: ', reason);
-			return Promise.reject(reason);
-		});
+	try {
+		const resp = Service.post(link, data);
+		return lazy.ParseUtils.parseItems(resp)[0];
+	} catch (reason) {
+		console.error('Failed to create assignment: ', reason);
+		throw reason;
+	}
 }
 
 module.exports = exports = Ext.define(

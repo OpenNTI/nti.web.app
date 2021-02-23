@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 					url,
 					headers: { Accept: ContentPackageMimeType },
 			  })
-			: Promise.reject('No Link');
+			: Promise.reject(new Error('No Link'));
 
 		return request.then(resp => {
 			return lazy.ParseUtils.parseItems(resp)[0];

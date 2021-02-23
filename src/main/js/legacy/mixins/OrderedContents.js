@@ -153,9 +153,9 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 		return Globals.trimRoute(link) + '/index/' + index;
 	},
 
-	__submitContent: function (content, link) {
+	__submitContent: async function (content, link) {
 		if (!link) {
-			return Promise.reject('No Link');
+			throw new Error('No Link');
 		}
 
 		return Service.post(link, content).then(function (response) {
@@ -194,9 +194,9 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 		);
 	},
 
-	__submitFormTo: function (form, link) {
+	__submitFormTo: async function (form, link) {
 		if (!link) {
-			return Promise.reject('No Link');
+			throw new Error('No Link');
 		}
 
 		return form.submitTo(link).then(function (response) {
