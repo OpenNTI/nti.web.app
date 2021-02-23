@@ -409,14 +409,14 @@ User.Repository = global.UserRepository = module.exports = exports = Ext.define(
 							}
 						}
 
-						if (fulfillment.length !== names.length) {
-							console.warn(
-								'Length mismatch! Assuming this is due to communities in the list.',
-								names,
-								fulfillment,
-								v
-							);
-						}
+						// if (fulfillment.length !== names.length) {
+						// 	console.warn(
+						// 		'Length mismatch! Assuming this is due to communities in the list.',
+						// 		names,
+						// 		fulfillment,
+						// 		v
+						// 	);
+						// }
 						fulfill(fulfillment);
 					}
 
