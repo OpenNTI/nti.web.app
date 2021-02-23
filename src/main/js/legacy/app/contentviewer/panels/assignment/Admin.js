@@ -73,7 +73,7 @@ module.exports = exports = Ext.define(
 			const { assignment, student, bundle, pageInfo } = this;
 			const readerAssessment = reader.getAssessment();
 
-			readerAssessment.setAssignmentFromInstructorProspective(
+			readerAssessment.setAssignmentFromInstructorPerspective(
 				assignment,
 				historyItem,
 				student

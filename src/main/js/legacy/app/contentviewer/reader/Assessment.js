@@ -773,7 +773,7 @@ module.exports = exports = Ext.define(
 			return !!this.injectedAssignment;
 		},
 
-		setAssignmentFromInstructorProspective: function (
+		setAssignmentFromInstructorPerspective: function (
 			assignment,
 			history,
 			student
