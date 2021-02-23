@@ -3,9 +3,7 @@ const Ext = require('@nti/extjs');
 const { guidGenerator } = require('legacy/util/Globals');
 
 Object.assign(Promise.prototype, {
-	always(fn) {
-		return this.then(fn, fn);
-	},
+	always: Promise.prototype.finally,
 });
 
 Object.assign(Promise, {
@@ -45,7 +43,7 @@ Object.assign(Promise, {
  * This version of the promise is no better than the callback-hell model.  Keep in mind that
  * Deferred's do not force execution of their promise, the are not Guaranteed to resolve.
  *
- * I strongly recommend examining your code and your structure before commiting to using this as a final solution.
+ * I strongly recommend examining your code and your structure before committing to using this as a final solution.
  */
 global.Deferred = Promise.Deferred = (function () {
 	function apply(d, src) {

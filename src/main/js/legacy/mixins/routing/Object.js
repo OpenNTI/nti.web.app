@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @param  {Object|string} objectOrMimeType thing to handle
 	 * @returns {Promise}				  fulfills with handler's return
 	 */
-	handleObject: function (objectOrMimeType) {
+	handleObject: async function (objectOrMimeType) {
 		var object =
 				typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
 			mimeType = this.__getMimeType(objectOrMimeType),
@@ -80,14 +80,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 		} else if (this.defaultObjectHandler) {
 			val = this.defaultObjectHandler(object);
 		} else {
-			val = Promise.reject();
+			throw new Error('Fallback: No Object');
 		}
 
-		if (val instanceof Promise) {
-			return val;
-		}
-
-		return Promise.resolve(val);
+		return val;
 	},
 
 	/**

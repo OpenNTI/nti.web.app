@@ -100,18 +100,16 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-	navigateToObject: function (object, fragment, edit) {
-		return this.mixins.Object.handleObject
-			.call(this, object)
-			.then(this.__handleObjectNav.bind(this, fragment, edit))
-			.catch(
-				this.__handleNoObjectNavigation.bind(
-					this,
-					object,
-					fragment,
-					edit
-				)
+	navigateToObject: async function (object, fragment, edit) {
+		try {
+			const result = await this.mixins.Object.handleObject.call(
+				this,
+				object
 			);
+			this.__handleObjectNav(fragment, edit, result);
+		} catch (e) {
+			return this.__handleNoObjectNavigation(object, fragment, edit);
+		}
 	},
 
 	/**

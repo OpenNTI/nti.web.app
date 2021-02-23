@@ -103,18 +103,17 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		if (me.self.TOC_REQUESTS[index + '-' + status]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
 		} else {
-			me.tocPromise = new Promise((fulfill, reject) => {
-				if (this.shouldAllowTocLoad()) {
-					fulfill();
-				} else {
-					reject();
-				}
-			})
-				.then(() => Service.request(Globals.getURL(index)))
-				//parse the response into a xml
-				.then(library.parseXML.bind(library))
-				//set my root, icon, and title on the doc
-				.then(function (xml) {
+			me.tocPromise = (async () => {
+				try {
+					if (!this.shouldAllowTocLoad()) {
+						throw new Error('Skip');
+					}
+
+					const data = await Service.request(Globals.getURL(index));
+					//parse the response into a xml
+					const xml = await library.parseXML(data);
+					//set my root, icon, and title on the doc
+
 					var doc = xml.documentElement;
 
 					doc.setAttribute('base', me.get('root'));
@@ -122,18 +121,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 					doc.setAttribute('title', me.get('title'));
 
 					return xml;
-				})
-				.catch(reason => {
+				} catch (reason) {
 					delete me.self.TOC_REQUESTS[index + '-' + status];
 
-					return Promise.reject(reason);
-				});
+					throw reason;
+				}
+			})();
 
 			me.self.TOC_REQUESTS[index + '-' + status] = me.tocPromise;
 		}
 
 		me.tocPromise
-			.then(function (xml) {
+			.then(xml => {
 				var doc = xml.documentElement;
 
 				//make sure I am synced with the toc
@@ -144,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 				});
 			})
 			.catch(e => {
-				if (e) {
+				if (e?.message !== 'Skip') {
 					throw e;
 				}
 			});

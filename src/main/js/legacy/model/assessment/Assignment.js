@@ -176,11 +176,11 @@ module.exports = exports = Ext.define(
 			this.historyLink = link;
 		},
 
-		getHistory: function () {
+		getHistory: async function () {
 			var link = this.historyLink || this.getLink('History');
 
 			if (!link) {
-				return Promise.reject();
+				throw new Error('No Link');
 			}
 
 			return Service.request(link).then(function (response) {
@@ -301,18 +301,19 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getLatestAttempt() {
+		async getLatestAttempt() {
 			const current = this.get('CurrentMetadataAttemptItem');
 
 			if (current) {
-				return Promise.resolve(current);
+				return current;
 			}
 
-			return this.getHistory()
-				.then(history => {
-					return history.get('MetadataAttemptItem');
-				})
-				.catch(() => null);
+			try {
+				const history = await this.getHistory();
+				return history.get('MetadataAttemptItem');
+			} catch {
+				return null;
+			}
 		},
 
 		//Timed Assignment Methods
