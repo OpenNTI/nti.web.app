@@ -41,7 +41,7 @@ async function createWithData(link, data) {
 	}
 
 	try {
-		const resp = Service.post(link, data);
+		const resp = await Service.post(link, data);
 		return lazy.ParseUtils.parseItems(resp)[0];
 	} catch (reason) {
 		console.error('Failed to create assignment: ', reason);
