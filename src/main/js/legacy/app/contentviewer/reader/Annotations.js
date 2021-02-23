@@ -149,19 +149,7 @@ module.exports = exports = Ext.define(
 				records,
 				function (r) {
 					var cls = r.get('Class');
-					if (!this.createAnnotationWidget(cls, r)) {
-						console.warn(
-							"Apparently this record didn't get added",
-							r
-						);
-					} else {
-						console.debug(
-							'Added ' + cls,
-							r.getId(),
-							'w/ body:',
-							r.get('body')
-						);
-					}
+					this.createAnnotationWidget(cls, r);
 				},
 				this
 			);
