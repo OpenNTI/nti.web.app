@@ -311,11 +311,11 @@ module.exports = exports = Ext.define(
 		maybeAddControlbarForPageInfo() {},
 
 		setupEmail: function () {
-			var me = this;
+			const me = this;
 			this.getStudentEnrollment(this.student).then(function (enrollment) {
-				var emailLink = enrollment && enrollment.getLink('Mail');
+				const emailLink = enrollment && enrollment.getLink('Mail');
 				if (emailLink) {
-					me.emailEl.show();
+					me.emailEl?.show();
 				}
 
 				me.studentEnrollment = enrollment;
