@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 
 	onRouteDeactivate() {
 		this.deactivateTimeout = setTimeout(() => {
-			this.library.destroy();
+			this.library?.destroy?.();
 			delete this.library;
 		}, 300);
 	},
