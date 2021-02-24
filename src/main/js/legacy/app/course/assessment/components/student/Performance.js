@@ -386,25 +386,29 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 				me.gradeLabel.addDisclaimer(false);
 			} else if (currentBundle) {
-				currentBundle.getCurrentGrade().then(function (grade) {
-					//if the final grade was set after getCurrentGrade was called
-					//but before it finished make sure we don't unset it
-					if (me.finalGrade && !me.finalGrade.isEmpty()) {
-						return;
-					}
+				currentBundle.getCurrentGrade()
+					.catch(() => {}) // rejects if there's no link. don't care.
+					.then(function (grade) {
+						if (grade) {
+							//if the final grade was set after getCurrentGrade was called
+							//but before it finished make sure we don't unset it
+							if (me.finalGrade && !me.finalGrade.isEmpty()) {
+								return;
+							}
 
-					// DisplayableGrade takes precedent if present
-					values = grade.get('DisplayableGrade')
-						? { value: grade.get('DisplayableGrade') }
-						: grade.getValues();
+							// DisplayableGrade takes precedent if present
+							values = grade.get('DisplayableGrade')
+								? { value: grade.get('DisplayableGrade') }
+								: grade.getValues();
 
-					addGrade(values);
+							addGrade(values);
 
-					if (values.letter || values.value) {
-						me.gradeLabel.addDisclaimer(
-							'Estimated from the grading policy in the Syllabus'
-						);
-					}
+							if (values.letter || values.value) {
+								me.gradeLabel.addDisclaimer(
+									'Estimated from the grading policy in the Syllabus'
+								);
+							}
+						}
 				});
 			}
 		},
