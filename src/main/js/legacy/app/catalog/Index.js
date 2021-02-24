@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
-const CatalogView = require('@nti/web-catalog');
+const CatalogView = require('@nti/web-catalog').default;
 const { getService } = require('@nti/web-client');
+const {Router, Route} = require('@nti/web-routing');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
@@ -8,20 +9,21 @@ const ComponentsNavigation = require('legacy/common/components/Navigation');
 const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
 	require('legacy/util/Parsing')
 );
-const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 require('legacy/app/library/courses/components/available/CourseWindow');
 
-const PURCHASED_ACTIVE = /^\/purchased/;
-const REDEEM_ACTIVE = /^\/redeem/;
 
 const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
 const CATEGORY_NAME = /\/([^/]*)\/?/;
 
 const URI_PART = /^uri/;
+
+const Catalog = Router.for([
+	Route({path: '/', component: CatalogView})
+]);
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -81,8 +83,9 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		} else {
 			this.catalog = this.add({
 				xtype: 'react',
-				component: CatalogView,
-				baseroute: baseroute,
+				component: Catalog,
+				baseroute,
+				setTitle: (title) => this.setTitle(title),
 				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
 						return `${
@@ -92,60 +95,23 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				},
 			});
 		}
-		const title = this.getTitleFromRoute(route.path);
-		this.setTitle(title);
 
 		this.setUpNavigation(baseroute, route.path);
 		return this.maybeShowCatalogEntry(route, this.category);
-	},
-
-	getTitleFromRoute(route) {
-		if (route === '/') {
-			return 'Catalog';
-		} else if (route === '/purchased' || route === '/redeem') {
-			return route[1].toUpperCase() + route.substr(2);
-		} else if (route === '/.nti_other') {
-			return 'OTHERS';
-		}
-
-		const decodeTitle = decodeURIComponent(route);
-		return decodeTitle.substr(1).toUpperCase();
 	},
 
 	setUpNavigation(baseroute, path) {
 		const navigation = this.getNavigation();
 
 		navigation.updateTitle('Catalog');
-
-		const tabs = [
-			{
-				text: getString('NextThought.view.library.View.course'),
-				route: '/',
-				active:
-					!PURCHASED_ACTIVE.test(path) && !REDEEM_ACTIVE.test(path),
-			},
-			{
-				text: 'History',
-				route: '/purchased',
-				active: PURCHASED_ACTIVE.test(path) && path.length !== 1,
-			},
-			{
-				text: 'Redeem',
-				route: '/redeem',
-				active: REDEEM_ACTIVE.test(path) && path.length !== 1,
-			},
-		];
-
-		navigation.setTabs(tabs);
+		navigation.useCommonTabs();
 
 		this.NavigationActions.setActiveContent(null, true, true);
 		this.NavigationActions.updateNavBar({
 			cmp: navigation,
 			noLibraryLink: false,
 			hideBranding: true,
-			onBack: () => {
-				this.pushRootRoute('Library', '/library');
-			},
+			onBack: () => this.pushRootRoute('Library', '/library')
 		});
 	},
 
