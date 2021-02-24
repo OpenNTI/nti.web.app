@@ -3,7 +3,9 @@ const Ext = require('@nti/extjs');
 const { guidGenerator } = require('legacy/util/Globals');
 
 Object.assign(Promise.prototype, {
-	always: Promise.prototype.finally,
+	always(fn) {
+		return this.then(fn, fn);
+	},
 });
 
 Object.assign(Promise, {
