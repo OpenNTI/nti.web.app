@@ -1732,11 +1732,11 @@ module.exports = exports = Ext.define(
 			return this.__streamStore;
 		},
 
-		getCurrentGrade: function () {
-			var link = this.getLink('CurrentGrade');
+		getCurrentGrade: async function () {
+			const link = this.getLink('CurrentGrade');
 
 			if (!link) {
-				return Promise.reject();
+				throw new Error('No Link');
 			}
 
 			return Service.request(link).then(function (response) {
