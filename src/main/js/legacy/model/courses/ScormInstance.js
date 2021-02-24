@@ -62,8 +62,8 @@ module.exports = exports = Ext.define(
 			return p;
 		},
 
-		getContentPackageContaining() {
-			return Promise.reject('No Content Packages in a scorm course.');
+		async getContentPackageContaining() {
+			throw new Error('No Content Packages in a scorm course.');
 		},
 
 		asUIData: function () {

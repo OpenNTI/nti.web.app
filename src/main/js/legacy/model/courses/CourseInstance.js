@@ -526,12 +526,14 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		updateContentPackage(id) {
+		async updateContentPackage(id) {
 			const contentPackage = this.getContentPackage(id);
 
-			return contentPackage
-				? contentPackage.update(this)
-				: Promise.reject('No Content Package');
+			if (!contentPackage) {
+				throw new Error('No Content Package');
+			}
+
+			return contentPackage.update(this);
 		},
 
 		getContentPackages: function () {
