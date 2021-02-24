@@ -453,7 +453,8 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				waitsOn.push(
 					assignments
 						.getHistoryItem(o.getId(), true)
-						.always(function (h) {
+						.catch(() => {}) // throws if there's no 'CurrentGrade' link. don't care.
+						.finally(function (h) {
 							if (typeof h === 'string') {
 								h = null;
 							}
