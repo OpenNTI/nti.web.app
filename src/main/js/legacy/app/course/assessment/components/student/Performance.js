@@ -417,7 +417,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 					);
 				}
 			} catch (e) {
-				if (e.message !== 'No Link') {
+				if (e?.message !== 'No Link') {
 					throw e;
 				}
 			}
@@ -501,7 +501,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								Submission: submission,
 							});
 						} catch (e) {
-							if (e.message !== 'No Link') {
+							if (e?.message !== 'No Link') {
 								throw e;
 							}
 						}
