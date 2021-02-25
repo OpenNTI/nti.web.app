@@ -4,8 +4,6 @@ import classnames from 'classnames/bind';
 import { scoped } from '@nti/lib-locale';
 import { DateTime } from '@nti/web-commons';
 
-import AccountActions from 'legacy/app/account/Actions';
-
 import Styles from './Instructions.css';
 
 const cx = classnames.bind(Styles);
@@ -27,9 +25,6 @@ const t = scoped(
 			header: 'We received your submission.',
 			message: 'You can always return here to review your work.',
 		},
-		support: {
-			link: 'Contact Support',
-		},
 		outsideSubmissionBuffer: {
 			header: 'Currently Unavailable',
 			message: 'Your assignment is no longer available for submission.',
@@ -46,12 +41,6 @@ export default class AssignmentSidebarInstructions extends React.Component {
 			isOutsideSubmissionBuffer: PropTypes.func,
 		}),
 		activeHistoryItemModel: PropTypes.object,
-	};
-
-	contactUs = () => {
-		const actions = AccountActions.create();
-
-		actions.showContactUs();
 	};
 
 	render() {
@@ -107,7 +96,6 @@ export default class AssignmentSidebarInstructions extends React.Component {
 						assignmentModel,
 						activeHistoryItemModel
 					)}
-				{this.renderSupport()}
 			</div>
 		);
 	}
@@ -149,17 +137,4 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		);
 	}
 
-	renderSupport() {
-		if (t.isMissing('support.link')) {
-			return null;
-		}
-
-		return (
-			<div className={cx('support')}>
-				<span className={cx('link')} onClick={this.contactUs}>
-					{t('support.link')}
-				</span>
-			</div>
-		);
-	}
 }
