@@ -523,7 +523,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 					optWindow.destroy();
 					optWindow = null;
 				}
-				if (Math.abs(window.orientation) !== 90) {
+				if (Math.abs(window.orientation ?? 90) !== 90) {
 					optWindow = me.createPortraitOrientationScreen();
 					const iframe = optWindow.el.down('iframe');
 					iframe.el.dom.contentWindow.addEventListener(
@@ -538,7 +538,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			true
 		);
 
-		if (Math.abs(window.orientation) !== 90) {
+		if (Math.abs(window.orientation ?? 90) !== 90) {
 			optWindow = this.createPortraitOrientationScreen();
 			const iframe = optWindow.el.down('iframe');
 			iframe.el.dom.contentWindow.addEventListener(
@@ -562,7 +562,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			closeAction: 'hide',
 			width: '100%',
 			height: '100%',
-			layout: 'fit',
+			layout: 'auto',
 			modal: true,
 			closable: false,
 			draggable: false,
@@ -581,7 +581,8 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto',
+					style:
+						'overflow-x: hidden; overflow-y:auto; height: 100vh; width: 100vw',
 				},
 			},
 		});
