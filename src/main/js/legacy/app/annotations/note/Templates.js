@@ -194,7 +194,6 @@ const TemplatesForNotes = Ext.define(
 			//will perform a mouseenter, mouseleave, and not click.
 			if (!Ext.is.iOS) {
 				menu.on('mouseover', function () {
-					console.log('mouseover');
 					if (
 						opts.scope.el &&
 						opts.scope.el.down('.single') &&
@@ -205,7 +204,6 @@ const TemplatesForNotes = Ext.define(
 				});
 
 				menu.on('mouseleave', function () {
-					console.log('mouseleave');
 					menuTimer = setTimeout(function () {
 						menu.close();
 						if (opts.scope.el && opts.scope.el.down('.single')) {
@@ -216,7 +214,6 @@ const TemplatesForNotes = Ext.define(
 					}, 100);
 				});
 				menu.on('mouseenter', function () {
-					console.log('mouseenter');
 					clearTimeout(menuTimer);
 				});
 			}
