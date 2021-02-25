@@ -301,7 +301,7 @@ global.Globals = module.exports = exports = Ext.define(
 				'server-host':
 					location.protocol +
 					'//' +
-					location.host.replace(/:(0|80|443)/, ''),
+					location.host.replace(/:((0.*)|80|443)$/, ''),
 				'server-path': new URL(
 					$AppConfig.server || '',
 					'file:///dataserver2/'
