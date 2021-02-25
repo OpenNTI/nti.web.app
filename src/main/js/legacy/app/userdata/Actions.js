@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { emitIncoming } = require('@nti/web-notifications');
 const { Events } = require('@nti/web-session');
 
 const ContextStateStore = require('legacy/app/context/StateStore');
@@ -106,6 +107,15 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		//if this is the raw json from the event, parse it.
 		if (!change.isModel) {
 			change = lazy.ParseUtils.parseItems([change])[0];
+		}
+
+		if (change.isNotable()) {
+			if (
+				change.get('ChangeType') !== 'Modified' ||
+				change.get('IsNewlyMentioned')
+			) {
+				emitIncoming(change.raw);
+			}
 		}
 
 		var item = change.getItem(),

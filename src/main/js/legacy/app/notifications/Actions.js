@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { emitIncoming } = require('@nti/web-notifications');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
@@ -83,7 +82,6 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 					change.get('ChangeType') !== 'Modified' ||
 					change.get('IsNewlyMentioned')
 				) {
-					emitIncoming(change.raw);
 					me.NotificationsStore.addRecord(change);
 				}
 			}
