@@ -45,16 +45,15 @@ module.exports = exports = Ext.define(
 		 * @param {boolean} useCache use the last call instead of making a new one
 		 * @returns {[type]}			   [description]
 		 */
-		getHistoryItem: function (assignment, useCache) {
-			return this.getHistory(useCache).then(function (history) {
-				var item = history.getItem(assignment);
+		getHistoryItem: async function (assignment, useCache) {
+			const history = await this.getHistory(useCache);
+			const item = history.getItem(assignment);
 
-				if (item) {
-					return Promise.resolve(item);
-				}
+			if (!item) {
+				throw new Error('No Item');
+			}
 
-				return Promise.reject();
-			});
+			return item;
 		},
 
 		/**

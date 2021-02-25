@@ -417,7 +417,11 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 					);
 				}
 			} catch (e) {
-				if (e?.message !== 'No Link') {
+				if (e == null) {
+					return;
+				}
+
+				if (e.message !== 'No Link') {
 					throw e;
 				}
 			}
@@ -466,9 +470,11 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				waitsOn.push(
 					(async () => {
 						try {
-							const historyItem = (
-								await assignments.getHistoryItem(id, true)
-							)?.getMostRecentHistoryItem?.();
+							let historyItem = await assignments
+								.getHistoryItem(id, true)
+								.catch(() => null);
+
+							historyItem = historyItem?.getMostRecentHistoryItem?.();
 
 							const submission = historyItem?.get('Submission');
 							const feedback = historyItem?.get('Feedback');
@@ -501,7 +507,11 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								Submission: submission,
 							});
 						} catch (e) {
-							if (e?.message !== 'No Link') {
+							if (e == null) {
+								return;
+							}
+
+							if (e.message !== 'No Link') {
 								throw e;
 							}
 						}
