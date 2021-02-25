@@ -298,7 +298,10 @@ global.Globals = module.exports = exports = Ext.define(
 
 			// Allow these properties to be drooped from the config. `.server` is the only config.
 			Object.assign($AppConfig, {
-				'server-host': location.protocol + '//' + location.host,
+				'server-host':
+					location.protocol +
+					'//' +
+					location.host.replace(/:(0|80|443)/, ''),
 				'server-path': new URL(
 					$AppConfig.server || '',
 					'file:///dataserver2/'
