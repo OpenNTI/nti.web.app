@@ -37,6 +37,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		assignmentModel: PropTypes.shape({
 			isAvailable: PropTypes.func,
 			isNoSubmit: PropTypes.func,
+			isTimed: PropTypes.bool,
 			getQuestionCount: PropTypes.func,
 			isOutsideSubmissionBuffer: PropTypes.func,
 		}),
