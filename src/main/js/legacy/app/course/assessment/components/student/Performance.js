@@ -339,16 +339,15 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 			this.mon(store, 'datachanged', 'updateHeader');
 		},
 
-		updateHeader: function () {
+		async updateHeader() {
 			function complete(o) {
 				return !!o.get('completed');
 			}
 
-			var me = this,
-				currentBundle = me.currentBundle,
-				tpl = me.tempCount.msgTpl,
-				count = me.store.getCount(),
-				c = me.store.getRange().filter(complete).length,
+			var currentBundle = this.currentBundle,
+				tpl = this.tempCount.msgTpl,
+				count = this.store.getCount(),
+				c = this.store.getRange().filter(complete).length,
 				values;
 
 			function addGrade(grade) {
@@ -374,42 +373,53 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 					});
 				}
 
-				me.tempGrade.update(Ext.DomHelper.markup(elements));
+				this.tempGrade.update(Ext.DomHelper.markup(elements));
 			}
 
-			me.tempCount.update(Ext.String.format(tpl, c, count));
+			this.tempCount.update(Ext.String.format(tpl, c, count));
 
-			if (me.finalGrade && !me.finalGrade.isEmpty()) {
-				values = me.finalGrade.getValues();
+			if (this.finalGrade && !this.finalGrade.isEmpty()) {
+				values = this.finalGrade.getValues();
 
 				addGrade(values);
 
-				me.gradeLabel.addDisclaimer(false);
-			} else if (currentBundle) {
-				currentBundle.getCurrentGrade()
-					.catch(() => {}) // rejects if there's no link. don't care.
-					.then(function (grade) {
-						if (grade) {
-							//if the final grade was set after getCurrentGrade was called
-							//but before it finished make sure we don't unset it
-							if (me.finalGrade && !me.finalGrade.isEmpty()) {
-								return;
-							}
+				this.gradeLabel.addDisclaimer(false);
+				return;
+			}
 
-							// DisplayableGrade takes precedent if present
-							values = grade.get('DisplayableGrade')
-								? { value: grade.get('DisplayableGrade') }
-								: grade.getValues();
+			if (!currentBundle) {
+				return;
+			}
 
-							addGrade(values);
+			try {
+				const grade = await currentBundle.getCurrentGrade();
 
-							if (values.letter || values.value) {
-								me.gradeLabel.addDisclaimer(
-									'Estimated from the grading policy in the Syllabus'
-								);
-							}
-						}
-				});
+				if (!grade) {
+					return;
+				}
+
+				//if the final grade was set after getCurrentGrade was called
+				//but before it finished make sure we don't unset it
+				if (!this.finalGrade?.isEmpty()) {
+					return;
+				}
+
+				// DisplayableGrade takes precedent if present
+				values = grade.get('DisplayableGrade')
+					? { value: grade.get('DisplayableGrade') }
+					: grade.getValues();
+
+				addGrade(values);
+
+				if (values.letter || values.value) {
+					this.gradeLabel.addDisclaimer(
+						'Estimated from the grading policy in the Syllabus'
+					);
+				}
+			} catch (e) {
+				if (e.message !== 'No Link') {
+					throw e;
+				}
 			}
 		},
 
@@ -438,9 +448,8 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 		//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
 		setAssignmentsData: function (assignments, currentBundle) {
-			var raw = [],
-				waitsOn = [],
-				me = this;
+			const raw = [];
+			const waitsOn = [];
 
 			this.clearAssignmentsData();
 
@@ -451,28 +460,27 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				return Promise.reject('No Data?');
 			}
 
-			function collect(o) {
-				var id = o.getId();
+			const collect = o => {
+				const id = o.getId();
 
 				waitsOn.push(
-					assignments
-						.getHistoryItem(o.getId(), true)
-						.catch(() => {}) // throws if there's no 'CurrentGrade' link. don't care.
-						.finally(function (h) {
-							if (typeof h === 'string') {
-								h = null;
-							}
+					(async () => {
+						try {
+							const historyItem = (
+								await assignments.getHistoryItem(id, true)
+							)?.getMostRecentHistoryItem?.();
 
-							h = h && h.getMostRecentHistoryItem();
+							const submission = historyItem?.get('Submission');
+							const feedback = historyItem?.get('Feedback');
+							const grade = historyItem?.get('Grade');
+							const gradeValue = grade?.getValues().value;
+							const pendingAssessment = historyItem?.get(
+								'pendingAssessment'
+							);
 
-							var submission = h && h.get('Submission'),
-								feedback = h && h.get('Feedback'),
-								grade = h && h.get('Grade'),
-								gradeValue = grade && grade.getValues().value,
-								pendingAssessment =
-									h && h.get('pendingAssessment');
-
-							if (me.maybeSetFinalGrade(o, h, grade)) {
+							if (
+								this.maybeSetFinalGrade(o, historyItem, grade)
+							) {
 								return;
 							}
 
@@ -483,43 +491,40 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								name: o.get('title'),
 								assigned: o.get('availableBeginning'),
 								due: o.get('availableEnding'),
-								completed:
-									submission && submission.get('CreatedTime'),
+								completed: submission?.get('CreatedTime'),
 								Grade: grade,
 								grade: gradeValue,
-								average: grade && grade.get('average'),
+								average: grade?.get('average'),
 								Feedback: feedback,
-								feedback:
-									feedback && feedback.get('Items').length,
+								feedback: feedback?.get('Items').length,
 								pendingAssessment: pendingAssessment,
 								Submission: submission,
 							});
-						})
+						} catch (e) {
+							if (e.message !== 'No Link') {
+								throw e;
+							}
+						}
+					})()
 				);
-			}
+			};
 
 			assignments.each(collect);
 
 			return Promise.all(waitsOn)
-				.then(function () {
-					return raw;
-				})
+				.then(() => raw)
 				.then(this.store.loadRawData.bind(this.store))
 				.then(this.grid.view.refresh.bind(this.grid.view));
 		},
 
-		maybeSetFinalGrade: function (assignment, history, grade) {
+		maybeSetFinalGrade(assignment, history, grade) {
 			if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
 				return false;
 			}
 
-			try {
-				this.finalGrade = grade;
-				this.updateHeader();
-				return true;
-			} catch (e) {
-				console.error(e.stack || e.message || e);
-			}
+			this.finalGrade = grade;
+			this.updateHeader();
+			return true;
 		},
 	}
 ));
