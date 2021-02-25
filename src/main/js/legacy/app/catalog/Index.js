@@ -88,9 +88,13 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				setTitle: (title) => this.setTitle(title),
 				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
-						return `${
-							this.category || '.'
-						}/nti-course-catalog-entry/${obj.getID()}`;
+						let base = `${this.category || '.'}/nti-course-catalog-entry/${obj.getID()}`;
+
+						if (obj.redeemed) {
+							base = `${base}?redeem=1`;
+						}
+
+						return base;
 					}
 				},
 			});
