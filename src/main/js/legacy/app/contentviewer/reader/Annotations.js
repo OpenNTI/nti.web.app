@@ -604,134 +604,6 @@ module.exports = exports = Ext.define(
 			me.selectRange(range);
 		},
 
-		// For compatibility with native scrolling on iPad
-		iAddAnnotation: function (range) {
-			if (!range) {
-				console.warn('bad range');
-				return;
-			}
-
-			var me = this,
-				rect2,
-				record,
-				menu,
-				xy,
-				offset,
-				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
-				innerDocOffset;
-
-			function createHighlight() {
-				rect2 = RectUtils.getFirstNonBoundingRect(range);
-				record = AnnotationUtils.selectionToHighlight(
-					range,
-					null,
-					me.getDocumentElement()
-				);
-				if (!record) {
-					return;
-				}
-				//Default container, this should be replaced with the local container.
-				if (!record.get('ContainerId')) {
-					record.set('ContainerId', me.reader.getLocation().NTIID);
-				}
-				me.selectRange(range);
-			}
-
-			//set a flag to prevent NoteOverlay from resolving the line
-			this.reader.creatingAnnotation = true;
-
-			menu = Ext.widget('menu', {
-				closeAction: 'destroy',
-				minWidth: 150,
-				defaults: { ui: 'nt-annotaion', plain: true },
-			});
-
-			menu.add({
-				text: getString(
-					'NextThought.view.content.reader.Annotations.save-highlight'
-				),
-				handler: function () {
-					createHighlight();
-					me.UserDataActions.savePhantomAnnotation(record, false);
-				},
-			});
-
-			menu.add({
-				text: getString(
-					'NextThought.view.content.reader.Annotations.add-note'
-				),
-				handler: function () {
-					createHighlight();
-					me.fireEvent('create-note', range, rect2, 'plain');
-				},
-			});
-
-			function redaction(block) {
-				return function () {
-					createHighlight();
-					me.clearSelection();
-					var r = Redaction.createFromHighlight(record, block);
-					try {
-						me.UserDataActions.savePhantomAnnotation(r, true);
-					} catch (e) {
-						alert(
-							getString(
-								'NextThought.view.content.reader.Annotations.error'
-							)
-						);
-					}
-				};
-			}
-
-			//FIXME - official way of redaction feature enablement:
-			//if(Service.canRedact()){
-			//hack to allow redactions only in legal texts for now..
-			if (redactionRegex.test(this.reader.getLocation().NTIID)) {
-				//inject other menu items:
-				menu.add({
-					text: getString(
-						'NextThought.view.content.reader.Annotations.redact-inline'
-					),
-					handler: redaction(false),
-				});
-
-				menu.add({
-					text: getString(
-						'NextThought.view.content.reader.Annotations.redact-block'
-					),
-					handler: redaction(true),
-				});
-			}
-
-			//on close make sure it gets destroyed.
-			menu.on(
-				'hide',
-				function () {
-					menu.close();
-					delete this.reader.creatingAnnotation;
-				},
-				this
-			);
-
-			xy = [
-				range.getBoundingClientRect().right,
-				range.getBoundingClientRect().bottom,
-			];
-			offset = me.reader.getEl().getXY();
-			innerDocOffset = document.getElementsByTagName('iframe')[0]
-				.offsetLeft;
-			xy[0] += offset[0] + innerDocOffset;
-			xy[1] += offset[1] - Ext.getBody().getScroll().top;
-
-			if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
-				menu.showAt(xy);
-			} else {
-				console.debug(
-					'hack alert; annotation context menu deliberately hidden in mathcounts content'
-				);
-			}
-		},
-
 		/**
 		 *
 		 * @param {string} type - the type
@@ -863,12 +735,7 @@ module.exports = exports = Ext.define(
 					e.stopPropagation();
 					e.preventDefault();
 					if (origSelection.length > 0) {
-						if (Ext.is.iPad) {
-							// For compatibility with native highlighting on iPad
-							this.iAddAnnotation(range);
-						} else {
-							this.addAnnotation(range, e.getXY());
-						}
+						this.addAnnotation(range, e.getXY());
 					}
 				}
 			} catch (er) {
@@ -906,10 +773,7 @@ module.exports = exports = Ext.define(
 				selection,
 				txt;
 			try {
-				if (!Ext.is.iPad) {
-					// iPad does this automatically
-					Anchors.snapSelectionToWord(doc);
-				}
+				Anchors.snapSelectionToWord(doc);
 
 				selection = doc.parentWindow.getSelection();
 				txt = selection.toString();
