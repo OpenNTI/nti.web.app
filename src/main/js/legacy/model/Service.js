@@ -890,7 +890,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-	//region capability shortcuts
+	//#region capability shortcuts
 	/*
 	 *	The following methods are for deciding when things can or cannot happen
 	 */
@@ -967,7 +967,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return !!coll;
 	},
 
-	//endregion
+	//#endregion
 	canWorkspaceBlog: function () {
 		return Boolean(Service.getCollection('Blog'));
 	},

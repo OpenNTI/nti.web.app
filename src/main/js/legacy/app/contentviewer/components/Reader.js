@@ -42,9 +42,9 @@ module.exports = exports = Ext.define(
 		layout: 'auto',
 		prefix: 'default',
 
-		//endregion
+		//#endregion
 
-		//region Setup & Init
+		//#region Setup & Init
 		initComponent: function () {
 			this.callParent(arguments);
 			this.trackThis();
@@ -174,9 +174,9 @@ module.exports = exports = Ext.define(
 			return this.getNoteOverlay()?.showContainerNoteEditor();
 		},
 
-		//endregion
+		//#endregion
 
-		//region Getters/Queries
+		//#region Getters/Queries
 		getAnnotationOffsets: function () {
 			return this.calculateNecessaryAnnotationOffsets();
 		},
@@ -216,9 +216,9 @@ module.exports = exports = Ext.define(
 			return target;
 		},
 
-		//endregion
+		//#endregion
 
-		//region Actions
+		//#region Actions
 		activating: function () {
 			delete this.annotationOffsetsCache;
 		},
@@ -319,9 +319,9 @@ module.exports = exports = Ext.define(
 			};
 		},
 
-		//endregion
+		//#endregion
 
-		//region Event Handlers
+		//#region Event Handlers
 		onContextMenuHandler: function () {
 			var o = this.getAnnotations();
 			return o.onContextMenuHandler.apply(o, arguments);
@@ -497,10 +497,10 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		//endregion
+		//#endregion
 
-		//region Statics
-		//endregion
+		//#region Statics
+		//#endregion
 		statics: {
 			get: function (prefix) {
 				var instances = this.instances;
