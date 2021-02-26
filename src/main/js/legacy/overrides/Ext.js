@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { default: isTouchDevice } = require('@nti/util-detection-touch');
 
 const Globals = require('legacy/util/Globals');
 
@@ -38,10 +37,6 @@ module.exports = exports = Ext.define(
 	function () {
 		Ext.isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
 		Ext.isGecko = Ext.isGecko && !Ext.isIE11p;
-		Ext.is.iPad =
-			Ext.is.iPad ||
-			(isTouchDevice && /Mac OS X/i.test(navigator.userAgent)); // Safari on iPad reports OS X on iOS 13+
-		Ext.is.iOS = Ext.is.iOS || Ext.is.iPad;
 
 		Ext.isFunction = function isFunction(f) {
 			return typeof f === 'function';
