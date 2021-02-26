@@ -907,6 +907,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display {
 }
 
 .nt-annotation-menu {
+	$arrow-size: 0.5em;
 	$transition-duration: 0.1s;
 
 	background: var(--annotations-menu-bg);
@@ -920,10 +921,15 @@ div.section-problem .highlight-mouse-over .MathJax_Display {
 
 	overflow: visible;
 
+	&.flip::after {
+		bottom: initial;
+		top: -($arrow-size * 2);
+		border-bottom-color: var(--annotations-menu-bg);
+		border-top-color: transparent;
+	}
+
 	// the pointer/arrow
 	&::after {
-		$arrow-size: 0.5em;
-
 		content: '';
 		position: absolute;
 		width: 0;
@@ -1025,6 +1031,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display {
 					1,
 					1
 				); // so the transform will animate on mouseout.
+
 				transition: all $transition-duration 0;
 
 				&::after {

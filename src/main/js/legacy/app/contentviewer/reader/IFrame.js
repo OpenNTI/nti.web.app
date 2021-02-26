@@ -370,7 +370,7 @@ module.exports = exports = Ext.define(
 				reader: me.reader,
 			});
 
-			on(doc, 'mousedown', function () {
+			on(doc, ['mousedown', 'touchstart'], () => {
 				Ext.menu.Manager.hideAll();
 			});
 
@@ -395,43 +395,42 @@ module.exports = exports = Ext.define(
 				evt.stopEvent();
 			});
 
-			on(doc, 'touchend', function () {
-				//if open notepad editor, close it if touch on reader
-				var notepad = Ext.query(
-					'.inline-editor.x-component-notepad-item'
-				)[0];
-				if (notepad) {
-					notepad = Ext.get(notepad).down('.body');
-					if (notepad) {
-						notepad.blur();
-					}
-				}
+			let lastTouch;
+			on(doc, ['touchstart', 'touchmove'], e => {
+				lastTouch = e;
 			});
 
-			on(doc, 'mouseup', function (e) {
+			on(doc, ['mouseup', 'touchend'], e => {
+				const { touches } = lastTouch || {};
+				const { type } = e;
 				var fakeEvent = Ext.EventObject.setEvent(e || window.event),
 					t = Ext.getBody().getScroll().top,
 					s = me.get().win.getSelection();
 
 				if (!fakeEvent.getTarget('a') || !s.isCollapsed) {
 					me.reader.onContextMenuHandler({
-						getTarget: function () {
+						type,
+						getTarget() {
 							return fakeEvent.getTarget.apply(
 								fakeEvent,
 								arguments
 							);
 						},
 
-						preventDefault: function () {
+						preventDefault() {
 							fakeEvent.preventDefault();
 						},
 
-						stopPropagation: function () {
+						stopPropagation() {
 							fakeEvent.stopPropagation();
 						},
 
-						getXY: function () {
-							var xy = fakeEvent.getXY();
+						getXY() {
+							const xy = fakeEvent.getXY() || [];
+							if (type === 'touchend') {
+								xy[0] = touches[0].pageX;
+								xy[1] = touches[0].pageY;
+							}
 							xy[1] -= t;
 							return xy;
 						},
@@ -439,65 +438,15 @@ module.exports = exports = Ext.define(
 				}
 			});
 
-			if (!Ext.is.iPad) {
-				forward(['mousedown', 'mouseup', 'mousemove', 'mouseout']);
-			} else {
-				//NOTE: Are we using these listeners for iPad?
-				on(doc, 'touchstart', function () {
-					Ext.menu.Manager.hideAll();
-				});
-
-				on(doc, 'selectionchange', function (e) {
-					function selectionChange(e2) {
-						var fakeEvent = Ext.EventObject.setEvent(
-								e2 || window.event
-							),
-							r = me.get().win.getSelection().getRangeAt(0);
-
-						function showMenu() {
-							me.reader.onContextMenuHandler({
-								getTarget: function () {
-									return fakeEvent.getTarget.apply(
-										fakeEvent,
-										arguments
-									);
-								},
-								preventDefault: function () {
-									fakeEvent.preventDefault();
-								},
-								stopPropagation: function () {
-									fakeEvent.stopPropagation();
-								},
-							});
-						}
-
-						if (r) {
-							var df = r.cloneContents(),
-								n = df.firstChild;
-
-							if (!n) {
-								clearInterval(this.showMenuTimer);
-							} else if (
-								!df.querySelector('.application-highlight')
-							) {
-								this.showMenuTimer = setTimeout(showMenu, 250);
-							} else {
-								clearInterval(this.showMenuTimer);
-							}
-						} else {
-							clearInterval(this.showMenuTimer);
-						}
-					}
-
-					if (me.selectionTimer) {
-						// So it doesn't continuously update during highlight-drag
-						clearTimeout(me.selectionTimer);
-					}
-					me.selectionTimer = Ext.defer(selectionChange, 300, me, [
-						e,
-					]);
-				});
-			}
+			forward([
+				'mousedown',
+				'mouseup',
+				'mousemove',
+				'mouseout',
+				'touchend',
+				'touchmove',
+				'touchstart',
+			]);
 
 			on(doc, 'mouseout', function (e) {
 				var evt = Ext.EventObject.setEvent(e || window.event),

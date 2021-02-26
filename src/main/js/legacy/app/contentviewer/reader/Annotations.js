@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const cx = require('classnames');
 
 const Anchors = require('legacy/util/Anchors');
 const AnnotationUtils = require('legacy/util/Annotations');
@@ -401,23 +402,22 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		addAnnotation: function (range, xy) {
+		addAnnotation: function (range, xy, type) {
 			const pageInfo = this.reader.getLocation().pageInfo;
 			const isFake = pageInfo && pageInfo.get('isFakePageInfo');
 
 			if (!range) {
-				console.warn('bad range');
 				return;
 			}
 
 			if (!xy || !xy[0] || !xy[1]) {
-				console.warn('xy are null or undefined: ', xy);
+				// console.warn('xy are null or undefined: ', xy);
 				return;
 			}
 
 			if (isFake) {
 				this.selectRange(range);
-				console.warn('Trying highlight on fake page info');
+				// console.warn('Trying highlight on fake page info');
 				return;
 			}
 
@@ -452,7 +452,7 @@ module.exports = exports = Ext.define(
 				minWidth: 4,
 				top: 0,
 				ui: 'nt-annotation',
-				cls: 'nt-annotation-menu',
+				cls: cx('nt-annotation-menu', { flip: type === 'touchend' }),
 				layout: 'hbox',
 				focusOnToFront: false,
 				defaults: { ui: 'nt-annotation', plain: true },
@@ -586,7 +586,11 @@ module.exports = exports = Ext.define(
 
 				//center the menu at that x, y
 				x -= menuWidth / 2;
-				y -= menuHeight + 20;
+				if (type !== 'touchend') {
+					y -= menuHeight + 20;
+				} else {
+					y += menuHeight + 20;
+				}
 
 				return [x, y];
 			}
@@ -729,13 +733,13 @@ module.exports = exports = Ext.define(
 				var origSelection = rangy
 						.getSelection(this.getDocumentElement())
 						.toString(),
-					range = this.getSelection();
+					range = this.getSelection(e.type !== 'touchend');
 
 				if (range && !range.collapsed) {
 					e.stopPropagation();
 					e.preventDefault();
 					if (origSelection.length > 0) {
-						this.addAnnotation(range, e.getXY());
+						this.addAnnotation(range, e.getXY(), e.type);
 					}
 				}
 			} catch (er) {
@@ -767,13 +771,15 @@ module.exports = exports = Ext.define(
 			this.buildAnnotations(items);
 		},
 
-		getSelection: function () {
+		getSelection: function (snap = true) {
 			var doc = this.getDocumentElement(),
 				range,
 				selection,
 				txt;
 			try {
-				Anchors.snapSelectionToWord(doc);
+				if (snap) {
+					Anchors.snapSelectionToWord(doc);
+				}
 
 				selection = doc.parentWindow.getSelection();
 				txt = selection.toString();
