@@ -20,7 +20,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
         </a>
       </span>
       <div
-        className="nti-link-to-path profile"
+        className="pathLink nti-link-to-path profile"
         to="#"
       >
         <i
@@ -40,7 +40,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
     >
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           exact={true}
           to="./"
         >
@@ -52,7 +52,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
       <li />
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="./reports"
         >
           Reports
@@ -84,7 +84,7 @@ Array [
           </a>
         </span>
         <div
-          className="nti-link-to-path profile"
+          className="pathLink nti-link-to-path profile"
           to="#"
         >
           <i
@@ -104,7 +104,7 @@ Array [
       >
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             exact={true}
             to="./"
           >
@@ -115,7 +115,7 @@ Array [
         <li />
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./transcript"
           >
             Transcript
@@ -123,7 +123,7 @@ Array [
         </li>
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./reports"
           >
             Reports

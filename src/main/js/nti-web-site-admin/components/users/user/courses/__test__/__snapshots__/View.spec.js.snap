@@ -30,7 +30,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
     >
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="#"
         >
           <div
@@ -73,7 +73,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="#"
         >
           <div
@@ -116,7 +116,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="#"
         >
           <div
@@ -159,7 +159,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="#"
         >
           <div
@@ -202,7 +202,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="#"
         >
           <div

@@ -2,7 +2,7 @@
 
 exports[`Site admin content table book name column test Test name 1`] = `
 <div
-  className="nti-link-to-path"
+  className="pathLink nti-link-to-path"
   exact={true}
   to="./book/bookName"
 >

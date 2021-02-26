@@ -15,7 +15,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
       >
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             exact={true}
             to="./"
           >
@@ -24,7 +24,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
         </li>
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./admins"
           >
             Admins
@@ -32,7 +32,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
         </li>
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./deactivated"
           >
             Deactivated
@@ -61,7 +61,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
       >
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./invitations"
           >
             Invitations
@@ -93,7 +93,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
       >
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             exact={true}
             to="./"
           >
@@ -102,7 +102,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
         </li>
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./admins"
           >
             Admins
@@ -110,7 +110,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
         </li>
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./deactivated"
           >
             Deactivated
@@ -130,7 +130,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
       >
         <li>
           <div
-            className="nti-link-to-path"
+            className="pathLink nti-link-to-path"
             to="./invitations"
           >
             Invitations

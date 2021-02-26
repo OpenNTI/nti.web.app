@@ -51,7 +51,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id1"
             >
@@ -95,7 +95,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id2"
             >
@@ -139,7 +139,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id3"
             >
@@ -183,7 +183,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id4"
             >
@@ -227,7 +227,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id5"
             >
@@ -323,7 +323,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id1"
             >
@@ -367,7 +367,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id2"
             >
@@ -411,7 +411,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id3"
             >
@@ -455,7 +455,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id4"
             >
@@ -499,7 +499,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id5"
             >
@@ -543,7 +543,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id6"
             >
@@ -587,7 +587,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id7"
             >
@@ -631,7 +631,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id8"
             >
@@ -675,7 +675,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id9"
             >
@@ -719,7 +719,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id10"
             >
@@ -763,7 +763,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id11"
             >
@@ -807,7 +807,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id12"
             >
@@ -851,7 +851,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id13"
             >
@@ -895,7 +895,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id14"
             >
@@ -939,7 +939,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id15"
             >
@@ -983,7 +983,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id16"
             >
@@ -1027,7 +1027,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id17"
             >
@@ -1071,7 +1071,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id18"
             >
@@ -1115,7 +1115,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id19"
             >
@@ -1159,7 +1159,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id20"
             >
@@ -1203,7 +1203,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id21"
             >
@@ -1247,7 +1247,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id22"
             >
@@ -1291,7 +1291,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id23"
             >
@@ -1335,7 +1335,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id24"
             >
@@ -1379,7 +1379,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             className="bookname-col"
           >
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./book/id25"
             >

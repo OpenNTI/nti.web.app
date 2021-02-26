@@ -14,7 +14,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
         className="header"
       >
         <div
-          className="nti-link-to-path"
+          className="pathLink nti-link-to-path"
           to="site-admin.users.user-overview"
         >
           <i
@@ -78,7 +78,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
         >
           <li>
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               exact={true}
               to="./"
             >
@@ -87,7 +87,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
           </li>
           <li>
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               to="./reports"
             >
               Reports
@@ -95,7 +95,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
           </li>
           <li>
             <div
-              className="nti-link-to-path"
+              className="pathLink nti-link-to-path"
               to="./progress"
             >
               Progress
