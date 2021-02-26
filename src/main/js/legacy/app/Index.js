@@ -156,7 +156,6 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		if (Ext.is.iOS) {
 			//this.setupTablet();
 			//Ext.getDoc().swallowEvent('gesturestart', true);
-			this.lockOrientation();
 
 			//keep element under body from shrinking. Can cause the screen to go white
 			Ext.defer(function () {
@@ -508,85 +507,6 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				touch.target.dispatchEvent(clickEvent);
 			}
 		}
-	},
-
-	lockOrientation: function () {
-		var optWindow,
-			me = this;
-
-		/*If user rotates to portrait, display screen saying to rotate it.
-		 * if they rotate back to landscape, destroy screen*/
-		window.addEventListener(
-			'orientationchange',
-			function () {
-				if (optWindow) {
-					optWindow.destroy();
-					optWindow = null;
-				}
-				if (Math.abs(window.orientation ?? 90) !== 90) {
-					optWindow = me.createPortraitOrientationScreen();
-					const iframe = optWindow.el.down('iframe');
-					iframe.el.dom.contentWindow.addEventListener(
-						'touchstart',
-						function (e) {
-							e.preventDefault();
-						}
-					);
-					optWindow.show();
-				}
-			},
-			true
-		);
-
-		if (Math.abs(window.orientation ?? 90) !== 90) {
-			optWindow = this.createPortraitOrientationScreen();
-			const iframe = optWindow.el.down('iframe');
-			iframe.el.dom.contentWindow.addEventListener(
-				'touchstart',
-				function (e) {
-					e.preventDefault();
-				}
-			);
-
-			optWindow.show();
-		}
-
-		document.body.onorientationchange = function () {
-			window.scrollTo(0, 0);
-		};
-	},
-
-	createPortraitOrientationScreen: function () {
-		var optWindow = Ext.widget('nti-window', {
-			title: 'Portrait mode unavailabe',
-			closeAction: 'hide',
-			width: '100%',
-			height: '100%',
-			layout: 'auto',
-			modal: true,
-			closable: false,
-			draggable: false,
-			resizeable: false,
-			hideParent: true,
-			renderTo: Ext.getBody(),
-			items: {
-				xtype: 'component',
-				cls: 'clickthrough',
-				autoEl: {
-					tag: 'iframe',
-					src: 'resources/portraitOrientation.html',
-					frameBorder: 0,
-					marginWidth: 0,
-					marginHeight: 0,
-					seamless: true,
-					transparent: true,
-					allowTransparency: true,
-					style:
-						'overflow-x: hidden; overflow-y:auto; height: 100vh; width: 100vw',
-				},
-			},
-		});
-		return optWindow;
 	},
 
 	onWindowResize: function () {
