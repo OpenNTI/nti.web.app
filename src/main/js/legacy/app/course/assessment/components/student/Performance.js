@@ -26,15 +26,15 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 		alias: 'widget.course-assessment-performance',
 
 		statics: {
-			getScoreSorter: function () {
-				function get(o) {
+			getScoreSorter() {
+				const get = o => {
 					var grade = o.get('Grade'),
 						values = grade && grade.getValues();
 
 					return (values && values.value) || '';
-				}
+				};
 
-				return function (a, b) {
+				return (a, b) => {
 					var aComp = a.get('completed'),
 						bComp = b.get('completed'),
 						aVal = get(a),
@@ -115,7 +115,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								'data-qtip': '{qtip}',
 							})
 						),
-						addDisclaimer: function (disclaimer) {
+						addDisclaimer(disclaimer) {
 							if (!this.rendered) {
 								this.on(
 									'afterrender',
@@ -199,7 +199,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								dataIndex: 'completed',
 								width: 80,
 								resizable: false,
-								renderer: function (v) {
+								renderer(v) {
 									return v && v.getTime() > 0
 										? this.checkMarkTpl
 										: '';
@@ -210,7 +210,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								dataIndex: 'grade',
 								width: 70,
 								resizable: false,
-								doSort: function (state) {
+								doSort(state) {
 									var store = this.up('grid').getStore(),
 										sorter = new Ext.util.Sorter({
 											direction: state,
@@ -228,7 +228,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 								tdCls: 'feedback',
 								width: 140,
 								resizable: false,
-								renderer: function (value, col, rec) {
+								renderer(value, col, rec) {
 									var grade = rec.get('Grade'),
 										isExcused =
 											grade && grade.get('IsExcused'),
@@ -256,26 +256,22 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 						],
 
 						listeners: {
-							sortchange: function (ct, column) {
+							sortchange(ct, column) {
 								ct.up('grid').markColumn(column);
 							},
-							selectionchange: function (sm, selected) {
+							selectionchange(sm, selected) {
 								sm.deselect(selected);
 							},
-							viewready: function (grid) {
-								grid.mon(
-									grid.getView(),
-									'refresh',
-									function () {
-										grid.markColumn(
-											grid.down('gridcolumn[sortState]')
-										);
-									}
-								);
+							viewready(grid) {
+								grid.mon(grid.getView(), 'refresh', () => {
+									grid.markColumn(
+										grid.down('gridcolumn[sortState]')
+									);
+								});
 							},
 						},
 
-						markColumn: function (c) {
+						markColumn(c) {
 							var cls = 'sortedOn',
 								el = this.getEl();
 							if (el) {
@@ -297,7 +293,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 		pathRoot: 'Grades & Performance',
 
-		initComponent: function () {
+		initComponent() {
 			this.callParent(arguments);
 
 			this.enableBubble(['goto-assignment', 'close-reader']);
@@ -340,9 +336,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 		},
 
 		async updateHeader() {
-			function complete(o) {
-				return !!o.get('completed');
-			}
+			const complete = o => !!o.get('completed');
 
 			var currentBundle = this.currentBundle,
 				tpl = this.tempCount.msgTpl,
@@ -350,7 +344,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				c = this.store.getRange().filter(complete).length,
 				values;
 
-			function addGrade(grade) {
+			const addGrade = grade => {
 				var elements = [];
 
 				if (grade.value) {
@@ -374,7 +368,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				}
 
 				this.tempGrade?.update(Ext.DomHelper.markup(elements));
-			}
+			};
 
 			this.tempCount.update(Ext.String.format(tpl, c, count));
 
@@ -427,11 +421,11 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 			}
 		},
 
-		clearAssignmentsData: function () {
+		clearAssignmentsData() {
 			this.store.removeAll();
 		},
 
-		fireGoToAssignment: function (selModel, record) {
+		fireGoToAssignment(selModel, record) {
 			var date = Ext.Date.format(
 				record.get('assigned'),
 				'l F j \\a\\t g:i A'
@@ -451,7 +445,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 		},
 
 		//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
-		setAssignmentsData: function (assignments, currentBundle) {
+		setAssignmentsData(assignments, currentBundle) {
 			const raw = [];
 			const waitsOn = [];
 
