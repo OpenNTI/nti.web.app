@@ -8,7 +8,8 @@ exports[`Site admin user course reports test Basic render test 1`] = `
     className="reports-list-view"
   >
     <figure
-      className="notice empty-state-component"
+      className="empty-state-component"
+      small={false}
     >
       <h1>
         No Reports
