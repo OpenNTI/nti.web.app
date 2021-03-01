@@ -373,7 +373,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 					});
 				}
 
-				this.tempGrade.update(Ext.DomHelper.markup(elements));
+				this.tempGrade?.update(Ext.DomHelper.markup(elements));
 			}
 
 			this.tempCount.update(Ext.String.format(tpl, c, count));

@@ -89,8 +89,8 @@ module.exports = exports = Ext.define(
 		 * @param  {boolean} useCache -
 		 * @returns {Promse}			   fulfills with the history item
 		 */
-		getHistoryItem: function (assignment, useCache) {
-			return Promise.reject();
+		getHistoryItem: async function (assignment, useCache) {
+			throw new Error('No implementation');
 		},
 
 		/**

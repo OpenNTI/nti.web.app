@@ -220,7 +220,8 @@ module.exports = exports = Ext.define(
 				waitsOn.push(
 					assignments
 						.getHistoryItem(o.getId(), true)
-						.always(me.collectEvents.bind(me, o))
+						.catch(() => null)
+						.then(me.collectEvents.bind(me, o))
 				);
 			}
 
