@@ -23,6 +23,11 @@ class BookStore extends Stores.BoundStore {
 		this.load();
 	}
 
+	applySearchTerm (searchTerm) {
+		this.setImmediate('pageNumber', 0);
+	}
+
+
 	async load() {
 		if (this.isBufferingSearch) {
 			return;
@@ -71,7 +76,6 @@ class BookStore extends Stores.BoundStore {
 
 			if (this.searchTerm) {
 				params.filter = this.searchTerm;
-				params.batchStart = 0;
 			}
 
 			const collection = service.getCollection(
