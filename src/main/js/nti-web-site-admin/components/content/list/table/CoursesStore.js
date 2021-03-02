@@ -20,6 +20,10 @@ class CoursesStore extends Stores.BoundStore {
 		this.load();
 	}
 
+	applySearchTerm (searchTerm) {
+		this.setImmediate('pageNumber', 0);
+	}
+
 	async onCourseCreated(catalogEntry) {
 		this.load();
 	}
@@ -72,7 +76,6 @@ class CoursesStore extends Stores.BoundStore {
 
 			if (this.searchTerm) {
 				params.filter = this.searchTerm;
-				params.batchStart = 0;
 			}
 
 			const collection = service.getCollection(
