@@ -119,9 +119,9 @@
 				}
 			};
 
-			// if (!new RegExp(<%= JSON.stringify(SUPPORTED_AGENTS) %>).test(navigator.userAgent)) {
-			// 	location.replace('./unsupported');
-			// }
+			if (!new RegExp(<%= JSON.stringify(SUPPORTED_AGENTS) %>).test(navigator.userAgent)) {
+				location.replace('./unsupported');
+			}
 
 			//frame buster
 			//use weak comparison on purpose.
