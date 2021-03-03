@@ -407,9 +407,17 @@ li.library-grid-item {
 	padding: 10px;
 	text-align: center;
 	line-height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 40px;
 
 	&.indented {
 		margin-left: 34px;
+	}
+
+	@media (--respond-to-handhelds) {
+		margin: 0 15px 40px;
 	}
 }
 
@@ -977,28 +985,21 @@ li.library-grid-item {
 .available-courses {
 	overflow: visible;
 
-	.x-mask,
-	.x-mask-msg {
-		@include animate($name: fadeIn, $duration: 1s);
-
-		&.removing {
-			@include animate($name: fadeOut, $duration: 1s);
-		}
-	}
-}
-
-.available-courses,
-.available-books {
-	position: fixed !important;
-}
-
-.available-courses {
 	.header {
 		padding-top: 6px !important;
 
 		.name {
 			font-size: 20px !important;
 			color: var(--primary-grey);
+		}
+	}
+
+	.x-mask,
+	.x-mask-msg {
+		@include animate($name: fadeIn, $duration: 1s);
+
+		&.removing {
+			@include animate($name: fadeOut, $duration: 1s);
 		}
 	}
 }
@@ -1139,6 +1140,8 @@ li.library-grid-item {
 
 .available-courses,
 .available-books {
+	position: fixed !important;
+
 	.header {
 		height: 60px;
 		padding-top: 15px;
