@@ -299,83 +299,85 @@ module.exports = exports = Ext.define(
 				}
 
 				return Promise.all([assignmentLoad, view.getAssignmentList()])
-					.then(([assignment, assignments = [], enrollment]) => {
-						// let assignmentStart = assignment.get('availableBeginning');
-						let index,
-							prev,
-							next,
-							path = [],
-							pageSource;
+					.then(
+						async ([assignment, assignments = [], enrollment]) => {
+							// let assignmentStart = assignment.get('availableBeginning');
+							let index,
+								prev,
+								next,
+								path = [],
+								pageSource;
 
-						assignments.forEach(function (item, i) {
-							if (item.getId() === assignment.getId()) {
-								index = i;
+							assignments.forEach(function (item, i) {
+								if (item.getId() === assignment.getId()) {
+									index = i;
+								}
+							});
+							prev = index - 1;
+							next = index + 1;
+
+							if (prev >= 0) {
+								prev = assignments[prev];
+							} else {
+								prev = undefined;
 							}
-						});
-						prev = index - 1;
-						next = index + 1;
 
-						if (prev >= 0) {
-							prev = assignments[prev];
-						} else {
-							prev = undefined;
-						}
-
-						if (next < assignments.length) {
-							next = assignments[next];
-						} else {
-							next = undefined;
-						}
-
-						path.push({
-							label: view.getAssignmentsTabLabel(),
-							title: view.getAssignmentsTabLabel(),
-							route: '/',
-						});
-
-						if (view.isAdmin) {
-							path.push({
-								label: assignment.get('title'),
-								title: assignment.get('title'),
-								route:
-									'/' +
-									encodeForURI(assignment.getId()) +
-									'/students',
-							});
+							if (next < assignments.length) {
+								next = assignments[next];
+							} else {
+								next = undefined;
+							}
 
 							path.push({
-								cls: 'locked',
-								label: $AppConfig.userObject.getName(),
+								label: view.getAssignmentsTabLabel(),
+								title: view.getAssignmentsTabLabel(),
+								route: '/',
 							});
-						} else {
-							path.push({
-								cls: 'locked',
-								label: assignment.get('title'),
+
+							if (view.isAdmin) {
+								path.push({
+									label: assignment.get('title'),
+									title: assignment.get('title'),
+									route:
+										'/' +
+										encodeForURI(assignment.getId()) +
+										'/students',
+								});
+
+								path.push({
+									cls: 'locked',
+									label: $AppConfig.userObject.getName(),
+								});
+							} else {
+								path.push({
+									cls: 'locked',
+									label: assignment.get('title'),
+								});
+							}
+
+							pageSource = PageSource.create({
+								next: next?.getId(),
+								nextTitle: next?.get('title'),
+								previous: prev?.getId(),
+								previousTitle: prev?.get('title'),
+								currentIndex: index,
+								total: assignments.length,
+								getRoute: i => i && encodeForURI(i),
 							});
+
+							return {
+								path: path,
+								pageSource: pageSource,
+								assignment: assignment,
+								student: $AppConfig.userObject,
+								assignmentHistory: await view.assignmentCollection
+									.getHistoryItem(assignment.getId())
+									.catch(() => null),
+								instructorProspective: view.isAdmin,
+								fragment: route.hash,
+							};
 						}
-
-						pageSource = PageSource.create({
-							next: next && next.getId(),
-							nextTitle: next && next.get('title'),
-							previous: prev && prev.getId(),
-							previousTitle: prev && prev.get('title'),
-							currentIndex: index,
-							total: assignments.length,
-							getRoute: i => i && encodeForURI(i),
-						});
-
-						return {
-							path: path,
-							pageSource: pageSource,
-							assignment: assignment,
-							student: $AppConfig.userObject,
-							assignmentHistory: view.assignmentCollection.getHistoryItem(
-								assignment.getId()
-							),
-							instructorProspective: view.isAdmin,
-							fragment: route.hash,
-						};
-					})
+					)
 					.then(me.showReader.bind(me))
 					.then(function () {
 						if (
@@ -442,10 +444,10 @@ module.exports = exports = Ext.define(
 					}
 
 					let pageSource = {
-						next: next && next.getId(),
-						nextTitle: next && next.get('title'),
-						previous: prev && prev.getId(),
-						previousTitle: prev && prev.get('title'),
+						next: next?.getId(),
+						nextTitle: next?.get('title'),
+						previous: prev?.getId(),
+						previousTitle: prev?.get('title'),
 						currentIndex: index,
 						total: assignments.length,
 					};
@@ -833,15 +835,8 @@ module.exports = exports = Ext.define(
 						};
 					})
 					.then(me.showReader.bind(me))
-					.always(function () {
-						if (
-							me.assignment &&
-							me.assignment.reader &&
-							me.assignment.reader.el
-						) {
-							me.assignment.reader.el.unmask();
-						}
-
+					.finally(() => {
+						me.assignment?.reader?.el?.unmask();
 						view.maybeUnmask();
 					});
 			});
