@@ -56,6 +56,10 @@ function getRouteFor(obj, context) {
 		};
 	}
 
+	if (obj.type === 'redeem-course-code') {
+		return '/app/catalog/redeem';
+	}
+
 	if (obj.isUser) {
 		if (context === 'open-chat') {
 			return () => {
