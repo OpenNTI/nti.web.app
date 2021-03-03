@@ -2614,7 +2614,7 @@ input.preview[readonly] {
 		font: normal 400 0.875rem/1 var(--body-font-family);
 		min-height: 200px;
 		max-height: 350px;
-		overflow: scroll;
+		overflow: auto;
 		color: var(--secondary-grey);
 	}
 }

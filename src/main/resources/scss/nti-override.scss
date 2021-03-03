@@ -75,7 +75,7 @@ body.x-body {
 		padding-bottom: 16px;
 		font-family: Monaco, 'Courier New', Courier, monospace;
 		padding-left: 4ex;
-		overflow: scroll;
+		overflow: auto;
 		word-wrap: normal;
 
 		* {
@@ -83,7 +83,7 @@ body.x-body {
 		}
 
 		&.code {
-			overflow: scroll;
+			overflow: auto;
 			line-height: 1em;
 			word-wrap: normal;
 			padding-top: 5px;
