@@ -394,7 +394,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 				//if the final grade was set after getCurrentGrade was called
 				//but before it finished make sure we don't unset it
-				if (!this.finalGrade?.isEmpty()) {
+				if (this.finalGrade && !this.finalGrade.isEmpty()) {
 					return;
 				}
 
@@ -445,80 +445,65 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 		},
 
 		//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
-		setAssignmentsData(assignments, currentBundle) {
+		async setAssignmentsData(assignments, currentBundle) {
 			const raw = [];
-			const waitsOn = [];
 
 			this.clearAssignmentsData();
 
 			this.currentBundle = currentBundle;
 
-			if (!assignments) {
-				console.error('No assignments??');
-				return Promise.reject('No Data?');
-			}
+			await Promise.all(
+				assignments?.map(async o => {
+					const id = o.getId();
+					try {
+						let historyItem = await assignments
+							.getHistoryItem(id, true)
+							.catch(() => null);
 
-			const collect = o => {
-				const id = o.getId();
+						historyItem = historyItem?.getMostRecentHistoryItem?.();
 
-				waitsOn.push(
-					(async () => {
-						try {
-							let historyItem = await assignments
-								.getHistoryItem(id, true)
-								.catch(() => null);
+						const submission = historyItem?.get('Submission');
+						const feedback = historyItem?.get('Feedback');
+						const grade = historyItem?.get('Grade');
+						const gradeValue = grade?.getValues().value;
+						const pendingAssessment = historyItem?.get(
+							'pendingAssessment'
+						);
 
-							historyItem = historyItem?.getMostRecentHistoryItem?.();
-
-							const submission = historyItem?.get('Submission');
-							const feedback = historyItem?.get('Feedback');
-							const grade = historyItem?.get('Grade');
-							const gradeValue = grade?.getValues().value;
-							const pendingAssessment = historyItem?.get(
-								'pendingAssessment'
-							);
-
-							if (
-								this.maybeSetFinalGrade(o, historyItem, grade)
-							) {
-								return;
-							}
-
-							raw.push({
-								ntiid: id,
-								containerId: o.get('containerId'),
-								item: o,
-								name: o.get('title'),
-								assigned: o.get('availableBeginning'),
-								due: o.get('availableEnding'),
-								completed: submission?.get('CreatedTime'),
-								Grade: grade,
-								grade: gradeValue,
-								average: grade?.get('average'),
-								Feedback: feedback,
-								feedback: feedback?.get('Items').length,
-								pendingAssessment: pendingAssessment,
-								Submission: submission,
-							});
-						} catch (e) {
-							if (e == null) {
-								return;
-							}
-
-							if (e.message !== 'No Link') {
-								throw e;
-							}
+						if (this.maybeSetFinalGrade(o, historyItem, grade)) {
+							return;
 						}
-					})()
-				);
-			};
 
-			assignments.each(collect);
+						raw.push({
+							ntiid: id,
+							containerId: o.get('containerId'),
+							item: o,
+							name: o.get('title'),
+							assigned: o.get('availableBeginning'),
+							due: o.get('availableEnding'),
+							completed: submission?.get('CreatedTime'),
+							Grade: grade,
+							grade: gradeValue,
+							average: grade?.get('average'),
+							Feedback: feedback,
+							feedback: feedback?.get('Items').length,
+							pendingAssessment: pendingAssessment,
+							Submission: submission,
+						});
+					} catch (e) {
+						if (e == null) {
+							return;
+						}
 
-			return Promise.all(waitsOn)
-				.then(() => raw)
-				.then(this.store.loadRawData.bind(this.store))
-				.then(this.grid.view.refresh.bind(this.grid.view));
+						if (e.message !== 'No Link') {
+							throw e;
+						}
+					}
+				}) || []
+			);
+
+			this.store.loadRawData(raw);
+			this.grid.view.refresh();
 		},
 
 		maybeSetFinalGrade(assignment, history, grade) {
