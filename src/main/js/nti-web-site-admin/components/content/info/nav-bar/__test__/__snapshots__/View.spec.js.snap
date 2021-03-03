@@ -30,7 +30,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
       className="actions"
     >
       <div
-        className="pathLink nti-link-to-path profile"
+        className="nti-link-to-path profile"
         to="#"
       >
         <i
@@ -50,7 +50,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
     >
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           exact={true}
           to="./"
         >
@@ -60,7 +60,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
       <li />
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="./reports"
         >
           Reports
@@ -101,7 +101,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
       className="actions"
     >
       <div
-        className="pathLink nti-link-to-path profile"
+        className="nti-link-to-path profile"
         to="#"
       >
         <i
@@ -121,7 +121,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
     >
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           exact={true}
           to="./"
         >
@@ -130,7 +130,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="./roster"
         >
           Roster
@@ -138,7 +138,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="./reports"
         >
           Reports

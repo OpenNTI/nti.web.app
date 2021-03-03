@@ -24,7 +24,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
     >
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -47,7 +47,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -70,7 +70,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -93,7 +93,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -116,7 +116,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -154,7 +154,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
     >
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -177,7 +177,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -200,7 +200,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -223,7 +223,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -246,7 +246,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -269,7 +269,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -292,7 +292,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -315,7 +315,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -338,7 +338,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -361,7 +361,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -384,7 +384,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -407,7 +407,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -430,7 +430,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -453,7 +453,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -476,7 +476,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -499,7 +499,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -522,7 +522,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -545,7 +545,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -568,7 +568,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -591,7 +591,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -614,7 +614,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -637,7 +637,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -660,7 +660,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -683,7 +683,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div
@@ -706,7 +706,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
       </li>
       <li>
         <div
-          className="pathLink nti-link-to-path"
+          className="nti-link-to-path"
           to="#"
         >
           <div

@@ -44,7 +44,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test 1`] = 
   >
     <li>
       <div
-        className="pathLink nti-link-to-path"
+        className="nti-link-to-path"
         exact={true}
         to="./"
       >
@@ -53,7 +53,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test 1`] = 
     </li>
     <li>
       <div
-        className="pathLink nti-link-to-path"
+        className="nti-link-to-path"
         to="./reports"
       >
         Reports
@@ -61,7 +61,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test 1`] = 
     </li>
     <li>
       <div
-        className="pathLink nti-link-to-path"
+        className="nti-link-to-path"
         to="./progress"
       >
         Progress

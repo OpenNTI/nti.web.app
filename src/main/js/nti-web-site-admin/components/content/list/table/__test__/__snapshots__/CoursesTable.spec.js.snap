@@ -105,7 +105,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -218,7 +218,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -331,7 +331,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -444,7 +444,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -557,7 +557,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -776,7 +776,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -889,7 +889,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1002,7 +1002,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1115,7 +1115,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1228,7 +1228,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1341,7 +1341,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1454,7 +1454,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1567,7 +1567,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1680,7 +1680,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1793,7 +1793,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -1906,7 +1906,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2019,7 +2019,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2132,7 +2132,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2245,7 +2245,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2358,7 +2358,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2471,7 +2471,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2584,7 +2584,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2697,7 +2697,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2810,7 +2810,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -2923,7 +2923,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -3036,7 +3036,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -3149,7 +3149,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -3262,7 +3262,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -3375,7 +3375,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >
@@ -3488,7 +3488,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
             className="coursename-col"
           >
             <div
-              className="pathLink nti-link-to-path"
+              className="nti-link-to-path"
               exact={true}
               to="#"
             >

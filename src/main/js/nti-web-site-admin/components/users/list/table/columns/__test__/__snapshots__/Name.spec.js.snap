@@ -2,7 +2,7 @@
 
 exports[`Site admin user table name column test Test for admins 1`] = `
 <div
-  className="pathLink nti-link-to-path"
+  className="nti-link-to-path"
   to="#"
 >
   <div>
@@ -17,7 +17,7 @@ exports[`Site admin user table name column test Test for admins 1`] = `
 
 exports[`Site admin user table name column test Test for learners 1`] = `
 <div
-  className="pathLink nti-link-to-path"
+  className="nti-link-to-path"
   to="#"
 >
   <div>
