@@ -365,6 +365,7 @@ JSONProxy.findModel = JSONProxy.prototype.findModel = exports.findModel.bind(
 (function (DOMParser) {
 	//eslint-disable-next-line strict
 	'use strict';
+	if (!DOMParser) return;
 	var DOMParserProto = DOMParser.prototype,
 		RealParseFromString = DOMParserProto.parseFromString;
 

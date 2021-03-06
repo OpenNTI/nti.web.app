@@ -15,7 +15,7 @@ module.exports = exports = Ext.define(
 			request;
 
 		request = names.reduce(function (acc, name) {
-			return acc || window[name];
+			return acc || global[name];
 		}, null);
 
 		if (!request) {
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define(
 		return request;
 	}
 
-	if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = getRequestAnimationFrame;
+	if (!global.requestAnimationFrame) {
+		global.requestAnimationFrame = getRequestAnimationFrame;
 	}
 })();

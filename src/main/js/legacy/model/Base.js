@@ -57,7 +57,7 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 		 *	ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
 		 *	As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire, or re-init.
 		 */
-		__SHARED_LOCATION_INTERFACE: document.createElement('a'),
+		__SHARED_LOCATION_INTERFACE: global.document?.createElement('a'),
 
 		/**
 		 * Gives you the shared location interface intialized to a given ref.

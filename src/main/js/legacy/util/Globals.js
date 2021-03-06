@@ -1004,7 +1004,9 @@ global.Globals = module.exports = exports = Ext.define(
 global.isMe = exports.isMe.bind(exports); //Used in xtemplates >.<
 global.isFeature = exports.isFeature.bind(exports); //Used in xtemplates >.<
 
-exports.stopBackspace(document);
+if (typeof document !== 'undefined') {
+	exports.stopBackspace(document);
+}
 
 exports.handleCache();
 

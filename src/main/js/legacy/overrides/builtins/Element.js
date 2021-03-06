@@ -181,6 +181,7 @@ if (!Function.prototype.bind) {
 
 // Begin dataset code
 if (
+	typeof document !== 'undefined' &&
 	!document.documentElement.dataset &&
 	// FF is empty while IE gives empty object
 	(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset') ||

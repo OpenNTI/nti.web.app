@@ -544,4 +544,4 @@ module.exports = exports = Ext.define(
 	}
 );
 
-window.ReaderPanel = exports;
+global.ReaderPanel = exports;

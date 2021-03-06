@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const DetectZoom = require('detect-zoom');
 const Commons = require('@nti/web-commons');
 
 const ChatOverrides = require('nti-web-chat-overrides');
@@ -47,6 +46,14 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	touchStartTime: -1,
 
 	items: [],
+
+	get DetectZoom() {
+		// lazy require ... blows up if run on node
+		return (
+			this._detectZoomInstance ||
+			(this._detectZoomInstance = require('detect-zoom'))
+		);
+	},
 
 	initComponent: function () {
 		this.callParent();
@@ -517,7 +524,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		var currentBar;
 
 		try {
-			z = DetectZoom.zoom();
+			z = this.DetectZoom.zoom();
 			// console.debug('Zoom:', z);
 		} catch (e) {
 			console.error('Detect Zoom failed to load');

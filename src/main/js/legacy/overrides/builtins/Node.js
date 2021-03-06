@@ -6,6 +6,9 @@ module.exports = exports = Ext.define(
 );
 //Patch-in features that might be missing.
 (function () {
+	if (typeof Element === 'undefined') {
+		return;
+	}
 	var EP = Element.prototype;
 
 	Ext.applyIf(EP, {

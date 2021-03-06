@@ -88,7 +88,7 @@ var Localization = (module.exports = exports = Ext.define(
 	}
 ).create());
 
-window.getString = Localization.getString.bind(Localization);
-window.getFormattedString = Localization.getFormattedString.bind(Localization);
+global.getString = Localization.getString.bind(Localization);
+global.getFormattedString = Localization.getFormattedString.bind(Localization);
 Localization.oldPlural = Ext.util.Format.plural;
 Ext.util.Format.plural = Localization.pluralizeString.bind(Localization);
