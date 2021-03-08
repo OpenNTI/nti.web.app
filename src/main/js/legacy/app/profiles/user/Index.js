@@ -71,6 +71,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		clearTimeout(this.cleanupTimeout);
 	},
 
+	getContext() {
+		return this.activeEntity;
+	},
+
 	async setActiveEntity(id) {
 		if (
 			this.activeEntity &&
@@ -196,10 +200,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 	startResourceViewed: function () {
-		var id = this.activeEntity && this.activeEntity.getId();
+		var id = this.activeEntity?.getId();
 
 		if (id && !this.hasCurrentTimer) {
-			AnalyticsUtil.startEvent(id, 'ProfileAboutView');
+			AnalyticsUtil.startEvent(id, {
+				type: 'ProfileAboutView',
+				rootContextId: this.activeEntity.get('NTIID'),
+			});
 
 			console.log('analytics event started');
 
