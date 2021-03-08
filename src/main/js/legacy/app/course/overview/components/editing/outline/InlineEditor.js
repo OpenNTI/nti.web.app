@@ -106,6 +106,7 @@ module.exports = exports = Ext.define(
 				MimeType: this.mimeType,
 				ContentNTIID: null,
 				title: this.inputEl.getValue(),
+				'auto_publish': !!this.autoPublish
 			};
 		},
 

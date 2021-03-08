@@ -21,5 +21,7 @@ module.exports = exports = Ext.define(
 				};
 			},
 		},
+
+		autoPublish: false
 	}
 );
