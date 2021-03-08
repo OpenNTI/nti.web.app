@@ -21,7 +21,7 @@ function onUserNameClick(e) {
 	}
 
 	var u = this.userObject || this.user,
-		profileUrl = u.getProfileUrl && u.getProfileUrl();
+		profileUrl = u.getProfileUrl?.();
 
 	if (profileUrl) {
 		if (this instanceof lazy.Popout) {
@@ -38,48 +38,10 @@ function onUserNameClick(e) {
 	}
 }
 
-// function showCard (e, el, position) {
-// 	var Popup = Popout,
-// 		pop,
-// 		user = this.userObject || this.user;
-//
-// 	if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
-// 		return;
-// 	}
-//
-// 	pop = contactCardPopout;
-//
-// 	if (!pop || pop.isDestroyed) {
-// 		pop = Popup.create({
-// 			renderTo: Ext.getBody(),
-// 			record: user,
-// 			refEl: el,
-// 			hidden: true
-// 		});
-// 	}
-//
-// 	pop.show();
-// 	if (el && el.dom) {
-// 		pop.alignTo(el, 'tl-bl?', [0, 0]);
-// 	} else {
-// 		pop.setPosition(position || {});
-// 	}
-//
-// 	contactCardPopout = canShow ? null : pop;
-// }
-
-// function startShowCard (e, el) {
-// 	var p = el.getAnchorXY('tl');
-// 	showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
-// }
-
-// function stopShowCard () {
-// 	clearTimeout(showCardTimer);
-// }
 
 module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 	navigateToProfile: function (u) {
-		var profileUrl = u.getProfileUrl && u.getProfileUrl();
+		var profileUrl = u.getProfileUrl?.();
 
 		if (profileUrl) {
 			lazy.Actions.pushRootRoute(u.getName(), profileUrl, {

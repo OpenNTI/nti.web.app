@@ -256,8 +256,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			currentTitle = me.getRouteTitle(),
 			myContext = me.getContext(),
 			child = me.getActiveItem(),
-			childContext =
-				child && child.getCurrentContext && child.getCurrentContext();
+			childContext = child?.getCurrentContext?.();
 
 		function addContext(c) {
 			if (Ext.isArray(c)) {
