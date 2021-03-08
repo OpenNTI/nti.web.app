@@ -88,13 +88,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getValue: function () {
-		return {
-			MimeType: this.mimeType,
-			ContentNTIID: null,
-			title: this.inputEl.getValue()
-		};
-	},
+		getValue: function () {
+			return {
+				MimeType: this.mimeType,
+				ContentNTIID: null,
+				title: this.inputEl.getValue(),
+				'auto_publish': !!this.autoPublish
+			};
+		},
 
 	setSuggestTitle: function () {
 		this.inputEl.dom.value = this.getSuggestedNodeTitle();
