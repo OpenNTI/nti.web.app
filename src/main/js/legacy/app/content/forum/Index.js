@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/Router');
-require('legacy/app/forums/Index');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/app/forums/Index');
 
 module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 	extend: 'Ext.container.Container',

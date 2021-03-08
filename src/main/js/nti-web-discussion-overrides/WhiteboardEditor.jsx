@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layouts } from '@nti/web-commons';
 
-import WhiteboardWindow from 'legacy/app/whiteboard/Window';
+import { Layouts } from '@nti/web-commons';
+import WhiteboardWindow from 'internal/legacy/app/whiteboard/Window';
 
 WebappWhiteboardEditor.propTypes = {
 	data: PropTypes.any,

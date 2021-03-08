@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { NotificationsView } = require('@nti/web-notifications');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const GutterTab = require('internal/legacy/app/chat/components/gutter/Tab');
+const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
-const LibraryActions = require('legacy/app/library/Actions');
-const GutterTab = require('legacy/app/chat/components/gutter/Tab');
-const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
-const ReactHarness = require('legacy/overrides/ReactHarness');
-
-require('legacy/mixins/State');
-require('legacy/model/transcript/TranscriptItem');
-require('legacy/app/account/identity/Index');
+require('internal/legacy/mixins/State');
+require('internal/legacy/model/transcript/TranscriptItem');
+require('internal/legacy/app/account/identity/Index');
 
 require('./Grid');
 require('./Toolbar');

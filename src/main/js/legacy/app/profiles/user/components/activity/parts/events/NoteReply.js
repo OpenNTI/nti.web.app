@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 require('./ActivityItem');
 

@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 
-require('legacy/common/components/Navigation');
+require('internal/legacy/common/components/Navigation');
 require('./ContentSwitcher');
 
 module.exports = exports = Ext.define(

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const RelatedWork = require('legacy/model/RelatedWork');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
 require('../../../parts/ContentLink');
 require('../ListItem');

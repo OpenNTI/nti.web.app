@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/app/video/Video');
-require('legacy/model/PlaylistItem');
+require('internal/legacy/app/video/Video');
+require('internal/legacy/model/PlaylistItem');
 require('./VideoRollItem');
 
 module.exports = exports = Ext.define(

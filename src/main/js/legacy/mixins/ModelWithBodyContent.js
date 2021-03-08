@@ -1,13 +1,11 @@
 const Ext = require('@nti/extjs');
 const Logger = require('@nti/util-logger').default;
-
-require('legacy/app/video/VideoPlayer');
-
-const WhiteboardCanvas = require('legacy/app/whiteboard/Canvas');
-const Video = require('legacy/app/video/Video');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const RelatedWork = require('legacy/model/RelatedWork');
-const Globals = require('legacy/util/Globals');
+const WhiteboardCanvas = require('internal/legacy/app/whiteboard/Canvas');
+const Video = require('internal/legacy/app/video/Video');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
+const Globals = require('internal/legacy/util/Globals');
+require('internal/legacy/app/video/VideoPlayer');
 
 const logger = Logger.get('nextthought:extjs:mixins:ModelWithBodyContent');
 

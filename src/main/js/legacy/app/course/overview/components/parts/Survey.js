@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
-const { getString } = require('legacy/util/Localization');
-const PageInfo = require('legacy/model/PageInfo');
-
-require('legacy/model/SurveyRef');
-require('legacy/model/assessment/Survey');
+require('internal/legacy/model/SurveyRef');
+require('internal/legacy/model/assessment/Survey');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.Survey',

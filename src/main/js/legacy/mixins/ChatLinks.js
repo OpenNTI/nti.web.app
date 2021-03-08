@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const ChatActions = require('legacy/app/chat/Actions');
-const { isMe } = require('legacy/util/Globals');
+const ChatActions = require('internal/legacy/app/chat/Actions');
+const { isMe } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 	/*

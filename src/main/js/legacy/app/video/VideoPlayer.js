@@ -12,8 +12,8 @@ const {
 } = require('@nti/web-video');
 
 const AnalyticsUtil = require('../../util/Analytics');
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/InstanceTracking');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/InstanceTracking');
 
 const TIME_CHANGE_THRESHOLD = 5;
 

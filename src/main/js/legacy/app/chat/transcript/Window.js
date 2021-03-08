@@ -1,19 +1,19 @@
 const Ext = require('@nti/extjs');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const Transcript = require('legacy/model/Transcript');
-const TranscriptSummary = require('legacy/model/TranscriptSummary');
-const { isMe } = require('legacy/util/Globals');
+const Transcript = require('internal/legacy/model/Transcript');
+const TranscriptSummary = require('internal/legacy/model/TranscriptSummary');
+const { isMe } = require('internal/legacy/util/Globals');
 
 const WindowsStateStore = require('../../windows/StateStore');
 const WindowsActions = require('../../windows/Actions');
 const ChatStateStore = require('../StateStore');
 
-require('legacy/model/MessageInfo');
+require('internal/legacy/model/MessageInfo');
 require('../../windows/components/Header');
 require('../../windows/components/Loading');
 require('../Gutter');

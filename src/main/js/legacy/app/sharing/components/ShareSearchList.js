@@ -1,9 +1,9 @@
-const Ext = require('@nti/extjs');
-const { toCSSClassName } = require('@nti/lib-dom');
 const cx = require('classnames');
 
-const NTIFormat = require('legacy/util/Format');
-const UserSearch = require('legacy/model/UserSearch');
+const Ext = require('@nti/extjs');
+const { toCSSClassName } = require('@nti/lib-dom');
+const NTIFormat = require('internal/legacy/util/Format');
+const UserSearch = require('internal/legacy/model/UserSearch');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.sharing.components.ShareSearchList',

@@ -1,5 +1,6 @@
 import './Tabs.scss';
 import React from 'react';
+
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 import { List } from '@nti/web-commons';

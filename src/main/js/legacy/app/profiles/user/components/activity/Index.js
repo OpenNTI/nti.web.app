@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const FlatPage = require('internal/legacy/store/FlatPage');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
+const UserSearch = require('internal/legacy/model/UserSearch');
 
-const AnalyticsUtil = require('legacy/util/Analytics');
-const FlatPage = require('legacy/store/FlatPage');
-const UserdataActions = require('legacy/app/userdata/Actions');
-const UserSearch = require('legacy/model/UserSearch');
-
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
-require('legacy/app/profiles/user/components/activity/Body');
-require('legacy/app/profiles/user/components/activity/Sidebar');
-require('legacy/app/stream/util/StreamSource');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
+require('internal/legacy/app/profiles/user/components/activity/Body');
+require('internal/legacy/app/profiles/user/components/activity/Sidebar');
+require('internal/legacy/app/stream/util/StreamSource');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.Index',

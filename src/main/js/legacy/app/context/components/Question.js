@@ -1,7 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { isCourseContentModalOpen } = require('nti-web-app-lesson-items');
-const ContentUtils = require('legacy/util/Content');
+const {
+	isCourseContentModalOpen,
+} = require('internal/nti-web-app-lesson-items');
+const ContentUtils = require('internal/legacy/util/Content');
 
 const ContextStateStore = require('../StateStore');
 

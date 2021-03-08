@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const SupportedVideoTypes = require('legacy/app/video/SupportedVideoTypes');
+const SupportedVideoTypes = require('internal/legacy/app/video/SupportedVideoTypes');
 
 const Globals = require('../Globals');
 

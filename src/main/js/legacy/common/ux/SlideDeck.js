@@ -1,12 +1,11 @@
 /*eslint no-undef:1*/
 const Ext = require('@nti/extjs');
+const ContentUtils = require('internal/legacy/util/Content');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const Slide = require('internal/legacy/model/Slide');
+const { getURL } = require('internal/legacy/util/Globals');
 
-const ContentUtils = require('legacy/util/Content');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const Slide = require('legacy/model/Slide');
-const { getURL } = require('legacy/util/Globals');
-
-require('legacy/app/mediaviewer/content/Overlay');
+require('internal/legacy/app/mediaviewer/content/Overlay');
 
 module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 	openFromDom: function (el, reader) {

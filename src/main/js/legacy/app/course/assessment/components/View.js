@@ -2,15 +2,14 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
+const Globals = require('internal/legacy/util/Globals');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const AssessmentActions = require('internal/legacy/app/course/assessment/Actions');
+const User = require('internal/legacy/model/User');
 
-const Globals = require('legacy/util/Globals');
-const UserRepository = require('legacy/cache/UserRepository');
-const AssessmentActions = require('legacy/app/course/assessment/Actions');
-const User = require('legacy/model/User');
-
-require('legacy/common/components/NavPanel');
-require('legacy/mixins/Router');
-require('legacy/util/Parsing');
+require('internal/legacy/common/components/NavPanel');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/util/Parsing');
 
 require('./Navigation');
 require('./Body');

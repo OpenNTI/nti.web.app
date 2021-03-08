@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const { getString } = require('internal/legacy/util/Localization');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.Curtain',

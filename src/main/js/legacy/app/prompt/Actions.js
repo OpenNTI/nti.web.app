@@ -1,4 +1,4 @@
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 const Ext = require('@nti/extjs');
 
 const PromptStateStore = require('./StateStore');

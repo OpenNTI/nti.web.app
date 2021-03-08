@@ -1,6 +1,7 @@
 import './CoursesTable.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { decorate } from '@nti/lib-commons';
 import { Table, Loading } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';

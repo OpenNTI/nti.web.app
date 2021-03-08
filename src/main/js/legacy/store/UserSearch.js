@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { isMe } = require('legacy/util/Globals');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
+const { isMe } = require('internal/legacy/util/Globals');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
 
 require('../proxy/UserSearch');
 

@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const B64 = require('legacy/util/Base64');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const B64 = require('internal/legacy/util/Base64');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const Avatar = require('legacy/mixins/Avatar');
+const Avatar = require('internal/legacy/mixins/Avatar');
 
 const Community = require('./Community');
 const FriendsList = require('./FriendsList');

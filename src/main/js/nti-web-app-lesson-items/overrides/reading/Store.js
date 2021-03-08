@@ -2,9 +2,8 @@ import { Stores } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
 import { UserDataThreader, Models } from '@nti/lib-interfaces';
 import { isNTIID, decodeFromURI } from '@nti/lib-ntiids';
-
-import BaseModel from 'legacy/model/Base';
-import RelatedWork from 'legacy/model/RelatedWork';
+import BaseModel from 'internal/legacy/model/Base';
+import RelatedWork from 'internal/legacy/model/RelatedWork';
 
 async function resolveSurvey(ref, course) {
 	try {

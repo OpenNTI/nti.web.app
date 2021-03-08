@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
-
 require('../NTI');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const UtilUserDataThreader = require('legacy/util/UserDataThreader');
+const UtilUserDataThreader = require('internal/legacy/util/UserDataThreader');
 
 const OPEN_THREADS = Symbol('Open Threads');
 const ALL = Symbol('All');

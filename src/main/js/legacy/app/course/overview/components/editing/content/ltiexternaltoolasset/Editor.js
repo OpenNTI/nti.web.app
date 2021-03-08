@@ -1,15 +1,15 @@
-const Ext = require('@nti/extjs');
 const React = require('react');
+
+const Ext = require('@nti/extjs');
 const { Prompt } = require('@nti/web-commons');
 const { ContentSelection, LTIAddTool, LTIStore } = require('@nti/web-course');
-
-const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
-const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
+const LTIExternalToolAsset = require('internal/legacy/model/LTIExternalToolAsset');
+const EditingActions = require('internal/legacy/app/course/overview/components/editing/Actions');
 
 require('../../Editor');
 require('./LTIExternalToolAssetSelection');
 require('./LTIExternalToolAssetEditor');
-require('legacy/app/course/assessment/components/CreateMenu');
+require('internal/legacy/app/course/assessment/components/CreateMenu');
 
 const Type = 'application/vnd.nextthought.ims.consumer.configuredtool';
 

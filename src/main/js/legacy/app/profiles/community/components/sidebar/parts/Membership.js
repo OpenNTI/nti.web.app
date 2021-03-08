@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const StoreUtils = require('legacy/util/Store');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const StoreUtils = require('internal/legacy/util/Store');
 
 require('../../../../user/components/membership/parts/Membership');
 

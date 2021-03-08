@@ -3,20 +3,22 @@ const { wait } = require('@nti/lib-commons');
 const { Presentation: PresentationAssets } = require('@nti/web-commons');
 const { Enrollment } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const User = require('legacy/model/User');
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const { guidGenerator, isFeature } = require('legacy/util/Globals');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const AccountActions = require('legacy/app/account/Actions');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+const User = require('internal/legacy/model/User');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const { guidGenerator, isFeature } = require('internal/legacy/util/Globals');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const AccountActions = require('internal/legacy/app/account/Actions');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
 const EnrollmentStateStore = require('./StateStore');
 const EnrollmentActions = require('./Actions');
 
 require('../info/components/Panel');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.Details',

@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const { isFeature } = require('internal/legacy/util/Globals');
 
-const { isFeature } = require('legacy/util/Globals');
-
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 	extend: 'Ext.container.Container',

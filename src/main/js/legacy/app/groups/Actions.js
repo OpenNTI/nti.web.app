@@ -1,21 +1,21 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { getService } = require('@nti/web-client');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const LoginStateStore = require('legacy/login/StateStore');
-const FriendsList = require('legacy/model/FriendsList');
-const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const FriendsList = require('internal/legacy/model/FriendsList');
+const DynamicFriendsList = require('internal/legacy/model/DynamicFriendsList');
 
 const GroupsStateStore = require('./StateStore');
 
 const { guidGenerator, isMe, getURL } = Globals;
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 	extend: 'NextThought.common.Actions',

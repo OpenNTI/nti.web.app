@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 const QuizSubmission = require('./QuizSubmission');
 
-require('legacy/common/chart/Score');
+require('internal/legacy/common/chart/Score');
 require('../contentviewer/overlay/Panel');
 require('./Score');
 require('./ScoreboardHeader');

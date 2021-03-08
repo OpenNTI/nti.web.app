@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
-
-import { getString } from 'legacy/util/Localization';
+import { getString } from 'internal/legacy/util/Localization';
 
 import Tabs from '../../../common/Tabs';
 

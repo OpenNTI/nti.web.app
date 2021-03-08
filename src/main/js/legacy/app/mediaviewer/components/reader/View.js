@@ -1,20 +1,19 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const FlatPage = require('legacy/store/FlatPage');
-const UserdataActions = require('legacy/app/userdata/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const { guidGenerator } = require('legacy/util/Globals');
+const FlatPage = require('internal/legacy/store/FlatPage');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 
 const MediaviewerActions = require('../../Actions');
 const MediaviewerStateStore = require('../../StateStore');
 
-require('legacy/app/annotations/Index');
-require('legacy/app/annotations/renderer/Manager');
-require('legacy/app/contentviewer/reader/NoteOverlay');
-require('legacy/layout/component/Natural');
-require('legacy/mixins/Searchable');
-require('legacy/util/Store');
+require('internal/legacy/app/annotations/Index');
+require('internal/legacy/app/annotations/renderer/Manager');
+require('internal/legacy/app/contentviewer/reader/NoteOverlay');
+require('internal/legacy/layout/component/Natural');
+require('internal/legacy/mixins/Searchable');
+require('internal/legacy/util/Store');
 
 require('./NoteOverlay');
 require('./parts/Transcript');

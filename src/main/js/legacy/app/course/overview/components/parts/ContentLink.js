@@ -1,21 +1,21 @@
 const Ext = require('@nti/extjs');
-
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const Note = require('legacy/model/Note');
-const RelatedWork = require('legacy/model/RelatedWork');
-const PageInfo = require('legacy/model/PageInfo');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const Note = require('internal/legacy/model/Note');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
+const PageInfo = require('internal/legacy/model/PageInfo');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/mixins/EllipsisText');
-require('legacy/common/components/cards/Card');
-require('legacy/util/Parsing');
+require('internal/legacy/mixins/EllipsisText');
+require('internal/legacy/common/components/cards/Card');
+require('internal/legacy/util/Parsing');
 
 function resolveIcon(config, n, root) {
 	const icon = n.getAttribute('icon');

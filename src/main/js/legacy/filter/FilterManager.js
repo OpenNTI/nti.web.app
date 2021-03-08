@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
 require('./Filter');
 require('./FilterGroup');

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
+const Vimeo = require('internal/legacy/model/resolvers/videoservices/Vimeo');
 
 module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 	extend: 'Ext.container.Container',

@@ -1,15 +1,15 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const OverviewGroup = require('legacy/model/courses/overview/Group');
-const LegacyCommunityBasedCourseInstance = require('legacy/model/courses/LegacyCommunityBasedCourseInstance');
+const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
+const LegacyCommunityBasedCourseInstance = require('internal/legacy/model/courses/LegacyCommunityBasedCourseInstance');
 
 const Group = require('../parts/Group');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/model/courses/overview/Lesson');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/model/courses/overview/Lesson');
 require('../parts/Header');
 
 module.exports = exports = Ext.define(

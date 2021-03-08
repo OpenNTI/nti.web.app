@@ -1,9 +1,8 @@
 /*globals ActiveXObject*/
 const Ext = require('@nti/extjs');
+const { getURL, swallow } = require('internal/legacy/util/Globals');
 
-const { getURL, swallow } = require('legacy/util/Globals');
-
-require('legacy/common/window/Window');
+require('internal/legacy/common/window/Window');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.components.definition.Window',

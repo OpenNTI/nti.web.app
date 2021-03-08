@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const CourseCatalogEntry = require('internal/legacy/model/courses/CourseCatalogEntry');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 require('./CourseWindow');
 

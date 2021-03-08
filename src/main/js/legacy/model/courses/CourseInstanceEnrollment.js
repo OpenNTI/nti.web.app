@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/HasLinks');
+require('internal/legacy/mixins/HasLinks');
 
 require('../Base');
 

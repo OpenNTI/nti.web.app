@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { LinkTo } from '@nti/web-routing';
 import { Loading, Layouts } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';

@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const Form = require('legacy/common/form/Form');
+const Globals = require('internal/legacy/util/Globals');
+const Form = require('internal/legacy/common/form/Form');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.parentselection.NewItem',

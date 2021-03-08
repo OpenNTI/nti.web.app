@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const GroupsActions = require('legacy/app/groups/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-
-require('legacy/app/contacts/components/coderetrieval/Window');
+require('internal/legacy/app/contacts/components/coderetrieval/Window');
 
 /**
  *	We assume that the component that mixes this in should implement 'createUserComponent' and the its children should

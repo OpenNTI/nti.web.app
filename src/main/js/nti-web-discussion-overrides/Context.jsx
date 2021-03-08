@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import { Layouts } from '@nti/web-commons';
 
-import BaseModel from 'legacy/model/Base';
-import ContainerContext from 'legacy/app/context/ContainerContext';
-import WindowStore from 'legacy/app/windows/StateStore';
+import { Layouts } from '@nti/web-commons';
+import BaseModel from 'internal/legacy/model/Base';
+import ContainerContext from 'internal/legacy/app/context/ContainerContext';
+import WindowStore from 'internal/legacy/app/windows/StateStore';
 
 import Styles from './Context.css';
 

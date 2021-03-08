@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 const { Editor } = require('@nti/web-assignment-editor');
 const { wait } = require('@nti/lib-commons');
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/Router');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.editing.AssignmentEditor',

@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
 const CourseActions = require('../../course/Actions');
 
 const CoursesActions = require('./Actions');
 const CoursesStateStore = require('./StateStore');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./components/available/CoursePage');
 require('./components/available/CourseWindow');
 require('./components/Collection');

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const AbstractStorage = require('internal/legacy/cache/AbstractStorage');
+const { swallow } = require('internal/legacy/util/Globals');
 
-const AbstractStorage = require('legacy/cache/AbstractStorage');
-const { swallow } = require('legacy/util/Globals');
-
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
 	extend: 'NextThought.common.StateStore',

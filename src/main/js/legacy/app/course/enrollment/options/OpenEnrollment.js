@@ -1,8 +1,6 @@
 const Ext = require('@nti/extjs');
-
+const { getString } = require('internal/legacy/util/Localization');
 require('./Base');
-
-const { getString } = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.options.OpenEnrollment',

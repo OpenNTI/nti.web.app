@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
 require('./CourseOutlineNode');
-require('legacy/mixins/AuditLog');
+require('internal/legacy/mixins/AuditLog');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.courses.navigation.CourseOutlineContentNode',

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
 
 require('../contentviewer/overlay/Panel');
 require('./Video');

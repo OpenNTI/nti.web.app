@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const LocationMeta = require('legacy/cache/LocationMeta');
-const UserRepository = require('legacy/cache/UserRepository');
-const { getURL } = require('legacy/util/Globals');
+const LocationMeta = require('internal/legacy/cache/LocationMeta');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.chat.components.log.Content',

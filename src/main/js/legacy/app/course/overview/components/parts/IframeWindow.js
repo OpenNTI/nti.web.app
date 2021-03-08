@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/components/cards/Card');
-require('legacy/common/ux/IframeWindow');
+require('internal/legacy/common/components/cards/Card');
+require('internal/legacy/common/ux/IframeWindow');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.IframeWindow',

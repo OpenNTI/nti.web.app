@@ -1,11 +1,11 @@
 /*eslint no-undef:1*/
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const StoreUtils = require('legacy/util/Store');
-const NTI = require('legacy/store/NTI');
+const StoreUtils = require('internal/legacy/util/Store');
+const NTI = require('internal/legacy/store/NTI');
 
 const Board = require('./Board');
 require('./CommentPost');

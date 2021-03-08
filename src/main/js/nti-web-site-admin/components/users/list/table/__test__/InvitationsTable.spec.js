@@ -1,6 +1,7 @@
 /* eslint-env jest */
 import React from 'react';
 import renderer from 'react-test-renderer';
+
 import { TestUtils } from '@nti/web-client';
 
 import InvitationsTable from '../InvitationsTable';

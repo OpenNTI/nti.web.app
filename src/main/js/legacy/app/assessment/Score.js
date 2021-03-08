@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/chart/Score');
+require('internal/legacy/common/chart/Score');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Score', {
 	extend: 'Ext.container.Container',

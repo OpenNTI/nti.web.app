@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 scoped(
 	'nti-web-app.course.assessment.components.student.assignments.FilterBar',
@@ -11,7 +10,7 @@ scoped(
 	}
 );
 
-require('legacy/app/course/assessment/components/CreateMenu');
+require('internal/legacy/app/course/assessment/components/CreateMenu');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.student.assignments.FilterBar',

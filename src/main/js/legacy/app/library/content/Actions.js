@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const StoreUtils = require('legacy/util/Store');
-const { getURL } = require('legacy/util/Globals');
-const LoginStateStore = require('legacy/login/StateStore');
-const lazy = require('legacy/util/lazy-require').get('ContentStateStore', () =>
-	require('./StateStore')
+const StoreUtils = require('internal/legacy/util/Store');
+const { getURL } = require('internal/legacy/util/Globals');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ContentStateStore',
+	() => require('./StateStore')
 );
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.content.Actions',

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
+const Globals = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.SearchComboBox',

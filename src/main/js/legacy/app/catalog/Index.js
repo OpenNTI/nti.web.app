@@ -1,29 +1,26 @@
 const Ext = require('@nti/extjs');
 const CatalogView = require('@nti/web-catalog').default;
 const { getService } = require('@nti/web-client');
-const {Router, Route} = require('@nti/web-routing');
+const { Router, Route } = require('@nti/web-routing');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const ComponentsNavigation = require('legacy/common/components/Navigation');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const ComponentsNavigation = require('internal/legacy/common/components/Navigation');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/common/components/Navigation');
-require('legacy/overrides/ReactHarness');
-require('legacy/login/StateStore');
-require('legacy/app/library/courses/components/available/CourseWindow');
-
+require('internal/legacy/common/components/Navigation');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/login/StateStore');
+require('internal/legacy/app/library/courses/components/available/CourseWindow');
 
 const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
 const CATEGORY_NAME = /\/([^/]*)\/?/;
 
 const URI_PART = /^uri/;
 
-const Catalog = Router.for([
-	Route({path: '/', component: CatalogView})
-]);
+const Catalog = Router.for([Route({ path: '/', component: CatalogView })]);
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -85,10 +82,12 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				xtype: 'react',
 				component: Catalog,
 				baseroute,
-				setTitle: (title) => this.setTitle(title),
+				setTitle: title => this.setTitle(title),
 				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
-						let base = `${this.category || '.'}/nti-course-catalog-entry/${obj.getID()}`;
+						let base = `${
+							this.category || '.'
+						}/nti-course-catalog-entry/${obj.getID()}`;
 
 						if (obj.redeemed) {
 							base = `${base}?redeem=1`;
@@ -115,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			cmp: navigation,
 			noLibraryLink: false,
 			hideBranding: true,
-			onBack: () => this.pushRootRoute('Library', '/library')
+			onBack: () => this.pushRootRoute('Library', '/library'),
 		});
 	},
 

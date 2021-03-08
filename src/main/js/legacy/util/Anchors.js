@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
-
-const rangy = require('legacy/util/rangy');
-const Globals = require('legacy/util/Globals');
-const TextContext = require('legacy/model/anchorables/TextContext');
-const TextDomContentPointer = require('legacy/model/anchorables/TextDomContentPointer');
-const ElementDomContentPointer = require('legacy/model/anchorables/ElementDomContentPointer');
-const DomContentRangeDescription = require('legacy/model/anchorables/DomContentRangeDescription');
-const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
-require('legacy/model/anchorables/DomContentPointer');
-const lazy = require('legacy/util/lazy-require')
+const rangy = require('internal/legacy/util/rangy');
+const Globals = require('internal/legacy/util/Globals');
+const TextContext = require('internal/legacy/model/anchorables/TextContext');
+const TextDomContentPointer = require('internal/legacy/model/anchorables/TextDomContentPointer');
+const ElementDomContentPointer = require('internal/legacy/model/anchorables/ElementDomContentPointer');
+const DomContentRangeDescription = require('internal/legacy/model/anchorables/DomContentRangeDescription');
+const ContentRangeDescription = require('internal/legacy/model/anchorables/ContentRangeDescription');
+require('internal/legacy/model/anchorables/DomContentPointer');
+const lazy = require('internal/legacy/util/lazy-require')
 	.get('RangeUtils', () => require('./Ranges'))
 	.get('AnnotationUtils', () => require('./Annotations'));
 

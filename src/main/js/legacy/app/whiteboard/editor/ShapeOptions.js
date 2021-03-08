@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { guidGenerator } = require('legacy/util/Globals');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 
 require('./ColorPickerButton');
 require('./StrokeWidthSelector');

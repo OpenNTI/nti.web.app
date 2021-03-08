@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 require('../../StateStore');
 
 module.exports = exports = Ext.define(

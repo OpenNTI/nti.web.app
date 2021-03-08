@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getString } = require('legacy/util/Localization');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.emailverify.verify.Index',

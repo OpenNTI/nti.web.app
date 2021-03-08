@@ -1,6 +1,7 @@
+const { isSameSecond: isSame } = require('date-fns');
+
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-const { isSameSecond: isSame } = require('date-fns');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.DatePicker',

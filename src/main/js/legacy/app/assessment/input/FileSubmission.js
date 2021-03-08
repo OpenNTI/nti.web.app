@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
 const { AssetIcon, ProgressBar } = require('@nti/web-commons');
 const { scoped } = require('@nti/lib-locale');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
 
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-
-require('legacy/app/MessageBox');
-require('legacy/common/form/fields/FilePicker');
+require('internal/legacy/app/MessageBox');
+require('internal/legacy/common/form/fields/FilePicker');
 require('./Base');
 
 const t = scoped('nti-web-app.assessment.input.FileSubmission', {

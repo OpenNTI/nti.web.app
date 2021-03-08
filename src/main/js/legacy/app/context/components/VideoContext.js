@@ -1,12 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const { isCourseContentModalOpen } = require('nti-web-app-lesson-items');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const PageInfo = require('legacy/model/PageInfo');
+const {
+	isCourseContentModalOpen,
+} = require('internal/nti-web-app-lesson-items');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
 const ContextStateStore = require('../StateStore');
 
-require('legacy/app/video/VideoPlayer');
+require('internal/legacy/app/video/VideoPlayer');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.context.components.VideoContext',

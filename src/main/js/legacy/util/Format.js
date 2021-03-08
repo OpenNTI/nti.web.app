@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { DateTime, Avatar } = require('@nti/web-commons');
-
-const { getString } = require('legacy/util/Localization');
-const { isMe } = require('legacy/util/Globals');
-const FriendsList = require('legacy/model/FriendsList');
-const User = require('legacy/model/User');
+const { getString } = require('internal/legacy/util/Localization');
+const { isMe } = require('internal/legacy/util/Globals');
+const FriendsList = require('internal/legacy/model/FriendsList');
+const User = require('internal/legacy/model/User');
 
 const AVATAR_COLORS = [
 	'#B8B8B8',

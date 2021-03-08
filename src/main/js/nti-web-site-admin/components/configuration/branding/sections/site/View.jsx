@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+
 import { scoped } from '@nti/lib-locale';
 import { rawContent } from '@nti/lib-commons';
 import { Input, List, Theme } from '@nti/web-commons';
-import classnames from 'classnames/bind';
 
 import { BRAND_NAME } from '../../constants';
 import { Title, Description } from '../../ParameterText';

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const LTIExternalToolAssetRef = require('legacy/model/LTIExternalToolAsset');
+const LTIExternalToolAssetRef = require('internal/legacy/model/LTIExternalToolAsset');
 
 require('../../../parts/LTIExternalToolAsset');
 require('../ListItem');

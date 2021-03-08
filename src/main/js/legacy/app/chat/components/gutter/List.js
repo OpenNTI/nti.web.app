@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const NTIFormat = require('legacy/util/Format');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const NTIFormat = require('internal/legacy/util/Format');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 const ChatStateStore = require('../../StateStore');
 // const ChatActions = require('../../Actions');

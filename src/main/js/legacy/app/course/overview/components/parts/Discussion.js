@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const DiscussionRef = require('legacy/model/DiscussionRef');
+const DiscussionRef = require('internal/legacy/model/DiscussionRef');
 
-require('legacy/mixins/EllipsisText');
+require('internal/legacy/mixins/EllipsisText');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.Discussion',

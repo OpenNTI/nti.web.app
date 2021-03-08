@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { Info } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const ContentProxy = require('legacy/proxy/JSONP');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+const ContentProxy = require('internal/legacy/proxy/JSONP');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
 require('./parts/Description');
 require('./parts/Instructors');

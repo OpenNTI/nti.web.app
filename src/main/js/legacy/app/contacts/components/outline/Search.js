@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
+const NTIFormat = require('internal/legacy/util/Format');
+const { getString } = require('internal/legacy/util/Localization');
+const UserSearch = require('internal/legacy/store/UserSearch');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const ChatActions = require('internal/legacy/app/chat/Actions');
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
+const { isMe } = require('internal/legacy/util/Globals');
 
-const NTIFormat = require('legacy/util/Format');
-const { getString } = require('legacy/util/Localization');
-const UserSearch = require('legacy/store/UserSearch');
-const GroupsActions = require('legacy/app/groups/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const ChatActions = require('legacy/app/chat/Actions');
-const ChatStateStore = require('legacy/app/chat/StateStore');
-const { isMe } = require('legacy/util/Globals');
-
-require('legacy/app/account/contacts/management/Popout');
+require('internal/legacy/app/account/contacts/management/Popout');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contacts.components.outline.Search',

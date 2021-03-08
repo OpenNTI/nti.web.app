@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Video = require('legacy/app/video/Video');
+const Video = require('internal/legacy/app/video/Video');
 
 require('./Split');
 

@@ -1,18 +1,18 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/StateStore');
-require('legacy/model/Course'); //Still used?
-require('legacy/model/store/GiftPurchaseAttempt');
-require('legacy/model/store/PricingResults');
-require('legacy/model/store/Purchasable');
-require('legacy/model/store/PurchasableCourse');
-require('legacy/model/store/PurchaseAttempt');
-require('legacy/model/store/StripeConnectKey');
-require('legacy/model/store/StripeOperationError');
-require('legacy/model/store/StripePricedPurchasable');
-require('legacy/model/store/StripePurchaseError');
-require('legacy/model/store/StripePurchaseItem');
-require('legacy/model/store/StripePurchaseOrder');
+require('internal/legacy/common/StateStore');
+require('internal/legacy/model/Course'); //Still used?
+require('internal/legacy/model/store/GiftPurchaseAttempt');
+require('internal/legacy/model/store/PricingResults');
+require('internal/legacy/model/store/Purchasable');
+require('internal/legacy/model/store/PurchasableCourse');
+require('internal/legacy/model/store/PurchaseAttempt');
+require('internal/legacy/model/store/StripeConnectKey');
+require('internal/legacy/model/store/StripeOperationError');
+require('internal/legacy/model/store/StripePricedPurchasable');
+require('internal/legacy/model/store/StripePurchaseError');
+require('internal/legacy/model/store/StripePurchaseItem');
+require('internal/legacy/model/store/StripePurchaseOrder');
 
 module.exports = exports = Ext.define('NextThought.app.store.StateStore', {
 	extend: 'NextThought.common.StateStore',

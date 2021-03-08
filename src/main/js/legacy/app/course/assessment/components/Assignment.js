@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const ContentviewerIndex = require('internal/legacy/app/contentviewer/Index');
 
-const ContentviewerIndex = require('legacy/app/contentviewer/Index');
-
-require('legacy/app/content/content/Index');
+require('internal/legacy/app/content/content/Index');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.Assignment',

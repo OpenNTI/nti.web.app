@@ -1,18 +1,18 @@
 const Ext = require('@nti/extjs');
 const { Events } = require('@nti/web-session');
-
-const UserdataActions = require('legacy/app/userdata/Actions');
-const UserdataStateStore = require('legacy/app/userdata/StateStore');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const Post = require('legacy/model/forums/Post');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
+const UserdataStateStore = require('internal/legacy/app/userdata/StateStore');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const Post = require('internal/legacy/model/forums/Post');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
 const ForumStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',

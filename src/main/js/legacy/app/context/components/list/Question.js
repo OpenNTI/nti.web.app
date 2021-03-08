@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PathActions = require('legacy/app/navigation/path/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
 
 require('../Question');
 

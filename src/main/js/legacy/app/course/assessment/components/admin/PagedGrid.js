@@ -1,14 +1,16 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
-
-const TimeUtils = require('legacy/util/Time');
-const { getString, getFormattedString } = require('legacy/util/Localization');
+const TimeUtils = require('internal/legacy/util/Time');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
 const AssignmentStatus = require('../../AssignmentStatus');
 
-require('legacy/model/User');
-require('legacy/mixins/grid-feature/GradeInputs');
+require('internal/legacy/model/User');
+require('internal/legacy/mixins/grid-feature/GradeInputs');
 
 const t = scoped('nti-web-app.course.assessment.components.admin.PagedGrid', {
 	graded: 'Graded %(date)s',

@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const { isMe } = require('legacy/util/Globals');
-const ChatStateStore = require('legacy/app/chat/StateStore');
-const lazy = require('legacy/util/lazy-require').get('GroupsStateStore', () =>
-	require('legacy/app/groups/StateStore')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { isMe } = require('internal/legacy/util/Globals');
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'GroupsStateStore',
+	() => require('internal/legacy/app/groups/StateStore')
 );
 
 module.exports = exports = Ext.define('NextThought.store.Contacts', {

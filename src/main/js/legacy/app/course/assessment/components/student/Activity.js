@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const { getFormattedString } = require('legacy/util/Localization');
-const UserRepository = require('legacy/cache/UserRepository');
-const { isMe } = require('legacy/util/Globals');
+const { getFormattedString } = require('internal/legacy/util/Localization');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { isMe } = require('internal/legacy/util/Globals');
 
 const t = scoped('nti-web-app.course.assessment.components.student.Activity', {
 	gradereceived: 'Grade Received',
@@ -12,7 +11,7 @@ const t = scoped('nti-web-app.course.assessment.components.student.Activity', {
 	submittedassignment: 'Assignment Submitted:',
 });
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.student.Activity',

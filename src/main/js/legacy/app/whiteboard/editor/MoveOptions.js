@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Color = require('legacy/util/Color');
+const Color = require('internal/legacy/util/Color');
 
 require('./ColorPickerButton');
 require('./StrokeWidthSelector');

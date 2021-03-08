@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const Scrolling = require('legacy/util/Scrolling');
+const Scrolling = require('internal/legacy/util/Scrolling');
 
 const DndStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
 	extend: 'NextThought.common.Actions',

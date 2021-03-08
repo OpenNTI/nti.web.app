@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/util/Globals');
+require('internal/legacy/util/Globals');
 require('../../../../../stream/List');
 require('./Page');
 require('./events/Empty');

@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const Transition = require('legacy/mixins/Transition');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Transition = require('internal/legacy/mixins/Transition');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 module.exports = exports = Ext.define(

@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
 require('./parts/BaseInput');
 require('./parts/Checkbox');
@@ -21,7 +23,7 @@ require('./parts/SubmitButton');
 require('./parts/Textarea');
 require('./parts/TextInput');
 
-require('legacy/mixins/enrollment-feature/Form');
+require('internal/legacy/mixins/enrollment-feature/Form');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.components.Admission',

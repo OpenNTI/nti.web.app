@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const SharingUtils = require('legacy/util/Sharing');
-const UserdataActions = require('legacy/app/userdata/Actions');
-
-require('legacy/common/window/Window');
-require('legacy/util/Annotations');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/util/Annotations');
 require('./components/UserTokenField');
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Window', {

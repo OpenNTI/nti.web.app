@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const NTIFormat = require('legacy/util/Format');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const NTIFormat = require('internal/legacy/util/Format');
 
 require('./Base');
 

@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/dd/ScrollingDragZone');
+require('internal/legacy/common/dd/ScrollingDragZone');
 require('./Base');
 
 function asInt(e, i) {

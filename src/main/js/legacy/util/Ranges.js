@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
+const AnchorResolver = require('internal/legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 const Anchors = require('./Anchors');
 const Globals = require('./Globals');

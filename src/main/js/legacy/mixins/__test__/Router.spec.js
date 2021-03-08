@@ -1,6 +1,6 @@
 /* globals spyOn, NextThought */
 /* eslint-env jest */
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 const stub = (a, b, c) => jest.spyOn(a, b).mockImplementation(c || (() => {}));
 

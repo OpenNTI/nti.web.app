@@ -1,8 +1,9 @@
 const Ext = require('@nti/extjs');
 const { AssetIcon } = require('@nti/web-commons');
-
-const { isCourseContentModalOpen } = require('nti-web-app-lesson-items');
-const RelatedWork = require('legacy/model/RelatedWork');
+const {
+	isCourseContentModalOpen,
+} = require('internal/nti-web-app-lesson-items');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
 const ContextStateStore = require('../../StateStore');
 

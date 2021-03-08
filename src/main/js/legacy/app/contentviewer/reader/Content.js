@@ -1,17 +1,17 @@
 const Ext = require('@nti/extjs');
-
-const ImageZoomView = require('legacy/common/ux/ImageZoomView');
-const SlideDeck = require('legacy/common/ux/SlideDeck');
-const ContentUtils = require('legacy/util/Content');
-const Globals = require('legacy/util/Globals');
-const ObjectUtils = require('legacy/util/Object');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ImageZoomView = require('internal/legacy/common/ux/ImageZoomView');
+const SlideDeck = require('internal/legacy/common/ux/SlideDeck');
+const ContentUtils = require('internal/legacy/util/Content');
+const Globals = require('internal/legacy/util/Globals');
+const ObjectUtils = require('internal/legacy/util/Object');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { getString } = require('legacy/util/Localization');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const { getString } = require('internal/legacy/util/Localization');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
-require('legacy/common/ux/IFramePopout');
+require('internal/legacy/common/ux/IFramePopout');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.reader.Content',

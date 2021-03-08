@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const User = require('legacy/model/User');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const User = require('internal/legacy/model/User');
 
 module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	extend: 'Ext.data.proxy.Rest',

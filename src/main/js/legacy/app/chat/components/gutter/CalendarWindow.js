@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { Calendar } = require('@nti/web-calendar');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const CalendarRoutes = require('legacy/app/CalendarRoutes');
-require('legacy/mixins/Router');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const CalendarRoutes = require('internal/legacy/app/CalendarRoutes');
+require('internal/legacy/mixins/Router');
 require('./EventWindow');
 
 module.exports = exports = Ext.define(

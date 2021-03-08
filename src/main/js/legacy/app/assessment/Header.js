@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
 
-const Globals = require('legacy/util/Globals');
-
-require('legacy/common/ux/VideoPopout');
+require('internal/legacy/common/ux/VideoPopout');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 	extend: 'Ext.Component',

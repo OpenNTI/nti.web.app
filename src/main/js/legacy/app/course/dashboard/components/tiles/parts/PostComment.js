@@ -1,10 +1,10 @@
-const Ext = require('@nti/extjs');
 const { format } = require('date-fns');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const User = require('legacy/model/User');
+const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const User = require('internal/legacy/model/User');
 
-require('legacy/app/windows/Actions');
+require('internal/legacy/app/windows/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.dashboard.components.tiles.parts.PostComment',

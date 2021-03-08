@@ -1,19 +1,19 @@
 const Ext = require('@nti/extjs');
 const { Survey } = require('@nti/web-assessment');
-
-const PromptActions = require('legacy/app/prompt/Actions');
-const PageInfo = require('legacy/model/PageInfo');
-const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const PromptActions = require('internal/legacy/app/prompt/Actions');
+const PageInfo = require('internal/legacy/model/PageInfo');
+const ContentUtils = require('internal/legacy/util/Content');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { guidGenerator } = require('legacy/util/Globals');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 
 const AttachmentWindow = require('./components/attachment/Window');
 
-require('legacy/common/Actions');
-require('legacy/model/RelatedWork');
-require('legacy/util/Content');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/RelatedWork');
+require('internal/legacy/util/Content');
 
 const TOPIC_EMBED = 'application/vnd.nextthought.app.embededtopic';
 

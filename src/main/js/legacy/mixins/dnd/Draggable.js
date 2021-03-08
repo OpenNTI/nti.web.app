@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DndDraggable = require('legacy/app/dnd/Draggable');
+const DndDraggable = require('internal/legacy/app/dnd/Draggable');
 
 /**
  * Handle adding and removing listeners for dropping actions

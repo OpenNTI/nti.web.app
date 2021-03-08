@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/window/Window');
+require('internal/legacy/common/window/Window');
 require('../../Header');
 require('./Confirm');
 

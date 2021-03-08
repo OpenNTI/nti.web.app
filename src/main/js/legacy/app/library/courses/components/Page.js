@@ -1,9 +1,9 @@
-const Ext = require('@nti/extjs');
 const { compare: naturalSort } = require('natural-orderby');
 
-const { getString } = require('legacy/util/Localization');
-const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
+const CourseCatalogEntry = require('internal/legacy/model/courses/CourseCatalogEntry');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.courses.components.Page',

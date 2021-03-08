@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PromptStore = require('legacy/app/prompt/StateStore');
+const PromptStore = require('internal/legacy/app/prompt/StateStore');
 
 const view = require('./Index');
 

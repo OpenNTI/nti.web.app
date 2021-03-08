@@ -1,9 +1,8 @@
 /*eslint no-control-regex: 0 */
 const Ext = require('@nti/extjs');
+const Cue = require('internal/legacy/webvtt/Cue');
 
-const Cue = require('legacy/webvtt/Cue');
-
-require('legacy/model/transcript/Cue');
+require('internal/legacy/model/transcript/Cue');
 
 /*
  * Transcript.js

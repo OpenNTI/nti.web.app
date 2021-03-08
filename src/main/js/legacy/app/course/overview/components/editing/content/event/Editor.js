@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
 const { Overview } = require('@nti/web-course');
 const { getService } = require('@nti/web-client');
-
-const CalendarEventRef = require('legacy/model/calendar/CalendarEventRef');
-const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
+const CalendarEventRef = require('internal/legacy/model/calendar/CalendarEventRef');
+const EditingActions = require('internal/legacy/app/course/overview/components/editing/Actions');
 
 require('../../Editor');
-require('legacy/app/course/assessment/components/CreateMenu');
+require('internal/legacy/app/course/assessment/components/CreateMenu');
 
 const getEventSVG = require('./eventIconUtil.js');
 

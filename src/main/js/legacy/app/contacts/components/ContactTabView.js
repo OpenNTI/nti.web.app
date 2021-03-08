@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const StoreUtils = require('legacy/util/Store');
-const User = require('legacy/model/User');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
+const { getString } = require('internal/legacy/util/Localization');
+const StoreUtils = require('internal/legacy/util/Store');
+const User = require('internal/legacy/model/User');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
 
 require('./TabView');
 

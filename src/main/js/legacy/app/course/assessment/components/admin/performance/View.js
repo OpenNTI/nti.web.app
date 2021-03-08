@@ -1,17 +1,17 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const User = require('legacy/model/User');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const User = require('internal/legacy/model/User');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PagedPageSource = require('legacy/util/PagedPageSource');
-const { isFeature } = require('legacy/util/Globals');
+const PagedPageSource = require('internal/legacy/util/PagedPageSource');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 require('./Root');
 require('./Student');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.performance.View',

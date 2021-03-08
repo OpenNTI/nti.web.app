@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const StoreActions = require('legacy/app/store/Actions');
-const PurchasableCourse = require('legacy/model/store/PurchasableCourse');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const StoreActions = require('internal/legacy/app/store/Actions');
+const PurchasableCourse = require('internal/legacy/model/store/PurchasableCourse');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 const EnrollmentActions = require('../Actions');
 

@@ -1,7 +1,6 @@
 /*global jQuery*/
 const Ext = require('@nti/extjs');
-
-const SymbolicMath = require('legacy/app/assessment/input/SymbolicMath');
+const SymbolicMath = require('internal/legacy/app/assessment/input/SymbolicMath');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.menus.SymbolicMathMenuItem',

@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
 
 const ComponentsNavigation = require('./components/Navigation');
 
-require('legacy/util/Parsing');
-require('legacy/model/Video');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/model/Video');
 
 module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',

@@ -1,11 +1,13 @@
-const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
-const { scoped } = require('@nti/lib-locale');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
-	.get('ParseUtils', () => require('legacy/util/Parsing'));
-const BatchExecution = require('legacy/util/BatchExecution');
+const Ext = require('@nti/extjs');
+const { scoped } = require('@nti/lib-locale');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('UserDataActions', () =>
+		require('internal/legacy/app/userdata/Actions')
+	)
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'));
+const BatchExecution = require('internal/legacy/util/BatchExecution');
 
 const Grade = require('./Grade');
 

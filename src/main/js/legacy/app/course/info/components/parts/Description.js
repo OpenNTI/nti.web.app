@@ -1,7 +1,7 @@
-const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
 
-const { getString } = require('legacy/util/Localization');
+const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.info.components.parts.Description',

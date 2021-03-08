@@ -1,4 +1,3 @@
-const Ext = require('@nti/extjs');
 const {
 	startOfISOWeek,
 	endOfISOWeek,
@@ -6,10 +5,12 @@ const {
 	isSameSecond: isSame,
 } = require('date-fns');
 
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Ext = require('@nti/extjs');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const StoreUtils = require('legacy/util/Store');
+const StoreUtils = require('internal/legacy/util/Store');
 
 module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	params: {

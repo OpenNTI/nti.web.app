@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { naturalSortComparator } = require('legacy/util/Globals');
+const { naturalSortComparator } = require('internal/legacy/util/Globals');
 
 require('./tiles/Header');
 

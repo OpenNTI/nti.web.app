@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { Widgets } = require('@nti/web-content');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.components.EmbededWidget',

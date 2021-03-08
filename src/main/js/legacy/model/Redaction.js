@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-require('legacy/mixins/ModelWithBodyContent');
-require('legacy/model/Base');
-require('legacy/model/Highlight');
-require('legacy/model/anchorables/DomContentRangeDescription');
+require('internal/legacy/mixins/ModelWithBodyContent');
+require('internal/legacy/model/Base');
+require('internal/legacy/model/Highlight');
+require('internal/legacy/model/anchorables/DomContentRangeDescription');
 
 module.exports = exports = Ext.define('NextThought.model.Redaction', {
 	extend: 'NextThought.model.Base',

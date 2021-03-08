@@ -1,6 +1,6 @@
 /* eslint-env jest */
-// require('legacy/model/courses/CourseInstance');
-// const Current = require('legacy/app/library/courses/Current');
+// require('internal/legacy/model/courses/CourseInstance');
+// const Current = require('internal/legacy/app/library/courses/Current');
 
 describe.skip('Current Courses Widget', () => {
 	// let CurrentCourseCmp;

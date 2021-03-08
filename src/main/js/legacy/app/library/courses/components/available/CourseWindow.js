@@ -3,22 +3,21 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
-
-const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
-const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
-const StoreActions = require('legacy/app/store/Actions');
-const { isFeature } = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
+const EnrollmentActions = require('internal/legacy/app/course/enrollment/Actions');
+const EnrollmentStateStore = require('internal/legacy/app/course/enrollment/StateStore');
+const StoreActions = require('internal/legacy/app/store/Actions');
+const { isFeature } = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
 const CoursesActions = require('../../Actions');
 const CoursesStateStore = require('../../StateStore');
 
-require('legacy/util/Parsing');
-require('legacy/common/window/Window');
-require('legacy/mixins/Router');
-require('legacy/app/course/catalog/Collection');
-require('legacy/app/course/enrollment/Details');
-require('legacy/app/course/enrollment/components/Process');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/app/course/catalog/Collection');
+require('internal/legacy/app/course/enrollment/Details');
+require('internal/legacy/app/course/enrollment/components/Process');
 require('./CoursePage');
 require('./Actions');
 

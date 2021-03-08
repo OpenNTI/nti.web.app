@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { NewChatStore } = require('@nti/web-profiles');
-
-const NavigationStateStore = require('legacy/app/navigation/StateStore');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
+const NavigationStateStore = require('internal/legacy/app/navigation/StateStore');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
 
 const ChatStateStore = require('./StateStore');
 const ChatActions = require('./Actions');

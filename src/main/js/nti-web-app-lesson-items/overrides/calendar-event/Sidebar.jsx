@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+
 import { Router } from '@nti/web-routing';
 import { CalendarEvents, Event, getCourseCalendar } from '@nti/web-calendar';
 import { FillToBottom } from '@nti/web-commons';
-import classnames from 'classnames/bind';
 
 import styles from './Sidebar.css';
 

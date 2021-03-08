@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-require('legacy/model/courses/navigation/CourseOutlineNode');
-require('legacy/model/courses/navigation/Node');
+const Globals = require('internal/legacy/util/Globals');
+require('internal/legacy/model/courses/navigation/CourseOutlineNode');
+require('internal/legacy/model/courses/navigation/Node');
 
 module.exports = exports = Ext.define(
 	'NextThought.store.courseware.Navigation',

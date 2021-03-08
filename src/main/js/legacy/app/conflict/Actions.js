@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const DestructiveChallenge = require('./types/DestructiveChallenge');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
 	extend: 'NextThought.common.Actions',

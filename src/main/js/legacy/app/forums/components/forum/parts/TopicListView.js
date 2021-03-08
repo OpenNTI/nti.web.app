@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { Viewer } = require('@nti/web-reports');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const CommunityHeadlineTopic = require('internal/legacy/model/forums/CommunityHeadlineTopic');
+const { isFeature, WAIT_TIMES } = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const TimeUtils = require('internal/legacy/util/Time');
 
-const WindowsActions = require('legacy/app/windows/Actions');
-const UserRepository = require('legacy/cache/UserRepository');
-const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
-const { isFeature, WAIT_TIMES } = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const TimeUtils = require('legacy/util/Time');
-
-require('legacy/mixins/UIHelpers');
+require('internal/legacy/mixins/UIHelpers');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.forums.components.forum.parts.TopicListView',

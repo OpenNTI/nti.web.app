@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const StateStore = require('legacy/common/state/StateStore');
-const Actions = require('legacy/common/state/Actions');
+const StateStore = require('internal/legacy/common/state/StateStore');
+const Actions = require('internal/legacy/common/state/Actions');
 
 module.exports = exports = Ext.define('NextThought.mixins.State', {
 	stateKey: 'default',

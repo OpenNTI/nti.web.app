@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const ControlBar = require('nti-web-course-overview-controls').default;
-const ReactHarness = require('legacy/overrides/ReactHarness');
+const ControlBar = require('internal/nti-web-course-overview-controls').default;
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.EditingControls',

@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/mixins/GroupLike');
-require('legacy/mixins/Avatar');
+require('internal/legacy/mixins/GroupLike');
+require('internal/legacy/mixins/Avatar');
 require('./Base');
 
 /**

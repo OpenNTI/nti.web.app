@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const ObjectUtils = require('legacy/util/Object');
+const ObjectUtils = require('internal/legacy/util/Object');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.converters.Synthetic',

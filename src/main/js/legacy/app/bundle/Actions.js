@@ -4,7 +4,7 @@ const { Navigation } = require('@nti/web-content');
 
 const BundleStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 const APP_REGEX = /^\/app/;
 const stripApp = route => route.replace(APP_REGEX, '');

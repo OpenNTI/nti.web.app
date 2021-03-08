@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PromptStateStore = require('legacy/app/prompt/StateStore');
+const PromptStateStore = require('internal/legacy/app/prompt/StateStore');
 
 const EditingActions = require('../Actions');
 

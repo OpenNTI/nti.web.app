@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const DomUtils = require('legacy/util/Dom');
-require('legacy/model/User');
-require('legacy/mixins/LikeFavoriteActions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const DomUtils = require('internal/legacy/util/Dom');
+require('internal/legacy/model/User');
+require('internal/legacy/mixins/LikeFavoriteActions');
 
 /**
  * Render the body of a record (namely notes and forums), expects

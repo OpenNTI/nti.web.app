@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const Anchors = require('legacy/util/Anchors');
-const AnnotationUtils = require('legacy/util/Annotations');
-const Globals = require('legacy/util/Globals');
-const RangeUtils = require('legacy/util/Ranges');
-const RectUtils = require('legacy/util/Rects');
+const Anchors = require('internal/legacy/util/Anchors');
+const AnnotationUtils = require('internal/legacy/util/Annotations');
+const Globals = require('internal/legacy/util/Globals');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const RectUtils = require('internal/legacy/util/Rects');
 
 const AnnotationsBase = require('./Base');
 

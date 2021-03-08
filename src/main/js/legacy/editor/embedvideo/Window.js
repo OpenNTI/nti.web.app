@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-require('legacy/common/window/Window');
-require('legacy/app/account/Header');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/app/account/Header');
 require('./Main');
 
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {

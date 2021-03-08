@@ -1,7 +1,6 @@
 /*globals BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION*/
 const Ext = require('@nti/extjs');
-
-const { getURL } = require('legacy/util/Globals');
+const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.overrides.data.Connection',

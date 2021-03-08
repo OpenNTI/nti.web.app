@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const TimeUtils = require('legacy/util/Time');
+const TimeUtils = require('internal/legacy/util/Time');
 
 const t = scoped('nti-web-app.course.assessment.AssignmentStatus', {
 	status: {

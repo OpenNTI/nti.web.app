@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const ContainerContext = require('internal/legacy/app/context/ContainerContext');
+const { isMe } = require('internal/legacy/util/Globals');
 
-const ContainerContext = require('legacy/app/context/ContainerContext');
-const { isMe } = require('legacy/util/Globals');
-
-require('legacy/app/annotations/note/Panel');
-require('legacy/mixins/note-feature/GetLatestReply');
+require('internal/legacy/app/annotations/note/Panel');
+require('internal/legacy/mixins/note-feature/GetLatestReply');
 require('./ActivityItemReply');
 
 module.exports = exports = Ext.define(

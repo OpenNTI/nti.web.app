@@ -1,7 +1,8 @@
 import React from 'react';
+import classnames from 'classnames/bind';
+
 import { scoped } from '@nti/lib-locale';
 import { Theme } from '@nti/web-commons';
-import classnames from 'classnames/bind';
 
 import styles from './Email.css';
 

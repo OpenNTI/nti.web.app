@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/form/fields/ComboBox');
+require('internal/legacy/common/form/fields/ComboBox');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.whiteboard.editor.StrokeWidthSelector',

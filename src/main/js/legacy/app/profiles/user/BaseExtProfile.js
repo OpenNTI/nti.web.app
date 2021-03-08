@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const { isMe } = require('internal/legacy/util/Globals');
 
-const GroupsActions = require('legacy/app/groups/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const { isMe } = require('legacy/util/Globals');
-
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./components/activity/Index');
 require('./components/membership/Index');
 require('./components/achievements/Index');

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Select = require('legacy/common/form/fields/select');
+const Select = require('internal/legacy/common/form/fields/select');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.stream.components.filters.Select',

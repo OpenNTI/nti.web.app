@@ -1,13 +1,13 @@
 import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { LinkTo } from '@nti/web-routing';
 import { Loading, Layouts } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { decodeFromURI } from '@nti/lib-ntiids';
-
-import { getString } from 'legacy/util/Localization';
+import { getString } from 'internal/legacy/util/Localization';
 
 import Store from './Store';
 import NavBar from './nav-bar';

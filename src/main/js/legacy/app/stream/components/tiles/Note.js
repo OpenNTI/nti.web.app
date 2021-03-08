@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Note = require('legacy/model/Note');
-const WindowsActions = require('legacy/app/windows/Actions');
+const Note = require('internal/legacy/model/Note');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 require('../parts/BodyContent');
 require('../parts/AddComment');

@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const ContentBundle = require('internal/legacy/model/ContentBundle');
 
-const ContentBundle = require('legacy/model/ContentBundle');
-
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.content.StateStore',

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+const { getString } = require('internal/legacy/util/Localization');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
 require('./Menu');
 require('./OpenCourseInfo');

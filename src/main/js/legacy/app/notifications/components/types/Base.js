@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const NTIFormat = require('legacy/util/Format');
-// const NavActions = require('legacy/app/navigation/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const NTIFormat = require('internal/legacy/util/Format');
+// const NavActions = require('internal/legacy/app/navigation/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.notifications.components.types.Base',

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('Anchors', () =>
-	require('legacy/util/Anchors')
+const lazy = require('internal/legacy/util/lazy-require').get('Anchors', () =>
+	require('internal/legacy/util/Anchors')
 );
 
 const ContentPointer = require('./ContentPointer');

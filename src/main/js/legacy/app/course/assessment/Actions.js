@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/model/assessment/Assignment');
-require('legacy/model/assessment/DiscussionAssignment');
+require('internal/legacy/model/assessment/Assignment');
+require('internal/legacy/model/assessment/DiscussionAssignment');
 
 const t = scoped('nti-web-app.course.assessment.Actions', {
 	untitled: 'Untitled Assignment',

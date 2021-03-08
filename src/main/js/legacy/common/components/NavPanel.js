@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const NavStore = require('legacy/app/navigation/StateStore');
+const NavStore = require('internal/legacy/app/navigation/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.components.NavPanel',

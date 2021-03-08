@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { Info } = require('@nti/web-course');
-
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Email = require('legacy/model/Email');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Email = require('internal/legacy/model/Email');
 
 const StudentInfo = require('./ExtInfo');
 
-require('legacy/mixins/Router');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.admin.ReactInfo',

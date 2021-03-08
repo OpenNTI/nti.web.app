@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const RectUtils = require('legacy/util/Rects');
+const RectUtils = require('internal/legacy/util/Rects');
 
 module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',

@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { decorate } from '@nti/lib-commons';
 import { TranscriptedVideo } from '@nti/web-content';
 import { Router } from '@nti/web-routing';
 import { Layouts } from '@nti/web-commons';
 import { getViewportWidth } from '@nti/lib-dom';
-
-import DiscussionEditor from 'legacy/app/contentviewer/components/editor/DiscussionEditor';
-import UserDataActions from 'legacy/app/userdata/Actions';
-import SharingUtils from 'legacy/util/Sharing';
-import DomUtils from 'legacy/util/Dom';
-import BaseModel from 'legacy/model/Base';
-import SearchStore from 'legacy/app/search/StateStore';
+import DiscussionEditor from 'internal/legacy/app/contentviewer/components/editor/DiscussionEditor';
+import UserDataActions from 'internal/legacy/app/userdata/Actions';
+import SharingUtils from 'internal/legacy/util/Sharing';
+import DomUtils from 'internal/legacy/util/Dom';
+import BaseModel from 'internal/legacy/model/Base';
+import SearchStore from 'internal/legacy/app/search/StateStore';
 
 import Registry from '../Registry';
 

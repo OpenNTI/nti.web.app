@@ -1,6 +1,7 @@
 import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { LinkTo } from '@nti/web-routing';
 import { decorate } from '@nti/lib-commons';
 import { Loading, Layouts } from '@nti/web-commons';

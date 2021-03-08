@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const SCORMRef = require('legacy/model/courses/scorm/SCORMReference');
+const SCORMRef = require('internal/legacy/model/courses/scorm/SCORMReference');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.scorm.ListItem',

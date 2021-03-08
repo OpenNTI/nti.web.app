@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const DomUtils = require('legacy/util/Dom');
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const DomUtils = require('internal/legacy/util/Dom');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.components.cards.Launcher',

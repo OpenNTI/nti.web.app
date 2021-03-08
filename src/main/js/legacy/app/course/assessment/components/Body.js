@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 
-require('legacy/mixins/UIHelpers');
+require('internal/legacy/mixins/UIHelpers');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.Body',

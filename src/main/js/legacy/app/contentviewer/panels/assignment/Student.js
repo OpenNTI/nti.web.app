@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
 require('../../navigation/assignment/Student');
 require('../../components/assignment/TimedPlaceholder');

@@ -1,9 +1,8 @@
 const { encodeForURI } = require('@nti/lib-ntiids');
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
-const ContentActions = require('legacy/app/content/Actions');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const ContentUtils = require('internal/legacy/util/Content');
+const ContentActions = require('internal/legacy/app/content/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 require('../ContentPackageSelection');
 require('../ReadingEditor');

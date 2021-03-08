@@ -3,7 +3,7 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 
 const CourseStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	extend: 'NextThought.common.Actions',

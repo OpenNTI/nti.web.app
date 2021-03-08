@@ -1,9 +1,9 @@
 /*globals createStoryJS*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { decorate, rawContent } from '@nti/lib-commons';
 
-import AnalyticsUtil from 'legacy/util/Analytics';
+import { decorate, rawContent } from '@nti/lib-commons';
+import AnalyticsUtil from 'internal/legacy/util/Analytics';
 
 import Registry from '../Registry';
 

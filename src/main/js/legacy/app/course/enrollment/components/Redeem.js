@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
 require('./Purchase');
 

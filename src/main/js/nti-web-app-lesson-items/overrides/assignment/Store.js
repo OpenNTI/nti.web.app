@@ -1,8 +1,7 @@
 /*globals $AppConfig*/
 import { Stores } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
-
-import BaseModel from 'legacy/model/Base';
+import BaseModel from 'internal/legacy/model/Base';
 
 async function getHistory(assignmentId, assignments) {
 	try {

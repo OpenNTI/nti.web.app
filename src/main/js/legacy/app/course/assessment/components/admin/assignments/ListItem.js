@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { Viewer } = require('@nti/web-reports');
-
-const { isFeature } = require('legacy/util/Globals');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 require('../../student/assignments/ListItem');
 

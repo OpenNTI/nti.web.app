@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const LegacySearchComboBox = require('./LegacySearchComboBox');
 
-require('legacy/util/Scrolling');
+require('internal/legacy/util/Scrolling');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.DateTimeField',

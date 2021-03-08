@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/app/course/assessment/components/admin/Pager');
+require('internal/legacy/app/course/assessment/components/admin/Pager');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.forums.components.topic.parts.Pager',

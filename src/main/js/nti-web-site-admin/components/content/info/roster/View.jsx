@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Roster, Enrollment } from '@nti/web-course';
 import { List, Loading, Button } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';

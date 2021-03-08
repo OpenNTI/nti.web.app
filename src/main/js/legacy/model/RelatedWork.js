@@ -1,11 +1,11 @@
-const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
 
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
+const Ext = require('@nti/extjs');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
 
-require('legacy/mixins/AuditLog');
-require('legacy/mixins/AuditLog');
+require('internal/legacy/mixins/AuditLog');
+require('internal/legacy/mixins/AuditLog');
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.RelatedWork', {

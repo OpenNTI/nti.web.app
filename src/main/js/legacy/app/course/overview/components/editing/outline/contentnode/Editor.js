@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+const CourseOutlineContentNode = require('internal/legacy/model/courses/navigation/CourseOutlineContentNode');
 
 const OutlineParentSelection = require('../ParentSelection');
 
-require('legacy/model/courses/navigation/CourseOutlineNode');
+require('internal/legacy/model/courses/navigation/CourseOutlineNode');
 require('../calendarnode/Editor');
 
 module.exports = exports = Ext.define(

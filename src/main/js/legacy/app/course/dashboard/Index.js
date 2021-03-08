@@ -1,11 +1,11 @@
-const Ext = require('@nti/extjs');
-const { wait } = require('@nti/lib-commons');
 const { isBefore } = require('date-fns');
 
-const { getString } = require('legacy/util/Localization');
-const TimeUtils = require('legacy/util/Time');
-const Scrolling = require('legacy/util/Scrolling');
-require('legacy/mixins/Router');
+const Ext = require('@nti/extjs');
+const { wait } = require('@nti/lib-commons');
+const { getString } = require('internal/legacy/util/Localization');
+const TimeUtils = require('internal/legacy/util/Time');
+const Scrolling = require('internal/legacy/util/Scrolling');
+require('internal/legacy/mixins/Router');
 
 require('./components/tiles/Assignment');
 require('./components/tiles/AssignmentsList');

@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-require('legacy/model/Base');
-require('legacy/model/anchorables/DomContentRangeDescription');
+require('internal/legacy/model/Base');
+require('internal/legacy/model/anchorables/DomContentRangeDescription');
 
 module.exports = exports = Ext.define('NextThought.model.Highlight', {
 	extend: 'NextThought.model.Base',

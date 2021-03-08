@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const AnnotationUtils = require('internal/legacy/util/Annotations');
 
-const AnnotationUtils = require('legacy/util/Annotations');
-
-require('legacy/common/components/Collection');
+require('internal/legacy/common/components/Collection');
 
 module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	extend: 'NextThought.common.components.Collection',

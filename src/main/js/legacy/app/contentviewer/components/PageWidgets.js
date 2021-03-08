@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const UserdataActions = require('legacy/app/userdata/Actions');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.components.PageWidgets',

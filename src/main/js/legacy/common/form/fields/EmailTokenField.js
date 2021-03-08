@@ -1,7 +1,8 @@
-const Ext = require('@nti/extjs');
 const { validate } = require('email-validator');
 
-require('legacy/common/form/fields/TagField');
+const Ext = require('@nti/extjs');
+
+require('internal/legacy/common/form/fields/TagField');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.EmailTokenField',

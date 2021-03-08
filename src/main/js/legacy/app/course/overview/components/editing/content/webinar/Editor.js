@@ -2,13 +2,12 @@ const Ext = require('@nti/extjs');
 const { Overview } = require('@nti/web-course');
 const { getService } = require('@nti/web-client');
 const { GotoWebinar } = require('@nti/web-integrations');
-
-const WebinarAsset = require('legacy/model/WebinarAsset');
-const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
+const WebinarAsset = require('internal/legacy/model/WebinarAsset');
+const EditingActions = require('internal/legacy/app/course/overview/components/editing/Actions');
 
 const ContentlinkEditor = require('../contentlink/types/URL');
 require('../../Editor');
-require('legacy/app/course/assessment/components/CreateMenu');
+require('internal/legacy/app/course/assessment/components/CreateMenu');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.webinar.Editor',

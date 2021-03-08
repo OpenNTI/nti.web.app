@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const User = require('internal/legacy/model/User');
+const { PersistentStorage } = require('internal/legacy/cache/AbstractStorage');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const User = require('legacy/model/User');
-const { PersistentStorage } = require('legacy/cache/AbstractStorage');
-
-require('legacy/model/courses/assignments/Summary');
+require('internal/legacy/model/courses/assignments/Summary');
 
 module.exports = exports = Ext.define(
 	'NextThought.store.courseware.GradeBookSummaries',

@@ -2,13 +2,12 @@ const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
 const { AdminTools } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const ComponentsNavigation = require('internal/legacy/common/components/Navigation');
 
-const NavigationActions = require('legacy/app/navigation/Actions');
-const ComponentsNavigation = require('legacy/common/components/Navigation');
-
-require('legacy/common/components/Navigation');
-require('legacy/overrides/ReactHarness');
-require('legacy/login/StateStore');
+require('internal/legacy/common/components/Navigation');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/login/StateStore');
 
 // const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;

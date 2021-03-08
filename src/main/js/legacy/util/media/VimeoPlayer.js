@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const VimeoResolver = require('legacy/model/resolvers/videoservices/Vimeo');
-const PlayStates = require('legacy/app/video/PlayStates');
+const VimeoResolver = require('internal/legacy/model/resolvers/videoservices/Vimeo');
+const PlayStates = require('internal/legacy/app/video/PlayStates');
 
 module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	statics: {

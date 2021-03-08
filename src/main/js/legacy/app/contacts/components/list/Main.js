@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
 
-const { getString } = require('legacy/util/Localization');
-const GroupsActions = require('legacy/app/groups/Actions');
-
-require('legacy/common/form/fields/SimpleTextField');
+require('internal/legacy/common/form/fields/SimpleTextField');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contacts.components.list.Main',

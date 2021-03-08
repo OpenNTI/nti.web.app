@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const EditingActions = require('../Actions');
 
-require('legacy/common/form/fields/DatePicker');
+require('internal/legacy/common/form/fields/DatePicker');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.controls.AvailableDateMenu',

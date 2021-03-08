@@ -2,6 +2,7 @@ import './ResultTabs.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+
 import { List, Table as T } from '@nti/web-commons';
 
 export default class ResultTabs extends React.Component {

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DestructiveChallenge = require('legacy/model/conflict/DestructiveChallenge');
+const DestructiveChallenge = require('internal/legacy/model/conflict/DestructiveChallenge');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.conflict.types.DestructiveChallenge',

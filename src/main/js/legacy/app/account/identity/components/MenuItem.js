@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const SettingsWindow = require('../../settings/Window');
 
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.identity.components.MenuItem',

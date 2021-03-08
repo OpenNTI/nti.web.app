@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/proxy/reader/Json');
+require('internal/legacy/proxy/reader/Json');
 
 module.exports = exports = Ext.define('NextThought.store.Blog', {
 	extend: 'Ext.data.Store',

@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/Scrolling');
+require('internal/legacy/mixins/Scrolling');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.LegacySearchComboBox',

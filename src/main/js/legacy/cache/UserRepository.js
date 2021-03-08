@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const User = require('legacy/model/User');
-const PresenceInfo = require('legacy/model/PresenceInfo');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const User = require('internal/legacy/model/User');
+const PresenceInfo = require('internal/legacy/model/PresenceInfo');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { isMe, isFeature } = require('legacy/util/Globals');
-const { Deferred } = require('legacy/util/Promise');
-const ChatStateStore = require('legacy/app/chat/StateStore');
+const { isMe, isFeature } = require('internal/legacy/util/Globals');
+const { Deferred } = require('internal/legacy/util/Promise');
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
 
 if (!global.$AppConfig) {
 	global.$AppConfig = {};

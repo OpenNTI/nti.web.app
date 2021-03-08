@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const CSSUtils = require('internal/legacy/util/CSS');
 
-const CSSUtils = require('legacy/util/CSS');
-
-require('legacy/model/TopicNode');
-require('legacy/mixins/MenuShowHideBehavior');
-require('legacy/util/Parsing');
+require('internal/legacy/model/TopicNode');
+require('internal/legacy/mixins/MenuShowHideBehavior');
+require('internal/legacy/util/Parsing');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.navigation.TableOfContents',

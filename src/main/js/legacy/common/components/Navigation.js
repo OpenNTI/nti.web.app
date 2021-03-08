@@ -1,12 +1,12 @@
-const Ext = require('@nti/extjs');
 const React = require('react');
+
+const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { Navigation } = require('@nti/web-commons');
 const { LinkTo } = require('@nti/web-routing');
+const Globals = require('internal/legacy/util/Globals');
 
-const Globals = require('legacy/util/Globals');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('../menus/LabeledSeparator');
 
 module.exports = exports = Ext.define(

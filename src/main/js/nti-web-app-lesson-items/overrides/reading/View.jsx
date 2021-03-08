@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { Loading, Layouts, EmptyState } from '@nti/web-commons';
 import { Notes } from '@nti/web-discussions';
 import { LinkTo, Router, Prompt as RoutePrompt } from '@nti/web-routing';
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
-
-import ContentViewer from 'legacy/app/contentviewer/Index';
-import PageInfo from 'legacy/model/PageInfo';
-import RelatedWorkRef from 'legacy/model/RelatedWork';
-import ExternalToolAsset from 'legacy/model/LTIExternalToolAsset';
-import SurveyModel from 'legacy/model/assessment/Survey';
+import ContentViewer from 'internal/legacy/app/contentviewer/Index';
+import PageInfo from 'internal/legacy/model/PageInfo';
+import RelatedWorkRef from 'internal/legacy/model/RelatedWork';
+import ExternalToolAsset from 'internal/legacy/model/LTIExternalToolAsset';
+import SurveyModel from 'internal/legacy/model/assessment/Survey';
 
 import Registry from '../Registry';
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+
 import { ContextIndicator } from '@nti/web-search';
 import { List, Loading, EmptyState } from '@nti/web-commons';
 

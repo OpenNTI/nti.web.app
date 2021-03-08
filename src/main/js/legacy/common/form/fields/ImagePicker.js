@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
 
 require('./FilePicker');
-require('legacy/app/image/cropping/Prompt');
+require('internal/legacy/app/image/cropping/Prompt');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.ImagePicker',

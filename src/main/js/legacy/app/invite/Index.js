@@ -1,14 +1,14 @@
 const { extname } = require('path');
 
 const Ext = require('@nti/extjs');
-
-const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserCourseInvitations = require('internal/legacy/model/courses/UserCourseInvitations');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/common/form/Form');
-require('legacy/app/invite/EmailTokens');
+require('internal/legacy/common/form/Form');
+require('internal/legacy/app/invite/EmailTokens');
 
 module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	extend: 'Ext.container.Container',

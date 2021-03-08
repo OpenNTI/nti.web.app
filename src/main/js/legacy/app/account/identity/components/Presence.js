@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
+const StateStore = require('internal/legacy/app/chat/StateStore');
+const Actions = require('internal/legacy/app/chat/Actions');
+const PresenceInfo = require('internal/legacy/model/PresenceInfo');
+const { getString } = require('internal/legacy/util/Localization');
+const { isMe } = require('internal/legacy/util/Globals');
 
-const StateStore = require('legacy/app/chat/StateStore');
-const Actions = require('legacy/app/chat/Actions');
-const PresenceInfo = require('legacy/model/PresenceInfo');
-const { getString } = require('legacy/util/Localization');
-const { isMe } = require('legacy/util/Globals');
-
-require('legacy/cache/AbstractStorage');
+require('internal/legacy/cache/AbstractStorage');
 require('./PresenceEditor');
 
 //styles in identity.scss

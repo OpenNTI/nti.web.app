@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/ux/Grouping');
+require('internal/legacy/common/ux/Grouping');
 
 require('../../student/assignments/View');
 require('./List');

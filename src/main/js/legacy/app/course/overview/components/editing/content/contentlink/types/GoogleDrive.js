@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { Drive } = require('@nti/web-integrations');
 const { AssetIcon } = require('@nti/web-commons');
-
-const RelatedWork = require('legacy/model/RelatedWork');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
 require('./Base');
 

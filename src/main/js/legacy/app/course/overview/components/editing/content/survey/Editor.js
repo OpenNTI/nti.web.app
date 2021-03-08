@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const SurveyRef = require('legacy/model/SurveyRef');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const SurveyRef = require('internal/legacy/model/SurveyRef');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 // const Type = 'application/vnd.nextthought.nasurvey';
 
 require('../questionset/types/Assignment');

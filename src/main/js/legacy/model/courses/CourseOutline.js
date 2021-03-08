@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ContentUtils = require('internal/legacy/util/Content');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
+const OutlineInterface = require('internal/legacy/store/courseware/OutlineInterface');
 
 const CourseOutlineNode = require('./navigation/CourseOutlineNode');
 
-require('legacy/mixins/DurationCache');
-require('legacy/mixins/MovingRoot');
-require('legacy/mixins/OrderedContents');
+require('internal/legacy/mixins/DurationCache');
+require('internal/legacy/mixins/MovingRoot');
+require('internal/legacy/mixins/OrderedContents');
 require('./navigation/CourseOutlineContentNode');
 require('./navigation/CourseOutlineCalendarNode');
 require('../Base');

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const TabIndexTracker = require('legacy/util/TabIndexTracker');
-const { guidGenerator } = require('legacy/util/Globals');
+const TabIndexTracker = require('internal/legacy/util/TabIndexTracker');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 
 const OverlayPanel = require('../overlay/Panel');
 

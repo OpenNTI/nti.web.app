@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const Slide = require('legacy/model/Slide');
-const Globals = require('legacy/util/Globals');
+const MediaviewerActions = require('internal/legacy/app/mediaviewer/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const Slide = require('internal/legacy/model/Slide');
+const Globals = require('internal/legacy/util/Globals');
 
 require('../components/Default');
 require('../components/cards/Slide');

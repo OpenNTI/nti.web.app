@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/ModelWithBodyContent');
+require('internal/legacy/mixins/ModelWithBodyContent');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.results.parts.ModeledContent',

@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Timeline = require('internal/legacy/model/Timeline');
+const Globals = require('internal/legacy/util/Globals');
 
-const WindowsActions = require('legacy/app/windows/Actions');
-const Timeline = require('legacy/model/Timeline');
-const Globals = require('legacy/util/Globals');
-
-require('legacy/common/components/cards/Card');
+require('internal/legacy/common/components/cards/Card');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.Timeline',

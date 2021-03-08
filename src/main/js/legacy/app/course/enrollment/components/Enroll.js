@@ -1,7 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
 require('./parts/DetailsTable');
 

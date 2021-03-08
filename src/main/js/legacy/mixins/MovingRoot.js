@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DndActions = require('legacy/app/dnd/Actions');
+const DndActions = require('internal/legacy/app/dnd/Actions');
 
 require('./OrderedContents');
 

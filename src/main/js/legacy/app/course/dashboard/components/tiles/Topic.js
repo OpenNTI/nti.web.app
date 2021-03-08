@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const StoreUtils = require('legacy/util/Store');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
+const StoreUtils = require('internal/legacy/util/Store');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 require('./Post');
 require('./parts/TopicComment');

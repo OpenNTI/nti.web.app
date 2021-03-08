@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const { isMe } = require('internal/legacy/util/Globals');
 
-const { isMe } = require('legacy/util/Globals');
-
-require('legacy/app/annotations/note/Panel');
-require('legacy/util/Content');
+require('internal/legacy/app/annotations/note/Panel');
+require('internal/legacy/util/Content');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply',

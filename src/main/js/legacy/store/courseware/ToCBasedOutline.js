@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/model/courses/navigation/Node');
+require('internal/legacy/model/courses/navigation/Node');
 
 module.exports = exports = Ext.define(
 	'NextThought.store.courseware.ToCBasedOutline',

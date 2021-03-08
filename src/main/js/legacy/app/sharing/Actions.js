@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const ContextStateStore = require('internal/legacy/app/context/StateStore');
+const UserSearch = require('internal/legacy/model/UserSearch');
 
-const Globals = require('legacy/util/Globals');
-const ContextStateStore = require('legacy/app/context/StateStore');
-const UserSearch = require('legacy/model/UserSearch');
-
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 	extend: 'NextThought.common.Actions',

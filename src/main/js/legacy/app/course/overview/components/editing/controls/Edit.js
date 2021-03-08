@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.controls.Edit',

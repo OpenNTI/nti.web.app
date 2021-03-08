@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
 const { User } = require('@nti/web-profiles');
-
-const { isMe } = require('legacy/util/Globals');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const UserRepository = require('legacy/cache/UserRepository');
-const UserModel = require('legacy/model/User');
-const PersonalBlog = require('legacy/model/forums/PersonalBlog');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const SettingsWindow = require('legacy/app/account/settings/Window');
+const { isMe } = require('internal/legacy/util/Globals');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const UserModel = require('internal/legacy/model/User');
+const PersonalBlog = require('internal/legacy/model/forums/PersonalBlog');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const SettingsWindow = require('internal/legacy/app/account/settings/Window');
 
 const Header = require('./Tabs');
 

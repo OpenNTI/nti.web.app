@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const UserSearch = require('internal/legacy/model/UserSearch');
 
-const UserSearch = require('legacy/model/UserSearch');
-
-require('legacy/app/sharing/components/UserTokenField');
+require('internal/legacy/app/sharing/components/UserTokenField');
 require('./components/ScopeSearch');
 
 module.exports = exports = Ext.define(

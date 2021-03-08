@@ -1,9 +1,7 @@
 const Ext = require('@nti/extjs');
-
-require('legacy/mixins/Router');
+const { getString } = require('internal/legacy/util/Localization');
+require('internal/legacy/mixins/Router');
 require('./components/Page');
-
-const { getString } = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.communities.Index',

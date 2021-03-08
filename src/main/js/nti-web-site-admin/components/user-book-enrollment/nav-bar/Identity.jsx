@@ -1,6 +1,7 @@
 import './Identity.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Avatar, DisplayName, Presentation } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 

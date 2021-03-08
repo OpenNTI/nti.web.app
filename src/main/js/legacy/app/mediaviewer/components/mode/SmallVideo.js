@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
+const ContentUtils = require('internal/legacy/util/Content');
+const { isFeature } = require('internal/legacy/util/Globals');
 
-const ContentUtils = require('legacy/util/Content');
-const { isFeature } = require('legacy/util/Globals');
-
-require('legacy/app/video/Video');
-require('legacy/app/video/navigation/Video');
-require('legacy/util/Parsing');
-require('legacy/mixins/Searchable');
+require('internal/legacy/app/video/Video');
+require('internal/legacy/app/video/navigation/Video');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/mixins/Searchable');
 require('../reader/View');
 
 module.exports = exports = Ext.define(

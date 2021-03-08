@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const { isMe } = require('internal/legacy/util/Globals');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
 
-const { isMe } = require('legacy/util/Globals');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-
-require('legacy/mixins/Searchable');
+require('internal/legacy/mixins/Searchable');
 require('./Actions');
 require('./panels/Reader');
 require('./panels/assignment/Admin');

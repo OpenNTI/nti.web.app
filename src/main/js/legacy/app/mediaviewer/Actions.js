@@ -1,21 +1,20 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const ContentProxy = require('legacy/proxy/JSONP');
-const WebvttTranscript = require('legacy/webvtt/Transcript');
-const Note = require('legacy/model/Note');
-const Slidedeck = require('legacy/model/Slidedeck');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
-const PageItem = require('legacy/store/PageItem');
-const UserdataActions = require('legacy/app/userdata/Actions');
-const UserdataStateStore = require('legacy/app/userdata/StateStore');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const LibraryActions = require('legacy/app/library/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const ContentProxy = require('internal/legacy/proxy/JSONP');
+const WebvttTranscript = require('internal/legacy/webvtt/Transcript');
+const Note = require('internal/legacy/model/Note');
+const Slidedeck = require('internal/legacy/model/Slidedeck');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const TranscriptItem = require('internal/legacy/model/transcript/TranscriptItem');
+const PageItem = require('internal/legacy/store/PageItem');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
+const UserdataStateStore = require('internal/legacy/app/userdata/StateStore');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const LibraryActions = require('internal/legacy/app/library/Actions');
 
 const MediaviewerStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	extend: 'NextThought.common.Actions',

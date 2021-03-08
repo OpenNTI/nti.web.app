@@ -1,20 +1,20 @@
 const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const Toaster = require('legacy/common/toast/Manager');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const Toaster = require('internal/legacy/common/toast/Manager');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const LoginStateStore = require('legacy/login/StateStore');
-const PresenceInfo = require('legacy/model/PresenceInfo');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const PresenceInfo = require('internal/legacy/model/PresenceInfo');
 
 const ChatStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
-require('legacy/model/MessageInfo');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/MessageInfo');
 
 const { isMe } = Globals;
 const logger = Logger.get('nextthought:extjs:app:chat:Actions');

@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const NTIFormat = require('legacy/util/Format');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const NTIFormat = require('internal/legacy/util/Format');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 const ChatActions = require('../../Actions');
 
-require('legacy/layout/component/Natural');
-require('legacy/util/Annotations');
+require('internal/legacy/layout/component/Natural');
+require('internal/legacy/util/Annotations');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.chat.components.log.Entry',

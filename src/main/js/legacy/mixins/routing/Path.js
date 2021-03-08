@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { String: StringUtils } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const Base = require('legacy/model/Base');
+const Globals = require('internal/legacy/util/Globals');
+const Base = require('internal/legacy/model/Base');
 
 /*
 	Inspired by https://github.com/chrisdavies/rlite/blob/master/rlite.js

@@ -1,17 +1,17 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-
-const ObjectUtils = require('legacy/util/Object');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ObjectUtils = require('internal/legacy/util/Object');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 require('./forums/DFLBoard');
 require('./forums/DFLForum');
 
-require('legacy/mixins/GroupLike');
-require('legacy/mixins/ShareEntity');
-require('legacy/mixins/Avatar');
+require('internal/legacy/mixins/GroupLike');
+require('internal/legacy/mixins/ShareEntity');
+require('internal/legacy/mixins/Avatar');
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.FriendsList', {

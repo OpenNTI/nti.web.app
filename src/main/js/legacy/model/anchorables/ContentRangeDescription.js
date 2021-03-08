@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/JSONValue');
+require('internal/legacy/mixins/JSONValue');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.anchorables.ContentRangeDescription',

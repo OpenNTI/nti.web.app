@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const Video = require('legacy/model/Video');
-const VideoRoll = require('legacy/model/VideoRoll');
-const { getString } = require('legacy/util/Localization');
+const Video = require('internal/legacy/model/Video');
+const VideoRoll = require('internal/legacy/model/VideoRoll');
+const { getString } = require('internal/legacy/util/Localization');
 
 require('../parts/ContentLink');
 require('../parts/Discussion');

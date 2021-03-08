@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Color = require('legacy/util/Color');
+const Color = require('internal/legacy/util/Color');
 
 const NTMatrix = require('../../Matrix');
 const WBUtils = require('../../Utils');

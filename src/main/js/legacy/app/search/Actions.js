@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const StoreUtils = require('legacy/util/Store');
-const ContextStateStore = require('legacy/app/context/StateStore');
+const StoreUtils = require('internal/legacy/util/Store');
+const ContextStateStore = require('internal/legacy/app/context/StateStore');
 
 const SearchStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 	extend: 'NextThought.common.Actions',

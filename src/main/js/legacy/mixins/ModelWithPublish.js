@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const SharingUtils = require('legacy/util/Sharing');
+const SharingUtils = require('internal/legacy/util/Sharing');
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	getPublishState: function () {

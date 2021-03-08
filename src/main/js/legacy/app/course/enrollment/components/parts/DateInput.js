@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/form/fields/DateField');
+require('internal/legacy/common/form/fields/DateField');
 require('./BaseInput');
 
 module.exports = exports = Ext.define(

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const RectUtils = require('internal/legacy/util/Rects');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
 
-const RectUtils = require('legacy/util/Rects');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-
-require('legacy/util/Search');
+require('internal/legacy/util/Search');
 
 module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 	alias: 'widget.search-hits',

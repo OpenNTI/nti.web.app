@@ -1,14 +1,13 @@
 /* global Deferred */
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const ContentUtils = require('legacy/util/Content');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const ContentUtils = require('internal/legacy/util/Content');
 
 const LibraryActions = require('../../library/Actions');
 
-require('legacy/util/Parsing');
+require('internal/legacy/util/Parsing');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.Grid',

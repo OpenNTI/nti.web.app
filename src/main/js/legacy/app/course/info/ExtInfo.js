@@ -4,8 +4,8 @@ const { wait } = require('@nti/lib-commons');
 const WindowsActions = require('../../windows/Actions');
 const CoursesStateStore = require('../../library/courses/StateStore');
 
-require('legacy/common/components/NavPanel');
-require('legacy/mixins/Router');
+require('internal/legacy/common/components/NavPanel');
+require('internal/legacy/mixins/Router');
 require('../../library/courses/components/available/CourseDetailWindow');
 require('./components/Body');
 require('./components/Outline');

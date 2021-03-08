@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
 const { AssetIcon } = require('@nti/web-commons');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const RelatedWork = require('legacy/model/RelatedWork');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
-require('legacy/mixins/EllipsisText');
+require('internal/legacy/mixins/EllipsisText');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.components.cards.Card',

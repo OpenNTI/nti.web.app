@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {

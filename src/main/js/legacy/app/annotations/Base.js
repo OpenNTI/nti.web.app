@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
+const IdCache = require('internal/legacy/cache/IdCache');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
-const IdCache = require('legacy/cache/IdCache');
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const NavigationActions = require('legacy/app/navigation/Actions');
-
-require('legacy/mixins/Shareable');
+require('internal/legacy/mixins/Shareable');
 require('./renderer/Manager');
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Base', {

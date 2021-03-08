@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 const Actions = require('../../Actions');
 
-require('legacy/common/form/fields/SimpleTextField');
+require('internal/legacy/common/form/fields/SimpleTextField');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.settings.components.PasswordResetForm',

@@ -2,7 +2,7 @@ require('./Redeem.scss');
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 
-require('legacy/common/form/Form');
+require('internal/legacy/common/form/Form');
 
 module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	extend: 'Ext.container.Container',

@@ -2,8 +2,8 @@ const Ext = require('@nti/extjs');
 
 const OutlineIndex = require('./outline/Index');
 
-require('legacy/mixins/Router');
-require('legacy/mixins/Scrolling');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/Scrolling');
 require('./Prompt');
 
 module.exports = exports = Ext.define(

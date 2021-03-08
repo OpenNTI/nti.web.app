@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const AnalyticsUtil = require('legacy/util/Analytics');
-const FlatPage = require('legacy/store/FlatPage');
-const QuestionSet = require('legacy/model/assessment/QuestionSet');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const FlatPage = require('internal/legacy/store/FlatPage');
+const QuestionSet = require('internal/legacy/model/assessment/QuestionSet');
 
 const UserdataActions = require('../../userdata/Actions');
 const ContextStateStore = require('../../context/StateStore');
 const WindowsActions = require('../../windows/Actions');
 
-require('legacy/common/components/NavPanel');
+require('internal/legacy/common/components/NavPanel');
 require('../../annotations/Index');
 require('../components/Reader');
 require('../navigation/Content');

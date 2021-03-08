@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
-const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
-const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+const DndOrderingContainer = require('internal/legacy/mixins/dnd/OrderingContainer');
+const CourseOutlineNode = require('internal/legacy/model/courses/navigation/CourseOutlineNode');
+const CourseOutlineContentNode = require('internal/legacy/model/courses/navigation/CourseOutlineContentNode');
 
 const OutlineOutlineNode = require('./outline/OutlineNode');
 const OutlinePrompt = require('./editing/outline/Prompt');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/model/courses/navigation/CourseOutlineCalendarNode');
 require('./outline/Header');
 require('./outline/progress/Header');
 require('./editing/outline/outlinenode/AddNode');

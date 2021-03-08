@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const User = require('internal/legacy/model/User');
+const ContentUtils = require('internal/legacy/util/Content');
+const PageItem = require('internal/legacy/store/PageItem');
 
-const User = require('legacy/model/User');
-const ContentUtils = require('legacy/util/Content');
-const PageItem = require('legacy/store/PageItem');
-
-require('legacy/mixins/ModelWithBodyContent');
+require('internal/legacy/mixins/ModelWithBodyContent');
 require('./anchorables/DomContentRangeDescription');
 require('./anchorables/TranscriptRangeDescription');
 require('./Base');

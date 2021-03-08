@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Video = require('legacy/model/Video');
-const VideoRoll = require('legacy/model/VideoRoll');
+const Video = require('internal/legacy/model/Video');
+const VideoRoll = require('internal/legacy/model/VideoRoll');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.video.Actions',

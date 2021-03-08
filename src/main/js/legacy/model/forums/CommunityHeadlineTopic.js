@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/ModelWithPublish');
+require('internal/legacy/mixins/ModelWithPublish');
 require('./HeadlineTopic');
 
 module.exports = exports = Ext.define(

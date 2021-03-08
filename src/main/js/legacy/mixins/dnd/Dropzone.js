@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DndDropzone = require('legacy/app/dnd/Dropzone');
+const DndDropzone = require('internal/legacy/app/dnd/Dropzone');
 
 /**
  * Handle adding and removing listeners for dropping actions

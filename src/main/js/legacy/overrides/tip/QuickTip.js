@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const ObjectUtils = require('legacy/util/Object');
+const Globals = require('internal/legacy/util/Globals');
+const ObjectUtils = require('internal/legacy/util/Object');
 
 /**
  * This entire file is a hack.	The ExtJS implementation aligns and positions the tip before it updates the contents of

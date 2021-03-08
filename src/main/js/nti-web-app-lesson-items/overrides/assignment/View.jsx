@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { decorate } from '@nti/lib-commons';
 import { Loading, Layouts } from '@nti/web-commons';
 import { Prompt as RoutePrompt } from '@nti/web-routing';
-
-import ContentViewer from 'legacy/app/contentviewer/Index';
+import ContentViewer from 'internal/legacy/app/contentviewer/Index';
 
 import Registry from '../Registry';
 

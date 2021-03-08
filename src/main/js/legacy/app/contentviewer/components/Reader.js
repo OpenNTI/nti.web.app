@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { getScrollParent } = require('@nti/lib-dom');
-
-const RangeUtils = require('legacy/util/Ranges');
-const ContentProxy = require('legacy/proxy/JSONP');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const ContentProxy = require('internal/legacy/proxy/JSONP');
 
 const ContentAPIRegistry = require('../reader/ContentAPIRegistry');
 
-require('legacy/mixins/InstanceTracking');
-require('legacy/mixins/ModuleContainer');
-require('legacy/common/components/ResourceNotFound');
+require('internal/legacy/mixins/InstanceTracking');
+require('internal/legacy/mixins/ModuleContainer');
+require('internal/legacy/common/components/ResourceNotFound');
 
 require('../reader/Annotations');
 require('../reader/Assessment');

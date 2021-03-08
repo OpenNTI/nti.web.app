@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const { getString } = require('internal/legacy/util/Localization');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const { getURL } = require('internal/legacy/util/Globals');
 
-const { getString } = require('legacy/util/Localization');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const LibraryActions = require('legacy/app/library/Actions');
-const { getURL } = require('legacy/util/Globals');
-
-require('legacy/app/video/Video');
+require('internal/legacy/app/video/Video');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.parts.Videos',

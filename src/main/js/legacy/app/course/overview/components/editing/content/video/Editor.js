@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
-const Video = require('legacy/model/Video');
-const VideoRoll = require('legacy/model/VideoRoll');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
+const Video = require('internal/legacy/model/Video');
+const VideoRoll = require('internal/legacy/model/VideoRoll');
 
 require('../Editor');
 require('./ItemSelection');
 require('./VideoEditor');
 
-require('legacy/app/video/Picker');
+require('internal/legacy/app/video/Picker');
 
 const Type = 'application/vnd.nextthought.ntivideo';
 

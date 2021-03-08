@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { getScrollParent } from '@nti/lib-dom';
 import { Layouts, Loading, Prompt, Decorators } from '@nti/web-commons';
 import { LinkTo, Prompt as RoutePrompt } from '@nti/web-routing';
-
-import NoteWindow from 'legacy/app/annotations/note/Window';
-import BaseModel from 'legacy/model/Base';
-import ContextStateStore from 'legacy/app/context/StateStore';
+import NoteWindow from 'internal/legacy/app/annotations/note/Window';
+import BaseModel from 'internal/legacy/model/Base';
+import ContextStateStore from 'internal/legacy/app/context/StateStore';
 
 import Registry from '../Registry';
 

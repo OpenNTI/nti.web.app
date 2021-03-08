@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/app/course/StateStore');
-require('legacy/common/Actions');
+require('internal/legacy/app/course/StateStore');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.email.Actions',

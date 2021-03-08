@@ -1,15 +1,15 @@
 const Ext = require('@nti/extjs');
 const { autobind } = require('@nti/lib-commons');
 const { ContentResources } = require('@nti/web-commons');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const StateStore = require('legacy/app/context/StateStore');
+const StateStore = require('internal/legacy/app/context/StateStore');
 
-require('legacy/model/ContentBlobFile');
-require('legacy/model/courseware/ContentFile');
+require('internal/legacy/model/ContentBlobFile');
+require('internal/legacy/model/courseware/ContentFile');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.FilePicker',

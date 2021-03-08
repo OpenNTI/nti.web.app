@@ -1,10 +1,12 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
-const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
-const WindowsActions = require('legacy/app/windows/Actions');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const EnrollmentActions = require('internal/legacy/app/course/enrollment/Actions');
+const EnrollmentStateStore = require('internal/legacy/app/course/enrollment/StateStore');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 require('../available/CourseDetailWindow');
 

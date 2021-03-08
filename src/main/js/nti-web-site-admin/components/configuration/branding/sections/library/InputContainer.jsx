@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Text } from '@nti/web-commons';
 
 import Styles from './InputContainer.css';
 

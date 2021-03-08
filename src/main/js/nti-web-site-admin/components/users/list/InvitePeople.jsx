@@ -1,5 +1,7 @@
 import './InvitePeople.scss';
 import React from 'react';
+import { validate as isEmail } from 'email-validator';
+
 import { scoped } from '@nti/lib-locale';
 import {
 	DialogButtons,
@@ -10,7 +12,6 @@ import {
 	Loading,
 	List,
 } from '@nti/web-commons';
-import { validate as isEmail } from 'email-validator';
 import { Connectors } from '@nti/lib-store';
 
 const DEFAULT_TEXT = {

@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const BatchInterface = require('internal/legacy/store/BatchInterface');
 
-const BatchInterface = require('legacy/store/BatchInterface');
-
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.notifications.StateStore',

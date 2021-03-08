@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const Synclock = require('legacy/app/course/overview/components/editing/controls/Synclock');
+const Synclock = require('internal/legacy/app/course/overview/components/editing/controls/Synclock');
 
 describe('NextThought.app.course.overview.components.editing.controls.Synclock', () => {
 	let previousService;

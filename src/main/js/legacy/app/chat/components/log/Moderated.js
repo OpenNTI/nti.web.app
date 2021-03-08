@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.chat.components.log.Moderated',

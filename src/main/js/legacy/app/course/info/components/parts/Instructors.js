@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const { Instructors } = require('nti-web-course-roster');
-const User = require('legacy/model/User');
+const { Instructors } = require('internal/nti-web-course-roster');
+const User = require('internal/legacy/model/User');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.info.components.parts.Instructors',

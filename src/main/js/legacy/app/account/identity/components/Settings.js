@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const LoginActions = require('legacy/login/Actions');
+const { getString } = require('internal/legacy/util/Localization');
+const LoginActions = require('internal/legacy/login/Actions');
 
 const AccountActions = require('../../Actions');
 
-require('legacy/model/User');
+require('internal/legacy/model/User');
 require('./MenuItem');
 require('./Presence');
 

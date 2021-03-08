@@ -1,5 +1,6 @@
-const Ext = require('@nti/extjs');
 const { isSameMonth, format } = require('date-fns');
+
+const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.dashboard.components.tiles.Header',

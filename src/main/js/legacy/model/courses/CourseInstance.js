@@ -2,18 +2,18 @@ const Ext = require('@nti/extjs');
 const {
 	URL: { join: urlJoin },
 } = require('@nti/lib-commons');
-
-const { getString } = require('legacy/util/Localization');
-const { getURL, isFeature } = require('legacy/util/Globals');
-const ContentUtils = require('legacy/util/Content');
-const CoursewareStream = require('legacy/store/courseware/Stream');
-const Navigation = require('legacy/store/courseware/Navigation');
-const ObjectUtils = require('legacy/util/Object');
-const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const { getURL, isFeature } = require('internal/legacy/util/Globals');
+const ContentUtils = require('internal/legacy/util/Content');
+const CoursewareStream = require('internal/legacy/store/courseware/Stream');
+const Navigation = require('internal/legacy/store/courseware/Navigation');
+const ObjectUtils = require('internal/legacy/util/Object');
+const OutlineInterface = require('internal/legacy/store/courseware/OutlineInterface');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const ToCBasedOutline = require('legacy/store/courseware/ToCBasedOutline');
+const ToCBasedOutline = require('internal/legacy/store/courseware/ToCBasedOutline');
 
 const AssignmentCollection = require('../courses/AssignmentCollection');
 const ForumsBoard = require('../forums/Board');
@@ -25,10 +25,10 @@ const Video = require('../Video');
 
 const CourseOutline = require('./CourseOutline');
 
-require('legacy/mixins/AuditLog');
-require('legacy/mixins/BundleLike');
-require('legacy/mixins/DurationCache');
-require('legacy/mixins/PresentationResources');
+require('internal/legacy/mixins/AuditLog');
+require('internal/legacy/mixins/BundleLike');
+require('internal/legacy/mixins/DurationCache');
+require('internal/legacy/mixins/PresentationResources');
 require('../assessment/Assignment');
 require('../Base');
 require('../ContentBundle');

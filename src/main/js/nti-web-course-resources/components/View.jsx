@@ -1,7 +1,8 @@
 import './View.scss';
 import React from 'react';
-import { scoped } from '@nti/lib-locale';
 import PropTypes from 'prop-types';
+
+import { scoped } from '@nti/lib-locale';
 import { Flyout, Icons, Button } from '@nti/web-commons';
 
 import Controls from './Controls';

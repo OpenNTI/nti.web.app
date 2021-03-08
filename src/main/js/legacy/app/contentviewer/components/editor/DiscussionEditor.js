@@ -4,13 +4,12 @@ const { Editor } = require('@nti/web-modeled-content');
 const { Create } = require('@nti/web-discussions');
 const { getService } = require('@nti/web-client');
 const { getHistory } = require('@nti/web-routing');
+const Anchors = require('internal/legacy/util/Anchors');
+const ContextStore = require('internal/legacy/app/context/StateStore');
+const UserData = require('internal/legacy/app/userdata/Actions');
+const BaseModel = require('internal/legacy/model/Base');
 
-const Anchors = require('legacy/util/Anchors');
-const ContextStore = require('legacy/app/context/StateStore');
-const UserData = require('legacy/app/userdata/Actions');
-const BaseModel = require('legacy/model/Base');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 const BodyScrollClass = 'nti-reading-discussion-editor-body-scroll';
 

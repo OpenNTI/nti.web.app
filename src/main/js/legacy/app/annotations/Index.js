@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const ModelBase = require('legacy/model/Base');
+const { getString } = require('internal/legacy/util/Localization');
+const ModelBase = require('internal/legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	extend: 'Ext.view.View',

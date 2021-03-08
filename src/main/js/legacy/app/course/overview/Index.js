@@ -1,27 +1,27 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI, isNTIID } = require('@nti/lib-ntiids');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const LibraryActions = require('legacy/app/library/Actions');
-const Globals = require('legacy/util/Globals');
-const Lesson = require('legacy/model/courses/overview/Lesson');
-const PageInfo = require('legacy/model/PageInfo');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const QuestionSetRef = require('legacy/model/QuestionSetRef');
-const RelatedWork = require('legacy/model/RelatedWork');
-const SurveyRef = require('legacy/model/SurveyRef');
-const Slidedeck = require('legacy/model/Slidedeck');
-const Video = require('legacy/model/Video');
-const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
-const WebinarAsset = require('legacy/model/WebinarAsset');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const Lesson = require('internal/legacy/model/courses/overview/Lesson');
+const PageInfo = require('internal/legacy/model/PageInfo');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const QuestionSetRef = require('internal/legacy/model/QuestionSetRef');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
+const SurveyRef = require('internal/legacy/model/SurveyRef');
+const Slidedeck = require('internal/legacy/model/Slidedeck');
+const Video = require('internal/legacy/model/Video');
+const LTIExternalToolAsset = require('internal/legacy/model/LTIExternalToolAsset');
+const WebinarAsset = require('internal/legacy/model/WebinarAsset');
 
 const { ROUTE_BUILDERS } = require('./components/Constants');
 
-require('legacy/mixins/FillScreen');
-require('legacy/mixins/Router');
-require('legacy/util/Parsing');
+require('internal/legacy/mixins/FillScreen');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/util/Parsing');
 
 require('../assessment/components/editing/AssignmentEditor');
 require('../../contentviewer/Index');

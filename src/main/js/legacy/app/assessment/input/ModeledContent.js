@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const DomUtils = require('legacy/util/Dom');
+const { getString } = require('internal/legacy/util/Localization');
+const DomUtils = require('internal/legacy/util/Dom');
 
 require('./Base');
 

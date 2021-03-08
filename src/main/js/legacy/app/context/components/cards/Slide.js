@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
+const MediaviewerActions = require('internal/legacy/app/mediaviewer/Actions');
 
 require('./Content');
 

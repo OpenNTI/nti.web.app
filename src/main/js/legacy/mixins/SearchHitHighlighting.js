@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-const SearchUtils = require('legacy/util/Search');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
+const SearchUtils = require('internal/legacy/util/Search');
 
 module.exports = exports = Ext.define(
 	'NextThought.mixins.SearchHitHighlighting',

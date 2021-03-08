@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const BatchInterface = require('legacy/store/BatchInterface');
+const BatchInterface = require('internal/legacy/store/BatchInterface');
 
 module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 	BATCH_SIZE: 20,

@@ -1,19 +1,19 @@
 const Ext = require('@nti/extjs');
 const { Events } = require('@nti/web-session');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { getString } = require('legacy/util/Localization');
-const UserdataActions = require('legacy/app/userdata/Actions');
-const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
-const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
+const { getString } = require('internal/legacy/util/Localization');
+const UserdataActions = require('internal/legacy/app/userdata/Actions');
+const PersonalBlogEntryPost = require('internal/legacy/model/forums/PersonalBlogEntryPost');
+const PersonalBlogComment = require('internal/legacy/model/forums/PersonalBlogComment');
 
 const BlogStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	extend: 'NextThought.common.Actions',

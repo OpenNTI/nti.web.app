@@ -1,8 +1,7 @@
 /* globals spyOn */
 /* eslint-env jest */
 const Ext = require('@nti/extjs');
-
-const Hit = require('legacy/model/Hit');
+const Hit = require('internal/legacy/model/Hit');
 
 const SearchUtils = require('../Search');
 

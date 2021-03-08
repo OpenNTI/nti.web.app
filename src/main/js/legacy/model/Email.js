@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/ModelWithBodyContent');
+require('internal/legacy/mixins/ModelWithBodyContent');
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.Email', {

@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { Publish, Constants } = require('@nti/web-commons');
 
-require('legacy/common/form/fields/DateTimeComponent');
+require('internal/legacy/common/form/fields/DateTimeComponent');
 
 const { PUBLISH_STATES } = Constants;
 const getPublishState = value =>

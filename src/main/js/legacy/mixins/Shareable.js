@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const SharingUtils = require('internal/legacy/util/Sharing');
 
-const SharingUtils = require('legacy/util/Sharing');
-
-require('legacy/util/Sharing');
+require('internal/legacy/util/Sharing');
 
 module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 	afterRender: function () {

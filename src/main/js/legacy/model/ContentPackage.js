@@ -1,15 +1,15 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const LibraryActions = require('legacy/app/library/Actions');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/model/Base');
-require('legacy/mixins/PresentationResources');
-require('legacy/mixins/DurationCache');
+require('internal/legacy/model/Base');
+require('internal/legacy/mixins/PresentationResources');
+require('internal/legacy/mixins/DurationCache');
 
 module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',

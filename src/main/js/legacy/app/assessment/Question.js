@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
+const ContentUtils = require('internal/legacy/util/Content');
 
 const AssessmentActions = require('./Actions');
 
-require('legacy/mixins/QuestionContent');
+require('internal/legacy/mixins/QuestionContent');
 require('../contentviewer/overlay/Panel');
 require('./Header');
 require('./Parts');

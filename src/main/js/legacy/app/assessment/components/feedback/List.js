@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 require('./Item');
 
 module.exports = exports = Ext.define(

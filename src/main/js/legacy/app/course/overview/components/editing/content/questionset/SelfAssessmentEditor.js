@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const QuestionSetRef = require('legacy/model/QuestionSetRef');
+const QuestionSetRef = require('internal/legacy/model/QuestionSetRef');
 
 require('./AssignmentEditor');
 

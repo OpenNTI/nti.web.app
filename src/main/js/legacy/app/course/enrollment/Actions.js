@@ -2,16 +2,16 @@ const path = require('path');
 
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PathActions = require('legacy/app/navigation/path/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 const CoursesActions = require('../../library/courses/Actions');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.Actions',

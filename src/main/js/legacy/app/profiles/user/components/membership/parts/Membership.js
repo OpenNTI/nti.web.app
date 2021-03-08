@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const NTIFormat = require('legacy/util/Format');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const NTIFormat = require('internal/legacy/util/Format');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.membership.parts.Membership',

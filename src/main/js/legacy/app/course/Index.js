@@ -1,22 +1,21 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const Assignment = require('legacy/model/assessment/Assignment');
-const UsersCourseAssignmentHistoryItemFeedback = require('legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
-const UsersCourseAssignmentHistoryItem = require('legacy/model/courseware/UsersCourseAssignmentHistoryItem');
-const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
-require('legacy/model/forums/CommunityHeadlineTopic');
-require('legacy/model/forums/ContentHeadlineTopic');
-require('legacy/model/forums/DFLHeadlineTopic');
-const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
-const Globals = require('legacy/util/Globals');
-const Grade = require('legacy/model/courseware/Grade');
-require('legacy/model/forums/HeadlineTopic');
-require('legacy/model/forums/Topic');
-const User = require('legacy/model/User');
-const PageInfo = require('legacy/model/PageInfo');
-const Video = require('legacy/model/Video');
-const CourseCalendarEvent = require('legacy/model/calendar/CourseCalendarEvent');
+const Assignment = require('internal/legacy/model/assessment/Assignment');
+const UsersCourseAssignmentHistoryItemFeedback = require('internal/legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
+const UsersCourseAssignmentHistoryItem = require('internal/legacy/model/courseware/UsersCourseAssignmentHistoryItem');
+const CourseOutlineContentNode = require('internal/legacy/model/courses/navigation/CourseOutlineContentNode');
+require('internal/legacy/model/forums/CommunityHeadlineTopic');
+require('internal/legacy/model/forums/ContentHeadlineTopic');
+require('internal/legacy/model/forums/DFLHeadlineTopic');
+const DiscussionAssignment = require('internal/legacy/model/assessment/DiscussionAssignment');
+const Globals = require('internal/legacy/util/Globals');
+const Grade = require('internal/legacy/model/courseware/Grade');
+require('internal/legacy/model/forums/HeadlineTopic');
+require('internal/legacy/model/forums/Topic');
+const User = require('internal/legacy/model/User');
+const PageInfo = require('internal/legacy/model/PageInfo');
+const Video = require('internal/legacy/model/Video');
+const CourseCalendarEvent = require('internal/legacy/model/calendar/CourseCalendarEvent');
 
 const ContentviewerActions = require('../contentviewer/Actions');
 const CoursesStateStore = require('../library/courses/StateStore');
@@ -32,10 +31,10 @@ const ReportsIndex = require('./reports/Index');
 const ScormIndex = require('./scorm-content/Index');
 const CourseNavigation = require('./Tabs');
 
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
-require('legacy/overrides/ReactHarness');
-require('legacy/util/Parsing');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/util/Parsing');
 
 require('../content/Index');
 require('../content/content/Index');

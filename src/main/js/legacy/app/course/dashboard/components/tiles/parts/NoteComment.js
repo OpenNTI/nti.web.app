@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 require('./PostComment');
 

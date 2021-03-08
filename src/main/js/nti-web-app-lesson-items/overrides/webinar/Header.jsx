@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+
 import { DateTime } from '@nti/web-commons';
 import { Event } from '@nti/web-calendar';
-import classnames from 'classnames/bind';
 import { scoped } from '@nti/lib-locale';
 
 import styles from './Header.css';

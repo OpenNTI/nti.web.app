@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const SearchUtils = require('legacy/util/Search');
-const UserSearchStore = require('legacy/store/UserSearch');
-const UserSearch = require('legacy/model/UserSearch');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const SearchUtils = require('internal/legacy/util/Search');
+const UserSearchStore = require('internal/legacy/store/UserSearch');
+const UserSearch = require('internal/legacy/model/UserSearch');
 
 const SharingActions = require('../Actions');
 
-require('legacy/common/form/fields/TagField');
+require('internal/legacy/common/form/fields/TagField');
 require('./ShareSearch');
 
 module.exports = exports = Ext.define(

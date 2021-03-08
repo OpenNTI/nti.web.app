@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
 const { User } = require('@nti/web-profiles');
 const { getAppUser } = require('@nti/web-client');
+const { getString } = require('internal/legacy/util/Localization');
+const Globals = require('internal/legacy/util/Globals');
 
-const { getString } = require('legacy/util/Localization');
-const Globals = require('legacy/util/Globals');
-
-require('legacy/mixins/Router');
-require('legacy/model/openbadges/Badge');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/model/openbadges/Badge');
 require('./parts/BadgeList');
 
 const { ProfileCertificates } = User;

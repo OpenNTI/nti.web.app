@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
 
-const PathActions = require('legacy/app/navigation/path/Actions');
-
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer',

@@ -3,9 +3,8 @@ const { decodeFromURI } = require('@nti/lib-ntiids');
 const { getService } = require('@nti/web-client');
 const { dispatch } = require('@nti/lib-dispatcher');
 const { scoped } = require('@nti/lib-locale');
-
-const Forum = require('legacy/model/forums/Forum');
-require('legacy/common/components/NavPanel');
+const Forum = require('internal/legacy/model/forums/Forum');
+require('internal/legacy/common/components/NavPanel');
 require('./Navigation');
 require('./Forum');
 

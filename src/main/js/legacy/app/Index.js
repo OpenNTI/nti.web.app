@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const Commons = require('@nti/web-commons');
-
-const ChatOverrides = require('nti-web-chat-overrides');
-const DiscussionOverrides = require('nti-web-discussion-overrides');
-const { IEAlert } = require('nti-web-react-components');
+const ChatOverrides = require('internal/nti-web-chat-overrides');
+const DiscussionOverrides = require('internal/nti-web-discussion-overrides');
+const { IEAlert } = require('internal/nti-web-react-components');
 
 require('./MessageBox');
 require('./MessageBar');

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
+const Globals = require('internal/legacy/util/Globals');
 
 const Circle = require('./shapes/Circle');
 const Line = require('./shapes/Line');

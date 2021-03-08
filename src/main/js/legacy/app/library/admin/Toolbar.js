@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const { AdminToolbar } = require('nti-web-site-admin');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const { AdminToolbar } = require('internal/nti-web-site-admin');
 
 const CoursesStateStore = require('../courses/StateStore');
 

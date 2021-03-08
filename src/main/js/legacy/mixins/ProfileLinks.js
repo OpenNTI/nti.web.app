@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-// const {isMe} = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('Actions', () => require('legacy/app/navigation/Actions'))
+// const {isMe} = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('Actions', () => require('internal/legacy/app/navigation/Actions'))
 	.get('Popout', () =>
-		require('legacy/app/account/contacts/management/Popout')
+		require('internal/legacy/app/account/contacts/management/Popout')
 	)
 	.get('MenuItem', () =>
-		require('legacy/app/account/identity/components/MenuItem')
+		require('internal/legacy/app/account/identity/components/MenuItem')
 	);
 
 // let contactCardPopout;

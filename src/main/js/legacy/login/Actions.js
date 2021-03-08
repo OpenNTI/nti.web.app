@@ -2,18 +2,18 @@ const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
 const { wait } = require('@nti/lib-commons');
 const { init } = require('@nti/lib-locale');
-
-const { getString } = require('legacy/util/Localization');
-const Socket = require('legacy/proxy/Socket');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const B64 = require('legacy/util/Base64');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const Socket = require('internal/legacy/proxy/Socket');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const B64 = require('internal/legacy/util/Base64');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const LoginStateStore = require('legacy/login/StateStore');
-const ModelService = require('legacy/model/Service');
-const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const ModelService = require('internal/legacy/model/Service');
+const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
 
 const { location: locationHref } = global;
 

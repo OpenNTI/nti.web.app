@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { List } = require('@nti/web-reports');
 
-require('legacy/overrides/ReactHarness.js');
+require('internal/legacy/overrides/ReactHarness.js');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.info.components.Reports',
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define(
 );
 
 // const {wait} = require('@nti/lib-commons');
-// const {getString} = require('legacy/util/Localization');
+// const {getString} = require('internal/legacy/util/Localization');
 
 // //TODO: move this in to the strings file once we get that figured out
 // const labels = {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define(
 // 	}
 // };
 
-// require('legacy/mixins/FillScreen');
+// require('internal/legacy/mixins/FillScreen');
 
 // module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {
 // 	extend: 'Ext.Component',

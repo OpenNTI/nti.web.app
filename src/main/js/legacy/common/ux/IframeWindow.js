@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getURL } = require('legacy/util/Globals');
+const { getURL } = require('internal/legacy/util/Globals');
 
 require('../window/Window');
 

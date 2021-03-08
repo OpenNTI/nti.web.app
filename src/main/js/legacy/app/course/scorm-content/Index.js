@@ -4,7 +4,7 @@ const Ext = require('@nti/extjs');
 const { Scorm } = require('@nti/web-course');
 const { getService } = require('@nti/web-client');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.scorm-content.Index',

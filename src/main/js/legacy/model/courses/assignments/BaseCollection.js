@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
 require('../../Base');
-require('legacy/mixins/DurationCache');
+require('internal/legacy/mixins/DurationCache');
 require('../../courseware/UsersCourseAssignmentHistory');
 require('../../courseware/UsersCourseAssignmentHistoryItem');
 require('../../courseware/UsersCourseAssignmentHistoryItemContainer');

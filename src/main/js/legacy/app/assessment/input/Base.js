@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const { getString } = require('internal/legacy/util/Localization');
+const Globals = require('internal/legacy/util/Globals');
+const PageItem = require('internal/legacy/store/PageItem');
 
-const { getString } = require('legacy/util/Localization');
-const Globals = require('legacy/util/Globals');
-const PageItem = require('legacy/store/PageItem');
-
-require('legacy/common/menus/AnswerHistory');
+require('internal/legacy/common/menus/AnswerHistory');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	extend: 'Ext.Component',

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const Launcher = require('internal/legacy/common/components/cards/Launcher');
+const DomUtils = require('internal/legacy/util/Dom');
 
-const Launcher = require('legacy/common/components/cards/Launcher');
-const DomUtils = require('legacy/util/Dom');
-
-require('legacy/app/contentviewer/overlay/Panel');
+require('internal/legacy/app/contentviewer/overlay/Panel');
 require('./Roll');
 
 module.exports = exports = Ext.define(

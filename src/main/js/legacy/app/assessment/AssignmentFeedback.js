@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
+const { isMe } = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const UsersCourseAssignmentHistoryItemFeedback = require('internal/legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
 
-const { isMe } = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const UsersCourseAssignmentHistoryItemFeedback = require('legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
-
-require('legacy/common/form/fields/FilePicker');
-require('legacy/editor/Editor');
-require('legacy/app/contentviewer/overlay/Panel');
+require('internal/legacy/common/form/fields/FilePicker');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/app/contentviewer/overlay/Panel');
 require('./components/feedback/List');
 
 module.exports = exports = Ext.define(

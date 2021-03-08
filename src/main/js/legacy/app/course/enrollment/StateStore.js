@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 
@@ -8,7 +7,7 @@ const OpenEnrollment = require('./options/OpenEnrollment');
 const FiveminuteEnrollment = require('./options/FiveminuteEnrollment');
 const StoreEnrollment = require('./options/StoreEnrollment');
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.StateStore',

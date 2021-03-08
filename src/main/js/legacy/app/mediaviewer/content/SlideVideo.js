@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const SlideDeck = require('internal/legacy/common/ux/SlideDeck');
 
-const SlideDeck = require('legacy/common/ux/SlideDeck');
-
-require('legacy/webvtt/Transcript');
-require('legacy/webvtt/Cue');
+require('internal/legacy/webvtt/Transcript');
+require('internal/legacy/webvtt/Cue');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.content.SlideVideo',

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const QuestionSetRef = require('legacy/model/QuestionSetRef');
-const AssignmentRef = require('legacy/model/AssignmentRef');
+const QuestionSetRef = require('internal/legacy/model/QuestionSetRef');
+const AssignmentRef = require('internal/legacy/model/AssignmentRef');
 
 require('../../../parts/QuestionSet');
 require('../ListItem');

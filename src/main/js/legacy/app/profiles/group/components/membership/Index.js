@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
 
-const AnalyticsUtil = require('legacy/util/Analytics');
-
-require('legacy/mixins/Router');
-require('legacy/model/User');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/model/User');
 require('./parts/Users');
 require('./parts/Admins');
 

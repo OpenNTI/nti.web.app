@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const User = require('legacy/model/User');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const User = require('internal/legacy/model/User');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/common/components/NavPanel');
-require('legacy/common/components/BoundPanel');
+require('internal/legacy/common/components/NavPanel');
+require('internal/legacy/common/components/BoundPanel');
 
 require('./outline/View');
 require('./Grouping');

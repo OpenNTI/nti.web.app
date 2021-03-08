@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 
-require('legacy/app/video/VideoPlayer');
+require('internal/legacy/app/video/VideoPlayer');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.info.components.parts.Title',

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const Kaltura = require('legacy/model/resolvers/videoservices/Kaltura');
-const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
-const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
-const HTML = require('legacy/model/resolvers/videoservices/HTML');
+const Kaltura = require('internal/legacy/model/resolvers/videoservices/Kaltura');
+const Vimeo = require('internal/legacy/model/resolvers/videoservices/Vimeo');
+const Youtube = require('internal/legacy/model/resolvers/videoservices/Youtube');
+const HTML = require('internal/legacy/model/resolvers/videoservices/HTML');
 
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 	extend: 'Ext.container.Container',

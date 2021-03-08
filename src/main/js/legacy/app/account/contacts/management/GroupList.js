@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const StateStore = require('internal/legacy/app/groups/StateStore');
+const Actions = require('internal/legacy/app/groups/Actions');
 
-const Globals = require('legacy/util/Globals');
-const StateStore = require('legacy/app/groups/StateStore');
-const Actions = require('legacy/app/groups/Actions');
-
-require('legacy/mixins/AddGroup');
+require('internal/legacy/mixins/AddGroup');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.contacts.management.GroupList',

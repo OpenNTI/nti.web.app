@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
 const EmailActions = require('./Actions');
 
-require('legacy/editor/Editor');
-require('legacy/model/Email');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/model/Email');
 require('./Actions');
 require('./EmailTokenField');
 

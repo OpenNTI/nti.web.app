@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { Forums } = require('@nti/web-discussions');
+const WindowActions = require('internal/legacy/app/windows/Actions');
+const DomUtils = require('internal/legacy/util/Dom');
 
-const WindowActions = require('legacy/app/windows/Actions');
-const DomUtils = require('legacy/util/Dom');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('../contentviewer/overlay/Panel');
 
 function getMutationObserver() {

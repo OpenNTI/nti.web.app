@@ -2,24 +2,23 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { dispatch } = require('@nti/lib-dispatcher');
 const { Forums } = require('@nti/web-discussions');
-
-const { getString } = require('legacy/util/Localization');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-const DomUtils = require('legacy/util/Dom');
-const SearchUtils = require('legacy/util/Search');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-const UserRepository = require('legacy/cache/UserRepository');
+const { getString } = require('internal/legacy/util/Localization');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
+const DomUtils = require('internal/legacy/util/Dom');
+const SearchUtils = require('internal/legacy/util/Search');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 
 const ForumsActions = require('../../../Actions');
 
-require('legacy/mixins/FlagActions');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/Searchable');
-require('legacy/editor/Editor');
-require('legacy/common/menus/BlogTogglePublish');
-require('legacy/common/ux/SearchHits');
-require('legacy/layout/component/Natural');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/Searchable');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/common/menus/BlogTogglePublish');
+require('internal/legacy/common/ux/SearchHits');
+require('internal/legacy/layout/component/Natural');
 
 require('./Pager');
 

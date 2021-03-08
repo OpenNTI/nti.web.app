@@ -1,17 +1,20 @@
 const Ext = require('@nti/extjs');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const ContentUtils = require('legacy/util/Content');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const ContentUtils = require('internal/legacy/util/Content');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
-const PageInfo = require('legacy/model/PageInfo');
+const AssessedQuestionSet = require('internal/legacy/model/assessment/AssessedQuestionSet');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
-require('legacy/common/chart/Score');
-require('legacy/model/QuestionSetRef');
-require('legacy/model/AssignmentRef');
+require('internal/legacy/common/chart/Score');
+require('internal/legacy/model/QuestionSetRef');
+require('internal/legacy/model/AssignmentRef');
 require('../../../../assessment/ScoreboardHeader');
 require('../../../../assessment/ScoreboardTally');
 require('../../../assessment/components/AssignmentStatus');

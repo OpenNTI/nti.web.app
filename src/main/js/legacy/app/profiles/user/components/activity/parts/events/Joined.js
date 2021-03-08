@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 
-const UserRepository = require('legacy/cache/UserRepository');
-
-require('legacy/model/User');
+require('internal/legacy/model/User');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.Joined',

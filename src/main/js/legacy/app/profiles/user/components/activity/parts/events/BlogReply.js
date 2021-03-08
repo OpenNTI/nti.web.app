@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const BlogStateStore = require('legacy/app/blog/StateStore');
+const BlogStateStore = require('internal/legacy/app/blog/StateStore');
 
 require('./PostReply');
 

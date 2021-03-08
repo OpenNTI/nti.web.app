@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
-
-const { getURL } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getURL } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const ModelWithPublish = require('legacy/mixins/ModelWithPublish');
+const ModelWithPublish = require('internal/legacy/mixins/ModelWithPublish');
 
 require('./UsersCourseAssignmentAttemptMetadataItem');
 

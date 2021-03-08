@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-require('legacy/model/Base');
-
-const Badge = require('legacy/model/openbadges/Badge');
+require('internal/legacy/model/Base');
+const Badge = require('internal/legacy/model/openbadges/Badge');
 
 module.exports = exports = Ext.define('NextThought.model.Change', {
 	extend: 'NextThought.model.Base',

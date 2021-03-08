@@ -1,13 +1,13 @@
-const Ext = require('@nti/extjs');
 const { format } = require('date-fns');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const SharingUtils = require('legacy/util/Sharing');
+const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const SharingUtils = require('internal/legacy/util/Sharing');
 
 require('./BaseContainer');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/model/resolvers/VideoPosters');
-require('legacy/app/windows/Actions');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/model/resolvers/VideoPosters');
+require('internal/legacy/app/windows/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.dashboard.components.tiles.Post',

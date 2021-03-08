@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Text } from '@nti/web-commons';
 
 import Avatar from './Avatar';
 import Collection from './Collection';

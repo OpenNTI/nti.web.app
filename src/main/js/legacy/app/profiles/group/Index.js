@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { isMe } = require('legacy/util/Globals');
-const GroupsActions = require('legacy/app/groups/Actions');
+const { isMe } = require('internal/legacy/util/Globals');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
 
 require('../user/BaseExtProfile');
 require('../user/components/membership/Index');

@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
 
-const Globals = require('legacy/util/Globals');
-const PromptActions = require('legacy/app/prompt/Actions');
-
-require('legacy/app/MessageBox');
+require('internal/legacy/app/MessageBox');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.controls.Delete',

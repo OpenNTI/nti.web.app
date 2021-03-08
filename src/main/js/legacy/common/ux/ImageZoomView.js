@@ -6,7 +6,7 @@ const SlideDeck = require('./SlideDeck');
 const lazyResolve = {
 	get ReaderPanel() {
 		delete this.ReaderPanel;
-		return (this.ReaderPanel = require('legacy/app/contentviewer/components/Reader'));
+		return (this.ReaderPanel = require('internal/legacy/app/contentviewer/components/Reader'));
 	},
 };
 

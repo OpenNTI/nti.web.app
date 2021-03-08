@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
 const { buffer } = require('@nti/lib-commons');
-
-const RelatedWork = require('legacy/model/RelatedWork');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
 require('./Base');
 

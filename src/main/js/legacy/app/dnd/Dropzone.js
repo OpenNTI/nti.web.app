@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const Scrolling = require('legacy/util/Scrolling');
-const DndInfo = require('legacy/model/app/DndInfo');
-const DataTransferStore = require('legacy/store/DataTransfer');
+const Scrolling = require('internal/legacy/util/Scrolling');
+const DndInfo = require('internal/legacy/model/app/DndInfo');
+const DataTransferStore = require('internal/legacy/store/DataTransfer');
 
 const StateStore = require('./StateStore');
 
-require('legacy/mixins/Scrolling');
+require('internal/legacy/mixins/Scrolling');
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	mixins: {

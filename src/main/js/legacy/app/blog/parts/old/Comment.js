@@ -1,16 +1,15 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const DomUtils = require('legacy/util/Dom');
-const { isMe } = require('legacy/util/Globals');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const DomUtils = require('internal/legacy/util/Dom');
+const { isMe } = require('internal/legacy/util/Globals');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
 
 const BlogActions = require('../../Actions');
 
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/FlagActions');
-require('legacy/editor/Editor');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.blog.parts.old.Comment',

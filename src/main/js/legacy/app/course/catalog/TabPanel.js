@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const User = require('legacy/model/User');
-const { getString } = require('legacy/util/Localization');
-const { isFeature } = require('legacy/util/Globals');
+const User = require('internal/legacy/model/User');
+const { getString } = require('internal/legacy/util/Localization');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.catalog.TabPanel',

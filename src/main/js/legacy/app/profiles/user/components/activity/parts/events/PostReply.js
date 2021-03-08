@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PathActions = require('legacy/app/navigation/path/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
 
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/FlagActions');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/FlagActions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.PostReply',

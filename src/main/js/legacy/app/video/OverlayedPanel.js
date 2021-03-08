@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
-
-const DomUtils = require('legacy/util/Dom');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const DomUtils = require('internal/legacy/util/Dom');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
 
 const LibraryActions = require('../library/Actions');
 

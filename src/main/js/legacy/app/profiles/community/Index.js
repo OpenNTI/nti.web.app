@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { Community } = require('@nti/web-profiles');
-
-const CommunityOverrides = require('nti-web-community-overrides');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const CommunityOverrides = require('internal/nti-web-community-overrides');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.community.Index',

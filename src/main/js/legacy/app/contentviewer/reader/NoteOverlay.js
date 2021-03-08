@@ -1,16 +1,15 @@
 const Ext = require('@nti/extjs');
-
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const LineUtils = require('legacy/util/Line');
-const { getString } = require('legacy/util/Localization');
-const SharingUtils = require('legacy/util/Sharing');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const LineUtils = require('internal/legacy/util/Line');
+const { getString } = require('internal/legacy/util/Localization');
+const SharingUtils = require('internal/legacy/util/Sharing');
 
 const UserdataActions = require('../../userdata/Actions');
 const DiscussionEditor = require('../components/editor/DiscussionEditor');
 
-require('legacy/util/Line');
-require('legacy/editor/Editor');
+require('internal/legacy/util/Line');
+require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.reader.NoteOverlay',

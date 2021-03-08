@@ -2,12 +2,11 @@ const Ext = require('@nti/extjs');
 const { parseNTIID } = require('@nti/lib-ntiids');
 const { getService } = require('@nti/web-client');
 const { Progress } = require('@nti/web-course');
-
-require('legacy/overrides/ReactHarness');
-const Base64 = require('legacy/util/Base64');
-const WindowActions = require('legacy/app/windows/Actions');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const ContextStore = require('legacy/app/context/StateStore');
+const Base64 = require('internal/legacy/util/Base64');
+const WindowActions = require('internal/legacy/app/windows/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const ContextStore = require('internal/legacy/app/context/StateStore');
+require('internal/legacy/overrides/ReactHarness');
 
 const ProgressMimeType = 'application/vnd.nextthought.webapp.roster-progress';
 

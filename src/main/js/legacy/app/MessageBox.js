@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const { getString } = require('internal/legacy/util/Localization');
+const Globals = require('internal/legacy/util/Globals');
 
-const { getString } = require('legacy/util/Localization');
-const Globals = require('legacy/util/Globals');
-
-require('legacy/common/window/Window');
-require('legacy/mixins/State');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/mixins/State');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.MessageBox',

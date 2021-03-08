@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('PresenceInfo', () =>
-	require('../PresenceInfo')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'PresenceInfo',
+	() => require('../PresenceInfo')
 );
 
 module.exports = exports = Ext.define(

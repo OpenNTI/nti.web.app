@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const UserdataStateStore = require('legacy/app/userdata/StateStore');
-const NTI = require('legacy/store/NTI');
-const StoreUtils = require('legacy/util/Store');
-const SearchUtils = require('legacy/util/Search');
+const UserdataStateStore = require('internal/legacy/app/userdata/StateStore');
+const NTI = require('internal/legacy/store/NTI');
+const StoreUtils = require('internal/legacy/util/Store');
+const SearchUtils = require('internal/legacy/util/Search');
 
 require('../Base');
 

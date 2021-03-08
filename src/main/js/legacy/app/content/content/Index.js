@@ -1,26 +1,26 @@
-const Ext = require('@nti/extjs');
 const React = require('react');
+
+const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { Survey } = require('@nti/web-assessment');
 const { getService } = require('@nti/web-client');
 const { Page } = require('@nti/web-commons');
 const { Editor } = require('@nti/web-content');
-
-const ContentviewerIndex = require('legacy/app/contentviewer/Index');
-const PageInfo = require('legacy/model/PageInfo');
-const RelatedWork = require('legacy/model/RelatedWork');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const SurveyModel = require('legacy/model/assessment/Survey');
-const ExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
+const ContentviewerIndex = require('internal/legacy/app/contentviewer/Index');
+const PageInfo = require('internal/legacy/model/PageInfo');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const SurveyModel = require('internal/legacy/model/assessment/Survey');
+const ExternalToolAsset = require('internal/legacy/model/LTIExternalToolAsset');
 
 const ContentActions = require('../Actions');
 
-require('legacy/util/Parsing');
-require('legacy/mixins/Router');
-require('legacy/common/components/ResourceNotFound');
-require('legacy/app/contentviewer/StateStore');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/common/components/ResourceNotFound');
+require('internal/legacy/app/contentviewer/StateStore');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 const SurveyEditorPage = React.forwardRef(function SurveyEditorPage(
 	props,

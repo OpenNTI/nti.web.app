@@ -1,16 +1,15 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const LoginStore = require('legacy/login/StateStore');
-const PromptActions = require('legacy/app/prompt/Actions').create();
-const { isFeature } = require('legacy/util/Globals');
-const NavActions = require('legacy/app/navigation/Actions').create();
+const LoginStore = require('internal/legacy/login/StateStore');
+const PromptActions = require('internal/legacy/app/prompt/Actions').create();
+const { isFeature } = require('internal/legacy/util/Globals');
+const NavActions = require('internal/legacy/app/navigation/Actions').create();
 
 const StateStore = require('./StateStore');
 
 require('./info/Prompt');
 require('./verify/Prompt');
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.emailverify.Actions',

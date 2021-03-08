@@ -1,17 +1,16 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
-
-const { getString } = require('legacy/util/Localization');
-const Email = require('legacy/model/Email');
-const { isFeature } = require('legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const Email = require('internal/legacy/model/Email');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 const WindowsActions = require('../../../../windows/Actions');
 const WindowsStateStore = require('../../../../windows/StateStore');
 const AssignmentStatus = require('../../AssignmentStatus');
 const ComponentsAssignmentStatus = require('../AssignmentStatus');
 
-require('legacy/common/menus/LabeledSeparator');
+require('internal/legacy/common/menus/LabeledSeparator');
 require('./email/Window');
 
 scoped('nti-web-app.course.assessment.components.admin.ListHeader', {

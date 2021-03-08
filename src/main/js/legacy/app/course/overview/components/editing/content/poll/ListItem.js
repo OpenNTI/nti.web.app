@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PollRef = require('legacy/model/PollRef');
+const PollRef = require('internal/legacy/model/PollRef');
 
 require('../../../parts/Poll');
 require('../ListItem');

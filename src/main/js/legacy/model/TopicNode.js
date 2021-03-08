@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
+const ContentUtils = require('internal/legacy/util/Content');
 
 module.exports = exports = Ext.define('NextThought.model.TopicNode', {
 	extend: 'Ext.data.Model',

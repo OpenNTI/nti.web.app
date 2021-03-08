@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const lazy = require('internal/legacy/util/lazy-require').get('Anchors', () =>
+	require('internal/legacy/util/Anchors')
+);
 
 require('./DomContentPointer');
-
-const lazy = require('legacy/util/lazy-require').get('Anchors', () =>
-	require('legacy/util/Anchors')
-);
 
 const ElementDomContentPointer = (module.exports = exports = Ext.define(
 	'NextThought.model.anchorables.ElementDomContentPointer',

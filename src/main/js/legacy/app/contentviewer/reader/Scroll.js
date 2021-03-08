@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const Anchors = require('legacy/util/Anchors');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-const SearchUtils = require('legacy/util/Search');
-const ScrollingUtils = require('legacy/util/Scrolling');
+const Anchors = require('internal/legacy/util/Anchors');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
+const SearchUtils = require('internal/legacy/util/Search');
+const ScrollingUtils = require('internal/legacy/util/Scrolling');
 
 const MENU_HIDE_THRESHOLD = 10;
 const MENU_HIDE_TIME_MS = 500;

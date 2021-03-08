@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Button, Table, Loading, Prompt } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';

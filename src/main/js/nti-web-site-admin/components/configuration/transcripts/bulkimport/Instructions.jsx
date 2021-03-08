@@ -1,9 +1,10 @@
 import './Instructions.scss';
 import React from 'react';
+import cx from 'classnames';
+
 import { scoped } from '@nti/lib-locale';
 import { rawContent } from '@nti/lib-commons';
 import { List } from '@nti/web-commons';
-import cx from 'classnames';
 
 import Collapsible from './Collapsible';
 import SAMPLE from './assets/sample.csv?for-download';

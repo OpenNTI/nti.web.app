@@ -1,18 +1,17 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const StoreUtils = require('internal/legacy/util/Store');
+const ScrollingUtil = require('internal/legacy/util/Scrolling');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const TilesNote = require('internal/legacy/app/course/dashboard/components/tiles/Note');
+const TilesTopic = require('internal/legacy/app/course/dashboard/components/tiles/Topic');
+const TilesBlog = require('internal/legacy/app/course/dashboard/components/tiles/Blog');
+const Note = require('internal/legacy/model/Note');
+const CommunityHeadlineTopic = require('internal/legacy/model/forums/CommunityHeadlineTopic');
+const PersonalBlogEntry = require('internal/legacy/model/forums/PersonalBlogEntry');
 
-const AnalyticsUtil = require('legacy/util/Analytics');
-const StoreUtils = require('legacy/util/Store');
-const ScrollingUtil = require('legacy/util/Scrolling');
-const WindowsActions = require('legacy/app/windows/Actions');
-const TilesNote = require('legacy/app/course/dashboard/components/tiles/Note');
-const TilesTopic = require('legacy/app/course/dashboard/components/tiles/Topic');
-const TilesBlog = require('legacy/app/course/dashboard/components/tiles/Blog');
-const Note = require('legacy/model/Note');
-const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
-const PersonalBlogEntry = require('legacy/model/forums/PersonalBlogEntry');
-
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./parts/NewPost');
 
 module.exports = exports = Ext.define(

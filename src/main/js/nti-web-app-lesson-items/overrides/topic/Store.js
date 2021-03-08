@@ -1,7 +1,6 @@
 import { Stores } from '@nti/lib-store';
 import { User, getAppUsername } from '@nti/web-client';
-
-import BaseModel from 'legacy/model/Base';
+import BaseModel from 'internal/legacy/model/Base';
 
 const MAX_ACTIVE_USERS = 5;
 const ACTIVE_USER_PARAMS = {

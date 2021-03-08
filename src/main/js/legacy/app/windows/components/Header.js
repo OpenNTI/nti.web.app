@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Actions = require('legacy/app/navigation/path/Actions');
-const StateStore = require('legacy/app/context/StateStore');
+const Actions = require('internal/legacy/app/navigation/path/Actions');
+const StateStore = require('internal/legacy/app/context/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.windows.components.Header',

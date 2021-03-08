@@ -3,7 +3,7 @@ const Ext = require('@nti/extjs');
 const NTMatrix = require('../Matrix');
 const WBUtils = require('../Utils');
 
-require('legacy/common/menus/file/BrowserItem');
+require('internal/legacy/common/menus/file/BrowserItem');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.whiteboard.editor.ImageOptions',

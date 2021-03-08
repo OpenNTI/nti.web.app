@@ -2,18 +2,17 @@ const { resolve } = require('path');
 
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
-
-const LibraryActions = require('legacy/app/library/Actions');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
-const Slidedeck = require('legacy/model/Slidedeck');
-const PlaylistItem = require('legacy/model/PlaylistItem');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const TranscriptItem = require('internal/legacy/model/transcript/TranscriptItem');
+const Slidedeck = require('internal/legacy/model/Slidedeck');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
 
 const MediaviewerActions = require('./Actions');
 
-require('legacy/util/Parsing');
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
 require('./components/reader/parts/Transcript');
 require('./components/View');
 

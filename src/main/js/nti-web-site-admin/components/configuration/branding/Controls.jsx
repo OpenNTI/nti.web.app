@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DialogButtons } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { DialogButtons } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 
 import styles from './Controls.css';

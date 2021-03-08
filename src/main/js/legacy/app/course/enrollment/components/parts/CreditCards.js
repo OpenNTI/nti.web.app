@@ -2,7 +2,7 @@ require('./CreditCards.scss');
 const Ext = require('@nti/extjs');
 const { CreditCard } = require('@nti/web-payments');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('./BaseInput');
 
 module.exports = exports = Ext.define(

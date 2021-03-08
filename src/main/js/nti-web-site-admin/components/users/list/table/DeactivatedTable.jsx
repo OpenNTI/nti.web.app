@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { scoped } from '@nti/lib-locale';
 import { decorate } from '@nti/lib-commons';
 import { searchable, contextual } from '@nti/web-search';

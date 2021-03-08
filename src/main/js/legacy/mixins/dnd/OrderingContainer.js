@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const MoveInfo = require('legacy/model/app/MoveInfo');
-const Actions = require('legacy/app/dnd/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const MoveInfo = require('internal/legacy/model/app/MoveInfo');
+const Actions = require('internal/legacy/app/dnd/Actions');
 
 require('./Dropzone');
 

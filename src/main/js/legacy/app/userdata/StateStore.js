@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const Socket = require('internal/legacy/proxy/Socket');
 
-const Socket = require('legacy/proxy/Socket');
-
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',

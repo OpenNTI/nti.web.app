@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { View: LibrarySearchableView } = require('@nti/web-library');
 const { Theme } = require('@nti/web-commons');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const BundleActions = require('legacy/app/bundle/Actions');
-const CourseActions = require('legacy/app/course/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const BundleActions = require('internal/legacy/app/bundle/Actions');
+const CourseActions = require('internal/legacy/app/course/Actions');
 
 const GlobalTheme = Theme.getGlobalTheme();
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	extend: 'Ext.container.Container',

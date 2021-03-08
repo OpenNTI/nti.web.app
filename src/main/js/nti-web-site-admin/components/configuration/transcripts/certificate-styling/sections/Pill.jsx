@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames/bind';
+
 import { scoped } from '@nti/lib-locale';
 import { Input, Theme, Flyout, HOC, Text, Prompt } from '@nti/web-commons';
 import { Color } from '@nti/lib-commons';

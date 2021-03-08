@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { User } from '@nti/web-profiles';
 
 const { Transcripts } = User;

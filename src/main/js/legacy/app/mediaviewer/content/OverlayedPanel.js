@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const DomUtils = require('internal/legacy/util/Dom');
 
-const DomUtils = require('legacy/util/Dom');
-
-require('legacy/app/contentviewer/overlay/Panel');
+require('internal/legacy/app/contentviewer/overlay/Panel');
 require('./SlideVideo');
 
 module.exports = exports = Ext.define(

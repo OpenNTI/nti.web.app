@@ -1,6 +1,7 @@
 import './InvalidRows.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { scoped } from '@nti/lib-locale';
 import { Table as T } from '@nti/web-commons';
 

@@ -1,24 +1,25 @@
-const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
+
+const Ext = require('@nti/extjs');
 const Commons = require('@nti/web-commons');
 const { wait } = require('@nti/lib-commons');
 const { EmbedInput } = require('@nti/web-video');
-
-const AnnotationUtils = require('legacy/util/Annotations');
-const DomUtils = require('legacy/util/Dom');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const AnnotationUtils = require('internal/legacy/util/Annotations');
+const DomUtils = require('internal/legacy/util/Dom');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const RangeUtils = require('legacy/util/Ranges');
-const SharingUtils = require('legacy/util/Sharing');
-const { guidGenerator: guidFn } = require('legacy/util/Globals');
-const { isFeature } = require('legacy/util/Globals');
-const TabIndexTracker = require('legacy/util/TabIndexTracker');
-const Globals = require('legacy/util/Globals');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const RelatedWork = require('legacy/model/RelatedWork');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const { guidGenerator: guidFn } = require('internal/legacy/util/Globals');
+const { isFeature } = require('internal/legacy/util/Globals');
+const TabIndexTracker = require('internal/legacy/util/TabIndexTracker');
+const Globals = require('internal/legacy/util/Globals');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
 
-require('legacy/editor/embedvideo/Window');
+require('internal/legacy/editor/embedvideo/Window');
 
 const guidGenerator = () => `guid-${guidFn()}`; //CSS id selectors cannot start with numbers.
 

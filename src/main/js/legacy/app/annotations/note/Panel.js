@@ -1,30 +1,30 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { Events } = require('@nti/web-session');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const AnnotationUtils = require('legacy/util/Annotations');
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const SharingUtils = require('legacy/util/Sharing');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const AnnotationUtils = require('internal/legacy/util/Annotations');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { getString } = require('legacy/util/Localization');
-const ContentViewerActions = require('legacy/app/contentviewer/Actions');
-const UserDataActions = require('legacy/app/userdata/Actions');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const ContextStateStore = require('legacy/app/context/StateStore');
+const { getString } = require('internal/legacy/util/Localization');
+const ContentViewerActions = require('internal/legacy/app/contentviewer/Actions');
+const UserDataActions = require('internal/legacy/app/userdata/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const ContextStateStore = require('internal/legacy/app/context/StateStore');
 
 const TemplatesForNotes = require('./Templates');
 
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/FlagActions');
-require('legacy/cache/UserRepository');
-require('legacy/layout/component/Natural');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/cache/UserRepository');
+require('internal/legacy/layout/component/Natural');
 
 require('../../userdata/Actions');
 require('../../sharing/Window');

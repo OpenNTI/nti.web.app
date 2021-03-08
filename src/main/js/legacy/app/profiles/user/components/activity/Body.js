@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
-require('legacy/app/blog/Window');
+require('internal/legacy/app/blog/Window');
 require('./parts/Stream');
 require('./parts/NewPost');
 

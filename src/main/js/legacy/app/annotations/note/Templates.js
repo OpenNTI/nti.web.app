@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const { isMe } = require('legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const { isMe } = require('internal/legacy/util/Globals');
 
 const TemplatesForNotes = Ext.define(
 	'NextThought.app.annotations.note.Templates',

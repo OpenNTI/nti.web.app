@@ -1,8 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const { getURL } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('UserRepository', () => require('legacy/cache/UserRepository'))
+const { getURL } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('UserRepository', () =>
+		require('internal/legacy/cache/UserRepository')
+	)
 	.get('ParseUtils', () => require('./Parsing'));
 
 module.exports = exports = Ext.define('NextThought.util.Store', {

@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/dnd/Draggable');
+require('internal/legacy/mixins/dnd/Draggable');
 
 const DndOrderingItem = (module.exports = exports = Ext.define(
 	'NextThought.mixins.dnd.OrderingItem',

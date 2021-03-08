@@ -4,17 +4,17 @@ const { DateIcon } = require('@nti/web-calendar');
 const { NewChatStore } = require('@nti/web-profiles');
 const { ChatSidebar } = require('@nti/web-profiles');
 const { getAppUsername, isFlag } = require('@nti/web-client');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const User = require('legacy/model/User');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const User = require('internal/legacy/model/User');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const NavigationStateStore = require('legacy/app/navigation/StateStore');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const NavigationStateStore = require('internal/legacy/app/navigation/StateStore');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 const ChatStateStore = require('./StateStore');
 const ChatActions = require('./Actions');

@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
 
-const { getString } = require('legacy/util/Localization');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-
-require('legacy/app/whiteboard/Window');
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/app/whiteboard/Window');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.components.feedback.Item',

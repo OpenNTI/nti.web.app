@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const StreamSource = require('./util/StreamSource');
 
-require('legacy/mixins/Scrolling');
+require('internal/legacy/mixins/Scrolling');
 
 /**
  * Given a stream source, render the pages one at a time as you scroll, removing and adding them from the dom

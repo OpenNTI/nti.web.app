@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const { getURL } = require('legacy/util/Globals');
+const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 	getLink: function (rel, raw) {

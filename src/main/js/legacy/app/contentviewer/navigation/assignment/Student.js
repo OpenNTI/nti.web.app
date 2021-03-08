@@ -2,9 +2,8 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { ControlBar, NavigationBar } = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const ReactHarness = require('legacy/overrides/ReactHarness');
-const TimeUtils = require('legacy/util/Time');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
+const TimeUtils = require('internal/legacy/util/Time');
 
 const AssignmentStatus = require('../../../course/assessment/AssignmentStatus');
 const AccountActions = require('../../../account/Actions');

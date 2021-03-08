@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const SharedInstance = require('legacy/cache/SharedInstance');
-const GradeBookSummaries = require('legacy/store/courseware/GradeBookSummaries');
-const StudentHistoryItems = require('legacy/store/courseware/StudentHistoryItems');
-const AssignmentHistoryItems = require('legacy/store/courseware/AssignmentHistoryItems');
+const SharedInstance = require('internal/legacy/cache/SharedInstance');
+const GradeBookSummaries = require('internal/legacy/store/courseware/GradeBookSummaries');
+const StudentHistoryItems = require('internal/legacy/store/courseware/StudentHistoryItems');
+const AssignmentHistoryItems = require('internal/legacy/store/courseware/AssignmentHistoryItems');
 
 const Grade = require('../../courseware/Grade');
 const UsersCourseAssignmentHistory = require('../../courseware/UsersCourseAssignmentHistory');

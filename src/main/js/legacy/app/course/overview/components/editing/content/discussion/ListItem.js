@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DiscussionRef = require('legacy/model/DiscussionRef');
+const DiscussionRef = require('internal/legacy/model/DiscussionRef');
 
 require('../../../parts/Discussion');
 require('../ListItem');

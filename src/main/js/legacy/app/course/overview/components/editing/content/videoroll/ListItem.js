@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const VideoRoll = require('internal/legacy/model/VideoRoll');
 
-const VideoRoll = require('legacy/model/VideoRoll');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('../../../parts/VideoRoll');
 require('../ListItem');
 

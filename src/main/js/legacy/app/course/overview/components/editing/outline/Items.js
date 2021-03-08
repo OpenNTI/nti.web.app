@@ -1,16 +1,15 @@
 const Ext = require('@nti/extjs');
-
-const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
-const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
-const CourseOutlineCalendarNode = require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
-const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+const DndOrderingContainer = require('internal/legacy/mixins/dnd/OrderingContainer');
+const CourseOutlineNode = require('internal/legacy/model/courses/navigation/CourseOutlineNode');
+const CourseOutlineCalendarNode = require('internal/legacy/model/courses/navigation/CourseOutlineCalendarNode');
+const CourseOutlineContentNode = require('internal/legacy/model/courses/navigation/CourseOutlineContentNode');
 
 const OutlinenodeListItem = require('./outlinenode/ListItem');
 const CalendarnodeListItem = require('./calendarnode/ListItem');
 const ContentnodeListItem = require('./contentnode/ListItem');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/mixins/FillScreen');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/mixins/FillScreen');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.outline.Items',

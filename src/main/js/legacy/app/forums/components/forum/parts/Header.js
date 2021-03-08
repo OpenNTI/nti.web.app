@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { dispatch } = require('@nti/lib-dispatcher');
 const { Forums } = require('@nti/web-discussions');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.forums.components.forum.parts.Header',

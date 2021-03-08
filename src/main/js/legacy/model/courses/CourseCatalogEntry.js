@@ -1,19 +1,20 @@
-const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
-const { wait } = require('@nti/lib-commons');
 
-const { getString } = require('legacy/util/Localization');
-const { getURL } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Ext = require('@nti/extjs');
+const { wait } = require('@nti/lib-commons');
+const { getString } = require('internal/legacy/util/Localization');
+const { getURL } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/mixins/PresentationResources');
-require('legacy/model/Base');
-require('legacy/model/CatalogFamilies');
-require('legacy/model/courses/EnrollmentOptions');
-require('legacy/model/courses/CourseCreditLegacyInfo');
-require('legacy/model/courses/CourseCatalogInstructorInfo');
+require('internal/legacy/mixins/PresentationResources');
+require('internal/legacy/model/Base');
+require('internal/legacy/model/CatalogFamilies');
+require('internal/legacy/model/courses/EnrollmentOptions');
+require('internal/legacy/model/courses/CourseCreditLegacyInfo');
+require('internal/legacy/model/courses/CourseCatalogInstructorInfo');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.courses.CourseCatalogEntry',

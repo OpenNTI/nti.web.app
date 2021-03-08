@@ -3,10 +3,12 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
 const { default: Logger } = require('@nti/util-logger');
-
-const { guidGenerator, naturalSortComparator } = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const PathActions = require('legacy/app/navigation/path/Actions');
+const {
+	guidGenerator,
+	naturalSortComparator,
+} = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
 
 const logger = Logger.get('course-assessment-assignments');
 
@@ -18,10 +20,10 @@ const t = scoped(
 	}
 );
 
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
-require('legacy/common/ux/Grouping');
-require('legacy/app/course/assessment/Actions');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
+require('internal/legacy/common/ux/Grouping');
+require('internal/legacy/app/course/assessment/Actions');
 require('./FilterBar');
 require('./List');
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { scoped } from '@nti/lib-locale';
 import { Prompt, Text, Theme } from '@nti/web-commons';
 import { AssetEditor } from '@nti/web-whiteboard';

@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/model/recorder/TransactionRecord');
+require('internal/legacy/model/recorder/TransactionRecord');
 require('./Item');
 
 module.exports = exports = Ext.define(

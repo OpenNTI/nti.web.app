@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
 
 require('../settings/Window');
 require('./Visibility');

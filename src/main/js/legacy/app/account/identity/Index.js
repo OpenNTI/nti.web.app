@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const NTIFormat = require('legacy/util/Format');
+const NTIFormat = require('internal/legacy/util/Format');
 
 const styles = require('./Index.css');
 

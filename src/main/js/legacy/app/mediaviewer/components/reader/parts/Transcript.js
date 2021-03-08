@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const MediaViewerActions = require('internal/legacy/app/mediaviewer/Actions');
+const AnchorResolver = require('internal/legacy/app/mediaviewer/components/reader/AnchorResolver');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const Cue = require('internal/legacy/model/transcript/Cue');
+const Transcript = require('internal/legacy/webvtt/Transcript');
 
-const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
-const RangeUtils = require('legacy/util/Ranges');
-const Cue = require('legacy/model/transcript/Cue');
-const Transcript = require('legacy/webvtt/Transcript');
-
-require('legacy/app/mediaviewer/components/reader/mixins/AnnotationsMixin');
+require('internal/legacy/app/mediaviewer/components/reader/mixins/AnnotationsMixin');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.reader.parts.Transcript',

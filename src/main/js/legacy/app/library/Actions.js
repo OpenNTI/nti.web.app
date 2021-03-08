@@ -1,18 +1,17 @@
 const Ext = require('@nti/extjs');
-
-const ContentProxy = require('legacy/proxy/JSONP');
-const { getURL } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
+const ContentProxy = require('internal/legacy/proxy/JSONP');
+const { getURL } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
 	.get('ContentStateStore', () => require('./content/StateStore'))
 	.get('LibraryStateStore', () => require('./StateStore'))
 	.get('CoursesActions', () => require('./courses/Actions'))
 	.get('CoursesStateStore', () => require('./courses/StateStore'))
 	.get('ContentActions', () => require('./content/Actions'))
-	.get('ParseUtils', () => require('legacy/util/Parsing'))
-	.get('LoginStateStore', () => require('legacy/login/StateStore'));
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'))
+	.get('LoginStateStore', () => require('internal/legacy/login/StateStore'));
 
-require('legacy/proxy/JSONP');
-require('legacy/common/Actions');
+require('internal/legacy/proxy/JSONP');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	extend: 'NextThought.common.Actions',

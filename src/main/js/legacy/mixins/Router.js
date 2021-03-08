@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-
-const PathActions = require('legacy/app/navigation/path/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Globals = require('legacy/util/Globals');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Globals = require('internal/legacy/util/Globals');
 
 require('./routing/Path');
 require('./routing/Object');

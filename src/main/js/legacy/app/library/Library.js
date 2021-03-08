@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
-const NavigationActions = require('legacy/app/navigation/Actions');
-
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./communities/Index');
 require('./admin/Index');
 require('./content/Index');

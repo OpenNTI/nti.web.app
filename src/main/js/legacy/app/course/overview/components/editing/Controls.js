@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 const PublishingMenu = require('./publishing/Menu');
 

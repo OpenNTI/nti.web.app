@@ -1,17 +1,17 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { User } = require('@nti/web-commons');
-
-const Toaster = require('legacy/common/toast/Manager');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Toaster = require('internal/legacy/common/toast/Manager');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const Socket = require('legacy/proxy/Socket');
-const RoomInfo = require('legacy/model/RoomInfo');
-const { isMe } = require('legacy/util/Globals');
-const { TemporaryStorage } = require('legacy/cache/AbstractStorage');
+const Socket = require('internal/legacy/proxy/Socket');
+const RoomInfo = require('internal/legacy/model/RoomInfo');
+const { isMe } = require('internal/legacy/util/Globals');
+const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',

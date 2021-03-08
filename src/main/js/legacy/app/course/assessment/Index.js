@@ -3,17 +3,17 @@ const Path = require('path');
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PageSource = require('legacy/util/PageSource');
-const PagedPageSource = require('legacy/util/PagedPageSource');
-const User = require('legacy/model/User');
-const Assignment = require('legacy/model/assessment/Assignment');
+const PageSource = require('internal/legacy/util/PageSource');
+const PagedPageSource = require('internal/legacy/util/PagedPageSource');
+const User = require('internal/legacy/model/User');
+const Assignment = require('internal/legacy/model/assessment/Assignment');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./components/View');
 require('./components/Assignment');
 require('./components/editing/AssignmentEditor');

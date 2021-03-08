@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { isFeature } = require('legacy/util/Globals');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.badge.components.Footer',

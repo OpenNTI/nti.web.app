@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const { getURL } = require('legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.settings.components.PictureCanvas',

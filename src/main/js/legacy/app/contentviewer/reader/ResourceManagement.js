@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
+const DomUtils = require('internal/legacy/util/Dom');
+const { guidGenerator } = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
-const DomUtils = require('legacy/util/Dom');
-const { guidGenerator } = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/common/ux/ImageZoomView');
-require('legacy/common/components/cards/CardTarget');
+require('internal/legacy/common/ux/ImageZoomView');
+require('internal/legacy/common/components/cards/CardTarget');
 require('../../../common/components/cards/CardIframe');
-require('legacy/common/components/cards/OverlayedPanel');
+require('internal/legacy/common/components/cards/OverlayedPanel');
 require('../../mediaviewer/content/deck/OverlayedPanel');
 require('../../mediaviewer/content/OverlayedPanel');
 require('../../video/OverlayedPanel');

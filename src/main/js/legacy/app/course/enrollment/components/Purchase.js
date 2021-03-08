@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
 
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/mixins/enrollment-feature/Form');
+require('internal/legacy/mixins/enrollment-feature/Form');
 
 require('./parts/BaseInput');
 require('./parts/Checkbox');

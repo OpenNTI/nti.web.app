@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const { isMe } = require('legacy/util/Globals');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { isMe } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	extend: 'Ext.Component',

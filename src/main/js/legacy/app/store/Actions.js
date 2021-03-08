@@ -1,18 +1,18 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const StoreUtils = require('legacy/util/Store');
-const LoginStateStore = require('legacy/login/StateStore');
+const StoreUtils = require('internal/legacy/util/Store');
+const LoginStateStore = require('internal/legacy/login/StateStore');
 
 const ContentStateStore = require('../library/content/StateStore');
 
 const StoreStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 const { getURL } = Globals;
 

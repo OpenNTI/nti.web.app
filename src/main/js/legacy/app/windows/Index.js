@@ -4,7 +4,7 @@ const { wait } = require('@nti/lib-commons');
 const StateStore = require('./StateStore');
 const Actions = require('./Actions');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('../annotations/note/Window');
 require('./components/Container');
 

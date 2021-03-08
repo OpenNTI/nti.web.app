@@ -1,24 +1,23 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { Events } = require('@nti/web-session');
+const TemplatesForNotes = require('internal/legacy/app/annotations/note/Templates');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const ForumsComments = require('internal/legacy/store/forums/Comments');
+const Globals = require('internal/legacy/util/Globals');
+const DomUtils = require('internal/legacy/util/Dom');
+const Localization = require('internal/legacy/util/Localization');
+const { isMe } = require('internal/legacy/util/Globals');
+const Scrolling = require('internal/legacy/util/Scrolling');
+const { getString } = require('internal/legacy/util/Localization');
 
-const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-const UserRepository = require('legacy/cache/UserRepository');
-const ForumsComments = require('legacy/store/forums/Comments');
-const Globals = require('legacy/util/Globals');
-const DomUtils = require('legacy/util/Dom');
-const Localization = require('legacy/util/Localization');
-const { isMe } = require('legacy/util/Globals');
-const Scrolling = require('legacy/util/Scrolling');
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/model/User');
-require('legacy/mixins/Searchable');
-require('legacy/mixins/ProfileLinks');
-require('legacy/util/UserDataThreader');
-require('legacy/app/whiteboard/Window');
-require('legacy/app/video/window/Window');
+require('internal/legacy/model/User');
+require('internal/legacy/mixins/Searchable');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/util/UserDataThreader');
+require('internal/legacy/app/whiteboard/Window');
+require('internal/legacy/app/video/window/Window');
 
 const ForumsActions = require('../../../Actions');
 

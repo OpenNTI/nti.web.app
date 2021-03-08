@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { Community } = require('@nti/web-content');
+const CommunityOverrides = require('internal/nti-web-community-overrides');
 
-const CommunityOverrides = require('nti-web-community-overrides');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.bundle.community.Index',

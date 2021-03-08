@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const UtilUserDataThreader = require('legacy/util/UserDataThreader');
+const UtilUserDataThreader = require('internal/legacy/util/UserDataThreader');
 require('../proxy/reader/Json');
-require('legacy/model/GenericObject');
+require('internal/legacy/model/GenericObject');
 
 const coordinator = new Ext.util.Observable();
 

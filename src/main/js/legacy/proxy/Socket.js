@@ -1,8 +1,7 @@
 /*globals io*/
 const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
-
-const Globals = require('legacy/util/Globals');
+const Globals = require('internal/legacy/util/Globals');
 
 if (!global.$AppConfig) {
 	global.$AppConfig = {};

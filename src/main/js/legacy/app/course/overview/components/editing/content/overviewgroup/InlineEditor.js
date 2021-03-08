@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const OverviewGroup = require('legacy/model/courses/overview/Group');
-const Color = require('legacy/util/Color');
+const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
+const Color = require('internal/legacy/util/Color');
 
 const EditingActions = require('../../Actions');
 

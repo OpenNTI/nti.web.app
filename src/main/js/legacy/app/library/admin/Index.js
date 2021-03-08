@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 require('../courses/Index');
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 	extend: 'NextThought.app.library.courses.Index',

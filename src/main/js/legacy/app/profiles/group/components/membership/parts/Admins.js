@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
-
-const UserRepository = require('legacy/cache/UserRepository');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 
 require('./Users');
 

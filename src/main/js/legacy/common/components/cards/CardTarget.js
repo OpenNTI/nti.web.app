@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
 
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-
-require('legacy/app/contentviewer/overlay/Panel');
+require('internal/legacy/app/contentviewer/overlay/Panel');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.components.cards.CardTarget',

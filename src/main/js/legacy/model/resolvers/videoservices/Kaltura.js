@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
+const Globals = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.resolvers.videoservices.Kaltura',

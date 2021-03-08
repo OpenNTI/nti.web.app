@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const TranscriptSummary = require('legacy/model/TranscriptSummary');
-const Transcript = require('legacy/model/Transcript');
-const PageItem = require('legacy/store/PageItem');
+const Globals = require('internal/legacy/util/Globals');
+const TranscriptSummary = require('internal/legacy/model/TranscriptSummary');
+const Transcript = require('internal/legacy/model/Transcript');
+const PageItem = require('internal/legacy/store/PageItem');
 
 const ChatActions = require('../Actions');
 const ChatStateStore = require('../StateStore');

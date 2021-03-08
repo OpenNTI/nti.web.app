@@ -1,13 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 const ConflictActions = require('../../conflict/Actions');
 
-require('legacy/common/Actions');
-require('legacy/model/conflict/DestructiveChallenge');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/conflict/DestructiveChallenge');
 
 const BEGINNING = 'available_for_submission_beginning';
 const ENDING = 'available_for_submission_ending';

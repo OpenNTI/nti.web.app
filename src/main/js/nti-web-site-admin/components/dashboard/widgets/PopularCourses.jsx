@@ -1,12 +1,12 @@
 import './PopularCourses.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { scoped } from '@nti/lib-locale';
 import { Presentation, Loading } from '@nti/web-commons';
 import { getService } from '@nti/web-client';
-import cx from 'classnames';
-
-import { getString } from 'legacy/util/Localization';
+import { getString } from 'internal/legacy/util/Localization';
 
 const LABELS = {
 	title: getString(

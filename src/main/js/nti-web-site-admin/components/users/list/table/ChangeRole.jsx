@@ -1,6 +1,7 @@
 import './ChangeRole.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { DialogButtons, Avatar, Panels } from '@nti/web-commons';

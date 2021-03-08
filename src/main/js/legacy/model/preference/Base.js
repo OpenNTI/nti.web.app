@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const Base = require('internal/legacy/model/Base');
 
-const Base = require('legacy/model/Base');
-
-require('legacy/proxy/Preference');
+require('internal/legacy/proxy/Preference');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.preference.Base',

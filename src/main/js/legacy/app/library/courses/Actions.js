@@ -1,16 +1,15 @@
 const Ext = require('@nti/extjs');
+const StoreUtils = require('internal/legacy/util/Store');
+const { getURL } = require('internal/legacy/util/Globals');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
-const StoreUtils = require('legacy/util/Store');
-const { getURL } = require('legacy/util/Globals');
-const LoginStateStore = require('legacy/login/StateStore');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-
-require('legacy/common/Actions');
-require('legacy/model/courses/CourseInstance');
-require('legacy/model/courses/CourseInstanceAdministrativeRole');
-require('legacy/model/courseware/CourseInstanceEnrollment');
-require('legacy/model/courses/LegacyCommunityBasedCourseInstance');
-require('legacy/util/Store');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/courses/CourseInstance');
+require('internal/legacy/model/courses/CourseInstanceAdministrativeRole');
+require('internal/legacy/model/courseware/CourseInstanceEnrollment');
+require('internal/legacy/model/courses/LegacyCommunityBasedCourseInstance');
+require('internal/legacy/util/Store');
 require('./StateStore');
 
 module.exports = exports = Ext.define(

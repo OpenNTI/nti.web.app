@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { Viewer } = require('@nti/web-discussions');
 const { UserDataThreader } = require('@nti/lib-interfaces');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const ContainerContext = require('internal/legacy/app/context/ContainerContext');
+const Note = require('internal/legacy/model/Note');
 
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const ContainerContext = require('legacy/app/context/ContainerContext');
-const Note = require('legacy/model/Note');
+require('internal/legacy/overrides/ReactHarness');
 
-require('legacy/overrides/ReactHarness');
-
-require('legacy/app/windows/components/Header');
-require('legacy/app/windows/components/Loading');
+require('internal/legacy/app/windows/components/Header');
+require('internal/legacy/app/windows/components/Loading');
 require('./Main');
 
 function getReplies(record) {

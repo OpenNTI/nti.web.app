@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const Grade = require('internal/legacy/model/courseware/Grade');
+const Email = require('internal/legacy/model/Email');
 
-const WindowsActions = require('legacy/app/windows/Actions');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const Grade = require('legacy/model/courseware/Grade');
-const Email = require('legacy/model/Email');
-
-require('legacy/app/contentviewer/navigation/assignment/Admin');
+require('internal/legacy/app/contentviewer/navigation/assignment/Admin');
 
 const t = scoped(
 	'nti-web-app.course.assessment.components.admin.performance.Header',

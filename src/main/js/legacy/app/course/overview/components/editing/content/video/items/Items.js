@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
-const Video = require('legacy/model/Video');
-const VideoRoll = require('legacy/model/VideoRoll');
+const DndOrderingContainer = require('internal/legacy/mixins/dnd/OrderingContainer');
+const Video = require('internal/legacy/model/Video');
+const VideoRoll = require('internal/legacy/model/VideoRoll');
 
 require('./Item');
 

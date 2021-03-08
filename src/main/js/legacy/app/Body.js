@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
 const { isNTIID, encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { reportError } = require('@nti/web-client');
-
-const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
-const ContentBundle = require('legacy/model/ContentBundle');
-const ContentPackage = require('legacy/model/ContentPackage');
-const Community = require('legacy/model/Community');
-const User = require('legacy/model/User');
-const Globals = require('legacy/util/Globals');
+const DynamicFriendsList = require('internal/legacy/model/DynamicFriendsList');
+const ContentBundle = require('internal/legacy/model/ContentBundle');
+const ContentPackage = require('internal/legacy/model/ContentPackage');
+const Community = require('internal/legacy/model/Community');
+const User = require('internal/legacy/model/User');
+const Globals = require('internal/legacy/util/Globals');
 
 const LibraryStateStore = require('./library/StateStore');
 const NavigationStateStore = require('./navigation/StateStore');
@@ -16,10 +15,10 @@ const WindowsStateStore = require('./windows/StateStore');
 const WindowsActions = require('./windows/Actions');
 const ContextStateStore = require('./context/StateStore');
 
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
-require('legacy/mixins/Scrolling');
-require('legacy/util/Parsing');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
+require('internal/legacy/mixins/Scrolling');
+require('internal/legacy/util/Parsing');
 
 require('./library/Index');
 require('./bundle/Index');

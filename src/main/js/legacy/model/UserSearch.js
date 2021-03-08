@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const B64 = require('legacy/util/Base64');
-const Globals = require('legacy/util/Globals');
-const ShareEntity = require('legacy/mixins/ShareEntity');
-const ChatStateStore = require('legacy/app/chat/StateStore');
+const B64 = require('internal/legacy/util/Base64');
+const Globals = require('internal/legacy/util/Globals');
+const ShareEntity = require('internal/legacy/mixins/ShareEntity');
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
 
 const User = require('./User');
 
-require('legacy/mixins/Avatar');
-require('legacy/proxy/UserSearch');
+require('internal/legacy/mixins/Avatar');
+require('internal/legacy/proxy/UserSearch');
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.UserSearch', {

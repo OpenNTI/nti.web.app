@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 const NotificationActions = require('./Actions');
 const NotificationsStateStore = require('./StateStore');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./components/Stream');
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Index', {

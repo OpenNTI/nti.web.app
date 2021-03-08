@@ -1,14 +1,14 @@
 /* globals NextThought */
 /* eslint-env jest */
 require('../Actions.js');
-require('legacy/model/assessment/AssignmentSubmission');
-require('legacy/model/assessment/QuestionSetSubmission');
-require('legacy/model/assessment/Assignment');
-require('legacy/model/assessment/AssignmentPart');
-require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
-require('legacy/model/assessment/AssignmentSubmission');
+require('internal/legacy/model/assessment/AssignmentSubmission');
+require('internal/legacy/model/assessment/QuestionSetSubmission');
+require('internal/legacy/model/assessment/Assignment');
+require('internal/legacy/model/assessment/AssignmentPart');
+require('internal/legacy/model/assessment/UsersCourseAssignmentSavepointItem');
+require('internal/legacy/model/assessment/AssignmentSubmission');
 
-// const { guidGenerator } = require('legacy/util/Globals');
+// const { guidGenerator } = require('internal/legacy/util/Globals');
 const stub = (a, b, c) => jest.spyOn(a, b).mockImplementation(c || (() => {}));
 
 describe('Assessment Actions tests', () => {

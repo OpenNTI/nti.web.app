@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
+const ContainerContext = require('internal/legacy/app/context/ContainerContext');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Video = require('internal/legacy/app/context/types/Video');
+const LocationMeta = require('internal/legacy/cache/LocationMeta');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const ContentUtils = require('internal/legacy/util/Content');
+const StoreUtils = require('internal/legacy/util/Store');
 
-const ContainerContext = require('legacy/app/context/ContainerContext');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Video = require('legacy/app/context/types/Video');
-const LocationMeta = require('legacy/cache/LocationMeta');
-const UserRepository = require('legacy/cache/UserRepository');
-const ContentUtils = require('legacy/util/Content');
-const StoreUtils = require('legacy/util/Store');
-
-require('legacy/mixins/QuestionContent');
+require('internal/legacy/mixins/QuestionContent');
 require('./Post');
 require('./parts/NoteComment');
 

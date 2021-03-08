@@ -1,12 +1,12 @@
 /*eslint no-undef:1*/
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 require('../Base');
-require('legacy/mixins/ModelWithBodyContent');
+require('internal/legacy/mixins/ModelWithBodyContent');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback',

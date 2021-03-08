@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const StoreUtils = require('legacy/util/Store');
+const StoreUtils = require('internal/legacy/util/Store');
 
 /**
  * An interface to interact with batches that come back from the server,

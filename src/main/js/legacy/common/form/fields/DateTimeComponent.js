@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const { DateTimeField } = require('@nti/web-commons');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.common.form.fields.DateTimeComponent',

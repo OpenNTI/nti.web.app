@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const UserRepository = require('internal/legacy/cache/UserRepository');
 
-const UserRepository = require('legacy/cache/UserRepository');
-
-require('legacy/common/ux/Pointer');
+require('internal/legacy/common/ux/Pointer');
 require('./Preview');
 
 module.exports = exports = Ext.define(

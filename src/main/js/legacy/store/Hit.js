@@ -3,7 +3,7 @@ const Ext = require('@nti/extjs');
 require('../proxy/reader/Json');
 require('../filter/FilterGroup');
 require('../filter/Filter');
-require('legacy/model/Hit');
+require('internal/legacy/model/Hit');
 
 module.exports = exports = Ext.define('NextThought.store.Hit', {
 	extend: 'Ext.data.Store',

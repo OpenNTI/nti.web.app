@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const MoveInfo = require('internal/legacy/model/app/MoveInfo');
 
-const MoveInfo = require('legacy/model/app/MoveInfo');
-
-require('legacy/mixins/dnd/OrderingItem');
+require('internal/legacy/mixins/dnd/OrderingItem');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.video.items.Item',

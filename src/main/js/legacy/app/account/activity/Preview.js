@@ -1,17 +1,16 @@
 const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const ContentUtils = require('internal/legacy/util/Content');
+const DomUtils = require('internal/legacy/util/Dom');
+const { getString } = require('internal/legacy/util/Localization');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const ContentUtils = require('legacy/util/Content');
-const DomUtils = require('legacy/util/Dom');
-const { getString } = require('legacy/util/Localization');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/QuestionContent');
+require('internal/legacy/mixins/ProfileLinks');
 
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/QuestionContent');
-require('legacy/mixins/ProfileLinks');
-
-require('legacy/cache/LocationMeta');
-require('legacy/editor/Editor');
-require('legacy/layout/component/Natural');
+require('internal/legacy/cache/LocationMeta');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/layout/component/Natural');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.activity.Preview',

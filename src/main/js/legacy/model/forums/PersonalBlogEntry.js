@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { isMe } = require('legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 
 require('./HeadlineTopic');
-require('legacy/mixins/ModelWithPublish');
+require('internal/legacy/mixins/ModelWithPublish');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.forums.PersonalBlogEntry',

@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const SharingUtils = require('legacy/util/Sharing');
-const UserDataActions = require('legacy/app/userdata/Actions');
-const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-const lazy = require('legacy/util/lazy-require').get('Anchors', () =>
-	require('legacy/util/Anchors')
+const SharingUtils = require('internal/legacy/util/Sharing');
+const UserDataActions = require('internal/legacy/app/userdata/Actions');
+const MediaViewerStateStore = require('internal/legacy/app/mediaviewer/StateStore');
+const lazy = require('internal/legacy/util/lazy-require').get('Anchors', () =>
+	require('internal/legacy/util/Anchors')
 );
 
 require('../mixins/AnnotationsMixin');

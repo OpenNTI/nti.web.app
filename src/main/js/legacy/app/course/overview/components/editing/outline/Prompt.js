@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const CourseOutline = require('legacy/model/courses/CourseOutline');
+const CourseOutline = require('internal/legacy/model/courses/CourseOutline');
 
 const CalendarnodeEditor = require('./calendarnode/Editor');
 const ContentnodeEditor = require('./contentnode/Editor');

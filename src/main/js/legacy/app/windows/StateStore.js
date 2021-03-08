@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const Commons = require('@nti/web-commons');
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	extend: 'NextThought.common.StateStore',

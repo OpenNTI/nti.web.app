@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/model/User');
+require('internal/legacy/model/User');
 require('../../components/Header');
 
 module.exports = exports = Ext.define(

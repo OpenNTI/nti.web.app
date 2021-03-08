@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/common/components/BoundPanel');
-require('legacy/mixins/UserContainer');
-require('legacy/mixins/ProfileLinks');
-require('legacy/common/components/tool/Action');
+require('internal/legacy/common/components/BoundPanel');
+require('internal/legacy/mixins/UserContainer');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/common/components/tool/Action');
 
 require('./Card');
 

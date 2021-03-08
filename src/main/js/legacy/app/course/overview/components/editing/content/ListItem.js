@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { RemoveButton } = require('@nti/web-commons');
 const { Overview } = require('@nti/web-course');
-
-const Globals = require('legacy/util/Globals');
-const MoveInfo = require('legacy/model/app/MoveInfo');
+const Globals = require('internal/legacy/util/Globals');
+const MoveInfo = require('internal/legacy/model/app/MoveInfo');
 
 const getTargetId = require('../../../../util/get-target-id');
 const saveRequireStatus = require('../../../../util/save-require-status');
@@ -11,9 +10,9 @@ const { ROUTE_BUILDERS } = require('../../Constants');
 
 const ContentPrompt = require('./Prompt');
 
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/dnd/OrderingItem');
-require('legacy/mixins/Transition');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/dnd/OrderingItem');
+require('internal/legacy/mixins/Transition');
 require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');

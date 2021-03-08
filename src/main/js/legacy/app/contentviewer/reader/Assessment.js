@@ -1,24 +1,28 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { guidGenerator, isMe, swallow } = require('legacy/util/Globals');
-const DomUtils = require('legacy/util/Dom');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const {
+	guidGenerator,
+	isMe,
+	swallow,
+} = require('internal/legacy/util/Globals');
+const DomUtils = require('internal/legacy/util/Dom');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const TimeUtils = require('legacy/util/Time');
-const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
-const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
-const UsersCourseAssignmentHistoryItem = require('legacy/model/courseware/UsersCourseAssignmentHistoryItem');
+const TimeUtils = require('internal/legacy/util/Time');
+const AssignmentStatus = require('internal/legacy/app/course/assessment/AssignmentStatus');
+const AssessedQuestionSet = require('internal/legacy/model/assessment/AssessedQuestionSet');
+const UsersCourseAssignmentHistoryItem = require('internal/legacy/model/courseware/UsersCourseAssignmentHistoryItem');
 
 const ComponentOverlay = require('./ComponentOverlay');
 
-require('legacy/app/assessment/Scoreboard');
-require('legacy/app/assessment/SurveyHeader');
-require('legacy/app/assessment/Question');
-require('legacy/app/assessment/Poll');
-require('legacy/app/assessment/QuizSubmission');
-require('legacy/app/assessment/AssignmentFeedback');
+require('internal/legacy/app/assessment/Scoreboard');
+require('internal/legacy/app/assessment/SurveyHeader');
+require('internal/legacy/app/assessment/Question');
+require('internal/legacy/app/assessment/Poll');
+require('internal/legacy/app/assessment/QuizSubmission');
+require('internal/legacy/app/assessment/AssignmentFeedback');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.reader.Assessment',

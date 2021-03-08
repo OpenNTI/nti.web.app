@@ -1,21 +1,20 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const ImageZoomView = require('legacy/common/ux/ImageZoomView');
-const SlideDeck = require('legacy/common/ux/SlideDeck');
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-const CommonOverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');
-const CommonCard = require('legacy/common/components/cards/Card');
-const MediaviewerOverlayedPanel = require('legacy/app/mediaviewer/content/OverlayedPanel');
-const MediaviewerDeckOverlayedPanel = require('legacy/app/mediaviewer/content/deck/OverlayedPanel');
-const MediaviewerSlideVideo = require('legacy/app/mediaviewer/content/SlideVideo');
-const MediaviewerSlidedeck = require('legacy/app/mediaviewer/content/Slidedeck');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const ImageZoomView = require('internal/legacy/common/ux/ImageZoomView');
+const SlideDeck = require('internal/legacy/common/ux/SlideDeck');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
+const CommonOverlayedPanel = require('internal/legacy/common/components/cards/OverlayedPanel');
+const CommonCard = require('internal/legacy/common/components/cards/Card');
+const MediaviewerOverlayedPanel = require('internal/legacy/app/mediaviewer/content/OverlayedPanel');
+const MediaviewerDeckOverlayedPanel = require('internal/legacy/app/mediaviewer/content/deck/OverlayedPanel');
+const MediaviewerSlideVideo = require('internal/legacy/app/mediaviewer/content/SlideVideo');
+const MediaviewerSlidedeck = require('internal/legacy/app/mediaviewer/content/Slidedeck');
 
 const WBUtils = require('../../whiteboard/Utils');
 
-require('legacy/mixins/Searchable');
+require('internal/legacy/mixins/Searchable');
 
 require('./Panel');
 

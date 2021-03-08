@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
+const StoreActions = require('internal/legacy/app/store/Actions');
 
-const { getString } = require('legacy/util/Localization');
-const StoreActions = require('legacy/app/store/Actions');
-
-require('legacy/common/form/fields/SimpleTextField');
+require('internal/legacy/common/form/fields/SimpleTextField');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.components.parts.Pricing',

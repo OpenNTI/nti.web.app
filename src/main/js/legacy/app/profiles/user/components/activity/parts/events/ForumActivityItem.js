@@ -1,22 +1,21 @@
 const Ext = require('@nti/extjs');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const DomUtils = require('internal/legacy/util/Dom');
+const { isMe } = require('internal/legacy/util/Globals');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const ForumsActions = require('internal/legacy/app/forums/Actions');
+const ForumStore = require('internal/legacy/app/forums/StateStore');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const NTI = require('internal/legacy/store/NTI');
 
-const UserRepository = require('legacy/cache/UserRepository');
-const DomUtils = require('legacy/util/Dom');
-const { isMe } = require('legacy/util/Globals');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const ForumsActions = require('legacy/app/forums/Actions');
-const ForumStore = require('legacy/app/forums/StateStore');
-const WindowsActions = require('legacy/app/windows/Actions');
-const NTI = require('legacy/store/NTI');
-
-require('legacy/mixins/FlagActions');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/FlagActions');
-require('legacy/editor/Editor');
-require('legacy/layout/component/Natural');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/layout/component/Natural');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem',

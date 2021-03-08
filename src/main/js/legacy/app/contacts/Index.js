@@ -1,12 +1,10 @@
 const Ext = require('@nti/extjs');
 const Contacts = require('@nti/web-contacts');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const ComponentsNavigation = require('internal/legacy/common/components/Navigation');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
 
-require('legacy/overrides/ReactHarness');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const ComponentsNavigation = require('legacy/common/components/Navigation');
-
-require('legacy/mixins/Router');
 require('./components/TabView');
 require('./components/ContactTabView');
 require('./components/GroupTabView');

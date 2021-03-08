@@ -3,7 +3,7 @@ const { Overview } = require('@nti/web-course');
 
 const { MODAL_ROUTE_BUILDERS } = require('../Constants');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 const getOutlineNode = x => x.parent('isOutlineNode');
 

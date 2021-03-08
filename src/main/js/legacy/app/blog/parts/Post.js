@@ -1,17 +1,17 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const SharingUtils = require('legacy/util/Sharing');
-const { getString } = require('legacy/util/Localization');
-const Blog = require('legacy/store/Blog');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const { getString } = require('internal/legacy/util/Localization');
+const Blog = require('internal/legacy/store/Blog');
 
 const BlogActions = require('../Actions');
 
-require('legacy/mixins/Searchable');
+require('internal/legacy/mixins/Searchable');
 require('./old/Topic');
 require('./Comment');
 

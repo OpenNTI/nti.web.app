@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
-const OverviewGroup = require('legacy/model/courses/overview/Group');
+const Globals = require('internal/legacy/util/Globals');
+const DndOrderingContainer = require('internal/legacy/mixins/dnd/OrderingContainer');
+const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
 
 const OverviewgroupListItem = require('../overviewgroup/ListItem');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/mixins/FillScreen');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/mixins/FillScreen');
 require('../../controls/Add');
 
 module.exports = exports = Ext.define(

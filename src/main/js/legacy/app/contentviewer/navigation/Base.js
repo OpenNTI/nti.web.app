@@ -4,12 +4,11 @@ const { ControlBar } = require('@nti/web-content');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { StickyToolbar } = require('@nti/web-content');
 const { wait } = require('@nti/lib-commons');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
+const SearchStateStore = require('internal/legacy/app/search/StateStore');
+const BaseModel = require('internal/legacy/model/Base');
 
-const ReactHarness = require('legacy/overrides/ReactHarness');
-const SearchStateStore = require('legacy/app/search/StateStore');
-const BaseModel = require('legacy/model/Base');
-
-require('legacy/common/menus/JumpTo');
+require('internal/legacy/common/menus/JumpTo');
 require('./TableOfContents');
 
 const HASH_REGEX = /#/;

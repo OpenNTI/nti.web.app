@@ -3,25 +3,25 @@ const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
 const { getHistory } = require('@nti/web-routing');
 const { default: Logger } = require('@nti/util-logger');
-
-const { getString } = require('legacy/util/Localization');
-const B64 = require('legacy/util/Base64');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const B64 = require('internal/legacy/util/Base64');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const LoginStore = require('legacy/login/StateStore');
-const LoginActions = require('legacy/login/Actions');
-const LibraryActions = require('legacy/app/library/Actions');
-const StoreActions = require('legacy/app/store/Actions');
-const ChatActions = require('legacy/app/chat/Actions');
-const GroupActions = require('legacy/app/groups/Actions');
-const ContextStore = require('legacy/app/context/StateStore');
-const StateActions = require('legacy/common/state/Actions');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const UserDataActions = require('legacy/app/userdata/Actions');
+const LoginStore = require('internal/legacy/login/StateStore');
+const LoginActions = require('internal/legacy/login/Actions');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const StoreActions = require('internal/legacy/app/store/Actions');
+const ChatActions = require('internal/legacy/app/chat/Actions');
+const GroupActions = require('internal/legacy/app/groups/Actions');
+const ContextStore = require('internal/legacy/app/context/StateStore');
+const StateActions = require('internal/legacy/common/state/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const UserDataActions = require('internal/legacy/app/userdata/Actions');
 
-require('legacy/app/Index');
+require('internal/legacy/app/Index');
 
 const logger = Logger.get('app');
 const routeHistory = getHistory();

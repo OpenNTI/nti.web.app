@@ -1,17 +1,20 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const LibraryActions = require('legacy/app/library/Actions');
-const CoursesActions = require('legacy/app/library/courses/Actions');
-const User = require('legacy/model/User');
-const { isFeature } = require('legacy/util/Globals');
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const CoursesActions = require('internal/legacy/app/library/courses/Actions');
+const User = require('internal/legacy/model/User');
+const { isFeature } = require('internal/legacy/util/Globals');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 require('../Page');
-require('legacy/app/redeem/Redeem');
+require('internal/legacy/app/redeem/Redeem');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.courses.components.available.CoursePage',

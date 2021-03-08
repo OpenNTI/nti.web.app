@@ -1,4 +1,3 @@
-const Ext = require('@nti/extjs');
 const {
 	format,
 	isSameDay,
@@ -7,7 +6,8 @@ const {
 	isBefore,
 } = require('date-fns');
 
-const ContentUtils = require('legacy/util/Content');
+const Ext = require('@nti/extjs');
+const ContentUtils = require('internal/legacy/util/Content');
 
 require('./Item');
 

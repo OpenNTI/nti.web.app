@@ -1,19 +1,19 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const { getString } = require('legacy/util/Localization');
-const ContentUtils = require('legacy/util/Content');
-const Globals = require('legacy/util/Globals');
-const PageSource = require('legacy/util/PageSource');
-const RealPageSource = require('legacy/util/RealPageSource');
-const TopicNode = require('legacy/model/TopicNode');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const { getString } = require('internal/legacy/util/Localization');
+const ContentUtils = require('internal/legacy/util/Content');
+const Globals = require('internal/legacy/util/Globals');
+const PageSource = require('internal/legacy/util/PageSource');
+const RealPageSource = require('internal/legacy/util/RealPageSource');
+const TopicNode = require('internal/legacy/model/TopicNode');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/util/Parsing');
-require('legacy/app/navigation/path/Actions');
+require('internal/legacy/util/Parsing');
+require('internal/legacy/app/navigation/path/Actions');
 
 const EMPTY_CONTENT_PACKAGE = {
 	title: 'Untitled Reading',

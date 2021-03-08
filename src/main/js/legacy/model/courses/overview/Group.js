@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
 require('../../Base');
-require('legacy/mixins/OrderedContents');
+require('internal/legacy/mixins/OrderedContents');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.courses.overview.Group',

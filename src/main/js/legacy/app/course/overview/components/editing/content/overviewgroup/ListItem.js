@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
-const MoveInfo = require('legacy/model/app/MoveInfo');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const DndOrderingContainer = require('internal/legacy/mixins/dnd/OrderingContainer');
+const MoveInfo = require('internal/legacy/model/app/MoveInfo');
 
 const ContentlinkListItem = require('../contentlink/ListItem');
 const DiscussionListItem = require('../discussion/ListItem');
@@ -19,9 +18,9 @@ const WebinarListItem = require('../webinar/ListItem');
 
 const styles = require('./ListItem.css');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/mixins/dnd/OrderingItem');
-require('legacy/mixins/Transition');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/mixins/dnd/OrderingItem');
+require('internal/legacy/mixins/Transition');
 require('../../controls/Add');
 require('../../controls/Edit');
 require('./Preview');

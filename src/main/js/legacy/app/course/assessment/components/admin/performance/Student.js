@@ -2,10 +2,9 @@ const Ext = require('@nti/extjs');
 const { ignoreMissingLink, wait } = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
+const { getString } = require('internal/legacy/util/Localization');
 
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/mixins/State');
+require('internal/legacy/mixins/State');
 require('../Grid');
 require('./Header');
 

@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const PathActions = require('legacy/app/navigation/path/Actions');
-const { getURL } = require('legacy/util/Globals');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.context.components.list.Content',

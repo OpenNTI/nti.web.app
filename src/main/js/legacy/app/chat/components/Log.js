@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const Globals = require('legacy/util/Globals');
-const MessageInfo = require('legacy/model/MessageInfo');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const Globals = require('internal/legacy/util/Globals');
+const MessageInfo = require('internal/legacy/model/MessageInfo');
 
 require('./log/Entry');
 require('./log/NotificationEntry');

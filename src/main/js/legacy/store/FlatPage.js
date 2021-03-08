@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Note = require('legacy/model/Note');
+const Note = require('internal/legacy/model/Note');
 
 module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	extend: 'Ext.data.Store',

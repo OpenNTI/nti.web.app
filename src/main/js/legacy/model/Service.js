@@ -1,16 +1,17 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const { getString } = require('legacy/util/Localization');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
-	.get('ParseUtils', () => require('legacy/util/Parsing'));
+const { getString } = require('internal/legacy/util/Localization');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('UserDataActions', () =>
+		require('internal/legacy/app/userdata/Actions')
+	)
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'));
 
 const Community = require('./Community');
 
-require('legacy/model/Base');
-require('legacy/model/PageInfo');
+require('internal/legacy/model/Base');
+require('internal/legacy/model/PageInfo');
 
 const { guidGenerator, getURL } = Globals;
 

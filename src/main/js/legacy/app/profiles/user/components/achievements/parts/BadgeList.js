@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
-const WindowsActions = require('legacy/app/windows/Actions');
-
-require('legacy/app/badge/Window');
-require('legacy/mixins/ExportBadge');
-require('legacy/model/openbadges/Badge');
+require('internal/legacy/app/badge/Window');
+require('internal/legacy/mixins/ExportBadge');
+require('internal/legacy/model/openbadges/Badge');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.achievements.parts.BadgeList',

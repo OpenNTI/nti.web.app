@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
+const FriendsListStore = require('internal/legacy/store/FriendsList');
+const ContactsStore = require('internal/legacy/store/Contacts');
 
-const FriendsListStore = require('legacy/store/FriendsList');
-const ContactsStore = require('legacy/store/Contacts');
-
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 require('../chat/StateStore');
 
 function syncFriendsList(ext, lib) {

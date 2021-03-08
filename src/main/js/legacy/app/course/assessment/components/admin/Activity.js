@@ -1,14 +1,14 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const { isMe } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { isMe } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { getFormattedString } = require('legacy/util/Localization');
+const { getFormattedString } = require('internal/legacy/util/Localization');
 
-require('legacy/model/courseware/CourseActivity');
+require('internal/legacy/model/courseware/CourseActivity');
 require('../student/Activity');
 
 module.exports = exports = Ext.define(

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+
 import { Event } from '@nti/web-calendar';
 import { decorate } from '@nti/lib-commons';
 import { Layouts } from '@nti/web-commons';
-import classnames from 'classnames/bind';
 
 import TypeRegistry from '../Registry';
 

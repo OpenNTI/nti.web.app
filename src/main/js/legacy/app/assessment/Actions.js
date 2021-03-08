@@ -1,17 +1,16 @@
 const Ext = require('@nti/extjs');
 const { Events } = require('@nti/web-session');
 const { scoped } = require('@nti/lib-locale');
-
-const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
-const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');
-const AssessmentQuestionSubmission = require('legacy/model/assessment/QuestionSubmission');
-const AssessmentSurveySubmission = require('legacy/model/assessment/SurveySubmission');
-const AssessmentPollSubmission = require('legacy/model/assessment/PollSubmission');
+const AssessmentQuestionSetSubmission = require('internal/legacy/model/assessment/QuestionSetSubmission');
+const AssessmentAssignmentSubmission = require('internal/legacy/model/assessment/AssignmentSubmission');
+const AssessmentQuestionSubmission = require('internal/legacy/model/assessment/QuestionSubmission');
+const AssessmentSurveySubmission = require('internal/legacy/model/assessment/SurveySubmission');
+const AssessmentPollSubmission = require('internal/legacy/model/assessment/PollSubmission');
 
 const ContextStateStore = require('../context/StateStore');
 
-require('legacy/common/Actions');
-require('legacy/model/assessment/UsersCourseInquiryItemResponse');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/assessment/UsersCourseInquiryItemResponse');
 
 const t = scoped('nti-web-app.assessment.Actions', {
 	assignments: {

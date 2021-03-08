@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const getCssValue = require('legacy/util/get-css-property-value');
+const getCssValue = require('internal/legacy/util/get-css-property-value');
 
 require('./MostRecent');
 

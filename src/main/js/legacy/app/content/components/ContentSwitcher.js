@@ -8,8 +8,8 @@ const { PublishCourse } = require('@nti/web-course');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 
-require('legacy/mixins/State');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/State');
+require('internal/legacy/overrides/ReactHarness');
 
 const DEFAULT = 'default';
 

@@ -1,11 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
 const AccountActions = require('../../../account/Actions');
 const CoursesStateStore = require('../../../library/courses/StateStore');
 
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.components.Confirmation',

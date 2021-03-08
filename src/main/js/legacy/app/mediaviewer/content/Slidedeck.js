@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const SlideDeck = require('legacy/common/ux/SlideDeck');
+const SlideDeck = require('internal/legacy/common/ux/SlideDeck');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.content.Slidedeck',

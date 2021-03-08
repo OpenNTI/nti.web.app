@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const PromptActions = require('legacy/app/prompt/Actions');
+const { getString } = require('internal/legacy/util/Localization');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
 
 module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	showExportMenu: function (record, itemEl) {

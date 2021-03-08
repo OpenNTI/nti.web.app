@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const { isFeature } = require('legacy/util/Globals');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 require('./types/Content');
 require('./types/Poll');

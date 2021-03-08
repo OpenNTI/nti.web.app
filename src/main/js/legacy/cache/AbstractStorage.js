@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const B64 = require('legacy/util/Base64');
+const B64 = require('internal/legacy/util/Base64');
 
 function prefix(v) {
 	if (!prefix.val) {

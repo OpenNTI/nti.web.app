@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
-const { getURL } = require('legacy/util/Globals');
+const ContentUtils = require('internal/legacy/util/Content');
+const { getURL } = require('internal/legacy/util/Globals');
 
 const UserdataActions = require('../../userdata/Actions');
 

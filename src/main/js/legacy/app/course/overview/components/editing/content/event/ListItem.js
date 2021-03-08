@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const CalendarEventRef = require('legacy/model/calendar/CalendarEventRef');
+const CalendarEventRef = require('internal/legacy/model/calendar/CalendarEventRef');
 
 require('../../../parts/ContentLink');
 require('../ListItem');

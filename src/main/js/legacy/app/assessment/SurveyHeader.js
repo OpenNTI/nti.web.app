@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { Launch } = require('@nti/web-reports');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 require('../contentviewer/overlay/Panel');
 require('../../overrides/ReactHarness');

@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { InlineEditor } = require('@nti/web-assignment-editor');
 
-require('legacy/common/form/fields/DateTimeField');
+require('internal/legacy/common/form/fields/DateTimeField');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.editing.InlineEditor',

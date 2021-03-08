@@ -1,10 +1,12 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
-
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const TimeUtils = require('legacy/util/Time');
-const Globals = require('legacy/util/Globals');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const TimeUtils = require('internal/legacy/util/Time');
+const Globals = require('internal/legacy/util/Globals');
 
 const AssignmentStatus = require('../../AssignmentStatus');
 
@@ -13,7 +15,7 @@ const t = scoped('nti-web-app.course.assessment.components.admin.Grid', {
 	graded: 'Graded %(date)s',
 });
 
-require('legacy/mixins/grid-feature/GradeInputs');
+require('internal/legacy/mixins/grid-feature/GradeInputs');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.Grid',

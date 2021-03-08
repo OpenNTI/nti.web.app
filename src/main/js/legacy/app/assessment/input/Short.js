@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/QuestionContent');
+require('internal/legacy/mixins/QuestionContent');
 require('./Base');
 
 module.exports = exports = Ext.define(

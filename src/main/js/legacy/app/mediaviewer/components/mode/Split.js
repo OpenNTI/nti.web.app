@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Video = require('legacy/app/video/Video');
+const Video = require('internal/legacy/app/video/Video');
 
 require('./SmallVideo');
 

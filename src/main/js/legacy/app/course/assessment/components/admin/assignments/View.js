@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const PageSource = require('internal/legacy/util/PageSource');
 
-const PageSource = require('legacy/util/PageSource');
-
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./Root');
 require('./Assignment');
 

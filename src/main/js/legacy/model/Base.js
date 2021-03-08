@@ -4,18 +4,18 @@ const { EventEmitter } = require('events');
 
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const TimeUtils = require('legacy/util/Time');
+const TimeUtils = require('internal/legacy/util/Time');
 
-require('legacy/mixins/HasLinks');
-require('legacy/util/Time');
-require('legacy/proxy/Rest');
+require('internal/legacy/mixins/HasLinks');
+require('internal/legacy/util/Time');
+require('internal/legacy/proxy/Rest');
 
-require('legacy/model/converters');
+require('internal/legacy/model/converters');
 
 const MODIFICATION_BUS = new EventEmitter();
 const INTERFACE_INSTANCE = Symbol('Interface Instance');

@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
-const GroupsActions = require('legacy/app/groups/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
+const { getString } = require('internal/legacy/util/Localization');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
 
 const ChatActions = require('../../../chat/Actions');
 
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ProfileLinks');
 require('../../activity/Popout');
 require('./GroupList');
 require('./Options');

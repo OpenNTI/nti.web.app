@@ -1,21 +1,20 @@
 const Ext = require('@nti/extjs');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const MediaViewerActions = require('internal/legacy/app/mediaviewer/Actions');
+const AnchorResolver = require('internal/legacy/app/mediaviewer/components/reader/AnchorResolver');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const Video = require('internal/legacy/model/Video');
+const Cue = require('internal/legacy/model/transcript/Cue');
+const TranscriptItem = require('internal/legacy/model/transcript/TranscriptItem');
 
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const Video = require('legacy/model/Video');
-const Cue = require('legacy/model/transcript/Cue');
-const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
-
-require('legacy/app/context/components/Default');
-require('legacy/app/context/components/VideoContext');
-require('legacy/app/context/components/cards/Content');
-require('legacy/app/context/components/cards/Question');
-require('legacy/app/context/components/cards/RelatedWork');
-require('legacy/app/context/components/cards/Slide');
-require('legacy/app/context/components/cards/Video');
-require('legacy/app/context/components/list/Video');
+require('internal/legacy/app/context/components/Default');
+require('internal/legacy/app/context/components/VideoContext');
+require('internal/legacy/app/context/components/cards/Content');
+require('internal/legacy/app/context/components/cards/Question');
+require('internal/legacy/app/context/components/cards/RelatedWork');
+require('internal/legacy/app/context/components/cards/Slide');
+require('internal/legacy/app/context/components/cards/Video');
+require('internal/legacy/app/context/components/list/Video');
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 	videoPlayerTpl: new Ext.XTemplate(

@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const ContentUtils = require('internal/legacy/util/Content');
 
-const ContentUtils = require('legacy/util/Content');
-
-require('legacy/mixins/QuestionContent');
+require('internal/legacy/mixins/QuestionContent');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.PartContent',

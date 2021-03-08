@@ -2,14 +2,13 @@ const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
 const { Store, Input } = require('@nti/web-search');
-
-const { default: Search } = require('nti-web-components-search');
+const { default: Search } = require('internal/nti-web-components-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
 const styles = require('./SearchBar.css');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
 
 const SearchStore = Store.getGlobal();

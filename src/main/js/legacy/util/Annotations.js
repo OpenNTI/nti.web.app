@@ -1,13 +1,12 @@
 const Ext = require('@nti/extjs');
+const User = require('internal/legacy/model/User');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('Anchors', () => require('internal/legacy/util/Anchors'))
+	.get('RectUtils', () => require('internal/legacy/util/Rects'))
+	.get('Note', () => require('internal/legacy/model/Note'))
+	.get('Highlight', () => require('internal/legacy/model/Highlight'));
 
-const User = require('legacy/model/User');
-const lazy = require('legacy/util/lazy-require')
-	.get('Anchors', () => require('legacy/util/Anchors'))
-	.get('RectUtils', () => require('legacy/util/Rects'))
-	.get('Note', () => require('legacy/model/Note'))
-	.get('Highlight', () => require('legacy/model/Highlight'));
-
-require('legacy/app/whiteboard/Canvas');
+require('internal/legacy/app/whiteboard/Canvas');
 
 module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	// Recursively go up to the root of the a note.

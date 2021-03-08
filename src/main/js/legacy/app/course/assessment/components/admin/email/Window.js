@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Email = require('internal/legacy/model/Email');
 
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Email = require('legacy/model/Email');
-
-require('legacy/app/windows/components/Header');
-require('legacy/app/windows/components/Loading');
+require('internal/legacy/app/windows/components/Header');
+require('internal/legacy/app/windows/components/Loading');
 require('./Editor');
 
 module.exports = exports = Ext.define(

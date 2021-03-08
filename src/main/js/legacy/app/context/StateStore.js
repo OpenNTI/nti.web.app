@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 function decodeObjectPart(part) {
 	const decoded = decodeURIComponent(part);

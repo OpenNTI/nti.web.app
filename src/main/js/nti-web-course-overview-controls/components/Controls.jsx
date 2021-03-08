@@ -1,8 +1,9 @@
 import './Controls.scss';
 import React from 'react';
 import cx from 'classnames';
-import { scoped } from '@nti/lib-locale';
 import PropTypes from 'prop-types';
+
+import { scoped } from '@nti/lib-locale';
 import { ControlBar, Button } from '@nti/web-commons';
 
 const PREVIEW = 'preview';

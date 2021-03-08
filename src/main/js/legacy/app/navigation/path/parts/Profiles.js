@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const { isFeature } = require('legacy/util/Globals');
-const User = require('legacy/model/User');
-const Badge = require('legacy/model/openbadges/Badge');
-const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
-const lazy = require('legacy/util/lazy-require').get('ContextStateStore', () =>
-	require('legacy/app/context/StateStore')
+const { isFeature } = require('internal/legacy/util/Globals');
+const User = require('internal/legacy/model/User');
+const Badge = require('internal/legacy/model/openbadges/Badge');
+const DynamicFriendsList = require('internal/legacy/model/DynamicFriendsList');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ContextStateStore',
+	() => require('internal/legacy/app/context/StateStore')
 );
 
 module.exports = exports = Ext.define(

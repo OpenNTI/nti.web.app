@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const CoursesStateStore = require('../library/courses/StateStore');
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.course.StateStore', {
 	extend: 'NextThought.common.StateStore',

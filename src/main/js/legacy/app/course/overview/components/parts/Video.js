@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
 
-const PlaylistItem = require('legacy/model/PlaylistItem');
-
-require('legacy/app/video/VideoPlayer');
+require('internal/legacy/app/video/VideoPlayer');
 require('./Curtain');
 
 module.exports = exports = Ext.define(

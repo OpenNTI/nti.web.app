@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const DiscussionRef = require('legacy/model/DiscussionRef');
-const Globals = require('legacy/util/Globals');
+const DiscussionRef = require('internal/legacy/model/DiscussionRef');
+const Globals = require('internal/legacy/util/Globals');
 
 const EditingActions = require('../../Actions');
 
 require('../Editor');
-require('legacy/model/DiscussionRef');
+require('internal/legacy/model/DiscussionRef');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor',

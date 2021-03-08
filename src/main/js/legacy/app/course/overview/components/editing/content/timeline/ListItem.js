@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Timeline = require('legacy/model/Timeline');
+const Timeline = require('internal/legacy/model/Timeline');
 
 require('../../../parts/Timeline');
 require('../ListItem');

@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { getString } = require('legacy/util/Localization');
-const UserRepository = require('legacy/cache/UserRepository');
-const DomUtils = require('legacy/util/Dom');
+const { getString } = require('internal/legacy/util/Localization');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const DomUtils = require('internal/legacy/util/Dom');
 
 const BlogActions = require('../Actions');
 
-require('legacy/common/form/fields/FilePicker');
-require('legacy/editor/Editor');
+require('internal/legacy/common/form/fields/FilePicker');
+require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 	extend: 'NextThought.editor.Editor',

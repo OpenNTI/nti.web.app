@@ -1,10 +1,11 @@
-const Ext = require('@nti/extjs');
 const React = require('react');
+
+const Ext = require('@nti/extjs');
 const { ProfileUpdate } = require('@nti/web-profiles');
 const { Prompt } = require('@nti/web-commons');
 
-require('legacy/common/window/Window');
-require('legacy/overrides/ReactHarness.js');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/overrides/ReactHarness.js');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.profile-update.Window',

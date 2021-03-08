@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
-
-const Note = require('legacy/model/Note');
-const lazy = require('legacy/util/lazy-require')
+const Note = require('internal/legacy/model/Note');
+const lazy = require('internal/legacy/util/lazy-require')
 	.get('CourseOutlineContentNode', () =>
 		require('./CourseOutlineContentNode')
 	)
-	.get('ParseUtils', () => require('legacy/util/Parsing'));
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'));
 
-require('legacy/mixins/OrderedContents');
-require('legacy/mixins/DurationCache');
+require('internal/legacy/mixins/OrderedContents');
+require('internal/legacy/mixins/DurationCache');
 
 require('../../courses/overview/Lesson');
 require('../../Base');

@@ -1,23 +1,22 @@
 const Ext = require('@nti/extjs');
+const PreferenceBase = require('internal/legacy/model/preference/Base');
+const PreferenceRoot = require('internal/legacy/model/preference/Root');
 
-const PreferenceBase = require('legacy/model/preference/Base');
-const PreferenceRoot = require('legacy/model/preference/Root');
-
-require('legacy/model/preference/Badges');
-require('legacy/model/preference/badges/Base');
-require('legacy/model/preference/badges/Course');
-require('legacy/model/preference/ChatPresence');
-require('legacy/model/preference/chatpresence/Active');
-require('legacy/model/preference/chatpresence/Available');
-require('legacy/model/preference/chatpresence/Away');
-require('legacy/model/preference/chatpresence/Base');
-require('legacy/model/preference/chatpresence/DND');
-require('legacy/model/preference/Gradebook');
-require('legacy/model/preference/PushNotifications');
-require('legacy/model/preference/pushnotifications/Base');
-require('legacy/model/preference/pushnotifications/Email');
-require('legacy/model/preference/WebApp');
-require('legacy/proxy/Preference');
+require('internal/legacy/model/preference/Badges');
+require('internal/legacy/model/preference/badges/Base');
+require('internal/legacy/model/preference/badges/Course');
+require('internal/legacy/model/preference/ChatPresence');
+require('internal/legacy/model/preference/chatpresence/Active');
+require('internal/legacy/model/preference/chatpresence/Available');
+require('internal/legacy/model/preference/chatpresence/Away');
+require('internal/legacy/model/preference/chatpresence/Base');
+require('internal/legacy/model/preference/chatpresence/DND');
+require('internal/legacy/model/preference/Gradebook');
+require('internal/legacy/model/preference/PushNotifications');
+require('internal/legacy/model/preference/pushnotifications/Base');
+require('internal/legacy/model/preference/pushnotifications/Email');
+require('internal/legacy/model/preference/WebApp');
+require('internal/legacy/proxy/Preference');
 
 module.exports = exports = Ext.define('NextThought.preference.Manager', {
 	constructor: function (config) {

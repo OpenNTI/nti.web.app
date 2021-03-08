@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const UserRepository = require('legacy/cache/UserRepository');
-const TimeUtils = require('legacy/util/Time');
-const { isMe } = require('legacy/util/Globals');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const TimeUtils = require('internal/legacy/util/Time');
+const { isMe } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem',

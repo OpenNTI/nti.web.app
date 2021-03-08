@@ -1,7 +1,7 @@
-const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
 
-const Globals = require('legacy/util/Globals');
+const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
 
 require('./Base');
 

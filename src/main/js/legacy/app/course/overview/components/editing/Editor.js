@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { getFormattedString } = require('legacy/util/Localization');
-const PromptActions = require('legacy/app/prompt/Actions');
-const Form = require('legacy/common/form/Form');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
+const { getFormattedString } = require('internal/legacy/util/Localization');
+const PromptActions = require('internal/legacy/app/prompt/Actions');
+const Form = require('internal/legacy/common/form/Form');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
 
 const EditingActions = require('./Actions');
 

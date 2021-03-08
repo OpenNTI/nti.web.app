@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/common/ux/ComponentReferencing');
+require('internal/legacy/common/ux/ComponentReferencing');
 require('./Container');
 require('./Editor');
 require('./Item');

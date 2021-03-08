@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const Actions = require('legacy/app/groups/Actions');
+const Actions = require('internal/legacy/app/groups/Actions');
 
 module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 	attachAddGroupControl: function (parent, tag) {

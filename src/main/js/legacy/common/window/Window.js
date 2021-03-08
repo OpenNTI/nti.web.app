@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
 
-const Globals = require('legacy/util/Globals');
-const RangeUtils = require('legacy/util/Ranges');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-
-require('legacy/util/Ranges');
+require('internal/legacy/util/Ranges');
 require('./Header');
 
 module.exports = exports = Ext.define('NextThought.common.window.Window', {

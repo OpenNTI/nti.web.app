@@ -2,22 +2,22 @@ const Ext = require('@nti/extjs');
 const { ControlBar, NavigationBar } = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
-
-const ChatStateStore = require('legacy/app/chat/StateStore');
-const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Grade = require('legacy/model/courseware/Grade');
-const Email = require('legacy/model/Email');
-const ReactHarness = require('legacy/overrides/ReactHarness');
-const { isFeature } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
+const AssignmentStatus = require('internal/legacy/app/course/assessment/AssignmentStatus');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Grade = require('internal/legacy/model/courseware/Grade');
+const Email = require('internal/legacy/model/Email');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
+const { isFeature } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const TimeUtils = require('legacy/util/Time');
+const TimeUtils = require('internal/legacy/util/Time');
 
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/ProfileLinks');
-require('legacy/mixins/ChatLinks');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ChatLinks');
 require('../Base');
 
 const t = scoped('nti-web-app.contentviewer.navigation.assignment.Admin', {

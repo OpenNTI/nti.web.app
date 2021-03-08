@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const DomUtils = require('internal/legacy/util/Dom');
+const Launcher = require('internal/legacy/common/components/cards/Launcher');
 
-const DomUtils = require('legacy/util/Dom');
-const Launcher = require('legacy/common/components/cards/Launcher');
-
-require('legacy/app/contentviewer/overlay/Panel');
-require('legacy/common/ux/ImagePopout');
+require('internal/legacy/app/contentviewer/overlay/Panel');
+require('internal/legacy/common/ux/ImagePopout');
 
 require('./Roll');
 

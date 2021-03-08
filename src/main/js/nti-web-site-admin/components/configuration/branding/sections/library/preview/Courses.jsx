@@ -1,6 +1,7 @@
 import React from 'react';
-import { Presentation, Text } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Presentation, Text } from '@nti/web-commons';
 
 import Collection from './Collection';
 import styles from './Courses.css';

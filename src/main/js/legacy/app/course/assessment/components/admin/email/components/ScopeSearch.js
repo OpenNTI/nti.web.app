@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/app/sharing/components/ShareSearch');
+require('internal/legacy/app/sharing/components/ShareSearch');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.email.components.ScopeSearch',

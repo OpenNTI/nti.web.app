@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('Base', () =>
-	require('legacy/model/Base')
+const lazy = require('internal/legacy/util/lazy-require').get('Base', () =>
+	require('internal/legacy/model/Base')
 );
 
 require('./Base');

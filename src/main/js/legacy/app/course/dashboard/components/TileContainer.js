@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const lazy = require('legacy/util/lazy-require').get('DashboardIndex', () =>
-	require('../Index')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'DashboardIndex',
+	() => require('../Index')
 );
 require('./AbstractView');
 

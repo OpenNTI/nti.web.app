@@ -1,13 +1,12 @@
 require('./index.scss');
 const Ext = require('@nti/extjs');
+const Resources = require('internal/nti-web-course-resources');
+const SearchStateStore = require('internal/legacy/app/search/StateStore');
+const ContentActions = require('internal/legacy/app/content/Actions');
+const AssessmentActions = require('internal/legacy/app/course/assessment/Actions');
 
-const Resources = require('nti-web-course-resources');
-const SearchStateStore = require('legacy/app/search/StateStore');
-const ContentActions = require('legacy/app/content/Actions');
-const AssessmentActions = require('legacy/app/course/assessment/Actions');
-
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/Router');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.resources.Index',

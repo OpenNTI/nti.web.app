@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
+const ContentUtils = require('internal/legacy/util/Content');
 
 require('../../itemselection/Index');
 

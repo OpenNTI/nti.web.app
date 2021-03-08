@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const { isFeature } = require('legacy/util/Globals');
+const { isFeature } = require('internal/legacy/util/Globals');
 
 const ContactsActions = require('../../Actions');
 
-require('legacy/mixins/ContactSearchMixin');
+require('internal/legacy/mixins/ContactSearchMixin');
 require('./Search');
 
 module.exports = exports = Ext.define(

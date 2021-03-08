@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { scoped } from '@nti/lib-locale';
 import { DateTime } from '@nti/web-commons';
-import cx from 'classnames';
 
 import styles from './InviteDate.css';
 

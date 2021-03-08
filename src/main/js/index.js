@@ -1,6 +1,7 @@
 import './index.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { addFeatureCheckClasses } from '@nti/lib-dom';
 import { ConflictResolutionHandler, Updates, Offline } from '@nti/web-commons';
 import { init as initLocale } from '@nti/lib-locale';
@@ -33,4 +34,4 @@ if (typeof document !== 'undefined') {
 	ReactDOM.render(<Offline.Toasts />, document.createElement('div'));
 }
 
-import 'legacy'; //kick start the app (the core is still defined in extjs)
+import 'internal/legacy'; //kick start the app (the core is still defined in extjs)

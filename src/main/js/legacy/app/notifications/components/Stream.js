@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 require('./List');
 require('./Header');
 

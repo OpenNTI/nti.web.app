@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 const { ContentHighlighting } = require('@nti/web-commons');
 
-require('legacy/common/StateStore');
-require('legacy/store/Hit');
+require('internal/legacy/common/StateStore');
+require('internal/legacy/store/Hit');
 
 module.exports = exports = Ext.define('NextThought.app.search.StateStore', {
 	extend: 'NextThought.common.StateStore',

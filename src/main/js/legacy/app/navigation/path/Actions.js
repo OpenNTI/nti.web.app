@@ -1,18 +1,19 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require')
-	.get('ContextStateStore', () => require('legacy/app/context/StateStore'))
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('ContextStateStore', () =>
+		require('internal/legacy/app/context/StateStore')
+	)
 	.get('PathStateStore', () => require('./StateStore'))
-	.get('ParseUtils', () => require('legacy/util/Parsing'));
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'));
 
 const PartsAssignment = require('./parts/Assignment');
 const PartsContent = require('./parts/Content');
 const PartsForums = require('./parts/Forums');
 const PartsProfiles = require('./parts/Profiles');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 const PARTS = [PartsAssignment, PartsContent, PartsForums, PartsProfiles];
 

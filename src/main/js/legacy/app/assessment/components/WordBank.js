@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const DomUtils = require('legacy/util/Dom');
+const DomUtils = require('internal/legacy/util/Dom');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.components.WordBank',

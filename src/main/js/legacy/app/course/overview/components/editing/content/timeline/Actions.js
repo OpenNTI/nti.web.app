@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 
 require('../../Actions');
-require('legacy/model/Timeline');
+require('internal/legacy/model/Timeline');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.timeline.Actions',

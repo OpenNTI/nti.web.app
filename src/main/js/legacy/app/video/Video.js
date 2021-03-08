@@ -1,24 +1,23 @@
 const Ext = require('@nti/extjs');
-
-const AnalyticsUtil = require('legacy/util/Analytics');
-const Globals = require('legacy/util/Globals');
-const ObjectUtils = require('legacy/util/Object');
-const PlaylistItem = require('legacy/model/PlaylistItem');
-const VideoPosters = require('legacy/model/resolvers/VideoPosters');
-const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
-const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
-const Kaltura = require('legacy/model/resolvers/videoservices/Kaltura');
-const Wistia = require('legacy/model/resolvers/videoservices/Wistia');
-const HTML5Player = require('legacy/util/media/HTML5Player');
-const HTML5VideoPlayer = require('legacy/util/media/HTML5VideoPlayer');
-const KalturaPlayer = require('legacy/util/media/KalturaPlayer');
-const VimeoPlayer = require('legacy/util/media/VimeoPlayer');
-const YouTubePlayer = require('legacy/util/media/YouTubePlayer');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const Globals = require('internal/legacy/util/Globals');
+const ObjectUtils = require('internal/legacy/util/Object');
+const PlaylistItem = require('internal/legacy/model/PlaylistItem');
+const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
+const Vimeo = require('internal/legacy/model/resolvers/videoservices/Vimeo');
+const Youtube = require('internal/legacy/model/resolvers/videoservices/Youtube');
+const Kaltura = require('internal/legacy/model/resolvers/videoservices/Kaltura');
+const Wistia = require('internal/legacy/model/resolvers/videoservices/Wistia');
+const HTML5Player = require('internal/legacy/util/media/HTML5Player');
+const HTML5VideoPlayer = require('internal/legacy/util/media/HTML5VideoPlayer');
+const KalturaPlayer = require('internal/legacy/util/media/KalturaPlayer');
+const VimeoPlayer = require('internal/legacy/util/media/VimeoPlayer');
+const YouTubePlayer = require('internal/legacy/util/media/YouTubePlayer');
 
 const PlayStates = require('./PlayStates');
 const SupportedVideoTypes = require('./SupportedVideoTypes');
 
-require('legacy/mixins/InstanceTracking');
+require('internal/legacy/mixins/InstanceTracking');
 
 const MEDIA = [
 	HTML5Player,

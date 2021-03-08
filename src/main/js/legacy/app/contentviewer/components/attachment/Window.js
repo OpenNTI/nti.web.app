@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const PromptStateStore = require('legacy/app/prompt/StateStore');
+const Globals = require('internal/legacy/util/Globals');
+const PromptStateStore = require('internal/legacy/app/prompt/StateStore');
 
 require('./Panel');
 

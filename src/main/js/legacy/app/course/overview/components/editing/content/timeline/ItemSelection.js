@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/model/TimelineRef');
+require('internal/legacy/model/TimelineRef');
 require('../discussion/ItemSelection');
 
 module.exports = exports = Ext.define(

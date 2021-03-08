@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
 const { default: translate } = require('@nti/lib-locale');
+const { getString } = require('internal/legacy/util/Localization');
 
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/util/Globals');
+require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.overrides.XTemplate', {
 	override: 'Ext.XTemplate',

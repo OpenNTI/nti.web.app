@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const Delegation = require('internal/legacy/mixins/Delegation');
 
-const Delegation = require('legacy/mixins/Delegation');
-
-require('legacy/util/Promise');
+require('internal/legacy/util/Promise');
 
 module.exports = exports = Ext.define(
 	'NextThought.overrides.Component',

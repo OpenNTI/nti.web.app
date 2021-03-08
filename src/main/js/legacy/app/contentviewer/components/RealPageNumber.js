@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { VisibleComponentTracker } = require('@nti/web-commons');
-
-const DomUtils = require('legacy/util/Dom');
+const DomUtils = require('internal/legacy/util/Dom');
 
 require('../overlay/Panel');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.components.RealPageNumber',

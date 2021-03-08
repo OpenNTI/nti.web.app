@@ -2,11 +2,10 @@ const Ext = require('@nti/extjs');
 const { Models } = require('@nti/lib-interfaces');
 const { Event: EventComponent } = require('@nti/web-calendar');
 const { GotoWebinar } = require('@nti/web-integrations');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
 
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const WindowsActions = require('legacy/app/windows/Actions');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.chat.event.Window',

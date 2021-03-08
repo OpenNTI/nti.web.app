@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Avatar as Av, User } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Avatar as Av, User } from '@nti/web-commons';
 
 import styles from './Avatar.css';
 

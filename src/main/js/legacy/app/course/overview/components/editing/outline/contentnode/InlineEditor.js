@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+const CourseOutlineContentNode = require('internal/legacy/model/courses/navigation/CourseOutlineContentNode');
 
 require('../InlineEditor');
 

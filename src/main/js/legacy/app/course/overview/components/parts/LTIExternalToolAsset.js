@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const WindowsStateStore = require('internal/legacy/app/windows/StateStore');
+const Globals = require('internal/legacy/util/Globals');
 
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const WindowsStateStore = require('legacy/app/windows/StateStore');
-const Globals = require('legacy/util/Globals');
-
-require('legacy/model/LTIExternalToolAsset');
-require('legacy/common/components/cards/Card');
+require('internal/legacy/model/LTIExternalToolAsset');
+require('internal/legacy/common/components/cards/Card');
 
 function resolveIcon(config, n, root) {
 	const icon = n.getAttribute('icon');

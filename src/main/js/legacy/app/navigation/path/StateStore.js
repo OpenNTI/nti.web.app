@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.navigation.path.StateStore',

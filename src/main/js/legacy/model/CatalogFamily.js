@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/PresentationResources');
+require('internal/legacy/mixins/PresentationResources');
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.CatalogFamily', {

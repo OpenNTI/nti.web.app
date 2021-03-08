@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const NavigationActions = require('legacy/app/navigation/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.components.SimplePopoverWidget',

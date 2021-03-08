@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { dispatch } = require('@nti/lib-dispatcher');
 const { Forums } = require('@nti/web-discussions');
-
-const { getString } = require('legacy/util/Localization');
-const Post = require('legacy/model/forums/Post');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
+const { getString } = require('internal/legacy/util/Localization');
+const Post = require('internal/legacy/model/forums/Post');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
 
 const ForumsActions = require('../../../Actions');
 
-require('legacy/editor/Editor');
+require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.forums.components.topic.parts.Editor',

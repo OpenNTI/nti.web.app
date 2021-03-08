@@ -1,7 +1,6 @@
 const { Models } = require('@nti/lib-interfaces');
-
-const Base = require('legacy/model/Base');
-const WinActions = require('legacy/app/windows/Actions');
+const Base = require('internal/legacy/model/Base');
+const WinActions = require('internal/legacy/app/windows/Actions');
 
 module.exports = exports = function calendarRoutes(scope) {
 	const { WindowActions = WinActions.create() } = scope;

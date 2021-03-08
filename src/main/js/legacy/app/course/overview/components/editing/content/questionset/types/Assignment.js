@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
-
-const AssignmentRef = require('legacy/model/AssignmentRef');
-const AssessmentActions = require('legacy/app/course/assessment/Actions');
-const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
-const NavigationActions = require('legacy/app/navigation/Actions');
+const AssignmentRef = require('internal/legacy/model/AssignmentRef');
+const AssessmentActions = require('internal/legacy/app/course/assessment/Actions');
+const EditingActions = require('internal/legacy/app/course/overview/components/editing/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
 
 require('../../Editor');
 require('../AssignmentSelection');
-require('legacy/app/course/assessment/components/CreateMenu');
+require('internal/legacy/app/course/assessment/components/CreateMenu');
 
 const t = scoped(
 	'nti-web-app.course.overview.components.editing.content.questionset.types.Assignment',

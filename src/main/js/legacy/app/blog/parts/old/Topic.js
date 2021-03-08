@@ -1,20 +1,19 @@
 const Ext = require('@nti/extjs');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
+const SearchUtils = require('internal/legacy/util/Search');
+const NTI = require('internal/legacy/store/NTI');
+const ContentviewerActions = require('internal/legacy/app/contentviewer/Actions');
 
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-const SearchUtils = require('legacy/util/Search');
-const NTI = require('legacy/store/NTI');
-const ContentviewerActions = require('legacy/app/contentviewer/Actions');
-
-require('legacy/common/ux/SearchHits');
-require('legacy/editor/Editor');
-require('legacy/layout/component/Natural');
-require('legacy/mixins/FlagActions');
-require('legacy/mixins/LikeFavoriteActions');
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/common/ux/SearchHits');
+require('internal/legacy/editor/Editor');
+require('internal/legacy/layout/component/Natural');
+require('internal/legacy/mixins/FlagActions');
+require('internal/legacy/mixins/LikeFavoriteActions');
+require('internal/legacy/mixins/ProfileLinks');
 require('./Comment');
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {

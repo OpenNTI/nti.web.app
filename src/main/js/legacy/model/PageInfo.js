@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const ContentUtils = require('legacy/util/Content');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ContentUtils = require('internal/legacy/util/Content');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 const Assignment = require('./assessment/Assignment');

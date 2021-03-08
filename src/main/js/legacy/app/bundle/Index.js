@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const PageInfo = require('legacy/model/PageInfo');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
 const ContentStateStore = require('../library/content/StateStore');
 
@@ -12,8 +11,8 @@ require('../content/content/Index');
 require('../content/forum/Index');
 require('../content/notebook/Index');
 require('./community/Index.js');
-require('legacy/mixins/Router');
-require('legacy/mixins/State');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/State');
 
 require('../content/Index');
 

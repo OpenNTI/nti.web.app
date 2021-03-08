@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const DomUtils = require('legacy/util/Dom');
-const { guidGenerator } = require('legacy/util/Globals');
+const DomUtils = require('internal/legacy/util/Dom');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 
 const Video = require('./Video');
 

@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const WebinarAsset = require('legacy/model/WebinarAsset');
+const WebinarAsset = require('internal/legacy/model/WebinarAsset');
 
 require('../../../parts/ContentLink');
 require('../ListItem');

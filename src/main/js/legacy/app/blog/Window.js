@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const AnalyticsUtil = require('legacy/util/Analytics');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PersonalBlogEntry = require('legacy/model/forums/PersonalBlogEntry');
-const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
-const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
+const PersonalBlogEntry = require('internal/legacy/model/forums/PersonalBlogEntry');
+const PersonalBlogComment = require('internal/legacy/model/forums/PersonalBlogComment');
+const PersonalBlogEntryPost = require('internal/legacy/model/forums/PersonalBlogEntryPost');
 
 const WindowsActions = require('../windows/Actions');
 const WindowsStateStore = require('../windows/StateStore');

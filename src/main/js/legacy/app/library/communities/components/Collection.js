@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { toCSSClassName } = require('@nti/lib-dom');
+const NTIFormat = require('internal/legacy/util/Format');
 
-const NTIFormat = require('legacy/util/Format');
-
-require('legacy/mixins/EllipsisText');
+require('internal/legacy/mixins/EllipsisText');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.communities.components.Collection',

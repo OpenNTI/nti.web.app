@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
 
-const { getString, getFormattedString } = require('legacy/util/Localization');
-
-require('legacy/common/form/fields/SimpleTextField');
+require('internal/legacy/common/form/fields/SimpleTextField');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.components.GiftConfirmation',

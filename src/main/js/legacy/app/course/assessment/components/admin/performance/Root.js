@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
+const { getString } = require('internal/legacy/util/Localization');
+const User = require('internal/legacy/model/User');
+const Grade = require('internal/legacy/model/courseware/Grade');
+const { swallow, isFeature } = require('internal/legacy/util/Globals');
 
-const { getString } = require('legacy/util/Localization');
-const User = require('legacy/model/User');
-const Grade = require('legacy/model/courseware/Grade');
-const { swallow, isFeature } = require('legacy/util/Globals');
-
-require('legacy/mixins/grid-feature/GradeInputs');
-require('legacy/mixins/State');
+require('internal/legacy/mixins/grid-feature/GradeInputs');
+require('internal/legacy/mixins/State');
 require('../PagedGrid');
 require('../ListHeader');
 

@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const AssessedQuestion = require('./AssessedQuestion');
 
-require('legacy/model/Base');
+require('internal/legacy/model/Base');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.assessment.AssessedQuestionSet',

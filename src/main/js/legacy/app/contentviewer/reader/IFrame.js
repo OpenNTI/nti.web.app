@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { copyCustomPropertiesIntoIFrame } = require('@nti/lib-dom');
-
-const Globals = require('legacy/util/Globals');
+const Globals = require('internal/legacy/util/Globals');
 
 const ContentAPIRegistry = require('./ContentAPIRegistry');
 

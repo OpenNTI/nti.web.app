@@ -1,19 +1,21 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const GroupsActions = require('legacy/app/groups/Actions');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const IdCache = require('legacy/cache/IdCache');
-const UserRepository = require('legacy/cache/UserRepository');
-const { isMe } = require('legacy/util/Globals');
-const { getFormattedString, getString } = require('legacy/util/Localization');
+const GroupsActions = require('internal/legacy/app/groups/Actions');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const IdCache = require('internal/legacy/cache/IdCache');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const { isMe } = require('internal/legacy/util/Globals');
+const {
+	getFormattedString,
+	getString,
+} = require('internal/legacy/util/Localization');
 
 const ChatActions = require('../../chat/Actions');
 const ChatStateStore = require('../../chat/StateStore');
 const Pager = require('../transcript/Pager');
 
-require('legacy/mixins/ProfileLinks');
-require('legacy/model/User');
+require('internal/legacy/mixins/ProfileLinks');
+require('internal/legacy/model/User');
 require('./View');
 require('./Entry');
 require('../StateStore');

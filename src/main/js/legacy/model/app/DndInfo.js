@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const B64 = require('internal/legacy/util/Base64');
 
-const B64 = require('legacy/util/Base64');
-
-require('legacy/mixins/dnd/DataTransferSource');
+require('internal/legacy/mixins/dnd/DataTransferSource');
 require('../Base');
 
 module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {

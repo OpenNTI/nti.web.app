@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { scoped } = require('@nti/lib-locale');
-
-const OverviewGroup = require('legacy/model/courses/overview/Group');
+const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
 
 const ParentSelection = require('./ParentSelection');
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { Loading, Layouts } from '@nti/web-commons';
 import { decorate, rawContent } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
-
-import TopicViewer from 'legacy/app/forums/components/topic/Window';
+import TopicViewer from 'internal/legacy/app/forums/components/topic/Window';
 
 import Registry from '../Registry';
 

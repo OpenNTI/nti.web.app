@@ -1,25 +1,25 @@
-const Ext = require('@nti/extjs');
 const cx = require('classnames');
 
-const Anchors = require('legacy/util/Anchors');
-const AnnotationUtils = require('legacy/util/Annotations');
-// const FilterManager = require('legacy/filter/FilterManager');
-const Globals = require('legacy/util/Globals');
-const ModelBase = require('legacy/model/Base');
-const Redaction = require('legacy/model/Redaction');
-const rangy = require('legacy/util/rangy');
-const RectUtils = require('legacy/util/Rects');
-const SearchUtils = require('legacy/util/Search');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-const { getString } = require('legacy/util/Localization');
+const Ext = require('@nti/extjs');
+const Anchors = require('internal/legacy/util/Anchors');
+const AnnotationUtils = require('internal/legacy/util/Annotations');
+// const FilterManager = require('internal/legacy/filter/FilterManager');
+const Globals = require('internal/legacy/util/Globals');
+const ModelBase = require('internal/legacy/model/Base');
+const Redaction = require('internal/legacy/model/Redaction');
+const rangy = require('internal/legacy/util/rangy');
+const RectUtils = require('internal/legacy/util/Rects');
+const SearchUtils = require('internal/legacy/util/Search');
+const TextRangeFinderUtils = require('internal/legacy/util/TextRangeFinder');
+const { getString } = require('internal/legacy/util/Localization');
 
 const RendererManager = require('../../annotations/renderer/Manager');
 const UserdataActions = require('../../userdata/Actions');
 
-require('legacy/model/Highlight');
-require('legacy/model/Note');
-require('legacy/model/QuizResult');
-require('legacy/model/TranscriptSummary');
+require('internal/legacy/model/Highlight');
+require('internal/legacy/model/Note');
+require('internal/legacy/model/QuizResult');
+require('internal/legacy/model/TranscriptSummary');
 
 require('../../annotations/Highlight');
 require('../../annotations/Note');

@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const PageInfo = require('legacy/model/PageInfo');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
 const ContextStateStore = require('../context/StateStore');
 
 const NavigationStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
+require('internal/legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	extend: 'NextThought.common.Actions',

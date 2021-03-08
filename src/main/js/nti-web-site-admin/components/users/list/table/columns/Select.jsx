@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { Checkbox } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
 import { Connectors } from '@nti/lib-store';
-import cx from 'classnames';
 
 import styles from './Select.css';
 

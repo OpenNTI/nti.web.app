@@ -1,9 +1,9 @@
-const Ext = require('@nti/extjs');
 const cx = require('classnames');
 
-const ChatActions = require('legacy/app/chat/Actions');
-const ChatStateStore = require('legacy/app/chat/StateStore');
-const NavigationStateStore = require('legacy/app/navigation/StateStore');
+const Ext = require('@nti/extjs');
+const ChatActions = require('internal/legacy/app/chat/Actions');
+const ChatStateStore = require('internal/legacy/app/chat/StateStore');
+const NavigationStateStore = require('internal/legacy/app/navigation/StateStore');
 
 const styles = require('./Tab.css');
 

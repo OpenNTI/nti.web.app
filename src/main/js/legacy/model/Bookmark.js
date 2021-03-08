@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-require('legacy/model/anchorables/DomContentRangeDescription');
-require('legacy/model/Base');
+require('internal/legacy/model/anchorables/DomContentRangeDescription');
+require('internal/legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.model.Bookmark', {
 	extend: 'NextThought.model.Base',

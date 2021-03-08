@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const StoreStateStore = require('legacy/app/store/StateStore');
+const StoreStateStore = require('internal/legacy/app/store/StateStore');
 
 const ContentStateStore = require('./StateStore');
 

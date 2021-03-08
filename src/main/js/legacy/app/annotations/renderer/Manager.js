@@ -1,12 +1,12 @@
 const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
-
-const Anchors = require('legacy/util/Anchors');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('AnnotationsBase', () =>
-	require('legacy/app/annotations/Base')
+const Anchors = require('internal/legacy/util/Anchors');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'AnnotationsBase',
+	() => require('internal/legacy/app/annotations/Base')
 );
-require('legacy/util/Line');
+require('internal/legacy/util/Line');
 
 const { guidGenerator } = Globals;
 

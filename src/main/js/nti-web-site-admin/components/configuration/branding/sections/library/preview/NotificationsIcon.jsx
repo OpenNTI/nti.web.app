@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Theme } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Theme } from '@nti/web-commons';
 
 import styles from './NotificationsIcon.css';
 

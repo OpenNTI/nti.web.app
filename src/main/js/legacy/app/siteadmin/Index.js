@@ -1,12 +1,11 @@
 const Ext = require('@nti/extjs');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const ComponentsNavigation = require('internal/legacy/common/components/Navigation');
+const { View: SiteAdminView } = require('internal/nti-web-site-admin');
 
-const NavigationActions = require('legacy/app/navigation/Actions');
-const ComponentsNavigation = require('legacy/common/components/Navigation');
-const { View: SiteAdminView } = require('nti-web-site-admin');
-
-require('legacy/common/components/Navigation');
-require('legacy/overrides/ReactHarness');
-require('legacy/login/StateStore');
+require('internal/legacy/common/components/Navigation');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/login/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	extend: 'Ext.container.Container',

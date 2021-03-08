@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/mixins/HasLinks');
-require('legacy/proxy/Rest');
-require('legacy/util/Parsing');
+require('internal/legacy/mixins/HasLinks');
+require('internal/legacy/proxy/Rest');
+require('internal/legacy/util/Parsing');
 
-require('legacy/model/User');
+require('internal/legacy/model/User');
 
 module.exports = exports = Ext.define('NextThought.model.UserPasswordSet', {
 	extend: 'Ext.data.Model',

@@ -1,16 +1,16 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 const UserDataStateStore = require('../userdata/StateStore');
 
 const NotificationsStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
-require('legacy/model/Change');
+require('internal/legacy/common/Actions');
+require('internal/legacy/model/Change');
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	extend: 'NextThought.common.Actions',

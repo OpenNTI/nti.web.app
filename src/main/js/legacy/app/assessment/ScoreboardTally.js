@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/mixins/EllipsisText');
+require('internal/legacy/mixins/EllipsisText');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.ScoreboardTally',

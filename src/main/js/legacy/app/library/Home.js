@@ -9,7 +9,7 @@ const CommunitiesCurrent = require('./communities/Current');
 const ContentCurrent = require('./content/Current');
 const CoursesCurrent = require('./courses/Current');
 
-require('legacy/mixins/Router');
+require('internal/legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	extend: 'Ext.container.Container',

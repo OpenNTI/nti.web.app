@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
-
-const { getFormattedString, getString } = require('legacy/util/Localization');
-const Survey = require('legacy/model/assessment/Survey');
-const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
+const {
+	getFormattedString,
+	getString,
+} = require('internal/legacy/util/Localization');
+const Survey = require('internal/legacy/model/assessment/Survey');
+const AssessedQuestionSet = require('internal/legacy/model/assessment/AssessedQuestionSet');
 
 const AssessmentActions = require('./Actions');
 

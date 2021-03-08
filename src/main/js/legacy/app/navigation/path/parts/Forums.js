@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const LibraryActions = require('legacy/app/library/Actions');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const LibraryActions = require('internal/legacy/app/library/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.navigation.path.parts.Forums',

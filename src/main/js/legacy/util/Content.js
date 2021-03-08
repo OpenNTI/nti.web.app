@@ -1,11 +1,12 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require')
-	.get('AnnotationUtils', () => require('legacy/util/Annotations'))
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('AnnotationUtils', () => require('internal/legacy/util/Annotations'))
 	.get('ParseUtils', () => require('./Parsing'))
-	.get('LibraryStateStore', () => require('legacy/app/library/StateStore'));
+	.get('LibraryStateStore', () =>
+		require('internal/legacy/app/library/StateStore')
+	);
 
-require('legacy/overrides/builtins/RegExp');
+require('internal/legacy/overrides/builtins/RegExp');
 
 const Globals = require('./Globals');
 

@@ -1,17 +1,16 @@
 const Ext = require('@nti/extjs');
 const { Overview } = require('@nti/web-course');
-
-const { Modal } = require('nti-web-app-lesson-items');
-const ContentUtils = require('legacy/util/Content');
-const { getString } = require('legacy/util/Localization');
-const WindowActions = require('legacy/app/windows/Actions');
-const BaseModel = require('legacy/model/Base');
-const CalendarRoutes = require('legacy/app/CalendarRoutes');
+const { Modal } = require('internal/nti-web-app-lesson-items');
+const ContentUtils = require('internal/legacy/util/Content');
+const { getString } = require('internal/legacy/util/Localization');
+const WindowActions = require('internal/legacy/app/windows/Actions');
+const BaseModel = require('internal/legacy/model/Base');
+const CalendarRoutes = require('internal/legacy/app/CalendarRoutes');
 
 const { MODAL_ROUTE_BUILDERS } = require('./Constants');
-require('legacy/app/mediaviewer/Index');
-require('legacy/overrides/ReactHarness');
-require('legacy/mixins/Router');
+require('internal/legacy/app/mediaviewer/Index');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 

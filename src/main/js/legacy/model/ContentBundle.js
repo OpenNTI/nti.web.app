@@ -1,15 +1,14 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', () => require('legacy/util/Parsing'))
-	.get('ContentUtils', () => require('legacy/util/Content'));
-const { getURL } = require('legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require')
+	.get('ParseUtils', () => require('internal/legacy/util/Parsing'))
+	.get('ContentUtils', () => require('internal/legacy/util/Content'));
+const { getURL } = require('internal/legacy/util/Globals');
 
 const ForumsBoard = require('./forums/Board');
 
-require('legacy/mixins/BundleLike');
-require('legacy/mixins/PresentationResources');
+require('internal/legacy/mixins/BundleLike');
+require('internal/legacy/mixins/PresentationResources');
 require('./Base');
 require('./forums/ContentBoard');
 require('./ContentPackage');

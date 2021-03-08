@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/form/fields/DateTimeComponent');
+require('internal/legacy/common/form/fields/DateTimeComponent');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.assessment.components.editing.components.DueDate',

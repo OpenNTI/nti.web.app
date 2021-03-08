@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('UserRepository', () =>
-	require('legacy/cache/UserRepository')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'UserRepository',
+	() => require('internal/legacy/cache/UserRepository')
 );
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {

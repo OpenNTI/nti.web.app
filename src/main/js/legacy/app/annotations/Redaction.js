@@ -1,10 +1,9 @@
 const Ext = require('@nti/extjs');
+const Redaction = require('internal/legacy/model/Redaction');
+const Globals = require('internal/legacy/util/Globals');
+const { getString } = require('internal/legacy/util/Localization');
 
-const Redaction = require('legacy/model/Redaction');
-const Globals = require('legacy/util/Globals');
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/cache/IdCache');
+require('internal/legacy/cache/IdCache');
 require('./Highlight');
 
 module.exports = exports = Ext.define(

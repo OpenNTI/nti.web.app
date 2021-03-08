@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const { isFeature } = require('internal/legacy/util/Globals');
 
-const { isFeature } = require('legacy/util/Globals');
-
-require('legacy/model/Base');
+require('internal/legacy/model/Base');
 
 module.exports = exports = Ext.define(
 	'NextThought.model.assessment.QuestionSet',

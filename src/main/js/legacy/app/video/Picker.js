@@ -6,11 +6,11 @@ const {
 	createMediaSourceFromUrl,
 	getCanonicalUrlFrom,
 } = require('@nti/web-video');
-
-const PromptStateStore = require('legacy/app/prompt/StateStore');
-const Video = require('legacy/model/Video');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const PromptStateStore = require('internal/legacy/app/prompt/StateStore');
+const Video = require('internal/legacy/model/Video');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 const SourceMimeType = 'application/vnd.nextthought.ntivideosource';
@@ -22,7 +22,7 @@ const Types = {
 	wistia: 'video/wistia',
 };
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 function createSources({ service, source }) {
 	return [

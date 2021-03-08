@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
+const QuestionSetRef = require('internal/legacy/model/QuestionSetRef');
 
-const QuestionSetRef = require('legacy/model/QuestionSetRef');
-
-require('legacy/model/assessment/QuestionSet');
+require('internal/legacy/model/assessment/QuestionSet');
 require('../SelfAssessmentSelection');
 require('../SelfAssessmentEditor');
 require('./Assignment');

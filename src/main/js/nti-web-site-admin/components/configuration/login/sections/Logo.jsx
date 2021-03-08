@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { scoped } from '@nti/lib-locale';
 
 import { Property, Text, AssetPreview, AssetInput } from '../commons';

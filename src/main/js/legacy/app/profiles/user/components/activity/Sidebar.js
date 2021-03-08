@@ -1,10 +1,10 @@
-const Ext = require('@nti/extjs');
 const { subDays } = require('date-fns');
 
-const { isFeature } = require('legacy/util/Globals');
+const Ext = require('@nti/extjs');
+const { isFeature } = require('internal/legacy/util/Globals');
 
-require('legacy/app/stream/components/Filter');
-require('legacy/mixins/State');
+require('internal/legacy/app/stream/components/Filter');
+require('internal/legacy/mixins/State');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.Sidebar',

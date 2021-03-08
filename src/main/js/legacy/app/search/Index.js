@@ -1,22 +1,22 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
-
-const Search = require('nti-web-components-search');
-const ChatActions = require('legacy/app/chat/Actions');
-const PathActions = require('legacy/app/navigation/path/Actions');
-const LibraryActions = require('legacy/app/library/Actions');
-const NavigationActions = require('legacy/app/navigation/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const BaseModel = require('legacy/model/Base');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Search = require('internal/nti-web-components-search');
+const ChatActions = require('internal/legacy/app/chat/Actions');
+const PathActions = require('internal/legacy/app/navigation/path/Actions');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const BaseModel = require('internal/legacy/model/Base');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
 
-require('legacy/mixins/Router');
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
 
 module.exports = exports = Ext.define('NextThought.app.search.Index', {

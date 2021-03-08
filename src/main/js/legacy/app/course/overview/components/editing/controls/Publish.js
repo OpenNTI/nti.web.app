@@ -4,7 +4,7 @@ const { Publish } = require('@nti/web-commons');
 
 const Actions = require('../Actions');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.controls.Publish',

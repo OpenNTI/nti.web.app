@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const UserdataActions = require('../userdata/Actions');
 
-require('legacy/common/StateStore');
+require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.StateStore',

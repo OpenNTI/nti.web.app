@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const PageInfo = require('legacy/model/PageInfo');
+const PageInfo = require('internal/legacy/model/PageInfo');
 
 require('./Content');
 

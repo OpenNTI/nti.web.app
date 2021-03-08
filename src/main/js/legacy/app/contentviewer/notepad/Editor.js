@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const DomUtils = require('legacy/util/Dom');
-const Editor = require('legacy/editor/Editor');
+const DomUtils = require('internal/legacy/util/Dom');
+const Editor = require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.notepad.Editor',

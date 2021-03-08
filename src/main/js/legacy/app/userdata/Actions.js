@@ -1,35 +1,35 @@
 const Ext = require('@nti/extjs');
 const { emitIncoming } = require('@nti/web-notifications');
 const { Events } = require('@nti/web-session');
-
-const ContextStateStore = require('legacy/app/context/StateStore');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
-// const LocationMeta = require('legacy/cache/LocationMeta');
-const UserRepository = require('legacy/cache/UserRepository');
-const FilterManager = require('legacy/filter/FilterManager');
-const LoginStateStore = require('legacy/login/StateStore');
-const Anchors = require('legacy/util/Anchors');
-// const AnnotationUtils = require('legacy/util/Annotations');
-const ContentUtils = require('legacy/util/Content');
-const Globals = require('legacy/util/Globals');
-const ObjectUtils = require('legacy/util/Object');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const ContextStateStore = require('internal/legacy/app/context/StateStore');
+const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const AnchorResolver = require('internal/legacy/app/mediaviewer/components/reader/AnchorResolver');
+// const LocationMeta = require('internal/legacy/cache/LocationMeta');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const FilterManager = require('internal/legacy/filter/FilterManager');
+const LoginStateStore = require('internal/legacy/login/StateStore');
+const Anchors = require('internal/legacy/util/Anchors');
+// const AnnotationUtils = require('internal/legacy/util/Annotations');
+const ContentUtils = require('internal/legacy/util/Content');
+const Globals = require('internal/legacy/util/Globals');
+const ObjectUtils = require('internal/legacy/util/Object');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const SharingUtils = require('legacy/util/Sharing');
-const StoreUtils = require('legacy/util/Store');
-const Bookmark = require('legacy/model/Bookmark');
-const StorePageItem = require('legacy/store/PageItem');
-const Note = require('legacy/model/Note');
-const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
-const FilePicker = require('legacy/common/form/fields/FilePicker');
-const BaseModel = require('legacy/model/Base');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const StoreUtils = require('internal/legacy/util/Store');
+const Bookmark = require('internal/legacy/model/Bookmark');
+const StorePageItem = require('internal/legacy/store/PageItem');
+const Note = require('internal/legacy/model/Note');
+const ContentRangeDescription = require('internal/legacy/model/anchorables/ContentRangeDescription');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
+const BaseModel = require('internal/legacy/model/Base');
 
 const UserdataStateStore = require('./StateStore');
 
-require('legacy/common/Actions');
-require('legacy/app/contentviewer/components/definition/Window');
+require('internal/legacy/common/Actions');
+require('internal/legacy/app/contentviewer/components/definition/Window');
 
 module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	extend: 'NextThought.common.Actions',

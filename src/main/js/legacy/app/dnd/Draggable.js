@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const DndInfo = require('legacy/model/app/DndInfo');
-const DataTransferStore = require('legacy/store/DataTransfer');
+const DndInfo = require('internal/legacy/model/app/DndInfo');
+const DataTransferStore = require('internal/legacy/store/DataTransfer');
 
 const DndActions = require('./Actions');
 

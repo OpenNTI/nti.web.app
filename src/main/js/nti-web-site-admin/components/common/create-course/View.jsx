@@ -1,13 +1,13 @@
 import './View.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import { Flyout } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
 import { encodeForURI } from '@nti/lib-ntiids';
 import { getService } from '@nti/web-client';
 import { Models } from '@nti/lib-interfaces';
-
-import { getString } from 'legacy/util/Localization';
+import { getString } from 'internal/legacy/util/Localization';
 
 import Option from './Option';
 

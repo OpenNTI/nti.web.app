@@ -2,8 +2,7 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { Theme } = require('@nti/web-commons');
 const { NotificationsView } = require('@nti/web-notifications');
-
-const ReactHarness = require('legacy/overrides/ReactHarness');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const IdentityIndex = require('../account/identity/Index');
 const SearchBar = require('../search/SearchBar');
@@ -12,7 +11,7 @@ const GutterTab = require('../chat/components/gutter/Tab');
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
 
-require('legacy/mixins/State');
+require('internal/legacy/mixins/State');
 require('../chat/Index');
 
 const DefaultAsset = 'assets.logo';

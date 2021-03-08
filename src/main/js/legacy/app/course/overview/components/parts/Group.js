@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/components/BoundCollection');
-require('legacy/model/VideoRoll');
-require('legacy/model/Video');
-require('legacy/util/Content');
+require('internal/legacy/common/components/BoundCollection');
+require('internal/legacy/model/VideoRoll');
+require('internal/legacy/model/Video');
+require('internal/legacy/util/Content');
 
 require('./ContentLink');
 require('./Discussion');

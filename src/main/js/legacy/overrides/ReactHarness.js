@@ -1,20 +1,20 @@
-const Ext = require('@nti/extjs');
 const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
+
+const Ext = require('@nti/extjs');
 const { getService, reportError } = require('@nti/web-client');
 const { Error: ErrorCmp, Theme, Utils } = require('@nti/web-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { getHistory, LinkTo } = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
-
-const AccountActions = require('legacy/app/account/Actions');
-const AnalyticsUtil = require('legacy/util/Analytics');
-const ParsingUtils = require('legacy/util/Parsing');
-const User = require('legacy/model/User');
-const ContextStore = require('legacy/app/context/StateStore');
-const ChatActions = require('legacy/app/chat/Actions');
+const AccountActions = require('internal/legacy/app/account/Actions');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
+const ParsingUtils = require('internal/legacy/util/Parsing');
+const User = require('internal/legacy/model/User');
+const ContextStore = require('internal/legacy/app/context/StateStore');
+const ChatActions = require('internal/legacy/app/chat/Actions');
 
 const unwrap = x => (x && x.default ? x.default : x);
 

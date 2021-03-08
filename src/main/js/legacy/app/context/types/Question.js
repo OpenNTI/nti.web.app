@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const LibraryActions = require('legacy/app/library/Actions');
-const Question = require('legacy/model/assessment/Question');
+const LibraryActions = require('internal/legacy/app/library/Actions');
+const Question = require('internal/legacy/model/assessment/Question');
 
 require('../components/Question');
 require('../components/list/Question');

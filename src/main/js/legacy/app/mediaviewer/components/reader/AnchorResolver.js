@@ -1,20 +1,19 @@
 const Ext = require('@nti/extjs');
-
-const TimeContentPointer = require('legacy/model/anchorables/TimeContentPointer');
-const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescription');
-const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
-const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
-const lazy = require('legacy/util/lazy-require').get('Anchors', () =>
-	require('legacy/util/Anchors')
+const TimeContentPointer = require('internal/legacy/model/anchorables/TimeContentPointer');
+const TimeRangeDescription = require('internal/legacy/model/anchorables/TimeRangeDescription');
+const TranscriptContentPointer = require('internal/legacy/model/anchorables/TranscriptContentPointer');
+const TranscriptRangeDescription = require('internal/legacy/model/anchorables/TranscriptRangeDescription');
+const lazy = require('internal/legacy/util/lazy-require').get('Anchors', () =>
+	require('internal/legacy/util/Anchors')
 );
 
-require('legacy/model/anchorables/ContentPointer');
-require('legacy/model/anchorables/ContentRangeDescription');
-require('legacy/model/anchorables/DomContentPointer');
-require('legacy/model/anchorables/DomContentRangeDescription');
-require('legacy/model/anchorables/ElementDomContentPointer');
-require('legacy/model/anchorables/TextContext');
-require('legacy/model/anchorables/TextDomContentPointer');
+require('internal/legacy/model/anchorables/ContentPointer');
+require('internal/legacy/model/anchorables/ContentRangeDescription');
+require('internal/legacy/model/anchorables/DomContentPointer');
+require('internal/legacy/model/anchorables/DomContentRangeDescription');
+require('internal/legacy/model/anchorables/ElementDomContentPointer');
+require('internal/legacy/model/anchorables/TextContext');
+require('internal/legacy/model/anchorables/TextDomContentPointer');
 
 const AnchorResolver = (module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.reader.AnchorResolver',

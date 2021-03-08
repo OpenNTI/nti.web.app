@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { ScormCollection } = require('@nti/web-course');
 
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 require('../../Editor');
 require('./RefEditor');
 

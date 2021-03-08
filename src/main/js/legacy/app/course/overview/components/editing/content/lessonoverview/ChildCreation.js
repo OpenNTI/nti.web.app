@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const OverviewLesson = require('legacy/model/courses/overview/Lesson');
+const OverviewLesson = require('internal/legacy/model/courses/overview/Lesson');
 
 const OverviewgroupEditor = require('../overviewgroup/Editor');
 

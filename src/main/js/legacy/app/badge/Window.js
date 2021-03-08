@@ -1,15 +1,15 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const Badge = require('legacy/model/openbadges/Badge');
+const Badge = require('internal/legacy/model/openbadges/Badge');
 
 const StateStore = require('../windows/StateStore');
 
 require('../windows/components/Header');
-require('legacy/mixins/ExportBadge');
+require('internal/legacy/mixins/ExportBadge');
 require('./components/Badge');
 require('./components/Footer');
 require('./components/Prompt');

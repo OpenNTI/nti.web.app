@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Grade = require('legacy/model/courseware/Grade');
-const LibraryActions = require('legacy/app/library/Actions');
+const Grade = require('internal/legacy/model/courseware/Grade');
+const LibraryActions = require('internal/legacy/app/library/Actions');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.navigation.path.parts.Assignment',

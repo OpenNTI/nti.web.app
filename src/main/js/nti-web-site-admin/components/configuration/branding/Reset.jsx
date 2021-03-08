@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Prompt } from '@nti/web-commons';
 import classnames from 'classnames/bind';
+
+import { Button, Prompt } from '@nti/web-commons';
 
 import styles from './Reset.css';
 

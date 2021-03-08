@@ -2,13 +2,15 @@ const Ext = require('@nti/extjs');
 const { CourseMenu } = require('@nti/web-course');
 const { Prompt } = require('@nti/web-commons');
 const { getService } = require('@nti/web-client');
+const {
+	getString,
+	getFormattedString,
+} = require('internal/legacy/util/Localization');
+const EnrollmentStateStore = require('internal/legacy/app/course/enrollment/StateStore');
+const EnrollmentActions = require('internal/legacy/app/course/enrollment/Actions');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 
-const { getString, getFormattedString } = require('legacy/util/Localization');
-const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
-const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
-const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-
-require('legacy/overrides/ReactHarness');
+require('internal/legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.courses.components.settings.CourseMenu',

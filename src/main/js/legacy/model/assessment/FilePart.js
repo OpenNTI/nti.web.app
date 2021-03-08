@@ -3,8 +3,7 @@ require('./Part');
 const {
 	FileType: { FileSetDescriptor: FileSet },
 } = require('@nti/lib-commons');
-
-const FilePicker = require('legacy/common/form/fields/FilePicker');
+const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	extend: 'NextThought.model.assessment.Part',

@@ -1,14 +1,13 @@
 const Ext = require('@nti/extjs');
 const { Stream } = require('@nti/web-profiles');
 const { getService } = require('@nti/web-client');
+const User = require('internal/legacy/model/User');
+const Note = require('internal/legacy/model/Note');
+const HighLight = require('internal/legacy/model/Highlight');
+const Bookmark = require('internal/legacy/model/Bookmark');
 
-const User = require('legacy/model/User');
-const Note = require('legacy/model/Note');
-const HighLight = require('legacy/model/Highlight');
-const Bookmark = require('legacy/model/Bookmark');
-
-require('legacy/mixins/Router');
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.content.notebook.Index',

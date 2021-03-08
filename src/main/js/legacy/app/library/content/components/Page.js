@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-require('legacy/app/library/courses/components/Page');
-require('legacy/app/library/components/Collection');
+require('internal/legacy/app/library/courses/components/Page');
+require('internal/legacy/app/library/components/Collection');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.library.content.components.Page',

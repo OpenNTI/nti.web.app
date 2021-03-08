@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
 const AppDispatcher = require('@nti/lib-dispatcher').default;
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
-const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
+const CourseInstanceAdministrativeRole = require('internal/legacy/model/courses/CourseInstanceAdministrativeRole');
 
 const ALL_COURSES = 'AllCourses';
 const ENROLLED_COURSES = 'EnrolledCourses';

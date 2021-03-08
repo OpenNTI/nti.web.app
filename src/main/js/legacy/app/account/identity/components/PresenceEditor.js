@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const { getString } = require('legacy/util/Localization');
+const { getString } = require('internal/legacy/util/Localization');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.account.identity.components.PresenceEditor',

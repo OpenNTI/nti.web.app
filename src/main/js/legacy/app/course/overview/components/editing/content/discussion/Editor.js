@@ -2,10 +2,9 @@ const Ext = require('@nti/extjs');
 const { Community } = require('@nti/web-profiles');
 const { isFlag } = require('@nti/web-client');
 const { Forums } = require('@nti/web-discussions');
-
-const DiscussionRef = require('legacy/model/DiscussionRef');
-const Discussion = require('legacy/model/Discussion');
-const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const DiscussionRef = require('internal/legacy/model/DiscussionRef');
+const Discussion = require('internal/legacy/model/Discussion');
+const CommunityHeadlineTopic = require('internal/legacy/model/forums/CommunityHeadlineTopic');
 
 require('../Editor');
 require('./ItemSelection');

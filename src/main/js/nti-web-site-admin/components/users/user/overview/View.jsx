@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Widgets } from '@nti/web-reports';
 import { getService } from '@nti/web-client';
 

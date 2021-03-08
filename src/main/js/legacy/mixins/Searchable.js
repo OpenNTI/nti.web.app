@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const SearchStateStore = require('legacy/app/search/StateStore');
+const SearchStateStore = require('internal/legacy/app/search/StateStore');
 
 require('./SearchHitHighlighting');
 

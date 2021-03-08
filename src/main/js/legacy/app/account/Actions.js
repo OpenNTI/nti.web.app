@@ -1,19 +1,19 @@
 const Ext = require('@nti/extjs');
-
-const PromptActions = require('legacy/app/prompt/Actions');
-const Globals = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('LibraryActions', () =>
-	require('legacy/app/library/Actions')
+const PromptActions = require('internal/legacy/app/prompt/Actions');
+const Globals = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'LibraryActions',
+	() => require('internal/legacy/app/library/Actions')
 );
-const UserPasswordSet = require('legacy/model/UserPasswordSet');
+const UserPasswordSet = require('internal/legacy/model/UserPasswordSet');
 
 const EmailverifyActions = require('./emailverify/Actions');
 
-require('legacy/common/Actions');
-require('legacy/common/ux/WelcomeGuide');
-require('legacy/common/ux/IframeConfirmWindow');
-require('legacy/common/ux/UpdatedTos');
-require('legacy/common/ux/IframeWindow');
+require('internal/legacy/common/Actions');
+require('internal/legacy/common/ux/WelcomeGuide');
+require('internal/legacy/common/ux/IframeConfirmWindow');
+require('internal/legacy/common/ux/UpdatedTos');
+require('internal/legacy/common/ux/IframeWindow');
 
 require('./contact/Window');
 require('./coppa/Window');

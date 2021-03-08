@@ -1,21 +1,20 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const LocationMeta = require('internal/legacy/cache/LocationMeta');
+const AnchorResolver = require('internal/legacy/app/mediaviewer/components/reader/AnchorResolver');
+const ContentUtils = require('internal/legacy/util/Content');
+const DomUtils = require('internal/legacy/util/Dom');
+const Globals = require('internal/legacy/util/Globals');
+const RangeUtils = require('internal/legacy/util/Ranges');
+const SharingUtils = require('internal/legacy/util/Sharing');
+const UserDataActions = require('internal/legacy/app/userdata/Actions');
+const MediaViewerActions = require('internal/legacy/app/mediaviewer/Actions');
+const MediaViewerStateStore = require('internal/legacy/app/mediaviewer/StateStore');
 
-const LocationMeta = require('legacy/cache/LocationMeta');
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
-const ContentUtils = require('legacy/util/Content');
-const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
-const RangeUtils = require('legacy/util/Ranges');
-const SharingUtils = require('legacy/util/Sharing');
-const UserDataActions = require('legacy/app/userdata/Actions');
-const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
-const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-
-require('legacy/app/contentviewer/components/editor/DiscussionEditor');
-require('legacy/util/Line');
-require('legacy/app/whiteboard/Utils');
-require('legacy/editor/Editor');
+require('internal/legacy/app/contentviewer/components/editor/DiscussionEditor');
+require('internal/legacy/util/Line');
+require('internal/legacy/app/whiteboard/Utils');
+require('internal/legacy/editor/Editor');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.reader.NoteOverlay',

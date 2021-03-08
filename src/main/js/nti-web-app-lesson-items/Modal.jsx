@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
 import { Prompt } from '@nti/web-commons';
 import { Content } from '@nti/web-course';
 import { decodeFromURI } from '@nti/lib-ntiids';

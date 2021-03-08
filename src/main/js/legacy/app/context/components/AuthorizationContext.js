@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const WindowsActions = require('legacy/app/windows/Actions');
-const { getURL } = require('legacy/util/Globals');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const { getURL } = require('internal/legacy/util/Globals');
 
 const ContextStateStore = require('../StateStore');
 

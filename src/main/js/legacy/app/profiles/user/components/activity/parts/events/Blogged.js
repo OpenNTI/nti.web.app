@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const UserRepository = require('legacy/cache/UserRepository');
-const BlogStateStore = require('legacy/app/blog/StateStore');
+const UserRepository = require('internal/legacy/cache/UserRepository');
+const BlogStateStore = require('internal/legacy/app/blog/StateStore');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.Blogged',

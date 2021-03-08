@@ -1,13 +1,10 @@
 const Ext = require('@nti/extjs');
 const { Roster } = require('@nti/web-course');
-
-require('legacy/overrides/ReactHarness');
-
-const NavigationActions = require('legacy/app/navigation/Actions');
-const WindowsActions = require('legacy/app/windows/Actions');
-const Email = require('legacy/model/Email');
-
-require('legacy/mixins/Router');
+const NavigationActions = require('internal/legacy/app/navigation/Actions');
+const WindowsActions = require('internal/legacy/app/windows/Actions');
+const Email = require('internal/legacy/model/Email');
+require('internal/legacy/overrides/ReactHarness');
+require('internal/legacy/mixins/Router');
 
 const ROSTER_ROUTE = /^\/roster/;
 

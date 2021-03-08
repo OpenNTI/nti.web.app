@@ -1,8 +1,7 @@
 /*globals createStoryJS*/
 const Ext = require('@nti/extjs');
-
-const Timeline = require('legacy/model/Timeline');
-const AnalyticsUtil = require('legacy/util/Analytics');
+const Timeline = require('internal/legacy/model/Timeline');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
 
 const WindowsStateStore = require('../../windows/StateStore');
 

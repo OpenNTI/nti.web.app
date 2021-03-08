@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
-
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('legacy/util/Parsing')
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('internal/legacy/util/Parsing')
 );
 
-require('legacy/model/assessment/UsersCourseInquiryItem');
-require('legacy/model/assessment/UsersCourseInquiryItemResponse');
+require('internal/legacy/model/assessment/UsersCourseInquiryItem');
+require('internal/legacy/model/assessment/UsersCourseInquiryItemResponse');
 require('./results/Poll');
 require('./Question');
 

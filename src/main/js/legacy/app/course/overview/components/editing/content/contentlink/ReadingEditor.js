@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const RelatedWork = require('legacy/model/RelatedWork');
-const ContentUtils = require('legacy/util/Content');
+const RelatedWork = require('internal/legacy/model/RelatedWork');
+const ContentUtils = require('internal/legacy/util/Content');
 
 require('./types/Base');
 

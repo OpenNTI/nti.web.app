@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('internal/legacy/util/Localization');
 
-const { getString } = require('legacy/util/Localization');
-
-require('legacy/common/window/Window');
-require('legacy/app/account/Header');
+require('internal/legacy/common/window/Window');
+require('internal/legacy/app/account/Header');
 require('./Main');
 
 module.exports = exports = Ext.define(

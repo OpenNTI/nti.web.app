@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const AnalyticsUtil = require('legacy/util/Analytics');
+const AnalyticsUtil = require('internal/legacy/util/Analytics');
 
 require('./Base');
 

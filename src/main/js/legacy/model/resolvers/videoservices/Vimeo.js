@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-
-const Globals = require('legacy/util/Globals');
-const BatchExecution = require('legacy/util/BatchExecution');
+const Globals = require('internal/legacy/util/Globals');
+const BatchExecution = require('internal/legacy/util/BatchExecution');
 
 const schedular = new BatchExecution({ batchSize: 5 });
 

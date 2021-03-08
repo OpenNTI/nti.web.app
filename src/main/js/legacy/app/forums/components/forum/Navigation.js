@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { Forums } = require('@nti/web-discussions');
 
-require('legacy/util/Parsing');
+require('internal/legacy/util/Parsing');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.forums.components.forum.Navigation',

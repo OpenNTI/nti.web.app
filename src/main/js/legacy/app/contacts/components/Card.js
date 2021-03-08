@@ -2,8 +2,8 @@ const Ext = require('@nti/extjs');
 
 const ManagementPopout = require('../../account/contacts/management/Popout');
 
-require('legacy/mixins/ChatLinks');
-require('legacy/mixins/ProfileLinks');
+require('internal/legacy/mixins/ChatLinks');
+require('internal/legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contacts.components.Card',

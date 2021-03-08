@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-
-const BatchInterface = require('legacy/store/BatchInterface');
+const BatchInterface = require('internal/legacy/store/BatchInterface');
 
 /**
  * An interface for the BatchInterface to handle paging through a stream of activity.

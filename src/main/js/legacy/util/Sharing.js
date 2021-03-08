@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
-
-const { isMe } = require('legacy/util/Globals');
-const lazy = require('legacy/util/lazy-require').get('ParseUtils', () =>
-	require('./Parsing')
+const { isMe } = require('internal/legacy/util/Globals');
+const lazy = require('internal/legacy/util/lazy-require').get(
+	'ParseUtils',
+	() => require('./Parsing')
 );
 
 const UserRepository = require('../cache/UserRepository');

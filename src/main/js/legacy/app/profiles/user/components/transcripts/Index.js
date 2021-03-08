@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 const { User } = require('@nti/web-profiles');
 
-require('legacy/mixins/Router');
-require('legacy/overrides/ReactHarness.js');
+require('internal/legacy/mixins/Router');
+require('internal/legacy/overrides/ReactHarness.js');
 
 const { Transcripts } = User;
 
