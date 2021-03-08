@@ -320,17 +320,15 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		);
 	},
 
-	onRoute: function (title, route, afterRoute) {
-		var body = this.getBody(),
-			store = this.ContextStore;
+	async onRoute(title, route, afterRoute) {
+		const body = this.getBody();
 
 		//if we set the route with a fragement it get passed in here
 		//so make sure we split it off
 		route = route.split('#')[0];
 
-		body.getCurrentContext().then(function (context) {
-			store.setContext(context, title || document.title, route);
-		});
+		const context = await body.getCurrentContext();
+		this.ContextStore.setContext(context, title || document.title, route);
 
 		this.sendGAEvent();
 

@@ -10,42 +10,42 @@ const ContextStateStore = require('internal/legacy/app/context/StateStore');
 module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	VIEWED_MAP: {},
 
+	constructor() {
+		this.callParent(arguments);
+		const store = ContextStateStore.getInstance();
+		store.on('new-context', this.updateContext.bind(this));
+	},
+
 	getContextRoot() {
 		return this.getContext().first();
 	},
 
+	updateContext() {
+		this.manager.setContext(this.getContext());
+	},
+
 	getContext() {
-		var ContextSS = ContextStateStore.getInstance(),
-			contextObjects = ContextSS.getContext(),
-			context = [];
+		const ContextSS = ContextStateStore.getInstance();
+		const contextObjects = ContextSS.getContext();
+		let context = [];
 
-		function mapContextObjectToAnalyticContext(contextPart) {
-			var contextObject = contextPart && contextPart.obj,
-				contextCmp = contextPart && contextPart.cmp,
-				contextStr = null;
+		function contextObjectToAnalyticContext(contextPart) {
+			const contextObject = contextPart?.obj;
+			const contextCmp = contextPart?.cmp;
 
-			if (contextObject && contextObject.contentIds) {
-				contextStr = contextObject.contentIds;
-			} else if (contextObject && Ext.isFunction(contextObject.get)) {
-				contextStr = contextObject.get('NTIID');
-			}
-			if (!contextStr) {
-				contextStr = contextCmp && contextCmp.contextIdentifier;
-			}
-
-			return contextStr;
+			return (
+				contextObject?.contentIds ||
+				contextObject?.get?.('NTIID') ||
+				contextCmp?.contextIdentifier
+			);
 		}
 
-		context = Ext.Array.map(
-			contextObjects,
-			mapContextObjectToAnalyticContext
-		);
-		context = context.reduce((acc, c) => acc.concat(c), []);
-		context = Ext.Array.filter(context, function (str) {
-			return !Ext.isEmpty(str);
-		});
+		context = contextObjects
+			.map(contextObjectToAnalyticContext)
+			.reduce((acc, c) => acc.concat(c), [])
+			.filter(str => str?.length);
 
-		return context || [];
+		return context;
 	},
 
 	beginSession() {
