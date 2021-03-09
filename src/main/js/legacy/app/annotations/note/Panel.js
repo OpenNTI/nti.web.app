@@ -869,33 +869,31 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		setContext: function (contextCmp) {
-			var t,
-				me = this;
+		async setContext(contextCmp) {
+			await this.onceRendered;
+			if (!this.context) {
+				return;
+			}
 
-			return me.onceRendered.then(function () {
-				me.context.setHTML('');
-				if (!Ext.isEmpty(contextCmp)) {
-					//We have seen a case where we try and render a component twice.  That is a no no and causes
-					//terrible crashes
-					if (contextCmp.rendered) {
-						console.error('Attempting to rerender a context cmp');
-						return Promise.reject();
-					}
-					contextCmp.render(me.context);
-
-					if (me.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
-						me.resizeMathJax(me.context);
-					}
-				} else {
-					t = me.context.up('.context') || me.context;
-					// for no context, hide it.
-					t.setVisibilityMode(Ext.dom.Element.DISPLAY);
-					t.hide();
+			this.context.setHTML('');
+			if (!Ext.isEmpty(contextCmp)) {
+				//We have seen a case where we try and render a component twice.  That is a no no and causes
+				//terrible crashes
+				if (contextCmp.rendered) {
+					console.error('Attempting to rerender a context cmp');
+					return Promise.reject();
 				}
+				contextCmp.render(this.context);
 
-				return Promise.resolve();
-			});
+				if (this.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
+					this.resizeMathJax(this.context);
+				}
+			} else {
+				const t = this.context.up('.context') || this.context;
+				// for no context, hide it.
+				t.setVisibilityMode(Ext.dom.Element.DISPLAY);
+				t.hide();
+			}
 		},
 
 		//for subclasses
