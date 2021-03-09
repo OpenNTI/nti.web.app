@@ -18,5 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				types: []
 			};
 		}
-	}
+	},
+
+	autoPublish: false
 });

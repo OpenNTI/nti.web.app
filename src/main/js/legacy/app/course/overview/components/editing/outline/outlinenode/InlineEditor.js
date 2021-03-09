@@ -17,8 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				mimeType: CourseOutlineNode.mimeType,
 				types: []
 			};
-		},
+		}
+	},
 
-		autoPublish: true
-	}
+	autoPublish: true
 });
