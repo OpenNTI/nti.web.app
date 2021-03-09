@@ -54,6 +54,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.addDefaultRoute('/about');
 	},
 
+	getActiveItem() {
+		return this.bodyContainer.items.first();
+	},
+
 	onRouteActivate() {
 		this.stopCleanup();
 	},

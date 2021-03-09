@@ -54,19 +54,16 @@ module.exports = exports = Ext.define(
 			this.addDefaultRoute('/');
 
 			this.stateKey = 'profile-activity-filters';
-
-			this.on({
-				activate: this.onActivate.bind(this),
-				deactivate: this.onDeactivate.bind(this),
-			});
 		},
 
 		startResourceViewed: function () {
 			var id = this.activeUser && this.activeUser.getId();
 
 			if (id && !this.hasCurrentTimer) {
-				AnalyticsUtil.startEvent(id, 'ProfileActivityView');
-
+				AnalyticsUtil.startEvent(id, {
+					type: 'ProfileActivityView',
+					rootContextId: this.activeUser.get('NTIID'),
+				});
 				this.hasCurrentTimer = true;
 			}
 		},
@@ -86,14 +83,14 @@ module.exports = exports = Ext.define(
 			return UserSearch.create(community.getData());
 		},
 
-		onActivate: function () {
+		onRouteActivate: function () {
 			this.startResourceViewed();
 			this.items.each(function (item) {
 				item.fireEvent('activate');
 			});
 		},
 
-		onDeactivate: function () {
+		onRouteDeactivate: function () {
 			this.stopResourceViewed();
 			this.items.each(function (item) {
 				item.fireEvent('deactivate');

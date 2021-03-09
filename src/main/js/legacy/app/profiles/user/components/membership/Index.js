@@ -28,32 +28,29 @@ module.exports = exports = Ext.define(
 			this.initRouter();
 
 			this.addRoute('/', this.onRoute.bind(this));
-
 			this.addDefaultRoute('/');
 
 			this.communitiesCmp = this.down(
 				'profile-user-membership-communities'
 			);
 			this.groupsCmp = this.down('profile-user-membership-groups');
-
-			this.on({
-				activate: this.startResourceViewed.bind(this),
-				deactivate: this.stopResourceViewed.bind(this),
-			});
 		},
 
 		startResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && !this.hasCurrentTimer) {
-				AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
+				AnalyticsUtil.startEvent(id, {
+					type: 'ProfileMembershipView',
+					rootContextId: this.activeUser.get('NTIID'),
+				});
 
 				this.hasCurrentTimer = true;
 			}
 		},
 
 		stopResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && this.hasCurrentTimer) {
 				AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
@@ -78,6 +75,10 @@ module.exports = exports = Ext.define(
 
 		onRoute: function () {
 			this.setTitle('Membership');
+		},
+
+		onRouteDeactivate() {
+			this.stopResourceViewed();
 		},
 	}
 );
