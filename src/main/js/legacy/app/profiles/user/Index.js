@@ -208,8 +208,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				rootContextId: this.activeEntity.get('NTIID'),
 			});
 
-			console.log('analytics event started');
-
 			this.hasCurrentTimer = true;
 		}
 	},
@@ -220,8 +218,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (id && this.hasCurrentTimer) {
 			AnalyticsUtil.stopEvent(id, 'ProfileAboutView');
 			delete this.hasCurrentTimer;
-
-			console.log('analytics event stopped');
 		}
 	},
 
