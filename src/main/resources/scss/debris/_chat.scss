@@ -980,7 +980,7 @@ body.white-shade-mask .chat-gutter-window {
 
 	@media #{$hide-chat-break-point} {
 		.chat-container:not(.show-gutter) & {
-			display: none;
+			display: block;
 		}
 	}
 
