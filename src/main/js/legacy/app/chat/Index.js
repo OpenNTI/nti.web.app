@@ -205,12 +205,16 @@ const ChatIndex = (module.exports = exports = Ext.define(
 						win.hide();
 					}
 				});
-				newChat ? this.hide() : this.removeCls('show-gutter');
+
+				if (newChat) {this.hide();}
+				else {this.removeCls('show-gutter');}
+
 				// deselect user
 				NewChatStore.deselectUser();
 			} else {
 				this.ChatStore.fireEvent('gutter-active');
-				newChat ? this.show() : this.addCls('show-gutter');
+				if (newChat) {this.show();}
+				else {this.addCls('show-gutter');}
 			}
 		},
 

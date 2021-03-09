@@ -3,12 +3,6 @@ import React from 'react';
 import { Layouts } from '@nti/web-commons';
 import Ext from '@nti/extjs';
 
-const styles = css`
-	.hidden {
-		display: none !important;
-	}
-`;
-
 WebappCalendarWindow.propTypes = {
 	onClose: PropTypes.func.isRequired,
 	target: PropTypes.object.isRequired,
@@ -19,7 +13,7 @@ export default function WebappCalendarWindow({ onClose, target }) {
 	const rebuildRef = React.useRef(null);
 
 	const onUnmount = React.useCallback(() => {
-		windowRef.current.addCls(styles.hidden);
+		windowRef.current.destroy();
 	}, [windowRef]);
 
 	const onMount = React.useCallback(() => {
@@ -28,8 +22,6 @@ export default function WebappCalendarWindow({ onClose, target }) {
 			onClose: onClose,
 
 			onItemClick: obj => {
-				onClose();
-
 				// temp solution to prevent having stale webinars in the calendar
 				if (obj.hasLink && obj.hasLink('WebinarRegister')) {
 					// clearTimeout(this.calendarDirty);
