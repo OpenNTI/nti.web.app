@@ -57,7 +57,7 @@ module.exports = exports = Ext.define(
 		},
 
 		startResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && !this.hasCurrentTimer) {
 				AnalyticsUtil.startEvent(id, {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define(
 		},
 
 		stopResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && this.hasCurrentTimer) {
 				AnalyticsUtil.stopEvent(id, 'ProfileActivityView');

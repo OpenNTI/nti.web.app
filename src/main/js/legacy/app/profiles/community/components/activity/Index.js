@@ -78,14 +78,12 @@ module.exports = exports = Ext.define(
 		},
 
 		startResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && !this.hasCurrentTimer) {
-				const contextId =
-					this.activeUser && this.activeUser.get('NTIID');
 				AnalyticsUtil.startEvent(id, {
 					type: 'ProfileActivityView',
-					RootContextID: contextId,
+					rootContextId: this.activeUser.get('NTIID'),
 				});
 
 				this.hasCurrentTimer = true;
@@ -93,7 +91,7 @@ module.exports = exports = Ext.define(
 		},
 
 		stopResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && this.hasCurrentTimer) {
 				AnalyticsUtil.stopEvent(id, 'ProfileActivityView');

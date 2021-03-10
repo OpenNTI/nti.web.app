@@ -67,7 +67,10 @@ module.exports = exports = Ext.define(
 			var id = this.activeEntity && this.activeEntity.getId();
 
 			if (id && !this.hasCurrentTimer) {
-				AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
+				AnalyticsUtil.startEvent(id, {
+					type: 'ProfileMembershipView',
+					rootContextId: this.activeEntity.get('NTIID'),
+				});
 
 				this.hasCurrentTimer = true;
 			}

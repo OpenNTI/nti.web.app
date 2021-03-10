@@ -283,7 +283,7 @@ module.exports = exports = Ext.define(
 
 			AnalyticsUtil.startEvent(this.course.getId(), {
 				type: 'CourseCatalogView',
-				RootContextID: this.course.getId(),
+				rootContextId: this.course.getId(),
 			});
 
 			this.on('beforedeactivate', 'onBeforeDeactivate');
