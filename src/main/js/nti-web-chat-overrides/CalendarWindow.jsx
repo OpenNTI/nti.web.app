@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import { Layouts } from '@nti/web-commons';
 import Ext from '@nti/extjs';
 
