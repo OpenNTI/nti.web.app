@@ -107,13 +107,17 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		window.addEventListener(
 			'DOMMouseScroll',
-			this.maybeStopScrollBleed.bind(this)
+			this.maybeStopScrollBleed.bind(this),
+			{ passive: false }
 		);
 		window.addEventListener(
 			'mousewheel',
-			this.maybeStopScrollBleed.bind(this)
+			this.maybeStopScrollBleed.bind(this),
+			{ passive: false }
 		);
-		window.addEventListener('wheel', this.maybeStopScrollBleed.bind(this));
+		window.addEventListener('wheel', this.maybeStopScrollBleed.bind(this), {
+			passive: false,
+		});
 	},
 
 	allowNavigation: function () {
