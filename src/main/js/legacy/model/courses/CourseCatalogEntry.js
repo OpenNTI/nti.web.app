@@ -502,12 +502,11 @@ module.exports = exports = Ext.define(
 					.join('/');
 			}
 
-			var myCoursInstance = nomnom(this.getLink('CourseInstance'));
+			var myCourseInstance = nomnom(this.getLink('CourseInstance'));
 
 			return function (record) {
-				console.log(record);
 				var i = record.getLink('CourseInstance');
-				return myCoursInstance === nomnom(i);
+				return myCourseInstance === nomnom(i);
 			};
 		},
 

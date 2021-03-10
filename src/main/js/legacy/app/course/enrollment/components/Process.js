@@ -304,7 +304,7 @@ module.exports = exports = Ext.define(
 		 * @param {boolean} recursive if we are called again to activate the next step
 		 * @returns {void}
 		 */
-		activateStep: function (index, recursive) {
+		activateStep: async function (index, recursive) {
 			const me = this,
 				item =
 					me.down('[index="' + index + '"]') ||
@@ -360,33 +360,39 @@ module.exports = exports = Ext.define(
 				maskCmp.unmask();
 			}
 
-			step.isComplete()
-				.then(function () {
-					//if we are completed
-					//if we aren't the last one check the next one
-					if (index < total - 1) {
-						me.activateStep(index + 1, true);
-					} else if (item) {
-						//if we are the last item make us active
-						setItem();
-					} else {
-						console.error(
-							'Last step must have a component to go with it'
-						);
-					}
-				})
-				.catch(function () {
-					//if we aren't compeleted
-					//if we have an cmp for this step
-					if (item) {
-						setItem();
-					} else {
-						//if we don't have cmp for a step it should never not be completed;
-						console.error(
-							'If a step has no item it can not be uncompleted'
-						);
-					}
+			const complete = await step
+				.isComplete()
+				// This was originally authored to treat exceptions (rejections) as "false" *sigh*
+				.catch(e => {
+					console.error(e);
+					return false;
 				});
+
+			if (complete) {
+				//if we are completed
+				//if we aren't the last one check the next one
+				if (index < total - 1) {
+					me.activateStep(index + 1, true);
+				} else if (item) {
+					//if we are the last item make us active
+					setItem();
+				} else {
+					console.error(
+						'Last step must have a component to go with it'
+					);
+				}
+			} else {
+				//if we aren't completed
+				//if we have an cmp for this step
+				if (item) {
+					setItem();
+				} else {
+					//if we don't have cmp for a step it should never not be completed;
+					console.error(
+						'If a step has no item it can not be uncompleted'
+					);
+				}
+			}
 		},
 
 		stepCompleted: function (cmp) {

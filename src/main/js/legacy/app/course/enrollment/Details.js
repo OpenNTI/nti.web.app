@@ -524,21 +524,17 @@ module.exports = exports = Ext.define(
 		 * @param  {Object} option option to load
 		 * @returns {Promise}	   fulfills when its loaded
 		 */
-		__addEnrollmentBase: function (option) {
-			var me = this,
-				loading;
-
+		async __addEnrollmentBase(option) {
 			if (option) {
-				loading = option.loaded.then(function (data) {
-					me.enrollmentOptions[data.Name] = data;
+				const data = await option.loaded;
+				if (data) {
+					this.enrollmentOptions[data.Name] = data;
 
-					me.__addBaseOption(option, data);
-				});
-			} else {
-				loading = Promise.reject();
+					this.__addBaseOption(option, data);
+				}
 			}
 
-			return loading;
+			return null;
 		},
 
 		/**
@@ -852,10 +848,13 @@ module.exports = exports = Ext.define(
 					const { Options } = enrollment;
 
 					return Promise.all(
-						Object.keys(Options).map(key => {
+						Object.keys(Options).map(async key => {
 							const option = Options[key];
-
-							return option.loaded.catch(() => null);
+							try {
+								return await option.loaded;
+							} catch {
+								return null;
+							}
 						})
 					);
 				}),

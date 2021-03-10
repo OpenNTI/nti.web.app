@@ -148,16 +148,16 @@ module.exports = exports = Ext.define(
 					name: 'Payment Info',
 					hasPricingCard: true,
 					enrollmentOption: option,
-					isComplete: function () {
-						return Promise.reject();
+					async isComplete() {
+						return false;
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						if (!data.purchaseDescription || !data.cardInfo) {
 							console.error(
 								'Incorrect data passed to complete',
 								arguments
 							);
-							return Promise.reject();
+							throw new Error('Invalid data');
 						}
 
 						return new Promise(function (fulfill, reject) {
@@ -182,10 +182,10 @@ module.exports = exports = Ext.define(
 					hasPricingCard: true,
 					goBackOnError: true,
 					lockCoupon: true,
-					isComplete: function () {
-						return Promise.reject();
+					async isComplete() {
+						return false;
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						if (
 							!data.purchaseDescription ||
 							!data.tokenObject ||
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define(
 								'Incorrect data passed to complete',
 								arguments
 							);
-							return Promise.reject();
+							throw new Error('Invalid data');
 						}
 
 						return new Promise(function (fulfill, reject) {
@@ -232,8 +232,8 @@ module.exports = exports = Ext.define(
 					hasPricingCard: true,
 					lockCoupon: true,
 					enrollmentOption: option,
-					isComplete: function () {
-						return Promise.resolve();
+					async isComplete() {
+						return true;
 					},
 				},
 				steps
@@ -251,16 +251,16 @@ module.exports = exports = Ext.define(
 					name: 'Payment Info',
 					hasPricingCard: true,
 					enrollmentOption: option,
-					isComplete: function () {
-						return Promise.reject();
+					async isComplete() {
+						return false;
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						if (!data.purchaseDescription || !data.cardInfo) {
 							console.error(
 								'Incorrect data passed to complete',
 								arguments
 							);
-							return Promise.reject();
+							return false;
 						}
 
 						return new Promise(function (fulfill, reject) {
@@ -285,10 +285,10 @@ module.exports = exports = Ext.define(
 					hasPricingCard: true,
 					goBackOnError: true,
 					lockCoupon: true,
-					isComplete: function () {
-						return Promise.reject();
+					async isComplete() {
+						return false;
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						if (
 							!data.purchaseDescription ||
 							!data.tokenObject ||
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define(
 								'Incorrect data passed to complete',
 								arguments
 							);
-							return Promise.reject();
+							throw new Error('Invalid data');
 						}
 
 						return new Promise(function (fulfill, reject) {
@@ -323,8 +323,8 @@ module.exports = exports = Ext.define(
 					lockCoupon: true,
 					enrollmentOption: option,
 					hasPricingCard: true,
-					isComplete: function () {
-						return Promise.resolve();
+					async isComplete() {
+						return true;
 					},
 				},
 				steps
@@ -348,16 +348,16 @@ module.exports = exports = Ext.define(
 					enrollmentOption: option,
 					hasPricingCard: true,
 					hidePrice: true,
-					isComplete: function () {
-						return Promise.reject();
+					async isComplete() {
+						return false;
 					},
-					complete: function (cmp, data) {
+					async complete(cmp, data) {
 						if (!data.token || !data.purchasable) {
 							console.error(
 								'Incorrect data passed to redeem',
 								arguments
 							);
-							return Promise.reject();
+							throw new Error('Invalid data');
 						}
 						return new Promise(function (fulfill, reject) {
 							me.StoreActions.redeemGift(
@@ -411,8 +411,8 @@ module.exports = exports = Ext.define(
 						redemptionText.heading ||
 						"You're Enrolled as a Lifelong Learner",
 					hasPricingCard: false,
-					isComplete: function () {
-						return Promise.resolve();
+					async isComplete() {
+						return true;
 					},
 				},
 				steps
@@ -511,7 +511,7 @@ module.exports = exports = Ext.define(
 			) {
 				return {
 					name: this.NAME,
-					loaded: Promise.reject(),
+					loaded: null,
 					IsEnrolled: false,
 					IsAvailable: false,
 				};

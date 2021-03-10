@@ -30,7 +30,7 @@ module.exports = exports = Ext.define(
 		Steps look like
 
 		{
-			isComplete: function //returns a promise that fulfills if this step is completed, rejects if they need to complete it
+			isComplete: async function //returns a boolean
 			enrollmentOption: Object //the object from the CCE's EnrollmentOptions
 			xtype: String //the view to show for this step if empty this step is just a placeholder in the breadcrumb thingy
 			name: String //the name that displays in the progress bread crumb thingy
@@ -49,12 +49,14 @@ module.exports = exports = Ext.define(
 			name: '',
 			enrollmentOption: {},
 			isActive: false,
-			isComplete: function () {},
-			comlete: function () {},
-			done: function (cmp) {
+			async isComplete() {
+				return true;
+			},
+			async complete() {},
+			done(cmp) {
 				cmp.fireEvent('step-completed');
 			},
-			error: function (cmp) {
+			error(cmp) {
 				cmp.fireEvent('step-error');
 			},
 		},

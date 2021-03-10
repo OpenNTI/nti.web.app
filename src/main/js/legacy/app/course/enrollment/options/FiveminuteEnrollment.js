@@ -52,18 +52,11 @@ module.exports = exports = Ext.define(
 					hasOpenOption: openOption && openOption.Enabled,
 					hasStoreOption: storeOption && storeOption.IsAvailable,
 					enrollmentOption: enrollmentOption,
-					isComplete: function () {
-						return new Promise(function (fulfill, reject) {
-							if (
-								$AppConfig.userObject.get(
-									'admission_status'
-								) === 'Admitted'
-							) {
-								fulfill();
-							} else {
-								reject();
-							}
-						});
+					async isComplete() {
+						return (
+							$AppConfig.userObject.get('admission_status') ===
+							'Admitted'
+						);
 					},
 					async complete(cmp, data) {
 						var link = $AppConfig.userObject.getLink(
@@ -92,50 +85,41 @@ module.exports = exports = Ext.define(
 					xtype: 'enrollment-enroll',
 					name: 'Enrollment',
 					enrollmentOption: enrollmentOption,
-					isComplete: function () {
-						var links = enrollmentOption.Links,
-							link = Service.getLinkFrom(
-								links,
-								'fmaep.is.pay.done'
-							),
-							crn = enrollmentOption.NTI_CRN,
-							term = enrollmentOption.NTI_Term;
+					async isComplete() {
+						const links = enrollmentOption.Links;
+						const link = Service.getLinkFrom(
+							links,
+							'fmaep.is.pay.done'
+						);
 
 						if (!link) {
-							return Promise.reject('No is pay done link');
+							throw new Error('No Link: fmaep.is.pay.done');
 						}
 
-						return Service.post(link, {
-							crn: crn,
-							term: term,
-						}).then(function (response) {
-							var json = Ext.JSON.decode(response, true);
-
-							if (json.Status !== 200) {
-								return Promise.reject(response);
-							}
-
-							if (json.State) {
-								return true;
-							} else {
-								return Promise.reject(response);
-							}
+						const response = await Service.post(link, {
+							crn: enrollmentOption.NTI_CRN,
+							term: enrollmentOption.NTI_Term,
 						});
+
+						const json = Ext.JSON.decode(response, true);
+
+						if (json.Status !== 200 || !json.State) {
+							throw response;
+						}
+
+						return true;
 					},
-					complete: function (cmp, data) {
-						var link = getEnrollAndPayLink(),
-							crn = enrollmentOption.NTI_CRN,
-							term = enrollmentOption.NTI_Term,
-							returnUrl = course.buildPaymentReturnURL();
+					async complete(cmp, data) {
+						const link = getEnrollAndPayLink();
 
 						if (!link) {
-							return Promise.reject('No enroll and pay link');
+							throw new Error('No Link: enroll and pay');
 						}
 
 						return Service.post(link, {
-							crn: crn,
-							term: term,
-							return_url: returnUrl,
+							crn: enrollmentOption.NTI_CRN,
+							term: enrollmentOption.NTI_Term,
+							return_url: course.buildPaymentReturnURL(),
 							AllowVendorUpdates: data.subscribe,
 						});
 					},
@@ -148,8 +132,8 @@ module.exports = exports = Ext.define(
 				{
 					xtype: '',
 					name: 'Payment',
-					isComplete: function () {
-						return Promise.resolve();
+					async isComplete() {
+						return true;
 					},
 				},
 				steps
@@ -161,8 +145,8 @@ module.exports = exports = Ext.define(
 					xtype: 'enrollment-confirmation',
 					name: 'Confirmation',
 					heading: "You're Enrolled to Earn College Credit.",
-					isComplete: function () {
-						return Promise.resolve();
+					async isComplete() {
+						return true;
 					},
 					enrollmentOption: enrollmentOption,
 				},
@@ -319,7 +303,7 @@ module.exports = exports = Ext.define(
 			) {
 				return {
 					name: this.NAME,
-					loaded: Promise.reject(),
+					loaded: null,
 					IsEnrolled: false,
 					IsAvailable: false,
 				};

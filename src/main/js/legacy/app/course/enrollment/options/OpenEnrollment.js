@@ -166,7 +166,7 @@ module.exports = exports = Ext.define(
 			if (!option || (!option.IsAvailable && !option.IsEnrolled)) {
 				return {
 					name: this.NAME,
-					loaded: Promise.reject(),
+					loaded: null,
 					IsEnrolled: false,
 					IsAvailable: false,
 				};
