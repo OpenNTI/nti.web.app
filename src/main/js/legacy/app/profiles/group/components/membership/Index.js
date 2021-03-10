@@ -46,17 +46,20 @@ module.exports = exports = Ext.define(
 		},
 
 		startResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && !this.hasCurrentTimer) {
-				AnalyticsUtil.startEvent(id, 'ProfileMembershipView');
+				AnalyticsUtil.startEvent(id, {
+					type: 'ProfileMembershipView',
+					rootContextId: this.activeUser.get('NTIID'),
+				});
 
 				this.hasCurrentTimer = true;
 			}
 		},
 
 		stopResourceViewed: function () {
-			var id = this.activeUser && this.activeUser.getId();
+			var id = this.activeUser?.getId();
 
 			if (id && this.hasCurrentTimer) {
 				AnalyticsUtil.stopEvent(id, 'ProfileMembershipView');
