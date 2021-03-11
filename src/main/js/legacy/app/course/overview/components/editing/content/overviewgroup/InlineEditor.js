@@ -28,7 +28,6 @@ module.exports = exports = Ext.define(
 			{ cls: 'sub-label', html: 'Choose a Color' },
 			{
 				tag: 'tpl',
-				if: 'advanced',
 				cn: [
 					{
 						tag: 'label',
