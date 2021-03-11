@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		const href = `uri:${catalogEntry.href}`;
 
 		const route = `./nti-course-catalog-entry/${encodeURIComponent(href)}`;
-		this.pushRootRoute(null, route);
+		this.pushRootRoute('Loading', route);
 	},
 
 	navigateToCommunity(community) {
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		}
 
 		if (route) {
-			this.pushRootRoute(null, route, { community: community });
+			this.pushRootRoute(community.Username, route, { community: community });
 		}
 	},
 
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 
 		this.CourseActions.transitionToCourse(courseID, null, part).then(
 			route => {
-				this.pushRootRoute(null, route);
+				this.pushRootRoute(course?.CatalogEntry?.title ?? '', route);
 			}
 		);
 	},
