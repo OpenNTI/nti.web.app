@@ -35,19 +35,11 @@ module.exports = exports = Ext.define(
 						isAvailable: async bundle => {
 							try {
 								const instance = await bundle.getInterfaceInstance();
-								const isConnected = await GotoWebinar.isConnected(
-									instance
-								);
 
-								if (isConnected) {
-									return true;
-								}
+								const status = await GotoWebinar.connectedStatus(instance);
+								const {connected, canConnect} = status;
 
-								const canConnect = await GotoWebinar.canConnect(
-									instance
-								);
-
-								return canConnect;
+								return connected || canConnect;
 							} catch (e) {
 								return false;
 							}
