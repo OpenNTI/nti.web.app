@@ -71,7 +71,7 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 		const { topicModel } = this.props;
 		const { topicModel: prevTopic } = prev;
 
-		if (topicModel !== prevTopic) {
+		if (prevTopic && topicModel !== prevTopic) {
 			this.setupTopic();
 		}
 	}

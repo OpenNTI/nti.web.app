@@ -225,43 +225,48 @@ module.exports = exports = Ext.define(
 			this.loadEditor();
 		},
 
-		showTopic: function (topic, forum, activeComment) {
-			var topicCmp = this.down('forums-topic-topic'),
-				commentCmp = this.down('forums-topic-comment-thread'),
-				controlCmp = this.down('forums-topic-comment-controls'),
-				me = this;
+		beforeDestroy() {
+			this.callParent(arguments);
+			this.stopCurrentAnalyticEvent?.();
+			this.dead = true;
+		},
 
-			function stopTimer() {
-				if (me.currentAnalyticId && me.hasCurrentTimer) {
-					delete me.hasCurrentTimer;
-					AnalyticsUtil.stopEvent(me.currentAnalyticId, 'TopicView');
-				}
+		startAnalyticEvent(topicId) {
+			this.stopCurrentAnalyticEvent?.();
+			this.stopCurrentAnalyticEvent = () =>
+				AnalyticsUtil.stopEvent(topicId, 'TopicView');
+
+			AnalyticsUtil.startEvent(topicId, 'TopicView');
+		},
+
+		showTopic(topic, forum, activeComment) {
+			if (this.dead) {
+				return;
 			}
+			let topicCmp = this.down('forums-topic-topic');
+			let commentCmp = this.down('forums-topic-comment-thread');
+			let controlCmp = this.down('forums-topic-comment-controls');
 
-			function startTimer() {
-				if (!me.hasCurrentTimer) {
-					me.hasCurrentTimer = true;
+			const stopTimer = () => this.stopCurrentAnalyticEvent?.();
 
-					AnalyticsUtil.startEvent(me.currentAnalyticId, 'TopicView');
-				}
-			}
+			const startTimer = () => this.startAnalyticEvent(topic?.getId());
 
 			this.activeTopic = topic;
 
-			if (topic && topic.getId() !== this.currentAnalyticId) {
+			if (topic?.getId() !== this.currentAnalyticId) {
 				stopTimer();
-				this.currentAnalyticId = topic.getId();
-				startTimer();
+				this.currentAnalyticId = topic?.getId();
+
+				if (topic) startTimer();
 			}
 
 			if (!this.visibilityMonitors) {
 				this.visibilityMonitors = this.on(
 					{
-						destroy: function () {
-							Ext.destroy(me.visibilityMonitors);
-							stopTimer();
+						destroy: () => {
+							Ext.destroy(this.visibilityMonitors);
 						},
-						'visibility-changed': function (visible) {
+						'visibility-changed': visible => {
 							//start the time when we become visible, stop it when we hide
 							if (visible) {
 								startTimer();
@@ -270,7 +275,7 @@ module.exports = exports = Ext.define(
 							}
 						},
 					},
-					me,
+					this,
 					{ destroyable: true }
 				);
 			}
