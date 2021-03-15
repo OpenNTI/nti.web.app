@@ -51,8 +51,6 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.ContentStore = ContentStateStore.getInstance();
 		this.BundleViewStore = BundleStateStore.getInstance();
 
-		this.getActiveBundle = Promise.reject();
-
 		this.initRouter();
 
 		this.addRoute('/content', this.showContent.bind(this));
@@ -67,40 +65,30 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.BundleViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-	setActiveBundle: function (ntiid, bundle) {
-		var me = this;
-
+	async setActiveBundle(ntiid, bundle) {
 		ntiid = ntiid.toLowerCase();
 
 		//if we are setting my current bundle no need to do anything
-		if (
-			me.activeBundle &&
-			(me.activeBundle.get('NTIID') || '').toLowerCase() === ntiid
-		) {
-			me.getActiveBundle = Promise.resolve(me.activeBundle);
-		} else {
-			me.getActiveBundle = me.ContentStore.onceLoaded().then(function () {
-				var current;
-				//if the bundle was cached no need to look for it
-				if (bundle && (bundle.getId() || '').toLowerCase() === ntiid) {
-					current = bundle;
-				} else {
-					current = me.ContentStore.findContentBy(function (content) {
-						return content.get('NTIID').toLowerCase() === ntiid;
-					});
-				}
-
-				if (!current) {
-					return Promise.reject('No bundle found for:', ntiid);
-				}
-
-				me.activeBundle = current;
-
-				return current;
-			});
+		if (this.activeBundle?.get('NTIID')?.toLowerCase?.() === ntiid) {
+			return this.activeBundle;
 		}
 
-		return me.getActiveBundle;
+		await this.ContentStore.onceLoaded();
+		//if the bundle was cached no need to look for it
+		const current =
+			bundle?.getId?.()?.toLowerCase?.() === ntiid
+				? bundle
+				: this.ContentStore.findContentBy(function (content) {
+						return content.get('NTIID').toLowerCase() === ntiid;
+				  });
+
+		if (!current) {
+			throw new Error('No bundle found for: ' + ntiid);
+		}
+
+		this.activeBundle = current;
+
+		return current;
 	},
 
 	applyState() {
