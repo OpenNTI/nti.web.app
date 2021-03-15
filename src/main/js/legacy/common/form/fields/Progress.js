@@ -51,8 +51,6 @@ module.exports = exports = Ext.define(
 			if (!this.running) {
 				this.start();
 			}
-
-			console.log(this.progress);
 		},
 
 		start: function () {
