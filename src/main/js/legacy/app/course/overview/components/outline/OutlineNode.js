@@ -246,8 +246,8 @@ const OutlineNode = (module.exports = exports = Ext.define(
 				header.removeCls('selected');
 				header.removeCls('out-of-view');
 				header.el
-					.down('.label')
-					.el.dom.setAttribute(
+					?.down('.label')
+					.el?.dom.setAttribute(
 						'aria-label',
 						this.outlineNode.getTitle()
 					);
