@@ -1,5 +1,6 @@
 const cx = require('classnames');
 
+const Logger = require('@nti/util-logger');
 const Ext = require('@nti/extjs');
 const Anchors = require('internal/legacy/util/Anchors');
 const AnnotationUtils = require('internal/legacy/util/Annotations');
@@ -27,6 +28,8 @@ require('../../annotations/QuizResults');
 require('../../annotations/Redaction');
 require('../../annotations/Transcript');
 require('../../assessment/Scoreboard');
+
+const logger = Logger.get('legacy:app:content-viewer:reader:Annotations');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.contentviewer.reader.Annotations',
@@ -141,7 +144,7 @@ module.exports = exports = Ext.define(
 		},
 
 		storeEventsAdd: function (store, records) {
-			console.debug(
+			logger.debug(
 				'New records in store, adding to page...',
 				store.cacheMapId || store.containerId,
 				records
@@ -255,7 +258,7 @@ module.exports = exports = Ext.define(
 				indexedOverlayData,
 				result = [];
 
-			console.log('Getting ranges for search hits');
+			logger.debug('Getting ranges for search hits');
 
 			//We get ranges from two places, the iframe content
 			//and the overlays
@@ -397,7 +400,7 @@ module.exports = exports = Ext.define(
 
 				return result;
 			} catch (e) {
-				console.error(e.message, e.stack);
+				logger.error(e.message, e.stack);
 				return null;
 			}
 		},
@@ -411,13 +414,13 @@ module.exports = exports = Ext.define(
 			}
 
 			if (!xy || !xy[0] || !xy[1]) {
-				// console.warn('xy are null or undefined: ', xy);
+				// logger.warn('xy are null or undefined: ', xy);
 				return;
 			}
 
 			if (isFake) {
 				this.selectRange(range);
-				// console.warn('Trying highlight on fake page info');
+				// logger.warn('Trying highlight on fake page info');
 				return;
 			}
 
@@ -600,7 +603,7 @@ module.exports = exports = Ext.define(
 				menu.setXY(menuPosition(range, xy), false); // center it
 				menu.addClass('visible'); // show it.
 			} else {
-				console.debug(
+				logger.debug(
 					'hack alert; annotation context menu deliberately hidden in mathcounts content'
 				);
 				return;
@@ -631,7 +634,7 @@ module.exports = exports = Ext.define(
 			}
 
 			if (this.exists(record)) {
-				console.log('Updating existing annotation?');
+				logger.debug('Updating existing annotation?');
 				this.annotations[record.getId()]
 					.getRecord()
 					.fireEvent('updated', record);
@@ -672,7 +675,7 @@ module.exports = exports = Ext.define(
 				this.annotations[oid] = w;
 				Ext.callback(onCreated, w, [w]);
 			} catch (e) {
-				console.error(Globals.getError(e));
+				logger.error(Globals.getError(e));
 			}
 
 			if (w && type === 'redaction') {
@@ -692,7 +695,7 @@ module.exports = exports = Ext.define(
 			)[0];
 
 			if (!scoreboard) {
-				console.error(
+				logger.error(
 					'Got prior assessments back but there is no scoreboard to associate with',
 					sets
 				);
@@ -713,7 +716,7 @@ module.exports = exports = Ext.define(
 					try {
 						me.createAnnotationWidget(r.getModelName(), r);
 					} catch (e) {
-						console.error(
+						logger.error(
 							'Could not build ' +
 								r.getModelName() +
 								' from record:',
@@ -743,7 +746,7 @@ module.exports = exports = Ext.define(
 					}
 				}
 			} catch (er) {
-				console.error('onContextMenuHandler: ' + er.message);
+				logger.error('onContextMenuHandler: ' + er.message);
 			}
 		},
 
@@ -790,9 +793,9 @@ module.exports = exports = Ext.define(
 					return range;
 				}
 			} catch (e) {
-				console.error(e.stack || e.message || e);
+				logger.error(e.stack || e.message || e);
 			}
-			console.warn(
+			logger.warn(
 				'skipping getSelection() no viable selection',
 				selection
 			);
@@ -806,7 +809,7 @@ module.exports = exports = Ext.define(
 				s.removeAllRanges();
 				s.addRange(range);
 			} catch (e) {
-				console.error(e.stack || e.message || e);
+				logger.error(e.stack || e.message || e);
 			}
 		},
 
@@ -816,7 +819,7 @@ module.exports = exports = Ext.define(
 			try {
 				win.getSelection().removeAllRanges();
 			} catch (e) {
-				console.warn(e.stack || e.toString());
+				logger.warn(e.stack || e.toString());
 			}
 		},
 	}
