@@ -76,8 +76,8 @@ module.exports = exports = Ext.define(
 		},
 
 		onDeactivate: function () {
-			this.endViewedAnalytics();
 			Ext.EventManager.removeResizeListener(this.onWindowResize, this);
+			this.endViewedAnalytics();
 		},
 
 		/*
@@ -470,13 +470,11 @@ module.exports = exports = Ext.define(
 		},
 
 		endViewedAnalytics: function () {
-			var data = this.__lastAnalyticEvent;
-
-			if (!data) {
-				return;
+			const data = this.__lastAnalyticEvent;
+			if (data) {
+				delete this.__lastAnalyticEvent;
+				AnalyticsUtil.stopEvent(data.resourceId, data.type, data);
 			}
-
-			AnalyticsUtil.stopEvent(data.resourceId, data.type, data);
 		},
 	}
 );
