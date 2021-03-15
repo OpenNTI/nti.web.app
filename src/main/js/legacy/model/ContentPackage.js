@@ -95,18 +95,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		return true;
 	},
 
-	getToc: function (status) {
-		var me = this,
-			library = me.LibraryActions,
-			index = me.get('index');
+	async getToc(status) {
+		const library = this.LibraryActions;
+		const index = this.get('index');
+		const REQUESTS = this.self.TOC_REQUESTS;
+		const key = index + '-' + status;
 
-		if (me.self.TOC_REQUESTS[index + '-' + status]) {
-			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
-		} else {
-			me.tocPromise = (async () => {
+		this.tocPromise =
+			REQUESTS[key] ||
+			(REQUESTS[key] = (async () => {
 				try {
 					if (!this.shouldAllowTocLoad()) {
-						throw new Error('Skip');
+						return null;
 					}
 
 					const data = await Service.request(Globals.getURL(index));
@@ -114,41 +114,34 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 					const xml = await library.parseXML(data);
 					//set my root, icon, and title on the doc
 
-					var doc = xml.documentElement;
+					const doc = xml.documentElement;
 
-					doc.setAttribute('base', me.get('root'));
-					doc.setAttribute('icon', me.get('icon'));
-					doc.setAttribute('title', me.get('title'));
+					doc.setAttribute('base', this.get('root'));
+					doc.setAttribute('icon', this.get('icon'));
+					doc.setAttribute('title', this.get('title'));
 
 					return xml;
 				} catch (reason) {
-					delete me.self.TOC_REQUESTS[index + '-' + status];
+					delete this.self.TOC_REQUESTS[key];
 
 					throw reason;
 				}
-			})();
+			})());
 
-			me.self.TOC_REQUESTS[index + '-' + status] = me.tocPromise;
+		const xml = await this.tocPromise;
+
+		if (xml) {
+			const doc = xml.documentElement;
+
+			//make sure I am synced with the toc
+			this.set({
+				toc: xml,
+				NTIID: doc.getAttribute('ntiid'),
+				isCourse: doc.getAttribute('isCourse') === 'true',
+			});
 		}
 
-		me.tocPromise
-			.then(xml => {
-				var doc = xml.documentElement;
-
-				//make sure I am synced with the toc
-				me.set({
-					toc: xml,
-					NTIID: doc.getAttribute('ntiid'),
-					isCourse: doc.getAttribute('isCourse') === 'true',
-				});
-			})
-			.catch(e => {
-				if (e?.message !== 'Skip') {
-					throw e;
-				}
-			});
-
-		return me.tocPromise;
+		return xml;
 	},
 
 	asUIData: function () {
