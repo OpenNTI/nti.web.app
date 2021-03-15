@@ -1,6 +1,6 @@
 const cx = require('classnames');
 
-const Logger = require('@nti/util-logger');
+const { default: Logger } = require('@nti/util-logger');
 const Ext = require('@nti/extjs');
 const Anchors = require('internal/legacy/util/Anchors');
 const AnnotationUtils = require('internal/legacy/util/Annotations');
