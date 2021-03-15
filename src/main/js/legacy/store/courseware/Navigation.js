@@ -43,7 +43,7 @@ module.exports = exports = Ext.define(
 		},
 
 		failedToBuild: function (reason) {
-			console.error('Could not build outline store:', reason);
+			// console.debug('Could not build outline store:', reason);
 			return this;
 		},
 
