@@ -243,7 +243,7 @@ module.exports = exports = Ext.define(
 					// don't close if another showToast request came in while
 					// waiting to close this one
 					if (this.safeToCloseToast) {
-						this.toolbarCmp.setProps({ message: null });
+						this.toolbarCmp?.setProps({ message: null });
 					}
 				});
 			};
