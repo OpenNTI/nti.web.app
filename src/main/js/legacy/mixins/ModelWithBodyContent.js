@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const Logger = require('@nti/util-logger').default;
+const { default: Logger } = require('@nti/util-logger');
 const WhiteboardCanvas = require('internal/legacy/app/whiteboard/Canvas');
 const Video = require('internal/legacy/app/video/Video');
 const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
