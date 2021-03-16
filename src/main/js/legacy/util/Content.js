@@ -1,3 +1,4 @@
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const lazy = require('internal/legacy/util/lazy-require')
 	.get('AnnotationUtils', () => require('internal/legacy/util/Annotations'))
@@ -1105,46 +1106,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		});
 	},
 
-	getContentPackageContainingReading(ntiid, bundle) {
+	async getContentPackageContainingReading(ntiid, bundle) {
 		const contentPackages = this.__getContentPackages(bundle);
-		let toCheck = [...contentPackages];
+		const service = await getService();
 
-		function findReading(toc) {
-			var escaped = lazy.ParseUtils.escapeId(ntiid),
-				query =
-					'toc[ntiid="' +
-					escaped +
-					'"],topic[ntiid="' +
-					escaped +
-					'"]';
-
-			return toc.querySelector(query);
+		try {
+			const pageInfo = await service.getPageInfo(ntiid);
+			const packageId = pageInfo.getLinkProperty('package', 'ntiid');
+			return contentPackages.find(x => x?.get('NTIID') === packageId);
+		} catch {
+			return null;
 		}
-
-		const checkNext = async () => {
-			const current = toCheck.pop();
-			const id = current?.get('NTIID');
-
-			if (!current) {
-				return null;
-			}
-
-			if (id === ntiid) {
-				return current;
-			}
-
-			try {
-				const toc = await this.__resolveTocFor(bundle, id);
-
-				if (findReading(toc)) {
-					return current;
-				}
-			} catch {
-				//move on
-			}
-			return checkNext();
-		};
-
-		return checkNext();
 	},
 }).create();
