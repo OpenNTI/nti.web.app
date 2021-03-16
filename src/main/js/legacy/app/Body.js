@@ -79,6 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			this.onNewContext.bind(this)
 		);
 
+		this.addRoute('/login', () => this.replaceRoute(document.title, '/'));
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
 		this.addRoute('/bundle/:id', this.setBundleActive.bind(this));
