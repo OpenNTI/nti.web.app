@@ -884,7 +884,7 @@ module.exports = exports = Ext.define(
 
 					//Try to keep the instance of the injectedAssignment the
 					//same between all the views
-					if (a.getId() === injectedAssignment.getId()) {
+					if (a.getId() === injectedAssignment?.getId()) {
 						a = injectedAssignment;
 					}
 
