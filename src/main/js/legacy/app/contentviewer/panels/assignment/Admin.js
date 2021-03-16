@@ -30,41 +30,30 @@ module.exports = exports = Ext.define(
 
 		afterRender: function () {
 			this.callParent(arguments);
+			this.afterRenderTask();
+		},
 
-			var reader = this.down('reader-content'),
-				assignmentHistoryItemContainer = this
-					.assignmentHistoryItemContainer;
+		afterRenderTask: async function () {
+			const reader = this.down('reader-content');
+			const assignmentHistoryItemContainer = await this
+				.assignmentHistoryItemContainer;
 
 			reader.getScroll().lock();
 			reader.pageWidgets.hide();
-
-			function done() {
-				reader.getScroll().unlock();
-				this.beginViewedAnalytics();
-			}
 
 			if (!this.pageInfo) {
 				console.error('No pageinfo configured');
 				return;
 			}
 
-			if (
-				!assignmentHistoryItemContainer ||
-				!(assignmentHistoryItemContainer instanceof Promise)
-			) {
-				assignmentHistoryItemContainer = Promise.resolve(
-					this.assignmentHistoryItemContainer
-				);
+			const historyItem = await assignmentHistoryItemContainer.getMostRecentHistoryItem();
+
+			if (!reader.isDestroyed) {
+				reader.getNoteOverlay().disable();
+				this.selectHistoryItem(historyItem);
+				reader.getScroll().unlock();
+				this.beginViewedAnalytics();
 			}
-
-			assignmentHistoryItemContainer
-				.then(container => container.getMostRecentHistoryItem())
-				.then(h => {
-					reader.getNoteOverlay().disable();
-
-					return this.selectHistoryItem(h);
-				})
-				.then(done.bind(this));
 		},
 
 		selectHistoryItem(historyItem) {
