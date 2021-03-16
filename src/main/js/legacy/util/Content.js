@@ -73,10 +73,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return ntiid || thing;
 	},
 
-	__getContentPackages(x) {
-		return x.getContentPackages ? x.getContentPackages() : [];
-	},
-
 	__resolveTocs: function (bundleOrTocOrNTIID) {
 		var x = bundleOrTocOrNTIID,
 			load;
@@ -1107,15 +1103,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	async getContentPackageContainingReading(ntiid, bundle) {
-		const contentPackages = this.__getContentPackages(bundle);
-		const service = await getService();
-
 		try {
+			const service = await getService();
 			const pageInfo = await service.getPageInfo(ntiid);
 			const packageId = pageInfo.getLinkProperty('package', 'ntiid');
 			// TODO: we can skip searching our local collection and just pull the package from the packageId
 			// The only reason I didn't do that now, was because the caller is expecting
 			// the ExtJS model, not the lib-interfaces model.
+			const contentPackages = bundle?.getContentPackages?.() || [];
 			return contentPackages.find(x => x?.get('NTIID') === packageId);
 		} catch {
 			return null;
