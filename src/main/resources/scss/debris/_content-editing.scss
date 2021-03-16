@@ -830,9 +830,8 @@ input[type='number'] {
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
 	.title {
-		width: 100%;
+		width: calc(100% - 40px);
 		font-size: 0.875em;
-		margin-bottom: 1.25em;
 		padding: 0.35em;
 		font-family: var(--body-font-family);
 		font-style: italic;
@@ -842,45 +841,6 @@ input[type='number'] {
 
 		&.error {
 			box-shadow: 0 0 0 1px var(--primary-red);
-		}
-	}
-
-	ul.colors {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		margin-top: 0.5em;
-		margin-bottom: 2em;
-		max-width: 240px;
-
-		li.color {
-			display: inline-block;
-			width: 20px;
-			height: 20px;
-			margin-right: 10px;
-			cursor: pointer;
-
-			&:last-child,
-			&:nth-child(8) {
-				margin-right: 0;
-			}
-
-			&.selected {
-				opacity: 0.7;
-				position: relative;
-
-				&::after {
-					content: '';
-					display: block;
-					position: absolute;
-					top: -4px;
-					left: -4px;
-					right: -4px;
-					bottom: -4px;
-					box-shadow: 0 0 0 1px #979797;
-					border-radius: 4px;
-				}
-			}
 		}
 	}
 }
