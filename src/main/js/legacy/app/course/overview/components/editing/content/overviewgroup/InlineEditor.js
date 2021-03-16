@@ -1,8 +1,17 @@
 const Ext = require('@nti/extjs');
+const {Input} = require('@nti/web-commons');
+const {Color: ColorLib} = require('@nti/lib-commons');
 const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
 const Color = require('internal/legacy/util/Color');
+const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const EditingActions = require('../../Actions');
+
+const styles = stylesheet`
+	.color-input-container {
+		float: right;
+	}
+`;
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor',
@@ -25,48 +34,12 @@ module.exports = exports = Ext.define(
 				value: '{title}',
 				maxlength: '{maxLength}',
 			},
-			{ cls: 'sub-label', html: 'Choose a Color' },
-			{
-				tag: 'tpl',
-				cn: [
-					{
-						tag: 'label',
-						cn: [
-							'#',
-							{
-								tag: 'input',
-								cls: 'color-input',
-								placeholder: 'Enter a Hex Code',
-								value: '{currentColor}',
-							},
-						],
-					},
-				],
-			},
-			{
-				tag: 'ul',
-				cls: 'colors',
-				cn: [
-					{
-						tag: 'tpl',
-						for: 'colors',
-						cn: [
-							{
-								tag: 'li',
-								cls: 'color {cls}',
-								'data-value': '{hex}',
-								style: { background: '#{hex}' },
-							},
-						],
-					},
-				],
-			},
+			{ cls: 'color-input', tag: 'span'},
 		]),
 
 		renderSelectors: {
 			inputEl: '.title',
-			colorsEl: '.colors',
-			colorInput: '.color-input',
+			colorInputContainerEl: '.color-input',
 		},
 
 		escapeForInput: function (value) {
@@ -82,21 +55,7 @@ module.exports = exports = Ext.define(
 					: '',
 				accent = this.record ? this.record.get('accentColor') : '';
 
-			function isSelectedColor(hex, index) {
-				if (accent) {
-					return hex === accent;
-				}
-
-				return index === 0;
-			}
-
 			this.renderData = Ext.apply(this.renderData || {}, {
-				colors: colors.map(function (hex, index) {
-					return {
-						cls: isSelectedColor(hex, index) ? 'selected' : '',
-						hex: hex,
-					};
-				}),
 				currentColor: accent || colors[0],
 				advanced: Service.canDoAdvancedEditing(),
 				title: title,
@@ -107,38 +66,34 @@ module.exports = exports = Ext.define(
 		afterRender: function () {
 			this.callParent(arguments);
 
-			this.mon(this.colorsEl, 'click', this.maybeSelectColor.bind(this));
-			this.mon(this.inputEl, 'keyup', this.onInputChange.bind(this));
+			var colors = OverviewGroup.COLOR_CHOICES,
+				accent = this.record ? this.record.get('accentColor') : '';
 
-			if (this.colorInput) {
-				this.mon(
-					this.colorInput,
-					'keyup',
-					this.onInputChange.bind(this)
-				);
-			}
+			this.colorInput = ReactHarness.create({
+				cls: styles.colorInputContainer,
+				component: Input.Color.Flyout,
+				renderTo: this.colorInputContainerEl,
+				value: accent === '' ? colors[0].color : ColorLib.fromHex(accent),
+				onChange: (newColor) => {
+    				this.colorInput.setProps({value: newColor});
+					this.onInputChange();
+				},
+				arrow: true,
+				swatches: colors,
+				veriticalAlign: Input.Color.Flyout.ALIGNMENTS.BOTTOM,
+				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT
+			});
 
 			this.onInputChange();
 		},
 
-		getSelectedColorEl: function () {
-			return (
-				this.colorsEl &&
-				this.colorsEl.dom &&
-				this.colorsEl.dom.querySelector('.color.selected')
-			);
-		},
-
 		getSelectedColor: function () {
-			var selectedEl = this.getSelectedColorEl(),
-				recordColor = this.record && this.record.get('accentColor'),
+			var recordColor = this.record && this.record.get('accentColor'),
 				value;
 
-			if (this.colorInput) {
-				value = this.colorInput && this.colorInput.dom.value;
-				value = value.replace('#', '');
-			} else if (selectedEl) {
-				value = selectedEl.getAttribute('data-value');
+			if (this.colorInput ) {
+				value = this.colorInput.getProps().value.hex.toString();
+				value = value?.replace('#', '');
 			} else if (recordColor) {
 				value = recordColor;
 			}
@@ -157,28 +112,6 @@ module.exports = exports = Ext.define(
 		},
 
 		onInputChange: function () {
-			if (this.onChange) {
-				this.onChange(this.getValue());
-			}
-		},
-
-		maybeSelectColor: function (e) {
-			var color = e.getTarget('[data-value]'),
-				value = color && color.getAttribute('data-value'),
-				current = this.getSelectedColorEl();
-
-			if (color) {
-				if (current) {
-					current.classList.remove('selected');
-				}
-
-				color.classList.add('selected');
-
-				if (this.colorInput) {
-					this.colorInput.dom.value = value;
-				}
-			}
-
 			if (this.onChange) {
 				this.onChange(this.getValue());
 			}
