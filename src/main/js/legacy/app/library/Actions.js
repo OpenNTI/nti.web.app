@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 		const getToc = contentPackageID
 			? bundle.getTocFor(contentPackageID)
-			: bundle.getTocs().then(tocs => tocs[0]);
+			: bundle.getToCs().then(([first]) => first);
 		const contentPackage = contentPackageID
 			? bundle.getContentPackage(contentPackageID)
 			: bundle.getContentPackages[0];

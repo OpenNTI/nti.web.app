@@ -133,12 +133,12 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			});
 	},
 
-	getInfo: function (record, course, overviewsrc) {
+	getInfo: function (record, course, overviewSrc) {
 		return Promise.all([
 			course.getAssignments(),
 			course.getWrapper && course.getWrapper(),
 			ContentUtils.getLocation(record.get('ContentNTIID'), course),
-			overviewsrc ? null : course.getVideoIndex(),
+			overviewSrc ? null : course.getVideoIndex(),
 		]);
 	},
 

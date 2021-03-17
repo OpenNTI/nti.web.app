@@ -132,7 +132,7 @@ module.exports = exports = Ext.define(
 			},
 		],
 
-		constructor: function () {
+		constructor() {
 			this.callParent(arguments);
 
 			this.__precacheEntry();
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define(
 			return this.get('Bundle') || {};
 		},
 
-		asUIData: function () {
+		asUIData() {
 			var e = this.getCourseCatalogEntry(),
 				bundle =
 					(this.getBundle().asUIData &&
@@ -170,12 +170,12 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		allowPathSiblings: function (ntiid) {
+		allowPathSiblings(ntiid) {
 			const outline = flattenOutlineIn(this);
 			return outline.indexOf(ntiid) > -1;
 		},
 
-		getDefaultAssetRoot: function () {
+		getDefaultAssetRoot() {
 			var location = this.getLocationInfo(),
 				root = location && location.root;
 
@@ -187,11 +187,11 @@ module.exports = exports = Ext.define(
 			return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 		},
 
-		setEnrollment: function (enrollment) {
+		setEnrollment(enrollment) {
 			this.__instanceEnrollment = enrollment;
 		},
 
-		getEnrollment: function (/*enrollment*/) {
+		getEnrollment(/*enrollment*/) {
 			return this.__instanceEnrollment;
 		},
 
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define(
 			return this.__precacheEntry().then(() => this);
 		},
 
-		__precacheEntry: function () {
+		__precacheEntry() {
 			var p = this.precachePromise,
 				me = this;
 
@@ -234,21 +234,19 @@ module.exports = exports = Ext.define(
 			return p;
 		},
 
-		getCourseCatalogEntry: function () {
+		getCourseCatalogEntry() {
 			return this.__courseCatalogEntry;
 		},
 
 		/**
 		 * @returns {CatalogFamily} Get the catalog family for this course
 		 */
-		getCatalogFamily: function () {
+		getCatalogFamily() {
 			return this.__courseCatalogEntry.getCatalogFamily();
 		},
 
-		getFirstPage: function () {
-			var bundle = this.getBundle();
-
-			return bundle.getFirstPage && bundle.getFirstPage();
+		getFirstPage() {
+			return this.getBundle()?.getFirstPage?.();
 		},
 
 		SCOPE_SUGGESTIONS: {
@@ -314,17 +312,15 @@ module.exports = exports = Ext.define(
 			},
 		},
 
-		getSuggestedSharing: function () {
-			var me = this;
-
-			return me.getWrapper().then(function (enrollment) {
+		getSuggestedSharing() {
+			return this.getWrapper().then(enrollment => {
 				return enrollment.isAdministrative
-					? me.getParentSuggestedSharing()
-					: me.getStudentSuggestedSharing();
+					? this.getParentSuggestedSharing()
+					: this.getStudentSuggestedSharing();
 			});
 		},
 
-		__scopeToUserSearch: function (scope, friendlyName) {
+		__scopeToUserSearch(scope, friendlyName) {
 			var json = scope.asJSON();
 
 			json.friendlyName = friendlyName || '';
@@ -332,7 +328,7 @@ module.exports = exports = Ext.define(
 			return UserSearch.create(json);
 		},
 
-		getStudentSuggestedSharing: function () {
+		getStudentSuggestedSharing() {
 			var sectionScopes = this.get('SharingScopes'),
 				parentScopes = this.get('ParentSharingScopes') || sectionScopes,
 				defaultId = sectionScopes && sectionScopes.getDefaultSharing(),
@@ -359,7 +355,7 @@ module.exports = exports = Ext.define(
 			return suggestions;
 		},
 
-		getParentSuggestedSharing: function () {
+		getParentSuggestedSharing() {
 			var sectionScopes = this.get('SharingScopes'),
 				parentScopes = this.get('ParentSharingScopes'),
 				containsDefault =
@@ -390,7 +386,7 @@ module.exports = exports = Ext.define(
 			return parentSuggestions.concat(sectionSuggestions);
 		},
 
-		__buildSuggestedSharing: function (config, sharingScopes, sectionName) {
+		__buildSuggestedSharing(config, sharingScopes, sectionName) {
 			var me = this,
 				scopes = {},
 				defaultKey,
@@ -452,7 +448,7 @@ module.exports = exports = Ext.define(
 			return items;
 		},
 
-		getContentBreadCrumb: function (path, pageId, rootId, parent) {
+		getContentBreadCrumb(path, pageId, rootId, parent) {
 			var root = path[0];
 
 			if (parent) {
@@ -473,7 +469,7 @@ module.exports = exports = Ext.define(
 		},
 
 		//get a count of how many things the user has done in the course
-		getCompletionStatus: function () {},
+		getCompletionStatus() {},
 
 		getTocFor(contentPackageID) {
 			const bundle = this.getBundle();
@@ -486,44 +482,28 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getTocs: function () {
+		getToCs() {
 			var bundle = this.getBundle();
 
-			return this.getWrapper().then(function (enrollment) {
-				return (
-					bundle.getTocs && bundle.getTocs(enrollment.get('Status'))
-				);
-			});
+			return this.getWrapper().then(enrollment =>
+				bundle.getToCs?.(enrollment.get('Status'))
+			);
 		},
 
 		hasContentPackage(id) {
-			const bundle = this.getBundle();
-
-			return bundle.getContentPackage && bundle.getContentPackage(id);
+			return this.getBundle()?.getContentPackage?.(id);
 		},
 
 		getContentPackage(id) {
-			const bundle = this.getBundle();
-
-			return bundle.getContentPackage && bundle.getContentPackage(id);
+			return this.getBundle()?.getContentPackage?.(id);
 		},
 
 		getContentPackageContaining(id) {
-			const bundle = this.getBundle();
-
-			return (
-				bundle.getContentPackageContaining &&
-				bundle.getContentPackageContaining(id)
-			);
+			return this.getBundle()?.getContentPackageContaining?.(id);
 		},
 
 		syncContentPackage(contentPackage) {
-			const bundle = this.getBundle();
-
-			return (
-				bundle.syncContentPackage &&
-				bundle.syncContentPackage(contentPackage)
-			);
+			return this.getBundle()?.syncContentPackage?.(contentPackage);
 		},
 
 		async updateContentPackage(id) {
@@ -536,97 +516,72 @@ module.exports = exports = Ext.define(
 			return contentPackage.update(this);
 		},
 
-		getContentPackages: function () {
-			var bundle = this.getBundle();
-
-			return bundle.getContentPackages && bundle.getContentPackages();
+		getContentPackages() {
+			return this.getBundle()?.getContentPackages?.();
 		},
 
-		getContentRoots: function () {
-			var bundle = this.getBundle();
-
-			return bundle.getContentRoots && bundle.getContentRoots();
+		getContentRoots() {
+			return this.getBundle()?.getContentRoots?.();
 		},
 
 		getNonRenderableContentRoots() {
-			const bundle = this.getBundle();
-
-			return (
-				bundle.getNonRenderableContentRoots &&
-				bundle.getNonRenderableContentRoots()
-			);
+			return this.getBundle()?.getNonRenderableContentRoots?.();
 		},
 
-		getContentIds: function () {
-			var bundle = this.getBundle();
-
-			return bundle.getContentIds && bundle.getContentIds();
+		getContentIds() {
+			return this.getBundle()?.getContentIds?.();
 		},
 
-		getTitle: function () {
+		getTitle() {
 			return this.getLinkProperty('CourseCatalogEntry', 'title');
 		},
 
-		getIcon: function () {
-			var bundle = this.getBundle();
-
-			return bundle.getIcon && bundle.getIcon();
+		getIcon() {
+			return this.getBundle()?.getIcon?.();
 		},
 
-		canGetToContent: function (ntiid, rootId) {
-			var me = this;
+		async canGetToContent(ntiid, rootId) {
+			const [lineages, locationInfo] = await Promise.all([
+				ContentUtils.getLineage(ntiid, this),
+				this.getLocationInfo(),
+			]);
+			const store = this.getNavigationStore();
+			let canGetTo = false;
 
-			return Promise.all([
-				ContentUtils.getLineage(ntiid, me),
-				me.getLocationInfo(),
-			]).then(function (results) {
-				var lineages = results[0],
-					locationInfo = results[1],
-					store = me.getNavigationStore(),
-					canGetTo = false;
-
-				if (locationInfo) {
-					(lineages || []).forEach(function (lineage) {
-						//not in the same content
-						if (locationInfo.NTIID !== lineage.last()) {
-							canGetTo = true;
-						}
-					});
-				}
-
-				if (me.isExpired()) {
-					canGetTo = true;
-				}
-
-				// the last item in the lineage is the root of the content.
-				// the next to last entry is the first branch from the root
-				// of the content (so its a unit or a lesson... if we can
-				// find it in the nav store, its available.)
-				//TODO: This needs to go away. Favor scoped reader navigation.
-				if (!store.getCount()) {
-					canGetTo = true;
-				}
-
-				if (canGetTo) {
-					return true;
-				}
-				//TODO: Need to simplfy logic of this entire canGetToContent function
-
-				(lineages || []).forEach(function (lineage) {
-					// ick, bad logic testing for the existence of the node in the Outline. (Need LibraryPath for this)
-					if (
-						store.getById(
-							lineage[Math.max(0, lineage.length - 2)]
-						) ||
-						(rootId && lineage.indexOf(rootId) >= 0)
-					) {
-						//root is in the path of the lineage, we're good to go.
+			if (locationInfo) {
+				(lineages || []).forEach(lineage => {
+					//not in the same content
+					if (locationInfo.NTIID !== lineage.last()) {
 						canGetTo = true;
 					}
 				});
-
-				return canGetTo;
+			}
+			if (this.isExpired()) {
+				canGetTo = true;
+			}
+			// the last item in the lineage is the root of the content.
+			// the next to last entry is the first branch from the root
+			// of the content (so its a unit or a lesson... if we can
+			// find it in the nav store, its available.)
+			//TODO: This needs to go away. Favor scoped reader navigation.
+			if (!store.getCount()) {
+				canGetTo = true;
+			}
+			if (canGetTo) {
+				return true;
+			}
+			//TODO: Need to simplify logic of this entire canGetToContent function
+			lineages?.forEach(lineage => {
+				// ick, bad logic testing for the existence of the node in the Outline. (Need LibraryPath for this)
+				if (
+					store.getById(lineage[Math.max(0, lineage.length - 2)]) ||
+					(rootId && lineage.indexOf(rootId) >= 0)
+				) {
+					//root is in the path of the lineage, we're good to go.
+					canGetTo = true;
+				}
 			});
+			return canGetTo;
 		},
 
 		canAddAssignment() {
@@ -638,57 +593,45 @@ module.exports = exports = Ext.define(
 		 * @param  {CourseInstance} instance the instance to compare against
 		 * @returns {boolean}		if they are in the same family
 		 */
-		inSameFamily: function (instance) {
-			var catalog = this.getCourseCatalogEntry();
+		inSameFamily(instance) {
+			const catalog = this.getCourseCatalogEntry();
 
 			return catalog.inSameFamily(instance.getCourseCatalogEntry());
 		},
 
-		isExpired: function () {
-			var c = this.getCourseCatalogEntry();
-			return c && c.isExpired();
+		isExpired() {
+			return this.getCourseCatalogEntry()?.isExpired();
 		},
 
-		getLocationInfo: function () {
-			var me = this,
-				bundle = me.get('Bundle');
+		async getLocationInfo() {
+			const bundle = this.get('Bundle');
 
-			return me
-				.getWrapper()
-				.then(function (enrollment) {
-					return (
-						bundle &&
-						bundle.getLocationInfo(enrollment.get('Status'))
-					);
-				})
-				.then(function (locationInfo) {
-					if (locationInfo) {
-						locationInfo.isCourse = true;
-						//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
-						locationInfo.courseInstance = me;
-					}
+			const enrollment = await this.getWrapper();
 
-					return locationInfo;
-				});
-		},
-
-		getPresentationProperties: function (id) {
-			return (
-				this.getBundle().getPresentationProperties &&
-				this.getBundle().getPresentationProperties(id)
+			const locationInfo = await bundle?.getLocationInfo(
+				enrollment.get('Status')
 			);
+
+			if (locationInfo) {
+				locationInfo.isCourse = true;
+				//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
+				locationInfo.courseInstance = this;
+			}
+
+			return locationInfo;
 		},
 
-		getAssetRoot: function () {
-			return (
-				this.getBundle().getAssetRoot && this.getBundle().getAssetRoot()
-			);
+		getPresentationProperties(id) {
+			return this.getBundle().getPresentationProperties?.(id);
 		},
 
-		__getPresentationResourcesBacking() {
-			return this.prepareData().then(course =>
-				course.getCourseCatalogEntry()
-			);
+		getAssetRoot() {
+			return this.getBundle().getAssetRoot?.();
+		},
+
+		async __getPresentationResourcesBacking() {
+			const course = await this.prepareData();
+			return course.getCourseCatalogEntry();
 		},
 
 		/**
@@ -696,49 +639,41 @@ module.exports = exports = Ext.define(
 		 *
 		 * @returns {Promise} fulfills with url
 		 */
-		getBackgroundImage: function () {
+		async getBackgroundImage() {
 			return this.__getPresentationResourcesBacking()
 				.then(backing => backing.getBackgroundImage())
 				.catch(() => '');
 		},
 
-		getIconImage: function () {
+		async getIconImage() {
 			return this.__getPresentationResourcesBacking()
 				.then(backing => backing.getIconImage())
 				.catch(() => '');
 		},
 
-		getThumbnail: function () {
+		async getThumbnail() {
 			return this.__getPresentationResourcesBacking()
 				.then(backing => backing.getThumbnail())
 				.catch(() => '');
 		},
 
-		getVendorIconImage: function () {
+		async getVendorIconImage() {
 			return this.__getPresentationResourcesBacking()
 				.then(backing => backing.getVendorIcon())
 				.catch(() => '');
 		},
 
-		getPublicScope: function () {
+		getPublicScope() {
 			return this.getScope('Public');
 		},
-		getRestrictedScope: function () {
+		getRestrictedScope() {
 			return this.getScope('Restricted');
 		},
 
 		//i don't think this is used
 
-		getScope: function (scope) {
+		getScope(scope) {
 			var s = (this.get('Scopes') || {})[scope.toLowerCase()] || ''; //Old...
-
-			/*if (this.raw.SharingScopes) {
-			s = this.get('SharingScopes');
-			s = s.getScope(scope);
-			if (s && typeof s !== 'string') {
-				s = s.get('NTIID');
-			}
-		}*/
 
 			if (typeof s === 'string') {
 				s = s.split(' ');
@@ -748,7 +683,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getDefaultSharing: function () {
+		getDefaultSharing() {
 			var defaultSharing = this.getPublicScope();
 
 			if (this.raw.SharingScopes) {
@@ -769,18 +704,18 @@ module.exports = exports = Ext.define(
 		 *
 		 * @returns {Promise} fulfills with the enrollment instance
 		 */
-		getWrapper: function () {
-			var me = this;
-
+		async getWrapper() {
 			//the enrollment instance shouldn't change so we can cache this logic
-			if (!me.__findWrapper) {
-				me.__findWrapper = new Promise((fulfill, reject) => {
+			if (!this.__findWrapper) {
+				this.__findWrapper = new Promise((fulfill, reject) => {
 					const enrollment = this.getEnrollment();
 
 					if (enrollment) {
 						fulfill(enrollment);
 					} else if (this.hasLink('UserCoursePreferredAccess')) {
-						Service.request(me.getLink('UserCoursePreferredAccess'))
+						Service.request(
+							this.getLink('UserCoursePreferredAccess')
+						)
 							.then(resp => {
 								fulfill(
 									lazy.ParseUtils.parseItems(
@@ -790,7 +725,7 @@ module.exports = exports = Ext.define(
 							})
 							.catch(reject);
 					} else {
-						me.stores.forEach(function (obj) {
+						this.stores.forEach(obj => {
 							if (obj.isModel) {
 								fulfill(obj);
 							}
@@ -799,17 +734,15 @@ module.exports = exports = Ext.define(
 				});
 			}
 
-			return me.__findWrapper;
+			return this.__findWrapper;
 		},
 
-		findOutlineNode: function (id) {
-			var outline = this.get('Outline');
-
-			return outline.findOutlineNode(id);
+		findOutlineNode(id) {
+			return this.get('Outline').findOutlineNode(id);
 		},
 
-		getOutlineContents: function (doNotCache) {
-			var outline = this.get('Outline');
+		getOutlineContents(doNotCache) {
+			const outline = this.get('Outline');
 
 			if (!outline) {
 				return Promise.resolve(new CourseOutline());
@@ -818,13 +751,11 @@ module.exports = exports = Ext.define(
 			return outline.getOutlineContents(doNotCache);
 		},
 
-		getAdminOutlineContents: function (doNotCache) {
-			var outline = this.get('Outline');
-
-			return outline.getAdminOutlineContents(doNotCache);
+		getAdminOutlineContents(doNotCache) {
+			return this.get('Outline').getAdminOutlineContents(doNotCache);
 		},
 
-		getOutlineInterface: function (doNotCache) {
+		getOutlineInterface(doNotCache) {
 			if (!this.OutlineInterface) {
 				this.OutlineInterface = new OutlineInterface({
 					getOutlineContents: noCache => {
@@ -840,7 +771,7 @@ module.exports = exports = Ext.define(
 			return this.OutlineInterface;
 		},
 
-		getAdminOutlineInterface: function (doNotCache) {
+		getAdminOutlineInterface(doNotCache) {
 			if (!this.AdminOutlineInterface) {
 				this.AdminOutlineInterface = new OutlineInterface({
 					getOutlineContents: noCache => {
@@ -856,21 +787,20 @@ module.exports = exports = Ext.define(
 			return this.AdminOutlineInterface;
 		},
 
-		hasOutline: function () {
+		hasOutline() {
 			var outline = this.get('Outline');
 
 			return outline && outline.hasContentsLink();
 		},
 
-		getOutline: function () {
+		getOutline() {
 			//cache outline
 			if (!this._outlinePromise) {
-				var o = this.get('Outline'),
-					me = this;
+				const o = this.get('Outline');
 
-				this._outlinePromise = o.getContents().then(function () {
-					o.bundle = me;
-					o.navStore = me.getNavigationStore();
+				this._outlinePromise = o.getContents().then(() => {
+					o.bundle = this;
+					o.navStore = this.getNavigationStore();
 					return o;
 				});
 			}
@@ -884,21 +814,20 @@ module.exports = exports = Ext.define(
 		 * TODO: don't keep these cached for the lifetime of the app
 		 * @returns {[type]} [description]
 		 */
-		__getTocOutline: function () {
+		__getTocOutline() {
 			if (!this.tocOutline) {
-				this.tocOutline = this.getLocationInfo().then(function (
-					location
-				) {
-					return new ToCBasedOutline({
-						data: location && location.toc,
-					});
-				});
+				this.tocOutline = this.getLocationInfo().then(
+					location =>
+						new ToCBasedOutline({
+							data: location?.toc,
+						})
+				);
 			}
 
 			return this.tocOutline;
 		},
 
-		getNavigationStore: function () {
+		getNavigationStore() {
 			var key = 'NavStore',
 				navStore;
 
@@ -918,7 +847,7 @@ module.exports = exports = Ext.define(
 			return navStore;
 		},
 
-		shouldShowAssignments: function () {
+		shouldShowAssignments() {
 			//we should only show assignments if there is an assignments by outline node link
 			return !!this.getLink('AssignmentsByOutlineNode');
 		},
@@ -927,16 +856,11 @@ module.exports = exports = Ext.define(
 		 * Get the AssignmentHistory link off of the enrolled instance or this
 		 * @returns {string} link to the assignment history
 		 */
-		__getAssignmentHistoryLink: function () {
-			var me = this;
+		async __getAssignmentHistoryLink() {
+			const getLink = (rel, e) => e.getLink(rel) || this.getLink(rel);
 
-			function getLink(rel, e) {
-				return e.getLink(rel) || me.getLink(rel);
-			}
-
-			return this.getWrapper().then(
-				getLink.bind(null, 'AssignmentHistory')
-			);
+			const wrapper = await this.getWrapper();
+			return getLink('AssignmentHistory', wrapper);
 		},
 
 		/**
@@ -946,7 +870,7 @@ module.exports = exports = Ext.define(
 		 * @param  {number} timeout -
 		 * @returns {Promise} the request for the link
 		 */
-		__getList: function (link, force, timeout) {
+		__getList(link, force, timeout) {
 			var promiseName = '__get' + link + 'Promise';
 
 			if (this[promiseName] && !force) {
@@ -974,7 +898,7 @@ module.exports = exports = Ext.define(
 			return this[promiseName];
 		},
 
-		__getAssignmentsByOutline: function () {
+		__getAssignmentsByOutline() {
 			return this.__getList(
 				'AssignmentSummaryByOutlineNode',
 				false,
@@ -982,13 +906,13 @@ module.exports = exports = Ext.define(
 			); //up the timeout of the request
 		},
 
-		__getNonAssignmentsByOutline: function () {
+		__getNonAssignmentsByOutline() {
 			return this.__getList(
 				'NonAssignmentAssessmentSummaryItemsByOutlineNode'
 			);
 		},
 
-		__getGradeBook: function () {
+		__getGradeBook() {
 			if (this.__getGradeBookPromise) {
 				return this.__getGradeBookPromise;
 			}
@@ -1022,7 +946,7 @@ module.exports = exports = Ext.define(
 			return baseLink && urlJoin(baseLink, encodeURIComponent(ntiid));
 		},
 
-		getLTIConfiguredTools: function (force) {
+		getLTIConfiguredTools(force) {
 			if (this.__getLTIConfiguredToolsPromise && !force) {
 				return this.__getLTIConfiguredToolsPromise;
 			}
@@ -1043,45 +967,33 @@ module.exports = exports = Ext.define(
 		 * Return an assignment collection for this course
 		 * @returns {AssignmentCollection} the assignment collection
 		 */
-		getAssignments: function () {
+		async getAssignments() {
 			if (this.__getAssignmentsPromise) {
 				return this.__getAssignmentsPromise;
 			}
 
-			var me = this,
-				gradeBook = me.get('GradeBook');
+			const gradeBook = this.get('GradeBook');
 
-			me.__getAssignmentsPromise = Promise.all([
-				me.getWrapper().catch(function () {
-					return {};
-				}),
-				me.__getAssignmentsByOutline().catch(() => {
-					return {};
-				}),
-				me.__getNonAssignmentsByOutline().catch(() => {
-					return {};
-				}),
-				me.__getAssignmentHistoryLink(),
-			]).then(function (results) {
-				var wrapper = results[0],
-					assignments = results[1],
-					nonAssignments = results[2],
-					historyURL = results[3];
-
-				return AssignmentCollection.fromJson(
+			this.__getAssignmentsPromise = Promise.all([
+				this.getWrapper().catch(() => ({})),
+				this.__getAssignmentsByOutline().catch(() => ({})),
+				this.__getNonAssignmentsByOutline().catch(() => ({})),
+				this.__getAssignmentHistoryLink(),
+			]).then(([wrapper, assignments, nonAssignments, historyURL]) =>
+				AssignmentCollection.fromJson(
 					assignments,
 					nonAssignments,
 					gradeBook,
 					historyURL,
 					wrapper.isAdministrative,
-					me
-				);
-			});
+					this
+				)
+			);
 
-			return me.__getAssignmentsPromise;
+			return this.__getAssignmentsPromise;
 		},
 
-		getAssignmentSavePoints: function () {
+		getAssignmentSavePoints() {
 			var p = this.getAssignmentSavePointsPromise,
 				link;
 
@@ -1110,7 +1022,7 @@ module.exports = exports = Ext.define(
 			return p;
 		},
 
-		getAllSurveys: function (batchSize, batchStart) {
+		getAllSurveys(batchSize, batchStart) {
 			var link = this.getLink('Inquiries'),
 				config;
 
@@ -1140,7 +1052,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getAllAssignments: function () {
+		getAllAssignments() {
 			return this.getAssignments().then(function (assignmentsCollection) {
 				const assignments = assignmentsCollection.get('Assignments');
 				const filtered = (assignments || []).filter(x => !x.isDeleted);
@@ -1148,7 +1060,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getAllAssessments: function () {
+		getAllAssessments() {
 			return this.getAssignments().then(function (assignments) {
 				var nonAssignments = assignments.get('NonAssignments');
 
@@ -1158,7 +1070,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		fireNavigationEvent: function (eventSource) {
+		fireNavigationEvent(eventSource) {
 			var me = this;
 
 			return new Promise(function (fulfill) {
@@ -1168,7 +1080,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		__getAssets: function (type, batchSize, batchStart) {
+		__getAssets(type, batchSize, batchStart) {
 			var link = this.getLink('assets'),
 				config;
 
@@ -1205,15 +1117,15 @@ module.exports = exports = Ext.define(
 				});
 		},
 
-		getVideoAssets: function () {
+		getVideoAssets() {
 			return this.__getAssets(Video.mimeType);
 		},
 
-		getTimelineAssets: function (batchSize, batchStart) {
+		getTimelineAssets(batchSize, batchStart) {
 			return this.__getAssets(Timeline.mimeType, batchSize, batchStart);
 		},
 
-		getDiscussionAssets: function () {
+		getDiscussionAssets() {
 			var link = this.getLink('CourseDiscussions');
 
 			if (!link) {
@@ -1244,14 +1156,11 @@ module.exports = exports = Ext.define(
 				});
 		},
 
-		getVideosByContentPackage: function () {
-			return (
-				this.getBundle().getVideosByContentPackage &&
-				this.getBundle().getVideosByContentPackage()
-			);
+		getVideosByContentPackage() {
+			return this.getBundle().getVideosByContentPackage?.();
 		},
 
-		getMediaByOutline: function (force) {
+		getMediaByOutline(force) {
 			return this.__getList('MediaByOutlineNode', force);
 		},
 
@@ -1261,13 +1170,13 @@ module.exports = exports = Ext.define(
 			return this.getVideoIndex(true);
 		},
 
-		getVideoIndex: function (force) {
+		getVideoIndex(force) {
 			if (this.videoIndexPromise) {
 				return this.videoIndexPromise;
 			}
 
 			this.videoIndexPromise = this.getMediaByOutline(force).then(
-				function (outline) {
+				outline => {
 					let items = outline.Items;
 
 					// if we have slidedeck, map video obj to their respective slidedeck
@@ -1275,15 +1184,12 @@ module.exports = exports = Ext.define(
 						if (items.hasOwnProperty(key)) {
 							let item = items[key] || {};
 							if (item.Class === 'NTISlideDeck') {
-								Ext.each(
-									item.Videos || [],
-									function (slidevideo) {
-										let vid = slidevideo.video_ntiid;
-										if (vid && items[vid]) {
-											items[vid].slidedeck = item.NTIID;
-										}
+								Ext.each(item.Videos || [], slidevideo => {
+									let vid = slidevideo.video_ntiid;
+									if (vid && items[vid]) {
+										items[vid].slidedeck = item.NTIID;
 									}
-								);
+								});
 							}
 						}
 					}
@@ -1295,8 +1201,8 @@ module.exports = exports = Ext.define(
 			return this.videoIndexPromise;
 		},
 
-		getVideoForId: function (vid) {
-			return this.getVideoIndex().then(function (index) {
+		getVideoForId(vid) {
+			return this.getVideoIndex().then(index => {
 				var i = index[vid];
 				// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos.
 				// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility,
@@ -1311,8 +1217,8 @@ module.exports = exports = Ext.define(
 		/*
 		 * Check if a video belongs to a slidedeck
 		 */
-		getSlidedeckForVideo: function (vid) {
-			return this.getVideoIndex().then(function (index) {
+		getSlidedeckForVideo(vid) {
+			return this.getVideoIndex().then(index => {
 				var i = index[vid];
 				if (i && i.slidedeck) {
 					return Promise.resolve(i.slidedeck);
@@ -1344,7 +1250,7 @@ module.exports = exports = Ext.define(
 		 * @param  {Array} parent  Array of forums in the parent if there are any
 		 * @returns {Object}		  The binned forums
 		 */
-		__binDiscussions: function (section, parent) {
+		__binDiscussions(section, parent) {
 			var bin = {
 				ForCredit: {
 					Section: [],
@@ -1409,7 +1315,7 @@ module.exports = exports = Ext.define(
 		 * @param  {Object} bin binned forums
 		 * @returns {Object}		a forum list of the above type
 		 */
-		__binToForumList: function (bin) {
+		__binToForumList(bin) {
 			var section = this.get('Discussions'),
 				parent = this.get('ParentDiscussions'),
 				sectionId,
@@ -1539,7 +1445,7 @@ module.exports = exports = Ext.define(
 		 * @param {string} prop -
 		 * @returns {Promise} Fulfills or rejects with the response of the request
 		 */
-		getDiscussionContents: function (prop) {
+		getDiscussionContents(prop) {
 			var board = this.get(prop),
 				request;
 
@@ -1556,17 +1462,16 @@ module.exports = exports = Ext.define(
 			return request;
 		},
 
-		hasForumList: function () {
+		hasForumList() {
 			var board = this.get('Discussions'),
 				parentBoard = this.get('ParentDiscussions');
 
 			return !!(
-				(board && board.getLink('contents')) ||
-				(parentBoard && parentBoard.getLink('contents'))
+				board?.getLink('contents') || parentBoard?.getLink('contents')
 			);
 		},
 
-		getForumList: function () {
+		getForumList() {
 			var me = this,
 				sectionContents,
 				parentContents;
@@ -1642,7 +1547,7 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		represents: function (catalogEntry) {
+		represents(catalogEntry) {
 			var cceId = catalogEntry.getId(),
 				cceHref = catalogEntry.get('href'),
 				cce = this.getCourseCatalogEntry();
@@ -1652,7 +1557,7 @@ module.exports = exports = Ext.define(
 				: this.getLink('CourseCatalogEntry') === cceHref;
 		},
 
-		containsNTIID: function (id) {
+		containsNTIID(id) {
 			return (
 				this.getBundle().containsNTIID &&
 				this.getBundle().containsNTIID(id)
@@ -1664,7 +1569,7 @@ module.exports = exports = Ext.define(
 		 * @param  {Object} items []
 		 * @returns {[type]}		  [description]
 		 */
-		__getAnnouncementsForums: function (items) {
+		__getAnnouncementsForums(items) {
 			var keys = Object.keys(items) || [],
 				forums = [];
 
@@ -1690,10 +1595,8 @@ module.exports = exports = Ext.define(
 		 *}
 		 * @returns {Array} a flattened list of the forums
 		 */
-		getMySectionAnnouncements: function () {
-			var announcements = this.get('AnnouncementForums');
-
-			announcements = announcements && announcements.Items;
+		getMySectionAnnouncements() {
+			const announcements = this.get('AnnouncementForums')?.Items;
 
 			this.__sectionAnnouncements =
 				this.__sectionAnnouncements ||
@@ -1706,10 +1609,8 @@ module.exports = exports = Ext.define(
 		 * Same as getMySectionAnnouncements just for my parent section
 		 * @returns {Array} a flattened list of the forums
 		 */
-		getParentAnnouncements: function () {
-			var announcements = this.get('ParentAnnouncementForums');
-
-			announcements = announcements && announcements.Items;
+		getParentAnnouncements() {
+			const announcements = this.get('ParentAnnouncementForums')?.Items;
 
 			this.__parentAnnouncements =
 				this.__parentAnnouncements ||
@@ -1718,7 +1619,7 @@ module.exports = exports = Ext.define(
 			return this.__parentAnnouncements;
 		},
 
-		getStream: function () {
+		getStream() {
 			var catalog = this.getCourseCatalogEntry(),
 				link = this.getLink('CourseRecursiveStreamByBucket');
 
@@ -1750,7 +1651,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getVideoProgress: function () {
+		getVideoProgress() {
 			var link = this.getLink('VideoProgress');
 
 			if (!link) {
@@ -1762,7 +1663,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getSuggestContacts: function () {
+		getSuggestContacts() {
 			if (!isFeature('suggest-contacts') || !this.hasLink('Classmates')) {
 				return Promise.reject();
 			}
@@ -1775,7 +1676,7 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		getCatalogFamilies: function () {
+		getCatalogFamilies() {
 			const link = this.getLink('CourseCatalogFamilies');
 
 			if (!link) {

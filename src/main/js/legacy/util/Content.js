@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return ntiid || thing;
 	},
 
-	__resolveTocs: function (bundleOrTocOrNTIID) {
+	__resolveToCs: function (bundleOrTocOrNTIID) {
 		var x = bundleOrTocOrNTIID,
 			load;
 
@@ -81,8 +81,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		if (typeof x === 'string') {
 			console.error('Need to fill this path out');
 			load = Promise.reject();
-		} else if (x && x.getTocs) {
-			load = x.getTocs();
+		} else if (x?.getToCs) {
+			load = x.getToCs();
 		} else {
 			load = Promise.resolve([x]);
 		}
@@ -164,26 +164,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @returns {Promise}					fulfills with the nodes
 	 */
 	getNodes: function (ntiid, bundleOrTocOrNTIID) {
-		var result,
-			me = this;
-
-		result = me.findCache[ntiid];
+		let result = this.findCache[ntiid];
 
 		if (!result) {
-			result = me.__resolveTocs(bundleOrTocOrNTIID).then(function (tocs) {
-				var nodes = (tocs || []).map(function (toc) {
-					return me.__findNode(ntiid, toc);
-				});
+			result = this.__resolveTocs(bundleOrTocOrNTIID).then(toCs =>
+				toCs.map(toc => this.__findNode(ntiid, toc)).filter(Boolean)
+			);
 
-				//filter out falsy values
-				nodes = nodes.filter(function (node) {
-					return !!node;
-				});
-
-				return nodes;
-			});
-
-			me.findCache[ntiid] === result;
+			this.findCache[ntiid] === result;
 		}
 
 		return result;

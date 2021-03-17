@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return Promise.resolve(p && p.getToc(status));
 	},
 
-	getTocs: function (status) {
+	getToCs: function (status) {
 		var packages = this.get('ContentPackages');
 
 		packages = packages.map(function (pack) {

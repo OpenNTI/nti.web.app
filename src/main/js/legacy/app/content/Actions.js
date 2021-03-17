@@ -622,7 +622,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 	getTocStore: function (bundle, root) {
 		return bundle
-			.getTocs()
+			.getToCs()
 			.then(function (tocs) {
 				var toc = tocs[0];
 

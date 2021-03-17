@@ -37,8 +37,7 @@ module.exports = exports = Ext.define(
 		},
 
 		renderLesson: function (outlineNode, contents) {
-			var me = this,
-				course = me.bundle,
+			var course = this.bundle,
 				overviewsrc =
 					(outlineNode && outlineNode.getLink('overview-content')) ||
 					null;
@@ -49,35 +48,29 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			me.buildingOverview = true;
-			me.maybeMask();
+			this.buildingOverview = true;
+			this.maybeMask();
 
-			return me
-				.getInfo(outlineNode, course, overviewsrc)
-				.then(function (results) {
-					var assignments = results[0],
-						enrollment = results[1],
-						//Just use the first one for now
-						locInfo = results[2][0];
-
-					me.currentOverview = me.add({
+			return this.getInfo(outlineNode, course, overviewsrc)
+				.then(([assignments, enrollment, [locInfo]]) => {
+					this.currentOverview = this.add({
 						xtype: 'overview-editing-lessonoverview',
 						record: outlineNode,
-						locInfo: locInfo,
-						assignments: assignments,
-						enrollment: enrollment,
+						locInfo,
+						assignments,
+						enrollment,
 						bundle: course,
-						contents: contents,
+						contents,
 						outline: getOutlineFromNode(outlineNode),
-						navigate: me.navigate,
+						navigate: this.navigate,
 					});
 
-					return me.currentOverview.onceLoaded();
+					return this.currentOverview.onceLoaded();
 				})
-				.catch(function (reason) {
+				.catch(reason => {
 					console.error(reason);
 				})
-				.then(me.maybeUnmask.bind(me));
+				.then(this.maybeUnmask.bind(this));
 		},
 	}
 );
