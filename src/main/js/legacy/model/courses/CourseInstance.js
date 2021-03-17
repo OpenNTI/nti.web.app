@@ -507,7 +507,7 @@ module.exports = exports = Ext.define(
 		},
 
 		async updateContentPackage(id) {
-			const contentPackage = this.getContentPackage(id);
+			const contentPackage = await this.getContentPackage(id);
 
 			if (!contentPackage) {
 				throw new Error('No Content Package');

@@ -279,7 +279,7 @@ module.exports = exports = Ext.define(
 			this.maybeAddControlbarForPageInfo(pageInfo);
 		},
 
-		maybeAddControlbarForPageInfo(pageInfo) {
+		async maybeAddControlbarForPageInfo(pageInfo) {
 			const contentPackageId = pageInfo.get('ContentPackageNTIID');
 
 			if (
@@ -319,8 +319,7 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			const contentPackage =
-				this.bundle && this.bundle.getContentPackage(contentPackageId);
+			const contentPackage = await this.bundle?.getContentPackage(contentPackageId).catch(() => null);
 
 			if (contentPackage && contentPackage.hasLink('edit')) {
 				this.controlBar = ReactHarness.create({

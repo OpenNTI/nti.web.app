@@ -177,14 +177,18 @@ module.exports = exports = Ext.define(
 				},
 			});
 
-			this.contentPackageSelectionCmp = this.add({
-				xtype: 'overview-editing-content-package-item-selection',
-				onSelectionChanged: this.onContentPackageSelectionChange.bind(
-					this
-				),
-				selectionItems: this.getContentPackageList(),
-				selectedItems,
-			});
+			this.getContentPackageList()
+				.then((list) => {
+					this.contentPackageSelectionCmp = this.add({
+						xtype: 'overview-editing-content-package-item-selection',
+						onSelectionChanged: this.onContentPackageSelectionChange.bind(
+							this
+						),
+						selectionItems: list,
+						selectedItems,
+					});
+				})
+
 		},
 
 		showReadingList: function (selectedItems) {
