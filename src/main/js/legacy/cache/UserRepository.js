@@ -795,7 +795,7 @@ function worker() {
 		about: 1,
 		affiliation: 1,
 		description: 1,
-		home_page: 1, //eslint-disable-line camelcase
+		home_page: 1,
 		location: 1,
 		role: 1,
 	};

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Models, registerModel } from '@nti/lib-interfaces';
 
 export default class SiteBrand extends Models.Base {
