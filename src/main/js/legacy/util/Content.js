@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		let result = this.findCache[ntiid];
 
 		if (!result) {
-			result = this.__resolveTocs(bundleOrTocOrNTIID).then(toCs =>
+			result = this.__resolveToCs(bundleOrTocOrNTIID).then(toCs =>
 				toCs.map(toc => this.__findNode(ntiid, toc)).filter(Boolean)
 			);
 
@@ -660,7 +660,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return me
-			.__resolveTocs(bundleOrToc)
+			.__resolveToCs(bundleOrToc)
 			.then(function (tocs) {
 				return Promise.all((tocs || []).map(getPageInToc));
 			})
@@ -1013,7 +1013,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return toc.querySelector(query);
 		}
 
-		return this.__resolveTocs(bundle).then(function (tocs) {
+		return this.__resolveToCs(bundle).then(function (tocs) {
 			return tocs.map(findReading).filter(x => x)[0];
 		});
 	},
@@ -1075,7 +1075,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		let resolve = contentPackageID
 			? this.__resolveTocFor(bundle, contentPackageID)
-			: this.__resolveTocs(bundle);
+			: this.__resolveToCs(bundle);
 
 		return resolve.then(function (tocs) {
 			if (!Array.isArray(tocs)) {
