@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const { Overview } = require('@nti/web-course');
 const { Modal } = require('internal/nti-web-app-lesson-items');
-const ContentUtils = require('internal/legacy/util/Content');
+// const ContentUtils = require('internal/legacy/util/Content');
 const { getString } = require('internal/legacy/util/Localization');
 const WindowActions = require('internal/legacy/app/windows/Actions');
 const BaseModel = require('internal/legacy/model/Base');
@@ -137,7 +137,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		return Promise.all([
 			course.getAssignments(),
 			course.getWrapper && course.getWrapper(),
-			ContentUtils.getLocation(record.get('ContentNTIID'), course),
+			[null], // ContentUtils.getLocation(record.get('ContentNTIID'), course),
 			overviewSrc ? null : course.getVideoIndex(),
 		]);
 	},
