@@ -3,7 +3,6 @@ const { wait } = require('@nti/lib-commons');
 const lazy = require('internal/legacy/util/lazy-require')
 	.get('ParseUtils', () => require('internal/legacy/util/Parsing'))
 	.get('ContentUtils', () => require('internal/legacy/util/Content'));
-const { getURL } = require('internal/legacy/util/Globals');
 
 const ForumsBoard = require('./forums/Board');
 
@@ -130,20 +129,6 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		};
 	},
 
-	getDefaultAssetRoot: function () {
-		var root = [this]
-			.concat(this.get('ContentPackages'))
-			.reduce(function (agg, o) {
-				return agg || o.get('root');
-			}, null);
-
-		if (!root) {
-			console.error('No root for content bundle: ', this);
-			return '';
-		}
-
-		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
-	},
 
 	__setImage: function () {
 		var me = this;
@@ -214,13 +199,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	__addContentPackage(contentPackage) {
-		const packages = this.getContentPackages();
-
-		this.set('ContentPackages', [...packages, contentPackage]);
+		if (this.__contentPackages) {
+			this.__contentPackages = [...this.__contentPackages, contentPackage];
+		}
 	},
 
-	syncContentPackage(contentPackage) {
-		const original = this.getContentPackage(contentPackage.get('NTIID'));
+	async syncContentPackage(contentPackage) {
+		const original = await this.getContentPackage(contentPackage.get('NTIID'));
 
 		if (original) {
 			original.syncWith(contentPackage);
@@ -229,12 +214,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-	hasContentPackage(id) {
-		return !!this.getContentPackage(id);
+	async hasContentPackage(id) {
+		const contentPackage = await this.getContentPackage(id);
+
+		return !!contentPackage;
 	},
 
-	getContentPackage(id) {
-		const packages = this.get('ContentPackages');
+	async getContentPackage(id) {
+		const packages = await this.getContentPackages();
 
 		for (let p of packages) {
 			if (p.get('NTIID') === id || p.get('OID') === id) {
@@ -244,42 +231,54 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getContentPackages: function () {
-		return this.get('ContentPackages');
+		return Promise.resolve((this.get('ContentPackages')));
+		// return this.get('ContentPackages');
 	},
 
-	getContentRoots: function () {
-		return (this.get('ContentPackages') || []).map(function (content) {
+	async getLegacyContentPackages () {
+		const packages = await this.getContentPackages();
+
+		return packages.filter(p => !p.isRenderableContentPackage);
+	},
+
+	async getContentRoots () {
+		const packages = await this.getContentPackages();
+
+		return packages.map(function (content) {
 			return content && content.get('root');
 		});
 	},
 
-	getNonRenderableContentRoots() {
-		return (this.get('ContentPackages') || [])
+	async getNonRenderableContentRoots() {
+		const packages = await this.getContentPackages();
+
+		return packages
 			.filter(content => !content.isRenderableContentPackage)
 			.map(content => content && content.get('root'));
 	},
 
-	getContentIds: function () {
-		return (this.get('ContentPackages') || []).map(function (content) {
+	async getContentIds () {
+		const packages = await this.getContentPackages();
+
+		return packages.map(function (content) {
 			return content && content.get('NTIID');
 		});
 	},
 
-	getPresentationProperties: function (id) {
-		var packages = this.get('ContentPackages') || [],
-			props;
+	async getPresentationProperties (id) {
+		const packages = await this.getContentPackages();
 
-		packages.forEach(function (content) {
+		for (let content of packages) {
 			if (content.get('NTIID') === id) {
-				props = content.get('PresentationProperties');
+				return content.get('PresentationProperties');
 			}
-		});
-
-		return props;
+		}
 	},
 
-	getLocationInfo: function (status) {
-		var firstPackage = this.get('LegacyContentPackages')[0],
+	async getLocationInfo (status) {
+		const packages = await this.getLegacyContentPackages();
+
+		var firstPackage = packages[0],
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
@@ -308,8 +307,10 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
-	getFirstPage: function () {
-		var e = this.get('ContentPackages')[0];
+	async getFirstPage () {
+		const packages = await this.getContentPackages();
+
+		var e = packages[0];
 		return e && e.get('NTIID');
 	},
 
