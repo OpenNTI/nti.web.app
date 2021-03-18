@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 	},
 
-	bundleChanged: function (bundle) {
+	async bundleChanged (bundle) {
 		if (bundle === this.currentBundle) {
 			return;
 		}
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			this.reader.destroy();
 		}
 
-		this.root = bundle.getFirstPage();
+		this.root = await bundle.getFirstPage();
 		this.currentBundle = bundle;
 	},
 
