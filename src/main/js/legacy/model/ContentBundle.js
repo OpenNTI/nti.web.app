@@ -173,11 +173,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	async getToCs (status) {
 		const packages = await this.getContentPackages();
 
-		packages = packages.map(function (pack) {
-			return pack.getToc(status).catch(() => null);
-		});
-
-		return Promise.all(packages).then(results => {
+		return Promise.all(
+			packages.map(function (pack) {
+				return pack.getToc(status).catch(() => null);
+			})
+		).then(results => {
 			return results.filter(x => x);
 		});
 	},
