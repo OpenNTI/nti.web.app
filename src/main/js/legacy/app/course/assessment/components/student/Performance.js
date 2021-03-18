@@ -369,6 +369,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 					});
 				}
 
+				this.tempGrade?.show();
 				this.tempGrade?.update(Ext.DomHelper.markup(elements));
 			};
 
@@ -379,6 +380,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 				addGrade(values);
 
+				this.gradeLabel.show();
 				this.gradeLabel.addDisclaimer(false);
 				return;
 			}
@@ -390,7 +392,9 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 			try {
 				const grade = await currentBundle.getCurrentGrade();
 
-				if (!grade) {
+				if (!grade && !this.finalGrade) {
+					this.gradeLabel.hide();
+					this.tempGrade.hide();
 					return;
 				}
 
@@ -408,11 +412,18 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				addGrade(values);
 
 				if (values.letter || values.value) {
+					this.gradLabel.show();
 					this.gradeLabel.addDisclaimer(
 						'Estimated from the grading policy in the Syllabus'
 					);
 				}
 			} catch (e) {
+				if (!this.finalGrade) {
+					this.gradeLabel.hide();
+					this.tempGrade.hide();
+					return;
+				}
+
 				if (e == null) {
 					return;
 				}
@@ -510,6 +521,8 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 		maybeSetFinalGrade(assignment, history, grade) {
 			if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
+				this.finalGrade = null;
+				this.updateHeader();
 				return false;
 			}
 
