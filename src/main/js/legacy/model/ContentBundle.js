@@ -164,14 +164,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('thumb');
 	},
 
-	getTocFor(contentPackageID, status) {
-		const p = this.getContentPackage(contentPackageID);
+	async getTocFor (contentPackageID, status) {
+		const p = await this.getContentPackage(contentPackageID);
 
 		return Promise.resolve(p && p.getToc(status));
 	},
 
-	getToCs: function (status) {
-		var packages = this.get('ContentPackages');
+	async getToCs (status) {
+		const packages = await this.getContentPackages();
 
 		packages = packages.map(function (pack) {
 			return pack.getToc(status).catch(() => null);
