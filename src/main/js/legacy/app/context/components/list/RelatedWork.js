@@ -19,7 +19,7 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		getContentRootFor: function (path) {
+		async getContentRootFor (path) {
 			var root,
 				i = 0,
 				part;
@@ -28,7 +28,8 @@ module.exports = exports = Ext.define(
 				part = path[i];
 
 				if (part.getContentRoots) {
-					root = part.getContentRoots()[0];
+					const roots = await part.getContentRoots();
+					root = roots[0];
 				}
 
 				i += 1;
@@ -37,13 +38,13 @@ module.exports = exports = Ext.define(
 			return root;
 		},
 
-		setIcon: function (path) {
+		async setIcon (path) {
 			if (!this.rendered) {
 				this.on('afterrender', this.setIcon.bind(this, path));
 				return;
 			}
 
-			var root = this.getContentRootFor(path),
+			var root = await this.getContentRootFor(path),
 				iconUrl = this.content.getIcon(root);
 
 			iconUrl = typeof iconUrl === 'string' ? iconUrl : iconUrl.url;
