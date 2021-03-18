@@ -234,58 +234,58 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		return getService()
 			.then(service => service.getObject(this.currentBundle.getId()))
 			.then(course => {
-				const contentPackage = course.getPackage(packageId);
-
-				if (!contentPackage) {
-					return this.showReader(page, parent);
-				}
-
-				const onDelete = () => {
-					this.currentBundle.updateFromServer().then(() => {
-						if (this.onDelete) {
-							this.onDelete();
-						}
-					});
-				};
-
-				const gotoResources = () => {
-					if (this.gotoResources) {
-						this.gotoResources();
+				course.getPackage(packageId).then(contentPackage => {
+					if (!contentPackage) {
+						return this.showReader(page, parent);
 					}
-				};
 
-				this.editor = this.add({
-					xtype: 'react',
-					component: Editor,
-					cls: 'native-content-editor',
-					course,
-					contentPackage,
-					pageSource,
-					breadcrumb,
-					navigateToPublished: () => {
-						// determine where to go after publishing completes
-						// if coming from a lesson, handleContentNavigation handles a
-						// route with the lesson included.  if not coming from a lesson
-						// (the resources screen instead), handles a route with just the
-						// content
-						if (this.handleContentNavigation) {
-							this.handleContentNavigation(
-								'',
-								encodeForURI(contentPackage.getID())
-							);
-						} else {
-							this.pushRoute(
-								'',
-								encodeForURI(contentPackage.getID())
-							);
+					const onDelete = () => {
+						this.currentBundle.updateFromServer().then(() => {
+							if (this.onDelete) {
+								this.onDelete();
+							}
+						});
+					};
+
+					const gotoResources = () => {
+						if (this.gotoResources) {
+							this.gotoResources();
 						}
-					},
-					pageID: page.getId ? page.getId() : '',
-					onDidChange: () => {
-						this.currentBundle.updateContentPackage(packageId);
-					},
-					onDelete: onDelete,
-					gotoResources: gotoResources,
+					};
+
+					this.editor = this.add({
+						xtype: 'react',
+						component: Editor,
+						cls: 'native-content-editor',
+						course,
+						contentPackage,
+						pageSource,
+						breadcrumb,
+						navigateToPublished: () => {
+							// determine where to go after publishing completes
+							// if coming from a lesson, handleContentNavigation handles a
+							// route with the lesson included.  if not coming from a lesson
+							// (the resources screen instead), handles a route with just the
+							// content
+							if (this.handleContentNavigation) {
+								this.handleContentNavigation(
+									'',
+									encodeForURI(contentPackage.getID())
+								);
+							} else {
+								this.pushRoute(
+									'',
+									encodeForURI(contentPackage.getID())
+								);
+							}
+						},
+						pageID: page.getId ? page.getId() : '',
+						onDidChange: () => {
+							this.currentBundle.updateContentPackage(packageId);
+						},
+						onDelete: onDelete,
+						gotoResources: gotoResources,
+					});
 				});
 			});
 	},
