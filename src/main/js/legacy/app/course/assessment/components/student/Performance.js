@@ -521,8 +521,6 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 
 		maybeSetFinalGrade(assignment, history, grade) {
 			if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
-				this.finalGrade = null;
-				this.updateHeader();
 				return false;
 			}
 
