@@ -59,11 +59,13 @@ html.x-viewport {
 
 body.x-body {
 	min-height: calc(100vh - #{$header-height});
-	height: auto !important;
 	// Now that we scroll the window, this needs to force overflow visible. (positioned things that drop
 	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
 	// this, reflow the styles with the thing that breaks.
-	overflow: visible !important;
+	height: auto !important;
+	max-height: none;
+	// height will grow with content. We still need overflow to be marked hidden to force layout calculations
+	overflow: hidden;
 	background: var(--primary-background);
 	background-size: cover;
 	background-attachment: fixed;
