@@ -53,97 +53,97 @@ function buildPageInfoForAssignment(assignment, contents, regenerate) {
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	getRelatedWorkPageInfo: function (data, bundle) {
-		var ntiid = data.get ? data.get('NTIID') : data.NTIID,
-			href = data.get ? data.get('href') : data.href,
-			DH = Ext.DomHelper;
+	async getRelatedWorkPageInfo(data, bundle) {
+		const ntiid = data.get?.('NTIID') || data.NTIID;
+		const href = data.get?.('href') || data.href;
+		const DH = Ext.DomHelper;
 
-		return new Promise((fulfill, reject) => {
-			if (lazy.ParseUtils.isNTIID(href)) {
-				Service.getPageInfo(href, void 0, void 0, void 0, bundle)
-					.then(x => fulfill(x))
-					.catch(() => reject());
-			} else {
-				reject();
+		if (lazy.ParseUtils.isNTIID(href)) {
+			try {
+				// the await makes exceptions catch in this try/catch
+				return await Service.getPageInfo(
+					href,
+					void 0,
+					void 0,
+					void 0,
+					bundle
+				);
+			} catch {
+				/* just continue with the below... */
 			}
-		}).catch(() => {
-			return ContentUtils.getLocation(ntiid, bundle).then(function (
-				locations
-			) {
-				var location = locations[0],
-					root = location && location.root,
-					postfix,
-					pageInfo,
-					pageURI = encodeURIComponent('Pages(' + ntiid + ')'),
-					userURI = encodeURIComponent($AppConfig.username);
+		}
 
-				if (data.asDomData) {
-					data = data.asDomData(root || '');
-				}
+		const [location] = await ContentUtils.getLocation(ntiid, bundle);
 
-				postfix = data.noTarget ? '' : '-target';
+		const root = location?.root;
+		const pageURI = encodeURIComponent('Pages(' + ntiid + ')');
+		const userURI = encodeURIComponent($AppConfig.username);
 
-				pageInfo = PageInfo.create({
-					ID: ntiid,
-					NTIID: ntiid,
-					content: DH.markup([
+		if (data.asDomData) {
+			data = data.asDomData(root || '');
+		}
+
+		const postfix = data.noTarget ? '' : '-target';
+
+		const pageInfo = PageInfo.create({
+			ID: ntiid,
+			NTIID: ntiid,
+			content: DH.markup([
+				{
+					tag: 'head',
+					cn: [
+						{ tag: 'title', html: data.title },
 						{
-							tag: 'head',
-							cn: [
-								{ tag: 'title', html: data.title },
-								{
-									tag: 'meta',
-									name: 'icon',
-									content: data.thumbnail,
-								},
-							],
-						},
-						{
-							tag: 'body',
-							cn: {
-								cls: 'page-contents',
-								cn: Ext.applyIf(
-									{
-										tag: 'object',
-										cls: 'nticard' + postfix,
-										type:
-											'application/vnd.nextthought.nticard' +
-											postfix,
-										'data-ntiid': ntiid,
-										html: DH.markup([
-											{ tag: 'img', src: data.thumbnail },
-											{
-												tag: 'span',
-												cls: 'description',
-												html: data.description,
-											},
-										]),
-									},
-									data.domSpec
-								),
-							},
-						},
-					]),
-					Links: [
-						{
-							Class: 'Link',
-							href:
-								'/dataserver2/users/' +
-								userURI +
-								'/' +
-								pageURI +
-								'/UserGeneratedData',
-							rel: 'UserGeneratedData',
+							tag: 'meta',
+							name: 'icon',
+							content: data.thumbnail,
 						},
 					],
-				});
-
-				pageInfo.hideControls = true;
-				pageInfo.isMock = true;
-
-				return pageInfo;
-			});
+				},
+				{
+					tag: 'body',
+					cn: {
+						cls: 'page-contents',
+						cn: Ext.applyIf(
+							{
+								tag: 'object',
+								cls: 'nticard' + postfix,
+								type:
+									'application/vnd.nextthought.nticard' +
+									postfix,
+								'data-ntiid': ntiid,
+								html: DH.markup([
+									{ tag: 'img', src: data.thumbnail },
+									{
+										tag: 'span',
+										cls: 'description',
+										html: data.description,
+									},
+								]),
+							},
+							data.domSpec
+						),
+					},
+				},
+			]),
+			Links: [
+				{
+					Class: 'Link',
+					href:
+						'/dataserver2/users/' +
+						userURI +
+						'/' +
+						pageURI +
+						'/UserGeneratedData',
+					rel: 'UserGeneratedData',
+				},
+			],
 		});
+
+		pageInfo.hideControls = true;
+		pageInfo.isMock = true;
+
+		return pageInfo;
 	},
 
 	getExternalToolAssetPageInfo(data, bundle) {
