@@ -52,20 +52,22 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		addClasses: function () {
+		async addClasses() {
 			const cls = [];
-			const attempt =
-				this.history && this.history.getMostRecentHistoryItem();
-			const completed = attempt && attempt.get('completed');
+			const attempt = this.history?.getMostRecentHistoryItem();
+			const completed = attempt?.get('completed');
 
-			this.assignment.getInterfaceInstance().then(assignment => {
+			try {
+				const assignment = await this.assignment.getInterfaceInstance();
 				if (assignment.CompletedItem?.Success === false) {
-					this.addCls('failed');
+					cls.push('failed');
 				}
 				if (!assignment.CompletedItem && completed) {
-					this.addCls('no-completion');
+					cls.push('no-completion');
 				}
-			});
+			} catch {
+				// don't mark any status on rejection
+			}
 
 			if (!this.assignment.isOpen()) {
 				cls.push('closed');
@@ -79,7 +81,9 @@ module.exports = exports = Ext.define(
 				cls.push('editable');
 			}
 
-			this.addCls(cls);
+			if (!this.isDestroyed && this.el) {
+				this.addCls(cls);
+			}
 		},
 
 		afterRender: function () {
