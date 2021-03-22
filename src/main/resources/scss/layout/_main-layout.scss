@@ -63,9 +63,13 @@ body.x-body {
 	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
 	// this, reflow the styles with the thing that breaks.
 	height: auto !important;
+	// height will grow with content.
 	max-height: none;
-	// height will grow with content. We still need overflow to be marked hidden to force layout calculations
-	overflow: hidden;
+	//We still need overflow to be default value so the scroll element remains the document.
+	// (this overrides Ext's styles to revert us back to default) ... For content that sets
+	// a margin-top that pushes the content down... offset top calculations will break. (most
+	// visible is hovering over the calendar icon and watch where the tooltip appears)
+	overflow: visible;
 	background: var(--primary-background);
 	background-size: cover;
 	background-attachment: fixed;
