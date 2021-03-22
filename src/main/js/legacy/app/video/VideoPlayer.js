@@ -169,11 +169,15 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 			interval: 1000,
 			scope: this,
 			run: () => {
-				this.analytics.onHeartBeat(this.queryPlayer());
 				this.fireEvent('media-heart-beat');
 				this.maybeSyncHeight();
+				this.analytics.onHeartBeat(this.queryPlayer());
 			},
-			onError: err => console.error(err),
+			onError: err => {
+				Ext.TaskManager.stop(this.taskMediaHeartBeat);
+				this.destroy();
+				console.error(err);
+			},
 		};
 
 		Ext.TaskManager.start(this.taskMediaHeartBeat);
