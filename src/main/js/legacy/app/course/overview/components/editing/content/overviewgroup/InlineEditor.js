@@ -1,8 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Input} = require('@nti/web-commons');
-const {Color: ColorLib} = require('@nti/lib-commons');
+const {Color} = require('@nti/lib-commons');
 const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
-const Color = require('internal/legacy/util/Color');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const EditingActions = require('../../Actions');
@@ -73,7 +72,7 @@ module.exports = exports = Ext.define(
 				cls: styles.colorInputContainer,
 				component: Input.Color.Flyout,
 				renderTo: this.colorInputContainerEl,
-				value: accent === '' ? colors[0].color : ColorLib.fromHex(accent),
+				value: accent === '' ? colors[0].color : Color.fromHex(accent),
 				onChange: (newColor) => {
     				this.colorInput.setProps({value: newColor});
 					this.onInputChange();
@@ -132,13 +131,6 @@ module.exports = exports = Ext.define(
 					missing: true,
 				};
 			}
-
-			if (!Color.isValidHexColor(values.accentColor)) {
-				errors.color = {
-					invalidColor: true,
-				};
-			}
-
 			return errors;
 		},
 
