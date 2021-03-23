@@ -268,14 +268,6 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		);
 
 		await this.resolveService();
-
-		const tosLink = this.ServiceInterface.getLinkFrom(
-			response.Links,
-			'content.direct_tos_link'
-		);
-		if (tosLink) {
-			this.service.overrideServiceLink('termsOfService', tosLink);
-		}
 	},
 
 	findResolveSelfWorkspace(service) {

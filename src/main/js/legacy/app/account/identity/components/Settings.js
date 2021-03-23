@@ -1,3 +1,4 @@
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const { getString } = require('internal/legacy/util/Localization');
 const LoginActions = require('internal/legacy/login/Actions');
@@ -30,6 +31,12 @@ module.exports = exports = Ext.define(
 
 		initComponent: function () {
 			this.callParent(arguments);
+			this.addMenuItems();
+		},
+
+		async addMenuItems() {
+			const service = await getService();
+			const supportLinks = service.getSupportLinks();
 
 			var items = [],
 				u = $AppConfig.userObject,
@@ -45,7 +52,7 @@ module.exports = exports = Ext.define(
 				setMenuClosed: this.setMenuClosed.bind(this),
 			});
 
-			if (Service.canChat()) {
+			if (service.capabilities.canChat) {
 				items.push({ xtype: 'presence-menu' });
 				items.push({ xtype: 'menuseparator' });
 			}
@@ -61,7 +68,7 @@ module.exports = exports = Ext.define(
 			items.push({
 				handler: this.showAbout.bind(this),
 				text: getString('NextThought.view.menus.Settings.about'),
-				href: Service.getSupportLinks().about,
+				href: supportLinks.about,
 				target: '_blank',
 				cls: 'settings-menu-about-item',
 			});
@@ -95,14 +102,18 @@ module.exports = exports = Ext.define(
 			};
 			items.push(contactItem);
 
-			if (!Ext.isEmpty(Service.getSupportLinks().supportEmail)) {
+			const { supportContact } = supportLinks;
+
+			if (supportContact && !supportLinks.internalSupport) {
+				const ensureProtocol = x =>
+					!x || /^(mailto|https?):/i.test(x) ? x : `mailto:${x}`;
+
 				Ext.apply(contactItem, {
 					onClick: Ext.emptyFn,
 					autoEl: {
 						tag: 'a',
 						target: '_blank',
-						href:
-							'mailto:' + Service.getSupportLinks().supportEmail,
+						href: ensureProtocol(supportContact),
 						style: { textDecoration: 'none' },
 					},
 				});
@@ -112,16 +123,12 @@ module.exports = exports = Ext.define(
 				'NextThought.view.menus.Setting.helpSiteLabel',
 				'Help Site'
 			);
-			const helpSiteHref = getString(
-				'NextThought.view.menus.Setting.helpSiteHref',
-				'https://help.nextthought.com/'
-			);
 
-			if (helpSiteHref && helpSiteLabel) {
+			if (supportLinks.help && helpSiteLabel) {
 				items.push({
 					handler: this.showHelpSite.bind(this),
 					text: helpSiteLabel,
-					href: helpSiteHref,
+					href: supportLinks.help,
 					cls: 'setting-help-site-menu-item',
 				});
 			}
@@ -169,10 +176,8 @@ module.exports = exports = Ext.define(
 			this.AccountActions.showHref(item.href, item.target);
 		},
 
-		showPrivacy: function () {
-			var link = $AppConfig.userObject.getLink(
-				'content.permanent_general_privacy_page'
-			);
+		async showPrivacy() {
+			const link = (await getService()).getSupportLinks().privacyPolicy;
 
 			if (link) {
 				this.AccountActions.showPrivacy(link);
@@ -187,8 +192,8 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		showTerms: function (item) {
-			var link = Service.getSupportLinks().termsOfService;
+		async showTerms(item) {
+			var link = (await getService()).getSupportLinks().termsOfService;
 
 			this.AccountActions.showTermsOfService(link);
 		},

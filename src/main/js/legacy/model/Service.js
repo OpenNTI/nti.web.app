@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
-const { getString } = require('internal/legacy/util/Localization');
 const Globals = require('internal/legacy/util/Globals');
 const lazy = require('internal/legacy/util/lazy-require')
 	.get('UserDataActions', () =>
@@ -802,35 +801,6 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			Ext.callback(success, scope, [results]);
 			return results;
 		});
-	},
-
-	getSupportLinks: function () {
-		var aboutLink =
-			getString(
-				'NextThought.view.menus.Settings.about.href',
-				null,
-				true
-			) || 'http://nextthought.com';
-		var supportEmailLink =
-			getString(
-				'NextThought.view.menus.Settings.supportEmail',
-				null,
-				true
-			) || null;
-
-		this.supportLinks = this.supportLinks || {};
-
-		return Ext.applyIf(this.supportLinks, {
-			about: aboutLink,
-			termsOfService: 'about:blank',
-			supportEmail: supportEmailLink,
-		});
-	},
-
-	overrideServiceLink: function (link, value) {
-		var o = {};
-		o[link] = value || undefined;
-		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
 	},
 
 	__resolveBoards: function (link, community) {

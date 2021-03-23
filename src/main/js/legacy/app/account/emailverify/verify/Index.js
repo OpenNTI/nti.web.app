@@ -1,3 +1,4 @@
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { getString } = require('internal/legacy/util/Localization');
@@ -413,9 +414,6 @@ module.exports = exports = Ext.define(
 		},
 
 		submitEmailClicked: function (e) {
-			if (!isMe(this.user)) {
-				return;
-			}
 			var me = this,
 				messageEl = this.el.down('.back .error-msg'),
 				targetEl = Ext.get(e.target);
@@ -433,23 +431,21 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		setupEmailEdit: function () {
-			var me = this;
-			this.user.getSchema().then(function (schema) {
-				var profileSchema = schema.ProfileSchema,
-					email = profileSchema && profileSchema.email;
+		async setupEmailEdit() {
+			const schema = await this.user.getSchema();
+			const email = schema?.ProfileSchema?.email;
 
-				if (email.readonly) {
-					me.subEmailEl.update('');
-					me.supportEmailLinkTpl.append(me.subEmailEl, {
-						email: Service.getSupportLinks().supportEmail,
-					});
-					me.el.down('.back .input-box').hide();
-					me.confirmEditEl.update('Done');
-					me.confirmEditEl.addCls('done');
-					me.cancelEditEl.hide();
-				}
-			});
+			if (email?.readonly) {
+				this.subEmailEl.update('');
+				this.supportEmailLinkTpl.append(this.subEmailEl, {
+					email: (await getService()).getSupportLinks()
+						.supportContact,
+				});
+				this.el.down('.back .input-box').hide();
+				this.confirmEditEl.update('Done');
+				this.confirmEditEl.addCls('done');
+				this.cancelEditEl.hide();
+			}
 		},
 
 		showEmailCard: function () {

@@ -1,5 +1,6 @@
 /*eslint no-undef:1*/
 
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
@@ -746,28 +747,25 @@ module.exports = exports = Ext.define(
 			return this.showCourseDetail(route, subRoute);
 		},
 
-		showRedeemToken: function (route, subRoute) {
-			var me = this,
-				//TODO: a better system for getting this email
-				email =
-					Service.getSupportLinks().email ||
-					'support@nextthought.com';
+		async showRedeemToken(route, subRoute) {
+			let email = (await getService()).getSupportLinks().supportContact;
 
-			return me
-				.showCourseDetail(
-					route,
-					subRoute,
-					'This course is not redeemable by this account. Please contact <a href="mailto:' +
-						email +
-						'">Support.</a>'
-				)
-				.then(function () {
-					if (me.courseDetail) {
-						me.courseDetail.restoreEnrollmentOption('redeem', [
-							route.params.token,
-						]);
-					}
-				});
+			const ensureProtocol = x =>
+				!x || /^(mailto|https?):/i.test(x) ? x : `mailto:${x}`;
+
+			return this.showCourseDetail(
+				route,
+				subRoute,
+				'This course is not redeemable by this account. Please contact <a href="' +
+					ensureProtocol(email) +
+					'">Support.</a>'
+			).then(() => {
+				if (this.courseDetail) {
+					this.courseDetail.restoreEnrollmentOption('redeem', [
+						route.params.token,
+					]);
+				}
+			});
 		},
 
 		showRedeemInvite(route, subRoute) {

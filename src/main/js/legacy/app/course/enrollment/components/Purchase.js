@@ -1,3 +1,4 @@
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const { getString } = require('internal/legacy/util/Localization');
 
@@ -270,9 +271,10 @@ module.exports = exports = Ext.define(
 			return r;
 		},
 
-		showTerms: function () {
+		async showTerms() {
+			const service = await getService();
 			//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
-			window.open(Service.getSupportLinks().termsOfService, '_blank');
+			window.open(service.getSupportLinks().termsOfService, '_blank');
 		},
 
 		getPricingInfo: function (formValue) {

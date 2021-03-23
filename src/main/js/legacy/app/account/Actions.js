@@ -1,3 +1,4 @@
+const { getService } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const PromptActions = require('internal/legacy/app/prompt/Actions');
 const Globals = require('internal/legacy/util/Globals');
@@ -286,10 +287,14 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}
 	},
 
-	showContactUs: function () {
-		var help = Service.getSupportLinks().supportEmail;
+	async showContactUs() {
+		const service = await getService();
+		const {
+			internalSupport,
+			supportContact: help,
+		} = service.getSupportLinks();
 
-		if (help) {
+		if (help && !internalSupport) {
 			Globals.sendEmailTo(help);
 			return;
 		}
