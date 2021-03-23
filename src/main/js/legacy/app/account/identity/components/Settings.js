@@ -35,7 +35,7 @@ module.exports = exports = Ext.define(
 				u = $AppConfig.userObject,
 				contactItem,
 				welcomeLink = u.getLink('content.permanent_welcome_page'),
-				childsLink = u.getLink('childrens-privacy');
+				childrenLink = u.getLink('childrens-privacy');
 
 			this.AccountActions = AccountActions.create();
 			this.LoginActions = LoginActions.create();
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define(
 				text: getString('NextThought.view.menus.Settings.privacy'),
 			});
 
-			if (!Ext.isEmpty(childsLink)) {
+			if (!Ext.isEmpty(childrenLink)) {
 				items.push({
 					handler: this.showChildPrivacy.bind(this),
 					text: getString(
