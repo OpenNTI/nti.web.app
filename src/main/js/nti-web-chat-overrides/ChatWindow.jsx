@@ -22,7 +22,7 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 	const windowRef = React.useRef(null);
 
 	const onUnmount = () => {
-		windowRef.current?.close();
+		windowRef.current?.hide();
 	};
 
 	const onMount = async () => {
