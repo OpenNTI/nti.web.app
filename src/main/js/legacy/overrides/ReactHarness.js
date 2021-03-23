@@ -341,6 +341,12 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		const { initialConfig: config } = this;
 		const component = unwrap(config.component);
 
+		if (!component && process.env.NODE_ENV !== 'production') {
+			throw new Error(
+				'Invalid Component passed to ReactHarness. Check your imports'
+			);
+		}
+
 		const props = this.getProps();
 
 		ReactDOM.render(
