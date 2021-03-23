@@ -78,7 +78,7 @@ module.exports = exports = Ext.define(
 				items.push({
 					handler: this.showChildPrivacy.bind(this),
 					text: getString(
-						'NextThought.view.menus.Settings.childerns'
+						'NextThought.view.menus.Settings.children.privacy'
 					),
 				});
 			}
