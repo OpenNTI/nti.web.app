@@ -67,7 +67,7 @@ function getAnalyticMethods(doNotAllow, hasTranscript, configuration) {
 			const { video, time, state: playerState } = state;
 			const diff = lastTime ? time - lastTime : 0;
 
-			if (hasWatch) {
+			if (hasWatch && playerState === PLAYING) {
 				AnalyticsUtil.updateEvent(video, {
 					type: 'VideoWatch',
 					videoTime: time,
