@@ -242,8 +242,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			try {
 				const link = this.getLink('contents');
 				const resp = await Service.request(link);
+				const json = JSON.parse(resp);
 
-				this.__contentPackages = resp;
+				this.__contentPackages = lazy.ParseUtils.parseItems(json.Items);
 			} catch (e) {
 				this.__contentPackages = [];
 			}
