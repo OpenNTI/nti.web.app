@@ -238,27 +238,23 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		if (this.__contentPackages) {
 			return this.__contentPackages;
 		}
-		if (this.__contentPackagesPromise) {
-			return this.__contentPackagesPromise;
-		}
 
-		const loadContentPackages = async () => {
+		this.__contentPackages = (async () => {
 			try {
 				const link = this.getLink('contents');
 				const resp = await Service.request(link);
 				const json = JSON.parse(resp);
 
-				this.__contentPackages = lazy.ParseUtils.parseItems(json.Items);
+				return lazy.ParseUtils.parseItems(json.Items);
 			} catch {
-				this.__contentPackages = [];
+				return [];
 			}
+		})();
 
-			return this.__contentPackages;
-		};
+		// throw away the promise once its resolved (the way the function above is written it cannot reject).
+		this.__contentPackages = await this.__contentPackages;
 
-		this.__contentPackagesPromise = loadContentPackages();
-
-		return this.__contentPackagesPromise;
+		return this.__contentPackages;
 	},
 
 	async getLegacyContentPackages() {
