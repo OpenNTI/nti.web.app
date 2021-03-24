@@ -234,9 +234,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-	async getContentPackages () {
-		if (this.__contentPackages) { return this.__contentPackages; }
-		if (this.__contentPackagesPromise) { return this.__contentPackagesPromise; }
+	async getContentPackages() {
+		if (this.__contentPackages) {
+			return this.__contentPackages;
+		}
+		if (this.__contentPackagesPromise) {
+			return this.__contentPackagesPromise;
+		}
 
 		const loadContentPackages = async () => {
 			try {
@@ -245,12 +249,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 				const json = JSON.parse(resp);
 
 				this.__contentPackages = lazy.ParseUtils.parseItems(json.Items);
-			} catch (e) {
+			} catch {
 				this.__contentPackages = [];
 			}
 
 			return this.__contentPackages;
-		}
+		};
 
 		this.__contentPackagesPromise = loadContentPackages();
 
@@ -304,36 +308,31 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
-		const tocRequest = firstPackage
-			? firstPackage.getToc(status)
-			: Promise.resolve();
+		const toc = await firstPackage?.getToc?.(status);
 
-		return tocRequest.then(function (toc) {
-			if (!toc) {
-				return null;
-			}
+		if (!toc) {
+			return null;
+		}
 
-			return Ext.applyIf(
-				{
-					toc: toc,
-					location: toc.documentElement,
-					NTIID: firstPage,
-					ContentNTIID: firstPackage,
-					title: firstPackage,
-					root: firstPackage.get('root'),
-					getIcon: () => uiData.icon,
-					getPathLabel: () => Promise.resolve(uiData.title),
-				},
-				uiData
-			);
-		});
+		return Ext.applyIf(
+			{
+				toc: toc,
+				location: toc.documentElement,
+				NTIID: firstPage,
+				ContentNTIID: firstPackage,
+				title: firstPackage,
+				root: firstPackage.get('root'),
+				getIcon: () => uiData.icon,
+				getPathLabel: () => Promise.resolve(uiData.title),
+			},
+			uiData
+		);
 	},
 
 	async getFirstPage() {
-		const packages = await this.getContentPackages();
+		const [package] = (await this.getContentPackages()) || [];
 
-		var e = packages[0];
-		return e && e.get('NTIID');
+		return package?.get('NTIID');
 	},
 
 	fireNavigationEvent: function (eventSource) {
@@ -364,9 +363,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
-		return s.filter(function (v) {
-			return !Ext.isEmpty(v);
-		});
+		return s.filter(v => !Ext.isEmpty(v));
 	},
 
 	hasForumList: function () {
