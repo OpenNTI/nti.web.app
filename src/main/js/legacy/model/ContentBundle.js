@@ -129,7 +129,6 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		};
 	},
 
-
 	__setImage: function () {
 		var me = this;
 
@@ -164,14 +163,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('thumb');
 	},
 
-	async getTocFor (contentPackageID, status) {
+	async getTocFor(contentPackageID, status) {
 		const p = await this.getContentPackage(contentPackageID);
 
 		return Promise.resolve(p && p.getToc(status));
 	},
 
-	async getToCs (status) {
-		const packages = await this.getContentPackages();
+	async getToCs(status) {
+		const packages = (await this.getContentPackages()) ?? [];
 
 		return Promise.all(
 			packages.map(function (pack) {
@@ -200,12 +199,17 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 	__addContentPackage(contentPackage) {
 		if (this.__contentPackages) {
-			this.__contentPackages = [...this.__contentPackages, contentPackage];
+			this.__contentPackages = [
+				...this.__contentPackages,
+				contentPackage,
+			];
 		}
 	},
 
 	async syncContentPackage(contentPackage) {
-		const original = await this.getContentPackage(contentPackage.get('NTIID'));
+		const original = await this.getContentPackage(
+			contentPackage.get('NTIID')
+		);
 
 		if (original) {
 			original.syncWith(contentPackage);
@@ -231,18 +235,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getContentPackages: function () {
-		return Promise.resolve((this.get('ContentPackages')));
+		return Promise.resolve(this.get('ContentPackages'));
 		// return this.get('ContentPackages');
 	},
 
-	async getLegacyContentPackages () {
-		const packages = await this.getContentPackages();
+	async getLegacyContentPackages() {
+		const packages = (await this.getContentPackages()) ?? [];
 
 		return packages.filter(p => !p.isRenderableContentPackage);
 	},
 
-	async getContentRoots () {
-		const packages = await this.getContentPackages();
+	async getContentRoots() {
+		const packages = (await this.getContentPackages()) ?? [];
 
 		return packages.map(function (content) {
 			return content && content.get('root');
@@ -250,14 +254,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	async getNonRenderableContentRoots() {
-		const packages = await this.getContentPackages();
+		const packages = (await this.getContentPackages()) ?? [];
 
 		return packages
 			.filter(content => !content.isRenderableContentPackage)
 			.map(content => content && content.get('root'));
 	},
 
-	async getContentIds () {
+	async getContentIds() {
 		const packages = await this.getContentPackages();
 
 		return packages.map(function (content) {
@@ -265,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
-	async getPresentationProperties (id) {
+	async getPresentationProperties(id) {
 		const packages = await this.getContentPackages();
 
 		for (let content of packages) {
@@ -275,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-	async getLocationInfo (status) {
+	async getLocationInfo(status) {
 		const packages = await this.getLegacyContentPackages();
 
 		var firstPackage = packages[0],
@@ -307,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
-	async getFirstPage () {
+	async getFirstPage() {
 		const packages = await this.getContentPackages();
 
 		var e = packages[0];
