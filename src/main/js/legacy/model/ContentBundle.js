@@ -234,9 +234,28 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-	getContentPackages: function () {
-		return Promise.resolve(this.get('ContentPackages'));
-		// return this.get('ContentPackages');
+	async getContentPackages () {
+		if (this.__contentPackages) { return this.__contentPackages; }
+		if (this.__contentPackagesPromise) { return this.__contentPackagesPromise; }
+
+		const loadContentPackages = async () => {
+			try {
+				debugger;
+				const link = this.getLink('contents');
+				const resp = await Service.request(link);
+
+				debugger;
+				this.__contentPackages = resp;
+			} catch (e) {
+				this.__contentPackages = [];
+			}
+
+			return this.__contentPackages;
+		}
+
+		this.__contentPackagesPromise = loadContentPackages();
+
+		return this.__contentPackagesPromise;
 	},
 
 	async getLegacyContentPackages() {
