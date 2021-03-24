@@ -262,13 +262,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	async getLegacyContentPackages() {
-		const packages = (await this.getContentPackages()) ?? [];
+		const packages = (await this.getContentPackages()) || [];
 
 		return packages.filter(p => !p.isRenderableContentPackage);
 	},
 
 	async getContentRoots() {
-		const packages = (await this.getContentPackages()) ?? [];
+		const packages = (await this.getContentPackages()) || [];
 
 		return packages.map(function (content) {
 			return content && content.get('root');
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	async getNonRenderableContentRoots() {
-		const packages = (await this.getContentPackages()) ?? [];
+		const packages = (await this.getContentPackages()) || [];
 
 		return packages
 			.filter(content => !content.isRenderableContentPackage)
