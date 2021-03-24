@@ -181,11 +181,12 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 		};
 
 		Ext.TaskManager.start(this.taskMediaHeartBeat);
+	},
 
-		this.on({
-			destroy: () => Ext.TaskManager.stop(this.taskMediaHeartBeat),
-			beforedestroy: () => this.stopPlayback(),
-		});
+	beforeDestroy() {
+		this.callParent(arguments);
+		Ext.TaskManager.stop(this.taskMediaHeartBeat);
+		this.stopPlayback();
 	},
 
 	afterRender() {
@@ -309,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	},
 
 	stopPlayback() {
-		if (this.videoPlayer && this.videoPlayer.componentInstance) {
+		if (this.videoPlayer?.componentInstance) {
 			this.videoPlayer.componentInstance.stop();
 			this.analytics.stop(this.queryPlayer());
 		} else {
@@ -377,6 +378,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 	onError(e) {
 		this.fireEvent('player-error', e);
+		Ext.TaskManager.stop(this.taskMediaHeartBeat);
 	},
 
 	onRateChange(oldRate, newRate) {
