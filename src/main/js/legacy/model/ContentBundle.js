@@ -240,11 +240,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 		const loadContentPackages = async () => {
 			try {
-				debugger;
 				const link = this.getLink('contents');
 				const resp = await Service.request(link);
 
-				debugger;
 				this.__contentPackages = resp;
 			} catch (e) {
 				this.__contentPackages = [];
