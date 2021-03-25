@@ -1,7 +1,6 @@
 const path = require('path');
 
 const Ext = require('@nti/extjs');
-const { wait } = require('@nti/lib-commons');
 const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
@@ -40,71 +39,47 @@ module.exports = exports = Ext.define(
 		 * @param  {Function} callback what to do when its done, takes two arguments success,changed\
 		 * @returns {void}
 		 */
-		dropEnrollment: function (course, callback) {
-			var me = this;
+		async dropEnrollment(course, callback) {
+			this.CourseStore.beforeDropCourse();
 
-			me.CourseStore.beforeDropCourse();
+			try {
+				await this.__toggleEnrollmentStatus(course, true);
 
-			me.__toggleEnrollmentStatus(course, true)
-				.then(function () {
-					var updateEnrolled;
+				course.setEnrolled(false);
 
-					course.setEnrolled(false);
-					wait(500).then(() => course.fireEvent('dropped'));
+				const updateEnrolled = this.refreshEnrolledCourses();
 
-					updateEnrolled = new Promise(function (fulfill, reject) {
-						me.refreshEnrolledCourses(
-							fulfill.bind(null, true),
-							fulfill.bind(null, false)
-						);
-					});
+				//Clear the library path caches since they may have changed
+				this.PathActions.clearCache();
 
-					//Clear the library path caches since they may have changed
-					me.PathActions.clearCache();
+				await Promise.all([
+					this.CourseActions.loadAllUpcomingCourses(),
+					this.CourseActions.loadAllCurrentCourses(),
+					this.CourseActions.loadAllArchivedCourses(),
+					updateEnrolled,
+				]);
 
-					Promise.all([
-						me.CourseActions.loadAllUpcomingCourses(),
-						me.CourseActions.loadAllCurrentCourses(),
-						me.CourseActions.loadAllArchivedCourses(),
-						updateEnrolled,
-					])
-						.then(function (results) {
-							var success = results[3];
+				const loadedCourse = this.CourseStore.findCourseForNtiid(
+					course.getId()
+				);
+				if (loadedCourse && course && loadedCourse !== course) {
+					loadedCourse.setEnrolled(false);
+					course = loadedCourse;
+				}
 
-							if (success) {
-								const loadedCourse = me.CourseStore.findCourseForNtiid(
-									course.getId()
-								);
-								if (
-									loadedCourse &&
-									course &&
-									loadedCourse !== course
-								) {
-									loadedCourse.setEnrolled(false);
-									course = loadedCourse;
-								}
-							}
+				course.fireEvent('dropped');
+				this.CourseStore.afterDropCourse();
+				callback.call(null, true, true);
+			} catch (response) {
+				// console.error('Failed to enroll in course: ', response);
+				const rawReason = response && response.responseText;
+				const reason = (rawReason && JSON.parse(rawReason)) || {};
+				reason.status = response && response.status;
 
-							me.CourseStore.afterDropCourse();
-							callback.call(null, success, true);
-						})
-						.catch(function (reason) {
-							console.error(
-								'Failed to enroll in course: ',
-								reason
-							);
-						});
-				})
-				.catch(function (response) {
-					console.error('Failed to enroll in course: ', response);
-					const rawReason = response && response.responseText;
-					const reason = (rawReason && JSON.parse(rawReason)) || {};
-					reason.status = response && response.status;
+				this.CourseStore.onDropCourseError();
 
-					me.CourseStore.onDropCourseError();
-
-					callback.call(null, false, false, reason);
-				});
+				callback.call(null, false, false, reason);
+			}
 		},
 
 		/**
@@ -113,71 +88,46 @@ module.exports = exports = Ext.define(
 		 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 		 * @returns {void}
 		 */
-		enrollCourse: function (course, callback) {
-			const me = this;
-
+		async enrollCourse(course, callback) {
 			//if we trying to enroll, and we are already enrolled no need to enroll again
 			if (!course.isEnrollable()) {
 				callback.call(null, true, false);
 				return;
 			}
 
-			me.CourseStore.beforeAddCourse();
+			this.CourseStore.beforeAddCourse();
 
-			me.__toggleEnrollmentStatus(course)
-				.then(function (response) {
-					var updateCatalog,
-						updateEnrolled,
-						courseEnrollment = lazy.ParseUtils.parseItems(
-							response
-						)[0],
-						oldCatalogEntry = courseEnrollment.getCourseCatalogEntry();
+			const parse = x => lazy.ParseUtils.parseItems(x)[0];
 
-					course.setEnrolled(true);
+			try {
+				const response = await this.__toggleEnrollmentStatus(course);
 
-					updateCatalog = Service.request(
-						oldCatalogEntry.get('href')
-					).then(function (catalogEntry) {
-						catalogEntry = lazy.ParseUtils.parseItems(
-							catalogEntry
-						)[0];
+				const courseEnrollment = parse(response);
 
-						course.set(
-							'EnrollmentOptions',
-							catalogEntry.get('EnrollmentOptions')
-						);
-						// me.CourseStore.updatedAvailableCourses();
-					});
+				course.setEnrolled(true);
 
-					updateEnrolled = new Promise(function (fulfill, reject) {
-						me.refreshEnrolledCourses(
-							fulfill.bind(null, true),
-							fulfill.bind(null, false)
-						);
-					});
+				const catalogEntry = parse(
+					await Service.request(
+						courseEnrollment.getCourseCatalogEntry().get('href')
+					)
+				);
 
-					//Clear the library path caches since they may have changed
-					me.PathActions.clearCache();
+				course.set(
+					'EnrollmentOptions',
+					catalogEntry.get('EnrollmentOptions')
+				);
+				// this.CourseStore.updatedAvailableCourses();
 
-					Promise.all([updateCatalog, updateEnrolled])
-						.then(function (results) {
-							var success = results[1];
+				await this.refreshEnrolledCourses();
 
-							me.CourseStore.afterAddCourse();
-							callback.call(null, success, true);
-						})
-						.catch(function (reason) {
-							console.error(
-								'Failed to enroll in course: ',
-								reason
-							);
-						});
-				})
-				.catch(function (reason) {
-					console.error('Failed to enroll in course: ', reason);
+				//Clear the library path caches since they may have changed
+				this.PathActions.clearCache();
 
-					callback.call(null, false, false);
-				});
+				this.CourseStore.afterAddCourse();
+				callback.call(null, true, true);
+			} catch (reason) {
+				callback.call(null, false, false);
+			}
 		},
 
 		__toggleEnrollmentStatus: function (catalogEntry, drop) {
@@ -199,21 +149,23 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		refreshEnrolledCourses: function (fulfill, reject) {
-			var me = this,
-				collection = (
-					Service.getCollection('EnrolledCourses', 'Courses') || {}
-				).href;
+		async refreshEnrolledCourses(fulfill, reject) {
+			const collection = (
+				Service.getCollection('EnrolledCourses', 'Courses') || {}
+			).href;
 
-			reject = reject || function () {};
+			try {
+				//Call this when refreshing enrolled courses to
+				//trigger the favorites to update
+				this.CourseStore.afterAddCourse();
 
-			//Call this when refreshing enrolled courses to
-			//trigger the favorites to update
-			me.CourseStore.afterAddCourse();
-
-			me.CourseActions.setUpEnrolledCourses(collection)
-				.then(fulfill)
-				.catch(reject);
+				const result = await this.CourseActions.setUpEnrolledCourses(
+					collection
+				);
+				fulfill?.(result || true);
+			} catch (reason) {
+				reject?.(reason);
+			}
 		},
 
 		courseDropped: function (catalogEntry) {
