@@ -40,8 +40,8 @@ module.exports = exports = Ext.define(
 			{
 				name: 'ContentPackages',
 				mapping: 'ContentPackageNTIID',
-				convert: function (v) {
-					return [v];
+				convert(v) {
+					return Array.isArray(v) ? v : [v];
 				},
 			},
 			{ name: 'CatalogFamilies', type: 'singleItem', persist: false },
