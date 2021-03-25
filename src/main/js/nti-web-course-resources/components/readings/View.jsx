@@ -2,12 +2,14 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
-import { searchable, contextual } from '@nti/web-search';
-import { Table, EmptyState, Loading } from '@nti/web-commons';
+import { WithSearch } from '@nti/web-search';
+import { Table, EmptyState, Loading, Hooks, Errors } from '@nti/web-commons';
 
 import ListItem from './ListItem';
+
+const {useResolver} = Hooks;
+const {isPending, isErrored, isResolved} = useResolver;
 
 const DEFAULT_TEXT = {
 	name: 'Name',
@@ -39,101 +41,106 @@ const columnClasses = {
 	default: 'sort-default',
 };
 
-function getReadings(course) {
-	const { ContentPackageBundle } = course || {};
-	const { ContentPackages } = ContentPackageBundle || {};
+const columns = [
+	{
+		name: 'name',
+		classes: { name: 'name', ...columnClasses },
+		display: t('name'),
+		sortFn: sortOnTitle,
+	},
+	{
+		name: 'publish',
+		classes: { name: 'publish', ...columnClasses },
+		display: t('publish'),
+		sortFn: (a, b) => {
+			const { isPublished: aPublished } = a;
+			const { isPublished: bPublished } = b;
 
-	return (ContentPackages || []).filter(x => x.isRenderable);
+			return aPublished && !bPublished
+				? 1
+				: aPublished === bPublished
+				? sortOnTitle(a, b)
+				: -1;
+		},
+	},
+	{
+		name: 'modified',
+		classes: { name: 'last-modified', ...columnClasses },
+		display: t('lastModified'),
+		sortFn: (a, b) => {
+			const aModified = a.getLastModified();
+			const bModified = b.getLastModified();
+
+			return aModified < bModified
+				? -1
+				: aModified === bModified
+				? 0
+				: 1;
+		},
+	},
+];
+
+function getFilter (term) {
+	if (!term) { return () => true; }
+
+	const regex = new RegExp(term, 'i');
+
+	return (c) => regex.test(c.title);
 }
 
-class Readings extends React.Component {
-	static propTypes = {
-		course: PropTypes.object,
-		gotoResource: PropTypes.func,
-		searchTerm: PropTypes.string,
-	};
+Readings.propTypes = {
+	course: PropTypes.object,
+	gotoResource: PropTypes.func,
+	searchTerm: PropTypes.string
+};
+function Readings ({course, gotoResource, searchTerm}) {
+	const resolver = useResolver(async () => {
+		const items = await course.ContentPackageBundle.getContentPackages();
 
-	renderItem = (item, cols) => {
+		return items.filter(i => i.isRenderable);
+	}, [course]);
+
+	const loading = isPending(resolver) || !course;
+	const error = isErrored(resolver) ? resolver : null;
+	const readings = isResolved(resolver) ? resolver : null;
+
+	const filter = getFilter(searchTerm);
+	const items = (readings ?? []).filter(filter);
+
+	const empty = !error && items.length === 0;
+
+	const renderItem = (item, cols) => {
 		return (
 			<ListItem
 				reading={item}
-				gotoResource={this.props.gotoResource}
+				gotoResource={gotoResource}
 				columns={cols}
 			/>
 		);
 	};
 
-	filter = title => {
-		const { searchTerm } = this.props;
-
-		return searchTerm ? new RegExp(searchTerm, 'i').test(title) : true;
-	};
-
-	render() {
-		const { course } = this.props;
-
-		const loading = !course;
-		const readings = getReadings(course).filter(x => this.filter(x.title));
-
-		const columns = [
-			{
-				name: 'name',
-				classes: { name: 'name', ...columnClasses },
-				display: t('name'),
-				sortFn: sortOnTitle,
-			},
-			{
-				name: 'publish',
-				classes: { name: 'publish', ...columnClasses },
-				display: t('publish'),
-				sortFn: (a, b) => {
-					const { isPublished: aPublished } = a;
-					const { isPublished: bPublished } = b;
-
-					return aPublished && !bPublished
-						? 1
-						: aPublished === bPublished
-						? sortOnTitle(a, b)
-						: -1;
-				},
-			},
-			{
-				name: 'modified',
-				classes: { name: 'last-modified', ...columnClasses },
-				display: t('lastModified'),
-				sortFn: (a, b) => {
-					const aModified = a.getLastModified();
-					const bModified = b.getLastModified();
-
-					return aModified < bModified
-						? -1
-						: aModified === bModified
-						? 0
-						: 1;
-				},
-			},
-		];
-
-		return (
-			<div className="nti-web-course-resources">
-				{readings.length !== 0 ? (
-					<Table.ListTable
-						classes={tableClasses}
-						items={readings}
-						columns={columns}
-						renderItem={this.renderItem}
-					/>
-				) : loading ? (
-					<Loading.Mask message={t('loading')} />
-				) : (
+	return (
+		<div className="nti-web-course-resources">
+			<Loading.Placeholder loading={loading} fallback={<Loading.Spinner.Large />}>
+				{error && (<Errors.Message error={error} />)}
+				{empty && (
 					<EmptyState
 						header={t('emptyHeader')}
 						subHeader={t('emptyMessage')}
 					/>
 				)}
-			</div>
-		);
-	}
+				{!empty && (
+					<Table.ListTable
+						classes={tableClasses}
+						items={items}
+						columns={columns}
+						renderItem={renderItem}
+					/>
+				)}
+			</Loading.Placeholder>
+		</div>
+	)
 }
 
-export default decorate(Readings, [searchable(), contextual(t('readings'))]);
+export default WithSearch(Readings, {label: t('readings')});
+
