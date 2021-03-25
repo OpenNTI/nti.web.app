@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Section from '../Section';
 
 import t from './strings';
-import { types } from './constants';
+import { types, formatting } from './constants';
 import AssetItem from './AssetItem';
 
 export default function Assets({
@@ -23,6 +23,7 @@ export default function Assets({
 					<AssetItem
 						key={type}
 						name={type}
+						formatting={formatting[type]}
 						onChange={changeHandler(type)}
 						onThumbClick={onThumbClick}
 						getText={k => t(['types', type, k])}

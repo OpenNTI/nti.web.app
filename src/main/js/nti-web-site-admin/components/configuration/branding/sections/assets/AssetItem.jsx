@@ -16,28 +16,17 @@ const NameToTheme = {
 	full_logo: 'fullLogo',
 };
 
-export default function AssetItem({ onChange, getText, name, onThumbClick }) {
+export default function AssetItem({ onChange, getText, name, formatting, onThumbClick }) {
 	const asset = Theme.useThemeProperty(
 		`${ASSETS}.${NameToTheme[name] || name}`
 	);
 
-	const change = e => {
-		const { target: { files = [] } = {} } = e;
-		if (files[0]) {
-			const file = files[0];
-			const reader = new FileReader();
-
-			reader.onload = () => {
-				const { result: source } = reader;
-
-				onChange({
-					filename: file.name,
-					source,
-					file,
-				});
-			};
-			reader.readAsDataURL(file);
-		}
+	const change = ({file, source}) => {
+		onChange({
+			filename: file.name,
+			source,
+			file,
+		});
 	};
 
 	return (
@@ -50,7 +39,7 @@ export default function AssetItem({ onChange, getText, name, onThumbClick }) {
 						<span className={cx('filename')}>{asset.filename}</span>
 					)}
 					<div>
-						<ImageInput name={name} onChange={change}>
+						<ImageInput name={name} title={getText('title')} formatting={formatting} onChange={change}>
 							Change
 						</ImageInput>
 					</div>
@@ -66,6 +55,7 @@ export default function AssetItem({ onChange, getText, name, onThumbClick }) {
 AssetItem.propTypes = {
 	onChange: PropTypes.func,
 	getText: PropTypes.func,
+	formatting: PropTypes.object,
 	name: PropTypes.string,
 	edit: PropTypes.object,
 	onThumbClick: PropTypes.func,

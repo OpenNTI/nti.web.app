@@ -8,12 +8,12 @@ export default scoped('nti-web-app.admin.branding.logo', {
 		[types.logo]: {
 			title: 'Square Format',
 			description:
-				'We recommend this asset be close to a square in proportion.',
+				'We recommend this asset be close to a square in proportion. The ideal dimensions are 140x140 pixels.',
 		},
 		[types.fullLogo]: {
 			title: 'Wide Format',
 			description:
-				'The wider orientation has space for your icon and company name.',
+				'The wider orientation has space for your icon and company name. We recommend a height of 140 pixels.',
 		},
 		[types.email]: {
 			title: 'Email Header',
@@ -23,7 +23,7 @@ export default scoped('nti-web-app.admin.branding.logo', {
 		[types.favicon]: {
 			title: 'Favicon',
 			description:
-				'This square asset helps users identify your site among their open browser tabs.',
+				'This square asset helps users identify your site among their open browser tabs. We recommend a size of 32x32 pixels for this asset.',
 		},
 		// [types.login]: {
 		// 	title: 'Login Image',
