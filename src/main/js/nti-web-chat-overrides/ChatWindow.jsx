@@ -32,15 +32,15 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 	}, [window, onClose]);
 
 	React.useEffect(() => {
-		const openChat = async (entity) => {
+		const openChat = async (_entity) => {
 			const actions = ChatActions.create();
-			const roomInfo = await actions.createChatRoom(entity);
+			const roomInfo = await actions.createChatRoom(_entity);
 
 			return actions.openChatWindow(roomInfo);
 		};
 
 		if (entity) {
-			openChat(entity).then(window => setState(window));
+			openChat(entity).then(_window => setState(_window));
 		} else {
 			window?.hide();
 		}
