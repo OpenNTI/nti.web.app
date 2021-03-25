@@ -10,7 +10,7 @@ const styles = stylesheet`
 `;
 
 WebappChatWindow.propTypes = {
-	entity: PropTypes.string.isRequired,
+	entity: PropTypes.string,
 	expanded: PropTypes.bool,
 
 	onClose: PropTypes.func,
