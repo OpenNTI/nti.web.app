@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { Layouts } from '@nti/web-commons';
-
 import ChatActions from '../legacy/app/chat/Actions';
 
 const styles = stylesheet`
-	.expanded-mode {
+	.expanded {
 		right: 240px !important;
 	}
 `;
@@ -19,30 +17,46 @@ WebappChatWindow.propTypes = {
 };
 
 export default function WebappChatWindow({ onClose, entity, expanded }) {
-	const windowRef = React.useRef(null);
+	const [window, setState] = React.useState(null);
 
-	const onUnmount = () => {
-		windowRef.current?.hide();
-	};
-
-	const onMount = async () => {
-		const actions = ChatActions.create();
-
-		const roomInfo = await actions.createChatRoom(entity);
-
-		const win = actions.openChatWindow(roomInfo);
-
-		expanded
-			? win.addCls(styles.expandedMode)
-			: win.removeCls(styles.expandedMode);
-
-		win.on({
+	React.useEffect(() => {
+		const listen = {
 			single: true,
 			close: onClose,
-		});
+		};
 
-		windowRef.current = win;
-	};
+		window?.on(listen);
+		return () => {
+			window?.un(listen);
+		}
+	}, [window, onClose]);
 
-	return <Layouts.Uncontrolled onMount={onMount} onUnmount={onUnmount} />;
+	React.useEffect(() => {
+		const openChat = async (entity) => {
+			const actions = ChatActions.create();
+			const roomInfo = await actions.createChatRoom(entity);
+
+			return actions.openChatWindow(roomInfo);
+		};
+
+		if (entity) {
+			openChat(entity).then(window => setState(window));
+		} else {
+			window?.hide();
+		}
+
+		return () => {
+			window?.hide();
+		}
+	}, [entity]);
+
+	React.useEffect(() => {
+		if (expanded) {
+			window?.addCls(styles.expanded);
+		} else {
+			window?.removeCls(styles.expanded);
+		}
+	}, [window, expanded]);
+
+	return null;
 }
