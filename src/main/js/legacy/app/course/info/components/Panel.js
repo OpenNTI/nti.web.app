@@ -7,7 +7,6 @@ const CoursesStateStore = require('internal/legacy/app/library/courses/StateStor
 require('./parts/Description');
 require('./parts/Instructors');
 require('./parts/NotStarted');
-require('./parts/Support');
 require('./parts/Title');
 
 module.exports = exports = Ext.define(
