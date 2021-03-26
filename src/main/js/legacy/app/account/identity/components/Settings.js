@@ -29,7 +29,7 @@ module.exports = exports = Ext.define(
 			// 'mouseleave': 'startHide'
 		},
 
-		initComponent: function () {
+		initComponent() {
 			this.callParent(arguments);
 			this.addMenuItems();
 		},
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define(
 
 			const { supportContact } = supportLinks;
 
-			if (supportContact && !supportLinks.internalSupport) {
+			if (supportContact) {
 				const ensureProtocol = x =>
 					!x || /^(mailto|https?):/i.test(x) ? x : `mailto:${x}`;
 
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define(
 			this.add(items);
 		},
 
-		startHide: function () {
+		startHide() {
 			var me = this;
 
 			me.cancelHide();
@@ -164,15 +164,15 @@ module.exports = exports = Ext.define(
 			}, 500);
 		},
 
-		cancelHide: function () {
+		cancelHide() {
 			clearTimeout(this.hideTimeout);
 		},
 
-		showWelcome: function (item) {
+		showWelcome(item) {
 			this.AccountActions.showWelcomePage(item.link);
 		},
 
-		showAbout: function (item) {
+		showAbout(item) {
 			this.AccountActions.showHref(item.href, item.target);
 		},
 
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		showChildPrivacy: function () {
+		showChildPrivacy() {
 			var link = $AppConfig.userObject.getLink('childrens-privacy');
 
 			if (link) {
@@ -198,15 +198,15 @@ module.exports = exports = Ext.define(
 			this.AccountActions.showTermsOfService(link);
 		},
 
-		contactUs: function () {
+		contactUs() {
 			this.AccountActions.showContactUs();
 		},
 
-		impersonate: function () {
+		impersonate() {
 			this.LoginActions.handleImpersonate();
 		},
 
-		logout: function () {
+		logout() {
 			this.LoginActions.handleLogout();
 		},
 
