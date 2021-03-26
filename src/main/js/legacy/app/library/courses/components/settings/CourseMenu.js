@@ -219,23 +219,18 @@ module.exports = exports = Ext.define(
 					component: CourseMenu,
 					course: this.course,
 					registered,
-					doRequestSupport: () => {
-						me.hide();
-						window.location.href =
-							'mailto:support@nextthought.com?subject=Support%20Request';
-					},
 				};
 
 			// assume delete link means admin and not delete means drop enrollment option?
 			if (this.course.hasLink('delete')) {
-				menuCfg.doEdit = () => {
+				menuCfg.onEdit = () => {
 					me.hide();
 					me.goToRecord && me.goToRecord(me.record, 'info');
 				};
 			}
 
 			if (this.course.hasLink('Export')) {
-				menuCfg.doExport = () => {
+				menuCfg.onExport = () => {
 					me.hide();
 
 					window.location.href = this.course.getLink('Export');
@@ -243,14 +238,14 @@ module.exports = exports = Ext.define(
 			}
 
 			if (catalogEntry.isDroppable()) {
-				menuCfg.doDrop = () => {
+				menuCfg.onDrop = () => {
 					me.hide();
 					me.dropCourse();
 				};
 			}
 
 			if (this.course.hasLink('delete')) {
-				menuCfg.doDelete = () => {
+				menuCfg.onDelete = () => {
 					me.hide();
 					me.deleteCourse();
 				};
