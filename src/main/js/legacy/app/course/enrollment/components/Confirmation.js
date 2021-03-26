@@ -82,14 +82,14 @@ module.exports = exports = Ext.define(
 			iframeEl: '.iframe-container',
 		},
 
-		initComponent: function () {
+		initComponent() {
 			this.callParent(arguments);
 
 			this.AccountActions = AccountActions.create();
 			this.CourseStore = CoursesStateStore.getInstance();
 		},
 
-		beforeRender: function () {
+		beforeRender() {
 			this.callParent(arguments);
 
 			var c = this.course,
@@ -158,12 +158,10 @@ module.exports = exports = Ext.define(
 			});
 		},
 
-		afterRender: function () {
+		afterRender() {
 			this.callParent(arguments);
 
-			var me = this;
-
-			me.mon(me.el, 'click', function (e) {
+			this.mon(this.el, 'click', e => {
 				var a = e.getTarget('a'),
 					href = a && a.getAttribute('href');
 
@@ -173,41 +171,41 @@ module.exports = exports = Ext.define(
 
 				if (href === 'profile') {
 					e.stopEvent();
-					me.up('library-available-courses-window').close();
-					me.navigateToProfile($AppConfig.userObject);
+					this.up('library-available-courses-window').close();
+					this.navigateToProfile($AppConfig.userObject);
 					return false;
 				}
 
 				if (href === 'welcome') {
 					e.stopEvent();
-					me.AccountActions.showWelcomePage(
+					this.AccountActions.showWelcomePage(
 						$AppConfig.getLink('content.permanent_welcome_page')
 					);
 					return false;
 				}
 			});
 
-			me.transactionContainerEl.setVisibilityMode(
+			this.transactionContainerEl.setVisibilityMode(
 				Ext.dom.Element.DISPLAY
 			);
 
-			me.transactionInput = Ext.widget('simpletext', {
+			this.transactionInput = Ext.widget('simpletext', {
 				inputType: 'text',
 				readOnly: true,
 				placeholder: getString(
 					'NextThought.view.courseware.enrollment.Confirmation.TransID'
 				),
-				renderTo: me.transactionEl,
+				renderTo: this.transactionEl,
 			});
 
-			me.on('destroy', 'destroy', me.transactionInput);
+			this.on('destroy', 'destroy', this.transactionInput);
 		},
 
-		stopClose: function () {
+		stopClose() {
 			return Promise.resolve();
 		},
 
-		beforeShow: function () {
+		beforeShow() {
 			var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 				transactionId =
 					purchaseAttempt && purchaseAttempt.get('TransactionID'),
@@ -234,7 +232,7 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		addThankYouPage: function (url) {
+		addThankYouPage(url) {
 			var container = this.iframeEl.dom,
 				existing = container.querySelector('iframe'),
 				iframe;
