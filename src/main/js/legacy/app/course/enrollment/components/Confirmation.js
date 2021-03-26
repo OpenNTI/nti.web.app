@@ -1,13 +1,18 @@
 const Ext = require('@nti/extjs');
+const { scoped } = require('@nti/lib-locale');
+const { getService } = require('@nti/web-client');
 const {
 	getString,
 	getFormattedString,
 } = require('internal/legacy/util/Localization');
-
-const AccountActions = require('../../../account/Actions');
-const CoursesStateStore = require('../../../library/courses/StateStore');
-
+const AccountActions = require('internal/legacy/app/account/Actions');
+const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
 require('internal/legacy/mixins/ProfileLinks');
+
+const t = scoped('course.enrollment.confirmation', {
+	'contact-support':
+		'Please contact <a>support<a> if you have any questions.',
+});
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.enrollment.components.Confirmation',
@@ -51,25 +56,12 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'support-text',
-						html:
-							'{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}',
+						html: t('contact-support'),
 					},
 					{
 						tag: 'tpl',
 						if: 'phone',
 						cn: [{ cls: 'help-link phone', html: '{phone}' }],
-					},
-					{
-						tag: 'tpl',
-						for: 'helplinks',
-						cn: [
-							{
-								tag: 'a',
-								href: '{href}',
-								html: '{text}',
-								target: '_blank',
-							},
-						],
 					},
 				],
 			},
@@ -80,6 +72,7 @@ module.exports = exports = Ext.define(
 			transactionContainerEl: '.transaction',
 			transactionEl: '.transaction .transaction-id',
 			iframeEl: '.iframe-container',
+			contactSupportLinkEl: '.support .support-text a',
 		},
 
 		initComponent() {
@@ -94,9 +87,6 @@ module.exports = exports = Ext.define(
 
 			var c = this.course,
 				start = c.get('StartDate'),
-				helplinks = [],
-				i,
-				labelprefix,
 				confirmationText = getString('EnrollmentConfirmation') || {},
 				prompt =
 					confirmationText.subtitle &&
@@ -116,20 +106,6 @@ module.exports = exports = Ext.define(
 				} else {
 					prompt = getFormattedString('{course} is available now!', {
 						course: c.get('Title'),
-					});
-				}
-			}
-
-			for (i = 1; i <= 3; i++) {
-				labelprefix = 'course-info.course-supoprt.link' + i;
-
-				if (
-					getString(labelprefix + '.Label') !==
-					labelprefix + '.label'
-				) {
-					helplinks.push({
-						href: getString(labelprefix + '.URL'),
-						text: getString(labelprefix + '.Label', '', true),
 					});
 				}
 			}
@@ -154,7 +130,6 @@ module.exports = exports = Ext.define(
 					null,
 					true
 				),
-				helplinks: helplinks,
 			});
 		},
 
@@ -197,6 +172,12 @@ module.exports = exports = Ext.define(
 				),
 				renderTo: this.transactionEl,
 			});
+
+			(async () => {
+				const service = await getService();
+				const { contactSupport } = service.getSupportLinks();
+				this.contactSupportLinkEl?.set({ href: contactSupport });
+			})();
 
 			this.on('destroy', 'destroy', this.transactionInput);
 		},
