@@ -23,6 +23,9 @@ require('./profile_update/Window');
 require('./recovery/Window');
 require('./registration/Prompt');
 
+const ensureProtocol = x =>
+	!x || /^(mailto|https?):/i.test(x) ? x : `mailto:${x}`;
+
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	extend: 'NextThought.common.Actions',
 
@@ -289,13 +292,12 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 
 	async showContactUs() {
 		const service = await getService();
-		const {
-			internalSupport,
-			supportContact: help,
-		} = service.getSupportLinks();
+		const { internalSupport, supportContact } = service.getSupportLinks();
 
-		if (help && !internalSupport) {
-			Globals.sendEmailTo(help);
+		if (supportContact && !internalSupport) {
+			const help = new URL(ensureProtocol(supportContact));
+			help.searchParams.append('subject', 'Support Request');
+			Globals.sendEmailTo(help.toString());
 			return;
 		}
 

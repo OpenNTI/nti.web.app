@@ -38,9 +38,22 @@ module.exports = exports = Ext.define(
 			const service = await getService();
 			const supportLinks = service.getSupportLinks();
 
+			this.mon(Ext.getBody(), {
+				click: e => {
+					const link = e.getTarget('a[href]');
+					const href = link?.getAttribute('href');
+					if (
+						supportLinks.supportContact === href &&
+						supportLinks.internalSupport
+					) {
+						e.stopEvent();
+						this.AccountActions.showContactUs();
+					}
+				},
+			});
+
 			var items = [],
 				u = $AppConfig.userObject,
-				contactItem,
 				welcomeLink = u.getLink('content.permanent_welcome_page'),
 				childrenLink = u.getLink('childrens-privacy');
 
@@ -95,7 +108,7 @@ module.exports = exports = Ext.define(
 				text: getString('NextThought.view.menus.Settings.terms'),
 			});
 
-			contactItem = {
+			const contactItem = {
 				handler: this.contactUs.bind(this),
 				text: getString('NextThought.view.menus.Settings.contact'),
 				cls: 'settings-menu-contact-item',
@@ -108,7 +121,7 @@ module.exports = exports = Ext.define(
 				const ensureProtocol = x =>
 					!x || /^(mailto|https?):/i.test(x) ? x : `mailto:${x}`;
 
-				Ext.apply(contactItem, {
+				Object.assign(contactItem, {
 					onClick: Ext.emptyFn,
 					autoEl: {
 						tag: 'a',
