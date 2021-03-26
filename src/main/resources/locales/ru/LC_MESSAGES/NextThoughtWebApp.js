@@ -44,7 +44,7 @@ NTIStrings['no_group_sub'] = 'Click create or join to add some.';
 
 NTIStrings['course-enrollment-enroll'] = 'Get Started';
 
-NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
+NTIStrings['course-info.course-support.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
 NTIStrings['enrollment.enroll.header'] = 'Congratulations!';
 NTIStrings['enrollment.enroll.description'] = 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.';
@@ -542,14 +542,8 @@ NTIStrings['NextThought.view.courseware.info.parts.NotStarted.starts'] = 'кур
 NTIStrings['NextThought.view.courseware.info.parts.NotStarted.edit'] = 'редактировать';
 NTIStrings['NextThought.view.courseware.info.parts.NotStarted.notenrolled'] = 'записаться';
 NTIStrings['NextThought.view.courseware.info.parts.Support.support'] = 'Техническая поддержка';
-NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
-NTIStrings['course-info.course-supoprt.phone'] = '\u200B';
-NTIStrings['course-info.course-supoprt.link1.Label'] = 'Support';
-NTIStrings['course-info.course-supoprt.link1.URL'] = 'mailto:support@nextthought.com';
-NTIStrings['course-info.course-supoprt.link2.Label'] = 'Info';
-NTIStrings['course-info.course-supoprt.link2.URL'] = 'mailto:info@nextthought.com';
-NTIStrings['course-info.course-supoprt.link3.Label'] = 'NextThought Website';
-NTIStrings['course-info.course-supoprt.link3.URL'] = 'http://nextthought.com';
+NTIStrings['course-info.course-support.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
+NTIStrings['course-info.course-support.phone'] = '\u200B';
 NTIStrings['course-info.course-support.help-site.Label'] = 'Help Site';
 NTIStrings['course-info.course-support.help-site.URL'] = 'http://help.nextthought.com/';
 NTIStrings['course-info.open-course-widget.heading'] = 'About Open Courses';

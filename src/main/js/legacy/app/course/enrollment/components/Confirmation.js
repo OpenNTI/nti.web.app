@@ -126,7 +126,7 @@ module.exports = exports = Ext.define(
 					},
 				],
 				phone: getString(
-					'course-info.course-supoprt.phone',
+					'course-info.course-support.phone',
 					null,
 					true
 				),
