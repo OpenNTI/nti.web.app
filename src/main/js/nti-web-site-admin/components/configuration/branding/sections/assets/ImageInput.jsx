@@ -31,14 +31,16 @@ const ImageWrapper = styled.div`
 	margin: 2rem;
 `;
 
-export default function ImageInput({ onChange: onChangeProp, name, formatting, children, title }) {
+export default function ImageInput({ onChange: onChangeProp, name, formatting, outputSize, children, title }) {
 	const [editorState, setEditorState] = React.useState(null);
+	const [filename, setFilename] = React.useState(null);
+
 	const onCancel = () => setEditorState(null);
 	const updateImage = async () => {
-		const file = await ImageEditor.getBlobForEditorState(editorState);
-		const source = ImageEditor.getDataURLForEditorState(editorState);
-		
-		onChangeProp({file, source});
+		const file = await ImageEditor.getBlobForEditorState(editorState, outputSize);
+		const source = ImageEditor.getDataURLForEditorState(editorState, outputSize);
+
+		onChangeProp({file, source, filename});
 		setEditorState(null);
 	};
 
@@ -55,6 +57,7 @@ export default function ImageInput({ onChange: onChangeProp, name, formatting, c
 
 			const editorState =  ImageEditor.getEditorState(img, formatting || {});
 
+			setFilename(files[0].name);
 			setEditorState(editorState);
 		} catch (err) {
 			setError(err);
@@ -94,5 +97,6 @@ ImageInput.propTypes = {
 	onChange: PropTypes.func,
 	name: PropTypes.string,
 	formatting: PropTypes.object,
+	outputSize: PropTypes.object,
 	title: PropTypes.string
 };

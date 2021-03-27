@@ -6,7 +6,13 @@ export const types = {
 };
 
 export const formatting = {
-	logo: {crop: {aspectRatio: 1}, maxHeight: 140},
-	'full_logo': {crop: {maxAspectRatio: 300 / 70}, maxHeight: 140},
-	favicon: {crop: {aspectRatio: 1}, maxHeight: 64}
-}
+	logo: {crop: {aspectRatio: 1}},
+	'full_logo': {crop: {maxAspectRatio: 300 / 70}},
+	email: {crop: {}},
+	favicon: {crop: {aspectRatio: 1}}
+};
+
+export const outputSize = {
+	logo: {maxHeight: 210},
+	'full_logo': {maxHeight: 210}
+};
