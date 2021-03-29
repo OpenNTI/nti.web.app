@@ -235,6 +235,10 @@ module.exports = exports = Ext.define(
 		},
 
 		hideSelectionMenu: function () {
+			if (this.selectionMenu.showingEditor()) {
+				return;
+			}
+
 			this.selectionEl.addCls('closed');
 			this.selectionMenu.hide();
 

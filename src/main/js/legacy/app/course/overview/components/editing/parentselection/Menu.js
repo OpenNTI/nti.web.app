@@ -149,5 +149,9 @@ module.exports = exports = Ext.define(
 			this.showItems();
 			this.doSelection(record);
 		},
+
+		showingEditor () {
+			return this.newItemContainer?.isVisible();
+		}
 	}
 );

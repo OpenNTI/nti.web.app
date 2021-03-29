@@ -7,8 +7,27 @@ const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 const EditingActions = require('../../Actions');
 
 const styles = stylesheet`
-	.color-input-container {
-		float: right;
+	.editor {
+		display: flex;
+		flex-direction: row-reverse;
+		align-items: center;
+	}
+
+	.input:global(.title) {
+		flex: 1 1 auto;
+		margin-bottom: 0;
+	}
+
+	.color {
+		flex: 0 0 auto;
+		display: inline-block;
+		margin-right: 0.5rem;
+	}
+
+	.color > :global(.x-component) {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 `;
 
@@ -22,18 +41,18 @@ module.exports = exports = Ext.define(
 			creationText: 'Create a section',
 		},
 
-		cls: 'overviewgroup-editor inline',
+		cls: `overviewgroup-editor inline ${styles.editor}`,
 
 		renderTpl: Ext.DomHelper.markup([
 			{
 				tag: 'input',
-				cls: 'title',
+				cls: `title ${styles.input}`,
 				placeholder: 'Section name',
 				type: 'text',
 				value: '{title}',
 				maxlength: '{maxLength}',
 			},
-			{ cls: 'color-input', tag: 'span'},
+			{ cls: `color-input ${styles.color}`, tag: 'span'},
 		]),
 
 		renderSelectors: {
@@ -69,7 +88,6 @@ module.exports = exports = Ext.define(
 				accent = this.record ? this.record.get('accentColor') : '';
 
 			this.colorInput = ReactHarness.create({
-				cls: styles.colorInputContainer,
 				component: Input.Color.Flyout,
 				renderTo: this.colorInputContainerEl,
 				value: accent === '' ? colors[0].color : Color.fromHex(accent),
