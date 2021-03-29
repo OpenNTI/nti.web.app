@@ -23,7 +23,7 @@ require('internal/legacy/mixins/dnd/OrderingItem');
 require('internal/legacy/mixins/Transition');
 require('../../controls/Add');
 require('../../controls/Edit');
-require('./Preview');
+const Preview = require('./Preview');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem',
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define(
 					},
 					{
 						xtype: 'overview-editing-controls-synclock',
-						color: 'white',
+						color: Preview.isDark(collection) ? '' : 'white',
 						record: collection,
 						parentRecord: this.lessonOverview,
 						root: this.lessonOverview,
@@ -201,7 +201,7 @@ module.exports = exports = Ext.define(
 					},
 					{
 						xtype: 'overview-editing-controls-edit',
-						color: 'white',
+						color: Preview.isDark(collection) ? '' : 'white',
 						record: collection,
 						parentRecord: this.lessonOverview,
 						root: this.lessonOverview,
