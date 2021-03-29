@@ -412,7 +412,7 @@ const StudentPerformance = (module.exports = exports = Ext.define(
 				addGrade(values);
 
 				if (values.letter || values.value) {
-					this.gradLabel.show();
+					this.gradeLabel.show();
 					this.gradeLabel.addDisclaimer(
 						'Estimated from the grading policy in the Syllabus'
 					);
