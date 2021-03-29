@@ -1,3 +1,5 @@
+const { Base64 } = require('js-base64');
+
 const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define(
@@ -78,7 +80,9 @@ module.exports = exports = Ext.define(
 	if (!HTMLCanvasElement.prototype.toBlob) {
 		Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
 			value: function (callback, type, quality) {
-				var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
+				var binStr = Base64.decode(
+						this.toDataURL(type, quality).split(',')[1]
+					),
 					len = binStr.length,
 					arr = new Uint8Array(len);
 
