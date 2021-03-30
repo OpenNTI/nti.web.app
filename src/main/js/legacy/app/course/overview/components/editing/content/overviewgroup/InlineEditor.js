@@ -92,6 +92,8 @@ module.exports = exports = Ext.define(
 				renderTo: this.colorInputContainerEl,
 				value: accent === '' ? colors[0].color : Color.fromHex(accent),
 				onChange: (newColor) => {
+					newColor = newColor.hsl.setSaturation(newColor.hsl.s / 100);
+					newColor = newColor.hsl.setLightness(newColor.hsl.l / 100);
     				this.colorInput.setProps({value: newColor});
 					this.onInputChange();
 				},
