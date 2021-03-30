@@ -162,6 +162,9 @@ module.exports = exports = Ext.define(
 			items.push({
 				handler: this.logout.bind(this),
 				text: getString('NextThought.view.menus.Settings.logout'),
+				afterRender() {
+					this.el.set({ 'data-testid': 'logout-button' });
+				},
 			});
 
 			this.add(items);
