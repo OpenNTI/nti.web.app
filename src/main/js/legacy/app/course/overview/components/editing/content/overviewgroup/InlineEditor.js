@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
-const {Input} = require('@nti/web-commons');
-const {Color} = require('@nti/lib-commons');
+const { Input } = require('@nti/web-commons');
+const { Color } = require('@nti/lib-commons');
 const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define(
 				value: '{title}',
 				maxlength: '{maxLength}',
 			},
-			{ cls: `color-input ${styles.color}`, tag: 'span'},
+			{ cls: `color-input ${styles.color}`, tag: 'span' },
 		]),
 
 		renderSelectors: {
@@ -60,83 +60,77 @@ module.exports = exports = Ext.define(
 			colorInputContainerEl: '.color-input',
 		},
 
-		escapeForInput: function (value) {
-			return value && value.replace(/"/g, '&quot;');
+		escapeForInput(value) {
+			return value?.replace(/"/g, '&quot;');
 		},
 
-		beforeRender: function () {
+		beforeRender() {
 			this.callParent(arguments);
 
 			var colors = OverviewGroup.COLOR_CHOICES,
-				title = this.record
-					? this.escapeForInput(this.record.get('title'))
-					: '',
-				accent = this.record ? this.record.get('accentColor') : '';
+				title = this.escapeForInput(this.record?.get('title')) || '',
+				accent = this.record?.get('accentColor');
 
 			this.renderData = Ext.apply(this.renderData || {}, {
 				currentColor: accent || colors[0],
 				advanced: Service.canDoAdvancedEditing(),
-				title: title,
+				title,
 				maxLength: EditingActions.MAX_TITLE_LENGTH,
 			});
 		},
 
-		afterRender: function () {
+		afterRender() {
 			this.callParent(arguments);
 
-			var colors = OverviewGroup.COLOR_CHOICES,
-				accent = this.record ? this.record.get('accentColor') : '';
+			const colors = OverviewGroup.COLOR_CHOICES;
+			const accent = this.record?.get('accentColor');
+			const [{ color: defaultColor }] = colors;
 
 			this.colorInput = ReactHarness.create({
 				component: Input.Color.Flyout,
 				renderTo: this.colorInputContainerEl,
-				value: accent === '' ? colors[0].color : Color.fromHex(accent),
-				onChange: (newColor) => {
-    				this.colorInput.setProps({value: newColor});
+				value: accent ? defaultColor : Color.fromHex(accent),
+				onChange: newColor => {
+					this.colorInput.setProps({ value: newColor });
 					this.onInputChange();
 				},
 				arrow: true,
 				swatches: colors,
-				veriticalAlign: Input.Color.Flyout.ALIGNMENTS.BOTTOM,
-				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT
+				verticalAlign: Input.Color.Flyout.ALIGNMENTS.BOTTOM,
+				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT,
 			});
 
 			this.onInputChange();
 		},
 
-		getSelectedColor: function () {
-			var recordColor = this.record && this.record.get('accentColor'),
-				value;
+		getSelectedColor() {
+			const recordColor = this.record?.get('accentColor');
 
-			if (this.colorInput ) {
-				value = this.colorInput.getProps().value.hex.toString();
-				value = value?.replace('#', '');
-			} else if (recordColor) {
-				value = recordColor;
+			if (this.colorInput) {
+				const value = this.colorInput.getProps().value.hex.toString();
+				return value?.replace('#', '');
 			}
 
-			return value;
+			return recordColor;
 		},
 
-		getTitle: function () {
-			return this.inputEl && this.inputEl.getValue();
+		getTitle() {
+			return this.inputEl?.getValue();
 		},
 
-		isEmpty: function () {
-			var values = this.getValue();
+		isEmpty() {
+			const values = this.getValue();
 
 			return !values.title && !values.accentColor;
 		},
 
-		onInputChange: function () {
-			if (this.onChange) {
-				this.onChange(this.getValue());
-			}
+		onInputChange() {
+			this.onChange?.(this.getValue());
 		},
 
-		getErrors: function () {
-			var values = this.getValue(),
-				errors = {};
+		getErrors() {
+			const values = this.getValue();
+			const errors = {};
 
 			if (!values.title || !values.title.trim().length) {
 				errors.title = {
@@ -149,26 +143,27 @@ module.exports = exports = Ext.define(
 					missing: true,
 				};
 			}
+
 			return errors;
 		},
 
-		showErrorOn: function (name) {
+		showErrorOn(name) {
 			if (name === 'title') {
 				this.inputEl.addCls('error');
 			}
 		},
 
-		removeErrorOn: function (name) {
+		removeErrorOn(name) {
 			this.inputEl.removeCls('error');
 		},
 
-		getErrorsFor: function (name) {
-			var errors = this.getErrors();
+		getErrorsFor(name) {
+			const errors = this.getErrors();
 
-			return errors[name];
+			return errors?.[name];
 		},
 
-		getValue: function () {
+		getValue() {
 			return {
 				MimeType: OverviewGroup.mimeType,
 				title: this.getTitle(),
