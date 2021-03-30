@@ -9,7 +9,7 @@ const EditingActions = require('../../Actions');
 const styles = stylesheet`
 	.editor {
 		display: flex;
-		flex-direction: row-reverse;
+		flex-direction: row;
 		align-items: center;
 	}
 
@@ -21,13 +21,17 @@ const styles = stylesheet`
 	.color {
 		flex: 0 0 auto;
 		display: inline-block;
-		margin-right: 0.5rem;
+		margin-left: 0.5rem;
 	}
 
 	.color > :global(.x-component) {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	[data-color-picker-panel].flyout {
+		max-width: 380px;
 	}
 `;
 
@@ -88,8 +92,9 @@ module.exports = exports = Ext.define(
 
 			this.colorInput = ReactHarness.create({
 				component: Input.Color.Flyout,
+				className: styles.flyout,
 				renderTo: this.colorInputContainerEl,
-				value: accent ? defaultColor : Color.fromHex(accent),
+				value: !accent ? defaultColor : Color.fromHex(accent),
 				onChange: newColor => {
 					this.colorInput.setProps({ value: newColor });
 					this.onInputChange();
@@ -97,7 +102,7 @@ module.exports = exports = Ext.define(
 				arrow: true,
 				swatches: colors,
 				verticalAlign: Input.Color.Flyout.ALIGNMENTS.BOTTOM,
-				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT,
+				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT_OR_RIGHT,
 			});
 
 			this.onInputChange();
