@@ -41,11 +41,11 @@ function LoginButton({ setBrandProp }) {
 	const styles = {};
 
 	if (backgroundColor) {
-		styles.backgroundColor = backgroundColor.hex.toString();
+		styles.backgroundColor = backgroundColor?.hex?.toString() ?? '#fff';
 	}
 
 	const onColorChange = color => {
-		setBrandProp('theme.login.buttonBackground', color.hex.toString());
+		setBrandProp('theme.login.buttonBackground', color);
 	};
 
 	const trigger = <span className={cx('color-trigger')} style={styles} />;
