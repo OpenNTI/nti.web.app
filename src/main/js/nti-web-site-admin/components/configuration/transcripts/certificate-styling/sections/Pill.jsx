@@ -80,7 +80,7 @@ export default function CertificateStylingPill() {
 			? background
 			: Color.fromCSS(background);
 	const onColorChange = newColor =>
-		setBrandProp('certificate_brand_color', newColor.hex.toString());
+		setBrandProp('certificate_brand_color', newColor);
 
 	const logoAsset = Theme.useThemeProperty(`assets.${LogoName}`);
 	const customAsset = Theme.useThemeProperty(`assets.${CustomName}`);
@@ -141,7 +141,7 @@ export default function CertificateStylingPill() {
 								onChange={onColorChange}
 							/>
 							<Input.Color.PresetSwatches
-								swatched={Presets}
+								swatches={Presets}
 								selected={color}
 								onSelect={onColorChange}
 							/>

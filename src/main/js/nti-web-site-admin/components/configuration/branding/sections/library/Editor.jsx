@@ -63,7 +63,7 @@ export default function Editor({ onChange }) {
 				>
 					<BrandColor
 						onChange={color =>
-							change(BRAND_COLOR)(color.hex.toString())
+							change(BRAND_COLOR)(color)
 						}
 					/>
 				</InputContainer>

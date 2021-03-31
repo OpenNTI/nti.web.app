@@ -28,7 +28,7 @@ export default function BrandColor({ onChange }) {
 		<span
 			role="button"
 			className={cx('brand-color-preview')}
-			style={{ background: brandColor }}
+			style={{ background: color?.hex.toString() }}
 		/>
 	);
 
