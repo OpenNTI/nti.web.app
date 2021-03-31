@@ -35,6 +35,38 @@ const ImageWrapper = styled.div`
 	margin: 2rem;
 `;
 
+const initialState = {inputKey: 1, error: null, filename: null, editorState: null};
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'error':
+			return {
+				...state,
+				error: action.error
+			};
+		case 'addFile':
+			return {
+				...state,
+				error: null,
+				filename: action.filename,
+				editorState: action.editorState,
+				inputKey: (state.inputKey ?? 0) + 1
+			};
+		case 'updateEditorState':
+			return {
+				...state,
+				editorState: action.editorState
+			};
+		case 'clear':
+			return {
+				...state,
+				filename: null,
+				editorState: null
+			};
+		default:
+			return state;
+	}
+}
+
 export default function ImageInput({
 	onChange: onChangeProp,
 	name,
@@ -43,10 +75,17 @@ export default function ImageInput({
 	children,
 	title,
 }) {
-	const [editorState, setEditorState] = React.useState(null);
-	const [filename, setFilename] = React.useState(null);
+	const [
+		{
+			editorState,
+			filename,
+			inputKey,
+			error
+		},
+		dispatch
+	] = React.useReducer(reducer, initialState);
 
-	const onCancel = () => setEditorState(null);
+	const onCancel = () => dispatch({type: 'clear'});
 	const updateImage = async () => {
 		const file = await ImageEditor.getBlobForEditorState(
 			editorState,
@@ -58,12 +97,16 @@ export default function ImageInput({
 		);
 
 		onChangeProp({ file, source, filename });
-		setEditorState(null);
+		dispatch({type: 'clear'});
 	};
 
-	const [error, setError] = React.useState(null);
+	const setEditorState = (newEditorState) => {
+		dispatch({type: 'updateEditorState', editorState: newEditorState});
+	};
+
 
 	const onChange = async e => {
+
 		try {
 			const {
 				target: { files = [] },
@@ -75,11 +118,17 @@ export default function ImageInput({
 				throw new Error('Unable to load img');
 			}
 
-			setFilename(files[0].name);
-			setEditorState(ImageEditor.getEditorState(img, formatting || {}));
+			dispatch({
+				type: 'addFile',
+				filename: files[0].name,
+				editorState: ImageEditor.getEditorState(img, formatting || {})
+			});
 		} catch (err) {
-			setError(err);
+			dispatch({type: 'error'})
 		}
+
+		e.stopPropagation();
+		e.preventDefault();
 	};
 
 	return (
@@ -88,6 +137,7 @@ export default function ImageInput({
 				<input
 					type="file"
 					name={name}
+					key={inputKey}
 					onChange={onChange}
 					accept={AcceptsOverrides[name] || 'image/*'}
 				/>
