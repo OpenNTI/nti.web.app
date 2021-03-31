@@ -1,7 +1,6 @@
 /*eslint strict:0, import/no-commonjs:0, import/order:0*/
 'use strict';
 const path = require('path');
-const logger = require('./logger');
 
 const HANDLERS = {
 	handleLibraryPathRedirects: /^\/library/i,
@@ -47,7 +46,7 @@ exports = module.exports = {
 				'nti-course-catalog-entry',
 				parts[1]
 			);
-			logger.info('redirecting to: %s', url);
+			// console.log('redirecting to: %s', url);
 			res.redirect(url);
 			return;
 		}
