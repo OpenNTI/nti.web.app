@@ -1,10 +1,12 @@
 const Ext = require('@nti/extjs');
-const { Input } = require('@nti/web-commons');
 const { Color } = require('@nti/lib-commons');
+const { Overview } = require('@nti/web-course');
 const OverviewGroup = require('internal/legacy/model/courses/overview/Group');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const EditingActions = require('../../Actions');
+
+const {AccentPicker} = Overview.Items.Group;
 
 const styles = stylesheet`
 	.editor {
@@ -91,18 +93,14 @@ module.exports = exports = Ext.define(
 			const [{ color: defaultColor }] = colors;
 
 			this.colorInput = ReactHarness.create({
-				component: Input.Color.Flyout,
+				component: AccentPicker,
 				className: styles.flyout,
 				renderTo: this.colorInputContainerEl,
 				value: !accent ? defaultColor : Color.fromHex(accent),
 				onChange: newColor => {
 					this.colorInput.setProps({ value: newColor });
 					this.onInputChange();
-				},
-				arrow: true,
-				swatches: colors,
-				verticalAlign: Input.Color.Flyout.ALIGNMENTS.BOTTOM,
-				horizontalAlign: Input.Color.Flyout.ALIGNMENTS.LEFT_OR_RIGHT,
+				}
 			});
 
 			this.onInputChange();
