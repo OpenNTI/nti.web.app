@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { DateIcon } = require('@nti/web-calendar');
 const { SocialFeatures } = require('@nti/web-profiles');
-const { getAppUsername, isFlag } = require('@nti/web-client');
+const { isFlag } = require('@nti/web-client');
 const UserRepository = require('internal/legacy/cache/UserRepository');
 const User = require('internal/legacy/model/User');
 const lazy = require('internal/legacy/util/lazy-require').get(
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
-			notify: this.handleWindowNotify.bind(this),
+			'notify': this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this),
 			'presence-changed': this.updatePresence.bind(this),
@@ -120,17 +120,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		});
 
 		this.mon(onlineContactStore, {
-			load: this.onOnlineContactAdd.bind(this),
-			add: this.onOnlineContactAdd.bind(this),
-			remove: this.onOnlineContactRemove.bind(this),
+			'load': this.onOnlineContactAdd.bind(this),
+			'add': this.onOnlineContactAdd.bind(this),
+			'remove': this.onOnlineContactRemove.bind(this)
 		});
 
 		this.store = store;
 
 		this.mon(this.store, {
-			load: this.updateList.bind(this),
-			add: this.addContacts.bind(this),
-			remove: this.removeContact.bind(this),
+			'load': this.updateList.bind(this),
+			'add': this.addContacts.bind(this),
+			'remove': this.removeContact.bind(this)
 		});
 	},
 
@@ -192,15 +192,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 				users = isNTIID === false ? occupantsKey.split('_') : [],
 				o = Ext.Array.remove(users.slice(), $AppConfig.username);
 
-			if (
-				o.length === 1 &&
-				me.store.find('Username', o[0], 0, false, false, true) === -1
-			) {
+			if (o.length === 1 && me.store.find('Username', o[0], 0, false, false, true) === -1) {
 				// This is 1-1 chat, not a groupchat
-				UserRepository.getUser(o[0]).then(function (u) {
-					// var p = u.getPresence();
-					me.store.add(u);
-				});
+				UserRepository.getUser(o[0])
+					.then(function (u) {
+						// var p = u.getPresence();
+						me.store.add(u);
+					});
 			}
 		});
 	},
@@ -240,31 +238,24 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	updatePresence: function (username, presence) {
-		if (!newChat) {
-			var user = this.findEntryForUser(username),
-				nodeIndex;
+		var user = this.findEntryForUser(username),
+			nodeIndex;
 
-			if (user) {
-				user.setStatus(presence);
+		if (user) {
+			user.setStatus(presence);
+		}
+		if (this.gutterList && this.gutterList.isVisible()) {
+			nodeIndex = this.store.find(
+				'Username',
+				username,
+				0,
+				false,
+				false,
+				true
+			);
+			if (nodeIndex > -1) {
+				this.gutterList.refreshNode(nodeIndex);
 			}
-			if (this.gutterList && this.gutterList.isVisible()) {
-				nodeIndex = this.store.find(
-					'Username',
-					username,
-					0,
-					false,
-					false,
-					true
-				);
-				if (nodeIndex > -1) {
-					this.gutterList.refreshNode(nodeIndex);
-				}
-			}
-		} else {
-			if (username === getAppUsername()) {
-				return;
-			}
-			SocialFeatures.Store.updatePresence(username, presence.getName());
 		}
 	},
 
@@ -282,6 +273,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			false,
 			true
 		);
+		if (newChat) {
+			SocialFeatures.Store.removeContact(record.get('Username'));
+		}
 		if (r && !this.hasActiveChat(r.get('Username'))) {
 			this.store.remove(r);
 		}
@@ -309,8 +303,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		if (entry) {
 			this.remove(entry);
-			if (newChat)
+			if (newChat) {
 				SocialFeatures.Store.removeContact(user.get('Username'));
+			}
 		}
 	},
 
@@ -336,10 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 			me.maybeUpdateOtherButton();
 		} else {
-			const contacts = await Promise.all(
-				users.map(user => user.getInterfaceInstance())
-			);
-			SocialFeatures.Store.addContacts(contacts);
+			SocialFeatures.Store.addContact(await Promise.resolve(users[0].getInterfaceInstance()));
 		}
 	},
 
@@ -387,13 +379,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		if (this.activeUser) {
 			this.deselectActiveUser(this.activeUser);
-			if (newChat) SocialFeatures.Store.deselectUser();
 		}
 
 		if (entry) {
 			entry.addCls('active');
 			this.activeUser = user;
-			if (newChat) SocialFeatures.Store.selectUser(user.get('Username'));
 		}
 	},
 
@@ -404,7 +394,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		if (entry && entry.hasCls('active')) {
 			entry.removeCls('active');
 			this.activeUser = null;
-			if (newChat) SocialFeatures.Store.deselectUser();
 		}
 	},
 
