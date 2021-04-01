@@ -15,5 +15,12 @@ export const formatting = {
 export const outputSize = {
 	logo: {maxHeight: 210},
 	'full_logo': {maxHeight: 210},
-	email: {maxHeight: 80}
+	email: {maxHeight: 80},
+	favicon: (editorState) => {
+		const width = editorState.layout.image.width;
+
+		if (width >= 32) { return {height: 32}; }
+
+		return {height: 16};
+	}
 };

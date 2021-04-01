@@ -105,9 +105,10 @@ export default function ImageInput({
 		dispatch({type: 'saving'});
 
 		try {
+			const size = typeof outputSize === 'function' ? outputSize(editorState) : outputSize;
 			const file = await ImageEditor.getBlobForEditorState(
 				editorState,
-				outputSize
+				size
 			);
 
 			file.name = filename;
