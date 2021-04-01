@@ -14,7 +14,7 @@ export default function CertificatePreviewSidebar() {
 	const styles = {};
 
 	if (backgroundColor) {
-		styles.backgroundColor = backgroundColor;
+		styles.backgroundColor = backgroundColor.isColor ? backgroundColor.hex.toString() : backgroundColor;
 	}
 
 	return (
