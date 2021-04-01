@@ -16,12 +16,19 @@ const NameToTheme = {
 	full_logo: 'fullLogo',
 };
 
-export default function AssetItem({ onChange, getText, name, formatting, outputSize, onThumbClick }) {
+export default function AssetItem({
+	onChange,
+	getText,
+	name,
+	formatting,
+	outputSize,
+	onThumbClick,
+}) {
 	const asset = Theme.useThemeProperty(
 		`${ASSETS}.${NameToTheme[name] || name}`
 	);
 
-	const change = ({file, source, filename}) => {
+	const change = ({ file, source, filename }) => {
 		onChange({
 			filename,
 			source,
@@ -62,7 +69,7 @@ AssetItem.propTypes = {
 	onChange: PropTypes.func,
 	getText: PropTypes.func,
 	formatting: PropTypes.object,
-	outputSize: PropTypes.object,
+	outputSize: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
 	name: PropTypes.string,
 	edit: PropTypes.object,
 	onThumbClick: PropTypes.func,

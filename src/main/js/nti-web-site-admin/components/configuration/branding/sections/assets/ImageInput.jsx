@@ -14,7 +14,7 @@ const t = scoped(
 	'nti-web.admin.components.configuration.branding.sections.assets.ImageInput',
 	{
 		save: 'Update',
-		processing: 'Processing...'
+		processing: 'Processing...',
 	}
 );
 
@@ -40,14 +40,20 @@ const Mask = styled(Text.Base)`
 	color: var(--primary-grey);
 `;
 
-const initialState = {inputKey: 1, error: null, filename: null, editorState: null, saving: false};
+const initialState = {
+	inputKey: 1,
+	error: null,
+	filename: null,
+	editorState: null,
+	saving: false,
+};
 const reducer = (state, action) => {
 	switch (action.type) {
 		case 'error':
 			return {
 				...state,
 				error: action.error,
-				saving: false
+				saving: false,
 			};
 		case 'addFile':
 			return {
@@ -56,30 +62,30 @@ const reducer = (state, action) => {
 				filename: action.filename,
 				editorState: action.editorState,
 				inputKey: (state.inputKey ?? 0) + 1,
-				saving: false
+				saving: false,
 			};
 		case 'updateEditorState':
 			return {
 				...state,
 				editorState: action.editorState,
-				saving: false
+				saving: false,
 			};
 		case 'clear':
 			return {
 				...state,
 				filename: null,
 				editorState: null,
-				saving: false
+				saving: false,
 			};
 		case 'saving':
 			return {
 				...state,
-				saving: true
+				saving: true,
 			};
 		default:
 			return state;
 	}
-}
+};
 
 export default function ImageInput({
 	onChange: onChangeProp,
@@ -90,22 +96,19 @@ export default function ImageInput({
 	title,
 }) {
 	const [
-		{
-			editorState,
-			filename,
-			inputKey,
-			error,
-			saving
-		},
-		dispatch
+		{ editorState, filename, inputKey, error, saving },
+		dispatch,
 	] = React.useReducer(reducer, initialState);
 
-	const onCancel = () => dispatch({type: 'clear'});
+	const onCancel = () => dispatch({ type: 'clear' });
 	const updateImage = async () => {
-		dispatch({type: 'saving'});
+		dispatch({ type: 'saving' });
 
 		try {
-			const size = typeof outputSize === 'function' ? outputSize(editorState) : outputSize;
+			const size =
+				typeof outputSize === 'function'
+					? outputSize(editorState)
+					: outputSize;
 			const file = await ImageEditor.getBlobForEditorState(
 				editorState,
 				size
@@ -116,19 +119,17 @@ export default function ImageInput({
 			const source = await ImageEditor.getImgSrc(file);
 
 			onChangeProp({ file, source, filename });
-			dispatch({type: 'clear'});
+			dispatch({ type: 'clear' });
 		} catch (e) {
-			dispatch({type: 'error', error: e});
+			dispatch({ type: 'error', error: e });
 		}
 	};
 
-	const setEditorState = (newEditorState) => {
-		dispatch({type: 'updateEditorState', editorState: newEditorState});
+	const setEditorState = newEditorState => {
+		dispatch({ type: 'updateEditorState', editorState: newEditorState });
 	};
 
-
 	const onChange = async e => {
-
 		try {
 			const {
 				target: { files = [] },
@@ -143,10 +144,10 @@ export default function ImageInput({
 			dispatch({
 				type: 'addFile',
 				filename: files[0].name,
-				editorState: ImageEditor.getEditorState(img, formatting || {})
+				editorState: ImageEditor.getEditorState(img, formatting || {}),
 			});
 		} catch (err) {
-			dispatch({type: 'error'})
+			dispatch({ type: 'error' });
 		}
 
 		e.stopPropagation();
@@ -171,7 +172,7 @@ export default function ImageInput({
 					actionLabel={t('save')}
 					onAction={updateImage}
 					onCancel={onCancel}
-					mask={saving ? (<Mask>{t('processing')}</Mask>) : null}
+					mask={saving ? <Mask>{t('processing')}</Mask> : null}
 				>
 					{title && <Title>{title}</Title>}
 					<ImageWrapper>
@@ -190,6 +191,6 @@ ImageInput.propTypes = {
 	onChange: PropTypes.func,
 	name: PropTypes.string,
 	formatting: PropTypes.object,
-	outputSize: PropTypes.object,
+	outputSize: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
 	title: PropTypes.string,
 };
