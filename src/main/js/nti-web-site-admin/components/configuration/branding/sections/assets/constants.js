@@ -14,5 +14,6 @@ export const formatting = {
 
 export const outputSize = {
 	logo: {maxHeight: 210},
-	'full_logo': {maxHeight: 210}
+	'full_logo': {maxHeight: 210},
+	email: {maxHeight: 80}
 };

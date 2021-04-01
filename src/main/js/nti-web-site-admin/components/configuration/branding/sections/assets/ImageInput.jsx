@@ -14,6 +14,7 @@ const t = scoped(
 	'nti-web.admin.components.configuration.branding.sections.assets.ImageInput',
 	{
 		save: 'Update',
+		processing: 'Processing...'
 	}
 );
 
@@ -35,13 +36,18 @@ const ImageWrapper = styled.div`
 	margin: 2rem;
 `;
 
-const initialState = {inputKey: 1, error: null, filename: null, editorState: null};
+const Mask = styled(Text.Base)`
+	color: var(--primary-grey);
+`;
+
+const initialState = {inputKey: 1, error: null, filename: null, editorState: null, saving: false};
 const reducer = (state, action) => {
 	switch (action.type) {
 		case 'error':
 			return {
 				...state,
-				error: action.error
+				error: action.error,
+				saving: false
 			};
 		case 'addFile':
 			return {
@@ -49,18 +55,26 @@ const reducer = (state, action) => {
 				error: null,
 				filename: action.filename,
 				editorState: action.editorState,
-				inputKey: (state.inputKey ?? 0) + 1
+				inputKey: (state.inputKey ?? 0) + 1,
+				saving: false
 			};
 		case 'updateEditorState':
 			return {
 				...state,
-				editorState: action.editorState
+				editorState: action.editorState,
+				saving: false
 			};
 		case 'clear':
 			return {
 				...state,
 				filename: null,
-				editorState: null
+				editorState: null,
+				saving: false
+			};
+		case 'saving':
+			return {
+				...state,
+				saving: true
 			};
 		default:
 			return state;
@@ -80,24 +94,31 @@ export default function ImageInput({
 			editorState,
 			filename,
 			inputKey,
-			error
+			error,
+			saving
 		},
 		dispatch
 	] = React.useReducer(reducer, initialState);
 
 	const onCancel = () => dispatch({type: 'clear'});
 	const updateImage = async () => {
-		const file = await ImageEditor.getBlobForEditorState(
-			editorState,
-			outputSize
-		);
-		const source = ImageEditor.getDataURLForEditorState(
-			editorState,
-			outputSize
-		);
+		dispatch({type: 'saving'});
 
-		onChangeProp({ file, source, filename });
-		dispatch({type: 'clear'});
+		try {
+			const file = await ImageEditor.getBlobForEditorState(
+				editorState,
+				outputSize
+			);
+
+			file.name = filename;
+
+			const source = await ImageEditor.getImgSrc(file);
+
+			onChangeProp({ file, source, filename });
+			dispatch({type: 'clear'});
+		} catch (e) {
+			dispatch({type: 'error', error: e});
+		}
 	};
 
 	const setEditorState = (newEditorState) => {
@@ -149,6 +170,7 @@ export default function ImageInput({
 					actionLabel={t('save')}
 					onAction={updateImage}
 					onCancel={onCancel}
+					mask={saving ? (<Mask>{t('processing')}</Mask>) : null}
 				>
 					{title && <Title>{title}</Title>}
 					<ImageWrapper>
