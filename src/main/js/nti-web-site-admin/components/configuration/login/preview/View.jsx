@@ -20,6 +20,7 @@ LoginPreview.propTypes = {
 export default function LoginPreview({ onSave, onCancel }) {
 	const background = Theme.useThemeProperty('login.background');
 	const disclaimer = Theme.useThemeProperty('login.disclaimer');
+	const buttonBackground = Theme.useThemeProperty('login.buttonBackground');
 
 	const containerStyles = {};
 
@@ -28,7 +29,7 @@ export default function LoginPreview({ onSave, onCancel }) {
 	}
 
 	const buttonStyle = {
-		backgroundColor: Theme.useThemeProperty('login.buttonBackground'),
+		backgroundColor: buttonBackground.isColor ? buttonBackground.hex.toString() : buttonBackground,
 	};
 
 	return (
