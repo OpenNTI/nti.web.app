@@ -215,8 +215,6 @@ module.exports = exports = Ext.define(
 					bundle
 				);
 				this.setLocationInfo(location);
-			} else {
-				console.warn('no lineage for id: ', ntiid);
 			}
 		},
 
