@@ -130,6 +130,8 @@ export default function ImageInput({
 	};
 
 	const onChange = async e => {
+		e.stopPropagation();
+		e.preventDefault();
 		try {
 			const {
 				target: { files = [] },
@@ -149,9 +151,6 @@ export default function ImageInput({
 		} catch (err) {
 			dispatch({ type: 'error' });
 		}
-
-		e.stopPropagation();
-		e.preventDefault();
 	};
 
 	return (
