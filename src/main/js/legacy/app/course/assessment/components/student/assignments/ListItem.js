@@ -54,7 +54,7 @@ module.exports = exports = Ext.define(
 
 		async addClasses() {
 			const cls = [];
-			const attempt = this.history?.getMostRecentHistoryItem();
+			const attempt = this.history?.getMostRecentHistoryItem?.();
 			const completed = attempt?.get('completed');
 
 			try {
