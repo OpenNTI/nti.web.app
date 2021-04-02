@@ -9,7 +9,7 @@ export const formatting = {
 	logo: { crop: { aspectRatio: 1 } },
 	full_logo: { crop: { maxAspectRatio: 300 / 70 } },
 	email: { crop: {} },
-	favicon: { crop: { aspectRatio: 1 } },
+	favicon: {},
 };
 
 export const outputSize = {
@@ -17,9 +17,9 @@ export const outputSize = {
 	full_logo: { maxHeight: 210 },
 	email: { maxHeight: 80 },
 	favicon(editorState) {
-		const width = editorState.layout.image.width;
+		const height = editorState.layout.image.height;
 
-		if (width >= 32) {
+		if (height >= 32) {
 			return { height: 32 };
 		}
 
