@@ -82,6 +82,10 @@ module.exports = exports = Ext.define(
 			if (this.selectionCmp) {
 				this.selectionCmp.destroy();
 			}
+
+			if (this.discussionEditorCmp) {
+				this.discussionEditorCmp.destroy();
+			}
 		},
 
 		async showEditor() {
