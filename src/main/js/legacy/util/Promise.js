@@ -82,7 +82,9 @@ global.Deferred = Promise.Deferred = (function () {
 	return Deferred;
 })();
 
-global.Deferred.reject = reason => ({
+global.Deferred.reject = (
+	reason = new Error('Deferred.reject: No Reason Given')
+) => ({
 	then: (...args) => Promise.reject(reason).then(...args),
 	catch: (...args) => Promise.reject(reason).catch(...args),
 	finally: (...args) => Promise.reject(reason).finally(...args),

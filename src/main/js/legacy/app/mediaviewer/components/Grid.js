@@ -1,4 +1,3 @@
-/* global Deferred */
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const VideoPosters = require('internal/legacy/model/resolvers/VideoPosters');
@@ -235,10 +234,6 @@ module.exports = exports = Ext.define(
 			}
 		},
 
-		__getCurrentProgress: function () {
-			return this._currentProgress || Deferred.reject();
-		},
-
 		processSpecialEvent: function (e) {
 			var k = e.getKey();
 			if (k === e.SPACE || k === e.ENTER) {
@@ -287,7 +282,7 @@ module.exports = exports = Ext.define(
 		 */
 		getVideosForBundle: function (bundle) {
 			if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {
-				return Deferred.reject();
+				return;
 			}
 
 			if (this.__getVideosPromise) {
@@ -363,7 +358,7 @@ module.exports = exports = Ext.define(
 			var me = this,
 				selected = me.getSource().get('NTIID');
 
-			this.getVideosForBundle(bundle).then(function (videos) {
+			this.getVideosForBundle(bundle)?.then(function (videos) {
 				me.store = new Ext.data.Store({
 					model: PlaylistItem,
 					proxy: 'memory',
@@ -386,22 +381,16 @@ module.exports = exports = Ext.define(
 		},
 
 		__updateProgress: function () {
-			var me = this;
-
-			this.__getCurrentProgress()
-				.then(function (progress) {
-					me.store.each(function (r) {
-						if (
-							r.get('NTIID') &&
-							progress.hasBeenViewed(r.get('NTIID'))
-						) {
-							r.set('progress', 'viewed');
-						}
-					});
-				})
-				.catch(function (reason) {
-					console.log('Could not load the video progress: ' + reason);
+			this._currentProgress?.then(progress => {
+				this.store.each(r => {
+					if (
+						r.get('NTIID') &&
+						progress.hasBeenViewed(r.get('NTIID'))
+					) {
+						r.set('progress', 'viewed');
+					}
 				});
+			});
 		},
 
 		fireSelection: function () {
