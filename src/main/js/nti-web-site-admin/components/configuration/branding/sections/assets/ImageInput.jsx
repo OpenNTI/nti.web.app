@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -129,29 +129,35 @@ export default function ImageInput({
 		dispatch({ type: 'updateEditorState', editorState: newEditorState });
 	};
 
-	const onChange = async e => {
-		e.stopPropagation();
-		e.preventDefault();
-		try {
-			const {
-				target: { files = [] },
-			} = e;
-			const src = files[0] && (await ImageEditor.getImgSrc(files[0]));
-			const img = src && (await ImageEditor.getImg(src));
+	const onChange = useCallback(
+		async e => {
+			e.stopPropagation();
+			e.preventDefault();
+			try {
+				const {
+					target: { files = [] },
+				} = e;
+				const src = files[0] && (await ImageEditor.getImgSrc(files[0]));
+				const img = src && (await ImageEditor.getImg(src));
 
-			if (!img) {
-				throw new Error('Unable to load img');
+				if (!img) {
+					throw new Error('Unable to load img');
+				}
+
+				dispatch({
+					type: 'addFile',
+					filename: files[0].name,
+					editorState: ImageEditor.getEditorState(
+						img,
+						formatting || {}
+					),
+				});
+			} catch (err) {
+				dispatch({ type: 'error' });
 			}
-
-			dispatch({
-				type: 'addFile',
-				filename: files[0].name,
-				editorState: ImageEditor.getEditorState(img, formatting || {}),
-			});
-		} catch (err) {
-			dispatch({ type: 'error' });
-		}
-	};
+		},
+		[dispatch, formatting]
+	);
 
 	return (
 		<>
