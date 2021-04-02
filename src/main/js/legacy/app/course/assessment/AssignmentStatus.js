@@ -338,15 +338,11 @@ module.exports = exports = Ext.define(
 			 */
 			hasActions: function (containerRecord) {
 				const record =
-					containerRecord && containerRecord.getMostRecentHistoryItem
-						? containerRecord.getMostRecentHistoryItem()
-						: containerRecord;
-				const grade = record && record.get('Grade');
+					containerRecord?.getMostRecentHistoryItem?.() ||
+					containerRecord;
+				const grade = record?.get('Grade');
 
-				return (
-					(record && record.get('submission')) ||
-					(grade && grade.isExcusable())
-				);
+				return record?.get('submission') || grade?.isExcusable();
 			},
 
 			/**
@@ -373,9 +369,8 @@ module.exports = exports = Ext.define(
 					grade;
 
 				const record =
-					containerRecord && containerRecord.getMostRecentHistoryItem
-						? containerRecord.getMostRecentHistoryItem()
-						: containerRecord;
+					containerRecord?.getMostRecentHistoryItem?.() ||
+					containerRecord;
 
 				if (record.get('submission')) {
 					menu.add(

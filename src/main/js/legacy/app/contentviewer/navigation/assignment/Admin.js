@@ -206,12 +206,9 @@ module.exports = exports = Ext.define(
 
 		__getExcusedTpl: function () {
 			var excusedTpl = { cls: 'off', html: 'Excused' },
-				grade =
-					this.assignmentHistory &&
-					this.assignmentHistory.getMostRecentHistoryItemGrade &&
-					this.assignmentHistory.getMostRecentHistoryItemGrade();
+				grade = this.assignmentHistory?.getMostRecentHistoryItemGrade?.();
 
-			if (grade && grade.get('IsExcused')) {
+			if (grade?.get('IsExcused')) {
 				excusedTpl.cls = 'on';
 			}
 
@@ -705,8 +702,8 @@ module.exports = exports = Ext.define(
 		},
 
 		excuseGradeStatusChanged: function () {
-			const historyItem = this.assignmentHistoryItemContainer.getMostRecentHistoryItem();
-			var grade = historyItem.get('Grade');
+			const historyItem = this.assignmentHistoryItemContainer?.getMostRecentHistoryItem?.();
+			var grade = historyItem?.get('Grade');
 
 			if (!grade) {
 				return;

@@ -98,11 +98,9 @@ module.exports = exports = Ext.define(
 			var me = this,
 				assignment = me.assignment,
 				history =
-					me.history && me.history.getMostRecentHistoryItem
-						? me.history.getMostRecentHistoryItem()
-						: me.history,
-				completed = history && history.get('completed'),
-				grade = history && history.get && history.get('Grade'),
+					me.history?.getMostRecentHistoryItem?.() || me.history,
+				completed = history?.get('completed'),
+				grade = history?.get?.('Grade'),
 				status =
 					me.status ||
 					AssignmentStatus.getStatusHTML({
@@ -111,14 +109,11 @@ module.exports = exports = Ext.define(
 						completed:
 							!assignment.getDateEditingLink() && completed,
 						maxTime: assignment.isTimed && assignment.getMaxTime(),
-						duration:
-							assignment.isTimed &&
-							history &&
-							history.getDuration(),
-						isExcused: grade && grade.get('IsExcused'),
+						duration: assignment.isTimed && history?.getDuration(),
+						isExcused: grade?.get('IsExcused'),
 						isNoSubmitAssignment:
 							assignment.isNoSubmit() ||
-							(history && history.isSyntheticSubmission()),
+							history?.isSyntheticSubmission(),
 						isDraft: assignment.isDraft(),
 					});
 

@@ -35,18 +35,18 @@ module.exports = exports = Ext.define(
 		shouldSaveGrade: function (value, letter) {
 			const historyItem = this.getMostRecentHistoryItem();
 
-			return historyItem && historyItem.shouldSaveGrade(value, letter);
+			return historyItem?.shouldSaveGrade(value, letter);
 		},
 
 		doNotAllowInterfaceInstance() {
 			return this.isPlaceholder;
 		},
 
-		saveGrade: function (value, letter) {
+		saveGrade: async function (value, letter) {
 			const historyItem = this.getMostRecentHistoryItem();
 
 			return historyItem
-				.saveGrade(value, letter, async response => {
+				?.saveGrade(value, letter, async response => {
 					const oldItems = this.get('Items');
 					const oldItem = this.get('item');
 					const oldId = this.get('AssignmentId');
@@ -76,13 +76,13 @@ module.exports = exports = Ext.define(
 		getMostRecentHistoryItem() {
 			const items = this.get('Items');
 
-			return items && items[items.length - 1];
+			return items?.[items.length - 1];
 		},
 
 		getMostRecentHistoryItemGrade() {
 			const mostRecentHistoryItem = this.getMostRecentHistoryItem();
 
-			return mostRecentHistoryItem && mostRecentHistoryItem.get('Grade');
+			return mostRecentHistoryItem?.get('Grade');
 		},
 
 		beginReset: function (isMine) {
@@ -117,17 +117,15 @@ module.exports = exports = Ext.define(
 
 									if (historyItem) {
 										historyItem.makePlaceholder(
-											record.collection &&
-												record.collection.createPlaceholderGrade(
-													record.get('item'),
-													record.get('Creator')
-												)
+											record.collection?.createPlaceholderGrade(
+												record.get('item'),
+												record.get('Creator')
+											)
 										);
 										record.set('Items', [historyItem]);
 									} else if (
-										record.collection &&
 										record.collection
-											.createPlaceholderHistoryItem
+											?.createPlaceholderHistoryItem
 									) {
 										record.set('Items', [
 											record.collection.createPlaceholderHistoryItem(

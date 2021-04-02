@@ -295,26 +295,15 @@ module.exports = exports = Ext.define(
 		},
 
 		deriveEvents: function (assignment, container) {
-			const historyItem =
-				container &&
-				container.getMostRecentHistoryItem &&
-				container.getMostRecentHistoryItem();
+			const historyItem = container?.getMostRecentHistoryItem?.();
 			var me = this,
 				now = new Date(),
-				submission =
-					historyItem &&
-					historyItem.get &&
-					historyItem.get('Submission'),
-				feedback =
-					historyItem &&
-					historyItem.get &&
-					historyItem.get('Feedback'),
-				grade =
-					historyItem && historyItem.get && historyItem.get('Grade'),
-				dateCompleted = submission && submission.get('CreatedTime'),
-				dateOpens = assignment && assignment.get('availableBeginning'),
-				dateDue =
-					(assignment && assignment.get('availableEnding')) || now,
+				submission = historyItem?.get?.('Submission'),
+				feedback = historyItem?.get?.('Feedback'),
+				grade = historyItem?.get?.('Grade'),
+				dateCompleted = submission?.get('CreatedTime'),
+				dateOpens = assignment?.get('availableBeginning'),
+				dateDue = assignment?.get('availableEnding') || now,
 				parts = assignment.get('parts') || [],
 				hasParts = parts.length > 0;
 

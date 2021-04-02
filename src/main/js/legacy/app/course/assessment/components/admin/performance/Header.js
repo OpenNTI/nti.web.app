@@ -36,9 +36,8 @@ module.exports = exports = Ext.define(
 		},
 
 		setGradeBook: function (historyItem) {
-			this.historyItem = historyItem.getMostRecentHistoryItem
-				? historyItem.getMostRecentHistoryItem()
-				: historyItem;
+			this.historyItem =
+				historyItem.getMostRecentHistoryItem?.() || historyItem;
 			this.setUpGradeBox();
 		},
 

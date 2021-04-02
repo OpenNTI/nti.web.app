@@ -46,7 +46,7 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			const historyItem = await assignmentHistoryItemContainer.getMostRecentHistoryItem();
+			const historyItem = await assignmentHistoryItemContainer?.getMostRecentHistoryItem();
 
 			if (!reader.isDestroyed) {
 				reader.getNoteOverlay().disable();

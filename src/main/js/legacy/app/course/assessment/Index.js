@@ -524,17 +524,12 @@ module.exports = exports = Ext.define(
 		},
 
 		__getHistoryItem: function (historyItem) {
-			const item =
-				historyItem &&
-				historyItem.getMostRecentHistoryItem &&
-				historyItem.getMostRecentHistoryItem();
+			const item = historyItem?.getMostRecentHistoryItem?.();
 			return (item || historyItem).resolveFullItem();
 		},
 
 		__getHistoryItemContainer(item) {
-			return item.getHistoryItemContainer
-				? item.getHistoryItemContainer()
-				: item;
+			return item.getHistoryItemContainer?.() || item;
 		},
 
 		showStudentForAssignment: function (route, subRoute) {
