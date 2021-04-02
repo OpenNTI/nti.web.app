@@ -660,8 +660,7 @@ module.exports = exports = Ext.define(
 				node,
 				actualId
 			) {
-				const mostRecentAttempt =
-					history && history.getMostRecentHistoryItem();
+				const mostRecentAttempt = history?.getMostRecentHistoryItem?.();
 
 				return {
 					id: id,
