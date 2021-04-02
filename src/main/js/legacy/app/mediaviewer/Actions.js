@@ -273,14 +273,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 				url: url,
 				ntiid: 'webvtt',
 				expectedContentType: transcript.get('contentType'),
-				success: function (res, req) {
-					console.log('SUCCESS Loading Transcripts: ', arguments);
+				success(res, req) {
+					// console.log('SUCCESS Loading Transcripts: ', arguments);
 					fulfill(res.responseText);
 				},
-				failure: function () {
-					console.log('FAILURE Loading Transcripts: ', arguments);
-					reject(arguments);
-				},
+				failure: reject,
 			});
 		});
 	},
