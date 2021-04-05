@@ -10,7 +10,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
     <img
       className="course-icon"
       onError={[Function]}
-      src="contentpackage-landing-232x170.png?t=0"
+      src="/contentpackage-landing-232x170.png?t=0"
     />
     <div
       className="info"
@@ -81,7 +81,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
     <img
       className="course-icon"
       onError={[Function]}
-      src="contentpackage-landing-232x170.png?t=0"
+      src="/contentpackage-landing-232x170.png?t=0"
     />
     <div
       className="info"

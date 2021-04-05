@@ -118,10 +118,10 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -231,10 +231,10 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -344,10 +344,10 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -457,10 +457,10 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -570,10 +570,10 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -789,10 +789,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -902,10 +902,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1015,10 +1015,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1128,10 +1128,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1241,10 +1241,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1354,10 +1354,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1467,10 +1467,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1580,10 +1580,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1693,10 +1693,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1806,10 +1806,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -1919,10 +1919,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2032,10 +2032,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2145,10 +2145,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2258,10 +2258,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2371,10 +2371,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2484,10 +2484,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2597,10 +2597,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2710,10 +2710,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2823,10 +2823,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -2936,10 +2936,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -3049,10 +3049,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -3162,10 +3162,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -3275,10 +3275,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -3388,10 +3388,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />
@@ -3501,10 +3501,10 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                   <div
                     className="course-icon"
                     onError={[Function]}
-                    src="contentpackage-landing-232x170.png?t=0"
+                    src="/contentpackage-landing-232x170.png?t=0"
                     style={
                       Object {
-                        "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+                        "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
                       }
                     }
                   />

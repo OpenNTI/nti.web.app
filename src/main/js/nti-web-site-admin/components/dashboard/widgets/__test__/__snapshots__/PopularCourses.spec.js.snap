@@ -65,10 +65,10 @@ exports[`Site admin dashboard widget popular courses (3 items, has previous) Bas
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -104,10 +104,10 @@ exports[`Site admin dashboard widget popular courses (3 items, has previous) Bas
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -143,10 +143,10 @@ exports[`Site admin dashboard widget popular courses (3 items, has previous) Bas
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -240,10 +240,10 @@ exports[`Site admin dashboard widget popular courses (5 items, no previous) Basi
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -279,10 +279,10 @@ exports[`Site admin dashboard widget popular courses (5 items, no previous) Basi
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -318,10 +318,10 @@ exports[`Site admin dashboard widget popular courses (5 items, no previous) Basi
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -357,10 +357,10 @@ exports[`Site admin dashboard widget popular courses (5 items, no previous) Basi
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
@@ -396,10 +396,10 @@ exports[`Site admin dashboard widget popular courses (5 items, no previous) Basi
         <div
           className="item-image"
           onError={[Function]}
-          src="contentpackage-landing-232x170.png?t=0"
+          src="/contentpackage-landing-232x170.png?t=0"
           style={
             Object {
-              "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
+              "backgroundImage": "url(/contentpackage-landing-232x170.png?t=0)",
             }
           }
         />
