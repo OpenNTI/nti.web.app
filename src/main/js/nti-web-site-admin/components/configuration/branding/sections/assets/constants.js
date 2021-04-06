@@ -9,7 +9,7 @@ export const formatting = {
 	logo: { crop: { aspectRatio: 1 } },
 	full_logo: { crop: { maxAspectRatio: 300 / 70 } },
 	email: { crop: {} },
-	favicon: {},
+	favicon: {crop: {aspectRatio: 1}}
 };
 
 export const outputSize = {
