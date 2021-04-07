@@ -63,12 +63,12 @@ jobs:
                   npm config set '@nti:registry' "$NPM_REGISTRY"
                   npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
                   git config --global url."git@github.com:".insteadOf "https://github.com/"
-                  npm install --global npm@6
 
             - name: install dependencies
               run: |
-                  (test ! -f package-lock.json && npm i --no-progress --no-audit) || echo 'Lock found, skipping npm i'
-                  (test -f package-lock.json && npm ci --no-progress --no-audit) || echo 'No lock, skipping npm ci'
+                  COMMAND='install'
+                  if [ -f package-lock.json ]; then COMMAND="ci"; fi;
+                  npm $COMMAND --package-lock --no-progress --no-audit
 
             - name: test
               run: npm test
