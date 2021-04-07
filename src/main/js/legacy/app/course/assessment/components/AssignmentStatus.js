@@ -99,7 +99,7 @@ module.exports = exports = Ext.define(
 				assignment = me.assignment,
 				history =
 					me.history?.getMostRecentHistoryItem?.() || me.history,
-				completed = history?.get('completed'),
+				completed = history?.get?.('completed'),
 				grade = history?.get?.('Grade'),
 				status =
 					me.status ||
