@@ -32,6 +32,8 @@ const BOOK_MIME_TYPES = {
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
+const FEEDBACK_MIME_TYPE = 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback';
+
 function lazyReject(reason) {
 	return {
 		catch(f) {
@@ -77,7 +79,7 @@ function getRouteFor(obj, context) {
 		return `/app/id/${encodeForURI(obj.NTIID)}`;
 	}
 
-	if (obj.CatalogEntry) {
+	if (obj.CatalogEntry && obj.MimeType !== FEEDBACK_MIME_TYPE) {
 		return `/app/course/${encodeForURI(obj.NTIID)}/info`;
 	}
 
