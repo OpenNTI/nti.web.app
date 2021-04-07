@@ -3,7 +3,6 @@ const React = require('react');
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { Survey } = require('@nti/web-assessment');
-const { getService } = require('@nti/web-client');
 const { Page } = require('@nti/web-commons');
 const { Editor } = require('@nti/web-content');
 const ContentviewerIndex = require('internal/legacy/app/contentviewer/Index');
