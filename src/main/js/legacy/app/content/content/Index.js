@@ -155,6 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			return Promise.resolve(obj);
 		}
 
+
 		//Try getting the object first, since it would return a related work or page info
 		return Service.getObject(id, null, null, null, null, this.currentBundle)
 			.then(o => {
@@ -231,10 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	async __showReadingEditor(page, parent, breadcrumb, pageSource) {
 		const packageId = page.get ? page.get('ContentPackageNTIID') : page;
 
-		const course = await getService().then(service =>
-			service.getObject(this.currentBundle.getId())
-		);
-
+		const course = await this.currentBundle.getInterfaceInstance();
 		const contentPackage = await course.getPackage(packageId);
 
 		if (!contentPackage) {
