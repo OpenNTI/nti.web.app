@@ -98,7 +98,7 @@ module.exports = exports = Ext.define(
 			var me = this,
 				assignment = me.assignment,
 				history =
-					me.history?.getMostRecentHistoryItem?.() || me.history,
+					me.history?.getMostRecentHistoryItem ? me.history.getMostRecentHistoryItem() : me.history,
 				completed = history?.get?.('completed'),
 				grade = history?.get?.('Grade'),
 				status =

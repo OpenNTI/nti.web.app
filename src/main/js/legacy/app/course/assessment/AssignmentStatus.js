@@ -338,8 +338,9 @@ module.exports = exports = Ext.define(
 			 */
 			hasActions: function (containerRecord) {
 				const record =
-					containerRecord?.getMostRecentHistoryItem?.() ||
-					containerRecord;
+					containerRecord?.getMostRecentHistoryItem ?
+						containerRecord.getMostRecentHistoryItem() :
+						containerRecord;
 				const grade = record?.get('Grade');
 
 				return record?.get('submission') || grade?.isExcusable();
@@ -369,8 +370,9 @@ module.exports = exports = Ext.define(
 					grade;
 
 				const record =
-					containerRecord?.getMostRecentHistoryItem?.() ||
-					containerRecord;
+					containerRecord?.getMostRecentHistoryItem ?
+						containerRecord.getMostRecentHistoryItem() :
+						containerRecord;
 
 				if (record.get('submission')) {
 					menu.add(

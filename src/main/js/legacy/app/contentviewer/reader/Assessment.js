@@ -168,7 +168,7 @@ module.exports = exports = Ext.define(
 		},
 
 		getHistory(h) {
-			return h?.getMostRecentHistoryItem?.() || h;
+			return h?.getMostRecentHistoryItem ? h.getMostRecentHistoryItem() : h;
 		},
 
 		makeAssessmentQuiz: function (set, guid) {

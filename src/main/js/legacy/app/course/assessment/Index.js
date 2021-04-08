@@ -529,7 +529,7 @@ module.exports = exports = Ext.define(
 		},
 
 		__getHistoryItemContainer(item) {
-			return item.getHistoryItemContainer?.() || item;
+			return item.getHistoryItemContainer? item.getHistoryItemContainer() : item;
 		},
 
 		showStudentForAssignment: function (route, subRoute) {
