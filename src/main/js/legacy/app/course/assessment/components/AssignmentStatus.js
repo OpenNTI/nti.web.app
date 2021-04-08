@@ -97,8 +97,9 @@ module.exports = exports = Ext.define(
 		updateStatus: function () {
 			var me = this,
 				assignment = me.assignment,
-				history =
-					me.history?.getMostRecentHistoryItem ? me.history.getMostRecentHistoryItem() : me.history,
+				history = me.history?.getMostRecentHistoryItem
+					? me.history.getMostRecentHistoryItem()
+					: me.history || null,
 				completed = history?.get?.('completed'),
 				grade = history?.get?.('Grade'),
 				status =
