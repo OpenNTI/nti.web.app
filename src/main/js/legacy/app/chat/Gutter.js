@@ -273,9 +273,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			false,
 			true
 		);
-		if (newChat) {
-			SocialFeatures.Store.removeContact(record.get('Username'));
-		}
 		if (r && !this.hasActiveChat(r.get('Username'))) {
 			this.store.remove(r);
 		}
@@ -303,9 +300,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		if (entry) {
 			this.remove(entry);
-			if (newChat) {
-				SocialFeatures.Store.removeContact(user.get('Username'));
-			}
 		}
 	},
 
@@ -330,8 +324,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			});
 
 			me.maybeUpdateOtherButton();
-		} else {
-			SocialFeatures.Store.addContact(await Promise.resolve(users[0].getInterfaceInstance()));
 		}
 	},
 
@@ -555,7 +547,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			sender = msg.isModel ? msg.get('Creator') : msg.Creator;
 
 		entry = this.findEntryForUser(sender);
-		if (newChat) SocialFeatures.Store.handleWindowNotify(sender);
+		if (newChat) {
+			SocialFeatures.Store.handleWindowNotify(sender);
+		}
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		} else {
