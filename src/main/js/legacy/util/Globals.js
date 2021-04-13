@@ -203,37 +203,6 @@ global.Globals = module.exports = exports = Ext.define(
 			}
 		},
 
-		/**
-		 * Attempt to detect whether or not a browser can render a pdf
-		 *
-		 * Adapted from: http://stackoverflow.com/questions/21485521/detecting-adobe-reader-in-ie11-with-javascript
-		 *
-		 * @returns {boolean} true if it can, false it it can't
-		 */
-		hasPDFSupport: function () {
-			var support = false;
-
-			//check if pdfs are registered as supported by the browser
-			if (this.getNavigatorMimeType('application/pdf')) {
-				support = true;
-				//check for a plugin that could render a pdf
-			} else if (
-				this.getNavigatorPlugin('Adobe Acrobat') ||
-				this.getNavigatorPlugin('Chrome PDF Viewer') ||
-				this.getNavigatorPlugin('WebKit built-in PDF')
-			) {
-				support = true;
-				//for IE check if we can create an active x object to show a pdf`
-			} else if (
-				this.getActiveXObject('AcroPDF.PDF') ||
-				this.getActiveXObject('PDF.PdfCtrl')
-			) {
-				support = true;
-			}
-
-			return support;
-		},
-
 		flatten: function (a) {
 			if (!a.reduce) {
 				return a;
