@@ -47,5 +47,6 @@
 
 .preview img {
 	max-height: var(--height);
+	max-width: 215px;
 	display: block;
 }
