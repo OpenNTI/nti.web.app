@@ -60,7 +60,7 @@ export default class CourseResources extends React.Component {
 		this.setState({ active: 'surveys' }, this.closeFlyout);
 
 	render() {
-		const { course, searchTerm } = this.props;
+		const { course } = this.props;
 		const { active } = this.state;
 
 		const headerTrigger = (
@@ -102,14 +102,12 @@ export default class CourseResources extends React.Component {
 					<Readings
 						course={course}
 						gotoResource={this.gotoResource}
-						searchTerm={searchTerm}
 					/>
 				)}
 				{active === 'surveys' && (
 					<Surveys
 						course={course}
 						gotoResource={this.gotoResource}
-						searchTerm={searchTerm}
 					/>
 				)}
 			</div>
