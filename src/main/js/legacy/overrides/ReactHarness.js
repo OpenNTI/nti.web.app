@@ -32,7 +32,8 @@ const BOOK_MIME_TYPES = {
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
-const FEEDBACK_MIME_TYPE = 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback';
+const FEEDBACK_MIME_TYPE =
+	'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback';
 
 function lazyReject(reason) {
 	return {
@@ -245,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	 */
 
 	onMsgBarUpdated() {
-		this.bridgeInstance && this.bridgeInstance.forceUpdate();
+		this.bridgeInstance?.forceUpdate();
 	},
 
 	initComponent() {
@@ -341,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		}
 
 		const { initialConfig: config } = this;
-		const component = unwrap(config.component);
+		const component = unwrap(config.component || this.component);
 
 		if (!component && process.env.NODE_ENV !== 'production') {
 			throw new Error(
