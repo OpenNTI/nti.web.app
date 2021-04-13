@@ -46,7 +46,7 @@ module.exports = exports = Ext.define(
 						supportLinks.supportContact === href &&
 						supportLinks.internalSupport
 					) {
-						e.stopEvent();
+						e.preventDefault();
 						this.AccountActions.showContactUs();
 					}
 				},
