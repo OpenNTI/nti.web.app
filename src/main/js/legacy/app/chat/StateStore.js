@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 		}
 
 		presence.getInterfaceInstance().then(instance => {
-			User.Presence.Store.setPresenceFor(username, instance);
+			User.Presence.Store.setPresence(username, instance);
 		});
 
 		this.PRESENCE_MAP[username] = presence;
