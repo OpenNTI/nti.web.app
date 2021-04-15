@@ -1,9 +1,11 @@
 const Ext = require('@nti/extjs');
 const { View: LibrarySearchableView } = require('@nti/web-library');
+const { ViewSortable: LibrarySortableView } = require('@nti/web-library');
 const { Theme } = require('@nti/web-commons');
 const NavigationActions = require('internal/legacy/app/navigation/Actions');
 const BundleActions = require('internal/legacy/app/bundle/Actions');
 const CourseActions = require('internal/legacy/app/course/Actions');
+const { isFlag } = require('@nti/web-client');
 
 const GlobalTheme = Theme.getGlobalTheme();
 
@@ -41,6 +43,10 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	},
 
 	showLibrary(route) {
+		const LibraryComponent = isFlag('library-sorting')
+			? LibrarySortableView
+			: LibrarySearchableView;
+
 		const LibraryTheme = GlobalTheme.scope('library');
 		const { background } = LibraryTheme;
 		const dark = background == null ? true : background === 'dark';
@@ -66,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		} else {
 			this.library = this.add({
 				xtype: 'react',
-				component: LibrarySearchableView,
+				component: LibraryComponent,
 				baseroute: baseroute,
 				setTitle: title => {
 					this.setTitle(title);
@@ -111,7 +117,9 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		}
 
 		if (route) {
-			this.pushRootRoute(community.Username, route, { community: community });
+			this.pushRootRoute(community.Username, route, {
+				community: community,
+			});
 		}
 	},
 
