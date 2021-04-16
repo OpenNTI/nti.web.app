@@ -3,17 +3,13 @@ const Ext = require('@nti/extjs');
 const { default: Logger } = require('@nti/util-logger');
 const Globals = require('internal/legacy/util/Globals');
 
-if (!global.$AppConfig) {
-	global.$AppConfig = {};
-}
-
 const logger = Logger.get('nextthought:extjs:proxy:Socket');
 
 global.Socket = module.exports = exports = Ext.define(
 	'NextThought.proxy.Socket',
 	{
-		isDebug: $AppConfig.debugSocket,
-		isVerbose: $AppConfig.debugSocketVerbosely,
+		isDebug: global.$AppConfig?.debugSocket,
+		isVerbose: global.$AppConfig?.debugSocketVerbosely,
 		mixins: { observable: 'Ext.util.Observable' },
 
 		constructor: function () {

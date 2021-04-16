@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		//latter isn't allowed right now either.  Strip the appuser from contacts fixes both.
 		//
 		//Note: now that we are skipping dfls above, we probably don't need to do this
-		names = Ext.Array.remove(names, $AppConfig.username);
+		names = Ext.Array.remove(names, global.$AppConfig?.username);
 		return names;
 	},
 
@@ -379,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 		});
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
-		names = Ext.Array.remove(names, $AppConfig.username);
+		names = Ext.Array.remove(names, global.$AppConfig?.username);
 		return names;
 	},
 
