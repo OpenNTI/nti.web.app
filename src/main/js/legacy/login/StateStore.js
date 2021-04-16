@@ -1,11 +1,11 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const UserRepository = require('internal/legacy/cache/UserRepository');
-const Socket = require('internal/legacy/proxy/Socket');
 const ObjectUtils = require('internal/legacy/util/Object');
 const ModelService = require('internal/legacy/model/Service');
 const PreferenceManager = require('internal/legacy/preference/Manager');
 const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
+const { getServer } = require('@nti/web-client');
 // const AccountActions = require('internal/legacy/app/account/Actions');
 const lazy = require('internal/legacy/util/lazy-require').get(
 	'AccountActions',
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	},
 
 	setupSocket: function () {
-		Socket.setup();
+		getServer().getWebSocketClient().setup();
 	},
 
 	__validateSession: function () {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 			this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
 
 		if (v !== this.sessionId && this.sessionStarted) {
-			Socket.tearDownSocket();
+			getServer().getWebSocketClient().tearDown();
 
 			alert({
 				title: 'Alert',

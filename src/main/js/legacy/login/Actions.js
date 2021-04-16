@@ -1,9 +1,8 @@
 const Ext = require('@nti/extjs');
-const { getService } = require('@nti/web-client');
+const { getService, getServer } = require('@nti/web-client');
 const { wait } = require('@nti/lib-commons');
 const { init } = require('@nti/lib-locale');
 const { getString } = require('internal/legacy/util/Localization');
-const Socket = require('internal/legacy/proxy/Socket');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
 const B64 = require('internal/legacy/util/Base64');
 const Globals = require('internal/legacy/util/Globals');
@@ -69,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			// timeout
 		} finally {
 			try {
-				Socket.tearDownSocket();
+				getServer().getWebSocketClient().tearDown();
 				this.store.fireEvent('session-closed');
 			} finally {
 				locationHref.replace(url);
@@ -180,6 +179,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 	/**
 	 * Get the user, and set up the service object
+	 *
 	 * @returns {Promise} fulfills is successfully logged in
 	 */
 	async login() {

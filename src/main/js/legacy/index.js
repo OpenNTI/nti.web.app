@@ -4,7 +4,7 @@ const Session = require('@nti/web-session');
 
 Ext.Loader.setConfig({ enabled: false });
 
-const { getURL, validateConfig, loadScript } = require('./util/Globals');
+const { validateConfig } = require('./util/Globals');
 
 require('@nti/style-common/variables.css');
 require('./util/Localization');
@@ -164,10 +164,6 @@ if (typeof document !== 'undefined') {
 			if (!validateConfig()) {
 				return;
 			}
-
-			//Uncomment to suppress cross domain flash socket message
-			//window.WEB_SOCKET_SUPPRESS_CROSS_DOMAIN_SWF_ERROR = true;
-			loadScript(getURL('/socket.io/static/socket.io.js'));
 
 			start();
 		},

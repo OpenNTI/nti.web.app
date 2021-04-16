@@ -77,14 +77,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				'chat_recvMessageForShadow'
 			),
 			chat_enteredRoom: me.onEnteredRoom.bind(me),
-			'socket-new-sessionid': me.createHandlerForChatEvents(
+			'socket-new-session-id': me.createHandlerForChatEvents(
 				me.onNewSocketConnection.bind(me),
-				'socket-new-sessionid'
+				'socket-new-session-id'
 			),
 		});
 
-		socket.onSocketAvailable(me.onSessionReady, me);
-		socket.on('socket-new-sessionid', me.onNewSocketConnection.bind(me));
+		socket.onSocketAvailable(me.onSessionReady.bind(me));
+		socket.on('socket-new-session-id', me.onNewSocketConnection.bind(me));
 
 		me.mon(me.LoginStore, 'will-logout', function (callback) {
 			me.changePresence('unavailable', null, null, callback);
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			this.ChatStore.setMySelfOffline();
 		}
 
-		socket.emit('chat_setPresence', newPresence.asJSON(), callback);
+		socket.send('chat_setPresence', newPresence.asJSON(), callback);
 	},
 
 	onNewSocketConnection: function () {
