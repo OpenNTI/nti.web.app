@@ -10,12 +10,12 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 const { getHistory, LinkTo } = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
 const AccountActions = require('internal/legacy/app/account/Actions');
+const SettingsWindow = require('internal/legacy/app/account/settings/Window');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
 const ParsingUtils = require('internal/legacy/util/Parsing');
 const User = require('internal/legacy/model/User');
 const ContextStore = require('internal/legacy/app/context/StateStore');
 const ChatActions = require('internal/legacy/app/chat/Actions');
-
 const unwrap = x => (x && x.default ? x.default : x);
 
 const CATALOG_MIME_TYPES = {
@@ -46,6 +46,13 @@ function lazyReject(reason) {
 	};
 }
 
+function showAccountSettings() {
+	var win = SettingsWindow.create();
+
+	win.show();
+	win.center();
+}
+
 function getRouteFor(obj, context) {
 	if (!obj) {
 		return null;
@@ -71,6 +78,10 @@ function getRouteFor(obj, context) {
 
 				chatActions.startChat(user);
 			};
+		}
+
+		if (context === 'account') {
+			return showAccountSettings;
 		}
 
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
@@ -288,6 +299,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	/**
 	 * The primary way to update a component's props. DO NOT externally call setState() unless you
 	 * KNOW what you are doing!
+	 *
 	 * @param {Object} props - The props for the given component.
 	 * @param {boolean} skipIfUnchanged - Don't re-render if props haven't changed. (Shallow comparison)
 	 * @returns {void}
@@ -412,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 	/**
-	 * @private This is NOT the primary way to communicate with the React component. Use setProps()
+	 * @private
 	 * This is here primarily as an example of ways to interact with the component. nothing more.
 	 *
 	 * Merges the imput state with the current state.
@@ -427,7 +439,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 	/**
-	 * @private This is NOT the primary way to communicate with the React component. use setProps()
+	 * @private
 	 * This is here primarily as an example of ways to interact with the component. nothing more.
 	 *
 	 * Replaces the entire state object.
