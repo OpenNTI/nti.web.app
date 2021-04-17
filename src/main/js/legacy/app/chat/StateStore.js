@@ -6,7 +6,6 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
 );
-const Socket = require('internal/legacy/proxy/Socket');
 const RoomInfo = require('internal/legacy/model/RoomInfo');
 const { isMe } = require('internal/legacy/util/Globals');
 const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
@@ -20,14 +19,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	STATE_KEY: 'chats',
 	CHAT_WIN_MAP: {},
 	ROOM_USER_MAP: {},
-
-	getSocket: function () {
-		if (!this.socket) {
-			this.socket = Socket;
-		}
-
-		return this.socket;
-	},
 
 	setMySelfOffline: function () {
 		var me = this;

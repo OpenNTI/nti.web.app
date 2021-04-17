@@ -8,6 +8,7 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
 );
+const { getServer } = require('@nti/web-client');
 const LoginStateStore = require('internal/legacy/login/StateStore');
 const PresenceInfo = require('internal/legacy/model/PresenceInfo');
 
@@ -45,49 +46,51 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onLogin: function () {
-		var me = this,
-			socket = me.ChatStore.getSocket();
+		const socket = getServer().getWebSocketClient();
 
-		me.ChatStore.setLoaded();
+		this.ChatStore.setLoaded();
 
 		socket.register({
-			chat_setPresenceOfUsersTo: me.handleSetPresence.bind(me),
-			disconnect: me.createHandlerForChatEvents(
-				me.onSocketDisconnect,
+			chat_setPresenceOfUsersTo: this.handleSetPresence.bind(this),
+			disconnect: this.createHandlerForChatEvents(
+				this.onSocketDisconnect,
 				'disconnect'
 			),
-			serverkill: me.createHandlerForChatEvents(
-				me.onSocketDisconnect,
+			serverkill: this.createHandlerForChatEvents(
+				this.onSocketDisconnect,
 				'serverkill'
 			),
-			chat_exitedRoom: me.createHandlerForChatEvents(
-				me.onExitedRoom,
+			chat_exitedRoom: this.createHandlerForChatEvents(
+				this.onExitedRoom,
 				'chat_exitedRoom'
 			),
-			chat_roomMembershipChanged: me.createHandlerForChatEvents(
-				me.onMembershipOrModerationChanged,
+			chat_roomMembershipChanged: this.createHandlerForChatEvents(
+				this.onMembershipOrModerationChanged,
 				'chat_roomMembershipChanged'
 			),
-			chat_recvMessage: me.createHandlerForChatEvents(
-				me.onMessage,
+			chat_recvMessage: this.createHandlerForChatEvents(
+				this.onMessage,
 				'chat_recvMessage'
 			),
-			chat_recvMessageForShadow: me.createHandlerForChatEvents(
-				me.onMessage,
+			chat_recvMessageForShadow: this.createHandlerForChatEvents(
+				this.onMessage,
 				'chat_recvMessageForShadow'
 			),
-			chat_enteredRoom: me.onEnteredRoom.bind(me),
-			'socket-new-session-id': me.createHandlerForChatEvents(
-				me.onNewSocketConnection.bind(me),
+			chat_enteredRoom: this.onEnteredRoom.bind(this),
+			'socket-new-session-id': this.createHandlerForChatEvents(
+				this.onNewSocketConnection.bind(this),
 				'socket-new-session-id'
 			),
 		});
 
-		socket.onSocketAvailable(me.onSessionReady.bind(me));
-		socket.on('socket-new-session-id', me.onNewSocketConnection.bind(me));
+		socket.onSocketAvailable(this.onSessionReady.bind(this));
+		socket.on(
+			'socket-new-session-id',
+			this.onNewSocketConnection.bind(this)
+		);
 
-		me.mon(me.LoginStore, 'will-logout', function (callback) {
-			me.changePresence('unavailable', null, null, callback);
+		this.mon(this.LoginStore, 'will-logout', callback => {
+			this.changePresence('unavailable', null, null, callback);
 		});
 	},
 
@@ -111,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	changePresence: function (type, show, status, c) {
-		var socket = this.ChatStore.getSocket(),
+		var socket = getServer().getWebSocketClient(),
 			username = $AppConfig.username,
 			newPresence =
 				type && type.isPresenceInfo
@@ -164,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var ri,
 			m,
 			me = this,
-			socket = this.ChatStore.getSocket();
+			socket = getServer().getWebSocketClient();
 
 		options = options || {};
 		if (!options.ContainerId) {
@@ -197,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			) {
 				m.Occupants = [];
 			}
-			socket.emit(
+			socket.send(
 				'chat_enterRoom',
 				Ext.apply(m, options),
 				me.shouldShowRoom.bind(me, options)
@@ -418,7 +421,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				Class: 'MessageInfo',
 			},
 			messageRecord,
-			socket = this.ChatStore.getSocket();
+			socket = getServer().getWebSocketClient();
 
 		if (channel) {
 			m.channel = channel;
@@ -436,7 +439,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			ack = Ext.bind(ack, null, [messageRecord], true);
 		}
 
-		socket.emit('chat_postMessage', m, ack);
+		socket.send('chat_postMessage', m, ack);
 	},
 
 	/*
@@ -779,7 +782,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			return;
 		}
 
-		var socket = this.ChatStore.getSocket();
+		var socket = getServer().getWebSocketClient();
 
 		// We want to remove the cached room when a user exits a room.
 		// However, we would like to keep the occupants key in the accepted list.
@@ -789,14 +792,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (this.isModerator(room)) {
 			logger.info("leaving room but I'm a moderator, relinquish control");
-			socket.emit('chat_makeModerated', room.getId(), false, function () {
+			socket.send('chat_makeModerated', room.getId(), false, function () {
 				//unmoderate called, now exit
 				logger.info('unmoderated, now exiting room');
-				socket.emit('chat_exitRoom', room.getId());
+				socket.send('chat_exitRoom', room.getId());
 			});
 		} else {
 			//im not a moderator, just leave
-			socket.emit('chat_exitRoom', room.getId());
+			socket.send('chat_exitRoom', room.getId());
 		}
 	},
 

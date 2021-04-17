@@ -1,18 +1,9 @@
 const Ext = require('@nti/extjs');
-const Socket = require('internal/legacy/proxy/Socket');
 
 require('internal/legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',
-
-	getSocket: function () {
-		if (!this.socket) {
-			this.socket = Socket;
-		}
-
-		return this.socket;
-	},
 
 	setPreference: function (key, pref) {
 		this.pagePreferenceMap = this.pagePreferenceMap || {};

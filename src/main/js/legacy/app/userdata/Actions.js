@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { emitIncoming } = require('@nti/web-notifications');
+const { getServer } = require('@nti/web-client');
 const { Events } = require('@nti/web-session');
 const ContextStateStore = require('internal/legacy/app/context/StateStore');
 const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
@@ -52,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 	onLogin: function () {
-		var socket = this.UserDataStore.getSocket();
+		var socket = getServer().getWebSocketClient();
 
 		socket.register({
 			data_noticeIncomingChange: this.onIncomingChange.bind(this),
