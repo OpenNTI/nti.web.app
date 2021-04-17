@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { wait } = require('@nti/lib-commons');
 const { User } = require('@nti/web-commons');
 const Toaster = require('internal/legacy/common/toast/Manager');
 const lazy = require('internal/legacy/util/lazy-require').get(
@@ -15,20 +14,9 @@ require('internal/legacy/common/StateStore');
 module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',
 	availableForChat: false,
-	PRESENCE_MAP: {},
 	STATE_KEY: 'chats',
 	CHAT_WIN_MAP: {},
 	ROOM_USER_MAP: {},
-
-	setMySelfOffline: function () {
-		var me = this;
-
-		me.didSetMySelfOffline = true;
-
-		wait(5000).then(function () {
-			me.didSetMySelfOffline = false;
-		});
-	},
 
 	getPresenceOf: function (user) {
 		var username = user && user.isModel ? user.get('Username') : user;
@@ -37,23 +25,31 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 			return;
 		}
 
-		return this.PRESENCE_MAP[username];
+		return User.Presence.Store.getPresence(username);
+	},
+
+	constructor() {
+		this.callParent(arguments);
+		User.Presence.Store.addListener(
+			'presence-changed',
+			this.onPresenceChanged.bind(this)
+		);
 	},
 
 	/**
-	 * Update the presence of a user, if it is the current user and they went offline
+	 * Update the presence of a user (extjs side)
+	 * if it is the current user and they went offline
 	 * in another session, give them a chance to come back online.
 	 *
 	 * @param {string} username		  id of the user the presence if for
 	 * @param {PresenceInfo} presence		the presence
-	 * @param {Function} changePresence what to call if they do set themselves online
+	 * @param {PresenceInfo} previousPresence		the presence
 	 * @returns {void}
 	 */
-	setPresenceOf: function (username, presence, changePresence) {
-		var prevToast = this.__offlineToast,
-			oldPresence;
+	onPresenceChanged: function (username, presence, previousPresence) {
+		var prevToast = this.__offlineToast;
 
-		if (isMe(username)) {
+		if (presence.isForAppUser) {
 			//if we are online we are available for chat
 			if (presence.isOnline()) {
 				this.availableForChat = true;
@@ -62,16 +58,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 					prevToast.destroy();
 				}
 			} else {
-				oldPresence = this.PRESENCE_MAP[username];
-
 				//if we didn't trigger being offline and our old presence was online alert the user
 				if (
-					!this.didSetMySelfOffline &&
-					oldPresence &&
-					oldPresence.isOnline()
+					presence.source === 'socket' &&
+					previousPresence?.isOnline()
 				) {
 					console.log('Set offline in another session');
-					this.didSetMySelfOffline = false;
 
 					if (prevToast) {
 						prevToast.destroy();
@@ -87,12 +79,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 							},
 							{
 								label: 'Set to available',
-								callback: function () {
-									presence.set({
-										type: 'available',
-										show: 'chat',
-									});
-									changePresence(presence);
+								callback() {
+									User.Presence.Store.setPresence(
+										username,
+										presence.from({
+											type: 'available',
+											show: 'chat',
+											source: 'user',
+										})
+									);
 								},
 							},
 						],
@@ -100,12 +95,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 				}
 			}
 		}
-
-		presence.getInterfaceInstance().then(instance => {
-			User.Presence.Store.setPresence(username, instance);
-		});
-
-		this.PRESENCE_MAP[username] = presence;
 
 		this.fireEvent('presence-changed', username, presence);
 	},
@@ -121,8 +110,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	notify: function (win, msg) {
-		var creator =
-			msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
+		var creator = msg?.isModel
+			? msg.get('Creator')
+			: msg?.creator || msg?.Creator;
 		if (!isMe(creator)) {
 			this.fireEvent('notify', win, msg);
 		}
@@ -290,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 		TemporaryStorage.remove('chats');
 	},
 
-	isPersistantRoomId: function (id) {
+	isPersistentRoomId: function (id) {
 		return /meetingroom/i.test(id);
 	},
 

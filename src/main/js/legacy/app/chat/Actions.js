@@ -8,9 +8,8 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
 );
-const { getServer } = require('@nti/web-client');
+const { getService } = require('@nti/web-client');
 const LoginStateStore = require('internal/legacy/login/StateStore');
-const PresenceInfo = require('internal/legacy/model/PresenceInfo');
 
 const ChatStateStore = require('./StateStore');
 
@@ -22,10 +21,16 @@ const logger = Logger.get('nextthought:extjs:app:chat:Actions');
 
 module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	extend: 'NextThought.common.Actions',
-	availableForChat: true,
+
+	statics: {
+		create() {
+			return this.instance || (this.instance = new exports());
+		},
+	},
 
 	constructor: function () {
 		this.callParent(arguments);
+		console.log('new instance');
 
 		this.ChatStore = ChatStateStore.getInstance();
 		this.LoginStore = LoginStateStore.getInstance();
@@ -45,111 +50,24 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		}
 	},
 
-	onLogin: function () {
-		const socket = getServer().getWebSocketClient();
-
+	async onLogin() {
+		const service = await getService();
+		const chat = (this.client = service.getChatClient());
+		console.log(chat, this);
 		this.ChatStore.setLoaded();
 
-		socket.register({
-			chat_setPresenceOfUsersTo: this.handleSetPresence.bind(this),
-			disconnect: this.createHandlerForChatEvents(
-				this.onSocketDisconnect,
-				'disconnect'
-			),
-			serverkill: this.createHandlerForChatEvents(
-				this.onSocketDisconnect,
-				'serverkill'
-			),
-			chat_exitedRoom: this.createHandlerForChatEvents(
-				this.onExitedRoom,
-				'chat_exitedRoom'
-			),
-			chat_roomMembershipChanged: this.createHandlerForChatEvents(
-				this.onMembershipOrModerationChanged,
-				'chat_roomMembershipChanged'
-			),
-			chat_recvMessage: this.createHandlerForChatEvents(
-				this.onMessage,
-				'chat_recvMessage'
-			),
-			chat_recvMessageForShadow: this.createHandlerForChatEvents(
-				this.onMessage,
-				'chat_recvMessageForShadow'
-			),
-			chat_enteredRoom: this.onEnteredRoom.bind(this),
-			'socket-new-session-id': this.createHandlerForChatEvents(
-				this.onNewSocketConnection.bind(this),
-				'socket-new-session-id'
-			),
-		});
-
-		socket.onSocketAvailable(this.onSessionReady.bind(this));
-		socket.on(
-			'socket-new-session-id',
-			this.onNewSocketConnection.bind(this)
+		chat.on('disconnect', this.onSocketDisconnect.bind(this));
+		chat.on(
+			'room-membership-changed',
+			this.onMembershipOrModerationChanged.bind(this)
 		);
+		chat.on('message', this.onMessage.bind(this));
+		chat.on('entered-room', this.onEnteredRoom.bind(this));
+		chat.on('exited-room', this.onExitedRoom.bind(this));
 
 		this.mon(this.LoginStore, 'will-logout', callback => {
-			this.changePresence('unavailable', null, null, callback);
+			chat.changePresence('unavailable', callback);
 		});
-	},
-
-	onSessionReady: function () {
-		logger.debug('Chat onSessionReady');
-		this.onNewSocketConnection();
-	},
-
-	handleSetPresence: function (msg) {
-		var me = this,
-			key,
-			store = me.ChatStore,
-			value;
-
-		for (key in msg) {
-			if (msg.hasOwnProperty(key)) {
-				value = lazy.ParseUtils.parseItems([msg[key]])[0];
-				store.setPresenceOf(key, value, this.changePresence.bind(this));
-			}
-		}
-	},
-
-	changePresence: function (type, show, status, c) {
-		var socket = getServer().getWebSocketClient(),
-			username = $AppConfig.username,
-			newPresence =
-				type && type.isPresenceInfo
-					? type
-					: PresenceInfo.createPresenceInfo(
-							username,
-							type,
-							show,
-							status
-					  ),
-			callback = c ? c : function () {};
-
-		if (!newPresence.isOnline()) {
-			this.ChatStore.setMySelfOffline();
-		}
-
-		socket.send('chat_setPresence', newPresence.asJSON(), callback);
-	},
-
-	onNewSocketConnection: function () {
-		var me = this;
-		logger.debug('created a new connection');
-		$AppConfig.Preferences.getPreference('ChatPresence/Active').then(
-			function (value) {
-				if (value) {
-					me.changePresence(
-						value.get('type'),
-						value.get('show'),
-						value.get('status')
-					);
-				} else {
-					me.changePresence('available');
-				}
-			}
-		);
 	},
 
 	createChatRoom(users, options) {
@@ -165,9 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	startChat: function (users, options) {
 		var ri,
-			m,
-			me = this,
-			socket = getServer().getWebSocketClient();
+			me = this;
 
 		options = options || {};
 		if (!options.ContainerId) {
@@ -191,18 +107,19 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			}
 		} else {
 			//If there were no existing rooms, create a new one.
-			m = { Occupants: users };
+			let occupants = users;
 
 			//no occupants required if there's a container id and it's a class/study room etc.
 			if (
 				options.ContainerId &&
-				this.ChatStore.isPersistantRoomId(options.ContainerId)
+				this.ChatStore.isPersistentRoomId(options.ContainerId)
 			) {
-				m.Occupants = [];
+				occupants = [];
 			}
-			socket.send(
-				'chat_enterRoom',
-				Ext.apply(m, options),
+
+			this.client.enterRoom(
+				occupants,
+				options,
 				me.shouldShowRoom.bind(me, options)
 			);
 		}
@@ -232,7 +149,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var me = this,
 			w,
 			roomInfo =
-				msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0],
+				msg && msg.isModel
+					? msg
+					: lazy.ParseUtils.parseItems([msg.__toRaw?.() || msg])[0],
 			occupants = roomInfo.get('Occupants'),
 			isGroupChat = occupants.length > 2;
 
@@ -243,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		roomInfo.setOriginalOccupants(occupants.slice());
 		w = me.openChatWindow(roomInfo);
 
-		this.presentInvationationToast(roomInfo)
+		this.presentInvitationToast(roomInfo)
 			.then(function () {
 				me.ChatStore.setOccupantsKeyAccepted(roomInfo);
 				w.accept(true);
@@ -320,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		return false;
 	},
 
-	presentInvationationToast: function (roomInfo) {
+	presentInvitationToast: function (roomInfo) {
 		var me = this,
 			occupants = roomInfo.get('Occupants'),
 			isGroupChat = occupants.length > 2;
@@ -376,83 +295,38 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		});
 	},
 
-	createHandlerForChatEvents: function (fn, eventName) {
-		var me = this;
-
-		return function () {
-			if (me.availableForChat) {
-				fn.apply(me, arguments);
-			} else if (me.debug) {
-				logger.info('Dropped ' + eventName + ' handling');
-			}
-		};
-	},
-
-	sendMessage: function (f, mid, channel, recipients) {
+	async sendMessage(f, mid, channel, recipients) {
 		var room = this.getRoomInfoFromComponent(f),
-			val = f.getValue(),
-			me = this;
+			val = f.getValue();
 
 		if (!room || Ext.isEmpty(val, false)) {
 			logger.error('Cannot send message, room', room, 'values', val);
 			return;
 		}
 		this.clearErrorForRoom(room);
-		this.postMessage(
-			room,
+		this.client.postMessage(
+			await room.getInterfaceInstance(),
 			val,
 			mid,
 			channel,
 			recipients,
-			Ext.bind(me.sendAckHandler, me)
+			Ext.bind(this.sendAckHandler, this)
 		);
 
 		f.focus();
 	},
 
-	postMessage: function (room, message, replyTo, channel, recipients, ack) {
-		if (typeof message === 'string') {
-			message = [message];
-		}
-
-		var m = {
-				ContainerId: room.getId(),
-				body: message,
-				Class: 'MessageInfo',
-			},
-			messageRecord,
-			socket = getServer().getWebSocketClient();
-
-		if (channel) {
-			m.channel = channel;
-		}
-		if (recipients) {
-			m.recipients = recipients;
-		}
-
-		if (ack) {
-			messageRecord = lazy.ParseUtils.parseItems([m]);
-			messageRecord =
-				messageRecord && messageRecord.length > 0
-					? messageRecord[0]
-					: null;
-			ack = Ext.bind(ack, null, [messageRecord], true);
-		}
-
-		socket.send('chat_postMessage', m, ack);
-	},
-
 	/*
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
-	publishChatStatus: function (room, newStatus, username) {
+	async publishChatStatus(room, newStatus, username) {
 		var channel = 'STATE',
 			oldStatus;
 		username =
 			username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if (oldStatus !== newStatus) {
-			logger.info(
+			logger.trace(
 				'transitioning room state for: ',
 				$AppConfig.username,
 				' from ',
@@ -460,8 +334,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				' to ',
 				newStatus
 			);
-			this.postMessage(
-				room,
+			this.client.postMessage(
+				await room.getInterfaceInstance(),
 				{ state: newStatus },
 				null,
 				channel,
@@ -473,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	onMessage: function (msg, opts) {
 		var me = this,
-			m = lazy.ParseUtils.parseItems([msg])[0],
+			m = lazy.ParseUtils.parseItems([msg.__toRaw?.() || msg])[0],
 			channel = m && m.get('channel'),
 			cid = m && m.get('ContainerId'),
 			w = this.ChatStore.getChatWindow(cid),
@@ -664,14 +538,16 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onExitedRoom: function (room) {
-		var occupants = room.Occupants || [],
+		var occupants = room.occupants || [],
 			key = Ext.Array.sort(occupants.slice()).join('_');
 
 		this.ChatStore.removeSessionObject(key);
 	},
 
 	onMembershipOrModerationChanged: function (msg) {
-		var newRoomInfo = lazy.ParseUtils.parseItems([msg])[0],
+		var newRoomInfo = lazy.ParseUtils.parseItems([
+				msg.__toRaw?.() || msg,
+			])[0],
 			oldRoomInfo =
 				newRoomInfo &&
 				this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
@@ -777,30 +653,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		});
 	},
 
-	leaveRoom: function (room) {
-		if (!room) {
-			return;
-		}
-
-		var socket = getServer().getWebSocketClient();
-
-		// We want to remove the cached room when a user exits a room.
-		// However, we would like to keep the occupants key in the accepted list.
-		// That will help us to know when users to add in the gutter.
-		// this.ChatStore.deleteOccupantsKeyAccepted(room.getId());
-		this.ChatStore.removeSessionObject(room.getOccupantsKey());
-
-		if (this.isModerator(room)) {
-			logger.info("leaving room but I'm a moderator, relinquish control");
-			socket.send('chat_makeModerated', room.getId(), false, function () {
-				//unmoderate called, now exit
-				logger.info('unmoderated, now exiting room');
-				socket.send('chat_exitRoom', room.getId());
-			});
-		} else {
-			//im not a moderator, just leave
-			socket.send('chat_exitRoom', room.getId());
-		}
+	async leaveRoom(room) {
+		this.client.exitRoom(await room.getInterfaceInstance());
 	},
 
 	fillInHistoryForOccupants: function (occupants, win) {
@@ -906,10 +760,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		return Service.getObject(id);
-	},
-
-	isModerator: function (ri) {
-		return Ext.Array.contains(ri.get('Moderators'), $AppConfig.username);
 	},
 
 	zoomWhiteboard: function (cmp, data) {
