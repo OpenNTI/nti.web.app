@@ -49,7 +49,7 @@
 	}
 }
 
-@mixin loadingSpinner($top: 8px, $left: 10px) {
+@mixin loadingSpinner($top: 12px, $left: 16px) {
 	display: block;
 	content: ' ';
 	background: {
@@ -59,19 +59,19 @@
 		repeat: no-repeat;
 	}
 
-	width: 24px;
-	height: 24px;
+	width: 16px;
+	height: 16px;
 	position: absolute;
 	top: $top;
 	left: $left;
 
-	@include animate(
-		$name: rotate,
-		$duration: 2s,
-		$delay: 0s,
-		$function: linear,
-		$iteration: infinite
-	);
+	// @include animate(
+	// 	$name: rotate,
+	// 	$duration: 2s,
+	// 	$delay: 0s,
+	// 	$function: linear,
+	// 	$iteration: infinite
+	// );
 }
 
 @mixin loadingEllipse($side: after, $animation-delay: 0) {
