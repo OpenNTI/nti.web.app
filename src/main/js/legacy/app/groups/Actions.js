@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
 	},
 
-	loadFriendsList: function () {
+	async loadFriendsList() {
 		var me = this,
 			store = me.GroupStore.getFriendsList(),
 			mimeType = store.model.mimeType,
@@ -42,6 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return;
 		}
 
+		const service = await getService();
+		const contacts = service.getContacts();
+		await contacts.waitForPending();
+
+		// TODO: Gut this and use the contacts from service
 		return new Promise(function (fulfill) {
 			store.on({
 				load: function (listStore, records, success) {
