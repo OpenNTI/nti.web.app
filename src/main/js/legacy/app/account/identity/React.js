@@ -56,7 +56,7 @@ module.exports = exports = Ext.define(
 
 			if (action) {
 				if (call(this, `do-${action}`, link, e) !== false) {
-					e.stopEvent();
+					e.preventDefault();
 				}
 			}
 		},
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define(
 		'do-about': 'showLink',
 
 		'do-privacy'(target) {
-			this.AccountActions.showPrivacy(target);
+			this.AccountActions.showPrivacy(target.href);
 		},
 
 		'do-privacyForMinors'(target) {
