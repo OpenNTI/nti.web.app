@@ -79,7 +79,7 @@ module.exports = exports = Ext.define(
 					var ChatStore = ChatStateStore.getInstance(),
 						presence = ChatStore.getPresenceOf(model.Username);
 
-					return (presence && presence.getName()) || '';
+					return presence?.name || '';
 				},
 				getAvatar: function (model) {
 					var a = NTIFormat.avatar(model);

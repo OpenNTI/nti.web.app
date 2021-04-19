@@ -210,7 +210,7 @@ module.exports = exports = Ext.define(
 					}
 
 					//if we don't have a presence for them or they are online add them to onlineOccupants
-					if (presence && presence.isOnline()) {
+					if (presence?.isOnline()) {
 						Ext.Array.include(me.onlineOccupants, name);
 					} else {
 						Ext.Array.remove(me.onlineOccupants, u.getId());
@@ -299,7 +299,7 @@ module.exports = exports = Ext.define(
 						var name = u.getId(),
 							presence = me.ChatStore.getPresenceOf(name);
 
-						if (presence && presence.isOnline()) {
+						if (presence?.isOnline()) {
 							onlineOccupants.push(u);
 						}
 					});
@@ -317,7 +317,6 @@ module.exports = exports = Ext.define(
 					} else if (
 						onlineOccupants.length === 1 &&
 						!isMe(onlineOccupants[0]) &&
-						myPresence &&
 						myPresence.isOnline()
 					) {
 						if (Ext.isEmpty(me.query('chat-log-entry'))) {

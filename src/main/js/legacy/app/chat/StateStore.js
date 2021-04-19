@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const { User } = require('@nti/web-commons');
+const { UserPresence } = require('@nti/lib-interfaces');
 const Toaster = require('internal/legacy/common/toast/Manager');
 const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
@@ -25,12 +25,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 			return;
 		}
 
-		return User.Presence.Store.getPresence(username);
+		return UserPresence.getPresence(username);
 	},
 
 	constructor() {
 		this.callParent(arguments);
-		User.Presence.Store.addListener(
+		UserPresence.addListener(
 			'presence-changed',
 			this.onPresenceChanged.bind(this)
 		);
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 							{
 								label: 'Set to available',
 								callback() {
-									User.Presence.Store.setPresence(
+									UserPresence.setPresence(
 										username,
 										presence.from({
 											type: 'available',
