@@ -1,12 +1,15 @@
 const Ext = require('@nti/extjs');
+const { Models, UserPresence } = require('@nti/lib-interfaces');
+const { getService } = require('@nti/web-client');
 const StateStore = require('internal/legacy/app/chat/StateStore');
 const Actions = require('internal/legacy/app/chat/Actions');
-const PresenceInfo = require('internal/legacy/model/PresenceInfo');
 const { getString } = require('internal/legacy/util/Localization');
 const { isMe } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/cache/AbstractStorage');
 require('./PresenceEditor');
+
+const { PresenceInfo } = Models.entities;
 
 //styles in identity.scss
 module.exports = exports = Ext.define(
@@ -331,7 +334,7 @@ module.exports = exports = Ext.define(
 			return null;
 		},
 
-		clicked: function (e) {
+		clicked: async function (e) {
 			var show, status, type, presence;
 
 			if (e.getTarget('.edit')) {
@@ -363,15 +366,15 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			presence = PresenceInfo.createPresenceInfo(
-				$AppConfig.username,
+			presence = PresenceInfo.from(
+				await getService(),
 				type,
 				show,
 				status
 			);
 
 			if (this.isNewPresence(presence)) {
-				this.ChatActions.changePresence(presence);
+				UserPresence.setPresence(presence.username, presence);
 
 				this.saveActive(type, show, status, true);
 			}
@@ -383,13 +386,9 @@ module.exports = exports = Ext.define(
 		},
 
 		isNewPresence: function (updated) {
-			var current = this.ChatStore.getPresenceOf($AppConfig.username);
+			const current = this.ChatStore.getPresenceOf($AppConfig.username);
 
-			function compare(k) {
-				return (
-					(updated && updated.get(k)) !== (current && current.get(k))
-				);
-			}
+			const compare = k => updated?.[k] !== current?.[k];
 
 			return compare('type') || compare('show') || compare('status');
 		},
@@ -402,7 +401,7 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		saveEditor: function (cmp, value, oldValue) {
+		saveEditor: async function (cmp, value, oldValue) {
 			value = value.trim();
 
 			if (value.length < 1) {
@@ -415,8 +414,8 @@ module.exports = exports = Ext.define(
 				show = target === 'available' ? 'chat' : target,
 				status = this.isStatus(value) ? value : '';
 
-			const newPresence = PresenceInfo.createPresenceInfo(
-				$AppConfig.username,
+			const newPresence = PresenceInfo.from(
+				await getService(),
 				type,
 				show,
 				status
@@ -430,7 +429,7 @@ module.exports = exports = Ext.define(
 			}
 
 			if (this.isNewPresence(newPresence)) {
-				this.ChatActions.changePresence(newPresence);
+				UserPresence.setPresence(newPresence.username, newPresence);
 				this.savePreference(type, show, status, true);
 			} else {
 				this.setPresence($AppConfig.username, newPresence);
