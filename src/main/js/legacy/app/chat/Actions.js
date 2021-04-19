@@ -30,7 +30,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	constructor: function () {
 		this.callParent(arguments);
-		console.log('new instance');
 
 		this.ChatStore = ChatStateStore.getInstance();
 		this.LoginStore = LoginStateStore.getInstance();
@@ -53,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	async onLogin() {
 		const service = await getService();
 		const chat = (this.client = service.getChatClient());
-		console.log(chat, this);
+
 		this.ChatStore.setLoaded();
 
 		chat.on('disconnect', this.onSocketDisconnect.bind(this));
