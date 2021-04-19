@@ -168,6 +168,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Add handlers for saving progress
+		 *
 		 * @param {Function} save	saves the progress and returns a promise
 		 * @param {Function} before called before progress is saved
 		 * @param {Function} after	called after progress is saved

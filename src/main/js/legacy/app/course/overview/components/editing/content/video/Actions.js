@@ -57,6 +57,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Remove a record from the oldPosition and add it to the new one
+		 *
 		 * @param  {Model} oldRecord   the record to remove
 		 * @param  {Object} oldPosition the parent and position of the old position
 		 * @param  {Object} newValues	the new values to update the record with

@@ -590,6 +590,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Check is this instance is in the same family as another
+		 *
 		 * @param  {CourseInstance} instance the instance to compare against
 		 * @returns {boolean}		if they are in the same family
 		 */
@@ -812,6 +813,7 @@ module.exports = exports = Ext.define(
 		 * Return an outline store based on the first toc,
 		 * cache these results for now.
 		 * TODO: don't keep these cached for the lifetime of the app
+		 *
 		 * @returns {[type]} [description]
 		 */
 		__getTocOutline() {
@@ -854,6 +856,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get the AssignmentHistory link off of the enrolled instance or this
+		 *
 		 * @returns {string} link to the assignment history
 		 */
 		async __getAssignmentHistoryLink() {
@@ -865,6 +868,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * get the link, and cache the results
+		 *
 		 * @param  {string} link rel of the link to get
 		 * @param  {boolean} force -
 		 * @param  {number} timeout -
@@ -965,6 +969,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Return an assignment collection for this course
+		 *
 		 * @returns {AssignmentCollection} the assignment collection
 		 */
 		async getAssignments() {
@@ -1442,6 +1447,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Sends requests for the contents link of the discussions and parent discussions if they are there
+		 *
 		 * @param {string} prop -
 		 * @returns {Promise} Fulfills or rejects with the response of the request
 		 */
@@ -1566,6 +1572,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * A helper to parse the object in AnnouncementForums or ParentAnnouncementForums
+		 *
 		 * @param  {Object} items []
 		 * @returns {[type]}		  [description]
 		 */
@@ -1593,6 +1600,7 @@ module.exports = exports = Ext.define(
 		 *		ForCredit: Forum
 		 *	}
 		 *}
+		 *
 		 * @returns {Array} a flattened list of the forums
 		 */
 		getMySectionAnnouncements() {
@@ -1607,6 +1615,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Same as getMySectionAnnouncements just for my parent section
+		 *
 		 * @returns {Array} a flattened list of the forums
 		 */
 		getParentAnnouncements() {

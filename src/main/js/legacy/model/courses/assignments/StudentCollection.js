@@ -41,6 +41,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get the HistoryItem for an assignment
+		 *
 		 * @param  {string} assignment Id of the assignment to get
 		 * @param {boolean} useCache use the last call instead of making a new one
 		 * @returns {[type]}			   [description]
@@ -58,6 +59,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Update the history item in the cache with data
+		 *
 		 * @param  {string} assignment id of the assignment to update
 		 * @param  {Object} data	   data to update with
 		 * @returns {Promise} -

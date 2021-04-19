@@ -144,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 
 	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
+	 *
 	 * @param {number} idx --
 	 * @returns {number} --
 	 */
@@ -190,6 +191,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 
 	/**
 	 * Return a unique hex value for the index
+	 *
 	 * @param  {number} idx the index
 	 * @returns {string}	 the hex code
 	 */

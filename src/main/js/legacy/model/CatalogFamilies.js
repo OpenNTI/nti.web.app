@@ -10,6 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 
 	/**
 	 * Whether or not a family is in the Items
+	 *
 	 * @param  {CatalogFamily|string} familyOrId id or or the CatalogFamily itself
 	 * @returns {boolean}			  whether or not the family is in my list
 	 */

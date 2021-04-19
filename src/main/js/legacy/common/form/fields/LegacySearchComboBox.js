@@ -270,6 +270,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Set the current option and update the input
+		 *
 		 * @param  {Node} el the li to select
 		 * @param  {boolean} silent don't fire an event
 		 * @returns {void}

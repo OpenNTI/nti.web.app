@@ -350,6 +350,7 @@ module.exports = exports = Ext.define(
 		 * new cmps every time and not updating existing cmps, this gives us a chance
 		 * to nest the transition between states.
 		 *
+		 * @abstract
 		 * @param  {Object} record		 the record to get the comp for
 		 * @param  {string} transition	 a transition cls to apply to the record
 		 * @param  {Object} initialState an earlier version of the record

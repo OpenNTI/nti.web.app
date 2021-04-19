@@ -81,8 +81,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
 		 *
-		 *	  @param {Object/Ext.data.Model} change the change record.
-		 *	  @param {Object/Ext.data.Model} item Item the change is about.
+		 *	  @param {Object|Ext.data.Model} change the change record.
+		 *	  @param {Object|Ext.data.Model} item Item the change is about.
 		 *	  @param {Object} meta Location meta data
 		 *
 		 * these are assigned in the init() above

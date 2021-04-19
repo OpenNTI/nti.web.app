@@ -449,6 +449,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Return all courses in the same catalog family
+		 *
 		 * @param  {string} familyId id of the catalog family to search for
 		 * @returns {Course} list of courses in the same catalog family
 		 */

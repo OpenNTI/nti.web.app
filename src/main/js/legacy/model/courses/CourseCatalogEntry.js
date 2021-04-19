@@ -277,6 +277,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Whether or not this catalog entry is in a given family id
+		 *
 		 * @param  {string}	 id FamilyId
 		 * @returns {boolean}	if it is in the family
 		 */
@@ -411,6 +412,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Compare a given catalog entry to this one to see if they
 		 * are in the same family
+		 *
 		 * @param  {CourseCatalogEntry} catalog entry to compare
 		 * @returns {boolean}			whether or not they are in the same family
 		 */

@@ -48,8 +48,8 @@ module.exports = exports = Ext.define(
 			 *	editor: Class //The component to instantiate to create the editor
 			 * }
 			 *
-			 * @override
-			 * @returns {[Object]} the types this editor handles
+			 * @abstract
+			 * @returns {Object[]} the types this editor handles
 			 */
 			getTypes: function () {},
 
@@ -102,6 +102,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * The Schema used to set up the fields
+		 *
 		 * @override
 		 * @type {Array}
 		 */

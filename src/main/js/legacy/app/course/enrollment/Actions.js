@@ -25,6 +25,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Drops a course
+		 *
 		 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
 		 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 		 * @returns {void}
@@ -35,6 +36,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Drops a course
+		 *
 		 * @param  {CourseCatalogEntry} course the course to enroll or drop
 		 * @param  {Function} callback what to do when its done, takes two arguments success,changed\
 		 * @returns {void}
@@ -84,6 +86,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Enrolls in a course
+		 *
 		 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
 		 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 		 * @returns {void}

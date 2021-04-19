@@ -133,6 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	/**
 	 * Takes a question set submission and updates the inputs with those values, without triggering
 	 * it to be marked correct or incorrect
+	 *
 	 * @param {QuestionSetSubmission} questionSetSubmission the users last values they had
 	 * @param {Object} eopts -
 	 * @param {boolean} reapplying -

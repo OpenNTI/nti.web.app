@@ -42,6 +42,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Find a record with the same assignment id as given
+		 *
 		 * @param  {NTIID} assignmentId Assignment to look up
 		 * @returns {HistoryItem}		history item for the assignment
 		 */

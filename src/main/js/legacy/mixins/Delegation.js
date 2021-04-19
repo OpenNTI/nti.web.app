@@ -4,7 +4,7 @@ const Ext = require('@nti/extjs');
  * Utility class to aid in defining delegated functions.
  */
 var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
-	/** @property This is a special value to return form a delegated function to prevent the default */
+	/** @type {Object} This is a special value to return form a delegated function to prevent the default */
 	PREVENT_DEFAULT: {},
 
 	/**

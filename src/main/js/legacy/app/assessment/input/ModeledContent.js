@@ -58,6 +58,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Enable or disable submission accordingly, if we aren't silent save the progress
+		 *
 		 * @param  {boolean} enable is the editor has something in it
 		 * @param  {boolean} silent if we are setting the value, don't save the progress
 		 * @param  {boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return

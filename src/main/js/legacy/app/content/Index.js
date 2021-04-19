@@ -225,6 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 	/**
 	 * Set up the active tab
+	 *
 	 * @param  {string} active	 xtype of the active tab
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
 	 * @param {string} tab the tab to mark as active if different than the one for the xtype

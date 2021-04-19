@@ -80,6 +80,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * builds the url for the asset and returns a promise that fulfills if the img loads or rejects if it fails.
+		 *
 		 * @param  {string} name asset name to load
 		 * @returns {Promise} whether or not the asset exists
 		 */
@@ -151,6 +152,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Return the url for the asset if the asset exists
+		 *
 		 * @param  {string} key	  field to store the value on
 		 * @param  {string} asset the name of the asset (defaults to key arg)
 		 * @returns {Promise}	  fulfills with the url to the asset if it exists

@@ -257,8 +257,9 @@ module.exports = exports = Ext.define(
 		/**
 		 * Maps the records 'reply/comment/post' counts to a single value.
 		 *
-		 * @param {Ext.data.Model} record -
-		 * @returns {number} -
+		 * @abstract
+		 * @param {Ext.data.Model} record
+		 * @returns {number}
 		 */
 		getCommentCount: function (record) {
 			throw new Error(

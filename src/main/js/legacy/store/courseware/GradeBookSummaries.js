@@ -147,6 +147,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
+		 *
 		 * @param  {Model} record record to fill in
 		 * @returns {Promise} --
 		 */

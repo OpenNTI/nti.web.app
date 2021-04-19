@@ -19,7 +19,8 @@ require('internal/legacy/mixins/LikeFavoriteActions');
  * record: Object, for the like and favorite actions
  *
  * fires: show-object, edit, report, delete
- * @type {String}
+ *
+ * @type {string}
  */
 module.exports = exports = Ext.define(
 	'NextThought.app.stream.components.parts.BodyContent',

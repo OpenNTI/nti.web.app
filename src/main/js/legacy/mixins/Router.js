@@ -240,13 +240,15 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 	/**
 	 * Return the current context
-	 * @override
+	 *
+	 * @abstract
 	 * @returns {Object|string} An object or string describing the current context
 	 */
 	getContext: function () {},
 
 	/**
 	 * Returns an array of the current context the view is in
+	 *
 	 * @returns {[type]} [description]
 	 */
 	getCurrentContext: function () {
@@ -291,6 +293,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 	/**
 	 * Return the active cmp for this route
+	 *
 	 * @override
 	 * @returns {Object} the active cmp
 	 */
@@ -304,6 +307,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
+	 *
 	 * @override
 	 * @returns {boolean|Promise} if we can navigate
 	 */

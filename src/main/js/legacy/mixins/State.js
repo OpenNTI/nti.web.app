@@ -23,6 +23,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 
 	/**
 	 * Return the current state
+	 *
 	 * @returns {Object} the current state
 	 */
 	getCurrentState: function () {
@@ -35,6 +36,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 
 	/**
 	 * Store the state in local storage
+	 *
 	 * @param {Object} state state to store
 	 * @returns {void}
 	 */
@@ -49,6 +51,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 
 	/**
 	 * Apply a state to the ui, return promise that fulfills when its down
+	 *
 	 * @override
 	 * @param {Object} state state to apply
 	 */

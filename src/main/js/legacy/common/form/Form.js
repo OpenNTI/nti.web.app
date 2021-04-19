@@ -29,7 +29,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	/**
 	 * Whether or not to send all the values back when submitted,
 	 * or just the values that have changed
-	 * @type {Boolean}
+	 *
+	 * @type {boolean}
 	 */
 	sendAllValues: false,
 

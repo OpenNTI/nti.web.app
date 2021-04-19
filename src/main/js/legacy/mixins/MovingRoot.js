@@ -20,6 +20,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 
 	/**
 	 * Append a record from one parent to another
+	 *
 	 * @param  {Object|string} record		  the record to move
 	 * @param  {Object|string} originalParent the current parent of the record
 	 * @param  {Object|string} newParent	  the desired parent of the record

@@ -13,10 +13,11 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * returns Promise the fulfills with a config with a width and height
+			 *
 			 * @param	{Model} record the record we are building the tile for
 			 * @returns	{Object} the config to build this tile
 			 */
-			getTileConfig: function (/*record*/) {
+			getTileConfig: function (record) {
 				return Promise.resolve({
 					xtype: this.xtype,
 					width: this.WIDTH,

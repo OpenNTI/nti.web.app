@@ -229,6 +229,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * If the assignment has parts or not
+		 *
 		 * @returns {boolean} False if there are parts
 		 */
 		isEmpty: function () {

@@ -54,7 +54,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Registers one or more {@link #refs references}.
 		 *
-		 * @param {Object/Object[]} refs -
+		 * @param {Object|Object[]} refs
 		 * @returns {void}
 		 */
 		addRef: function (refs) {

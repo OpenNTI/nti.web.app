@@ -86,6 +86,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 
 	/**
 	 * Takes the content of a question/part and returns the string to be inserted into the dom
+	 *
 	 * @param  {string|Element} dom the string or element of the question content
 	 * @param  {bool} dontRender the element mixing in will hanldle it
 	 * @returns {string} the html string of the content
@@ -159,7 +160,8 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 
 	/**
 	 * Takes the configs for the components we need to render and creates them
-	 * @returns {Undefined}	no return value
+	 *
+	 * @returns {undefined}	no return value
 	 */
 	renderContentComponents: function () {
 		var me = this;
@@ -173,6 +175,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 
 	/**
 	 * Takes the config for a component and either creates it or adds it to a a list to be created.
+	 *
 	 * @param {string}	type	the data-type attribute of the object element
 	 * @param {Object} config	the config to pass to the component
 	 * @param {bool} create		whether or not to create the element or add it to the list of things to be created

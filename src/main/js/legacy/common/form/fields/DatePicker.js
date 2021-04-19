@@ -339,6 +339,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get the timestamp in seconds.
+		 *
 		 * @returns {number} Timestamp in seconds.
 		 */
 		getValue: function () {
@@ -352,6 +353,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Display text for the selected date.
+		 *
 		 * @returns {[type]} [description]
 		 */
 		getDisplayValue: function () {
@@ -504,6 +506,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get the timestamp value time.
+		 *
 		 * @returns {number} timestamp in milliseconds.
 		 */
 		getMilliseconds: function () {

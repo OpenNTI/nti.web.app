@@ -74,6 +74,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 
 	/**
 	 * See CourseInstance getForumList for more details the structure this is returning
+	 *
 	 * @returns {Object} A forum list of the contents of this board
 	 */
 	getForumList: function () {

@@ -273,6 +273,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Set the bread crumb to show the active item note that data-index is 1 based
+		 *
 		 * @param {number} index the item to activate
 		 * @returns {void}
 		 */
@@ -300,6 +301,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Starting at index step through the steps and activate the first one that is not completed
 		 * or stop on the last one
+		 *
 		 * @param  {number} index the step to start looking from
 		 * @param {boolean} recursive if we are called again to activate the next step
 		 * @returns {void}

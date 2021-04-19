@@ -440,6 +440,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	 * Override this method in the state mixin so it doesn't
 	 * write the state to local storage. We only want this state
 	 * to persist in memory, not across refreshes.
+	 *
 	 * @param {Object} state the state to apply
 	 * @returns {void}
 	 */

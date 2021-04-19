@@ -85,6 +85,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
+		 *
 		 * @param  {string} assignment NTIID of the assignment
 		 * @param  {boolean} useCache -
 		 * @returns {Promse}			   fulfills with the history item
@@ -133,6 +134,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Returns the gradebook entry for an assignment
+		 *
 		 * @param  {string} assignment NTIID of the assignment
 		 * @returns {Promise}		   fulfills with the gradebook entry
 		 */
@@ -142,6 +144,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Returns the grade for a user on an assignment
+		 *
 		 * @param  {string} assignment NTIID of the assignment
 		 * @param  {string} user	   Username of the user
 		 * @returns {Promise}			fulfills with the grade
@@ -163,6 +166,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Returns a store with summaries for all the users
+		 *
 		 * @returns {Store}		pageable, sortable, searchable list of user summaries
 		 */
 		getGradeSummaries: function () {

@@ -41,6 +41,7 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * Return the weight of a tile for a record
+			 *
 			 * @param  {Model} record	the record to get the weight for
 			 * @returns {number}			weight of the tile
 			 */
@@ -50,6 +51,7 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * Return a number between [0,1] to help put newer items nearer the top
+			 *
 			 * @param  {Date} time the time from the record
 			 * @param {number} scale -
 			 * @returns {number} the time modifier to add to the weight

@@ -26,6 +26,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Load the context of UserData (i.e. note)
+		 *
 		 * @param  {[string]} type [type of context: card, list, or leave empty.
 		 *							Leave empty, in case of a note will be presented in a note window
 		 *							'card': to be rendered as a card, @see notes in activity.

@@ -145,6 +145,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	 * Return a promise that fulfills with the background image,
 	 * its a promise so the head requests have a change to fail so we can fall back
 	 * if the images aren't there
+	 *
 	 * @returns {Promise} fulfills with the url
 	 */
 	getBackgroundImage: function () {
@@ -368,6 +369,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 	/**
 	 * See getForumList in CourseInstance for more details
+	 *
 	 * @returns {Object} a forum list of the contents of this board
 	 */
 	getForumList: function () {

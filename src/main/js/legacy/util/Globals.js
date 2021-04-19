@@ -128,6 +128,7 @@ global.Globals = module.exports = exports = Ext.define(
 		/**
 		 * Should the given ntiid, url, and targetMimeType be opened in the app
 		 * or in another window.
+		 *
 		 * @param  {string} ntiid		   the ntiid of the thing
 		 * @param  {Srring} url			   the url to the thing
 		 * @param  {string} basePath		the pathname the app is hosted at.
@@ -157,6 +158,7 @@ global.Globals = module.exports = exports = Ext.define(
 
 		/**
 		 * Search the navigator for a  mimeType
+		 *
 		 * @param  {string} type mimeType to search for
 		 * @returns {MimeType}	 the mimeType if we find it or null
 		 */
@@ -176,6 +178,7 @@ global.Globals = module.exports = exports = Ext.define(
 
 		/**
 		 * Search the navigator for a plugin
+		 *
 		 * @param  {string} name name of the plugin
 		 * @returns {Plugin}		 the plugin if we find it or null
 		 */
@@ -435,6 +438,7 @@ global.Globals = module.exports = exports = Ext.define(
 
 				/**
 				 * Check all the style sheets of the link to see if the it has rules
+				 *
 				 * @returns {boolean} true if one matches false otherwise
 				 */
 				function checkIfLoaded() {

@@ -97,6 +97,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 	/**
 	 * Set a data transfer handler on the dropzone wrapper
+	 *
 	 * @param {Strins} key	   key to look up data on
 	 * @param {Object} handler the handlers, see NextThought.app.dnd.Dropzone
 	 * @returns {void}

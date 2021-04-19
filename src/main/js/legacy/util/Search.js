@@ -13,6 +13,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 
 	/**
 	 * If we have a cached regex for str return it otherwhise generate it
+	 *
 	 * @param  {string} str the term to search for
 	 * @param  {boolean} partial Set true to match the entire word not just the substring.
 	 * @param  {boolean} wholeWordOnly add \b to the end

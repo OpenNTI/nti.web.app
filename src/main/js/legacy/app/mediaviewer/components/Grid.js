@@ -275,6 +275,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Get list of videos for a course with section titles.
+		 *
 		 * @param {Object} bundle [description]
 		 * @returns {Promise} [description]
 		 */

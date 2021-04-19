@@ -180,6 +180,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	/**
 	 * Whether or not we have sent a view event for an ntiid
+	 *
 	 * @param  {string}	 id Ntiid to check
 	 * @returns {boolean}	[description]
 	 */

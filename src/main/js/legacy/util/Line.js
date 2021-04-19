@@ -141,8 +141,14 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return range;
 	},
 
-	/** @private */
-	//Gecko (FF)
+	/**
+	 * Gecko (FF)
+	 *
+	 * @private
+	 * @param {number} y
+	 * @param {Document} doc
+	 * @returns {Range}
+	 */
 	rangeByRecursiveSearch: function (y, doc) {
 		// y -= 30; //Correction
 		var curNode = doc.documentElement,
@@ -234,8 +240,14 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return range;
 	},
 
-	/** @private */
-	//webkit mostly
+	/**
+	 * webkit mostly
+	 *
+	 * @private
+	 * @param {number} y
+	 * @param {Document} doc
+	 * @returns {Range}
+	 */
 	rangeForLineByPoint: function (y, doc) {
 		var n = doc.querySelector('#NTIContent .page-contents'),
 			rect = n && n.getBoundingClientRect(),
@@ -381,8 +393,14 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return range;
 	},
 
-	/** @private */
-	//mozilla mostly
+	/**
+	 * mozilla mostly
+	 *
+	 * @private
+	 * @param {number} y
+	 * @param {Document} doc
+	 * @returns {Range}
+	 */
 	rangeForLineBySelection: function (y, doc) {
 		var xStart = 0,
 			xEnd = doc

@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	],
 
 	/**
-	 * @cfg {Object} tools
+	 * @property {Object} tools
 	 *
 	 * A dictionary of tools dictionaries.
 	 *

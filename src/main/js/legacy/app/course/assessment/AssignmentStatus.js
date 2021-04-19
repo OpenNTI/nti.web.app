@@ -333,6 +333,7 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * If there are any actions for a history item
+			 *
 			 * @param  {UsersCourseAssignmentHistoryItem}  containerRecord history item to check
 			 * @returns {boolean}		if there are actions
 			 */
@@ -348,6 +349,7 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * Return a menu of actions available for a history item
+			 *
 			 * @param  {UsersCourseAssignmentHistoryItem} containerRecord the history item we are getting actions for
 			 * @param {Function} onReset -
 			 * @param {Function} onExcused -

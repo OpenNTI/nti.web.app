@@ -383,6 +383,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Restore to an enrollment option
+		 *
 		 * @param  {string} type   name of the enrollment option
 		 * @param  {Array} config  array of configs for the option to parse
 		 * @returns {void}
@@ -521,6 +522,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Given a base enrollment option, fetch all the data
+		 *
 		 * @param  {Object} option option to load
 		 * @returns {Promise}	   fulfills when its loaded
 		 */
@@ -539,6 +541,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Given an enrollment option, fetch all the data for the option given
+		 *
 		 * @param  {Object} option the enrollment details
 		 * @returns {Promise}		 resolved if the option is available, reject if not;
 		 */
@@ -562,6 +565,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Takes the enrollment details for the course and build the
 		 * data necessary to make the enrollment card
+		 *
 		 * @param  {Object} details enrollment details
 		 * @returns {Promise}		 fulfills when its done, a rejection is not expected
 		 */
@@ -1064,6 +1068,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Handles a click on the enrollment card and calls the appropriate handler
+		 *
 		 * @param  {Event} e the click event
 		 * @returns {boolean}   if the event was stopped
 		 */
@@ -1093,6 +1098,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Updates the cards and button toggling a addon
+		 *
 		 * @param  {Ext.element} checkbox the addon element
 		 * @param  {Event} e		the click event
 		 * @returns {void}
@@ -1154,6 +1160,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Handles anchors with hrefs that we are looking for
+		 *
 		 * @param  {Ext.element} link the anchor that was clicked
 		 * @param  {Event} e	the click event
 		 * @returns {boolean}	  whether or not the event should be stopped
@@ -1225,6 +1232,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Handles the button being clicked for enrolling/dropping
+		 *
 		 * @param  {Ext.element} button the button element
 		 * @param  {Event} e	  the click event
 		 * @returns {void}

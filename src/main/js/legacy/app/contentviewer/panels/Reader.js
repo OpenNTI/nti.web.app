@@ -373,6 +373,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Return true if the reader should allow itself to be close
 		 * false should attempt to stop the navigation if it can
+		 *
 		 * @param {boolean} forced forced?
 		 * @returns {Promise} fulfills once it can navigate, or rejects if it needs to stop
 		 */

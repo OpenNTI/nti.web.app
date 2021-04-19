@@ -201,6 +201,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Given a base enrollment option, fetch all the data
+		 *
 		 * @param  {Object} option option to load
 		 * @returns {Promise}	   fulfills when its loaded
 		 */
@@ -223,6 +224,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Given an enrollment option, fetch all the data for the option given
+		 *
 		 * @param  {Object} option the enrollment details
 		 * @returns {Promise}		 resolved if the option is available, reject if not;
 		 */
@@ -246,6 +248,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Takes the enrollment details for the course and build the
 		 * data necessary to make the enrollment card
+		 *
 		 * @param  {Object} details enrollment details
 		 * @returns {Promise}		 fulfills when its done, a rejection is not expected
 		 */

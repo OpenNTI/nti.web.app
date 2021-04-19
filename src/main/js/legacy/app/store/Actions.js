@@ -213,6 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 	/**
 	 * validates a coupon code or figures the cost for activation keys
+	 *
 	 * @param {Component} sender  the form that is sending the request
 	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.	 Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param {Function} success The success callback called if the provided coupone is valid
@@ -576,6 +577,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 	/**
 	 * Submit a redeem token for a purchasable
+	 *
 	 * @param  {Ext.Component} sender	   the component sending the request
 	 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
 	 * @param  {string} token		the redeem token

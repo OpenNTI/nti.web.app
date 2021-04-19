@@ -33,6 +33,10 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 
 	/**
 	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
+	 *
+	 * @param {Node} node
+	 * @param {(node: Node) => boolean} nodeFilterFn
+	 * @returns {?{ text: string; indices: Array.<{i: number; n: ?Node}>}}
 	 */
 	// Author: Raymond Hill
 	// Version: 2011-01-17

@@ -211,6 +211,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 	/**
 	 * From a note, build its reply
+	 *
 	 * @returns {NextThought.model.Note} -
 	 */
 	makeReply: function () {

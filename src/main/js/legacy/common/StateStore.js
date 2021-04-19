@@ -51,6 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 	/**
 	 * A wrapper so we don't have to repeat this everywhere
 	 * make sure setLoaded is called at some point if you use this
+	 *
 	 * @returns {Promise} fulfills once setLoaded has been called
 	 */
 	onceLoaded: function () {

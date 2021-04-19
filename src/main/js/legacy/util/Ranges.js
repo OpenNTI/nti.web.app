@@ -353,6 +353,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 	/**
 	 * Takes a range or a rangy range and returns the bounding rect
+	 *
 	 * @param {Range} r - either a browser range or a rangy range
 	 * @returns {ClientRect} The bounding rect of the range.
 	 */
@@ -419,7 +420,9 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 */
 	getContextAroundRange: function (
 		applicableRange,
-		doc /*, cleanRoot, containerId*/
+		doc,
+		cleanRoot,
+		containerId
 	) {
 		var utils = applicableRange.isTimeRange ? AnchorResolver : Anchors,
 			range = utils.toDomRange.apply(utils, arguments);
@@ -459,6 +462,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * Gets the bounding rect of the provided range.  If the rect is zero
 	 * but the range is not collapsed we will attempt to get the bounding box
 	 * based on the ranges contents.  We do this because IE sucks.
+	 *
 	 * @param {Range} r A range
 	 * @returns {Rect} A rect
 	 */

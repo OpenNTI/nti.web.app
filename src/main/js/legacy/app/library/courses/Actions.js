@@ -48,7 +48,8 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Load the admin and enrolled courses, set the link for all courses so it can be loaded when needed
-		 * @param  {Service} s the service doc to get the links from
+		 * the service doc to get the links from
+		 *
 		 * @returns {Promise}   fulfills when all the courses have been loaded
 		 */
 		loadCourses: function () {
@@ -240,6 +241,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Iterate the items and call __precacheEntry on those that have it
+		 *
 		 * @param  {Array} items items to iterate
 		 * @returns {Promise}	   fulfills when all of the items precaches have finished
 		 */

@@ -15,7 +15,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Construct an instance of a StreamSource
 		 *
-		 * @memberOf NextThought.app.stream.util.StreamSource#
+		 * @memberof NextThought.app.stream.util.StreamSource#
 		 *
 		 * @param {Object} config values to set up the stream source with
 		 * @param {string} config.batch which batch to start on
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Build the params to send back with the request
 		 *
-		 * @memberOf  NextThought.app.stream.util.StreamSource#
+		 * @memberof  NextThought.app.stream.util.StreamSource#
 		 * @returns {Object} params
 		 */
 		getParams: function () {

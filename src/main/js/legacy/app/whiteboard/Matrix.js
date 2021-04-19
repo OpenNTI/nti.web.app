@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	/**
 	 *
-	 * @param {boolean} [averaged]-
+	 * @param {boolean} [averaged]
 	 * @returns {number} scale
 	 */
 	getScale: function (averaged) {

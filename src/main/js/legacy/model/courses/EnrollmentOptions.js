@@ -34,6 +34,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * For now, a course is droppable when we have an explicit open enrollment. Otherwise, it's not.
+		 *
 		 * @returns {boolean} whether it's droppable or not.
 		 */
 		isDroppable: function () {

@@ -232,6 +232,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	/**
 	 *
 	 * Get or generate the icon data for a related work.
+	 *
 	 * @param {string} root - the base root.
 	 * @returns {Object}	- The icon data object will have the following fields:
 	 * - url: The url for the icon. This field is required.

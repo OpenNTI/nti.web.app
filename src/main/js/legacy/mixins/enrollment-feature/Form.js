@@ -232,6 +232,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Fire an event to show an error on the window
+		 *
 		 * @param  {Object|string} json the message to alert
 		 * @returns {void}
 		 */

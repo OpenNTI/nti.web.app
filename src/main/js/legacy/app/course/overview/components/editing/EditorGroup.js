@@ -7,8 +7,8 @@ module.exports = exports = Ext.define(
 			/**
 			 * Get a list of all the editors in this group
 			 *
-			 * @override
-			 * @returns {[Editors]} the editors
+			 * @abstract
+			 * @returns {Editors[]} the editors
 			 */
 			getSubEditors: function () {},
 
@@ -84,6 +84,7 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * Return the editor in this group that can handle a record
+			 *
 			 * @param {Object} record the record to find the editor for
 			 * @returns {Editor} the Class to instantiate to edit the record
 			 */
@@ -124,6 +125,8 @@ module.exports = exports = Ext.define(
 
 			/**
 			 * Return the type switcher to handle switching between the items in the group
+			 *
+			 * @abstract
 			 * @returns {Object} component to handle switching types
 			 */
 			getTypeSwitcher: function () {},

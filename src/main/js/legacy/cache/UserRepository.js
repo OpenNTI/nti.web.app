@@ -345,8 +345,9 @@ User.Repository = global.UserRepository = module.exports = exports = Ext.define(
 		//<editor-fold desc="Bulk Request">
 		/**
 		 * Perform a bulk resolve. (and gather as many concurrent resolves as passible w/o delaying too long)
-		 * @param {String[]} names
-		 * @return {Promise}
+		 *
+		 * @param {string[]} names
+		 * @returns {Promise}
 		 */
 		bulkResolve: (function () {
 			var toResolve = [],

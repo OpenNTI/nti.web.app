@@ -21,6 +21,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	//needs testing? where did the test go?
 	/**
 	 * From a reply, build its absent parent
+	 *
 	 * @param {NextThought.model.Note} note note
 	 * @returns {NextThought.model.Note} placeholder
 	 */

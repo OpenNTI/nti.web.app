@@ -138,6 +138,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 *
 	 * handler should return its part of the url, or a string to use as the route
 	 * the handler can return a promise
+	 *
 	 * @param {Function|string} handler default route to apply or function to call
 	 * @returns {void}
 	 */
@@ -195,6 +196,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Given a route call a handler if we have one for it
+	 *
 	 * @param  {string} path the route to handle
 	 * @param {Object} precache a map of keys to precached objects
 	 * @returns {Promise} fulfills with the return value of the handler
@@ -315,6 +317,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Given a route call a handler if we have one for it
+	 *
 	 * @param  {string} path the route to handle
 	 * @param {Object} precache a map of keys to precached objects
 	 * @returns {Promise} fulfills with the return value of the handler
@@ -462,7 +465,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Gets called whenever a route we handle becomes active
-	 * @override
+	 *
+	 * @abstract
 	 */
 	__onInternalRouteActivate: function () {
 		if (this.wasDeactivedWhileHandlingRoute) {
@@ -474,7 +478,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Gets called whenever a route we handle changes
-	 * @override
+	 *
+	 * @abstract
 	 * @param {string} route the new route
 	 */
 	__onInternalRouteDeactivate: function (route) {
@@ -530,7 +535,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Return a title to put in the history.pushState title for this route
-	 * @override
+	 *
+	 * @abstract
 	 * @returns {string} a title to describe the state of this route
 	 */
 	getRouteTitle: function () {
@@ -539,6 +545,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Return objects to apply to the cache to speed up handling a route
+	 *
 	 * @returns {Object} items to merge into the precache
 	 */
 	getRoutePrecache: function () {
@@ -613,6 +620,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the child's route with mine and push it
+	 *
 	 * @param  {string} title	 title of the route
 	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
@@ -624,6 +632,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and replace it
+	 *
 	 * @param  {string} title	 title of the route
 	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
@@ -660,6 +669,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and push it
+	 *
 	 * @param {string} cmp key of the cmp
 	 * @param {Object} obj state object
 	 * @param  {string} title	 title of the route
@@ -675,6 +685,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and replace it
+	 *
 	 * @param {string} cmp the key of the cmp
 	 * @param {Object} obj state object
 	 * @param  {string} title	 title of the route
@@ -697,6 +708,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge my title in to the childs and set it
+	 *
 	 * @param {string} title title to set on the document
 	 * @returns {void}
 	 */
@@ -714,74 +726,84 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Set the title of the document
+	 *
+	 * @abstract
 	 * @param {string} title title to set on the document
 	 * @returns {void}
 	 */
-	setTitle: function (/*title*/) {},
+	setTitle: function (title) {},
 
 	/**
 	 * Push a current route
-	 * @override
+	 *
+	 * @abstract
 	 * @param  {string} title the title to set on the document
 	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 * @returns {void}
 	 */
-	pushRoute: function (/*title, route, precache*/) {},
+	pushRoute: function (title, route, precache) {},
 
 	/**
 	 * Replace the current route
-	 * @override
+	 *
+	 * @abstract
 	 * @param  {string} title the title to set on the document
 	 * @param  {string} route	the route to replace with
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 * @returns {void}
 	 */
-	replaceRoute: function (/*title, route, precache*/) {},
+	replaceRoute: function (title, route, precache) {},
 
 	/**
 	 * Skips all the route building and sets it on the root
-	 * @override
+	 *
+	 * @abstract
 	 * @param  {string} title the title to set on the document
 	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	pushRootRoute: function (/*title, route, precache*/) {},
+	pushRootRoute: function (title, route, precache) {},
 
 	/**
 	 * Skips all the route building and sets it on the root
-	 * @override
+	 *
+	 * @abstract
 	 * @param  {string} title the title to set on the document
 	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 * @returns {void}
 	 */
-	replaceRootRoute: function (/*title, route, precache*/) {},
+	replaceRootRoute: function (title, route, precache) {},
 
 	/**
 	 * Push a state object to the history
+	 *
 	 * @param  {Object} obj		 state object to push
 	 * @param  {string} title	 title of the state
 	 * @param  {string} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 * @returns {void}
 	 */
-	pushRouteState: function (/*obj, title, route, precache*/) {},
+	pushRouteState: function (obj, title, route, precache) {},
 
 	/**
 	 * Push a state object to the history
+	 *
+	 * @abstract
 	 * @param  {Object} obj		 state object to push
 	 * @param  {string} title	 title of the state
 	 * @param  {string} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 * @returns {void}
 	 */
-	replaceRouteState: function (/*obj, title, route, precache*/) {},
+	replaceRouteState: function (obj, title, route, precache) {},
 
 	/**
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
-	 * @override
+	 *
+	 * @abstract
 	 * @returns {boolean|Promise} if we can navigate
 	 */
 	allowNavigation: function () {

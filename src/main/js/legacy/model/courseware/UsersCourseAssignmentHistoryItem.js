@@ -341,6 +341,7 @@ module.exports = exports = Ext.define(
 		 * 1.)	Fufill with false if they cancel the dialog
 		 * 2.)	Rejects if the request was unsuccessful
 		 * 3.)	Fulfills with true if the request was successful
+		 *
 		 * @param  {boolean} isMine Which message to show in the confirmation
 		 * @returns {Promise}		 fulfills is it was successful
 		 */
@@ -702,9 +703,10 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Given a value and letter for a grade, either create one or update an existing one
+		 *
 		 * @param  {string} value  value of the grade
 		 * @param  {Char} letter letter of the grade
-		 * @param  {function} callback Called with response of setGrade
+		 * @param  {Function} callback Called with response of setGrade
 		 * @returns {Promise}	 fulfills when the grade has been saved
 		 */
 		saveGrade: function (value, letter, callback) {

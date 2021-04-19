@@ -323,6 +323,7 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * A list of keys to not include when syncing a record
+	 *
 	 * @type {Array}
 	 */
 	SYNC_BLACKLIST: [],
@@ -379,7 +380,6 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 	 *
 	 * @param  {Model} record the instance to update with
 	 * @param {boolean} silent do not fire the update event
-	 * @param {Object} refreshInterfaceRaw raw data to update the interface with
 	 * @returns {void}
 	 */
 	syncWith: function (record, silent) {
@@ -622,6 +622,7 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Caller should wrap in beginEdit() and endEdit()
+	 *
 	 * @param {Ext.data.Model} recordSrc the source record to copy
 	 * @param {...string} fields A vararg list of fields
 	 * @returns {void}
@@ -1092,6 +1093,7 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Calls the href and fills in the values missing.
+	 *
 	 * @returns {void}
 	 */
 	resolve: function () {
@@ -1364,8 +1366,9 @@ const Base = (module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 	/**
-	 * @private
 	 * property {Boolean} destroyDoesNotClearListeners
+	 *
+	 * @private
 	 */
 	destroyDoesNotClearListeners: false,
 

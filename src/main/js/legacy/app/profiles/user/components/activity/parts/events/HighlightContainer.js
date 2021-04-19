@@ -205,6 +205,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * This is intended to be a callback. No return value. We modify {data}
+		 *
 		 * @param {Object} data the output
 		 * @param {Object} groupings the input
 		 * @returns {Promise} -
@@ -280,7 +281,7 @@ module.exports = exports = Ext.define(
 		},
 
 		/**
-		 * @override {Ext.Component#beforeRender}
+		 * @override
 		 */
 		beforeRender: function () {
 			this.callParent(arguments);

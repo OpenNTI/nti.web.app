@@ -18,6 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		/**
 		 * Takes a grade object and returns a display value
 		 * It looks for value, letter, correctness, and grade
+		 *
 		 * @param  {Object} values grade values to get the display for
 		 * @returns {string}		   [escription]
 		 */
@@ -172,6 +173,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 	/**
 	 * Looks at the value for the grade and parses it into a value and letter value
+	 *
 	 * @returns {Object} an object with value and letter for keys
 	 */
 	getValues: function () {
@@ -349,6 +351,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	/**
 	 * Check if the value is empty, need to handle
 	 * "# L", "# -", " L", " " -", "#", and ""
+	 *
 	 * @returns {boolean} -
 	 */
 	isEmpty: function () {

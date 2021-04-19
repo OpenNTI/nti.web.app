@@ -102,6 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 
 	/**
 	 * Parse a video object and build the context component
+	 *
 	 * @param {Object} obj [video object]
 	 * @param {string} kind kind?
 	 * @returns {Promise}	   [promise that will resolve with an Ext.Component]

@@ -34,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		 *	end: TimeStamp,
 		 *	key: Number, key in the WEEK_MAP
 		 *}
+		 *
 		 * @type {Array}
 		 */
 		this.WEEK_RANGES = [];

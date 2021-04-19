@@ -106,6 +106,7 @@ module.exports = exports = Ext.define(
 		/**
 		 *
 		 * Get or generate the icon data for a related work.
+		 *
 		 * @param {string} root - the base root.
 		 * @returns {Object}	- The icon data object will have the following fields:
 		 * - url: The url for the icon. This field is required.
@@ -134,6 +135,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Resolve the icon to the content package if we don't have one set
+		 *
 		 * @param {string} root - the base root.
 		 * @returns {Promise}        fulfills with the a object that has url, extension, and icon cls
 		 */

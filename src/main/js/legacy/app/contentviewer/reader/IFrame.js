@@ -822,6 +822,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Makes pointer events go through the iframe so that all the
 		 * interactions can be handled manually.
+		 *
 		 * @param {boolean} should -
 		 * @returns {void}
 		 */
@@ -914,6 +915,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Positions relative to the window
+		 *
 		 * @param {number} x1 -
 		 * @param {number} y1 -
 		 * @param {number} x2 -

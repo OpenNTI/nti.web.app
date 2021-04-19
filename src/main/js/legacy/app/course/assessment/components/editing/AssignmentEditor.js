@@ -76,7 +76,8 @@ module.exports = exports = Ext.define(
 		 * Also make sure you keep the background record (one belonging to the assignmentCollection)
 		 * is updated. They could differ but they are both the same assignment
 		 * and we need to make sure they are always in sync.
-		 * @returns {Null} No Return
+		 *
+		 * @returns {null} No Return
 		 */
 		async updateAssignment() {
 			const assignment = this.assignment;

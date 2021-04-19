@@ -38,8 +38,9 @@ module.exports = exports = Ext.define(
 		/**
 		 * Remove any content packages in the used map
 		 * TODO: needs unit tests
+		 *
 		 * @param  {Object} used keys are the ids of content packages to remove
-		 * @returns {boolean} -
+		 * @returns {void}
 		 */
 		deDupContentPackages: function (used) {
 			this.CONTENT_PACKAGES = this.CONTENT_PACKAGES.filter(function (

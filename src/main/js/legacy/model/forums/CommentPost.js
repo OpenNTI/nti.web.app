@@ -71,6 +71,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 
 	/**
 	 *	Make a reply to this comment
+	 *
 	 *	@returns {NextThought.model.forums.CommentPost} -
 	 */
 	makeReply: function () {

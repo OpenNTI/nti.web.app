@@ -49,6 +49,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	/**
 	 * Given an object return the mime type
+	 *
 	 * @param  {Object|string} object --
 	 * @returns {string}		  object's mime type
 	 */
@@ -66,6 +67,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	/**
 	 * Given an object (or mime type) return a Promise that is the return value of the handler
+	 *
 	 * @param  {Object|string} objectOrMimeType thing to handle
 	 * @returns {Promise}				  fulfills with handler's return
 	 */

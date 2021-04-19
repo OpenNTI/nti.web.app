@@ -31,6 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 
 	/**
 	 * Contains a map of a mimeType to a component to show for it
+	 *
 	 * @type {Object}
 	 */
 	MIME_TO_COMPONENTS: {},
@@ -40,22 +41,25 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 
 	/**
 	 * The text to display when its empty
+	 *
 	 * @override
-	 * @type {String}
+	 * @type {string}
 	 */
 	emptyText: '',
 
 	/**
 	 * The text to display when there is an error
+	 *
 	 * @override
-	 * @type {String}
+	 * @type {string}
 	 */
 	errorText: 'Error: Unable to load more data.',
 
 	/**
 	 * The text to display at the bottom of the list
+	 *
 	 * @override
-	 * @type {String}
+	 * @type {string}
 	 */
 	doneText: '',
 

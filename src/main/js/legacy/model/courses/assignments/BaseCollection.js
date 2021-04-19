@@ -239,6 +239,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Search both the assignments and non-assignments for an item with an id
+		 *
 		 * @param  {string} id the id to search for
 		 * @returns {Object}	   the item if there is one
 		 */
@@ -326,6 +327,7 @@ module.exports = exports = Ext.define(
 		/**
 		 * Get the no submit assignment that has a title of Final Grade if there is one
 		 * TODO: figure out where there is a link to this to compare instead
+		 *
 		 * @returns {Assignment} the final grade assignment or null if there isn't one
 		 */
 		getFinalGradeAssignment: function () {

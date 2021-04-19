@@ -28,6 +28,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	/**
 	 * Given a record determine what key should be used to locate it
 	 * can be overridden
+	 *
 	 * @param  {ModelInstance|JSON} record the record to look up or data for a record
 	 * @returns {string}		   key
 	 */
@@ -46,6 +47,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	/**
 	 * Given a record return the url used to get it
 	 * can be overridden
+	 *
 	 * @param  {ModelInstance|JSON} record record to get url for or data for a record
 	 * @returns {string}		   the url
 	 */
@@ -75,6 +77,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	/**
 	 * Set the values of the record from the server to the shared instance
+	 *
 	 * @param {string} key key for the record
 	 * @param {ModelInstance} record the record to sync from
 	 * @returns {void}
@@ -102,6 +105,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	/**
 	 * Fetch the record from the server and update the values in the shared instance
+	 *
 	 * @param  {ModelInstance} record record to sync
 	 * @returns {void}
 	 */
@@ -168,6 +172,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	/**
 	 * Given a key find the record in the cache if it exists
+	 *
 	 * @param  {string} key key for the record
 	 * @returns {ModelInstance}	   the cached record
 	 */

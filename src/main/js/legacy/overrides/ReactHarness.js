@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	alias: 'widget.react',
 
 	/**
-	 * @cfg {React.Component} component
+	 * @property {React.Component} component The react component to render
 	 */
 
 	onMsgBarUpdated() {
@@ -272,10 +272,6 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 		this.setRouteViewTitle = this.setRouteViewTitle.bind(this);
 	},
-
-	/**
-	 * @cfg {...} ...  Any additional config properties will be pased as props to the component.
-	 */
 
 	getProps() {
 		const { initialConfig: config } = this;
@@ -342,9 +338,10 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 	/**
-	 * @private
 	 *
 	 * Executes ReactDOM.render with the current props. If the component is already mounted, it will reuse and update.
+	 *
+	 * @private
 	 * @returns {void}
 	 */
 	doRender() {
@@ -424,10 +421,11 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 	/**
-	 * @private
 	 * This is here primarily as an example of ways to interact with the component. nothing more.
 	 *
 	 * Merges the imput state with the current state.
+	 *
+	 * @private
 	 * @param {Object} state new state values
 	 * @returns {void}
 	 */
@@ -439,10 +437,11 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 	/**
-	 * @private
 	 * This is here primarily as an example of ways to interact with the component. nothing more.
 	 *
 	 * Replaces the entire state object.
+	 *
+	 * @private
 	 * @param {Object} state new state values
 	 * @returns {void}
 	 */

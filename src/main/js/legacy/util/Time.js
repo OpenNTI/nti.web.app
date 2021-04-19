@@ -125,6 +125,7 @@ global.TimeUtils = module.exports = exports = Ext.define(
 
 		/**
 		 * Takes two dates and returns true if they are on the same day
+		 *
 		 * @param  {Date}  a date to compare
 		 * @param  {Date}  b the other date to compare
 		 * @returns {boolean}   if they are on the same day
@@ -356,6 +357,7 @@ exports._timer = function () {
 
 	/**
 	 * Start the count down/up and update on the interval
+	 *
 	 * @param  {number} i how often to update
 	 * @returns {Object}			 this so calls can be chained
 	 */
@@ -387,6 +389,7 @@ exports._timer = function () {
 
 	/**
 	 * Set a count down from t to f
+	 *
 	 * @param  {Date|number} t date or milliseconds to stop at
 	 * @param  {Date|number} f date or milliseconds to start at
 	 * @returns {Object}	  this so calls can be chained
@@ -407,6 +410,7 @@ exports._timer = function () {
 
 	/**
 	 * Set a count up from t to f
+	 *
 	 * @param  {Date|number} t date or milliseconds to stop at
 	 * @param  {Date|number} f date or milliseconds to start at
 	 * @returns {Object}	  this so calls can be chained
@@ -460,6 +464,7 @@ exports._timer = function () {
 
 	/**
 	 * Clear the interval, make sure this gets called. Otherwise we will have an interval hanging around
+	 *
 	 * @returns {Object} return this so calls can be chained
 	 */
 	this.stop = function () {
@@ -470,6 +475,7 @@ exports._timer = function () {
 
 	/**
 	 * A callback to be called when the timer reaches the destination
+	 *
 	 * @param  {Function} fn [description]
 	 * @returns {Object}		 return this so calls can be chained
 	 */

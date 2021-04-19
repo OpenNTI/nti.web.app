@@ -10,6 +10,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * get the enrolled wording for this option if we haven't already
+		 *
 		 * @returns {string} the wording for this option
 		 */
 		getEnrolledWording: function () {
@@ -89,6 +90,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * if we haven't gotten this.ENROLLMENT_STATES get the string and get the value for this enrollment option
+		 *
 		 * @param  {string} state the state to get strings for
 		 * @returns {Object}		  the different wordings for this state
 		 */
@@ -160,6 +162,8 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Parse out all the information needed to build the enrollment text
+		 *
+		 * @abstract
 		 * @param  {Object} course	details about the course
 		 * @param  {Object} option details about the option
 		 * @returns {Object}			parsed details
@@ -174,6 +178,7 @@ module.exports = exports = Ext.define(
 		 *		IsEnrlled: Boolean if they are enrolled in that option
 		 *	}
 		 *
+		 * @abstract
 		 * @param {CourseCatalogEnrty} course the course we are looking at
 		 * @param {Object} details parsed enrollment details for the course
 		 * @returns {Object} -

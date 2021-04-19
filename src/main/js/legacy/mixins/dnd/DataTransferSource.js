@@ -11,6 +11,7 @@ module.exports = exports = Ext.define(
 	{
 		/**
 		 * Stringify the value of getDataForTransfer
+		 *
 		 * @returns {string} value for the data transfer
 		 */
 		getDataTransferValue: function () {

@@ -157,6 +157,7 @@ module.exports = exports = Ext.define(
 
 		/**
 		 * Set the number of columns the list can fill
+		 *
 		 * @param {number} width the number of columns
 		 * @returns {void}
 		 */

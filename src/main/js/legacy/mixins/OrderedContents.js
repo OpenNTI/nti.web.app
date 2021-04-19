@@ -206,6 +206,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 	/**
 	 * Append the values form a form component
+	 *
 	 * @param  {NextThought.common.form.Form} form the form component
 	 * @returns {Promise} -
 	 */
@@ -294,6 +295,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 	/**
 	 * Move a record from a given container to the end of my ordered contents
+	 *
 	 * @param  {Object} record	  record to move
 	 * @param  {Object|string} oldParent the current parent
 	 * @param  {Object} root	  the root of me and the oldParent

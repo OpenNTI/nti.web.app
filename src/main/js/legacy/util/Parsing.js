@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	/**
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
-
+	 
 	 * @param {string} id id
 	 * @returns {Object} an object containing the components of the id
 	 */
@@ -227,6 +227,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	/**
 	 * CSS escape ids
+	 *
 	 * @param {string} id id
 	 * @returns {string} CSS-friendly string to use in a selector
 	 */
@@ -239,6 +240,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	/**
 	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
+	 *
 	 * @param {string} id id
 	 * @returns {string} see description
 	 */

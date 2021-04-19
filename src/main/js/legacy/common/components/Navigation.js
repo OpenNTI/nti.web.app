@@ -177,6 +177,7 @@ module.exports = exports = Ext.define(
 		 *		text: String, //the name of the tab,
 		 *		active: Boolean //if this is the active tab
 		 * }
+		 *
 		 * @param {Array} tabs a list of tab configs to show
 		 * @returns {void}
 		 */

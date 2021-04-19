@@ -16,6 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 
 	/**
 	 * Transition to a course, if passed an element from the library show the image expanding
+	 *
 	 * @param  {string} ntiid	   the course id to navigate to
 	 * @param  {Element} libraryCard dom node of the image to expand
 	 * @param {string} part the part of the course to route to

@@ -198,11 +198,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	/**
 	 * Check to see if a room already exists.  A room exists when any of the following conditions are met, in this order:
 	 *1) if there's a roomId sent.	there must be an existing roomId in the active rooms object.
-	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
+	 *2) if no roomId is sent, then look for a room with the same constituents, that room must not be a group/class.
 	 *
 	 * @param {Array} users list of users
-	 * @param {string} roomId roomid
-	 * @param {Object} options options
+	 * @param {string} roomId roomId
 	 * @returns {NextThought.model.RoomInfo} RoomInfo
 	 */
 	existingRoom: function (users, roomId) {
@@ -281,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	isPersistentRoomId: function (id) {
-		return /meetingroom/i.test(id);
+		return /MeetingRoom/i.test(id);
 	},
 
 	isOccupantsKeyAccepted: function (id) {
