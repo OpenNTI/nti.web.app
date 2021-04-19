@@ -49,18 +49,18 @@
 	}
 }
 
-@mixin loadingSpinner($top: 12px, $left: 16px) {
+@mixin loadingSpinner($top: 8px, $left: 10px) {
 	display: block;
 	content: ' ';
 	background: {
 		image: $loading-indicator;
-		size: cover;
+		size: 16px;
 		position: center center;
 		repeat: no-repeat;
 	}
 
-	width: 16px;
-	height: 16px;
+	width: 24px;
+	height: 24px;
 	position: absolute;
 	top: $top;
 	left: $left;
