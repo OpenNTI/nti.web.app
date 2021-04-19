@@ -25,8 +25,12 @@ module.exports = exports = Ext.define(
 			this.LoginActions = LoginActions.create();
 		},
 
-		async afterRender() {
+		afterRender() {
 			this.callParent(arguments);
+			this.monitorBodyClicks();
+		},
+
+		async monitorBodyClicks() {
 			const service = await getService();
 			const supportLinks = service.getSupportLinks();
 
