@@ -19,8 +19,8 @@
     "build": "app-scripts build",
     "clean": "app-scripts clean",
     "check": "app-scripts check",
-    "release": "app-scripts release",
-    "snapshot": "app-scripts snapshot",
+    "release": "npx @nti/release",
+    "snapshot": "npx @nti/snapshot",
     "watch-legacy": "npx nodemon . -i './src/main/resources/scss/utils/_icons.scss' -e scss -x 'node ./config/build-hook.js'"
   },
   "main": "dist/server/index.js",
