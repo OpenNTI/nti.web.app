@@ -1,39 +1,59 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { Layouts } from '@nti/web-commons';
 import Ext from '@nti/extjs';
 
 WebappCalendarWindow.propTypes = {
 	onClose: PropTypes.func.isRequired,
 	target: PropTypes.object.isRequired,
+	visible: PropTypes.bool.isRequired,
 };
 
-export default function WebappCalendarWindow({ onClose, target }) {
+export default function WebappCalendarWindow({ onClose, target, visible }) {
 	const windowRef = React.useRef(null);
-	const rebuildRef = React.useRef(null);
 
-	const onUnmount = React.useCallback(() => {
-		windowRef.current.destroy();
-	}, [windowRef]);
+	React.useEffect(() => windowRef.current?.destroy(), []);
 
-	const onMount = React.useCallback(() => {
-		const win = Ext.widget('gutter-list-calendar-window', {
-			renderTo: Ext.get(target),
-			onClose: onClose,
+	React.useEffect(() => {
+		// capture the instance value of 'current' into this closure so it won't change when 'current' will.
+		// This way the calls to 'un' and 'destroy' apply to the correct reference.
+		const ref = windowRef.current;
 
-			onItemClick: obj => {
-				// temp solution to prevent having stale webinars in the calendar
-				if (obj.hasLink && obj.hasLink('WebinarRegister')) {
-					// clearTimeout(this.calendarDirty);
-					rebuildRef.current = true;
-				}
-			},
-			navigateToObject: obj => this.navigateToObject(obj),
-		});
+		const listen = {
+			single: true,
+			close: onClose,
+		};
 
-		windowRef.current = win;
-	}, [windowRef, rebuildRef]);
+		ref?.on(listen);
+		return () => {
+			ref?.un(listen);
+			ref?.destroy();
+		}
+	}, [windowRef.current]);
 
-	return <Layouts.Uncontrolled onMount={onMount} onUnmount={onUnmount} />;
+	React.useEffect(() => {
+		if (!visible) {
+			windowRef.current?.hide();
+		}
+		else if (windowRef.current) {
+			windowRef.current?.show();
+		}
+		else if (target) {
+			const win = Ext.widget('gutter-list-calendar-window', {
+				renderTo: Ext.get(target),
+				onClose: onClose,
+				navigateToObject: obj => this.navigateToObject(obj),
+			});
+			if (!visible) {
+				win.hide();
+			}
+			windowRef.current = win;
+		}
+
+		return () => {
+			windowRef.current?.hide();
+		}
+	}, [visible]);
+
+	return null;
 }
