@@ -15,6 +15,8 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 	React.useEffect(() => windowRef.current?.destroy(), []);
 
 	React.useEffect(() => {
+		// capture the instance value of 'current' into this closure so it won't change when 'current' will.
+		// This way the calls to 'un' and 'destroy' apply to the correct reference.
 		const ref = windowRef.current;
 
 		const listen = {
