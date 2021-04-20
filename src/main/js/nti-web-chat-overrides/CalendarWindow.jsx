@@ -15,14 +15,17 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 	React.useEffect(() => windowRef.current?.destroy(), []);
 
 	React.useEffect(() => {
+		const ref = windowRef.current;
+
 		const listen = {
 			single: true,
 			close: onClose,
 		};
 
-		windowRef.current?.on(listen);
+		ref?.on(listen);
 		return () => {
-			windowRef.current?.un(listen);
+			ref?.un(listen);
+			ref?.destroy();
 		}
 	}, [windowRef.current]);
 
