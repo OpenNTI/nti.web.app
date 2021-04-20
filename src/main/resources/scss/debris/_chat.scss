@@ -1,4 +1,6 @@
 .chat-window {
+	z-index: 1 !important;
+
 	@extend .nti-window;
 
 	right: 80px !important;
