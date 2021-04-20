@@ -12,6 +12,8 @@ WebappCalendarWindow.propTypes = {
 export default function WebappCalendarWindow({ onClose, target, visible }) {
 	const windowRef = React.useRef(null);
 
+	React.useEffect(() => windowRef.current?.destroy(), []);
+
 	React.useEffect(() => {
 		const listen = {
 			single: true,
@@ -44,7 +46,7 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 		}
 
 		return () => {
-			windowRef.current?.destroy();
+			windowRef.current?.hide();
 		}
 	}, [visible]);
 
