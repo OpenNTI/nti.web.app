@@ -44,7 +44,7 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 		}
 
 		return () => {
-			windowRef.current?.hide();
+			windowRef.current?.destroy();
 		}
 	}, [visible]);
 
