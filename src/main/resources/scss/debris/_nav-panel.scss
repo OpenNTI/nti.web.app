@@ -45,3 +45,13 @@
 		margin-left: 260px;
 	}
 }
+
+
+@media (max-width: 1024px) {
+	.navigation-panel {
+		.navigation-view.floating {
+			position: absolute;
+			top: 20px;
+		}
+	}
+}
