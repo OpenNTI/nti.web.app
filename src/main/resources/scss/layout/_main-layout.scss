@@ -56,10 +56,13 @@ html.x-viewport {
 			display: block;
 		}
 	}
+
+	& > body.x-body {
+		min-width: 1024px;
+	}
 }
 
 body.x-body {
-	min-width: 1024px;
 	min-height: calc(100vh - #{$header-height});
 	// Now that we scroll the window, this needs to force overflow visible. (positioned things that drop
 	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
