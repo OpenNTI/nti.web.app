@@ -5,7 +5,7 @@ export default class SiteBrand extends Models.Base {
 
 	// prettier-ignore
 	static Fields = {
-		...Models.Base.Fields,
+		...super.Fields,
 		assets:      { type: 'object' },
 		theme:       { type: 'object' },
 		brand_name:  { type: 'string' },
