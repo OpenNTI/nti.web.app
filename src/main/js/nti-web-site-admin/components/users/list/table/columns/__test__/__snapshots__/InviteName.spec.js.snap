@@ -4,6 +4,10 @@ exports[`Site admin user table invite name column test Test admin invitation 1`]
 <div
   className="cell"
 >
+  <img
+    className="avatar avatar-color-6"
+    src="unresolved-user-avatar.png"
+  />
   <div>
     <div>
       adminUser1
@@ -19,6 +23,10 @@ exports[`Site admin user table invite name column test Test learner invitation 1
 <div
   className="cell"
 >
+  <img
+    className="avatar avatar-color-6"
+    src="unresolved-user-avatar.png"
+  />
   <div>
     <div>
       learnerUser1

@@ -43,7 +43,6 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
               className="user-avatar"
             >
               <img
-                alt="Avatar for Anonymous User"
                 className="avatar avatar-color-6"
                 src="unresolved-user-avatar.png"
               />
@@ -60,9 +59,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
             <span
               className="username"
               rel="author"
-            >
-              Anonymous User
-            </span>
+            />
             <div
               className="plain-text"
             >

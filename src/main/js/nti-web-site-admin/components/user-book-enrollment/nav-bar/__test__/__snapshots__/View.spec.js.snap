@@ -17,7 +17,12 @@ exports[`Site admin user book enrollment nav bar test Basic render test 1`] = `
       />
       <div
         className="user-avatar"
-      />
+      >
+        <img
+          className="avatar avatar-color-6"
+          src="unresolved-user-avatar.png"
+        />
+      </div>
     </div>
     <div
       className="enrollment-info"
@@ -27,6 +32,10 @@ exports[`Site admin user book enrollment nav bar test Basic render test 1`] = `
       >
         Activity for
       </div>
+      <span
+        className="username"
+        rel="author"
+      />
       <div
         className="plain-text"
       >

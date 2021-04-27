@@ -6,7 +6,15 @@ exports[`Site admin user table name column test Test for admins 1`] = `
   to="#"
 >
   <div>
+    <img
+      className="avatar avatar-color-6"
+      src="unresolved-user-avatar.png"
+    />
     <div>
+      <span
+        className="username"
+        rel="author"
+      />
       <div>
         user@blah.com
       </div>
@@ -21,7 +29,15 @@ exports[`Site admin user table name column test Test for learners 1`] = `
   to="#"
 >
   <div>
+    <img
+      className="avatar avatar-color-6"
+      src="unresolved-user-avatar.png"
+    />
     <div>
+      <span
+        className="username"
+        rel="author"
+      />
       <div>
         user@blah.com
       </div>

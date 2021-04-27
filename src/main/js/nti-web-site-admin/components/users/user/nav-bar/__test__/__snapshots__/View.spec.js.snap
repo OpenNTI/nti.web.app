@@ -7,6 +7,14 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
   <div
     className="site-admin-user-identity"
   >
+    <img
+      className="avatar avatar-color-6"
+      src="unresolved-user-avatar.png"
+    />
+    <span
+      className="username"
+      rel="author"
+    />
     <div
       className="actions"
     >
@@ -71,6 +79,14 @@ Array [
     <div
       className="site-admin-user-identity"
     >
+      <img
+        className="avatar avatar-color-6"
+        src="unresolved-user-avatar.png"
+      />
+      <span
+        className="username"
+        rel="author"
+      />
       <div
         className="actions"
       >
