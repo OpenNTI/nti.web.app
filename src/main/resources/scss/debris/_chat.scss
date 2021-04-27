@@ -997,12 +997,6 @@ body.media-viewer-open {
 		}
 	}
 
-	@media #{$hide-chat-break-point} {
-		.chat-container:not(.show-gutter) & {
-			display: none;
-		}
-	}
-
 	.presence-gutter-entry {
 		margin: 8px auto;
 		width: 45px;
