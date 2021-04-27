@@ -57,7 +57,7 @@ module.exports = exports = Ext.define(
 							autoEl: { cls: 'quote-header', html: type.text },
 						};
 					}
-
+					console.log(type);
 					return {
 						xtype: 'overview-editing-type',
 						showEditor: showEditor,

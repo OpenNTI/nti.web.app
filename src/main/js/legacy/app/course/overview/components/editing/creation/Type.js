@@ -33,6 +33,9 @@ module.exports = exports = Ext.define(
 			this.callParent(arguments);
 
 			this.addCls(this.typeConfig.category);
+			this.el.set({
+				'data-testid': `${this.typeConfig.category} ${this.typeConfig.iconCls}`,
+			});
 
 			this.mon(this.el, 'click', this.handleClick.bind(this));
 		},
