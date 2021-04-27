@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { getService } = require('@nti/web-client');
 const { getString } = require('internal/legacy/util/Localization');
 
 require('./PictureCanvas');
@@ -113,7 +114,11 @@ module.exports = exports = Ext.define(
 					me.activeField,
 					url,
 
-					function good() {
+					async function good() {
+						const service = await getService();
+						const user = await service.getAppUser();
+						await user.refresh();
+						user.onChange('avatarURL');
 						me.fireEvent('saved', url);
 					},
 
