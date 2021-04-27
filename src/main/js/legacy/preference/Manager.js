@@ -134,11 +134,13 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 
 		return new Promise(function (fulfill, reject) {
 			PreferenceBase.load(url, {
-				failure: function (rec, op) {
-					reject(op.response);
+				failure(rec, op) {
+					if (op.error?.status === 404) fulfill();
+					else reject(op.error);
+
 					Ext.callback(cb, scope, [false]);
 				},
-				success: function (rec, op) {
+				success(rec, op) {
 					var model,
 						json = op.response.responseText;
 
