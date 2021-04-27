@@ -1,7 +1,6 @@
 /*global ActiveXObject*/
 /*eslint no-control-regex:0*/
 // eslint-disable-next-line no-restricted-modules
-const Url = require('url');
 
 const Ext = require('@nti/extjs');
 const { isNTIID } = require('@nti/lib-ntiids');
@@ -834,7 +833,13 @@ global.Globals = module.exports = exports = Ext.define(
 		},
 
 		getURLParts: function (url) {
-			return Url.parse(url);
+			const parsed = new URL(url, global.location.origin);
+
+			return {
+				pathname: parsed.pathname,
+				query: parsed.search,
+				hash: parsed.hash
+			};
 		},
 
 		getURLRooted: function (url, root) {
