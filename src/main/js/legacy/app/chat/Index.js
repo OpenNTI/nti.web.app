@@ -271,7 +271,7 @@ const ChatIndex = (module.exports = exports = Ext.define(
 				save: function (win, wb) {
 					wbData = wb.getValue();
 					me.ChatActions.clearErrorForRoom(room);
-					me.ChatActions.postMessage(
+					me.ChatActions.client.postMessage(
 						room,
 						[wbData],
 						mid,
