@@ -3,10 +3,8 @@ const { wait } = require('@nti/lib-commons');
 const { Theme } = require('@nti/web-commons');
 const { NotificationsView } = require('@nti/web-notifications');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
-const { isFlag } = require('@nti/web-client');
 
-const IdentityIndex = require('../account/identity/Index');
-const IdentityReact = require('../account/identity/React');
+const Identity = require('../account/identity/Index');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
@@ -309,10 +307,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			cacheBust: true,
 		});
 
-		this.identityCmp = (isFlag('react-session-menu')
-			? IdentityReact
-			: IdentityIndex
-		).create({
+		this.identityCmp = Identity.create({
 			setMenuOpen: this.setState.bind(this, { active: 'identityCmp' }),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this),

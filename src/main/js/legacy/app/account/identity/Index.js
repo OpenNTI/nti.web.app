@@ -1,164 +1,110 @@
 const Ext = require('@nti/extjs');
-const NTIFormat = require('internal/legacy/util/Format');
+const { getService } = require('@nti/web-client');
+const { Identity } = require('@nti/web-profiles');
+const LoginActions = require('internal/legacy/login/Actions');
+require('internal/legacy/overrides/ReactHarness');
 
-const styles = require('./Index.css');
-
-require('./components/Settings');
-
-const knockOut = styles.knockout;
-const noKnockOut = styles['no-knockout'];
+const AccountActions = require('../Actions');
 
 module.exports = exports = Ext.define(
-	'NextThought.app.account.identity.Index',
+	'NextThought.app.account.identity.React',
 	{
-		extend: 'Ext.Component',
+		extend: 'NextThought.ReactHarness',
 		alias: 'widget.identity',
-		cls: `identity x-menu ${styles.identity}`,
+		cls: 'identity',
+		component: Identity.Session,
 
-		renderTpl: Ext.DomHelper.markup([
-			{
-				cls: 'profile-pic',
-				'data-qtip': '{user:displayName}',
-				tabindex: '0',
-				'aria-label': '{user:displayName}',
-				role: 'button',
-				cn: ['{user:avatar}', { cls: 'presence' }],
-			},
-		]),
-
-		renderSelectors: {
-			avatar: '.profile-pic',
-			presence: '.profile-pic .presence',
-			name: '.name',
-		},
+		setTheme(scope, knockout) {},
 
 		initComponent: function () {
 			this.callParent(arguments);
-
-			this.renderData = Ext.apply(this.renderData || {}, {
-				user: $AppConfig.userObject,
+			Object.assign(this.initialConfig, {
+				addHistory: true,
+				baseroute: '/app',
 			});
-
-			this.menu = Ext.widget({
-				xtype: 'settings-menu',
-				ownerCt: this,
-				setMenuClosed: this.setMenuClosed.bind(this),
-			});
-
-			this.on('destroy', 'destroy', this.menu);
-			this.monitorUser($AppConfig.userObject);
+			this.AccountActions = AccountActions.create();
+			this.LoginActions = LoginActions.create();
 		},
 
-		setTheme(theme = {}, knockout) {
-			if (knockout) {
-				this.addCls(knockOut);
-				this.removeCls(noKnockOut);
-			} else if (knockout === false) {
-				this.removeCls(knockOut);
-				this.addCls(noKnockOut);
-			} else {
-				this.removeCls(knockOut);
-				this.removeCls(noKnockOut);
-			}
-		},
-
-		monitorUser: function (user) {
-			var me = this,
-				m = {
-					scope: this,
-					destroyable: true,
-					changed: function (r) {
-						var profile =
-								me.avatar && me.avatar.down('.avatar-pic'),
-							a;
-
-						if (profile) {
-							a = NTIFormat.avatar(r);
-							profile.dom.innerHTML = a;
-							profile.dom.setAttribute('aria-hidden', 'true');
-							profile.set({ 'data-qtip': r.getName() });
-						}
-
-						me.monitorUser(r !== user ? r : null);
-					},
-				};
-
-			if (user) {
-				Ext.destroy(me.userMonitor);
-				me.userMonitor = me.mon(user, m);
-				me.user = user;
-			}
-
-			if (me.presence && me.user) {
-				me.presence.set({
-					cls: 'presence ' + me.user.getPresence().getName(),
-				});
-			}
-		},
-
-		afterRender: function () {
-			var me = this;
-
+		afterRender() {
 			this.callParent(arguments);
-			this.monitorUser(me.user);
+			this.monitorBodyClicks();
+		},
 
-			this.mon(this.el, {
-				click: 'toggleMenu',
-				//TODO: do we want to hide this on mouse out, or just on click?
-				// 'mouseout': 'startToHideMenu'
+		async monitorBodyClicks() {
+			const service = await getService();
+			const supportLinks = service.getSupportLinks();
+
+			this.mon(Ext.getBody(), {
+				click: this.onBodyClicks.bind(this, supportLinks),
 			});
+		},
 
-			this.mon(this.menu, {
-				// 'mouseenter': 'cancelHideShowEvents',
-				show: this.addCls.bind(this, 'menu-showing'),
-				hide: this.removeCls.bind(this, 'menu-showing'),
-			});
+		onBodyClicks(supportLinks, e) {
+			let action = e.getTarget('a[data-action]')?.dataset.action;
+			const link = e.getTarget('a[href]');
+			const href = link?.getAttribute('href');
 
-			if (Ext.is.iOS) {
-				//TODO: I don't think these are needed any more
-				// // Prevent the save/copy image menu from appearing
-				// this.el.down('img').setStyle('-webkit-touch-callout', 'none');
-				// // Prevent the status menu from appearing after a click
-				// this.el.down('img').dom.addEventListener('click', function(e) {
-				//	me.cancelHideShowEvents();
-				//	Ext.defer(function() {
-				//		me.cancelHideShowEvents();
-				//	},50);
-				// });
+			// This is used to launch support logic the same way everywhere
+			// we have a link that goes to the supportContact url. (so we can
+			// just emit that url in the dom and not worry about coping logic)
+			if (
+				supportLinks.supportContact === href &&
+				supportLinks.internalSupport
+			) {
+				action = action || 'support';
+			}
+
+			if (action) {
+				if (call(this, `do-${action}`, link, e) !== false) {
+					e.preventDefault();
+				}
 			}
 		},
 
-		onMenuShow: function () {
-			this.menu.show();
+		showLink(target) {
+			target.setAttribute('target', '_blank');
+			return false;
 		},
 
-		onMenuHide: function () {
-			this.menu.hide();
+		'do-welcomeGuide'(target) {
+			this.AccountActions.showWelcomePage(target.href);
 		},
 
-		cancelHideShowEvents: function () {
-			clearTimeout(this.hideTimeout);
+		'do-about': 'showLink',
+
+		'do-privacy'(target) {
+			this.AccountActions.showPrivacy(target.href);
 		},
 
-		toggleMenu: function () {
-			if (this.menu.isVisible()) {
-				this.setMenuClosed();
-			} else {
-				// clearTimeout(this.hideTimeout);
-				this.setMenuOpen();
-			}
+		'do-privacyForMinors'(target) {
+			this.AccountActions.showChildrensPrivacy(target.href);
 		},
 
-		startToHideMenu: function () {
-			var me = this;
+		'do-terms'(target) {
+			this.AccountActions.showTermsOfService(target.href);
+		},
 
-			this.cancelHideShowEvents();
+		'do-support'(target) {
+			this.AccountActions.showContactUs();
+		},
 
-			if (!Ext.is.iPad || this.menu.isHidden()) {
-				this.hideTimeout = setTimeout(function () {
-					me.menu.hide();
-				}, 500);
-			}
+		'do-helpSite': 'showLink',
+
+		'do-impersonate'() {
+			this.LoginActions.handleImpersonate();
+		},
+
+		'do-logout'() {
+			this.LoginActions.handleLogout();
 		},
 	}
 );
+
+function call(scope, action, ...args) {
+	if (typeof action === 'string') {
+		return call(scope, scope[action], ...args);
+	}
+
+	return action.apply(scope, args);
+}

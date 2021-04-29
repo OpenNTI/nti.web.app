@@ -5,9 +5,6 @@ const lazy = require('internal/legacy/util/lazy-require')
 	.get('Actions', () => require('internal/legacy/app/navigation/Actions'))
 	.get('Popout', () =>
 		require('internal/legacy/app/account/contacts/management/Popout')
-	)
-	.get('MenuItem', () =>
-		require('internal/legacy/app/account/identity/components/MenuItem')
 	);
 
 // let contactCardPopout;
@@ -26,8 +23,6 @@ function onUserNameClick(e) {
 	if (profileUrl) {
 		if (this instanceof lazy.Popout) {
 			wait().then(this.destroy.bind(this));
-		} else if (this instanceof lazy.MenuItem) {
-			wait().then(this.setMenuClosed.bind(this));
 		}
 
 		lazy.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
@@ -37,7 +32,6 @@ function onUserNameClick(e) {
 		return false;
 	}
 }
-
 
 module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 	navigateToProfile: function (u) {
