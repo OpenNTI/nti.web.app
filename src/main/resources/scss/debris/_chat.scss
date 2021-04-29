@@ -955,6 +955,14 @@ body.media-viewer-open {
 	}
 }
 
+.social-bar-container {
+	@media #{$hide-chat-break-point} {
+		.chat-container:not(.show-gutter) & {
+			display: none;
+		}
+	}
+}
+
 .chat-gutter-window,
 .chat-gutter-list-window,
 .gutter-calendar-window {
