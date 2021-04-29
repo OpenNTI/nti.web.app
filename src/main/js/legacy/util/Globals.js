@@ -837,7 +837,8 @@ global.Globals = module.exports = exports = Ext.define(
 
 			return {
 				pathname: parsed.pathname,
-				query: parsed.search,
+				query: parsed.search ? parsed.search.replace(/^\?/, '') : undefined,
+				search: parsed.search,
 				hash: parsed.hash
 			};
 		},
