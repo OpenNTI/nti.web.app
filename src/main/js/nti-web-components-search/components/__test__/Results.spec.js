@@ -2,6 +2,11 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 
+import {
+	setupTestClient,
+	tearDownTestClient,
+} from '@nti/web-client/test-utils';
+
 import SearchResults from '../Results';
 
 const fakeHits = [
@@ -368,19 +373,13 @@ const fakeHits = [
 ];
 
 const onBefore = () => {
-	global.$AppConfig = {
-		nodeService: {
-			getObject: async o => o,
-		},
-		nodeInterface: {
-			getServiceDocument: async () => global.$AppConfig.nodeService,
-		},
-	};
+	setupTestClient({
+		getObject: async o => o,
+	});
 };
 
 const onAfter = () => {
-	//un-mock getService()
-	delete global.$AppConfig;
+	tearDownTestClient();
 };
 
 describe('<SearchResults />', () => {

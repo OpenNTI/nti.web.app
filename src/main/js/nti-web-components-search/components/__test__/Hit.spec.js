@@ -3,6 +3,10 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import { wait } from '@nti/lib-commons';
+import {
+	setupTestClient,
+	tearDownTestClient,
+} from '@nti/web-client/test-utils';
 
 import Hit from '../Hit';
 
@@ -53,21 +57,11 @@ const mockService = () => ({
 });
 
 const onBefore = () => {
-	global.$AppConfig = {
-		...(global.$AppConfig || {}),
-		nodeService: mockService(),
-		nodeInterface: {
-			getServiceDocument: () =>
-				Promise.resolve(global.$AppConfig.nodeService),
-		},
-	};
+	setupTestClient(mockService());
 };
 
 const onAfter = () => {
-	//unmock getService()
-	const { $AppConfig } = global;
-	delete $AppConfig.nodeInterface;
-	delete $AppConfig.nodeService;
+	tearDownTestClient();
 };
 
 const fakePath = [
