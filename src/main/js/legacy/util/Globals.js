@@ -1,6 +1,5 @@
 /*global ActiveXObject*/
 /*eslint no-control-regex:0*/
-// eslint-disable-next-line no-restricted-modules
 
 const Ext = require('@nti/extjs');
 const { isNTIID } = require('@nti/lib-ntiids');
@@ -837,9 +836,11 @@ global.Globals = module.exports = exports = Ext.define(
 
 			return {
 				pathname: parsed.pathname,
-				query: parsed.search ? parsed.search.replace(/^\?/, '') : undefined,
+				query: parsed.search
+					? parsed.search.replace(/^\?/, '')
+					: undefined,
 				search: parsed.search,
-				hash: parsed.hash
+				hash: parsed.hash,
 			};
 		},
 
