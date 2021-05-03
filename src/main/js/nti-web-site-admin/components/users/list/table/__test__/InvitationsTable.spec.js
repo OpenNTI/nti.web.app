@@ -2,7 +2,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { TestUtils } from '@nti/web-client';
+import * as TestUtils from '@nti/web-client/test-utils';
 
 import InvitationsTable from '../InvitationsTable';
 

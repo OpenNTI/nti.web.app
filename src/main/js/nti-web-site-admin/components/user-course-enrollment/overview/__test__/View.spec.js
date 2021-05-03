@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { TestUtils } from '@nti/web-client';
+import * as TestUtils from '@nti/web-client/test-utils';
 import { Date as DateUtils } from '@nti/lib-commons';
 
 import View from '../View';
