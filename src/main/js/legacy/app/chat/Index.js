@@ -255,11 +255,13 @@ const ChatIndex = (module.exports = exports = Ext.define(
 
 			//hook into the window's save and cancel operations:
 			wbWin.on({
-				save: function (win, wb) {
+				save: async (win, wb) => {
+					const r = await room.getInterfaceInstance();
+
 					wbData = wb.getValue();
 					me.ChatActions.clearErrorForRoom(room);
 					me.ChatActions.client.postMessage(
-						room,
+						r,
 						[wbData],
 						mid,
 						channel,
