@@ -27,6 +27,10 @@ module.exports = exports = Ext.define(
 
 			this.add({
 				cls: 'discussion',
+				autoEl: {
+					tag: 'div',
+					'data-testid': 'create-discussion-assignment-menu-item',
+				},
 				text: t('discussionAssignment'),
 				assignmentType: DISCUSSION_ASSIGNMENT,
 				listeners: {
@@ -38,6 +42,10 @@ module.exports = exports = Ext.define(
 			});
 			this.add({
 				cls: 'plain',
+				autoEl: {
+					tag: 'div',
+					'data-testid': 'create-plain-assignment-menu-item',
+				},
 				text: t('assignment'),
 				assignmentType: PLAIN_ASSIGNMENT,
 				listeners: {
