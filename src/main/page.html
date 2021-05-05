@@ -6,7 +6,15 @@
 			<meta http-equiv="refresh" content="0;url=/login/" />
 		</noscript>
 		<script>
+			//Taken from: https://github.com/rafgraph/detect-it/blob/a90c09ae774dab5e39a18ff597401c01bb73bca5/src/index.ts#L69
+			var isIpad = (
+				matchMedia && matchMedia('(pointer: coarse)').matches &&
+				/iPad|Macintosh/.test(navigator.userAgent) &&
+				Math.min(window.screen.width || 0, window.screen.height || 0) >= 768
+			);
+
 			if (
+				isIpad ||
 				/android|blackberry|iphone|ipod|mobile|webos/i.test(
 					navigator.userAgent
 				)
