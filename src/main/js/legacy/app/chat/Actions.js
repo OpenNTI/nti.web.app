@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		chat.on('exited-room', this.onExitedRoom.bind(this));
 
 		this.mon(this.LoginStore, 'will-logout', callback => {
-			chat.changePresence('unavailable', callback);
+			chat.changePresence(undefined, callback);
 		});
 	},
 
