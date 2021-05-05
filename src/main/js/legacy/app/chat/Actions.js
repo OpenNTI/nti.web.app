@@ -497,7 +497,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		//TODO do we need to do the window rebuilding stuff here
 		//like in onMessage?
 
-		cid = msg.get('ContainerId');
+		cid = msg.ContainerId;
 		win = this.ChatStore.getChatWindow(cid);
 		view = win ? win.down('chat-view') : null;
 		if (view) {
