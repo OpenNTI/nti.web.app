@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
-			'notify': this.handleWindowNotify.bind(this),
+			notify: this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this),
 			'presence-changed': this.updatePresence.bind(this),
@@ -120,17 +120,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		});
 
 		this.mon(onlineContactStore, {
-			'load': this.onOnlineContactAdd.bind(this),
-			'add': this.onOnlineContactAdd.bind(this),
-			'remove': this.onOnlineContactRemove.bind(this)
+			load: this.onOnlineContactAdd.bind(this),
+			add: this.onOnlineContactAdd.bind(this),
+			remove: this.onOnlineContactRemove.bind(this),
 		});
 
 		this.store = store;
 
 		this.mon(this.store, {
-			'load': this.updateList.bind(this),
-			'add': this.addContacts.bind(this),
-			'remove': this.removeContact.bind(this)
+			load: this.updateList.bind(this),
+			add: this.addContacts.bind(this),
+			remove: this.removeContact.bind(this),
 		});
 	},
 
@@ -192,13 +192,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 				users = isNTIID === false ? occupantsKey.split('_') : [],
 				o = Ext.Array.remove(users.slice(), $AppConfig.username);
 
-			if (o.length === 1 && me.store.find('Username', o[0], 0, false, false, true) === -1) {
+			if (
+				o.length === 1 &&
+				me.store.find('Username', o[0], 0, false, false, true) === -1
+			) {
 				// This is 1-1 chat, not a groupchat
-				UserRepository.getUser(o[0])
-					.then(function (u) {
-						// var p = u.getPresence();
-						me.store.add(u);
-					});
+				UserRepository.getUser(o[0]).then(function (u) {
+					// var p = u.getPresence();
+					me.store.add(u);
+				});
 			}
 		});
 	},
