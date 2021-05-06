@@ -447,7 +447,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		t?.setAttribute('data-badge', count);
 	},
 
-	incrementCollapsedMesssageCount: function () {
+	incrementCollapsedMessageCount: function () {
 		this.collapsedMessageCount += 1;
 		this.updateCollapsedMessageCount(this.collapsedMessageCount);
 	},
@@ -537,6 +537,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		return result;
 	},
 
+	/**
+	 *
+	 * @param {*} win
+	 * @param {import('@nti/lib-interfaces').Models.chat.MessageInfo} msg
+	 * @returns {void}
+	 */
 	handleWindowNotify: function (win, msg) {
 		if (win && win.isVisible()) {
 			return;
@@ -546,12 +552,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			me = this,
 			currentCount,
 			userRec,
-			sender = msg.isModel ? msg.get('Creator') : msg.Creator;
+			sender = msg.creator;
 
 		entry = this.findEntryForUser(sender);
 		if (newChat) {
 			SocialFeatures.Store.handleWindowNotify(sender);
 		}
+
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		} else {
@@ -561,7 +568,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			// On click, we show the full gutter list with the right count.
 			if (me.store.find('Username', sender, 0, false, false, true) > -1) {
 				if (me.isVisible()) {
-					me.incrementCollapsedMesssageCount();
+					me.incrementCollapsedMessageCount();
 				}
 
 				userRec = this.store.findRecord(

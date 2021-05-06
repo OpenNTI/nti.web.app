@@ -1,8 +1,4 @@
 const Ext = require('@nti/extjs');
-const lazy = require('internal/legacy/util/lazy-require').get(
-	'ParseUtils',
-	() => require('internal/legacy/util/Parsing')
-);
 const { isMe } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
@@ -85,7 +81,7 @@ module.exports = exports = Ext.define(
 		},
 
 		handleWindowNotify: function (win, msg) {
-			if (!win || win.isVisible() || isMe(msg.Creator)) {
+			if (!win || win.isVisible() || isMe(msg.creator)) {
 				return;
 			}
 
@@ -93,15 +89,15 @@ module.exports = exports = Ext.define(
 			var skip = false,
 				i,
 				count;
-			msg = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems(msg)[0];
+
 			for (i = 0; i < this.unreadMessageIds.length; i++) {
-				if (this.unreadMessageIds[i] === msg.getId()) {
+				if (this.unreadMessageIds[i] === msg.getID()) {
 					skip = true;
 				}
 			}
 
 			if (!skip) {
-				this.unreadMessageIds.push(msg.getId());
+				this.unreadMessageIds.push(msg.getID());
 				count = this.unreadMessageIds.length;
 				this.updateBadgeCount(count);
 			}
