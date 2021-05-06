@@ -540,10 +540,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	/**
 	 *
 	 * @param {*} win
-	 * @param {import('@nti/lib-interfaces').Models.chat.MessageInfo} msg
+	 * @param {import('@nti/lib-interfaces').Models.chat.MessageInfo} msg	 *
+	 * @param {number} [recalled=0] recursive count
 	 * @returns {void}
 	 */
-	handleWindowNotify: function (win, msg) {
+	handleWindowNotify: function (win, msg, recalled = 0) {
 		if (win && win.isVisible()) {
 			return;
 		}
@@ -555,7 +556,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			sender = msg.creator;
 
 		entry = this.findEntryForUser(sender);
-		if (newChat) {
+		if (newChat && recalled === 0) {
 			SocialFeatures.Store.handleWindowNotify(sender);
 		}
 
@@ -588,7 +589,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 				UserRepository.getUser(sender).then(function (u) {
 					me.store.add(u);
 					me.bindChatWindow(win);
-					wait().then(me.handleWindowNotify.bind(me, win, msg));
+					wait().then(
+						me.handleWindowNotify.bind(me, win, msg, recalled + 1)
+					);
 				});
 			}
 		}
