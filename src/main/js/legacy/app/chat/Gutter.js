@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
-			notify: this.handleWindowNotify.bind(this),
+			notify: (target, msg) => this.handleWindowNotify(target, msg),
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this),
 			'presence-changed': this.updatePresence.bind(this),
