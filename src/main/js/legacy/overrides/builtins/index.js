@@ -1,5 +1,4 @@
 require('./Array');
-require('./Console');
 require('./Element');
 require('./Error');
 require('./Function');
