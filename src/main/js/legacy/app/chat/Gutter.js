@@ -441,8 +441,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	updateCollapsedMessageCount: function (count) {
-		var t = this.otherContactsEl.dom;
-		t.setAttribute('data-badge', count);
+		var t = this.otherContactsEl?.dom;
+		t?.setAttribute('data-badge', count);
 	},
 
 	incrementCollapsedMesssageCount: function () {
