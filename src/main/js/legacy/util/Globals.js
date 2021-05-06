@@ -283,11 +283,6 @@ global.Globals =
 					).pathname,
 				});
 
-				if ($AppConfig.login === undefined) {
-					alert('Bad or no login configuration.');
-					return false;
-				}
-
 				if (!/^\/.+\/$/.test($AppConfig['server-path'])) {
 					alert(
 						'Bad Server Config, your data path does not validate the pattern: /.+/'

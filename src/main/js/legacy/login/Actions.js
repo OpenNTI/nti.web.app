@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 	},
 
 	__onLoginFailure(reason) {
-		let url = $AppConfig.login;
+		let url = '/login/';
 		const o = {};
 
 		if (

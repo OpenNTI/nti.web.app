@@ -157,7 +157,7 @@ if (typeof document !== 'undefined') {
 
 			if (reasons.length > 0) {
 				console.error(reasons.join('\n'));
-				window.location.replace($AppConfig.unsupported);
+				window.location.replace('./unsupported');
 				return; //we're leaving... so lets just stop here.
 			}
 

@@ -1,6 +1,5 @@
 {
 	"development": {
-
 		"apps": [
 			{
 				"public": true,
@@ -9,48 +8,31 @@
 			}
 		],
 
-		"debug": false,
-		"debugDelegation": false,
-		"debugSocket": false,
-		"debugSocketVerbosely": false,
-
-		"enableLogging": true,
-
-		"obscureUsernames": false,
-		"openExternalPDFsInNewWindow": false,
-
 		"flags": {
 			"new-chat": true,
-			"analytic-reports":true,
-			"badges":true,
+			"analytic-reports": true,
+			"badges": true,
 			"bulk-resolve-users": true,
 			"course-reports": false,
 			"course-content-modal": true,
 			"disable-context-in-activity": false,
 			"do-not-save-progress": false,
-			"email-verification":true,
-			"file-upload":true,
-			"forum-comment-expand-collapse":true,
-			"instructor-email":true,
+			"email-verification": true,
+			"file-upload": true,
+			"forum-comment-expand-collapse": true,
+			"instructor-email": true,
 			"kaltura.progressive": true,
 			"mathcounts-question-number-hack": false,
 			"notifications": true,
-			"profile-activity-filters":true,
+			"profile-activity-filters": true,
 			"request-alias-change": true,
-			"show-open-students-first":false,
+			"show-open-students-first": false,
 			"suggest-contacts": false,
 			"transcript-follow-video": true,
-			"use-new-search":true,
+			"use-new-search": true,
 			"show-notebook-tab": true,
 			"use-new-user-list": true,
 			"show-create-ltitool-button": true
-		},
-		"login": "/login/",
-		"unsupported": "./unsupported",
-
-		"corsSalt": "localhost",
-
-		"disableProfiles": false,
-		"kalturaUIID": ""
+		}
 	}
 }
