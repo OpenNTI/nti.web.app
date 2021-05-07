@@ -11,7 +11,7 @@ require('internal/legacy/mixins/ProfileLinks');
 
 const t = scoped('course.enrollment.confirmation', {
 	'contact-support':
-		'Please contact <a>support<a> if you have any questions.',
+		'Please contact <a>support</a> if you have any questions.',
 });
 
 module.exports = exports = Ext.define(
