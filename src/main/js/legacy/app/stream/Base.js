@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 
 	onActivate: function () {
 		//if we might have cleared on deactivate or haven't loaded any pages yet
-		if (this.clearOnDeactivate || this.PAGES.length === 0) {
+		if (!this.isLoading && (this.clearOnDeactivate || this.PAGES.length === 0)) {
 			this.setStreamSource(this.StreamSource);
 		}
 
