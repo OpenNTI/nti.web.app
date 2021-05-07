@@ -175,10 +175,10 @@ module.exports = exports = Ext.define(
 
 			(async () => {
 				const service = await getService();
-				const { contactSupport } = service.getSupportLinks();
+				const { supportContact } = service.getSupportLinks();
 				this.contactSupportTextEl
 					.down('a')
-					?.set({ href: contactSupport });
+					?.set({ href: supportContact });
 			})();
 
 			this.on('destroy', 'destroy', this.transactionInput);
