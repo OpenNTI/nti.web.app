@@ -946,7 +946,9 @@ global.Globals = module.exports = exports = Ext.define(
 		sendEmailTo: function (to, subject, body, cc, bcc) {
 			var href = 'mailto:';
 
-			to = Ext.isArray(to) ? to : [to];
+			to = (Ext.isArray(to) ? to : [to]).map(x =>
+				x.replace(/^mailto:/i, '')
+			);
 			subject = subject || '';
 			body = body || '';
 			cc = cc || '';
