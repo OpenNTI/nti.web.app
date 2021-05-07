@@ -72,7 +72,7 @@ module.exports = exports = Ext.define(
 			transactionContainerEl: '.transaction',
 			transactionEl: '.transaction .transaction-id',
 			iframeEl: '.iframe-container',
-			contactSupportLinkEl: '.support .support-text a',
+			contactSupportTextEl: '.support-text',
 		},
 
 		initComponent() {
@@ -176,7 +176,9 @@ module.exports = exports = Ext.define(
 			(async () => {
 				const service = await getService();
 				const { contactSupport } = service.getSupportLinks();
-				this.contactSupportLinkEl?.set({ href: contactSupport });
+				this.contactSupportTextEl
+					.down('a')
+					?.set({ href: contactSupport });
 			})();
 
 			this.on('destroy', 'destroy', this.transactionInput);
