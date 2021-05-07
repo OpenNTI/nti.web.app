@@ -1,15 +1,4 @@
 const Ext = require('@nti/extjs');
-const Globals = require('internal/legacy/util/Globals');
-
-const getURLSafe = (u) => {
-	try {
-		return Globals.getURLParts(u);
-	} catch (e) {
-		return {
-			pathname: u
-		};
-	}
-}
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	extend: 'Ext.Component',
@@ -139,13 +128,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 	syncValidator: function (value) {
-		var parts = getURLSafe(value),
-			validator = this.getValidator();
+		const validator = this.getValidator();
 
-		if (!parts.protocol) {
-			value = this.defaultProtocol + value;
+		try {
+			value = (new URL(value)).toString();
+		} catch (e) {
+			value = `${this.defaultProtocol}${value}`;
 		}
 
+		console.log('Validated: ', value);
 		validator.value = value;
 
 		return value;
