@@ -1335,6 +1335,14 @@
 .enrollment-container .enrollment-credit-purchase {
 	.support {
 		line-height: 1em;
+
+		.support-text a {
+			display: inline;
+		}
+
+		a {
+			display: block;
+		}
 	}
 }
 
