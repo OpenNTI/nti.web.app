@@ -1,6 +1,16 @@
 const Ext = require('@nti/extjs');
 const Globals = require('internal/legacy/util/Globals');
 
+const getURLSafe = (u) => {
+	try {
+		return Globals.getURLParts(u);
+	} catch (e) {
+		return {
+			pathname: u
+		};
+	}
+}
+
 module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	extend: 'Ext.Component',
 	alias: 'widget.url-field',
@@ -129,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 	syncValidator: function (value) {
-		var parts = Globals.getURLParts(value),
+		var parts = getURLSafe(value),
 			validator = this.getValidator();
 
 		if (!parts.protocol) {

@@ -835,6 +835,7 @@ global.Globals = module.exports = exports = Ext.define(
 			const parsed = new URL(url, global.location.origin);
 
 			return {
+				protocol: parsed.protocol,
 				pathname: parsed.pathname,
 				query: parsed.search
 					? parsed.search.replace(/^\?/, '')
