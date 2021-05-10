@@ -46,7 +46,7 @@ module.exports = exports = Ext.define(
 			this.callParent(arguments);
 
 			if (source.service !== 'youtube') {
-				Ext.Error.raise('Source Service Missmatch');
+				Ext.Error.raise('Source Service Mismatch');
 			}
 
 			this.videoId = source.source[0];
