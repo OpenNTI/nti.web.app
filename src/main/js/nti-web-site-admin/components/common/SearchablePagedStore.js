@@ -145,7 +145,7 @@ export default class SearchablePagedStore extends BasicStore {
 	/**
 	 * Return the items and loadNext function for a given search term
 	 *
-	 * @override
+	 * @abstract
 	 * @param  {string} term term to search on
 	 * @returns {Object}      with the items and loadNext function
 	 */
@@ -154,7 +154,7 @@ export default class SearchablePagedStore extends BasicStore {
 	/**
 	 * Return the items and loadNext function for a given search term
 	 *
-	 * @override
+	 * @abstract
 	 * @returns {Object}      with the items and loadNext function
 	 */
 	loadInitial() {}
