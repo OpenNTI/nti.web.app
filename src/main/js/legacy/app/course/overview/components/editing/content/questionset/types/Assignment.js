@@ -78,6 +78,11 @@ module.exports = exports = Ext.define(
 			}
 		},
 
+		onDestroy() {
+			this.callParent(arguments);
+			this.assignmentTypeMenu?.destroy();
+		},
+
 		showEditor: function () {
 			if (this.record) {
 				this.showItemEditor();
