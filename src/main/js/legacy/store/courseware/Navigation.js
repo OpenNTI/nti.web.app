@@ -21,7 +21,11 @@ module.exports = exports = Ext.define(
 
 		constructor: function (config) {
 			if (!config.outlinePromise) {
-				config.outlinePromise = Promise.reject('Not Given');
+				Object.defineProperty(config, 'outlinePromise', {
+					get() {
+						return Promise.reject(new Error('Not Given'));
+					},
+				});
 			}
 
 			if (!config.tocPromise) {
