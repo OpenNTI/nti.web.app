@@ -190,7 +190,10 @@ module.exports = exports = Ext.define(
 						}
 					}
 				}
-			});
+				},
+				// canceled... TODO: don't use promise rejection as a false/ignore
+				() => void 0
+			);
 		},
 
 		onVideoDelete(video) {
