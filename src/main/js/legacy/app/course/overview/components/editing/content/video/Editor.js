@@ -14,8 +14,7 @@ const Type = 'application/vnd.nextthought.ntivideo';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.video.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-video',
 		SWITCHED: 'switched-items',
 
@@ -34,7 +33,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},
@@ -106,8 +106,7 @@ module.exports = exports = Ext.define(
 				.reduce(function (acc, item) {
 					acc.push({
 						id: item,
-						msg:
-							'Videos can not be in the same section more than once',
+						msg: 'Videos can not be in the same section more than once',
 					});
 
 					return acc;
@@ -178,18 +177,22 @@ module.exports = exports = Ext.define(
 				bundle: this.bundle,
 				video: ntiid,
 				onVideoDelete: this.onVideoDelete.bind(this),
-			}).then(video => {
-				if (this.videoSelectionCmp) {
-					if (!ntiid) {
-						this.videoSelectionCmp.addSelectionItem(video, true);
-					} else {
-						this.videoSelectionCmp.updateSelectionItem(video);
+			}).then(
+				video => {
+					if (this.videoSelectionCmp) {
+						if (!ntiid) {
+							this.videoSelectionCmp.addSelectionItem(
+								video,
+								true
+							);
+						} else {
+							this.videoSelectionCmp.updateSelectionItem(video);
 
-						if (onEdit) {
-							onEdit(video);
+							if (onEdit) {
+								onEdit(video);
+							}
 						}
 					}
-				}
 				},
 				// canceled... TODO: don't use promise rejection as a false/ignore
 				() => void 0
