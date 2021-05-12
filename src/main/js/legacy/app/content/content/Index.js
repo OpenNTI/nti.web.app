@@ -154,7 +154,6 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			return Promise.resolve(obj);
 		}
 
-
 		//Try getting the object first, since it would return a related work or page info
 		return Service.getObject(id, null, null, null, null, this.currentBundle)
 			.then(o => {
@@ -276,8 +275,12 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				}
 			},
 			pageID: page.getId ? page.getId() : '',
-			onDidChange: () => {
-				this.currentBundle.updateContentPackage(packageId);
+			onDidChange: async () => {
+				try {
+					await this.currentBundle.updateContentPackage(packageId);
+				} catch {
+					/* don't care */
+				}
 			},
 			onDelete: onDelete,
 			gotoResources: gotoResources,
@@ -317,9 +320,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			];
 		}
 
-		return (page.isSurvey
-			? this.__showSurveyEditor(page, parent, breadcrumb, pageSource)
-			: this.__showReadingEditor(page, parent, breadcrumb, pageSource)
+		return (
+			page.isSurvey
+				? this.__showSurveyEditor(page, parent, breadcrumb, pageSource)
+				: this.__showReadingEditor(page, parent, breadcrumb, pageSource)
 		).always(() => {
 			if (page.get) {
 				this.setTitle(page.get('Title'));
