@@ -16,7 +16,6 @@ module.exports = exports = Ext.define(
 		 * Construct an instance of a StreamSource
 		 *
 		 * @memberof NextThought.app.stream.util.StreamSource#
-		 *
 		 * @param {Object} config values to set up the stream source with
 		 * @param {string} config.batch which batch to start on
 		 * @param {string} config.batchParam the value to key the batch on

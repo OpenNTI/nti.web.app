@@ -13,7 +13,6 @@ const BatchInterface = (module.exports = exports = Ext.define(
 	{
 		/**
 		 * @memberof NextThought.store.BatchInterface#
-		 *
 		 * @param {Object} config - values to set up the batch interface with
 		 * @param {string} config.url - the url of the batch
 		 * @param {Object} config.params - the params to send
@@ -47,7 +46,6 @@ const BatchInterface = (module.exports = exports = Ext.define(
 		 * Given a url and params, get a batch from the server
 		 *
 		 * @memberof NextThought.store.BatchInterface#
-		 *
 		 * @param  {string} url - url of the batch
 		 * @param  {string} params - params to send back
 		 * @returns {Promise} - fulfills with the response from the server

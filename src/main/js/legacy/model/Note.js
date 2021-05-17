@@ -181,9 +181,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	 * @param {Function} callback -
 	 * @param {Object} scope -
 	 * @param {Object} additionalParams An optional object describing params to send to the server.
-	 *
 	 *     Ex: { sortOn: 'lastModified', sortOrder: 'descending' }
-	 *
 	 * @returns {void}
 	 */
 	loadReplies: function (callback, scope, additionalParams) {

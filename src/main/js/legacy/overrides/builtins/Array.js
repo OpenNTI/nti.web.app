@@ -8,7 +8,6 @@ module.exports = exports = Ext.define(
 (function () {
 	/**
 	 * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
-	 *
 	 * @param {Function} callback -
 	 * @param {*} [initialValue] -
 	 * @returns {*} -

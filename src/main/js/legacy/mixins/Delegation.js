@@ -15,7 +15,6 @@ var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
 	 * @param {boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
 	 *						return value will be meaningless, so don't use this for functions that need to return
 	 *						something)
-	 *
 	 * @returns {Function} The delegated function.
 	 */
 	getDelegated: function (fn, applyAll) {

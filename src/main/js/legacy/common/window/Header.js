@@ -26,13 +26,11 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	],
 
 	/**
-	 * @property {Object} tools
-	 *
-	 * A dictionary of tools dictionaries.
-	 *
 	 * Ex:
 	 *
+	 * ```js
 	 * { whiteboard: { handler: function(){}, scope: this, tip: 'tool tip' } }
+	 * ```
 	 *
 	 * A null scope will resolve to this components' parent (the window)
 	 *
@@ -42,6 +40,8 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	 * The generated HTML will look something like this:
 	 *
 	 * <img src="..." class="tool x" alt="tool tip"/>
+	 *
+	 * @property {Object} tools A dictionary of tools dictionaries.
 	 */
 
 	renderSelectors: {

@@ -79,13 +79,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 	changeActionMap: {
 		/**
-		 * Stubs that show what we could handle. They will be called with these args:
+		 * Stubs that show what we could handle.
+		 * These are assigned in the init() above
+		 * They will be called with these args:
 		 *
-		 *	  @param {Object|Ext.data.Model} change the change record.
-		 *	  @param {Object|Ext.data.Model} item Item the change is about.
-		 *	  @param {Object} meta Location meta data
-		 *
-		 * these are assigned in the init() above
+		 * @param {Object|Ext.data.Model} change the change record.
+		 * @param {Object|Ext.data.Model} item Item the change is about.
+		 * @param {Object} meta Location meta data
 		 */
 		created: 'incomingCreatedChange',
 		deleted: 'incomingDeletedChange',
@@ -1107,8 +1107,6 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	 * @param {string|Array} body - update body
 	 * @param {string} title - updated title
 	 * @returns {Promise} -
-	 *
-	 * TODO: Combine this together with the saveNewNote Code.
 	 */
 	saveUpdatedNote: function (record, body, title) {
 		if (!record) {

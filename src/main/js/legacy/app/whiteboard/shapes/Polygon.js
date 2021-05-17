@@ -67,7 +67,7 @@ module.exports = exports = Ext.define(
 			/**
 			 * Unused func. We might use this function in the future when we need to migrate existing triangles.
 			 *
-			 * */
+			 */
 
 			if (this.migrated) {
 				return;
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define(
 			/**
 			 * Unused func. We will use it to draw triangles correctly.
 			 *
-			 * */
+			 */
 			var w2 = 0.5,
 				h2 = 0.5;
 
