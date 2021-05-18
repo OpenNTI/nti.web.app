@@ -466,7 +466,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			if (item && item.handleRoute) {
 				item.gotoResources = () => this.gotoResources();
 
-				return item.handleRoute(subRoute, route.precache).then();
+				return item.handleRoute(subRoute, route.precache);
 			}
 		});
 	},
@@ -484,7 +484,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			if (item && item.handleRoute) {
 				item.gotoResources = () => this.gotoResources();
 
-				return item.handleRoute(subRoute, route.precache).then();
+				return item.handleRoute(subRoute, route.precache);
 			}
 		});
 	},

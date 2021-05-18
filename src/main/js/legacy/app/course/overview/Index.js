@@ -124,11 +124,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.setTitle(this.title);
 	},
 
-	onRouteDeactivate: function () {
+	onRouteDeactivate: function (...args) {
 		const active = this.getLayout().getActiveItem();
 
-		if (active && active.onRouteDeactivate) {
-			active.onRouteDeactivate();
+		active?.onRouteDeactivate?.(...args);
+
+		const [newRoute] = args;
+		if (!/^\/course/.test(newRoute)) {
+			this.lessons.clear();
 		}
 
 		if (this.activeMediaWindow) {
@@ -367,9 +370,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				me.reader = me.add({
 					xtype: 'bundle-content',
 					currentBundle: me.currentBundle,
-					handleContentNavigation: me.handleContentNavigation.bind(
-						me
-					),
+					handleContentNavigation:
+						me.handleContentNavigation.bind(me),
 					handleNavigation: me.handleNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),
 					onDelete: () => {

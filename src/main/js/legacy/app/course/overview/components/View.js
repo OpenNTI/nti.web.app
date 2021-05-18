@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { wait } = require('@nti/lib-commons');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { getString } = require('internal/legacy/util/Localization');
 const Globals = require('internal/legacy/util/Globals');
@@ -49,9 +48,8 @@ module.exports = exports = Ext.define(
 				}
 			};
 
-			this.navigation.selectOutlineNode = this.selectOutlineNode.bind(
-				this
-			);
+			this.navigation.selectOutlineNode =
+				this.selectOutlineNode.bind(this);
 			this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
 
 			this.addChildRouter(this.body);
@@ -85,12 +83,18 @@ module.exports = exports = Ext.define(
 			this.navigation.onBeforeRouteActivate();
 		},
 
-		mask: function () {
+		mask() {
 			if (this.el && this.el.dom) {
 				this.el.mask(
 					getString('NextThought.view.courseware.View.loading'),
 					'loading'
 				);
+			}
+		},
+
+		unmask() {
+			if (this.el) {
+				this.el.unmask();
 			}
 		},
 
@@ -101,7 +105,7 @@ module.exports = exports = Ext.define(
 			this.body.onRouteDeactivate();
 			this.navigation.onRouteDeactivate();
 
-			this.clear();
+			// this.clear();
 		},
 
 		alignNavigation: function () {
@@ -152,8 +156,7 @@ module.exports = exports = Ext.define(
 
 				Ext.Msg.show({
 					title: 'Are you sure?',
-					msg:
-						'Changes are synced between all sections of your course.',
+					msg: 'Changes are synced between all sections of your course.',
 					doNotShowAgainKey: 'editing-shared-outline',
 					buttons: {
 						primary: {
@@ -369,22 +372,14 @@ module.exports = exports = Ext.define(
 
 			me.mon(me.body, {
 				single: true,
-				buffer: 1,
+				buffer: 10,
 				add: me.unmask.bind(me),
 			});
 
-			wait().then(function () {
-				me.mask();
-			});
+			me.mask();
 
 			me.navigation.clear();
 			me.body.clear();
-		},
-
-		unmask: function () {
-			if (this.el) {
-				this.el.unmask();
-			}
 		},
 
 		getActiveItem: function () {

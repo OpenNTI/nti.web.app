@@ -230,6 +230,8 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 	async renderLesson(record, doNotCache, subRoute) {
+		const nonce = {};
+		this.renderLessonTask = nonce;
 		try {
 			this.buildingOverview = true;
 
@@ -245,6 +247,9 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			this.activeRecord = record;
 
 			const course = await this.bundle.getInterfaceInstance();
+			if (this.renderLessonTask !== nonce) {
+				return;
+			}
 
 			if (!this.currentOverview) {
 				this.currentOverview = this.add({
@@ -270,7 +275,10 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			}
 
 			//If another lesson got rendered while we were loading don't do anything
-			if (this.activeRecord.getId() !== record.getId()) {
+			if (
+				this.renderLessonTask !== nonce &&
+				this.activeRecord.getId() !== record.getId()
+			) {
 				return;
 			}
 
@@ -281,6 +289,10 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			});
 		} catch (e) {
 			console.error(e);
+		} finally {
+			if (this.renderLessonTask === nonce) {
+				delete this.renderLessonTask;
+			}
 		}
 	},
 

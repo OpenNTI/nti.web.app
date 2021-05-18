@@ -253,11 +253,7 @@ const OutlineNode = (module.exports = exports = Ext.define(
 					);
 			}
 
-			body.items.each(function (item) {
-				if (item && item.selectRecord) {
-					item.selectRecord(record, scrollTo);
-				}
-			});
+			body.items.each(item=> item?.selectRecord?.(record, scrollTo));
 		},
 
 		stopEditing: function () {
