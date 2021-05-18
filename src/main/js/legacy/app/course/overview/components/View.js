@@ -67,11 +67,6 @@ module.exports = exports = Ext.define(
 			this.onScroll = this.onScroll.bind(this);
 		},
 
-		afterRender() {
-			this.callParent(arguments);
-			this.mask();
-		},
-
 		onRouteActivate: function () {
 			this.getNewestOutline(this.isEditing);
 
