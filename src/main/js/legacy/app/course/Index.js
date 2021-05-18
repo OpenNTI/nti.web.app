@@ -226,6 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				if (course) {
 					fulfill(course);
 				} else {
+					me.el?.mask('Loading...', 'loading');
 					Service.getObject(ntiid)
 						.then(item => {
 							if (item.isCourse) {
@@ -262,7 +263,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 							}
 
 							fulfill(null);
-						});
+						})
+						.finally(() => me.el?.unmask());
 				}
 			}).then(current => {
 				if (!current) {
