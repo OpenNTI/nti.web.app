@@ -332,11 +332,32 @@
 	}
 }
 
+.main-body > .x-masked[id*='course-view-container'] {
+	.x-mask {
+		background: rgba(0, 0, 0, 0);
+	}
+	.x-mask-msg.loading {
+		background: #fff;
+		border-radius: 5px;
+	}
+}
+
+.main-body > .x-masked[id*='course-view-container'],
+.navigation-panel.course-overview {
+	--height: calc(
+		100vh - var(--navigation-top, 0) - var(--navigation-bottom-gap, 0)
+	);
+
+	min-height: var(--height);
+	margin-top: 20px;
+	padding-top: 0;
+}
+
 .x-container-course {
 	&.course-overview {
 		background: #fff;
 		overflow: hidden;
-		min-height: 50px;
+		min-height: 50vh;
 
 		@include scrollbar(#ffffff, var(--tertiary-grey));
 
@@ -488,10 +509,6 @@
 
 	&.overview-videos,
 	&.overview-video {
-		&.video-roll {
-			margin: 10px 0;
-		}
-
 		@extend .overview-group;
 
 		&.singular {
@@ -542,6 +559,7 @@
 		}
 
 		&.video-roll {
+			margin: 10px 0;
 			.body {
 				position: relative;
 				overflow: hidden;
@@ -648,7 +666,7 @@
 
 										&::before {
 											content: '\221A';
-											font-family: 'icomoon' !important;
+											font-family: 'icomoon', serif !important;
 											font-size: 14px;
 											position: absolute;
 											left: 8px;

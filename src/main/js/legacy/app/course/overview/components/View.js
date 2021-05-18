@@ -67,6 +67,11 @@ module.exports = exports = Ext.define(
 			this.onScroll = this.onScroll.bind(this);
 		},
 
+		afterRender() {
+			this.callParent(arguments);
+			this.mask();
+		},
+
 		onRouteActivate: function () {
 			this.getNewestOutline(this.isEditing);
 
@@ -101,7 +106,7 @@ module.exports = exports = Ext.define(
 			this.body.onRouteDeactivate();
 			this.navigation.onRouteDeactivate();
 
-			this.mask();
+			this.clear();
 		},
 
 		alignNavigation: function () {
