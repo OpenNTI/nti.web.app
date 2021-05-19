@@ -45,7 +45,7 @@ class CourseContentViewerRendererCalendarEvent extends React.Component {
 		return (
 			<div>
 				<Layouts.Aside component={Sidebar} course={course} />
-				<View event={event} dialog={false} noControls />
+				<View event={event} dialog={false} controls={false} />
 			</div>
 		);
 	}
