@@ -1,15 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames/bind';
 
 import { Router } from '@nti/web-routing';
 import { CalendarEvents, Event, getCourseCalendar } from '@nti/web-calendar';
 import { FillToBottom } from '@nti/web-commons';
 
-import styles from './Sidebar.css';
+const SidebarContent = styled(FillToBottom)`
+	& :global(.icon-wrapper) {
+		display: none;
+	}
 
-const cx = classnames.bind(styles);
-
+	& :global(.calendar-day .day-events) {
+		padding: 0;
+	}
+`;
 export default class CalendarEventSidebar extends React.Component {
 	static propTypes = {
 		course: PropTypes.object.isRequired,
@@ -52,9 +56,9 @@ export default class CalendarEventSidebar extends React.Component {
 
 		return !calendar ? null : (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor}>
-				<FillToBottom limit className={cx('calendar-event-sidebar')}>
+				<SidebarContent limit>
 					<CalendarEvents calendar={calendar} />
-				</FillToBottom>
+				</SidebarContent>
 				{viewEvent && (
 					<Event.View
 						event={viewEvent}

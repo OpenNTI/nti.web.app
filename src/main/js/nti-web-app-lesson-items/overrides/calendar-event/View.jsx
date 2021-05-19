@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames/bind';
 
 import { Event } from '@nti/web-calendar';
 import { decorate } from '@nti/lib-commons';
@@ -9,11 +8,13 @@ import { Layouts } from '@nti/web-commons';
 import TypeRegistry from '../Registry';
 
 import Sidebar from './Sidebar';
-import styles from './View.css';
 
-const cx = classnames.bind(styles);
+const View = styled(Event.View)`
+	& :global(.calendar-event-editor) {
+		width: auto;
+	}
+`;
 
-const { Aside } = Layouts;
 const MIME_TYPES = {
 	'application/vnd.nextthought.nticalendareventref': true,
 };
@@ -43,13 +44,8 @@ class CourseContentViewerRendererCalendarEvent extends React.Component {
 
 		return (
 			<div>
-				<Aside component={Sidebar} course={course} />
-				<Event.View
-					event={event}
-					className={cx('lesson-event-view')}
-					nonDialog
-					noControls
-				/>
+				<Layouts.Aside component={Sidebar} course={course} />
+				<View event={event} dialog={false} noControls />
 			</div>
 		);
 	}
