@@ -42,11 +42,9 @@ module.exports = exports = Ext.define(
 			this.onceBundleSetup = bundle
 				.getInterfaceInstance()
 				.then(courseInterface => {
-					if (courseInterface?.PreferredAccess?.isAdministrative) {
-						this.setupAdminInfo(courseInterface);
-					} else {
+					return courseInterface?.PreferredAccess?.isAdministrative ?
+						this.setupAdminInfo(courseInterface) :
 						this.setupStudentInfo(bundle);
-					}
 				});
 		},
 
@@ -112,7 +110,7 @@ module.exports = exports = Ext.define(
 				this.studentInfo = this.add(StudentInfo.create({}));
 			}
 
-			this.studentInfo.bundleChanged(bundle);
+			return this.studentInfo.bundleChanged(bundle);
 		},
 
 		async showCourseInfo(route, subRoute) {
