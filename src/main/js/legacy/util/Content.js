@@ -108,9 +108,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				toc: toc,
 				location: node,
 				NTIID: ntiid,
-				ContentNTIID: node.ownerDocument.documentElement.getAttribute(
-					'ntiid'
-				),
+				ContentNTIID:
+					node.ownerDocument.documentElement.getAttribute('ntiid'),
 			};
 		}
 
@@ -374,9 +373,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				bundleOrToc
 					.getContentPackageContaining(ntiid)
 					.then(contentPackage =>
-						contentPackage.getInterfaceInstance()
+						contentPackage?.getInterfaceInstance()
 					)
-					.then(contentPackage => contentPackage.getRealPageIndex())
+					.then(contentPackage => contentPackage?.getRealPageIndex())
 					.catch(() => null),
 			]).then(results => {
 				const [nodes, realPageIndex] = results;
