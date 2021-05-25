@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import AdminsTable from '../AdminsTable';
 
@@ -52,8 +53,6 @@ const onBefore = numberOfUsers => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin user admin list (with no items)', () => {

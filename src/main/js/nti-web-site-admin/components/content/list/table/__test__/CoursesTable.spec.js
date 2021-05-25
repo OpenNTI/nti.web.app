@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import CoursesTable from '../CoursesTable';
 
@@ -59,8 +60,6 @@ const onBefore = numberOfCourses => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin content course list (with no items)', () => {

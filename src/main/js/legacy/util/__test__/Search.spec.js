@@ -1,4 +1,3 @@
-/* globals spyOn */
 /* eslint-env jest */
 const Ext = require('@nti/extjs');
 const Hit = require('internal/legacy/model/Hit');
@@ -60,10 +59,10 @@ describe('Search utils', () => {
 
 	describe('extractMatchFromFragment', () => {
 		test('Finds partial string', () => {
-			const result = SearchUtils.extractMatchFromFragment('I like cake', [
-				2,
-				6,
-			]);
+			const result = SearchUtils.extractMatchFromFragment(
+				'I like cake',
+				[2, 6]
+			);
 
 			expect(result).toBe('like');
 		});
@@ -151,13 +150,11 @@ describe('Search utils', () => {
 		beforeEach(() => {
 			MockSearchUtils = Ext.create('NextThought.util.Search');
 			MockTerms = ['cat', 'dog', 'plecostomus'];
-			spyOn(MockSearchUtils, 'contentRegexPartsForHit').andReturn(
-				MockTerms
-			);
-			spyOn(
+			jest.spyOn(
 				MockSearchUtils,
-				'contentRegexFromSearchTerm'
-			).andCallThrough();
+				'contentRegexPartsForHit'
+			).mockReturnValue(MockTerms);
+			jest.spyOn(MockSearchUtils, 'contentRegexFromSearchTerm');
 		});
 
 		test('Escapes each term', () => {

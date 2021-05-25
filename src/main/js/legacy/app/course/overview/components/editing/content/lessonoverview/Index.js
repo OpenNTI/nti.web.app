@@ -98,7 +98,7 @@ module.exports = exports = Ext.define(
 		},
 
 		afterSetCollection: function () {
-			setImmediate(() => this.uncacheHeight());
+			setTimeout(() => this.uncacheHeight(), 0);
 			this.enableOrderingContainer();
 		},
 

@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import BooksTable from '../BooksTable';
 
@@ -54,8 +55,6 @@ const onBefore = numberOfBooks => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin content book list (with no items)', () => {

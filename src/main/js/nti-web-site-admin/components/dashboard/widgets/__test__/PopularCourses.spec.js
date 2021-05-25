@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import PopularCourses from '../PopularCourses';
 
@@ -59,8 +60,6 @@ const onBefore = (numberOfCourses, hasBatchPrev) => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin dashboard widget popular courses (5 items, no previous)', () => {

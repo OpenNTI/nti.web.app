@@ -173,7 +173,7 @@ module.exports = exports = Ext.define(
 
 		afterSetCollection: function () {
 			this.enableOrderingContainer();
-			setImmediate(() => this.uncacheHeight());
+			setTimeout(() => this.uncacheHeight(), 0);
 
 			if (this.reenableDragging) {
 				delete this.reenableDragging;

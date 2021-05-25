@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 import { Date as DateUtils } from '@nti/lib-commons';
 
 import ActiveTimes from '../ActiveTimes';
@@ -35,8 +36,6 @@ const onBefore = hasData => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin user course enrollment overview active times widget (has data)', () => {

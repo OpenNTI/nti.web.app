@@ -3,6 +3,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import InvitationsTable from '../InvitationsTable';
 
@@ -54,15 +55,6 @@ const getMockService = numberOfUsers => {
 		},
 	};
 };
-
-const flushPromises = (run => () =>
-	new Promise(resolve => {
-		if (jest.isMockFunction(setTimeout)) {
-			jest.runAllTimers();
-		}
-
-		run.call(process, resolve);
-	}))(process.nextTick);
 
 async function pollForState(testRenderer, Component, test, timeout = 5000) {
 	let start = new Date();

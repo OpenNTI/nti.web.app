@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		}
 
 		if (el) {
-			setImmediate(() => el.classList.add('dragging'));
+			setTimeout(() => el.classList.add('dragging'), 0);
 		}
 
 		this.DnDActions.startDrag(this);

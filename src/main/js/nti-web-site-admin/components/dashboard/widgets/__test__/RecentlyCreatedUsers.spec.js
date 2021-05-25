@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { flushPromises } from '@nti/lib-commons/test-utils';
 
 import RecentlyCreatedUsers from '../RecentlyCreatedUsers';
 
@@ -43,8 +44,6 @@ const onBefore = numberOfUsers => {
 const onAfter = () => {
 	tearDownTestClient();
 };
-
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin dashboard widget recently created users (5 users total)', () => {

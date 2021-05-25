@@ -1,4 +1,4 @@
-/* globals spyOn, NextThought */
+/* globals NextThought */
 /* eslint-env jest */
 require('internal/legacy/mixins/Router');
 
@@ -223,12 +223,12 @@ describe('Router mixin tests', () => {
 				parent.addChildRouter(first);
 				first.addChildRouter(second);
 
-				spyOn(parent, 'pushRoute').and.callThrough();
-				spyOn(parent, 'replaceRoute').and.callThrough();
-				spyOn(testCtrl, 'pushRootRoute').and.callThrough();
-				spyOn(testCtrl, 'replaceRootRoute').and.callThrough();
-				spyOn(first, 'pushRoute').and.callThrough();
-				spyOn(first, 'replaceRoute').and.callThrough();
+				jest.spyOn(parent, 'pushRoute');
+				jest.spyOn(parent, 'replaceRoute');
+				jest.spyOn(testCtrl, 'pushRootRoute');
+				jest.spyOn(testCtrl, 'replaceRootRoute');
+				jest.spyOn(first, 'pushRoute');
+				jest.spyOn(first, 'replaceRoute');
 			});
 
 			test('pushRoute', () => {
@@ -293,7 +293,7 @@ describe('Router mixin tests', () => {
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create();
 
-			spyOn(obj, 'handler');
+			jest.spyOn(obj, 'handler');
 
 			router.addObjectHandler(
 				[
@@ -312,7 +312,7 @@ describe('Router mixin tests', () => {
 			expect(obj.handler).toHaveBeenCalledWith(page);
 		});
 
-		test('Navigate to Object calls parent', function (done) {
+		test('Navigate to Object calls parent', async () => {
 			var obj = { parent: () => {}, child: () => {} },
 				// first = false, second = false,
 				note = NextThought.model.Note.create(),
@@ -321,8 +321,8 @@ describe('Router mixin tests', () => {
 
 			router.addChildRouter(child);
 
-			spyOn(obj, 'parent').and.callThrough();
-			spyOn(obj, 'child').and.callThrough();
+			jest.spyOn(obj, 'parent');
+			jest.spyOn(obj, 'child');
 
 			child.addObjectHandler(
 				NextThought.model.PageInfo.mimeType,
@@ -337,49 +337,13 @@ describe('Router mixin tests', () => {
 				obj.parent
 			);
 
-			child
-				.navigateToObject(page)
-				.then(() => {
-					expect(obj.child).toHaveBeenCalledWith(page);
-					expect(obj.parent).not.toHaveBeenCalled();
+			await child.navigateToObject(page);
+			expect(obj.child).toHaveBeenCalledWith(page);
+			expect(obj.parent).not.toHaveBeenCalled();
 
-					return child.navigateToObject(note);
-				})
-				.then(() => {
-					expect(obj.child.calls.count()).toEqual(1);
-					expect(obj.parent).toHaveBeenCalledWith(note);
-				})
-				.then(() => {
-					done();
-				});
-
-			// child.navigateToObject(page)
-			// 	.then(() => {
-			// 		first = true;
-			// 	});
-
-			// waitsFor(() => {
-			// 	return first;
-			// }, 'navigate never finishes', 500);
-
-			// runs(() => {
-			// 	expect(obj.child).toHaveBeenCalledWith(page);
-			// 	expect(obj.parent).not.toHaveBeenCalled();
-
-			// 	child.navigateToObject(note)
-			// 		.then(() => {
-			// 			second = true;
-			// 		});
-			// });
-
-			// waitsFor(() => {
-			// 	return second;
-			// }, 'navigate never finishes', 500);
-
-			// runs(() => {
-			// 	expect(obj.child.callCount).toEqual(1);
-			// 	expect(obj.parent).toHaveBeenCalledWith(note);
-			// });
+			await child.navigateToObject(note);
+			expect(obj.child).toHaveBeenCalledTimes(1);
+			expect(obj.parent).toHaveBeenCalledWith(note);
 		});
 	});
 });
