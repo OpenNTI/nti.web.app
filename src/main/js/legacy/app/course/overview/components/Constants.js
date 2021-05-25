@@ -137,7 +137,7 @@ const ROUTE_BUILDERS = {
 	) => {
 		if (
 			obj.isExternal &&
-			!obj.isEmbeddableDocument &&
+			!obj.isEmbedableDocument &&
 			context !== 'discussions'
 		) {
 			return {
@@ -147,7 +147,7 @@ const ROUTE_BUILDERS = {
 		}
 
 		const ntiid =
-			obj.isEmbeddableDocument || obj.isExternal
+			obj.isEmbedableDocument || obj.isExternal
 				? obj.NTIID
 				: obj['target-NTIID'] || obj.NTIID;
 
@@ -186,8 +186,10 @@ const ROUTE_BUILDERS = {
 	'application/vnd.nextthought.narandomizedquestionset': getAssessmentRoute,
 
 	'application/vnd.nextthought.assignmentref': getAssignmentRefRoute,
-	'application/vnd.nextthought.assessment.discussionassignment': getAssignmentRoute,
-	'application/vnd.nextthought.assessment.timedassignment': getAssignmentRoute,
+	'application/vnd.nextthought.assessment.discussionassignment':
+		getAssignmentRoute,
+	'application/vnd.nextthought.assessment.timedassignment':
+		getAssignmentRoute,
 	'application/vnd.nextthought.assessment.assignment': getAssignmentRoute,
 
 	'application/vnd.nextthought.surveyref': (course, lesson, obj) => {

@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	 *
 	 * @returns {boolean} [description]
 	 */
-	isEmbeddableDocument: function () {
+	isEmbedableDocument: function () {
 		var type = this.get('type');
 
 		return this.isDocument() && this.self.EMBEDABLE_TYPES[type];
