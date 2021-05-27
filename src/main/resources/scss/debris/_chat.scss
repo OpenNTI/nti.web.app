@@ -938,9 +938,9 @@ body.white-shade-mask .chat-gutter-window {
 	background-color: rgba(35, 35, 35, 0.15);
 }
 
-html.nti-course-content-open,
-body.discussion-detail-open,
-body.media-viewer-open {
+.nti-course-content-open,
+.discussion-detail-open,
+.media-viewer-open {
 	.social-bar-container {
 		// When the course content window is open, we still want the chat bar to be intractable.
 		// The only way to do this in the current system (without route-specific views) is
