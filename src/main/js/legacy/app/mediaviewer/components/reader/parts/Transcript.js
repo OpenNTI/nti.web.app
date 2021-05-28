@@ -65,8 +65,7 @@ module.exports = exports = Ext.define(
 										tag: 'span',
 										cls: 'control-container',
 										cn: {
-											cls:
-												'note-here-control-box add-note-here hidden',
+											cls: 'note-here-control-box add-note-here hidden',
 											tag: 'span',
 										},
 									},

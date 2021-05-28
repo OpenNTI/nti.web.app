@@ -60,14 +60,12 @@ module.exports = exports = Ext.define(
 													{
 														tag: 'input',
 														type: 'checkbox',
-														id:
-															'reply-check-toggle',
+														id: 'reply-check-toggle',
 														cls: 'reply-check',
 													},
 													{
 														tag: 'label',
-														for:
-															'reply-check-toggle',
+														for: 'reply-check-toggle',
 														html: 'Allow Replies',
 													},
 												],
@@ -599,8 +597,7 @@ module.exports = exports = Ext.define(
 
 						alert({
 							title: 'Error',
-							msg:
-								'There was an error sending your email. Please try again later.',
+							msg: 'There was an error sending your email. Please try again later.',
 						});
 
 						Ext.Error.raise(

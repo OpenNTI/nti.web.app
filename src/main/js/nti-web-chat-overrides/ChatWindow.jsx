@@ -28,11 +28,11 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 		window?.on(listen);
 		return () => {
 			window?.un(listen);
-		}
+		};
 	}, [window, onClose]);
 
 	React.useEffect(() => {
-		const openChat = async (_entity) => {
+		const openChat = async _entity => {
 			const actions = ChatActions.create();
 			const roomInfo = await actions.createChatRoom(_entity);
 
@@ -47,7 +47,7 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 
 		return () => {
 			window?.hide();
-		}
+		};
 	}, [entity]);
 
 	React.useEffect(() => {

@@ -6,7 +6,7 @@ const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const EditingActions = require('../../Actions');
 
-const {AccentPicker} = Overview.Items.Group;
+const { AccentPicker } = Overview.Items.Group;
 
 const styles = stylesheet`
 	.editor {
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define(
 				onChange: newColor => {
 					this.colorInput.setProps({ value: newColor });
 					this.onInputChange();
-				}
+				},
 			});
 
 			this.onInputChange();

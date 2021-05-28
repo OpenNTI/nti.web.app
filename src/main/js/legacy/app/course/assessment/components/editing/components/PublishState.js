@@ -23,9 +23,8 @@ module.exports = exports = Ext.define(
 			this.callParent(arguments);
 
 			this.onPublishCheckChanged = this.onPublishCheckChanged.bind(this);
-			this.onScheduleCheckChanged = this.onScheduleCheckChanged.bind(
-				this
-			);
+			this.onScheduleCheckChanged =
+				this.onScheduleCheckChanged.bind(this);
 			this.onDraftCheckChanged = this.onDraftCheckChanged.bind(this);
 
 			const group = 'publish-state-' + this.id;

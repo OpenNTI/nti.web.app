@@ -319,7 +319,9 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			const contentPackage = await this.bundle?.getContentPackage(contentPackageId).catch(() => null);
+			const contentPackage = await this.bundle
+				?.getContentPackage(contentPackageId)
+				.catch(() => null);
 
 			if (contentPackage && contentPackage.hasLink('edit')) {
 				this.controlBar = ReactHarness.create({

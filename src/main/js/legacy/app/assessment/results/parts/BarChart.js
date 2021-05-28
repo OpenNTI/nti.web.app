@@ -46,8 +46,7 @@ module.exports = exports = Ext.define(
 													{
 														cls: 'item',
 														style: {
-															width:
-																'{percentWidth}%',
+															width: '{percentWidth}%',
 														},
 														cn: [
 															{
@@ -62,42 +61,29 @@ module.exports = exports = Ext.define(
 																cls: 'info',
 																cn: [
 																	{
-																		tag:
-																			'span',
-																		cls:
-																			'percent',
-																		html:
-																			'{percent}%',
+																		tag: 'span',
+																		cls: 'percent',
+																		html: '{percent}%',
 																	},
 																	{
-																		tag:
-																			'tpl',
-																		if:
-																			'label',
+																		tag: 'tpl',
+																		if: 'label',
 																		cn: [
 																			{
-																				tag:
-																					'span',
-																				cls:
-																					'label',
-																				html:
-																					' - {label}',
+																				tag: 'span',
+																				cls: 'label',
+																				html: ' - {label}',
 																			},
 																		],
 																	},
 																	{
-																		tag:
-																			'tpl',
-																		if:
-																			'sublabel',
+																		tag: 'tpl',
+																		if: 'sublabel',
 																		cn: [
 																			{
-																				tag:
-																					'span',
-																				cls:
-																					'sublabel',
-																				html:
-																					'{sublabel}',
+																				tag: 'span',
+																				cls: 'sublabel',
+																				html: '{sublabel}',
 																			},
 																		],
 																	},

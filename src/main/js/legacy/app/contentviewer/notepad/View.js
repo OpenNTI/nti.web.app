@@ -24,8 +24,7 @@ module.exports = exports = Ext.define(
 					cn: [
 						{
 							cls: 'note-here',
-							html:
-								'{{{NextThought.view.content.notepad.View.addnote}}}',
+							html: '{{{NextThought.view.content.notepad.View.addnote}}}',
 						},
 					],
 				},

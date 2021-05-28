@@ -41,10 +41,11 @@ module.exports = exports = Ext.define(
 						config.weight = getWeight(assignment);
 						config.course = course;
 						//TODO: get rid of getAssignmentHistory
-						config.getAssignmentHistory = assignments.getHistoryItem(
-							assignment.getId(),
-							true
-						);
+						config.getAssignmentHistory =
+							assignments.getHistoryItem(
+								assignment.getId(),
+								true
+							);
 
 						return config;
 					});
@@ -59,12 +60,10 @@ module.exports = exports = Ext.define(
 						var assignments = [];
 
 						assignmentCollection.each(function (assignment) {
-							var assignmentStart = assignment.get(
-									'availableBeginning'
-								),
-								assignmentEnd = assignment.get(
-									'availableEnding'
-								);
+							var assignmentStart =
+									assignment.get('availableBeginning'),
+								assignmentEnd =
+									assignment.get('availableEnding');
 
 							//don't show the final grade assignment
 							if (

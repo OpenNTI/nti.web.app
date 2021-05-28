@@ -63,8 +63,7 @@ module.exports = exports = Ext.define(
 							html: ' ',
 						},
 						{
-							cls:
-								"bar-cell {[values.annotatable || values.title || values.caption ? '' : 'no-details']}",
+							cls: "bar-cell {[values.annotatable || values.title || values.caption ? '' : 'no-details']}",
 							cn: [
 								{
 									tag: 'a',
@@ -99,8 +98,7 @@ module.exports = exports = Ext.define(
 										'data-qtip':
 											'{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
 										cls: 'mark',
-										html:
-											'{{{NextThought.view.content.reader.ResourceManagement.comment}}}',
+										html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}',
 									},
 								},
 							],
@@ -142,8 +140,7 @@ module.exports = exports = Ext.define(
 							html: ' ',
 						},
 						{
-							cls:
-								"bar-cell {[values.annotatable || values.title || values.caption ? '' : 'no-details']}",
+							cls: "bar-cell {[values.annotatable || values.title || values.caption ? '' : 'no-details']}",
 							cn: [
 								{
 									tag: 'tpl',
@@ -172,8 +169,7 @@ module.exports = exports = Ext.define(
 										'data-qtip':
 											'{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
 										cls: 'mark',
-										html:
-											'{{{NextThought.view.content.reader.ResourceManagement.comment}}}',
+										html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}',
 									},
 								},
 							],
@@ -434,8 +430,7 @@ module.exports = exports = Ext.define(
 							click: function (e) {
 								var sel = e
 										.getTarget()
-										.ownerDocument.getSelection()
-										.isCollapsed,
+										.ownerDocument.getSelection().isCollapsed,
 									dom = e.getTarget(itemSelector),
 									el = Ext.get(dom);
 

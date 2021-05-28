@@ -143,8 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style:
-						'overflow-x: hidden; overflow-y:auto; height: calc(600px - 35px); width: 100%;',
+					style: 'overflow-x: hidden; overflow-y:auto; height: calc(600px - 35px); width: 100%;',
 				},
 			},
 		});

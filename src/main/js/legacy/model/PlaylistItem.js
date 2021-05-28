@@ -111,7 +111,8 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		fromURL: function (url) {
 			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 			function parseYoutubeIdOut(uri) {
-				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/,
+				var regExp =
+						/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/,
 					match = uri.match(regExp);
 				if (match && match[2].length === 11) {
 					return match[2];

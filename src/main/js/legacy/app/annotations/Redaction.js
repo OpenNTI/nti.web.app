@@ -443,8 +443,7 @@ module.exports = exports = Ext.define(
 				{
 					tag: 'span',
 					cls: 'redacted-text',
-					html:
-						'{{{NextThought.view.annotations.Redaction.footnote-message}}}',
+					html: '{{{NextThought.view.annotations.Redaction.footnote-message}}}',
 					'data-non-anchorable': 'true',
 					'data-no-anchors-within': 'true',
 				},

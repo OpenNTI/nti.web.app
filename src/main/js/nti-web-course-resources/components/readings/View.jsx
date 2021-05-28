@@ -8,8 +8,8 @@ import { Table, EmptyState, Loading, Hooks, Errors } from '@nti/web-commons';
 
 import ListItem from './ListItem';
 
-const {useResolver} = Hooks;
-const {isPending, isErrored, isResolved} = useResolver;
+const { useResolver } = Hooks;
+const { isPending, isErrored, isResolved } = useResolver;
 
 const DEFAULT_TEXT = {
 	name: 'Name',
@@ -71,29 +71,27 @@ const columns = [
 			const aModified = a.getLastModified();
 			const bModified = b.getLastModified();
 
-			return aModified < bModified
-				? -1
-				: aModified === bModified
-				? 0
-				: 1;
+			return aModified < bModified ? -1 : aModified === bModified ? 0 : 1;
 		},
 	},
 ];
 
-function getFilter (term) {
-	if (!term) { return () => true; }
+function getFilter(term) {
+	if (!term) {
+		return () => true;
+	}
 
 	const regex = new RegExp(term, 'i');
 
-	return (c) => regex.test(c.title);
+	return c => regex.test(c.title);
 }
 
 Readings.propTypes = {
 	course: PropTypes.object,
 	gotoResource: PropTypes.func,
-	searchTerm: PropTypes.string
+	searchTerm: PropTypes.string,
 };
-function Readings ({course, gotoResource, searchTerm}) {
+function Readings({ course, gotoResource, searchTerm }) {
 	const resolver = useResolver(async () => {
 		const items = await course.ContentPackageBundle.getContentPackages();
 
@@ -121,8 +119,11 @@ function Readings ({course, gotoResource, searchTerm}) {
 
 	return (
 		<div className="nti-web-course-resources">
-			<Loading.Placeholder loading={loading} fallback={<Loading.Spinner.Large />}>
-				{error && (<Errors.Message error={error} />)}
+			<Loading.Placeholder
+				loading={loading}
+				fallback={<Loading.Spinner.Large />}
+			>
+				{error && <Errors.Message error={error} />}
 				{empty && (
 					<EmptyState
 						header={t('emptyHeader')}
@@ -139,8 +140,7 @@ function Readings ({course, gotoResource, searchTerm}) {
 				)}
 			</Loading.Placeholder>
 		</div>
-	)
+	);
 }
 
-export default WithSearch(Readings, {label: t('readings')});
-
+export default WithSearch(Readings, { label: t('readings') });

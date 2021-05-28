@@ -159,8 +159,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									tag: 'p',
-									style:
-										'margin-top: 1rem;text-align: center;color: var(--primary-grey);',
+									style: 'margin-top: 1rem;text-align: center;color: var(--primary-grey);',
 									html: 'Unable to find term.',
 								},
 							],

@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		const validator = this.getValidator();
 
 		try {
-			value = (new URL(value)).toString();
+			value = new URL(value).toString();
 		} catch (e) {
 			value = `${this.defaultProtocol}${value}`;
 		}

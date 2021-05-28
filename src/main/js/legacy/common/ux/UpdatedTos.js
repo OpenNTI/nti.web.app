@@ -19,8 +19,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 				cn: [
 					{
 						tag: 'h3',
-						html:
-							'We recently updated our Terms of Service and Privacy Policy.',
+						html: 'We recently updated our Terms of Service and Privacy Policy.',
 					},
 					{
 						tag: 'span',

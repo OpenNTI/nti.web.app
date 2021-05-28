@@ -45,8 +45,7 @@ module.exports = exports = Ext.define(
 					{
 						tag: 'span',
 						cls: 'label',
-						html:
-							'{{{NextThought.view.courseware.enrollment.Confirmation.TransID}}}',
+						html: '{{{NextThought.view.courseware.enrollment.Confirmation.TransID}}}',
 					},
 					{ cls: 'transaction-id' },
 				],

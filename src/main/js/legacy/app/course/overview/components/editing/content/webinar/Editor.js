@@ -12,8 +12,7 @@ require('internal/legacy/app/course/assessment/components/CreateMenu');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.webinar.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-webinar',
 
 		statics: {
@@ -34,10 +33,12 @@ module.exports = exports = Ext.define(
 						editor: this,
 						isAvailable: async bundle => {
 							try {
-								const instance = await bundle.getInterfaceInstance();
+								const instance =
+									await bundle.getInterfaceInstance();
 
-								const status = await GotoWebinar.connectedStatus(instance);
-								const {connected, canConnect} = status;
+								const status =
+									await GotoWebinar.connectedStatus(instance);
+								const { connected, canConnect } = status;
 
 								return connected || canConnect;
 							} catch (e) {
@@ -67,7 +68,8 @@ module.exports = exports = Ext.define(
 			this.loading = true;
 
 			const lessonOverview = await this.rootRecord.getInterfaceInstance();
-			const overviewGroup = await this.parentRecord.getInterfaceInstance();
+			const overviewGroup =
+				await this.parentRecord.getInterfaceInstance();
 
 			// we have to make sure the overview is the latest, otherwise we could have a stale list of sections
 			await lessonOverview.refresh();

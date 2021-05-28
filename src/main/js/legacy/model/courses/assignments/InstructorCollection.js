@@ -25,7 +25,8 @@ module.exports = exports = Ext.define(
 
 			this.GradeCache = this.__createGradeCache();
 			this.HistoryItemCache = this.__createHistoryItemCache();
-			this.HistoryItemContainerCache = this.__createHistoryItemContainerCache();
+			this.HistoryItemContainerCache =
+				this.__createHistoryItemContainerCache();
 		},
 
 		__getIdOf: function (obj) {

@@ -5,12 +5,10 @@ require('../../itemselection/Index');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.LTIExternalToolAssetSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.itemselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 		alias: 'widget.overview-editing-ltiexternaltoolasset-selection',
 
-		cls:
-			'ltiexternaltoolasset-item-selection item-selection assignment-item-selection',
+		cls: 'ltiexternaltoolasset-item-selection item-selection assignment-item-selection',
 
 		itemTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({

@@ -43,14 +43,12 @@ module.exports = exports = Ext.define(
 								{
 									tag: 'span',
 									cls: 'link edit',
-									html:
-										'{{{NextThought.view.assessment.AssignmentFeedback.edit}}}',
+									html: '{{{NextThought.view.assessment.AssignmentFeedback.edit}}}',
 								},
 								{
 									tag: 'span',
 									cls: 'link delete',
-									html:
-										'{{{NextThought.view.assessment.AssignmentFeedback.delete}}}',
+									html: '{{{NextThought.view.assessment.AssignmentFeedback.delete}}}',
 								},
 							],
 						},

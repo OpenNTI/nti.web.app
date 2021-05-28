@@ -5,8 +5,7 @@ require('../questionset/AssignmentSelection');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.survey.SurveySelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection',
+		extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection',
 		alias: 'widget.overview-editing-survey-selection',
 
 		cls: 'survey-item-selection item-selection',

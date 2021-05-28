@@ -20,7 +20,7 @@ class CoursesStore extends Stores.BoundStore {
 		this.load();
 	}
 
-	applySearchTerm (searchTerm) {
+	applySearchTerm(searchTerm) {
 		this.setImmediate('pageNumber', 0);
 	}
 

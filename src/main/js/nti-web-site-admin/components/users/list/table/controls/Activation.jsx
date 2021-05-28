@@ -29,10 +29,8 @@ const t = scoped(
 				other: 'Confirm Deactivation (%(count)s People)',
 			},
 			description: {
-				one:
-					'Are you sure you want to deactivate? The account will lose access to all courses. The account can be reactivated at any time.',
-				other:
-					'Are you sure you want to deactivate? Accounts will lose access to all courses. Accounts can be reactivated at any time.',
+				one: 'Are you sure you want to deactivate? The account will lose access to all courses. The account can be reactivated at any time.',
+				other: 'Are you sure you want to deactivate? Accounts will lose access to all courses. Accounts can be reactivated at any time.',
 			},
 			label: 'People',
 		},
@@ -42,10 +40,8 @@ const t = scoped(
 				other: 'Confirm Reactivation (%(count)s People)',
 			},
 			description: {
-				one:
-					'Are you sure you want to reactivate? This account and their records will be accessible again.',
-				other:
-					'Are you sure you want to reactivate? These accounts and their records will be accessible again.',
+				one: 'Are you sure you want to reactivate? This account and their records will be accessible again.',
+				other: 'Are you sure you want to reactivate? These accounts and their records will be accessible again.',
 			},
 			label: 'People',
 		},

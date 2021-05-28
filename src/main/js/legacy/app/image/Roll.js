@@ -38,28 +38,22 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 		if (!data) {
 			data = [
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg',
 				},
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg',
 				},
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg',
 				},
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg',
 				},
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg',
 				},
 				{
-					url:
-						'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg',
+					url: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg',
 				},
 			];
 		}

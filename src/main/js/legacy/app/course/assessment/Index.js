@@ -370,9 +370,10 @@ module.exports = exports = Ext.define(
 								pageSource: pageSource,
 								assignment: assignment,
 								student: $AppConfig.userObject,
-								assignmentHistory: await view.assignmentCollection
-									.getHistoryItem(assignment.getId())
-									.catch(() => null),
+								assignmentHistory:
+									await view.assignmentCollection
+										.getHistoryItem(assignment.getId())
+										.catch(() => null),
 								instructorProspective: view.isAdmin,
 								fragment: route.hash,
 							};
@@ -529,7 +530,9 @@ module.exports = exports = Ext.define(
 		},
 
 		__getHistoryItemContainer(item) {
-			return item.getHistoryItemContainer? item.getHistoryItemContainer() : item;
+			return item.getHistoryItemContainer
+				? item.getHistoryItemContainer()
+				: item;
 		},
 
 		showStudentForAssignment: function (route, subRoute) {
@@ -593,7 +596,8 @@ module.exports = exports = Ext.define(
 							// Use the batchContainingUsernameFilterByScope to load
 							// the page with that record.
 							if (!params.batchContainingUsernameFilterByScope) {
-								params.batchContainingUsernameFilterByScope = studentId;
+								params.batchContainingUsernameFilterByScope =
+									studentId;
 
 								students.on({
 									load: () =>
@@ -779,9 +783,8 @@ module.exports = exports = Ext.define(
 								}
 
 								var id = rec.get('AssignmentId'),
-									assignment2 = view.assignmentCollection.getItem(
-										id
-									);
+									assignment2 =
+										view.assignmentCollection.getItem(id);
 
 								if (assignment2) {
 									return assignment2.get('title');
@@ -823,9 +826,8 @@ module.exports = exports = Ext.define(
 							path: path,
 							pageSource: pageSource.load(),
 							assignment: assignment,
-							assignmentHistoryItemContainer: me.__getHistoryItemContainer(
-								record
-							),
+							assignmentHistoryItemContainer:
+								me.__getHistoryItemContainer(record),
 							student: student,
 						};
 					})

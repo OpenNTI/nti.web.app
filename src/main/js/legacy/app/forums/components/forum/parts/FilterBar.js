@@ -15,8 +15,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'label',
-						html:
-							'{{{NextThought.view.forums.forum.parts.FilterBar.alldiscussion}}}',
+						html: '{{{NextThought.view.forums.forum.parts.FilterBar.alldiscussion}}}',
 					},
 				],
 			},
@@ -25,8 +24,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'label',
-						html:
-							'{{{NextThought.view.forums.forum.parts.FilterBar.mostrecent}}}',
+						html: '{{{NextThought.view.forums.forum.parts.FilterBar.mostrecent}}}',
 					},
 				],
 			},

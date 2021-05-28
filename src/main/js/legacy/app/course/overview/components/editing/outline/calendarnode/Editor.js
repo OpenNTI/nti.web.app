@@ -6,8 +6,7 @@ require('../outlinenode/Editor');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.outline.calendarnode.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.outline.outlinenode.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Editor',
 		alias: 'widget.overview-editing-calendarnode-editor',
 
 		statics: {

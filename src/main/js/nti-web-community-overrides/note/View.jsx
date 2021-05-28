@@ -89,12 +89,8 @@ class NTIWebCommunityNote extends React.Component {
 	}
 
 	setupNote = renderTo => {
-		const {
-			topic,
-			focusNewComment,
-			selectedComment,
-			editMode,
-		} = this.props;
+		const { topic, focusNewComment, selectedComment, editMode } =
+			this.props;
 		const noteModel = BaseModel.interfaceToModel(topic);
 
 		if (this.noteCmp) {

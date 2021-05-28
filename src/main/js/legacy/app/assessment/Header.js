@@ -17,8 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 				//				{ cls: 'like' },
 				{
 					cls: 'video',
-					html:
-						'{{{NextThought.view.assessment.Header.related-videos}}}',
+					html: '{{{NextThought.view.assessment.Header.related-videos}}}',
 				},
 			],
 		},

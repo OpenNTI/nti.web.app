@@ -139,7 +139,8 @@ module.exports = exports = Ext.define(
 
 			const item = await record.getInterfaceInstance();
 			const course = await this.course.getInterfaceInstance();
-			this.currentOutlineNode = await this.outlineNode.getInterfaceInstance();
+			this.currentOutlineNode =
+				await this.outlineNode.getInterfaceInstance();
 
 			const targetId = getTargetId(record);
 

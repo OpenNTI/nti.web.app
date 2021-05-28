@@ -788,8 +788,7 @@ module.exports = exports = Ext.define(
 						},
 						{
 							cls: 'body',
-							html:
-								'{{{NextThought.view.courseware.enrollment.Admission.NonAcademicCriteria}}}',
+							html: '{{{NextThought.view.courseware.enrollment.Admission.NonAcademicCriteria}}}',
 						},
 					],
 				},
@@ -856,8 +855,7 @@ module.exports = exports = Ext.define(
 						inputs: [
 							{
 								type: 'description',
-								text:
-									'Students must be at least 13 years of age to participate in Janux courses.',
+								text: 'Students must be at least 13 years of age to participate in Janux courses.',
 							},
 						],
 					},
@@ -974,8 +972,7 @@ module.exports = exports = Ext.define(
 						inputs: [
 							{
 								type: 'description',
-								text:
-									'The class you are attempting to enroll in is a For-Credit Janux course. Only students who are currently in good academic standing may enroll in for credit Janux courses.',
+								text: 'The class you are attempting to enroll in is a For-Credit Janux course. Only students who are currently in good academic standing may enroll in for credit Janux courses.',
 							},
 						],
 					},
@@ -1012,8 +1009,7 @@ module.exports = exports = Ext.define(
 										noIncorrect: true,
 										defaultAnswer: 'N',
 										sets: {
-											input:
-												'years_of_oklahoma_residency',
+											input: 'years_of_oklahoma_residency',
 											//This input's answer to mapped to what to set on the other input
 											N: '0',
 										},

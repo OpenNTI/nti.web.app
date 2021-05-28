@@ -313,8 +313,7 @@ module.exports = exports = Ext.define(
 
 			if (!start && end) {
 				error = {
-					msg:
-						'The begin date is required when the finish date is set.',
+					msg: 'The begin date is required when the finish date is set.',
 					field: 'AvailableBeginning',
 				};
 

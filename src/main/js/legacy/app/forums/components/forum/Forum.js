@@ -94,7 +94,8 @@ module.exports = exports = Ext.define(
 				component: Forums.Editor,
 				title: this.activeTopicList.get('title'),
 				onSubmit: async payload => {
-					const object = await this.activeTopicList.getInterfaceInstance();
+					const object =
+						await this.activeTopicList.getInterfaceInstance();
 					await object.edit(payload);
 
 					this.activeTopicList.updateFromServer();

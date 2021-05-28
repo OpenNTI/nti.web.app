@@ -28,10 +28,11 @@ module.exports = exports = Ext.define(
 				initComponent: function () {
 					this.callParent(arguments);
 					//this.layout.padding = 0;
-					this.layout.overflowHandler = new Ext.layout.container.boxOverflow.None(
-						this.layout,
-						{}
-					);
+					this.layout.overflowHandler =
+						new Ext.layout.container.boxOverflow.None(
+							this.layout,
+							{}
+						);
 					this.layout.overflowHandler.scrollToItem = Ext.emptyFn;
 				},
 			},
@@ -50,8 +51,7 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											cls: 'sub',
-											html:
-												'{{{NextThought.view.courseware.coursecatalog.TabPanel.Setup}}}',
+											html: '{{{NextThought.view.courseware.coursecatalog.TabPanel.Setup}}}',
 										},
 										{
 											cls: 'actions',
@@ -59,27 +59,22 @@ module.exports = exports = Ext.define(
 												{
 													tag: 'a',
 													cls: 'completed',
-													html:
-														'{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}',
+													html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}',
 												},
 												{
 													tag: 'a',
-													cls:
-														'enroll {enrollmentStatus}',
-													html:
-														'{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
+													cls: 'enroll {enrollmentStatus}',
+													html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
 												},
 												{
 													tag: 'a',
 													cls: 'createProfile',
-													html:
-														'{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}',
+													html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}',
 												},
 												{
 													tag: 'a',
 													cls: 'suggestContacts',
-													html:
-														'{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
+													html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
 												},
 											],
 										},

@@ -6,8 +6,7 @@ require('../discussion/ItemSelection');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.timeline.ItemSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
+		extend: 'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
 		alias: 'widget.overview-editing-timeline-item-selection',
 		multiSelect: false,
 		cls: 'timeline-item-selection item-selection',

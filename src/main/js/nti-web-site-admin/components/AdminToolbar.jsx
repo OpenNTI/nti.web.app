@@ -17,12 +17,8 @@ export default class AdminToolbar extends Component {
 	};
 
 	render() {
-		const {
-			onCourseCreated,
-			onCourseModified,
-			handleNav,
-			canCreate,
-		} = this.props;
+		const { onCourseCreated, onCourseModified, handleNav, canCreate } =
+			this.props;
 
 		return (
 			<div className="admin-toolbar">

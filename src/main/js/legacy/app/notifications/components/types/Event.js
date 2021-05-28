@@ -33,9 +33,8 @@ module.exports = exports = Ext.define(
 				: this.updatedWording.replace('{name}', title);
 
 			if (this.wordingEl && this.wordingEl.dom) {
-				this.wordingEl.dom.innerHTML = Ext.util.Format.htmlEncode(
-					wording
-				);
+				this.wordingEl.dom.innerHTML =
+					Ext.util.Format.htmlEncode(wording);
 			}
 		},
 	}

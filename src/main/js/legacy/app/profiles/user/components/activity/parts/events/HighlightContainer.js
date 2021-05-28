@@ -79,20 +79,16 @@ module.exports = exports = Ext.define(
 														for: 'items',
 														cn: [
 															{
-																cls:
-																	'selected-text {highlightColorName}',
+																cls: 'selected-text {highlightColorName}',
 																'data-ntiid':
 																	'{ntiid}',
 																cn: [
 																	{
-																		tag:
-																			'span',
-																		html:
-																			'{text}',
+																		tag: 'span',
+																		html: '{text}',
 																	},
 																	{
-																		cls:
-																			'tip',
+																		cls: 'tip',
 																	},
 																],
 															},

@@ -50,40 +50,30 @@ module.exports = exports = Ext.define(
 																if: 'role',
 																cn: [
 																	{
-																		tag:
-																			'span',
-																		cls:
-																			'role',
-																		html:
-																			'{role}',
+																		tag: 'span',
+																		cls: 'role',
+																		html: '{role}',
 																	},
 																],
 															},
 															{
 																tag: 'tpl',
-																if:
-																	'role && affiliation',
+																if: 'role && affiliation',
 																cn: [
 																	{
-																		tag:
-																			'span',
-																		html:
-																			' at ',
+																		tag: 'span',
+																		html: ' at ',
 																	},
 																],
 															},
 															{
 																tag: 'tpl',
-																if:
-																	'affiliation',
+																if: 'affiliation',
 																cn: [
 																	{
-																		tag:
-																			'span',
-																		cls:
-																			'affiliation',
-																		html:
-																			'{affiliation}',
+																		tag: 'span',
+																		cls: 'affiliation',
+																		html: '{affiliation}',
 																	},
 																],
 															},
@@ -95,8 +85,7 @@ module.exports = exports = Ext.define(
 														cn: [
 															{
 																cls: 'location',
-																html:
-																	'{location}',
+																html: '{location}',
 															},
 														],
 													},
@@ -131,8 +120,7 @@ module.exports = exports = Ext.define(
 											{
 												tag: 'a',
 												cls: 'button',
-												html:
-													'{{{NextThought.view.account.contacts.management.Popout.chat}}}',
+												html: '{{{NextThought.view.account.contacts.management.Popout.chat}}}',
 											},
 										],
 									},
@@ -148,8 +136,7 @@ module.exports = exports = Ext.define(
 											{
 												tag: 'a',
 												cls: 'button',
-												html:
-													'{{{NextThought.view.account.contacts.management.Popout.add-contact}}}',
+												html: '{{{NextThought.view.account.contacts.management.Popout.add-contact}}}',
 											},
 										],
 									},

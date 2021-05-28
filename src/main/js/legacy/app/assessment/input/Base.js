@@ -41,8 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 						{ cls: 'action check' },
 						{
 							cls: 'action solution',
-							html:
-								'{{{NextThought.view.assessment.input.Base.show-solution}}}',
+							html: '{{{NextThought.view.assessment.input.Base.show-solution}}}',
 						},
 						{ cls: 'action results', html: 'View Results' },
 						{ cls: 'action report', html: 'View Report' },
@@ -164,9 +163,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		var ct = this.up('[contentElement]');
 		//if this returns null, it SHOULD blow up. Programmer error.
 
-		ct = ct.contentElement.querySelectorAll('.naquestionpart')[
-			this.ordinal
-		];
+		ct =
+			ct.contentElement.querySelectorAll('.naquestionpart')[this.ordinal];
 		if (!ct) {
 			Ext.Error.raise('Part Content Missing');
 		}

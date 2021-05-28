@@ -28,9 +28,8 @@ module.exports = exports = Ext.define(
 					pushState: this.pushState,
 					replaceState: this.replaceState,
 					alignNavigation: this.alignNavigation.bind(this),
-					showStudentsForAssignment: this.showStudentsForAssignment.bind(
-						this
-					),
+					showStudentsForAssignment:
+						this.showStudentsForAssignment.bind(this),
 					createAssignment:
 						this.createAssignment &&
 						this.createAssignment.bind(this),
@@ -108,9 +107,8 @@ module.exports = exports = Ext.define(
 					pushRoute: this.pushRoute.bind(this),
 					pushRouteState: this.pushRouteState.bind(this),
 					replaceRouteState: this.replaceRouteState.bind(this),
-					showStudentForAssignment: this.showStudentForAssignment.bind(
-						this
-					),
+					showStudentForAssignment:
+						this.showStudentForAssignment.bind(this),
 					pageSource: PageSource.create({
 						next: next && next.getId(),
 						nextTitle: next && next.get('name'),

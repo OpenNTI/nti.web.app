@@ -5,8 +5,7 @@ require('./BaseQuote');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.quotes.ContentQuote',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.quotes.BaseQuote',
+		extend: 'NextThought.app.course.overview.components.editing.content.quotes.BaseQuote',
 		alias: 'widget.overview-editing-content-development',
 		hubspotPageUrl: 'https://www.nextthought.com/content-quote',
 

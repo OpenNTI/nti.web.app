@@ -54,14 +54,12 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'link raw',
-										html:
-											'{{{nti-web-app.course.assessment.components.admin.ListHeader.viewAssignment}}}',
+										html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.viewAssignment}}}',
 									},
 									{
 										tag: 'span',
 										cls: 'link edit',
-										html:
-											'{{{nti-web-app.course.assessment.components.admin.ListHeader.editAssignment}}}',
+										html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.editAssignment}}}',
 									},
 								],
 							},

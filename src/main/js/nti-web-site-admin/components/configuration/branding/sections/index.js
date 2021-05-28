@@ -14,9 +14,10 @@ const scopes = {
 	[ASSETS]: Assets,
 };
 
-const warn = scope => () => (
-	logger.warn(`No component for scope '${scope}'`), null
-);
+const warn = scope => () => {
+	logger.warn(`No component for scope '${scope}'`);
+	return null;
+};
 
 export { Library, Assets, Site };
 

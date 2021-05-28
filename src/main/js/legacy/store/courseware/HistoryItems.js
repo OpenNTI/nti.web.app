@@ -5,8 +5,7 @@ module.exports = exports = Ext.define(
 	{
 		extend: 'Ext.data.Store',
 
-		model:
-			'NextThought.model.courseware.UsersCourseAssignmentHistoryItemContainer',
+		model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemContainer',
 
 		proxy: {
 			type: 'ajax',
@@ -41,8 +40,7 @@ module.exports = exports = Ext.define(
 						} else {
 							item = {
 								Creator: item[0],
-								Class:
-									'UsersCourseAssignmentHistoryItemContainer',
+								Class: 'UsersCourseAssignmentHistoryItemContainer',
 							};
 						}
 					}

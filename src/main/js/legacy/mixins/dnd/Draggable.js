@@ -22,9 +22,8 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 				ghostImageScale: this.ghostImageScale,
 				dropPlaceholderStyles: this.dropPlaceholderStyles,
 				getDragTarget: this.getDragTarget.bind(this),
-				getDragBoundingClientRect: this.getDragBoundingClientRect.bind(
-					this
-				),
+				getDragBoundingClientRect:
+					this.getDragBoundingClientRect.bind(this),
 				getDragHandle:
 					this.getDragHandle && this.getDragHandle.bind(this),
 				onDragStart: this.onDragStart && this.onDragStart.bind(this),

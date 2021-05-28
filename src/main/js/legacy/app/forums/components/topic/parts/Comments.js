@@ -53,8 +53,7 @@ module.exports = exports = Ext.define(
 				for: '.',
 				cn: [
 					{
-						cls:
-							'topic-comment-container {[values.threadShowing ? "expanded" : "collapsed"]} {[values.threadShowing && !values.repliesLoaded && values.ReferencedByCount > 0? "loading" : ""]}',
+						cls: 'topic-comment-container {[values.threadShowing ? "expanded" : "collapsed"]} {[values.threadShowing && !values.repliesLoaded && values.ReferencedByCount > 0? "loading" : ""]}',
 						'data-depth': '{depth}',
 						tabindex: -1,
 						cn: [
@@ -62,8 +61,7 @@ module.exports = exports = Ext.define(
 								tag: 'tpl',
 								if: 'Deleted',
 								cn: {
-									cls:
-										'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
+									cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
 									'data-depth': '{depth}',
 									cn: [
 										{
@@ -72,23 +70,19 @@ module.exports = exports = Ext.define(
 											cn: [
 												{
 													cls: 'body',
-													html:
-														'{{{NextThought.view.forums.topic.parts.Comments.deleted}}}',
+													html: '{{{NextThought.view.forums.topic.parts.Comments.deleted}}}',
 												},
 												{
 													cls: 'foot',
 													cn: [
 														{
 															tag: 'tpl',
-															if:
-																'depth == 0 &amp;&amp; ReferencedByCount &gt; 0',
+															if: 'depth == 0 &amp;&amp; ReferencedByCount &gt; 0',
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'comments link toggle',
-																	html:
-																		'{ReferencedByCount:plural("Comment")}',
+																	cls: 'comments link toggle',
+																	html: '{ReferencedByCount:plural("Comment")}',
 																},
 															],
 														},
@@ -103,8 +97,7 @@ module.exports = exports = Ext.define(
 								tag: 'tpl',
 								if: '!Deleted',
 								cn: {
-									cls:
-										'topic-comment {[values.threadShowing ? "expanded" : "collapsed"]} {[values.depth === 0 && values.ReferencedByCount > 0 ? "toggle" : ""]}',
+									cls: 'topic-comment {[values.threadShowing ? "expanded" : "collapsed"]} {[values.depth === 0 && values.ReferencedByCount > 0 ? "toggle" : ""]}',
 									'data-depth': '{depth}',
 									cn: [
 										{
@@ -112,8 +105,7 @@ module.exports = exports = Ext.define(
 											cn: [
 												{ cls: 'favorite-spacer' },
 												{
-													cls:
-														'like {[values.liked? "on" : "off"]}',
+													cls: 'like {[values.liked? "on" : "off"]}',
 													html: '{likeCount}',
 												},
 											],
@@ -128,8 +120,7 @@ module.exports = exports = Ext.define(
 													cn: [
 														{
 															tag: 'span',
-															html:
-																'{Creator:displayName()}',
+															html: '{Creator:displayName()}',
 															cls: 'name link',
 														},
 														{
@@ -138,8 +129,7 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	html:
-																		'{{{NextThought.view.forums.topic.parts.Comments.repliedto}}}',
+																	html: '{{{NextThought.view.forums.topic.parts.Comments.repliedto}}}',
 																},
 															],
 														},
@@ -149,10 +139,8 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'datetime nodot',
-																	html:
-																		'{CreatedTime:ago}',
+																	cls: 'datetime nodot',
+																	html: '{CreatedTime:ago}',
 																},
 															],
 														},
@@ -171,19 +159,15 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'comments  {[values.ReferencedByCount > 0 ? "link toggle" : ""]}',
-																	html:
-																		'{ReferencedByCount:plural("Comment")}',
+																	cls: 'comments  {[values.ReferencedByCount > 0 ? "link toggle" : ""]}',
+																	html: '{ReferencedByCount:plural("Comment")}',
 																},
 															],
 														},
 														{
 															tag: 'span',
-															cls:
-																'reply thread-reply link',
-															html:
-																'{{{NextThought.view.forums.topic.parts.Comments.reply}}}',
+															cls: 'reply thread-reply link',
+															html: '{{{NextThought.view.forums.topic.parts.Comments.reply}}}',
 														},
 														{
 															tag: 'tpl',
@@ -191,17 +175,13 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'edit link',
-																	html:
-																		'{{{NextThought.view.forums.topic.parts.Comments.edit}}}',
+																	cls: 'edit link',
+																	html: '{{{NextThought.view.forums.topic.parts.Comments.edit}}}',
 																},
 																{
 																	tag: 'span',
-																	cls:
-																		'delete link',
-																	html:
-																		'{{{NextThought.view.forums.topic.parts.Comments.delete}}}',
+																	cls: 'delete link',
+																	html: '{{{NextThought.view.forums.topic.parts.Comments.delete}}}',
 																},
 															],
 														},
@@ -211,10 +191,8 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'flag link {flagged:boolStr("on","off")}',
-																	html:
-																		'{flagged:boolStr("NextThought.view.forums.topic.parts.Comments.reported","NextThought.view.forums.topic.parts.Comments.report")}',
+																	cls: 'flag link {flagged:boolStr("on","off")}',
+																	html: '{flagged:boolStr("NextThought.view.forums.topic.parts.Comments.reported","NextThought.view.forums.topic.parts.Comments.report")}',
 																},
 															],
 														},

@@ -1,7 +1,8 @@
 const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {
-	ignoredWordsRe: /\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/gi,
+	ignoredWordsRe:
+		/\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/gi,
 
 	splitWhitespaceRe: /\W+/,
 

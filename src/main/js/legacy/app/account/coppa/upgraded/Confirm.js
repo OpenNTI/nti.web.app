@@ -77,8 +77,7 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'validation-message',
-										html:
-											'Please enter your first and last name.',
+										html: 'Please enter your first and last name.',
 									},
 								],
 							},
@@ -114,8 +113,7 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'validation-message long',
-										html:
-											"We need your parent's permission to activate social features on your account.",
+										html: "We need your parent's permission to activate social features on your account.",
 									},
 								],
 							},
@@ -131,12 +129,10 @@ module.exports = exports = Ext.define(
 											{
 												tag: 'input',
 												type: 'checkbox',
-												name:
-													'opt_in_email_communication',
+												name: 'opt_in_email_communication',
 											},
 											{
-												html:
-													'Send me updates about NextThought.',
+												html: 'Send me updates about NextThought.',
 											},
 										],
 									},

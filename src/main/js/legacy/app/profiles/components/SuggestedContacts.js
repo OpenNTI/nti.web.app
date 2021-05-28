@@ -9,8 +9,7 @@ require('../user/components/membership/parts/Membership');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.components.SuggestedContacts',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 		alias: 'widget.profile-suggested-contacts',
 
 		cls: 'memberships preview users suggested',

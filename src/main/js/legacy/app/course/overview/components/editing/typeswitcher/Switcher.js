@@ -12,8 +12,7 @@ const OPTIONAL = 'Optional';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.typeswitcher.Switcher',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+		extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
 		alias: 'widget.outline-editing-type-switcher',
 
 		title: 'Pick New Type',
@@ -65,9 +64,8 @@ module.exports = exports = Ext.define(
 						const basedOnDefault = this.record.get(
 							'IsCompletionDefaultState'
 						);
-						const isRequired = this.record.get(
-							'CompletionRequired'
-						);
+						const isRequired =
+							this.record.get('CompletionRequired');
 						const requiredValue = basedOnDefault
 							? DEFAULT
 							: isRequired

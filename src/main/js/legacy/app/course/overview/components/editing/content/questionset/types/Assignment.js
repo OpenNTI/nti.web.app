@@ -24,8 +24,7 @@ const Type = 'application/vnd.nextthought.assessment.assignment';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-questionset-assignment',
 
 		statics: {
@@ -45,7 +44,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},

@@ -5,16 +5,14 @@ require('../../itemselection/Index');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.ContentPackageSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.itemselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 		alias: 'widget.overview-editing-content-package-item-selection',
 		multiSelect: false,
 		cls: 'content-package-item-selection item-selection',
 
 		itemTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({
-				cls:
-					'content-package-item {[!values.isNativeAuthored || (values.isPublished && values.isRendered) ? "published" : "unpublished"]}',
+				cls: 'content-package-item {[!values.isNativeAuthored || (values.isPublished && values.isRendered) ? "published" : "unpublished"]}',
 				cn: [
 					{ cls: 'icon', style: { backgroundImage: 'url({icon})' } },
 					{

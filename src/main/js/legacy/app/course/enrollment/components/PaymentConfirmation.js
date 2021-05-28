@@ -32,18 +32,15 @@ module.exports = exports = Ext.define(
 					cn: [
 						{
 							cls: 'title',
-							html:
-								'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.ReviewPay}}}',
+							html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.ReviewPay}}}',
 						},
 						{
 							cls: 'description',
-							html:
-								'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PleaseReview}}}',
+							html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PleaseReview}}}',
 						},
 						{
 							cls: 'warning',
-							html:
-								'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.SaleFinal}}}',
+							html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.SaleFinal}}}',
 						},
 					],
 				},
@@ -55,13 +52,11 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									tag: 'span',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftInfo}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftInfo}}}',
 								},
 								{
 									cls: 'edit',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
 								},
 							],
 						},
@@ -71,8 +66,7 @@ module.exports = exports = Ext.define(
 								{
 									tag: 'span',
 									cls: 'label',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftFrom}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftFrom}}}',
 								},
 								{ tag: 'span', cls: 'name' },
 							],
@@ -83,8 +77,7 @@ module.exports = exports = Ext.define(
 								{
 									tag: 'span',
 									cls: 'label',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftTo}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftTo}}}',
 								},
 								{ tag: 'span', cls: 'to-email' },
 							],
@@ -95,8 +88,7 @@ module.exports = exports = Ext.define(
 								{
 									tag: 'span',
 									cls: 'label',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftMessage}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftMessage}}}',
 								},
 								{ tag: 'span', cls: 'message-text' },
 							],
@@ -111,13 +103,11 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									tag: 'span',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PayInfo}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PayInfo}}}',
 								},
 								{
 									cls: 'edit',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
 								},
 							],
 						},
@@ -146,13 +136,11 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									tag: 'span',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.BillAddress}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.BillAddress}}}',
 								},
 								{
 									cls: 'edit',
-									html:
-										'{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
+									html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}',
 								},
 							],
 						},

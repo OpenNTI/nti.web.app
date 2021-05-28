@@ -18,11 +18,8 @@ export default function Fragments({
 }) {
 	const navigateToFragment = useCallback(
 		async fragment => {
-			const {
-				obj,
-				fragIndex,
-				containerId,
-			} = await resolveNavigateToSearchHit(hit, fragment);
+			const { obj, fragIndex, containerId } =
+				await resolveNavigateToSearchHit(hit, fragment);
 			return navigateToSearchHit(obj, hit, fragIndex, containerId);
 		},
 		[hit]

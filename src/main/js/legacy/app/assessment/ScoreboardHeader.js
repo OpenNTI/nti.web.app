@@ -14,8 +14,7 @@ module.exports = exports = Ext.define(
 			{ cls: 'time', cn: [{ tag: 'span' }, { cls: 'arrow' }] },
 			{
 				cls: 'title',
-				html:
-					'{{{NextThought.view.assessment.ScoreboardHeader.title}}}',
+				html: '{{{NextThought.view.assessment.ScoreboardHeader.title}}}',
 			},
 		]),
 

@@ -26,8 +26,7 @@ module.exports = exports = Ext.define(
 		}).compile(),
 
 		renderTpl: Ext.DomHelper.markup({
-			cls:
-				'item notification {hidden:boolStr("x-hidden")} {previewCls} {itemCls}',
+			cls: 'item notification {hidden:boolStr("x-hidden")} {previewCls} {itemCls}',
 			cn: [
 				{ cls: 'icon-wrapper' },
 				{ cls: 'username' },

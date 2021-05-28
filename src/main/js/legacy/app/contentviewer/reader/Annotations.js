@@ -434,7 +434,8 @@ module.exports = exports = Ext.define(
 				highlightColors = Service.getHighlightColors(), // array of objects: {name:'blue',color:'0000ff'}
 				menu,
 				define,
-				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
+				redactionRegex =
+					/USSC-HTML|Howes_converted|USvJones2012_converted/i,
 				frame = me.reader.getIframe().get(),
 				win = frame && frame.win;
 
@@ -660,9 +661,8 @@ module.exports = exports = Ext.define(
 					record.on(
 						'updated',
 						function (r) {
-							this.annotations[r.get('NTIID')] = this.annotations[
-								oid
-							];
+							this.annotations[r.get('NTIID')] =
+								this.annotations[oid];
 
 							delete this.annotations[oid];
 						},

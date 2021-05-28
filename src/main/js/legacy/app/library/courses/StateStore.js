@@ -308,8 +308,9 @@ module.exports = exports = Ext.define(
 
 		findCourseInstance: function (ntiid) {
 			function fn(rec) {
-				var instance = rec.get('Links').getRelLink('CourseInstance')
-					.ntiid;
+				var instance = rec
+					.get('Links')
+					.getRelLink('CourseInstance').ntiid;
 
 				return instance === ntiid || rec.get('NTIID') === ntiid;
 			}
@@ -388,8 +389,9 @@ module.exports = exports = Ext.define(
 				course;
 
 			function fn(rec) {
-				const instId = rec.get('Links').getRelLink('CourseInstance')
-					.ntiid;
+				const instId = rec
+					.get('Links')
+					.getRelLink('CourseInstance').ntiid;
 				console.log(instId);
 				//if the id is my id or oid
 				let match = instId === id; // || instOID === id;

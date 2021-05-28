@@ -9,8 +9,7 @@ require('./CourseWindow');
 module.exports = exports = Ext.define(
 	'NextThought.app.library.courses.components.available.CourseDetailWindow',
 	{
-		extend:
-			'NextThought.app.library.courses.components.available.CourseWindow',
+		extend: 'NextThought.app.library.courses.components.available.CourseWindow',
 
 		isSingle: true,
 

@@ -17,14 +17,12 @@ const t = scoped('nti-web-app.assessment.Actions', {
 		errors: {
 			alreadySubmitted: {
 				title: 'This assignment has already been submitted',
-				msg:
-					'Clicking OK will reload the assignment and show the submission',
+				msg: 'Clicking OK will reload the assignment and show the submission',
 				button: 'OK',
 			},
 			pastDue: {
 				title: 'This assignment is past due',
-				msg:
-					'You can continue to view this assignment, but it cannot be submitted.',
+				msg: 'You can continue to view this assignment, but it cannot be submitted.',
 				button: 'OK',
 			},
 			conflict: {
@@ -257,7 +255,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			qsetSubmission,
 			assignmentSubmission;
 
-		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
+		data.CreatorRecordedEffortDuration +=
+			questionSet.getPreviousEffortDuration();
 
 		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
 		assignmentSubmission = AssessmentAssignmentSubmission.create({
@@ -371,7 +370,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			assignmentSubmission,
 			assignment = questionSet.associatedAssignment;
 
-		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
+		data.CreatorRecordedEffortDuration +=
+			questionSet.getPreviousEffortDuration();
 
 		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
 		assignmentSubmission = AssessmentAssignmentSubmission.create({
@@ -457,9 +457,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					assignment.updateFromServer().then(async () => {
 						try {
 							const history = await assignment.getHistory();
-							const pendingAssessment = history.get(
-								'pendingAssessment'
-							);
+							const pendingAssessment =
+								history.get('pendingAssessment');
 							const result = pendingAssessment.get('parts')[0];
 
 							if (onSubmitted) {

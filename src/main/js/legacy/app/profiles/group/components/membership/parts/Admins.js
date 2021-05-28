@@ -7,8 +7,7 @@ require('./Users');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.group.components.membership.parts.Admins',
 	{
-		extend:
-			'NextThought.app.profiles.group.components.membership.parts.Users',
+		extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 		alias: 'widget.profile-group-membership-administrators',
 
 		cls: 'memberships full group admin four-column',

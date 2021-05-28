@@ -72,9 +72,8 @@ module.exports = exports = Ext.define(
 
 			var root = this.add({
 				xtype: 'course-assessment-admin-performance-root',
-				showAssignmentsForStudent: this.showAssignmentsForStudent.bind(
-					this
-				),
+				showAssignmentsForStudent:
+					this.showAssignmentsForStudent.bind(this),
 				assignments: assignments,
 				pushRouteState: this.pushRouteState.bind(this),
 				replaceRouteState: this.replaceRouteState.bind(this),

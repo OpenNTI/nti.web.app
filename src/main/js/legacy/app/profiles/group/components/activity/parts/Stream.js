@@ -6,8 +6,7 @@ require('./events/Created');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.group.components.activity.parts.Stream',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.activity.parts.Stream',
+		extend: 'NextThought.app.profiles.user.components.activity.parts.Stream',
 		alias: 'widget.profile-group-activity-stream',
 
 		userChanged: function (user) {

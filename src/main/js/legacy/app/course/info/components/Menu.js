@@ -92,9 +92,8 @@ module.exports = exports = Ext.define(
 			var qtip = el.getAttribute('data-qtip');
 
 			if (this.QTIP_TO_CLASS_MAP[qtip]) {
-				var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[
-					qtip
-				];
+				var { cls, targetCls, doLocalNav } =
+					this.QTIP_TO_CLASS_MAP[qtip];
 
 				var target = document.getElementsByClassName(targetCls);
 				var containerPanel = document.getElementsByClassName(cls);
@@ -249,16 +248,14 @@ module.exports = exports = Ext.define(
 
 			var trigger = item.getAttribute('data-trigger');
 
-			var infoPanel = document.getElementsByClassName(
-				'course-info-panel'
-			);
+			var infoPanel =
+				document.getElementsByClassName('course-info-panel');
 
 			infoPanel = (infoPanel && infoPanel[0]) || {};
 
 			if (this.QTIP_TO_CLASS_MAP[trigger]) {
-				var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[
-					trigger
-				];
+				var { cls, targetCls, doLocalNav } =
+					this.QTIP_TO_CLASS_MAP[trigger];
 
 				var target = document.getElementsByClassName(targetCls);
 				var containerPanel = document.getElementsByClassName(cls);

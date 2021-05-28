@@ -105,10 +105,7 @@ export default class CourseResources extends React.Component {
 					/>
 				)}
 				{active === 'surveys' && (
-					<Surveys
-						course={course}
-						gotoResource={this.gotoResource}
-					/>
+					<Surveys course={course} gotoResource={this.gotoResource} />
 				)}
 			</div>
 		);

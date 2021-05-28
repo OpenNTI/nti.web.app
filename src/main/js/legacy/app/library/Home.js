@@ -58,16 +58,14 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 					if (showing[i]) {
 						me.add({
 							xtype: cmp.xtype,
-							navigateToAllCourses: me.navigateToAllCourses.bind(
-								me
-							),
+							navigateToAllCourses:
+								me.navigateToAllCourses.bind(me),
 							pushRoute: me.pushRoute.bind(me),
 							pushRootRoute: me.pushRootRoute.bind(me),
 							navigateToBundle: me.navigateToBundle.bind(me),
 							navigateToCourse: me.navigateToCourse.bind(me),
-							navigateToCommunity: me.navigateToCommunity.bind(
-								me
-							),
+							navigateToCommunity:
+								me.navigateToCommunity.bind(me),
 						});
 					}
 				});
@@ -99,8 +97,9 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	},
 
 	navigateToCourse: function (enrollment, el, subRoute) {
-		const instance = enrollment.get('Links').getRelLink('CourseInstance')
-			.ntiid;
+		const instance = enrollment
+			.get('Links')
+			.getRelLink('CourseInstance').ntiid;
 
 		this.CourseViewActions.transitionToCourse(instance, el).then(route => {
 			this.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''));

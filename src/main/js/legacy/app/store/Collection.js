@@ -26,8 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	]),
 
 	entryTpl: Ext.DomHelper.markup({
-		cls:
-			'{inGrid} purchasable item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
+		cls: '{inGrid} purchasable item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}',
 		cn: [
 			{ cls: 'cover', cn: [{ tag: 'img', src: '{Icon}' }] },

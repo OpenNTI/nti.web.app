@@ -74,9 +74,10 @@ module.exports = exports = Ext.define(
 
 		getContentRoot: function () {
 			if (!this.contentRootElement) {
-				this.contentRootElement = this.getDocumentElement().querySelector(
-					'#NTIContent > .page-contents'
-				);
+				this.contentRootElement =
+					this.getDocumentElement().querySelector(
+						'#NTIContent > .page-contents'
+					);
 			}
 
 			return this.contentRootElement;

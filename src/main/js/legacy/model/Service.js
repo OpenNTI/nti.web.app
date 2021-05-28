@@ -463,9 +463,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					//we call the failure callback
 					if (s) {
 						if (mime && forceMime) {
-							contentType = resp.getResponseHeader(
-								'Content-Type'
-							);
+							contentType =
+								resp.getResponseHeader('Content-Type');
 							if (contentType && contentType.indexOf(mime) < 0) {
 								reason =
 									'Requested with an explicit accept value of ' +

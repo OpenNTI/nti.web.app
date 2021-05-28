@@ -130,7 +130,8 @@ module.exports = exports = Ext.define(
 			toolbarConfig.isReaderToolBar = true;
 			toolbarConfig.contentOnly = this.contentOnly;
 
-			readerConfig.doNotAssumeBodyScrollParent = this.doNotAssumeBodyScrollParent;
+			readerConfig.doNotAssumeBodyScrollParent =
+				this.doNotAssumeBodyScrollParent;
 
 			this.body.add([toolbarConfig, readerConfig]);
 

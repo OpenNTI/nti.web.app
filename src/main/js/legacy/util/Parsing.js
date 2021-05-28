@@ -350,9 +350,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	},
 }).create();
 
-JSONProxy.findModel = JSONProxy.prototype.findModel = exports.findModel.bind(
-	exports
-);
+JSONProxy.findModel = JSONProxy.prototype.findModel =
+	exports.findModel.bind(exports);
 
 /*
  * DOMParser HTML extension

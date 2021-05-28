@@ -12,8 +12,7 @@ const t = scoped(
 	{
 		message: {
 			one: 'Your file contained an invalid row. Import aborted.',
-			other:
-				'Your file contained %(count)s invalid rows. Import aborted.',
+			other: 'Your file contained %(count)s invalid rows. Import aborted.',
 		},
 		rowNumber: 'Row %(number)s',
 		more: '…and %(number)s more',

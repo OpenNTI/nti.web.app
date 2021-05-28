@@ -20,8 +20,7 @@ module.exports = exports = Ext.define(
 					for: 'entries',
 					cn: [
 						{
-							cls:
-								'target wordentry drag {parent.unique:boolStr("unique")}',
+							cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
 							'data-wid': '{wid:htmlEncode}',
 							'data-lang': '{lang:htmlEncode}',
 							'data-question': '{parent.question}',

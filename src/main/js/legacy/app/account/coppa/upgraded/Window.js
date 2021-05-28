@@ -24,8 +24,7 @@ module.exports = exports = Ext.define(
 			{
 				xtype: 'account-header-view',
 				title: "It's a new school year!",
-				detail:
-					'Please answer the following questions, so we can update our records.',
+				detail: 'Please answer the following questions, so we can update our records.',
 			},
 			{ xtype: 'coppa-birthday-form' },
 		],

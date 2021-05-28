@@ -16,8 +16,7 @@ const Type = 'application/vnd.nextthought.ims.consumer.configuredtool';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-ltiexternaltoolasset',
 
 		statics: {
@@ -35,7 +34,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},

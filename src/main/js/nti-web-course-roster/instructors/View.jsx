@@ -99,13 +99,8 @@ export default class CourseRoster extends React.Component {
 
 	render() {
 		const { course, onDismiss } = this.props;
-		const {
-			loading,
-			searching,
-			permissionsList,
-			error,
-			updatingUsers,
-		} = this.state;
+		const { loading, searching, permissionsList, error, updatingUsers } =
+			this.state;
 		const buttons = [{ label: t('done'), onClick: this.onDismiss }];
 
 		return (

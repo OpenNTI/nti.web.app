@@ -46,18 +46,15 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 			data = [
 				{
 					thumbnail: 'http://img.youtube.com/vi/S4knArgz7cA/2.jpg',
-					url:
-						'https://www.youtube.com/embed/S4knArgz7cA?rel=0&wmode=opaque',
+					url: 'https://www.youtube.com/embed/S4knArgz7cA?rel=0&wmode=opaque',
 				},
 				{
 					thumbnail: 'http://img.youtube.com/vi/yY2NVw-aXqY/2.jpg',
-					url:
-						'https://www.youtube.com/embed/yY2NVw-aXqY?rel=0&wmode=opaque',
+					url: 'https://www.youtube.com/embed/yY2NVw-aXqY?rel=0&wmode=opaque',
 				},
 				{
 					thumbnail: 'http://img.youtube.com/vi/j-EB1O-vRS4/2.jpg',
-					url:
-						'https://www.youtube.com/embed/j-EB1O-vRS4?rel=0&wmode=opaque',
+					url: 'https://www.youtube.com/embed/j-EB1O-vRS4?rel=0&wmode=opaque',
 				},
 			];
 		}

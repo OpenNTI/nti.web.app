@@ -62,7 +62,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		const available = assignmentModel.isAvailable();
 		const noSubmit = assignmentModel.isNoSubmit();
 		const noQuestions =
-			  assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount();
+			assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount();
 		const isTimed = assignmentModel.isTimed;
 		const outsideBuffer = assignmentModel.isOutsideSubmissionBuffer();
 		const submitted = !!activeHistoryItemModel;
@@ -139,5 +139,4 @@ export default class AssignmentSidebarInstructions extends React.Component {
 			</div>
 		);
 	}
-
 }

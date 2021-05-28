@@ -144,9 +144,8 @@ const fallback = {
 		delete this.data[k];
 	},
 	setItem(k, v) {
-		this.data[
-			k
-		] = v; /*console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');*/
+		this.data[k] =
+			v; /*console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');*/
 	},
 	getItem(k) {
 		return this.data[k];

@@ -46,8 +46,7 @@ module.exports = exports = Ext.define(
 							{
 								tag: 'span',
 								cls: 'datetime',
-								html:
-									'{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}',
+								html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}',
 							},
 						],
 					},

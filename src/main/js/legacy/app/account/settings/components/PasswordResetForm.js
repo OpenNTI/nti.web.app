@@ -81,9 +81,10 @@ module.exports = exports = Ext.define(
 									},
 								},
 								validator: function (value) {
-									var password = this.previousSibling(
-										'[name=password]'
-									).getValue();
+									var password =
+										this.previousSibling(
+											'[name=password]'
+										).getValue();
 
 									if (!this.hasBeenFocused) {
 										return false;

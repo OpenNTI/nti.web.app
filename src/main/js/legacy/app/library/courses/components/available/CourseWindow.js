@@ -710,22 +710,26 @@ module.exports = exports = Ext.define(
 			}
 
 			me.mon(me.courseEnrollment, {
-				'create-enroll-purchase': me.StoreActions.createEnrollmentPurchase.bind(
-					me.StoreActions
-				),
-				'create-gift-purchase': me.StoreActions.createEnrollmentPurchase.bind(
-					me.StoreActions
-				),
-				'submit-enroll-purchase': me.StoreActions.submitEnrollmentPurchase.bind(
-					me.StoreActions
-				),
+				'create-enroll-purchase':
+					me.StoreActions.createEnrollmentPurchase.bind(
+						me.StoreActions
+					),
+				'create-gift-purchase':
+					me.StoreActions.createEnrollmentPurchase.bind(
+						me.StoreActions
+					),
+				'submit-enroll-purchase':
+					me.StoreActions.submitEnrollmentPurchase.bind(
+						me.StoreActions
+					),
 				'submit-gift-purchase': me.StoreActions.submitGiftPurchase.bind(
 					me.StoreActions
 				),
 				'redeem-gift': me.StoreActions.redeemGift.bind(me.StoreActions),
-				'enrollment-enrolled-complete': me.CourseEnrollmentActions.refreshEnrolledCourses.bind(
-					me.CourseEnrollmentActions
-				),
+				'enrollment-enrolled-complete':
+					me.CourseEnrollmentActions.refreshEnrolledCourses.bind(
+						me.CourseEnrollmentActions
+					),
 			});
 
 			me.getLayout().setActiveItem(me.courseEnrollment);

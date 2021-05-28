@@ -6,8 +6,7 @@ require('./PostComment');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.dashboard.components.tiles.parts.TopicComment',
 	{
-		extend:
-			'NextThought.app.course.dashboard.components.tiles.parts.PostComment',
+		extend: 'NextThought.app.course.dashboard.components.tiles.parts.PostComment',
 		alias: 'widget.dashboard-topic-comment-part',
 
 		isDeleted: function () {

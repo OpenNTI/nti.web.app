@@ -94,13 +94,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 							cn: [
 								{
 									cls: 'link reply',
-									html:
-										'{{{NextThought.view.annotations.note.Main.reply}}}',
+									html: '{{{NextThought.view.annotations.note.Main.reply}}}',
 								},
 								{
 									cls: 'link share',
-									html:
-										'{{{NextThought.view.annotations.note.Main.share}}}',
+									html: '{{{NextThought.view.annotations.note.Main.share}}}',
 								},
 								{
 									cls: 'link more',

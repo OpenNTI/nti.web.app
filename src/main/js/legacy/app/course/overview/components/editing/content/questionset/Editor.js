@@ -8,8 +8,7 @@ require('../../EditorGroup');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.questionset.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.EditorGroup',
+		extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
 		alias: 'widget.overview-editing-contentlink-editor',
 
 		statics: {

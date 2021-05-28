@@ -44,8 +44,7 @@ module.exports = exports = Ext.define(
 							if: 'isGroupHeader',
 							cn: [
 								{
-									cls:
-										'topic-list-header-item topic-list-item',
+									cls: 'topic-list-header-item topic-list-item',
 									html: '{groupName}',
 								},
 							],
@@ -61,19 +60,15 @@ module.exports = exports = Ext.define(
 											cls: 'controls',
 											cn: [
 												{
-													cls:
-														'favorite {favoriteState}',
+													cls: 'favorite {favoriteState}',
 												},
 												{
-													cls:
-														'like {likeState} {[values.LikeCount==0?"":"keep"]}',
-													html:
-														'{[values.LikeCount==0?"":values.LikeCount]}',
+													cls: 'like {likeState} {[values.LikeCount==0?"":"keep"]}',
+													html: '{[values.LikeCount==0?"":values.LikeCount]}',
 												},
 												{
 													tag: 'tpl',
-													if:
-														'this.showReport(values)',
+													if: 'this.showReport(values)',
 													cn: {
 														cls: 'reports off',
 														'data-qtip':
@@ -88,8 +83,7 @@ module.exports = exports = Ext.define(
 											cn: [
 												{
 													cls: 'author',
-													html:
-														'{Creator:displayName}',
+													html: '{Creator:displayName}',
 												},
 												{
 													cls: 'title',
@@ -107,40 +101,34 @@ module.exports = exports = Ext.define(
 														{
 															tag: 'span',
 															cls: 'matches',
-															html:
-																'{matches:plural("Match")} {{{NextThought.view.forums.forum.parts.TopicListView.for}}} &ldquo;{searchTerm}&rdquo;',
+															html: '{matches:plural("Match")} {{{NextThought.view.forums.forum.parts.TopicListView.for}}} &ldquo;{searchTerm}&rdquo;',
 														},
 													],
 												},
 												{
 													tag: 'span',
 													cls: 'count',
-													html:
-														'{PostCount:plural(parent.kind)}',
+													html: '{PostCount:plural(parent.kind)}',
 												},
 												{
 													tag: 'tpl',
-													if:
-														"values['NewestDescendant'] && values['NewestDescendant'].isComment",
+													if: "values['NewestDescendant'] && values['NewestDescendant'].isComment",
 													cn: [
 														{
 															tag: 'span',
 															cls: 'active',
-															html:
-																'{NewestDescendant.data.Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.replied}}} {NewestDescendant.data.CreatedTime:ago}',
+															html: '{NewestDescendant.data.Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.replied}}} {NewestDescendant.data.CreatedTime:ago}',
 														},
 													],
 												},
 												{
 													tag: 'tpl',
-													if:
-														"!values['NewestDescendant'] || !values['NewestDescendant'].isComment",
+													if: "!values['NewestDescendant'] || !values['NewestDescendant'].isComment",
 													cn: [
 														{
 															tag: 'span',
 															cls: 'active',
-															html:
-																'{Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.posted}}} {CreatedTime:ago}',
+															html: '{Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.posted}}} {CreatedTime:ago}',
 														},
 													],
 												},

@@ -55,8 +55,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 			alert({
 				title: 'Alert',
-				msg:
-					"You're using the application in another tab. This session has been invalidated.",
+				msg: "You're using the application in another tab. This session has been invalidated.",
 				closable: false,
 				buttons: {},
 			});

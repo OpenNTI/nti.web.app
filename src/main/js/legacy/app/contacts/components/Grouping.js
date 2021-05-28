@@ -61,8 +61,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{ cls: 'dots', cn: [{}, {}, {}] },
 					{
-						html:
-							'{count} {{{NextThought.view.contacts.Grouping.more}}}',
+						html: '{count} {{{NextThought.view.contacts.Grouping.more}}}',
 					},
 				],
 			})

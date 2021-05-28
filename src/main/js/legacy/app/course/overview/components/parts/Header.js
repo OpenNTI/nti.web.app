@@ -28,8 +28,7 @@ module.exports = exports = Ext.define(
 			},
 			{
 				tag: 'tpl',
-				if:
-					'(AvailableBeginning || courseStartDate) && AvailableEnding',
+				if: '(AvailableBeginning || courseStartDate) && AvailableEnding',
 				cn: {
 					cls: 'end date {expired}',
 					html: '- {AvailableEnding:date("l, F jS")}',
@@ -59,9 +58,8 @@ module.exports = exports = Ext.define(
 				courseCatalog = e && e.getCourseCatalogEntry();
 
 			if (courseCatalog && courseCatalog.get('StartDate')) {
-				this.renderData.courseStartDate = courseCatalog.get(
-					'StartDate'
-				);
+				this.renderData.courseStartDate =
+					courseCatalog.get('StartDate');
 			}
 
 			e = e && e.isExpired();

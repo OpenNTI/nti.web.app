@@ -82,8 +82,7 @@ module.exports = exports = Ext.define(
 							{
 								tag: 'span',
 								cls: 'path part root',
-								html:
-									'{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}',
+								html: '{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}',
 							},
 							' / ',
 							{
@@ -170,14 +169,12 @@ module.exports = exports = Ext.define(
 										},
 										{
 											tag: 'tpl',
-											if:
-												'this.hasTotalPoints(values) && !this.isGradeExcused(values)',
+											if: 'this.hasTotalPoints(values) && !this.isGradeExcused(values)',
 											cn: [
 												{
 													tag: 'span',
 													cls: 'total-points',
-													html:
-														'/ {[this.getTotalPoints(values)]}',
+													html: '/ {[this.getTotalPoints(values)]}',
 												},
 											],
 										},
@@ -206,18 +203,16 @@ module.exports = exports = Ext.define(
 								},
 
 								hasTotalPoints: values => {
-									const {
-										HistoryItemSummary: historyItem,
-									} = values;
+									const { HistoryItemSummary: historyItem } =
+										values;
 									const item = historyItem.get('item');
 
 									return item && !!item.get('total_points');
 								},
 
 								getTotalPoints: values => {
-									const {
-										HistoryItemSummary: historyItem,
-									} = values;
+									const { HistoryItemSummary: historyItem } =
+										values;
 									const item = historyItem.get('item');
 
 									return item && item.get('total_points');

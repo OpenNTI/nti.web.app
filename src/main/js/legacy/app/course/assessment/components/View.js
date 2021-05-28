@@ -397,9 +397,8 @@ module.exports = exports = Ext.define(
 				route: '/',
 				alignNavigation: this.alignNavigation.bind(this),
 				createAssignment: this.createAssignment.bind(this),
-				createDiscussionAssignment: this.createDiscussionAssignment.bind(
-					this
-				),
+				createDiscussionAssignment:
+					this.createDiscussionAssignment.bind(this),
 			});
 
 			this.performanceView = this.body.add({
@@ -452,9 +451,8 @@ module.exports = exports = Ext.define(
 				route: '/',
 				alignNavigation: this.alignNavigation.bind(this),
 				createAssignment: this.createAssignment.bind(this),
-				createDiscussionAssignment: this.createDiscussionAssignment.bind(
-					this
-				),
+				createDiscussionAssignment:
+					this.createDiscussionAssignment.bind(this),
 			});
 
 			this.performanceView = this.body.add({

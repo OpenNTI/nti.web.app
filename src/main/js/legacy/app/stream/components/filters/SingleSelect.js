@@ -26,8 +26,7 @@ module.exports = exports = Ext.define(
 										tag: 'input',
 										type: 'radio',
 										id: '{parent.id}-{index}',
-										name:
-											'filter-single-select-{parent.id}',
+										name: 'filter-single-select-{parent.id}',
 										value: '{value}',
 									},
 									{

@@ -7,18 +7,15 @@ import Path from '../Path';
 const fakePathObject = [
 	{
 		label: 'Human Physiology',
-		ntiid:
-			'tag:nextthought.com,2011-10:system-OID-0x4a73:5573657273:kj79vfPDVYE',
+		ntiid: 'tag:nextthought.com,2011-10:system-OID-0x4a73:5573657273:kj79vfPDVYE',
 	},
 	{
 		label: '1.1 How to Study for This Course',
-		ntiid:
-			'tag:nextthought.com,2011-10:NTI-NTICourseOutlineNode-Fall2016_BIOL_2124.1.0',
+		ntiid: 'tag:nextthought.com,2011-10:NTI-NTICourseOutlineNode-Fall2016_BIOL_2124.1.0',
 	},
 	{
 		label: 'Concept Mapping Software',
-		ntiid:
-			'tag:nextthought.com,2011-10:OU-HTML-OU_BIOL2124_F_2016_Human_Physiology.reading:concept_mapping_software',
+		ntiid: 'tag:nextthought.com,2011-10:OU-HTML-OU_BIOL2124_F_2016_Human_Physiology.reading:concept_mapping_software',
 	},
 ];
 

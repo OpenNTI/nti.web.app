@@ -6,8 +6,7 @@ require('../../itemselection/Index');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.itemselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 		alias: 'widget.overview-editing-reading-selection',
 
 		cls: 'reading-item-selection item-selection',

@@ -34,8 +34,7 @@ module.exports = exports = Ext.define(
 
 		entryTpl: Ext.DomHelper.markup({
 			tag: 'li',
-			cls:
-				'library-grid-item item {featured} allow-zoom {archived} {upcoming} {completed}',
+			cls: 'library-grid-item item {featured} allow-zoom {archived} {upcoming} {completed}',
 			role: 'link',
 			'aria-label': '{title}',
 			cn: [
@@ -60,8 +59,7 @@ module.exports = exports = Ext.define(
 										cn: [
 											{
 												tag: 'i',
-												cls:
-													'icon-check completed-check',
+												cls: 'icon-check completed-check',
 											},
 											{
 												tag: 'span',

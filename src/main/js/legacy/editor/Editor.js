@@ -1133,9 +1133,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			types = Ext.toArray(cd.types).toString();
 
 			if (/text\/html/.test(types)) {
-				offScreenBuffer.innerHTML = DomUtils.sanitizeExternalContentForInput(
-					cd.getData('text/html')
-				);
+				offScreenBuffer.innerHTML =
+					DomUtils.sanitizeExternalContentForInput(
+						cd.getData('text/html')
+					);
 			} else if (/text\/plain/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
 			}
@@ -2512,12 +2513,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 });
 
-const Editor = (module.exports = exports = Ext.define(
-	'NextThought.editor.Editor',
-	{
-		extend: 'NextThought.editor.AbstractEditor',
-		alias: 'widget.nti-editor',
-	}
-));
+const Editor =
+	(module.exports =
+	exports =
+		Ext.define('NextThought.editor.Editor', {
+			extend: 'NextThought.editor.AbstractEditor',
+			alias: 'widget.nti-editor',
+		}));
 
 Editor.AbstractEditor = AbstractEditor;

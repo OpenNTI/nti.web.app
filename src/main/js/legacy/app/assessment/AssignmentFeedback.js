@@ -53,9 +53,8 @@ module.exports = exports = Ext.define(
 			var commentBox;
 			this.afterImageLoad = this.afterImageLoad.bind(this);
 			this.feedbackList = this.down('assignment-feedback-list');
-			this.feedbackList.syncElementHeight = this.syncElementHeight.bind(
-				this
-			);
+			this.feedbackList.syncElementHeight =
+				this.syncElementHeight.bind(this);
 			this.feedbackList.openReply = this.showEditor.bind(this);
 			this.feedbackList.el.dom.addEventListener(
 				'load',

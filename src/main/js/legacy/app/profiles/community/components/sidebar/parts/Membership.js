@@ -7,8 +7,7 @@ require('../../../../user/components/membership/parts/Membership');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.community.components.sidebar.parts.Membership',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 		alias: 'widget.profile-community-sidebar-memberships',
 		cls: 'memberships condensed community',
 		profileRouteRoot: '/user',

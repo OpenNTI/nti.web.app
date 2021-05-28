@@ -5,8 +5,7 @@ require('../../membership/parts/Users');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.group.components.activity.parts.Users',
 	{
-		extend:
-			'NextThought.app.profiles.group.components.membership.parts.Users',
+		extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 		alias: 'widget.profile-group-membership-condensed',
 
 		cls: 'memberships condensed group',

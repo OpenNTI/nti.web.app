@@ -128,13 +128,8 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	setupTopic = renderTo => {
-		const {
-			topic,
-			channel,
-			focusNewComment,
-			selectedComment,
-			editMode,
-		} = this.props;
+		const { topic, channel, focusNewComment, selectedComment, editMode } =
+			this.props;
 		const isNewTopic = topic.isNewTopic;
 		const topicModel = isNewTopic
 			? null

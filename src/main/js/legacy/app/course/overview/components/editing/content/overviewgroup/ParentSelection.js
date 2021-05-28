@@ -6,8 +6,7 @@ require('./InlineEditor');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.parentselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 		alias: 'widget.overview-editing-overviewgroup-parentselection',
 		label: 'Lesson:',
 

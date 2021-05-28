@@ -37,14 +37,8 @@ class SiteAdminBookRoster extends React.Component {
 	}
 
 	render() {
-		const {
-			loading,
-			error,
-			items,
-			store,
-			numPages,
-			pageNumber,
-		} = this.props;
+		const { loading, error, items, store, numPages, pageNumber } =
+			this.props;
 
 		return (
 			<div className="site-admin-course-roster">

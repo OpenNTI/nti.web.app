@@ -4,8 +4,7 @@ const SCORMRef = require('internal/legacy/model/courses/scorm/SCORMReference');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.scorm.ListItem',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.ListItem',
+		extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
 		alias: 'widget.overivew-editing-scorm-listitem',
 
 		statics: {

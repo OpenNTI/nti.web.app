@@ -86,8 +86,7 @@ module.exports = exports = Ext.define(
 					}
 
 					return Promise.reject({
-						msg:
-							'Unable to add record to new location after removing it from the old',
+						msg: 'Unable to add record to new location after removing it from the old',
 						err: 'No new parent',
 					});
 				});

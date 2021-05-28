@@ -23,14 +23,12 @@ module.exports = exports = Ext.define(
 			const onChange = async value => {
 				const encodedID = encodeURIComponent(targetId);
 
-				const completionPolicy = this.courseInstance.get(
-					'CompletionPolicy'
-				);
+				const completionPolicy =
+					this.courseInstance.get('CompletionPolicy');
 
 				const requirementLink = completionPolicy.getLink('Required');
-				const nonRequirementLink = completionPolicy.getLink(
-					'NotRequired'
-				);
+				const nonRequirementLink =
+					completionPolicy.getLink('NotRequired');
 
 				if (value === REQUIRED) {
 					await Service.put(requirementLink, {
@@ -93,9 +91,8 @@ module.exports = exports = Ext.define(
 				],
 			});
 
-			const isCompletableObject = this.courseInstance.get(
-				'CompletionPolicy'
-			);
+			const isCompletableObject =
+				this.courseInstance.get('CompletionPolicy');
 
 			if (this.inEditMode && isCompletableObject) {
 				const transformed = {

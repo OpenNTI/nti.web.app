@@ -261,8 +261,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 	},
 
 	navigateToCourse: function (enrollment, el, subRoute) {
-		const instance = enrollment.get('Links').getRelLink('CourseInstance')
-			.ntiid;
+		const instance = enrollment
+			.get('Links')
+			.getRelLink('CourseInstance').ntiid;
 
 		this.CourseViewActions.transitionToCourse(instance, el).then(route => {
 			this.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''));

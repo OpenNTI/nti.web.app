@@ -36,8 +36,7 @@ module.exports = exports = Ext.define(
 								{
 									tag: 'p',
 									cls: 'bold',
-									html:
-										'{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}',
+									html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}',
 								},
 							],
 						},
@@ -68,8 +67,7 @@ module.exports = exports = Ext.define(
 					{
 						tag: 'span',
 						cls: 'label',
-						html:
-							'{{{NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey}}}',
+						html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey}}}',
 					},
 					{ cls: 'token-text' },
 				],
@@ -80,8 +78,7 @@ module.exports = exports = Ext.define(
 					{
 						tag: 'span',
 						cls: 'label',
-						html:
-							'{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}',
+						html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}',
 					},
 					{ cls: 'transaction-id' },
 				],

@@ -66,9 +66,10 @@ module.exports = exports = Ext.define(
 										getFormattedString(
 											'NextThought.view.courseware.enrollment.Redeem.CheckEmail',
 											{
-												support: getString(
-													'gift-support.label'
-												),
+												support:
+													getString(
+														'gift-support.label'
+													),
 												link: getString(
 													'gift-support.link'
 												),

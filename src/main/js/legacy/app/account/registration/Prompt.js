@@ -12,69 +12,69 @@ function getData({ data }) {
 	return {};
 }
 
-let registerPrompt = (module.exports = exports = Ext.define(
-	'NextThought.app.account.registration.Prompt',
-	{
-		extend: 'Ext.container.Container',
-		alias: 'widget.registration-prompt',
+let registerPrompt =
+	(module.exports =
+	exports =
+		Ext.define('NextThought.app.account.registration.Prompt', {
+			extend: 'Ext.container.Container',
+			alias: 'widget.registration-prompt',
 
-		title: 'Submit Registration',
+			title: 'Submit Registration',
 
-		cls: 'registration-prompt',
-		layout: 'none',
-		items: [],
+			cls: 'registration-prompt',
+			layout: 'none',
+			items: [],
 
-		initComponent() {
-			this.callParent(arguments);
+			initComponent() {
+				this.callParent(arguments);
 
-			let src = this.Prompt.data.link;
-			this.postMessageSourceId = new URL(
-				src,
-				window.location.href
-			).toString();
+				let src = this.Prompt.data.link;
+				this.postMessageSourceId = new URL(
+					src,
+					window.location.href
+				).toString();
 
-			this.Prompt.Header.disableClose();
-			this.Prompt.Header.setTitle(this.title);
+				this.Prompt.Header.disableClose();
+				this.Prompt.Header.setTitle(this.title);
 
-			this.Prompt.Footer.hide();
-			// this.Prompt.allowFullScreen();
+				this.Prompt.Footer.hide();
+				// this.Prompt.allowFullScreen();
 
-			this.iframeCmp = this.add({
-				xtype: 'box',
-				autoEl: {
-					tag: 'iframe',
-					src: src,
-				},
-			});
+				this.iframeCmp = this.add({
+					xtype: 'box',
+					autoEl: {
+						tag: 'iframe',
+						src: src,
+					},
+				});
 
-			let onPostMessage = this.onPostMessage.bind(this);
+				let onPostMessage = this.onPostMessage.bind(this);
 
-			window.addEventListener('message', onPostMessage);
+				window.addEventListener('message', onPostMessage);
 
-			this.on('destroy', () => {
-				window.removeEventListener('message', onPostMessage);
-			});
-		},
+				this.on('destroy', () => {
+					window.removeEventListener('message', onPostMessage);
+				});
+			},
 
-		onPostMessage(event) {
-			if (event.origin !== window.location.origin) {
-				return;
-			}
+			onPostMessage(event) {
+				if (event.origin !== window.location.origin) {
+					return;
+				}
 
-			const data = getData(event);
+				const data = getData(event);
 
-			if (
-				data.id === this.postMessageSourceId &&
-				data.method === SURVEY_COMPLETE
-			) {
-				this.Prompt.doSave();
-			}
-		},
+				if (
+					data.id === this.postMessageSourceId &&
+					data.method === SURVEY_COMPLETE
+				) {
+					this.Prompt.doSave();
+				}
+			},
 
-		onSave() {
-			return Promise.resolve();
-		},
-	}
-));
+			onSave() {
+				return Promise.resolve();
+			},
+		}));
 
 PromptStateStore.register('account-registration', registerPrompt);

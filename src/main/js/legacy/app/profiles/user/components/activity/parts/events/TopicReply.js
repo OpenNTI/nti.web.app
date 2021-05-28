@@ -5,8 +5,7 @@ require('./PostReply');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.activity.parts.events.TopicReply',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.activity.parts.events.PostReply',
+		extend: 'NextThought.app.profiles.user.components.activity.parts.events.PostReply',
 		alias: [
 			'widget.profile-activity-generalforumcomment-item',
 			'widget.profile-activity-generalforumcomment-reply-item',

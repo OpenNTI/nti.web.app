@@ -718,7 +718,9 @@ module.exports = exports = Ext.define(
 		getHistoryItemFromRecord: function (record) {
 			const container = record.get('HistoryItemSummary');
 
-			return container?.getMostRecentHistoryItem ? container.getMostRecentHistoryItem() : container;
+			return container?.getMostRecentHistoryItem
+				? container.getMostRecentHistoryItem()
+				: container;
 		},
 
 		onItemClicked: function (v, record, dom, i, e) {

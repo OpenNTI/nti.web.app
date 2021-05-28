@@ -100,8 +100,7 @@ module.exports = exports = Ext.define(
 											cls: 'comments',
 											'data-postcount': '{PostCount}',
 											'data-label': ' Comments',
-											html:
-												"{PostCount} Comment{[values.PostCount!=1?'s':'']}",
+											html: "{PostCount} Comment{[values.PostCount!=1?'s':'']}",
 										},
 										{
 											tag: 'tpl',
@@ -295,8 +294,7 @@ module.exports = exports = Ext.define(
 			var me = this;
 
 			Ext.Msg.show({
-				msg:
-					'Deleting this topic will permanently remove it and any comments.',
+				msg: 'Deleting this topic will permanently remove it and any comments.',
 				//We need to bitwise OR these two, so stop the lint.
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: me,

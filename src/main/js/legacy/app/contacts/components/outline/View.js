@@ -33,8 +33,7 @@ module.exports = exports = Ext.define(
 							if: 'canjoin',
 							cn: {
 								cls: 'join join-{type} contact-button',
-								html:
-									'{{{NextThought.view.contacts.outline.View.join}}}',
+								html: '{{{NextThought.view.contacts.outline.View.join}}}',
 							},
 						},
 						{
@@ -42,8 +41,7 @@ module.exports = exports = Ext.define(
 							if: 'cancreate',
 							cn: {
 								cls: 'create create-{type} contact-button',
-								html:
-									'{{{NextThought.view.contacts.outline.View.create}}}',
+								html: '{{{NextThought.view.contacts.outline.View.create}}}',
 							},
 						},
 						{
@@ -52,8 +50,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'contact-button search half',
-									html:
-										'{{{NextThought.view.contacts.outline.View.search}}}',
+									html: '{{{NextThought.view.contacts.outline.View.search}}}',
 									cn: [
 										{ tag: 'input', type: 'text' },
 										{
@@ -74,8 +71,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'contact-button search',
-									html:
-										'{{{NextThought.view.contacts.outline.View.search}}}',
+									html: '{{{NextThought.view.contacts.outline.View.search}}}',
 									cn: [
 										{ tag: 'input', type: 'text' },
 										{

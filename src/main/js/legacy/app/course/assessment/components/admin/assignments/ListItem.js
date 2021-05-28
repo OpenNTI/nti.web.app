@@ -9,8 +9,7 @@ const AorB = (a, b) => (typeof a === 'number' ? a : b);
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.assignments.ListItem',
 	{
-		extend:
-			'NextThought.app.course.assessment.components.student.assignments.ListItem',
+		extend: 'NextThought.app.course.assessment.components.student.assignments.ListItem',
 		alias: 'widget.course-assessment-assignment-admin-list-item',
 
 		renderTpl: Ext.DomHelper.markup([

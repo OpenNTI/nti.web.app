@@ -39,10 +39,8 @@ class NTIWebCommunityTopic extends React.Component {
 
 	componentDidUpdate(prevProps) {
 		const { focusNewComment, selectedComment } = this.props;
-		const {
-			focusNewComment: prevFocus,
-			selectedComment: prevComment,
-		} = prevProps;
+		const { focusNewComment: prevFocus, selectedComment: prevComment } =
+			prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();

@@ -23,8 +23,7 @@ require('../outline/Prompt');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.Prompt',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.outline.Prompt',
+		extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
 		alias: 'widget.overview-editing-content-editor',
 		cls: styles['overview-editing-content-editor-prompt'],
 

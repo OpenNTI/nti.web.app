@@ -13,8 +13,7 @@ module.exports = exports = Ext.define(
 
 		renderTpl: Ext.DomHelper.markup([
 			{
-				cls:
-					'credit-card-container nti-web-credit-card-override {size}',
+				cls: 'credit-card-container nti-web-credit-card-override {size}',
 			},
 		]),
 

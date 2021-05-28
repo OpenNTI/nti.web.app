@@ -167,9 +167,7 @@ module.exports = exports = Ext.define(
 						Ext.isEmpty(upcoming) &&
 						!activeTab) ||
 					activeTab === 'Archived';
-				this.tabbedComponents[
-					'archived'
-				] = this.addBinnedCourses(
+				this.tabbedComponents['archived'] = this.addBinnedCourses(
 					containerCmp,
 					this.binCourses(archived),
 					getString(

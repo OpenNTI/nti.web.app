@@ -102,9 +102,8 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		nav.pushRootRoute = body.pushRoute.bind(body);
 		nav.navigateToObject = body.navigateToObject.bind(body);
-		nav.attemptToNavigateToObject = body.attemptToNavigateToObject.bind(
-			body
-		);
+		nav.attemptToNavigateToObject =
+			body.attemptToNavigateToObject.bind(body);
 
 		NavigationActions.doPushRootRoute = body.pushRootRoute.bind(body);
 		NavigationActions.doReplaceRootRoute = body.replaceRootRoute.bind(body);

@@ -30,8 +30,7 @@ module.exports = exports = Ext.define(
 		renderTpl: Ext.DomHelper.markup([
 			{
 				cls: 'header',
-				html:
-					'<span class="assignments-title">{title}</span><span class="assignments-options"/>',
+				html: '<span class="assignments-title">{title}</span><span class="assignments-options"/>',
 			},
 			{ cls: 'outline-list' },
 		]),
@@ -104,8 +103,9 @@ module.exports = exports = Ext.define(
 				this.menu.showBy(settingsTarget, 'tr-br');
 
 				// re-adjust left location if left overlaps left side of window
-				const offsetX = this.menu.getEl().dom.getBoundingClientRect()
-					.left;
+				const offsetX = this.menu
+					.getEl()
+					.dom.getBoundingClientRect().left;
 
 				if (offsetX < 0) {
 					this.menu.setX(this.menu.getX() + Math.abs(offsetX));

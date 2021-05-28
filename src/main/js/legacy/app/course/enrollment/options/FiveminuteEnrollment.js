@@ -59,9 +59,8 @@ module.exports = exports = Ext.define(
 						);
 					},
 					async complete(cmp, data) {
-						var link = $AppConfig.userObject.getLink(
-							'fmaep.admission'
-						);
+						var link =
+							$AppConfig.userObject.getLink('fmaep.admission');
 
 						if (!link) {
 							throw new Error('No admit link');

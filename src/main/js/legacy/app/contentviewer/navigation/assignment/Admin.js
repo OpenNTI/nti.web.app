@@ -31,8 +31,7 @@ module.exports = exports = Ext.define(
 		extend: 'NextThought.app.contentviewer.navigation.Base',
 		alias: 'widget.course-assessment-admin-reader-header',
 		ui: 'course-assessment',
-		cls:
-			'admin-reader-header reader-header course-assessment-header assignment-item',
+		cls: 'admin-reader-header reader-header course-assessment-header assignment-item',
 
 		usePageSource: true,
 
@@ -120,20 +119,17 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'profile link',
-										html:
-											'{{{NextThought.view.courseware.assessment.admin.Header.profile}}}',
+										html: '{{{NextThought.view.courseware.assessment.admin.Header.profile}}}',
 									},
 									{
 										tag: 'span',
 										cls: 'email link',
-										html:
-											'{{{NextThought.view.courseware.assessment.admin.Header.email}}}',
+										html: '{{{NextThought.view.courseware.assessment.admin.Header.email}}}',
 									},
 									{
 										tag: 'span',
 										cls: 'chat link',
-										html:
-											'{{{NextThought.view.courseware.assessment.admin.Header.chat}}}',
+										html: '{{{NextThought.view.courseware.assessment.admin.Header.chat}}}',
 									},
 								],
 							},
@@ -206,7 +202,8 @@ module.exports = exports = Ext.define(
 
 		__getExcusedTpl: function () {
 			var excusedTpl = { cls: 'off', html: 'Excused' },
-				grade = this.assignmentHistory?.getMostRecentHistoryItemGrade?.();
+				grade =
+					this.assignmentHistory?.getMostRecentHistoryItemGrade?.();
 
 			if (grade?.get('IsExcused')) {
 				excusedTpl.cls = 'on';
@@ -702,7 +699,8 @@ module.exports = exports = Ext.define(
 		},
 
 		excuseGradeStatusChanged: function () {
-			const historyItem = this.assignmentHistoryItemContainer?.getMostRecentHistoryItem?.();
+			const historyItem =
+				this.assignmentHistoryItemContainer?.getMostRecentHistoryItem?.();
 			var grade = historyItem?.get('Grade');
 
 			if (!grade) {

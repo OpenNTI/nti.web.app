@@ -8,8 +8,7 @@ require('./items/Items');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.video.VideoEditor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-video-editor',
 		layout: 'none',
 		items: [],

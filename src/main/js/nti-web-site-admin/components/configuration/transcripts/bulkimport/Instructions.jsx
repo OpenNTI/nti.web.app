@@ -20,8 +20,7 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
 		title: 'name of the credit',
 		description: 'description of the credit',
 		issuer: 'entity issuing the credit',
-		date:
-			'the awarded date in ISO-8601 format (e.g. <span style="white-space:nowrap">2018-11-09T18:38:00.000-0500</span>)',
+		date: 'the awarded date in ISO-8601 format (e.g. <span style="white-space:nowrap">2018-11-09T18:38:00.000-0500</span>)',
 		value: 'amount of credit (e.g. 4)',
 		type: 'domain specific kind of credit (e.g. CRE)',
 	},

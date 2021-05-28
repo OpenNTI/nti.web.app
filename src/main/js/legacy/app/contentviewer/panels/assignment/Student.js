@@ -11,8 +11,7 @@ require('../Reader');
 const t = scoped('nti-web-app.contentviewer.panels.assignment.Student', {
 	alreadyStarted: {
 		title: 'Attempt in Progress',
-		msg:
-			'There is an ongoing attempt in progress. Clicking OK will continue that attempt.',
+		msg: 'There is an ongoing attempt in progress. Clicking OK will continue that attempt.',
 		button: 'OK',
 	},
 });
@@ -119,8 +118,7 @@ module.exports = exports = Ext.define(
 							return [
 								baseToolbarConfig,
 								{
-									xtype:
-										'assignment-submitted-masked-placeholder',
+									xtype: 'assignment-submitted-masked-placeholder',
 									assignment,
 									flex: 1,
 									isMaskedAssignment: true,

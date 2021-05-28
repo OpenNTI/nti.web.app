@@ -44,13 +44,11 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'title',
-									html:
-										'{{{NextThought.view.account.verification.EmailToken.PendingTitle}}}',
+									html: '{{{NextThought.view.account.verification.EmailToken.PendingTitle}}}',
 								},
 								{
 									cls: 'sub',
-									html:
-										'{{{NextThought.view.account.verification.EmailToken.PendingSubTitle}}}',
+									html: '{{{NextThought.view.account.verification.EmailToken.PendingSubTitle}}}',
 								},
 							],
 						},
@@ -66,8 +64,7 @@ module.exports = exports = Ext.define(
 					cn: [
 						{
 							tag: 'span',
-							html:
-								'Changing your email is not enabled on this platform. Please ',
+							html: 'Changing your email is not enabled on this platform. Please ',
 						},
 						{
 							tag: 'tpl',
@@ -112,8 +109,7 @@ module.exports = exports = Ext.define(
 								cn: [
 									{
 										cls: 'title',
-										html:
-											'We sent a verification email to:',
+										html: 'We sent a verification email to:',
 									},
 									{ cls: 'email', html: '{email}' },
 									{ cls: 'sub' },
@@ -157,8 +153,7 @@ module.exports = exports = Ext.define(
 												cn: [
 													{
 														tag: 'a',
-														cls:
-															'button confirm disabled',
+														cls: 'button confirm disabled',
 														role: 'button',
 														html: '{save}',
 													},
@@ -166,8 +161,7 @@ module.exports = exports = Ext.define(
 														tag: 'a',
 														cls: 'button cancel',
 														role: 'button',
-														html:
-															'{{{NextThought.view.account.verification.EmailToken.Cancel}}}',
+														html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}',
 													},
 												],
 											},
@@ -188,8 +182,7 @@ module.exports = exports = Ext.define(
 										cn: [
 											{
 												cls: 'button verify-email link',
-												html:
-													'< Back to Email Verification',
+												html: '< Back to Email Verification',
 											},
 										],
 									},
@@ -226,15 +219,13 @@ module.exports = exports = Ext.define(
 														tag: 'a',
 														cls: 'button confirm',
 														role: 'button',
-														html:
-															'{{{NextThought.view.account.verification.EmailToken.Submit}}}',
+														html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}',
 													},
 													{
 														tag: 'a',
 														cls: 'button cancel',
 														role: 'button',
-														html:
-															'{{{NextThought.view.account.verification.EmailToken.Cancel}}}',
+														html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}',
 													},
 												],
 											},

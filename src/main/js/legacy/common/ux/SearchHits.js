@@ -102,9 +102,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 			return toAppend;
 		}
 		Ext.each(rangesToRender, sel => {
-			const redactionAction = TextRangeFinderUtils.getRedactionActionSpan(
-				sel
-			);
+			const redactionAction =
+				TextRangeFinderUtils.getRedactionActionSpan(sel);
 			if (redactionAction) {
 				redactionAction.addCls('searchHitInside');
 				sel.getClientRects = () => {

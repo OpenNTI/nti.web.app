@@ -84,34 +84,26 @@ module.exports = exports = Ext.define(
 													cn: [
 														{
 															tag: 'span',
-															cls:
-																'link preview-link',
+															cls: 'link preview-link',
 															cn: [
 																{
 																	tag: 'a',
 																	href: '',
-																	target:
-																		'_blank',
-																	html:
-																		'Download',
+																	target: '_blank',
+																	html: 'Download',
 																},
 															],
 														},
 														{
 															tag: 'span',
-															cls:
-																'link change-link',
+															cls: 'link change-link',
 															html: 'Change',
 															cn: [
 																{
-																	tag:
-																		'input',
-																	type:
-																		'file',
-																	cls:
-																		'hidden',
-																	title:
-																		'Change File',
+																	tag: 'input',
+																	type: 'file',
+																	cls: 'hidden',
+																	title: 'Change File',
 																	tabindex:
 																		'1',
 																},
@@ -135,8 +127,7 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											cls: 'button',
-											html:
-												'Drop Files Here to Upload Them.',
+											html: 'Drop Files Here to Upload Them.',
 										},
 									],
 								},

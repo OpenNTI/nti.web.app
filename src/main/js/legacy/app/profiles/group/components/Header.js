@@ -86,9 +86,8 @@ module.exports = exports = Ext.define(
 		fillInEntity: function (entity) {
 			var data = entity.getAboutData();
 
-			this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(
-				entity
-			);
+			this.avatarContainerEl.dom.innerHTML =
+				Ext.util.Format.avatar(entity);
 			this.usernameEl.update(data.displayName);
 
 			this.aboutFieldEl.dom.innerHTML = data.about || '';

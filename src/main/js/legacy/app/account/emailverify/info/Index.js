@@ -18,8 +18,7 @@ module.exports = exports = Ext.define(
 					},
 					{
 						cls: 'sub',
-						html:
-							'Verifying your email is necessary to ensure successful communication, to facilitate account recovery, and to issue course completion badges.',
+						html: 'Verifying your email is necessary to ensure successful communication, to facilitate account recovery, and to issue course completion badges.',
 					},
 				],
 			},

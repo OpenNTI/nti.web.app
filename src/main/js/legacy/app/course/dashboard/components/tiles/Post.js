@@ -12,8 +12,7 @@ require('internal/legacy/app/windows/Actions');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.dashboard.components.tiles.Post',
 	{
-		extend:
-			'NextThought.app.course.dashboard.components.tiles.BaseContainer',
+		extend: 'NextThought.app.course.dashboard.components.tiles.BaseContainer',
 
 		mixins: {
 			likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',

@@ -41,9 +41,8 @@ module.exports = exports = Ext.define(
 
 			this.initChildComponentRefs();
 
-			this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(
-				this
-			);
+			this.streamCmp.navigateToObject =
+				this.navigateToActivityItem.bind(this);
 
 			this.sidebarCmp.setStreamCmp(this.streamCmp.getStreamCmp());
 

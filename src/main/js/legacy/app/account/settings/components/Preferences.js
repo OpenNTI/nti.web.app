@@ -34,8 +34,7 @@ module.exports = exports = Ext.define(
 						{
 							tag: 'span',
 							cls: 'not-ready nti-checkbox email',
-							html:
-								'Send me email notifications about activity I may have missed.',
+							html: 'Send me email notifications about activity I may have missed.',
 							tabIndex: 0,
 							role: 'button',
 							'data-preference-path': 'PushNotifications/Email',
@@ -45,8 +44,7 @@ module.exports = exports = Ext.define(
 						{
 							tag: 'span',
 							cls: 'not-ready nti-checkbox email',
-							html:
-								'Send me email notifications when someone @mentions me.',
+							html: 'Send me email notifications when someone @mentions me.',
 							tabIndex: 0,
 							role: 'button',
 							'data-preference-path': 'PushNotifications/Email',
@@ -55,8 +53,7 @@ module.exports = exports = Ext.define(
 						{
 							tag: 'span',
 							cls: 'not-ready nti-checkbox email',
-							html:
-								'Send me email notifications when I am replied to.',
+							html: 'Send me email notifications when I am replied to.',
 							tabIndex: 0,
 							role: 'button',
 							'data-preference-path': 'PushNotifications/Email',
@@ -75,8 +72,7 @@ module.exports = exports = Ext.define(
 						{
 							tag: 'span',
 							cls: 'not-ready nti-checkbox course-badges',
-							html:
-								'Make badges earned for completing a course public.',
+							html: 'Make badges earned for completing a course public.',
 							tabIndex: 0,
 							role: 'button',
 							'data-preference-path': 'Badges/Course',
@@ -109,9 +105,8 @@ module.exports = exports = Ext.define(
 					promise = prefs[path];
 
 				if (!promise) {
-					promise = prefs[
-						path
-					] = $AppConfig.Preferences.getPreference(path);
+					promise = prefs[path] =
+						$AppConfig.Preferences.getPreference(path);
 				}
 
 				promise = promise.then(function (pref) {

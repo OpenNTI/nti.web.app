@@ -31,14 +31,12 @@ const rel = 'noopener noreferrer';
 const target = '_blank';
 const Links = {
 	IESupport: {
-		href:
-			'https://www.microsoft.com/en-us/microsoft-365/windows/end-of-ie-support',
+		href: 'https://www.microsoft.com/en-us/microsoft-365/windows/end-of-ie-support',
 		rel,
 		target,
 	},
 	SupportedBrowsers: {
-		href:
-			'https://help.nextthought.com/faq/technicalfaq.html#supported-browsers',
+		href: 'https://help.nextthought.com/faq/technicalfaq.html#supported-browsers',
 		rel,
 		target,
 	},

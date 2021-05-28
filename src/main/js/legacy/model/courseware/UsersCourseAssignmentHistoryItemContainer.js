@@ -7,10 +7,8 @@ const t = scoped(
 	'nti-web-app.model.courseware.UsersCourseAssignmentHistoryItemContainer',
 	{
 		resetWarning: {
-			self:
-				'This will reset the assignment. All work will be deleted and is not recoverable.',
-			other:
-				'This will reset this assignment for this student. It is not recoverable. \nFeedback and work will be deleted.',
+			self: 'This will reset the assignment. All work will be deleted and is not recoverable.',
+			other: 'This will reset this assignment for this student. It is not recoverable. \nFeedback and work will be deleted.',
 		},
 	}
 );
@@ -113,7 +111,8 @@ module.exports = exports = Ext.define(
 						if (button === 'yes') {
 							Service.post(record.getLink('Reset'))
 								.then(() => {
-									const historyItem = record.getMostRecentHistoryItem();
+									const historyItem =
+										record.getMostRecentHistoryItem();
 
 									if (historyItem) {
 										historyItem.makePlaceholder(

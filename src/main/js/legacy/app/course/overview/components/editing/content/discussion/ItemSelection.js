@@ -7,8 +7,7 @@ require('../../itemselection/Index');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.itemselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 		alias: 'widget.overview-editing-discussion-item-selection',
 		multiSelect: false,
 		cls: 'discussion-item-selection item-selection',

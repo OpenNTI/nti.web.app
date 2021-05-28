@@ -34,8 +34,7 @@ module.exports = exports = Ext.define(
 									for: 'options',
 									cn: [
 										{
-											cls:
-												'enrollment-input dark full checkbox',
+											cls: 'enrollment-input dark full checkbox',
 											cn: [
 												{
 													tag: 'input',

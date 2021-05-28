@@ -6,8 +6,7 @@ const QUOTE_COMPLETED = 'inapp-quote-done';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.quotes.BaseQuote',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-base-quote',
 
 		cls: '',

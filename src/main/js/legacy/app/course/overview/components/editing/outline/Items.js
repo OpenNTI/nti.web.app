@@ -141,27 +141,24 @@ module.exports = exports = Ext.define(
 					record: record,
 					bundle: bundle,
 					navigateToOutlineNode: this.navigateToOutlineNode,
-					beforeShowMenuControl: this.beforeShowMenuControl.bind(
-						this
-					),
+					beforeShowMenuControl:
+						this.beforeShowMenuControl.bind(this),
 				});
 			} else if (record instanceof CourseOutlineCalendarNode) {
 				cmp = CalendarnodeListItem.create({
 					record: record,
 					bundle: bundle,
 					navigateToOutlineNode: this.navigateToOutlineNode,
-					beforeShowMenuControl: this.beforeShowMenuControl.bind(
-						this
-					),
+					beforeShowMenuControl:
+						this.beforeShowMenuControl.bind(this),
 				});
 			} else if (record instanceof CourseOutlineNode) {
 				cmp = OutlinenodeListItem.create({
 					record: record,
 					bundle: bundle,
 					navigateToOutlineNode: this.navigateToOutlineNode,
-					beforeShowMenuControl: this.beforeShowMenuControl.bind(
-						this
-					),
+					beforeShowMenuControl:
+						this.beforeShowMenuControl.bind(this),
 				});
 			} else {
 				console.warn('Unknown type: ', record);

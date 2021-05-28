@@ -28,17 +28,15 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 		return () => {
 			ref?.un(listen);
 			ref?.destroy();
-		}
+		};
 	}, [windowRef.current]);
 
 	React.useEffect(() => {
 		if (!visible) {
 			windowRef.current?.hide();
-		}
-		else if (windowRef.current) {
+		} else if (windowRef.current) {
 			windowRef.current?.show();
-		}
-		else if (target) {
+		} else if (target) {
 			const win = Ext.widget('gutter-list-calendar-window', {
 				renderTo: Ext.get(target),
 				onClose: onClose,
@@ -52,7 +50,7 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 
 		return () => {
 			windowRef.current?.hide();
-		}
+		};
 	}, [visible]);
 
 	return null;

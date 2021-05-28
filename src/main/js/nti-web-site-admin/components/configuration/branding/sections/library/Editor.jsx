@@ -62,9 +62,7 @@ export default function Editor({ onChange }) {
 					className={cx('input')}
 				>
 					<BrandColor
-						onChange={color =>
-							change(BRAND_COLOR)(color)
-						}
+						onChange={color => change(BRAND_COLOR)(color)}
 					/>
 				</InputContainer>
 				<InputContainer label={t('searchBar')} className={cx('input')}>

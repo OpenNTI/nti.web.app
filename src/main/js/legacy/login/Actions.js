@@ -126,8 +126,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 		Ext.Msg.show({
 			title: 'High Contrast mode',
-			msg:
-				'You are using the site in high contrast mode. Do you want to make this your preferred version of the app?',
+			msg: 'You are using the site in high contrast mode. Do you want to make this your preferred version of the app?',
 			buttons: {
 				primary: {
 					text: 'Yes',
@@ -164,8 +163,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			alert({
 				icon: 'error',
 				title: 'Request Timeout',
-				msg:
-					'There was some issue preventing us from starting. Please try again in a few minutes.',
+				msg: 'There was some issue preventing us from starting. Please try again in a few minutes.',
 				closable: false,
 				buttons: {},
 			});

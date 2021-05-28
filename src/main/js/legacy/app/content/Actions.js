@@ -237,9 +237,8 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 		if (lineage.length + leftOvers.length <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				levelName = ContentUtils.getFirstTopic(topic).getAttribute(
-					'level'
-				);
+				levelName =
+					ContentUtils.getFirstTopic(topic).getAttribute('level');
 				levelLabel = this.__getLevelLabel(
 					lineage.length,
 					levelName,

@@ -37,8 +37,7 @@ function unwrapSelection(topic) {
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.discussion.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-discussion',
 
 		statics: {
@@ -56,7 +55,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return Types.some(t => available[t]);
 						},

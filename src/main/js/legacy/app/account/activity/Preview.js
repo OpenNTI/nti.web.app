@@ -100,8 +100,7 @@ module.exports = exports = Ext.define(
 								cls: 'meta',
 								cn: [
 									{
-										cls:
-											'subject {[values.title? "":"no-subject"]}',
+										cls: 'subject {[values.title? "":"no-subject"]}',
 										html: '{title}',
 									},
 									{
@@ -109,8 +108,7 @@ module.exports = exports = Ext.define(
 										cn: [
 											{
 												tag: 'span',
-												cls:
-													'name link {[values.title? "":"no-subject"]}',
+												cls: 'name link {[values.title? "":"no-subject"]}',
 												html: 'By {name}',
 											},
 											{
@@ -151,8 +149,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'link reply',
-									html:
-										'{{{NextThought.view.account.activity.Preview.add-comment}}}',
+									html: '{{{NextThought.view.account.activity.Preview.add-comment}}}',
 								},
 							],
 						},

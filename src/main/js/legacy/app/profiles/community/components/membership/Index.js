@@ -8,8 +8,7 @@ require('../../../user/components/membership/parts/Membership');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.community.components.membership.Index',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 		alias: 'widget.profile-community-membership',
 
 		mixins: {

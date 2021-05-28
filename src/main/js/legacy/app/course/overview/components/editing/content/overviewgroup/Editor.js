@@ -12,10 +12,8 @@ const t = scoped(
 	{
 		deleteMessage: {
 			zero: 'Deleting this section cannot be undone.',
-			one:
-				'This section contains 1 item that will also be deleted. This action cannot be undone.',
-			other:
-				'This section contains %(count)s items that will also be deleted. This action cannot be undone.',
+			one: 'This section contains 1 item that will also be deleted. This action cannot be undone.',
+			other: 'This section contains %(count)s items that will also be deleted. This action cannot be undone.',
 		},
 	}
 );

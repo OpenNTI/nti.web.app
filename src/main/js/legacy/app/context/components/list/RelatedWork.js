@@ -19,7 +19,7 @@ module.exports = exports = Ext.define(
 			);
 		},
 
-		async getContentRootFor (path) {
+		async getContentRootFor(path) {
 			var root,
 				i = 0,
 				part;
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define(
 			return root;
 		},
 
-		async setIcon (path) {
+		async setIcon(path) {
 			if (!this.rendered) {
 				this.on('afterrender', this.setIcon.bind(this, path));
 				return;

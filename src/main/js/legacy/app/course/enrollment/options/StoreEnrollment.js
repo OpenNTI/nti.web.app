@@ -380,9 +380,10 @@ module.exports = exports = Ext.define(
 										)
 									)
 										.then(function (catalogEntry) {
-											catalogEntry = lazy.ParseUtils.parseItems(
-												catalogEntry
-											)[0];
+											catalogEntry =
+												lazy.ParseUtils.parseItems(
+													catalogEntry
+												)[0];
 											course.set(
 												'EnrollmentOptions',
 												catalogEntry.get(

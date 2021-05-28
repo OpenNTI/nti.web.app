@@ -154,8 +154,7 @@ module.exports = exports = Ext.define(
 						{
 							displayText: 'Chat',
 							stateValue: 'chat',
-							value:
-								'application/vnd.nextthought.transcriptsummary',
+							value: 'application/vnd.nextthought.transcriptsummary',
 						},
 					],
 				},

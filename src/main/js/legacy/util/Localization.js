@@ -1,92 +1,92 @@
 const Ext = require('@nti/extjs');
 
-var Localization = (module.exports = exports = Ext.define(
-	'NextThought.util.Localization',
-	{
-		formatRe: /\{([^{]+)\}/g,
+var Localization =
+	(module.exports =
+	exports =
+		Ext.define('NextThought.util.Localization', {
+			formatRe: /\{([^{]+)\}/g,
 
-		constructor: function () {
-			this.callParent(arguments);
+			constructor: function () {
+				this.callParent(arguments);
 
-			this.getString = this.getString.bind(this);
-			this.getFormattedString = this.getFormattedString.bind(this);
-		},
+				this.getString = this.getString.bind(this);
+				this.getFormattedString = this.getFormattedString.bind(this);
+			},
 
-		getExternalizedString: function (key, defaultValue, noKey) {
-			var v =
-				(window.NTIStrings || {})[key] ||
-				defaultValue ||
-				(!noKey && key) ||
-				'';
+			getExternalizedString: function (key, defaultValue, noKey) {
+				var v =
+					(window.NTIStrings || {})[key] ||
+					defaultValue ||
+					(!noKey && key) ||
+					'';
 
-			if (v instanceof Array) {
-				v = v[Math.floor(Math.random() * 100) % v.length];
-			}
+				if (v instanceof Array) {
+					v = v[Math.floor(Math.random() * 100) % v.length];
+				}
 
-			return v;
-		},
+				return v;
+			},
 
-		formatExternalString: function (key, values, dontUseKey) {
-			var string = this.getExternalizedString(
-				key,
-				dontUseKey ? null : key,
-				true
-			);
+			formatExternalString: function (key, values, dontUseKey) {
+				var string = this.getExternalizedString(
+					key,
+					dontUseKey ? null : key,
+					true
+				);
 
-			if (!values) {
-				return string;
-			}
+				if (!values) {
+					return string;
+				}
 
-			return string.replace(this.formatRe, function (m, i) {
-				return values[i] || m;
-			});
-		},
+				return string.replace(this.formatRe, function (m, i) {
+					return values[i] || m;
+				});
+			},
 
-		pluralizeString: function (count, key, noNum) {
-			var forms = (window.NTIStrings.PluralForms || {})[key],
-				i,
-				s;
+			pluralizeString: function (count, key, noNum) {
+				var forms = (window.NTIStrings.PluralForms || {})[key],
+					i,
+					s;
 
-			if (!forms) {
-				//console.error('Pluralizing a string we dont have forms for', key, count);
-				return this.oldPlural.apply(Ext.util.Format, arguments);
-			}
+				if (!forms) {
+					//console.error('Pluralizing a string we dont have forms for', key, count);
+					return this.oldPlural.apply(Ext.util.Format, arguments);
+				}
 
-			if (forms.rule) {
-				i = forms.rule(count);
-			} else {
-				i = forms.ranges[count];
-				i = i !== undefined ? i : forms.ranges[undefined];
-			}
+				if (forms.rule) {
+					i = forms.rule(count);
+				} else {
+					i = forms.ranges[count];
+					i = i !== undefined ? i : forms.ranges[undefined];
+				}
 
-			if (i === undefined) {
-				console.error('No form for count', key, count);
-				return key;
-			}
+				if (i === undefined) {
+					console.error('No form for count', key, count);
+					return key;
+				}
 
-			s = forms.forms[i] || key;
+				s = forms.forms[i] || key;
 
-			if (noNum) {
-				s = s.replace('{#}', '');
-				return s.trim();
-			}
+				if (noNum) {
+					s = s.replace('{#}', '');
+					return s.trim();
+				}
 
-			if (s === key) {
-				return count + ' ' + s;
-			}
+				if (s === key) {
+					return count + ' ' + s;
+				}
 
-			return s.replace('{#}', count);
-		},
+				return s.replace('{#}', count);
+			},
 
-		getString: function () {
-			return this.getExternalizedString.apply(this, arguments);
-		},
+			getString: function () {
+				return this.getExternalizedString.apply(this, arguments);
+			},
 
-		getFormattedString: function () {
-			return this.formatExternalString.apply(this, arguments);
-		},
-	}
-).create());
+			getFormattedString: function () {
+				return this.formatExternalString.apply(this, arguments);
+			},
+		}).create());
 
 global.getString = Localization.getString.bind(Localization);
 global.getFormattedString = Localization.getFormattedString.bind(Localization);

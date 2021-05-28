@@ -54,15 +54,13 @@ module.exports = exports = Ext.define(
 							cn: [
 								{ cls: 'name', html: '{displayName}' },
 								{
-									cls:
-										'profile-pic {[this.getPresence(values)]}',
+									cls: 'profile-pic {[this.getPresence(values)]}',
 									'data-badge':
 										'{[this.getBadgeCount(values)]}',
 									cn: [
 										'{[this.getAvatar(values)]}',
 										{
-											cls:
-												'presence {[this.getPresence(values)]}',
+											cls: 'presence {[this.getPresence(values)]}',
 										},
 									],
 								},

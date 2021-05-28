@@ -43,12 +43,8 @@ export default class PermissionsListItem extends React.Component {
 	};
 
 	render() {
-		const {
-			permissions,
-			updating,
-			showEditor,
-			showInstructor,
-		} = this.props;
+		const { permissions, updating, showEditor, showInstructor } =
+			this.props;
 		const { user } = permissions;
 		const isMe = getAppUsername() === user.getID();
 		const cls = cx('course-instructors-permission-list-item', { updating });

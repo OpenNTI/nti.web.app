@@ -83,8 +83,7 @@ module.exports = exports = Ext.define(
 								cn: [
 									{
 										tag: 'span',
-										cls:
-											'state link {publish-state:lowercase}',
+										cls: 'state link {publish-state:lowercase}',
 										html: '{publish-state}',
 									},
 								],
@@ -96,8 +95,7 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'edit link',
-										html:
-											'{{{NextThought.view.forums.topic.parts.Topic.edit}}}',
+										html: '{{{NextThought.view.forums.topic.parts.Topic.edit}}}',
 									},
 								],
 							},
@@ -108,8 +106,7 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'delete link',
-										html:
-											'{{{NextThought.view.forums.topic.parts.Topic.delete}}}',
+										html: '{{{NextThought.view.forums.topic.parts.Topic.delete}}}',
 									},
 								],
 							},
@@ -145,8 +142,7 @@ module.exports = exports = Ext.define(
 											{
 												tag: 'span',
 												cls: 'reply-count',
-												html:
-													'{PostCount:plural("Comment")}',
+												html: '{PostCount:plural("Comment")}',
 											},
 											{
 												tag: 'tpl',
@@ -155,16 +151,14 @@ module.exports = exports = Ext.define(
 													{
 														tag: 'span',
 														cls: 'reply link',
-														html:
-															'{{{NextThought.view.forums.topic.parts.Topic.add}}}',
+														html: '{{{NextThought.view.forums.topic.parts.Topic.add}}}',
 													},
 												],
 											},
 											{
 												tag: 'span',
 												cls: 'report link',
-												html:
-													'{{{NextThought.view.forums.topic.parts.Topic.report}}}',
+												html: '{{{NextThought.view.forums.topic.parts.Topic.report}}}',
 											},
 										],
 									},
@@ -251,9 +245,9 @@ module.exports = exports = Ext.define(
 					if (me.rendered) {
 						me.nameEl.update(u.getName());
 						me.avatarWrapperEl.update(
-							Ext.DomHelper.createTemplate(
-								'{user:avatar}'
-							).apply({ user: u })
+							Ext.DomHelper.createTemplate('{user:avatar}').apply(
+								{ user: u }
+							)
 						);
 					}
 				});

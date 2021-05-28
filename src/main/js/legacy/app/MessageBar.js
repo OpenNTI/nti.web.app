@@ -54,9 +54,8 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 	},
 
 	remember: function () {
-		this.self.dontShow[this.messageType] = !this.self.dontShow[
-			this.messageType
-		];
+		this.self.dontShow[this.messageType] =
+			!this.self.dontShow[this.messageType];
 		this.rememberEl[this.self.dontShow ? 'addCls' : 'removeCls']('checked');
 	},
 });

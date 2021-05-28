@@ -23,9 +23,8 @@ module.exports = exports = Ext.define(
 				doNotCache: true,
 				fn: this.getPathToBadge.bind(this),
 			};
-			handlers[
-				DynamicFriendsList.mimeType
-			] = this.getPathToDynamicFriendsList.bind(this);
+			handlers[DynamicFriendsList.mimeType] =
+				this.getPathToDynamicFriendsList.bind(this);
 
 			return handlers;
 		},

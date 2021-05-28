@@ -46,8 +46,7 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											tag: 'span',
-											cls:
-												'completed-label {completed.cls}',
+											cls: 'completed-label {completed.cls}',
 											'data-qtip': '{completed.qtip}',
 											html: '{completed.html}',
 										},
@@ -66,19 +65,16 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'overtime',
+																	cls: 'overtime',
 																	'data-qtip':
 																		'{overtime.qtip}',
-																	html:
-																		'{overtime.html}',
+																	html: '{overtime.html}',
 																},
 															],
 														},
 														{
 															tag: 'tpl',
-															if:
-																'overtime && overdue',
+															if: 'overtime && overdue',
 															cn: ', ',
 														},
 														{
@@ -87,12 +83,10 @@ module.exports = exports = Ext.define(
 															cn: [
 																{
 																	tag: 'span',
-																	cls:
-																		'overdue',
+																	cls: 'overdue',
 																	'data-qtip':
 																		'{overdue.qtip}',
-																	html:
-																		'{overdue.html}',
+																	html: '{overdue.html}',
 																},
 															],
 														},
@@ -338,10 +332,9 @@ module.exports = exports = Ext.define(
 			 * @returns {boolean}		if there are actions
 			 */
 			hasActions: function (containerRecord) {
-				const record =
-					containerRecord?.getMostRecentHistoryItem ?
-						containerRecord.getMostRecentHistoryItem() :
-						containerRecord;
+				const record = containerRecord?.getMostRecentHistoryItem
+					? containerRecord.getMostRecentHistoryItem()
+					: containerRecord;
 				const grade = record?.get('Grade');
 
 				return record?.get('submission') || grade?.isExcusable();
@@ -371,10 +364,9 @@ module.exports = exports = Ext.define(
 					txt,
 					grade;
 
-				const record =
-					containerRecord?.getMostRecentHistoryItem ?
-						containerRecord.getMostRecentHistoryItem() :
-						containerRecord;
+				const record = containerRecord?.getMostRecentHistoryItem
+					? containerRecord.getMostRecentHistoryItem()
+					: containerRecord;
 
 				if (record.get('submission')) {
 					menu.add(

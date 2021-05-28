@@ -5,8 +5,7 @@ require('./Membership');
 module.exports = exports = Ext.define(
 	'NextThought.app.profiles.user.components.membership.parts.Groups',
 	{
-		extend:
-			'NextThought.app.profiles.user.components.membership.parts.Membership',
+		extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 		alias: 'widget.profile-user-membership-groups',
 
 		cls: 'memberships full group four-column',

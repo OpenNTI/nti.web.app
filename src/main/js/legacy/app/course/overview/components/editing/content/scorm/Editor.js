@@ -12,8 +12,7 @@ const ScormContentMimeType =
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.scorm.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-scorm',
 		SWITCHED: 'switched-items',
 
@@ -31,7 +30,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[ScormContentMimeType];
 						},

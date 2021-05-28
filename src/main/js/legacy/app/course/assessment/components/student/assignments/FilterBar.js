@@ -26,8 +26,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'label',
-						html:
-							'{{{nti-web-app.course.assessment.components.student.assignments.FilterBar.allassignments}}}',
+						html: '{{{nti-web-app.course.assessment.components.student.assignments.FilterBar.allassignments}}}',
 					},
 				],
 			},
@@ -36,8 +35,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'label',
-						html:
-							'{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}',
+						html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}',
 					},
 				],
 			},

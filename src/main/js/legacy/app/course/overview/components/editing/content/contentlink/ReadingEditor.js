@@ -7,8 +7,7 @@ require('./types/Base');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
+		extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 		alias: 'widget.overview-editing-reading-editor',
 
 		afterRender: function () {

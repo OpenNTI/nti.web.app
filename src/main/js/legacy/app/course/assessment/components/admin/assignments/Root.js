@@ -8,8 +8,7 @@ require('./List');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.assignments.Root',
 	{
-		extend:
-			'NextThought.app.course.assessment.components.student.assignments.View',
+		extend: 'NextThought.app.course.assessment.components.student.assignments.View',
 		alias: 'widget.course-assessment-admin-assignments-root',
 		cls: 'assignment-list admin',
 

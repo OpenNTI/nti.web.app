@@ -37,8 +37,7 @@ module.exports = exports = Ext.define(
 			{ cls: 'list' },
 			{
 				cls: 'more hidden',
-				html:
-					'{{{NextThought.view.courseware.assessment.Activity.more}}}',
+				html: '{{{NextThought.view.courseware.assessment.Activity.more}}}',
 				tabIndex: 0,
 			},
 		]),

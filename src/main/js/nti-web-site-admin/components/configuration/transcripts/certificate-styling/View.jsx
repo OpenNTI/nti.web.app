@@ -43,15 +43,8 @@ const propMap = {
 };
 
 function CertificateStyling() {
-	const {
-		error,
-		loading,
-		modified,
-		theme,
-		save,
-		cancel,
-		canEdit,
-	} = Store.useMonitor(propMap);
+	const { error, loading, modified, theme, save, cancel, canEdit } =
+		Store.useMonitor(propMap);
 
 	const [preview, setPreview] = React.useState(false);
 	const form = React.createRef();

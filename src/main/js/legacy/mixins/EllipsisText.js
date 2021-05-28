@@ -3,160 +3,160 @@ const Ext = require('@nti/extjs');
 /**
  * Use this mixin to truncate text and add ellipsis depending on its parent node or itself
  */
-const EllipsisText = (module.exports = exports = Ext.define(
-	'NextThought.mixins.EllipsisText',
-	{
-		/**
-		 * Goal: Group dom reads/writes into single passes.
-		 */
-		statics: {
-			TASKS: [],
+const EllipsisText =
+	(module.exports =
+	exports =
+		Ext.define('NextThought.mixins.EllipsisText', {
+			/**
+			 * Goal: Group dom reads/writes into single passes.
+			 */
+			statics: {
+				TASKS: [],
 
-			schedule: function (fn) {
-				var task = this.addTask(fn);
+				schedule: function (fn) {
+					var task = this.addTask(fn);
 
-				this.start();
+					this.start();
 
-				return task;
+					return task;
+				},
+
+				isInterrupted: function (task) {
+					return (
+						task.skip ||
+						(task.parent && this.isInterrupted(task.parent))
+					);
+				},
+
+				getTasks: function () {
+					var me = this;
+
+					//filter out tasks that have already run or have been interrupted
+					return (me.TASKS || []).filter(function (x) {
+						return !me.isInterrupted(x) && !x.run;
+					});
+				},
+
+				addTask: function (task) {
+					var tasks = this.getTasks();
+
+					task = {
+						fn: task,
+					};
+
+					tasks.push(task);
+
+					this.TASKS = tasks;
+
+					return task;
+				},
+
+				start: function () {
+					var me = this;
+
+					if (!me.timeout) {
+						me.timeout = setTimeout(function () {
+							me.stop();
+							me.run();
+						}, 1);
+					}
+				},
+
+				stop: function () {
+					if (this.timeout) {
+						clearTimeout(this.timeout);
+						delete this.timeout;
+					}
+				},
+
+				run: function () {
+					var tasks = this.getTasks();
+
+					(tasks || []).forEach(function (task) {
+						var child;
+
+						try {
+							child = task.fn.call();
+
+							if (child) {
+								child.parent = task;
+							}
+						} catch (e) {
+							console.error(e);
+						}
+
+						task.run = true;
+					});
+
+					//Reset the list to filter out the tasks that have already ran
+					this.TASKS = this.getTasks();
+				},
 			},
 
-			isInterrupted: function (task) {
-				return (
-					task.skip ||
-					(task.parent && this.isInterrupted(task.parent))
-				);
-			},
+			/**
+			 * NOTE: the box should have a max-height property set on it.
+			 *
+			 * @param {Node} node - HTML element that we would like to ellipsis or expand into multiple lines
+			 * @param {string} measure - the box that we should use as reference. Defaults to self node.
+			 * @param {boolean} noEllipse -
+			 * @returns {void}
+			 */
+			truncateText: function (node, measure, noEllipse) {
+				// let box = node;
+				let textProperty =
+					node.textContent !== null ? 'textContent' : 'innerText';
+				let setToolTipOnce;
 
-			getTasks: function () {
-				var me = this;
+				// if (measure === 'parent') {
+				// 	box = node.parentNode;
+				// }
 
-				//filter out tasks that have already run or have been interrupted
-				return (me.TASKS || []).filter(function (x) {
-					return !me.isInterrupted(x) && !x.run;
-				});
-			},
-
-			addTask: function (task) {
-				var tasks = this.getTasks();
-
-				task = {
-					fn: task,
+				setToolTipOnce = function () {
+					node.setAttribute('data-qtip', node[textProperty]);
+					setToolTipOnce = function () {};
 				};
 
-				tasks.push(task);
-
-				this.TASKS = tasks;
-
-				return task;
-			},
-
-			start: function () {
-				var me = this;
-
-				if (!me.timeout) {
-					me.timeout = setTimeout(function () {
-						me.stop();
-						me.run();
-					}, 1);
+				if (noEllipse) {
+					setToolTipOnce = function () {};
 				}
-			},
 
-			stop: function () {
-				if (this.timeout) {
-					clearTimeout(this.timeout);
-					delete this.timeout;
-				}
-			},
+				// function work () {
+				// 	// NOTE: because of line-height, in different browsers, we might have a slight difference
+				// 	// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
+				// 	if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {
+				// 		if (node[textProperty] !== '...') {
+				// 			setTipOnce();
+				// 		}
+				// 	}
+				// }
 
-			run: function () {
-				var tasks = this.getTasks();
+				EllipsisText.schedule(function () {
+					var box = node;
 
-				(tasks || []).forEach(function (task) {
-					var child;
-
-					try {
-						child = task.fn.call();
-
-						if (child) {
-							child.parent = task;
-						}
-					} catch (e) {
-						console.error(e);
+					if (measure === 'parent') {
+						box = node.parentNode;
 					}
 
-					task.run = true;
+					function work() {
+						// NOTE: because of line-height, in different browsers, we might have a slight difference
+						// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
+						if (
+							box.scrollHeight -
+								(box.clientHeight || box.offsetHeight) >=
+							5
+						) {
+							if (node[textProperty] !== '...') {
+								setToolTipOnce();
+								node[textProperty] = node[textProperty].replace(
+									/.(\.+)?$/,
+									'...'
+								);
+								return EllipsisText.schedule(work);
+							}
+						}
+					}
+
+					return work();
 				});
-
-				//Reset the list to filter out the tasks that have already ran
-				this.TASKS = this.getTasks();
 			},
-		},
-
-		/**
-		 * NOTE: the box should have a max-height property set on it.
-		 *
-		 * @param {Node} node - HTML element that we would like to ellipsis or expand into multiple lines
-		 * @param {string} measure - the box that we should use as reference. Defaults to self node.
-		 * @param {boolean} noEllipse -
-		 * @returns {void}
-		 */
-		truncateText: function (node, measure, noEllipse) {
-			// let box = node;
-			let textProperty =
-				node.textContent !== null ? 'textContent' : 'innerText';
-			let setToolTipOnce;
-
-			// if (measure === 'parent') {
-			// 	box = node.parentNode;
-			// }
-
-			setToolTipOnce = function () {
-				node.setAttribute('data-qtip', node[textProperty]);
-				setToolTipOnce = function () {};
-			};
-
-			if (noEllipse) {
-				setToolTipOnce = function () {};
-			}
-
-			// function work () {
-			// 	// NOTE: because of line-height, in different browsers, we might have a slight difference
-			// 	// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
-			// 	if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {
-			// 		if (node[textProperty] !== '...') {
-			// 			setTipOnce();
-			// 		}
-			// 	}
-			// }
-
-			EllipsisText.schedule(function () {
-				var box = node;
-
-				if (measure === 'parent') {
-					box = node.parentNode;
-				}
-
-				function work() {
-					// NOTE: because of line-height, in different browsers, we might have a slight difference
-					// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
-					if (
-						box.scrollHeight -
-							(box.clientHeight || box.offsetHeight) >=
-						5
-					) {
-						if (node[textProperty] !== '...') {
-							setToolTipOnce();
-							node[textProperty] = node[textProperty].replace(
-								/.(\.+)?$/,
-								'...'
-							);
-							return EllipsisText.schedule(work);
-						}
-					}
-				}
-
-				return work();
-			});
-		},
-	}
-));
+		}));

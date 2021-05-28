@@ -150,8 +150,8 @@ module.exports = exports = Ext.define(
 			this.doSelection(record);
 		},
 
-		showingEditor () {
+		showingEditor() {
 			return this.newItemContainer?.isVisible();
-		}
+		},
 	}
 );

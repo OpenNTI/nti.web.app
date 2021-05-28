@@ -37,8 +37,7 @@ module.exports = exports = Ext.define(
 										cls: 'title-container',
 										cn: [
 											{
-												cls:
-													'{[this.getCls(values.displayName)]}',
+												cls: '{[this.getCls(values.displayName)]}',
 												html: '{displayName}',
 											},
 										],

@@ -39,12 +39,10 @@ module.exports = exports = Ext.define(
 						this.record.syncWithResponse(response);
 					})
 					.then(() => {
-						const availableBeginning = this.record.get(
-							'AvailableBeginning'
-						);
-						const availableEnding = this.record.get(
-							'AvailableEnding'
-						);
+						const availableBeginning =
+							this.record.get('AvailableBeginning');
+						const availableEnding =
+							this.record.get('AvailableEnding');
 						this.setProps({
 							availableBeginning,
 							availableEnding,

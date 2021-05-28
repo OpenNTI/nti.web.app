@@ -209,9 +209,8 @@ module.exports = exports = Ext.define(
 
 			var catalogEntry = this.course.getCourseCatalogEntry();
 
-			var registered = this.CourseEnrollmentStore.getEnrolledText(
-				catalogEntry
-			);
+			var registered =
+				this.CourseEnrollmentStore.getEnrolledText(catalogEntry);
 
 			var me = this,
 				menuCfg = {

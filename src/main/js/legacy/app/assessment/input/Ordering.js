@@ -608,7 +608,12 @@ module.exports = exports = Ext.define(
 						h = e.getHeight() + 'px',
 						leftMargin = e.getX() + 6;
 
-					this.initPageX = this.lastPageX = this.startPageX = this.minX = this.maxX = leftMargin;
+					this.initPageX =
+						this.lastPageX =
+						this.startPageX =
+						this.minX =
+						this.maxX =
+							leftMargin;
 
 					if (el) {
 						el.setStyle({

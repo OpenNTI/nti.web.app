@@ -81,10 +81,11 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		}
 
 		//generate the range description
-		var contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(
-			range,
-			documentElement
-		);
+		var contentRangeDescription =
+			lazy.Anchors.createRangeDescriptionFromRange(
+				range,
+				documentElement
+			);
 
 		return new lazy.Note({
 			applicableRange: contentRangeDescription.description,
@@ -101,10 +102,8 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		}
 
 		var text = range.toString(),
-			contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(
-				range,
-				root
-			);
+			contentRangeDescription =
+				lazy.Anchors.createRangeDescriptionFromRange(range, root);
 
 		return lazy.Highlight.create({
 			style: style,

@@ -131,9 +131,8 @@ module.exports = exports = Ext.define(
 				p = Promise.resolve(c)
 					.then(function (instance) {
 						if (instance) {
-							catalogData.EnrolledStartDate = instance.get(
-								'CreatedTime'
-							);
+							catalogData.EnrolledStartDate =
+								instance.get('CreatedTime');
 						}
 					})
 					.catch(function (reason) {

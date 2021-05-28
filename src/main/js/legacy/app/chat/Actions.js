@@ -137,8 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		} else {
 			alert({
 				title: 'Error',
-				msg:
-					'Unable to start your chat at this time. Please try again later.',
+				msg: 'Unable to start your chat at this time. Please try again later.',
 				icon: 'warning-red',
 			});
 		}

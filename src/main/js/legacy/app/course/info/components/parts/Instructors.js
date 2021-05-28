@@ -40,8 +40,7 @@ module.exports = exports = Ext.define(
 										cn: [
 											{
 												cls: 'label',
-												html:
-													'{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}',
+												html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}',
 											},
 											{ cls: 'name', html: '{Name}' },
 											{

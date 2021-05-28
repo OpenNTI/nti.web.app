@@ -121,30 +121,25 @@ module.exports = exports = Ext.define(
 											cn: [
 												{
 													cls: 'name',
-													html:
-														'{[this.displayName(values)]}',
+													html: '{[this.displayName(values)]}',
 												},
 												{
 													cls: 'action-items',
 													cn: [
 														{
 															tag: 'tpl',
-															if:
-																'OverdueAssignmentCount &gt; 0',
+															if: 'OverdueAssignmentCount &gt; 0',
 															cn: {
 																cls: 'overdue',
-																html:
-																	'{[this.displayOverdue(values)]}',
+																html: '{[this.displayOverdue(values)]}',
 															},
 														},
 														{
 															tag: 'tpl',
-															if:
-																'UngradedAssignmentCount &gt; 0',
+															if: 'UngradedAssignmentCount &gt; 0',
 															cn: {
 																cls: 'overdue',
-																html:
-																	'{[this.displayUngraded(values)]}',
+																html: '{[this.displayUngraded(values)]}',
 															},
 														},
 													],
@@ -229,15 +224,12 @@ module.exports = exports = Ext.define(
 													size: 3,
 													tabindex: '1',
 													type: 'text',
-													value:
-														'{[this.getGrade(values)]}',
+													value: '{[this.getGrade(values)]}',
 												},
 												{
-													cls:
-														'dropdown letter grade',
+													cls: 'dropdown letter grade',
 													tabindex: '1',
-													html:
-														'{[this.getLetter(values)]}',
+													html: '{[this.getLetter(values)]}',
 												},
 											],
 										},

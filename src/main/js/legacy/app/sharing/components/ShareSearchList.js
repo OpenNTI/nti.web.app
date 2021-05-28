@@ -49,24 +49,19 @@ module.exports = exports = Ext.define(
 								cn: [
 									'{[this.getAvatar(values)]}',
 									{
-										cls:
-											'avatar icon {[this.getType(values)]}',
+										cls: 'avatar icon {[this.getType(values)]}',
 										style: '{[this.getIcon(values)]}',
 									},
 									{
-										cls:
-											'card-body {[this.getType(values)]}',
+										cls: 'card-body {[this.getType(values)]}',
 										cn: [
 											{
-												cls:
-													'{[this.getNameClass(values)]}',
-												html:
-													'{[this.getDisplayName(values)]}',
+												cls: '{[this.getNameClass(values)]}',
+												html: '{[this.getDisplayName(values)]}',
 											},
 											{
 												cls: 'status',
-												html:
-													'{[this.getDisplayTypeValue(values)]}',
+												html: '{[this.getDisplayTypeValue(values)]}',
 											},
 										],
 									},

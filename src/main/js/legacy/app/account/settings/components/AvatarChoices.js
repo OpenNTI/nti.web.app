@@ -35,8 +35,7 @@ module.exports = exports = Ext.define(
 													tag: 'a',
 													cls: 'editCustom',
 													href: '#editAvatar',
-													html:
-														'{{{NextThought.view.account.settings.AvatarChoices.edit}}}',
+													html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}',
 												},
 												' | ',
 											],
@@ -45,8 +44,7 @@ module.exports = exports = Ext.define(
 											tag: 'a',
 											cls: 'uploadCustom',
 											href: '#uploadAvatar',
-											html:
-												'{{{NextThought.view.account.settings.AvatarChoices.upload}}}',
+											html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}',
 										},
 									],
 								},

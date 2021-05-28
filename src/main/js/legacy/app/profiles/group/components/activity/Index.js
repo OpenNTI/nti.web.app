@@ -32,9 +32,8 @@ module.exports = exports = Ext.define(
 				'profile-group-membership-condensed'
 			);
 
-			this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(
-				this
-			);
+			this.streamCmp.navigateToObject =
+				this.navigateToActivityItem.bind(this);
 		},
 
 		onAddedToParentRouter: function () {

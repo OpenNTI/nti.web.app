@@ -29,7 +29,9 @@ export default function LoginPreview({ onSave, onCancel }) {
 	}
 
 	const buttonStyle = {
-		backgroundColor: buttonBackground.isColor ? buttonBackground.hex.toString() : buttonBackground,
+		backgroundColor: buttonBackground.isColor
+			? buttonBackground.hex.toString()
+			: buttonBackground,
 	};
 
 	return (

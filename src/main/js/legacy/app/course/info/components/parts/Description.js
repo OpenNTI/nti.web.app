@@ -36,8 +36,7 @@ module.exports = exports = Ext.define(
 								cn: [
 									{
 										cls: 'label',
-										html:
-											'{{{NextThought.view.courseware.info.parts.Description.prereqs}}}',
+										html: '{{{NextThought.view.courseware.info.parts.Description.prereqs}}}',
 									},
 									{
 										cls: 'value',
@@ -54,12 +53,10 @@ module.exports = exports = Ext.define(
 								cn: [
 									{
 										cls: 'label',
-										html:
-											'{{{NextThought.view.courseware.info.parts.Description.hours}}}',
+										html: '{{{NextThought.view.courseware.info.parts.Description.hours}}}',
 									},
 									{
-										cls:
-											'value {enrollmentStatus:lowercase}',
+										cls: 'value {enrollmentStatus:lowercase}',
 										cn: [
 											{
 												tag: 'tpl',
@@ -80,10 +77,8 @@ module.exports = exports = Ext.define(
 																	'%}',
 																{
 																	tag: 'a',
-																	href:
-																		'{enrollUrl}',
-																	html:
-																		'{enrollLabel}',
+																	href: '{enrollUrl}',
+																	html: '{enrollLabel}',
 																},
 																{ tag: 'br' },
 															],
@@ -136,8 +131,7 @@ module.exports = exports = Ext.define(
 								cn: [
 									{
 										cls: 'label',
-										html:
-											'{{{NextThought.view.courseware.info.parts.Description.start}}}',
+										html: '{{{NextThought.view.courseware.info.parts.Description.start}}}',
 									},
 									{
 										cls: 'value',
@@ -156,13 +150,11 @@ module.exports = exports = Ext.define(
 											cn: [
 												{
 													cls: 'label',
-													html:
-														'{{{NextThought.view.courseware.info.parts.Description.duration}}}',
+													html: '{{{NextThought.view.courseware.info.parts.Description.duration}}}',
 												},
 												{
 													cls: 'value',
-													html:
-														'{duration} {durationUnits}',
+													html: '{duration} {durationUnits}',
 												},
 											],
 										},
@@ -172,8 +164,7 @@ module.exports = exports = Ext.define(
 										cn: [
 											{
 												cls: 'label',
-												html:
-													'{{{NextThought.view.courseware.info.parts.Description.days}}}',
+												html: '{{{NextThought.view.courseware.info.parts.Description.days}}}',
 											},
 											{
 												cls: 'value',
@@ -195,8 +186,7 @@ module.exports = exports = Ext.define(
 													{
 														tag: 'tpl',
 														if: '!days',
-														cn:
-															'{{{NextThought.view.courseware.info.parts.Description.online}}}',
+														cn: '{{{NextThought.view.courseware.info.parts.Description.online}}}',
 													},
 												],
 											},

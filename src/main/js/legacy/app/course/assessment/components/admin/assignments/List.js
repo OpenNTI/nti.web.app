@@ -7,8 +7,7 @@ require('./ListItem');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.assessment.components.admin.assignments.List',
 	{
-		extend:
-			'NextThought.app.course.assessment.components.student.assignments.List',
+		extend: 'NextThought.app.course.assessment.components.student.assignments.List',
 		alias: 'widget.course-assessment-assignment-admin-list',
 		cls: 'assignment-list admin',
 		view: 'admin',

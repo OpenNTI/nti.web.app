@@ -500,9 +500,8 @@ module.exports = exports = Ext.define(
 					//here which is failry tightly coupled to annotations/Redaction.js/
 					//TODO for things like this key off some generic data-nti-injected-element
 					//attribute
-					redactedPlaceholder = Ext.fly(clonedFn).down(
-						'.redacted-text'
-					);
+					redactedPlaceholder =
+						Ext.fly(clonedFn).down('.redacted-text');
 					if (redactedPlaceholder) {
 						redactedPlaceholder.remove();
 					}

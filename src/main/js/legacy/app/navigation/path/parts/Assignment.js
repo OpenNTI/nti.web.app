@@ -10,9 +10,8 @@ module.exports = exports = Ext.define(
 		},
 
 		addHandlers: function (handlers) {
-			handlers[
-				'application/vnd.nextthought.grade'
-			] = this.getPathToGrade.bind(this);
+			handlers['application/vnd.nextthought.grade'] =
+				this.getPathToGrade.bind(this);
 			handlers[Grade.mimeType] = this.getPathToGrade.bind(this);
 
 			return handlers;

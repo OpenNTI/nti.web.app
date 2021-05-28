@@ -95,10 +95,8 @@ export default function ImageInput({
 	children,
 	title,
 }) {
-	const [
-		{ editorState, filename, inputKey, error, saving },
-		dispatch,
-	] = React.useReducer(reducer, initialState);
+	const [{ editorState, filename, inputKey, error, saving }, dispatch] =
+		React.useReducer(reducer, initialState);
 
 	const onCancel = () => dispatch({ type: 'clear' });
 	const updateImage = async () => {

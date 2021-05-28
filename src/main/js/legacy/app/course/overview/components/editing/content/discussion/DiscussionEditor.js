@@ -10,8 +10,7 @@ require('internal/legacy/model/DiscussionRef');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-discussion-editor',
 		cls: 'content-editor discussion-link',
 

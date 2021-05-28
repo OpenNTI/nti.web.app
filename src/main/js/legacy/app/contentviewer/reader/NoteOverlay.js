@@ -556,10 +556,9 @@ module.exports = exports = Ext.define(
 
 				top = rect ? rect.top + readerRect.top : 0;
 
-				DiscussionEditor.getInitialStateForImage(
-					img
-				).then(initialState =>
-					this.noteHere(range, rect, null, top, initialState)
+				DiscussionEditor.getInitialStateForImage(img).then(
+					initialState =>
+						this.noteHere(range, rect, null, top, initialState)
 				);
 
 				// this.noteHere(range, rect, null, top)
@@ -576,9 +575,8 @@ module.exports = exports = Ext.define(
 
 		getAnnotationGutter: function () {
 			if (!this.annotationGutter) {
-				this.annotationGutter = this.reader.el.down(
-					'.annotation-gutter'
-				);
+				this.annotationGutter =
+					this.reader.el.down('.annotation-gutter');
 			}
 
 			return this.annotationGutter;

@@ -81,8 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 									cn: {
 										tag: 'span',
 										cls: 'name link',
-										html:
-											'{headline.Creator:displayName()}',
+										html: '{headline.Creator:displayName()}',
 									},
 								},
 								{
@@ -147,8 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 										{
 											tag: 'span',
 											cls: 'post-count',
-											html:
-												'{PostCount:plural("Comment")}',
+											html: '{PostCount:plural("Comment")}',
 										},
 										{
 											tag: 'tpl',

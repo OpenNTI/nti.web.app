@@ -10,8 +10,7 @@ const Type = 'application/vnd.nextthought.relatedworkref';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.types.URL',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
+		extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 		alias: 'widget.overview-editing-contentlink-url',
 
 		statics: {
@@ -24,7 +23,8 @@ module.exports = exports = Ext.define(
 						description: 'External links are used for',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},

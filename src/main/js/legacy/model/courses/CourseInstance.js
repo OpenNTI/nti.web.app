@@ -216,11 +216,8 @@ module.exports = exports = Ext.define(
 
 						me.__courseCatalogEntry = rec;
 						if (rec) {
-							rec
-								.get('Links')
-								.getRelLink('CourseInstance').href = me.get(
-								'href'
-							);
+							rec.get('Links').getRelLink('CourseInstance').href =
+								me.get('href');
 							me.set('Preview', rec.get('Preview'));
 							rec.set('enrolled', true); //if we come from here, we are enrolled.
 							me.afterEdit(['NTIID']); //let views know the record "changed".

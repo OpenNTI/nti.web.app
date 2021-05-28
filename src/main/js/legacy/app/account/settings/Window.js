@@ -149,9 +149,8 @@ module.exports = exports = Ext.define(
 					el.down('.identity div.affiliation').update(
 						r.get('affiliation')
 					);
-					el.down(
-						'.identity .avatar-wrapper'
-					).dom.innerHTML = Ext.util.Format.avatar(r);
+					el.down('.identity .avatar-wrapper').dom.innerHTML =
+						Ext.util.Format.avatar(r);
 
 					if (me.onUserChange) {
 						me.onUserChange(r);

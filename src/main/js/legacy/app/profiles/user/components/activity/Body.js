@@ -30,9 +30,8 @@ module.exports = exports = Ext.define(
 
 			this.WindowActions = WindowsActions.create();
 
-			this.activityCmp.navigateToObject = this.navigateToActivityItem.bind(
-				this
-			);
+			this.activityCmp.navigateToObject =
+				this.navigateToActivityItem.bind(this);
 			this.newPostCmp.onNewPost = this.onNewPost.bind(this);
 
 			this.newPostCmp.hide();

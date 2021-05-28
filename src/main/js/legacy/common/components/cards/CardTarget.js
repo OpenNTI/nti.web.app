@@ -74,8 +74,7 @@ module.exports = exports = Ext.define(
 						cn: [
 							{
 								cls: 'message',
-								html:
-									'{{{NextThought.view.cards.CardTarget.no-mobile-support}}}',
+								html: '{{{NextThought.view.cards.CardTarget.no-mobile-support}}}',
 							},
 						],
 					}),

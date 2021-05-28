@@ -41,8 +41,7 @@ const fakeHit = {
 	],
 	'Last Modified': '2017-03-31T22:59:00Z',
 	MimeType: 'application/vnd.nextthought.search.ugdsearchhit',
-	NTIID:
-		'tag:nextthought.com,2011-10:landon.sherwood-OID-0x020bd6:5573657273:azApdWJY3PP',
+	NTIID: 'tag:nextthought.com,2011-10:landon.sherwood-OID-0x020bd6:5573657273:azApdWJY3PP',
 	Score: 36.81021,
 	TargetMimeType: 'application/vnd.nextthought.note',
 };

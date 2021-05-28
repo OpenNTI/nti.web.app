@@ -7,8 +7,7 @@ require('../parentselection/Index');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.ParentSelection',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.parentselection.Index',
+		extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 		alias: 'widget.overview-editing-content-parentselection',
 		label: 'Section:',
 

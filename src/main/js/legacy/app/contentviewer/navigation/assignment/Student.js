@@ -32,8 +32,7 @@ module.exports = exports = Ext.define(
 		alias: 'widget.assignment-header',
 		WARNING_PERCENT: 0.2,
 		RED_PERCENT: 0.1,
-		cls:
-			'student-reader-header reader-header course-assessment-header assignment-item',
+		cls: 'student-reader-header reader-header course-assessment-header assignment-item',
 
 		usePageSource: true,
 

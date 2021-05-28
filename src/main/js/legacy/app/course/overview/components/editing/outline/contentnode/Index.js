@@ -7,8 +7,7 @@ require('./Preview');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.outline.contentnode.Index',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.outline.calendarnode.Index',
+		extend: 'NextThought.app.course.overview.components.editing.outline.calendarnode.Index',
 		alias: 'widget.overview-editing-contentnode',
 
 		statics: {

@@ -6,8 +6,7 @@ require('../Editor');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-assignment-editor',
 
 		showEditor: function () {

@@ -7,8 +7,7 @@ require('../ListItem');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.event.ListItem',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.ListItem',
+		extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
 		alias: 'widget.overview-editing-event-listitem',
 
 		statics: {

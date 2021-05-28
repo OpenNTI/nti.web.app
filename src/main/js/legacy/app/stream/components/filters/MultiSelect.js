@@ -31,8 +31,7 @@ module.exports = exports = Ext.define(
 												tag: 'input',
 												type: 'checkbox',
 												id: '{parent.id}-{index}',
-												name:
-													'filter-multi-select-{index}',
+												name: 'filter-multi-select-{index}',
 												value: '{value}',
 											},
 											{

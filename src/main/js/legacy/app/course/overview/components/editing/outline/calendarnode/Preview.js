@@ -5,8 +5,7 @@ require('../outlinenode/Preview');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.outline.calendarnode.Preview',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.outline.outlinenode.Preview',
+		extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Preview',
 		alias: 'widget.overview-editing-outline-calendarnode-preview',
 
 		renderTpl: Ext.DomHelper.markup([

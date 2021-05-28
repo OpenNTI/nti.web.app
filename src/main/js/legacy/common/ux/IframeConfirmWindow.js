@@ -28,8 +28,7 @@ module.exports = exports = Ext.define(
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style:
-						'overflow-x: hidden; overflow-y:auto; height: 550px;',
+					style: 'overflow-x: hidden; overflow-y:auto; height: 550px;',
 				},
 			},
 			{
@@ -156,8 +155,7 @@ module.exports = exports = Ext.define(
 				xtype: 'box',
 				cls: 'error-text',
 				autoEl: {
-					html:
-						'There was an error saving your response. You will be prompted to try again next time you login.',
+					html: 'There was an error saving your response. You will be prompted to try again next time you login.',
 				},
 			});
 

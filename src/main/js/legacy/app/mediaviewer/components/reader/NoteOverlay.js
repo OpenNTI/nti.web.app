@@ -338,11 +338,12 @@ module.exports = exports = Ext.define(
 				const doc = range
 					? range.commonAncestorContainer.ownerDocument
 					: null;
-				const rangeDescription = AnchorResolver.createRangeDescriptionFromRange(
-					range,
-					doc,
-					data
-				);
+				const rangeDescription =
+					AnchorResolver.createRangeDescriptionFromRange(
+						range,
+						doc,
+						data
+					);
 
 				rangeProps.applicableRange = rangeDescription.description;
 			}

@@ -42,9 +42,9 @@ module.exports = exports = Ext.define(
 			this.onceBundleSetup = bundle
 				.getInterfaceInstance()
 				.then(courseInterface => {
-					return courseInterface?.PreferredAccess?.isAdministrative ?
-						this.setupAdminInfo(courseInterface) :
-						this.setupStudentInfo(bundle);
+					return courseInterface?.PreferredAccess?.isAdministrative
+						? this.setupAdminInfo(courseInterface)
+						: this.setupStudentInfo(bundle);
 				});
 		},
 

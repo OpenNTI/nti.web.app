@@ -38,8 +38,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'enrolled',
-									html:
-										'{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}',
+									html: '{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}',
 								},
 								{ cls: 'title', html: '{base.title}' },
 								{ cls: 'price', html: '{base.priceString}' },
@@ -114,8 +113,7 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											cls: 'title',
-											html:
-												'{{{NextThought.view.courseware.enrollment.Details.HowtoDrop}}}',
+											html: '{{{NextThought.view.courseware.enrollment.Details.HowtoDrop}}}',
 										},
 										{ cls: 'info', html: '{drop}' },
 									],
@@ -132,8 +130,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'title',
-									html:
-										'{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}',
+									html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}',
 								},
 								{ cls: 'sub', html: '{gifts.giveTitle}' },
 							],
@@ -143,8 +140,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'title',
-									html:
-										'{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}',
+									html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}',
 								},
 							],
 						},
@@ -166,13 +162,11 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											cls: 'title',
-											html:
-												'{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!',
+											html: '{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!',
 										},
 										{
 											cls: 'sub',
-											html:
-												'{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}',
+											html: '{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}',
 										},
 										{
 											cls: 'actions',
@@ -183,31 +177,23 @@ module.exports = exports = Ext.define(
 													cn: [
 														{
 															tag: 'a',
-															cls:
-																'account-created completed',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}',
+															cls: 'account-created completed',
+															html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}',
 														},
 														{
 															tag: 'a',
-															cls:
-																'enroll completed',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
+															cls: 'enroll completed',
+															html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
 														},
 														{
 															tag: 'a',
-															cls:
-																'createProfile',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}',
+															cls: 'createProfile',
+															html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}',
 														},
 														{
 															tag: 'a',
-															cls:
-																'suggestContacts',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
+															cls: 'suggestContacts',
+															html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
 														},
 													],
 												},
@@ -217,17 +203,13 @@ module.exports = exports = Ext.define(
 													cn: [
 														{
 															tag: 'a',
-															cls:
-																'enroll completed',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
+															cls: 'enroll completed',
+															html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}',
 														},
 														{
 															tag: 'a',
-															cls:
-																'suggestContacts',
-															html:
-																'{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
+															cls: 'suggestContacts',
+															html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}',
 														},
 													],
 												},
@@ -240,8 +222,7 @@ module.exports = exports = Ext.define(
 									cn: [
 										{
 											tag: 'span',
-											html:
-												'{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}',
+											html: '{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}',
 										},
 										{
 											tag: 'span',
@@ -249,8 +230,7 @@ module.exports = exports = Ext.define(
 												{
 													tag: 'a',
 													cls: 'button add-course',
-													html:
-														'{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}',
+													html: '{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}',
 												},
 											],
 										},
@@ -734,9 +714,8 @@ module.exports = exports = Ext.define(
 		},
 
 		__buildCongratsCard: function () {
-			var isFirstTimer = $AppConfig.userObject.hasLink(
-					'first_time_logon'
-				),
+			var isFirstTimer =
+					$AppConfig.userObject.hasLink('first_time_logon'),
 				data = {
 					firstName: Ext.String.capitalize(
 						$AppConfig.userObject.get('FirstName') ||

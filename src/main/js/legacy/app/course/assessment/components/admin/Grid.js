@@ -81,8 +81,10 @@ module.exports = exports = Ext.define(
 										containerA,
 										containerB
 									) {
-										const a = containerA.getMostRecentHistoryItem();
-										const b = containerB.getMostRecentHistoryItem();
+										const a =
+											containerA.getMostRecentHistoryItem();
+										const b =
+											containerB.getMostRecentHistoryItem();
 
 										let aVal = get(a),
 											bVal = get(b),
@@ -111,10 +113,11 @@ module.exports = exports = Ext.define(
 													? 0
 													: 1;
 										} else {
-											sort = Globals.naturalSortComparator(
-												(aVal || '').toUpperCase(),
-												(bVal || '').toUpperCase()
-											);
+											sort =
+												Globals.naturalSortComparator(
+													(aVal || '').toUpperCase(),
+													(bVal || '').toUpperCase()
+												);
 										}
 										return sort;
 									},
@@ -236,8 +239,10 @@ module.exports = exports = Ext.define(
 										containerA,
 										containerB
 									) {
-										const a = containerA.getMostRecentHistoryItem();
-										const b = containerB.getMostRecentHistoryItem();
+										const a =
+											containerA.getMostRecentHistoryItem();
+										const b =
+											containerB.getMostRecentHistoryItem();
 
 										var v1 = a && !!a.get('completed'),
 											v2 = b && !!b.get('completed'),
@@ -260,8 +265,10 @@ module.exports = exports = Ext.define(
 										containerA,
 										containerB
 									) {
-										const a = containerA.getMostRecentHistoryItem();
-										const b = containerB.getMostRecentHistoryItem();
+										const a =
+											containerA.getMostRecentHistoryItem();
+										const b =
+											containerB.getMostRecentHistoryItem();
 
 										var v1 = get(a),
 											v2 = get(b);
@@ -362,8 +369,10 @@ module.exports = exports = Ext.define(
 								//the transform and root are ignored on remote sort
 								root: 'data',
 								sorterFn: function (containerA, containerB) {
-									const oA = containerA.getMostRecentHistoryItem();
-									const oB = containerB.getMostRecentHistoryItem();
+									const oA =
+										containerA.getMostRecentHistoryItem();
+									const oB =
+										containerB.getMostRecentHistoryItem();
 
 									var a = getGrade(oA),
 										b = getGrade(oB),
@@ -458,8 +467,10 @@ module.exports = exports = Ext.define(
 								//the transform and root are ignored on remote sort
 								root: 'data',
 								sorterFn: function (containerA, containerB) {
-									const oA = containerA.getMostRecentHistoryItem();
-									const oB = containerB.getMostRecentHistoryItem();
+									const oA =
+										containerA.getMostRecentHistoryItem();
+									const oB =
+										containerB.getMostRecentHistoryItem();
 
 									const v1 = getFeedbackCount(oA) || 0;
 									const v2 = getFeedbackCount(oB) || 0;

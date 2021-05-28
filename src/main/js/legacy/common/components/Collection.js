@@ -38,8 +38,7 @@ module.exports = exports = Ext.define(
 							if: 'sample',
 							cn: {
 								cls: 'sample',
-								html:
-									'{{{NextThought.view.navigation.Collection.sample}}}',
+								html: '{{{NextThought.view.navigation.Collection.sample}}}',
 							},
 						},
 					],

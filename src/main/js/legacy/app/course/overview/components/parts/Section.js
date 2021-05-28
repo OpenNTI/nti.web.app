@@ -33,8 +33,7 @@ module.exports = exports = Ext.define(
 					{
 						tag: 'span',
 						html: '{title}',
-						style:
-							'{[(values.color && ("background-color: #" + values.color)) || "" ]}',
+						style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}',
 					},
 				],
 			},

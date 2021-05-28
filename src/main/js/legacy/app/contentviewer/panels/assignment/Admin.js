@@ -19,8 +19,8 @@ module.exports = exports = Ext.define(
 				pageSource: this.pageSource,
 				assignment: this.assignment,
 				assignmentHistory: this.assignmentHistory,
-				assignmentHistoryItemContainer: this
-					.assignmentHistoryItemContainer,
+				assignmentHistoryItemContainer:
+					this.assignmentHistoryItemContainer,
 				doNavigation: this.doNavigation.bind(this),
 				currentBundle: this.bundle,
 				handleEdit: this.handleEdit,
@@ -46,7 +46,8 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			const historyItem = await assignmentHistoryItemContainer?.getMostRecentHistoryItem();
+			const historyItem =
+				await assignmentHistoryItemContainer?.getMostRecentHistoryItem();
 
 			if (!reader.isDestroyed) {
 				reader.getNoteOverlay().disable();

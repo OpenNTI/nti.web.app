@@ -16,8 +16,7 @@ module.exports = exports = Ext.define(
 				cn: [
 					{
 						cls: 'name',
-						html:
-							'{{{NextThought.view.profiles.parts.events.Badge.name}}}',
+						html: '{{{NextThought.view.profiles.parts.events.Badge.name}}}',
 					},
 					{ cls: 'date', html: '{date}' },
 					{ cls: 'description', html: '{description}' },

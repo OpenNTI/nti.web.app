@@ -11,8 +11,7 @@ require('../../ParentSelection');
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 
 		inheritableStatics: {
 			getHandledMimeTypes: function () {

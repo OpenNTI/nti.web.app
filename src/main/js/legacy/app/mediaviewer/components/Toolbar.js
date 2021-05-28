@@ -54,8 +54,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{ cls: 'grid-view' },
 								{
-									cls:
-										'selected-mv-type hasTranscript video-focus',
+									cls: 'selected-mv-type hasTranscript video-focus',
 									html: 'split video',
 								},
 							],

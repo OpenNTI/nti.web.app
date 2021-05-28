@@ -73,8 +73,7 @@ module.exports = exports = Ext.define(
 												{
 													tag: 'span',
 													cls: 'separator',
-													html:
-														' {{{NextThought.view.contacts.Card.at}}} ',
+													html: ' {{{NextThought.view.contacts.Card.at}}} ',
 												},
 											],
 										},
@@ -110,8 +109,7 @@ module.exports = exports = Ext.define(
 							cn: [
 								{
 									cls: 'chat',
-									html:
-										'{{{NextThought.view.contacts.Card.chat}}}',
+									html: '{{{NextThought.view.contacts.Card.chat}}}',
 								},
 							],
 						},

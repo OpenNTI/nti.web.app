@@ -124,8 +124,7 @@ module.exports = exports = Ext.define(
 											{
 												tag: 'span',
 												cls: 'red',
-												html:
-													"Once you've started, the timer will not stop.",
+												html: "Once you've started, the timer will not stop.",
 											},
 										],
 									},

@@ -10,8 +10,7 @@ const Type = 'application/vnd.nextthought.ntitimeline';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.timeline.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-timeline',
 
 		statics: {
@@ -29,7 +28,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},

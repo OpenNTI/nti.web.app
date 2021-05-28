@@ -17,13 +17,11 @@ module.exports = exports = Ext.define(
 						cn: [
 							{
 								cls: 'heading',
-								html:
-									'{{{NextThought.view.ResourceNotFound.heading}}}',
+								html: '{{{NextThought.view.ResourceNotFound.heading}}}',
 							},
 							{
 								cls: 'subtext',
-								html:
-									'{{{NextThought.view.ResourceNotFound.subtext}}}',
+								html: '{{{NextThought.view.ResourceNotFound.subtext}}}',
 							},
 							{
 								cls: 'actions',
@@ -34,15 +32,13 @@ module.exports = exports = Ext.define(
 										cn: {
 											cls: 'library',
 											tag: 'a',
-											html:
-												'{{{NextThought.view.ResourceNotFound.action-library}}}',
+											html: '{{{NextThought.view.ResourceNotFound.action-library}}}',
 										},
 									},
 									{
 										cls: 'back',
 										tag: 'a',
-										html:
-											'{{{NextThought.view.ResourceNotFound.action-back}}}',
+										html: '{{{NextThought.view.ResourceNotFound.action-back}}}',
 									},
 								],
 							},

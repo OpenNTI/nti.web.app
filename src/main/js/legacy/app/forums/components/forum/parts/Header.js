@@ -26,8 +26,7 @@ module.exports = exports = Ext.define(
 							{
 								tag: 'span',
 								cls: 'bold',
-								html:
-									'{{{NextThought.view.forums.forum.parts.Header.page}}}',
+								html: '{{{NextThought.view.forums.forum.parts.Header.page}}}',
 							},
 							{
 								tag: 'span',

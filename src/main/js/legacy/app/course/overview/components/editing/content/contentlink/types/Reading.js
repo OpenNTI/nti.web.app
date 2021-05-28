@@ -14,8 +14,7 @@ const Type = 'application/vnd.nextthought.relatedworkref';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.contentlink.types.Reading',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
+		extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 		alias: 'widget.overview-editing-contentlink-reading',
 		SWITCHED: 'switched-items',
 
@@ -29,7 +28,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},
@@ -177,18 +177,15 @@ module.exports = exports = Ext.define(
 				},
 			});
 
-			this.getContentPackageList()
-				.then((list) => {
-					this.contentPackageSelectionCmp = this.add({
-						xtype: 'overview-editing-content-package-item-selection',
-						onSelectionChanged: this.onContentPackageSelectionChange.bind(
-							this
-						),
-						selectionItems: list,
-						selectedItems,
-					});
-				})
-
+			this.getContentPackageList().then(list => {
+				this.contentPackageSelectionCmp = this.add({
+					xtype: 'overview-editing-content-package-item-selection',
+					onSelectionChanged:
+						this.onContentPackageSelectionChange.bind(this),
+					selectionItems: list,
+					selectedItems,
+				});
+			});
 		},
 
 		showReadingList: function (selectedItems) {
@@ -215,9 +212,8 @@ module.exports = exports = Ext.define(
 				.then(selection => {
 					this.readingSelectionCmp = this.add({
 						xtype: 'overview-editing-reading-selection',
-						onSelectionChanged: this.onReadingListSelectionChange.bind(
-							this
-						),
+						onSelectionChanged:
+							this.onReadingListSelectionChange.bind(this),
 						selectedItems: selectedItems,
 						applyFilter: () => this.showFilteredList(selection),
 						removeFilter: () => this.showUnfilteredList(selection),
@@ -275,10 +271,11 @@ module.exports = exports = Ext.define(
 					this.contentPackageSelectionCmp.getSelection()[0]
 				);
 			} else if (this.record) {
-				getContentPackage = ContentUtils.getContentPackageContainingReading(
-					this.record.get('href'),
-					this.bundle
-				);
+				getContentPackage =
+					ContentUtils.getContentPackageContainingReading(
+						this.record.get('href'),
+						this.bundle
+					);
 			} else {
 				getContentPackage = Promise.resolve(null);
 			}
@@ -427,18 +424,14 @@ module.exports = exports = Ext.define(
 			// we're adding an existing reading to a lesson
 			if (me.newlyCreatedReading) {
 				// update the new package based on form values (before creating the bundle)
-				me.newlyCreatedReading.label = me.readingEditorCmp.formCmp.getValueOf(
-					'label'
-				);
-				me.newlyCreatedReading.title = me.readingEditorCmp.formCmp.getValueOf(
-					'label'
-				);
-				me.newlyCreatedReading.byline = me.readingEditorCmp.formCmp.getValueOf(
-					'byline'
-				);
-				me.newlyCreatedReading.description = me.readingEditorCmp.formCmp.getValueOf(
-					'description'
-				);
+				me.newlyCreatedReading.label =
+					me.readingEditorCmp.formCmp.getValueOf('label');
+				me.newlyCreatedReading.title =
+					me.readingEditorCmp.formCmp.getValueOf('label');
+				me.newlyCreatedReading.byline =
+					me.readingEditorCmp.formCmp.getValueOf('byline');
+				me.newlyCreatedReading.description =
+					me.readingEditorCmp.formCmp.getValueOf('description');
 
 				// user has decided to create and add this new reading to a lesson
 				// so we need to actually create the empty reading, add to lesson,

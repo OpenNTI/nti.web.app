@@ -14,8 +14,7 @@ const Type = 'application/vnd.nextthought.courseware.coursecalendarevent';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.event.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.overview-editing-event',
 
 		statics: {
@@ -36,7 +35,8 @@ module.exports = exports = Ext.define(
 						editor: this,
 						customHTML: getEventSVG(new Date().getDate()),
 						isAvailable: async bundle => {
-							const available = await bundle.getAvailableContentSummary();
+							const available =
+								await bundle.getAvailableContentSummary();
 
 							return available[Type];
 						},
@@ -63,7 +63,8 @@ module.exports = exports = Ext.define(
 			this.loading = true;
 
 			const lessonOverview = await this.rootRecord.getInterfaceInstance();
-			const overviewGroup = await this.parentRecord.getInterfaceInstance();
+			const overviewGroup =
+				await this.parentRecord.getInterfaceInstance();
 
 			// we have to make sure the overview is the latest, otherwise we could have a stale list of sections
 			await lessonOverview.refresh();

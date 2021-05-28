@@ -24,8 +24,7 @@ module.exports = exports = Ext.define(
 							{ cls: 'text', html: 'Publish Now' },
 							{
 								cls: 'subtext',
-								html:
-									'Lesson contents are visible to students.',
+								html: 'Lesson contents are visible to students.',
 							},
 						],
 					},
@@ -40,8 +39,7 @@ module.exports = exports = Ext.define(
 									{
 										tag: 'span',
 										cls: 'description',
-										html:
-											'When do you want students to have access to this lesson?',
+										html: 'When do you want students to have access to this lesson?',
 									},
 									{ cls: 'date-picker-container' },
 								],

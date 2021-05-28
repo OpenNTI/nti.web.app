@@ -55,7 +55,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		//Sigh. Imagine that, some browsers want a proper NodeFilter and some want just a function.
 		//See http://stackoverflow.com/questions/5982648/recommendations-for-working-around-ie9-treewalker-filter-bug
 		var safeFilter = this.IGNORE_WHITESPACE_TEXTNODE_FILTER.acceptNode;
-		safeFilter.acceptNode = this.IGNORE_WHITESPACE_TEXTNODE_FILTER.acceptNode;
+		safeFilter.acceptNode =
+			this.IGNORE_WHITESPACE_TEXTNODE_FILTER.acceptNode;
 		return safeFilter;
 	},
 
@@ -1127,10 +1128,11 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		endResult,
 		docElement
 	) {
-		var liveStartResult = this.convertStaticResultToLiveDomContainerAndOffset(
-				startResult,
-				docElement
-			),
+		var liveStartResult =
+				this.convertStaticResultToLiveDomContainerAndOffset(
+					startResult,
+					docElement
+				),
 			liveEndResult = this.convertStaticResultToLiveDomContainerAndOffset(
 				endResult,
 				docElement
@@ -1258,8 +1260,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			root = root.parentNode;
 		}
 
-		referenceNode = pointer.getAncestor().locateRangePointInAncestor(root)
-			.node;
+		referenceNode = pointer
+			.getAncestor()
+			.locateRangePointInAncestor(root).node;
 		foundReferenceNode = true;
 		if (!referenceNode) {
 			foundReferenceNode = false;
@@ -1610,9 +1613,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			startOffset = 0;
 		}
 		if (!this.isNodeAnchorable(endEdgeNode)) {
-			endEdgeNode = this.searchFromRangeEndInwardForAnchorableNode(
-				endEdgeNode
-			);
+			endEdgeNode =
+				this.searchFromRangeEndInwardForAnchorableNode(endEdgeNode);
 			if (Ext.isTextNode(endEdgeNode)) {
 				endOffset = endEdgeNode.nodeValue.length;
 			}
@@ -2109,9 +2111,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			body =
 				docElement.body ||
 				this.findElementsWithTagName(docElement, 'body')[0],
-			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(
-				body
-			).node,
+			referenceNode =
+				staticResult.referencePointer.locateRangePointInAncestor(
+					body
+				).node,
 			container,
 			parts,
 			kids,
@@ -2174,9 +2177,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return null;
 		}
 
-		var childrenWithSyntheticsRemoved = this.childrenIfSyntheticsRemoved(
-				node
-			),
+		var childrenWithSyntheticsRemoved =
+				this.childrenIfSyntheticsRemoved(node),
 			i = 0,
 			child,
 			adjustedIdx = 0,

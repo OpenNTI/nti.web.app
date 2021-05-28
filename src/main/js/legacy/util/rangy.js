@@ -1,9 +1,8 @@
-
 if (typeof document !== 'undefined') {
-    const rangy = require('rangy');
-    require('rangy/lib/rangy-textrange');
+	const rangy = require('rangy');
+	require('rangy/lib/rangy-textrange');
 
-    rangy.init();
+	rangy.init();
 
-    module.exports = exports = rangy;
+	module.exports = exports = rangy;
 }

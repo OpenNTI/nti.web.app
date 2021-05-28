@@ -19,8 +19,7 @@ const t = scoped(
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.survey.Editor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
+		extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
 		alias: 'widget.overview-editing-survey',
 
 		isAssignment: false,

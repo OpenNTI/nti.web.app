@@ -20,7 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 	inheritableStatics: {
 		bgcolor: {},
-		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i,
+		blockElementRe:
+			/^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i,
 	},
 
 	highlightCls: 'application-highlight',
@@ -237,13 +238,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 					if (!me.self.bgcolor[me.record.get('Class')]) {
 						me.self.bgcolor[me.record.get('Class')] = {};
 						sampleEl = me.compElements.first();
-						me.self.bgcolor[
-							me.record.get('Class')
-						].normal = sampleEl.getStyle('background-color');
+						me.self.bgcolor[me.record.get('Class')].normal =
+							sampleEl.getStyle('background-color');
 						sampleEl.addCls(me.mouseOverCls);
-						me.self.bgcolor[
-							me.record.get('Class')
-						].hover = sampleEl.getStyle('background-color');
+						me.self.bgcolor[me.record.get('Class')].hover =
+							sampleEl.getStyle('background-color');
 						sampleEl.removeCls(me.mouseOverCls);
 					}
 					//me.compElements.setStyle('background-color','transparent');

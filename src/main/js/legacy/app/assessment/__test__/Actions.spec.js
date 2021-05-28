@@ -21,10 +21,8 @@ describe('Assessment Actions tests', () => {
 				ContainerId:
 					'tag:nextthought.com,2011-10:NTI-CourseInfo-NTI_NTI1000',
 				Creator: 'carlos.sanchez@nextthought.com',
-				ID:
-					'tag:nextthought.com,2011-10:NTI-NAQ-assignment_carlos_sanchez_nextthought_com_4743932405747896015_e102ce81',
-				NTIID:
-					'tag:nextthought.com,2011-10:NTI-NAQ-assignment_carlos_sanchez_nextthought_com_4743932405747896015_e102ce81',
+				ID: 'tag:nextthought.com,2011-10:NTI-NAQ-assignment_carlos_sanchez_nextthought_com_4743932405747896015_e102ce81',
+				NTIID: 'tag:nextthought.com,2011-10:NTI-NAQ-assignment_carlos_sanchez_nextthought_com_4743932405747896015_e102ce81',
 				version: ASSIGNMENT_VERSION,
 				Links: [
 					{
@@ -38,8 +36,7 @@ describe('Assessment Actions tests', () => {
 						Class: 'AssignmentPart',
 						MimeType:
 							'application/vnd.nextthought.assessment.assignmentpart',
-						NTIID:
-							'tag:nextthought.com,2011-10:system-OID-0x02208d:5573657273',
+						NTIID: 'tag:nextthought.com,2011-10:system-OID-0x02208d:5573657273',
 						question_set: {
 							MimeType:
 								'application/vnd.nextthought.naquestionset',
@@ -49,8 +46,7 @@ describe('Assessment Actions tests', () => {
 								{
 									MimeType:
 										'application/vnd.nextthought.naquestion',
-									NTIID:
-										'tag:nextthought.com,2011-10:NTI-NAQ-question_carlos_sanchez_nextthought_com_4743934952258491648_697e19e0',
+									NTIID: 'tag:nextthought.com,2011-10:NTI-NAQ-question_carlos_sanchez_nextthought_com_4743934952258491648_697e19e0',
 								},
 							],
 						},
@@ -75,23 +71,23 @@ describe('Assessment Actions tests', () => {
 				const version = assignment.get('version');
 				options.success(this, {
 					getResultSet: function () {
-						let rec = NextThought.model.assessment.UsersCourseAssignmentSavepointItem.create(
-							{
-								Class: 'UsersCourseAssignmentSavepointItem',
-								MimeType:
-									'application/vnd.nextthought.assessment.userscourseassignmentsavepointitem',
-								NTIID:
-									'tag:nextthought.com,2011-10:pacitest2-OID-foo-bar',
-								Submission: {
-									Class: 'AssignmentSubmission',
+						let rec =
+							NextThought.model.assessment.UsersCourseAssignmentSavepointItem.create(
+								{
+									Class: 'UsersCourseAssignmentSavepointItem',
 									MimeType:
-										'application/vnd.nextthought.assessment.assignmentsubmission',
-									version: version,
-									assignmentId: id,
-									parts: [],
-								},
-							}
-						);
+										'application/vnd.nextthought.assessment.userscourseassignmentsavepointitem',
+									NTIID: 'tag:nextthought.com,2011-10:pacitest2-OID-foo-bar',
+									Submission: {
+										Class: 'AssignmentSubmission',
+										MimeType:
+											'application/vnd.nextthought.assessment.assignmentsubmission',
+										version: version,
+										assignmentId: id,
+										parts: [],
+									},
+								}
+							);
 
 						return { records: [rec] };
 					},
@@ -109,36 +105,36 @@ describe('Assessment Actions tests', () => {
 
 		test('that the assignment version is passed', function () {
 			const questionData = { CreatorRecordedEffortDuration: 'John Doe' };
-			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(
-				questionData
-			);
-			const submission = NextThought.model.assessment.AssignmentSubmission.create(
-				{
+			const qsetSubmission =
+				NextThought.model.assessment.QuestionSetSubmission.create(
+					questionData
+				);
+			const submission =
+				NextThought.model.assessment.AssignmentSubmission.create({
 					assignmentId: Assignment.getId(),
 					parts: [qsetSubmission],
 					CreatorRecordedEffortDuration:
 						questionData.CreatorRecordedEffortDuration,
 					version: Assignment.get('version'),
-				}
-			);
+				});
 
 			expect(submission.get('version')).toBe(Assignment.get('version'));
 		});
 
 		test('savepoint: assignment and submission have the same version', function (done) {
 			const questionData = { CreatorRecordedEffortDuration: '35' };
-			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(
-				questionData
-			);
-			const submission = NextThought.model.assessment.AssignmentSubmission.create(
-				{
+			const qsetSubmission =
+				NextThought.model.assessment.QuestionSetSubmission.create(
+					questionData
+				);
+			const submission =
+				NextThought.model.assessment.AssignmentSubmission.create({
 					assignmentId: Assignment.getId(),
 					parts: [qsetSubmission],
 					CreatorRecordedEffortDuration:
 						questionData.CreatorRecordedEffortDuration,
 					version: Assignment.get('version'),
-				}
-			);
+				});
 
 			submission.save = mockSaveProgress.bind(submission);
 
@@ -158,19 +154,19 @@ describe('Assessment Actions tests', () => {
 
 		test('savepoint: assignment and submission have the different version', function (done) {
 			const questionData = { CreatorRecordedEffortDuration: 'John Doe' };
-			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(
-				questionData
-			);
+			const qsetSubmission =
+				NextThought.model.assessment.QuestionSetSubmission.create(
+					questionData
+				);
 			const OLD_VERSION = 'assignment-id-old-version';
-			const submission = NextThought.model.assessment.AssignmentSubmission.create(
-				{
+			const submission =
+				NextThought.model.assessment.AssignmentSubmission.create({
 					assignmentId: Assignment.getId(),
 					parts: [qsetSubmission],
 					CreatorRecordedEffortDuration:
 						questionData.CreatorRecordedEffortDuration,
 					version: OLD_VERSION,
-				}
-			);
+				});
 
 			submission.save = mockSaveProgress.bind(submission);
 

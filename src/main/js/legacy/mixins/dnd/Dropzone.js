@@ -17,9 +17,8 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		if (!this.Dropzone) {
 			this.Dropzone = new DndDropzone({
 				getDropzoneTarget: this.getDropzoneTarget.bind(this),
-				getDropzoneBoundingClientRect: this.getDropzoneBoundingClientRect.bind(
-					this
-				),
+				getDropzoneBoundingClientRect:
+					this.getDropzoneBoundingClientRect.bind(this),
 				onDragEnter: this.onDragEnter && this.onDragEnter.bind(this),
 				onDragLeave: this.onDragLeave && this.onDragLeave.bind(this),
 				onDragOver: this.onDragOver && this.onDragOver.bind(this),

@@ -7,8 +7,7 @@ const PLACEHOLDER_ICON = '/app/resources/images/file-icons/scorm-icon.svg';
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.scorm.RefEditor',
 	{
-		extend:
-			'NextThought.app.course.overview.components.editing.content.Editor',
+		extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 		alias: 'widget.scorm-ref-editor',
 
 		cls: 'content-editor content-link scorm-ref-editor',
