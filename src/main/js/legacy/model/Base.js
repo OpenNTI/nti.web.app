@@ -384,9 +384,16 @@ const Base =
 
 				const getInstance = async () => {
 					const service = await getService();
-					const instance = await service.getObject(
-						this.updatedRaw || this.rawData || this.initialData
-					);
+					const instance = await service.getObject({
+						// This ensures partial objects still have MimeTypes
+						// so the parser can map them to the correct model class.
+						// ExtJS models flatten the mime types to a string...
+						// if there were multiple, split and take th first one.
+						MimeType: this.get('MimeType').split(',')[0],
+						...(this.updatedRaw ||
+							this.rawData ||
+							this.initialData),
+					});
 
 					if (!(INTERFACE_INSTANCE_BACKER in instance)) {
 						Object.defineProperties(instance, {
