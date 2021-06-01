@@ -350,9 +350,13 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			!this.activeItemRoute || this.activeItemRoute === '/';
 		const wasMounted = !!this.itemFlyout;
 
-		if (!this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
-			this.cleanUpMediaViewer();
+		if (this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
+			this.itemFlyout?.destroy();
+			delete this.itemFlyout;
+			return;
 		}
+
+		this.cleanUpMediaViewer();
 
 		if (!this.itemFlyout) {
 			this.itemFlyout = this.add({
