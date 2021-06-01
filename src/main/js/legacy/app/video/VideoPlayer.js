@@ -109,6 +109,20 @@ function getAnalyticMethods(doNotAllow, hasTranscript, configuration) {
 	};
 }
 
+async function resolveVideo(video) {
+	const service = await getService();
+
+	const href = video.get('href');
+
+	if (href) {
+		const object = await service.get(href);
+
+		return service.getObject(object);
+	}
+
+	return service.getObject(video.getId());
+}
+
 module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.content-video-player',
@@ -214,9 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	getVideo() {
 		if (!this.videoPromise) {
 			this.videoPromise = this.video
-				? getService().then(service =>
-						service.getObject(this.video.getId())
-				  )
+				? resolveVideo(this.video)
 				: Promise.resolve(this.src);
 		}
 
@@ -276,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 			this.videoPlayer = this.videoWrapper.add({
 				xtype: 'react',
-				component: Video,
+				component: this.VideoComponentOverride ?? Video,
 				src: video,
 				autoPlay: !this.doNotAutoPlay,
 				deferred: this.deferred,

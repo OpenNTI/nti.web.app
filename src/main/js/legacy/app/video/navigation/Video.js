@@ -1,6 +1,50 @@
+const React = require('react');
+
 const Ext = require('@nti/extjs');
+const { default: Video, VideoContext } = require('@nti/web-video');
+const {
+	ControlBar,
+	Resume,
+	WatchedSegments,
+} = require('@nti/web-video/controls');
 
 require('../VideoPlayer');
+
+const StyledBar = styled(ControlBar)`
+	padding: 2rem 1.25rem;
+`;
+
+class Player extends React.Component {
+	videoRef = React.createRef();
+
+	play(...args) {
+		return this.videoRef.current?.play?.(...args);
+	}
+	stop(...args) {
+		return this.videoRef.current?.stop?.(...args);
+	}
+	pause(...args) {
+		return this.videoRef.current?.pause?.(...args);
+	}
+	setCurrentTime(...args) {
+		return this.videoRef.current?.setCurrentTime?.(...args);
+	}
+	getPlayerState(...args) {
+		return this.videoRef.current?.getPlayerState?.(...args);
+	}
+
+	render() {
+		return (
+			<VideoContext>
+				<Video {...this.props} ref={this.videoRef} />
+				<StyledBar dark>
+					<Resume />
+					<WatchedSegments.Trigger />
+				</StyledBar>
+			</VideoContext>
+		);
+	}
+}
 
 module.exports = exports = Ext.define(
 	'NextThought.app.video.navigation.Video',
@@ -9,6 +53,8 @@ module.exports = exports = Ext.define(
 		alias: 'widget.content-video-navigation',
 
 		cls: 'content-video-navigation',
+
+		VideoComponentOverride: Player,
 
 		overlayTpl: Ext.DomHelper.createTemplate({
 			cls: '{cls} navigation ext-hidden',

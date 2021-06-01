@@ -16,6 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		{ name: 'sources', type: 'VideoSources' },
 		{ name: 'dom-clone', type: 'auto' },
 		{ name: 'NTIID', type: 'string' },
+		{ name: 'href', type: 'string' },
 		{ name: 'transcripts', type: 'auto' },
 		{ name: 'title', type: 'string' },
 		{ name: 'description', type: 'string' },
