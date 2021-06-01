@@ -1,7 +1,10 @@
 const React = require('react');
 
 const Ext = require('@nti/extjs');
-const { default: Video, VideoContext } = require('@nti/web-video');
+const {
+	Component: VideoWithAnalytics,
+	VideoContext,
+} = require('@nti/web-video');
 const {
 	ControlBar,
 	Resume,
@@ -36,7 +39,7 @@ class Player extends React.Component {
 	render() {
 		return (
 			<VideoContext>
-				<Video {...this.props} ref={this.videoRef} />
+				<VideoWithAnalytics {...this.props} ref={this.videoRef} />
 				<StyledBar dark>
 					<Resume />
 					<WatchedSegments.Trigger />
