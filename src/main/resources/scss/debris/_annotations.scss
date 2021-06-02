@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @mixin image-bar {
 	.wrapper {
 		position: relative !important;
@@ -1024,7 +1026,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display {
 				width: $swatchSize;
 				height: $swatchSize;
 				border: 2px solid rgba(255, 255, 255, 0.1);
-				border-radius: $swatchSize/2;
+				border-radius: math.div($swatchSize, 2);
 				margin: 0.5em 0.2em;
 				position: relative;
 				transform: scale(
