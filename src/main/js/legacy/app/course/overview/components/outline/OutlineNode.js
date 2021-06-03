@@ -65,9 +65,7 @@ const OutlineNode =
 				truncateLabels: function () {
 					var me = this,
 						label =
-							me.currentHeader &&
-							me.currentHeader.el &&
-							me.currentHeader.el.dom.querySelector('.label');
+							me.currentHeader?.el?.dom.querySelector('.label');
 
 					if (!me.el) {
 						me.onceRendered.then(me.truncateLabels.bind(me));
@@ -237,28 +235,32 @@ const OutlineNode =
 				selectRecord: function (record, scrollTo) {
 					var body = this.getBodyContainer(),
 						header = this.currentHeader,
-						bodyListEl = this.el && this.el.up('.outline-list');
+						bodyListEl = this.el?.up('.outline-list');
+
+					if (header?.destroying || header?.isDestroyed) {
+						header = null;
+					}
 
 					this.selectedRecord = record;
 
 					if (record.getId() === this.outlineNode.getId()) {
-						header.addCls('selected');
-						header.el
+						header?.addCls('selected');
+						header?.el
 							.down('.label')
-							.el.dom.setAttribute(
+							?.el?.dom.setAttribute(
 								'aria-label',
-								this.outlineNode.getTitle() + ' selected'
+								`${this.outlineNode.getTitle()} selected`
 							);
 
 						if (bodyListEl && scrollTo) {
 							this.el.scrollIntoView(bodyListEl);
 						}
 					} else {
-						header.removeCls('selected');
-						header.removeCls('out-of-view');
-						header.el
-							?.down('.label')
-							.el?.dom.setAttribute(
+						header?.removeCls('selected');
+						header?.removeCls('out-of-view');
+						header?.el
+							.down('.label')
+							?.el?.dom.setAttribute(
 								'aria-label',
 								this.outlineNode.getTitle()
 							);
