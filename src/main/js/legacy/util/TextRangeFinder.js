@@ -31,43 +31,46 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 		return redactionAction;
 	},
 
+	/** @typedef {{i: number, n?: Node}} NodeIndex */
+
 	/**
-	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
+	 * These functions are a heavily modified version of Raymond Hill's doHighlight code.
 	 *
+	 * Attribution:
+	 * Title: HTML text highlighter
+	 * Purpose: Highlight portions of text inside a specified element, according to a search expression.
+	 * Key feature: Can safely highlight text across HTML tags.
+	 * History:
+	 *	 2012-01-29
+	 *	   fixed a bug which caused special regex characters in the
+	 *	   search string to break the highlighter
+	 *
+	 * @author Raymond Hill 2011-01-17
+	 * @see http://www.raymondhill.net/blog/?p=272
 	 * @param {Node} node
 	 * @param {(node: Node) => boolean} nodeFilterFn
-	 * @returns {?{ text: string; indices: Array.<{i: number; n: ?Node}>}}
+	 * @returns {{ text: string, indices: NodeIndex[]} | null} An object with two properties indices and text.
+	 * If nodeFilterFn is provided it will be called with each node before it is indexed. Nodes returning
+	 * true will be indexed
 	 */
-	// Author: Raymond Hill
-	// Version: 2011-01-17
-	// Title: HTML text hilighter
-	// Permalink: http://www.raymondhill.net/blog/?p=272
-	// Purpose: Hilight portions of text inside a specified element, according to a search expression.
-	// Key feature: Can safely hilight text across HTML tags.
-	// History:
-	//	 2012-01-29
-	//	   fixed a bug which caused special regex characters in the
-	//	   search string to break the highlighter
-
-	//Returns an object with two properties indices
-	//and text.	 If nodeFilterFn is provided it will
-	//be called with each node before it is indexed.  nodes returning
-	//true will be indexed
 	indexText: function (node, nodeFilterFn) {
 		// initialize root loop
-		var indices = [],
-			text = [], // will be morphed into a string later
-			iNode = 0,
-			nNodes = node.childNodes.length,
-			nodeText,
-			textLength = 0,
-			stack = [],
-			child,
-			nChildren;
+		/** @type {NodeIndex[]} */
+		const indices = [];
+		/** @type {string[]} */
+		const text = []; // will be morphed into a string later
+		/** @type {number} */
+		let iNode = 0;
+		/** @type {number} */
+		let nNodes = node.childNodes.length;
+		/** @type {number} */
+		let textLength = 0;
+
+		const stack = [];
 		// collect text and index-node pairs
 		for (;;) {
 			while (iNode < nNodes) {
-				child = node.childNodes[iNode++];
+				const child = node.childNodes[iNode++];
 
 				// text: collect and save index-node pair
 				if (child.nodeType === 3) {
@@ -76,7 +79,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 					}
 
 					indices.push({ i: textLength, n: child });
-					nodeText = child.nodeValue;
+					const nodeText = child.nodeValue;
 					text.push(nodeText);
 					textLength += nodeText.length;
 				}
@@ -99,7 +102,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 					}
 
 					// save parent's loop state
-					nChildren = child.childNodes.length;
+					const nChildren = child.childNodes.length;
 					if (nChildren) {
 						stack.push({ n: node, l: nNodes, i: iNode });
 						// initialize child's loop
@@ -127,12 +130,12 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 		}
 
 		// morph array of text into contiguous text
-		text = text.join('');
+		const txt = text.join('');
 
 		// sentinel
-		indices.push({ i: text.length });
+		indices.push({ i: txt.length });
 
-		return { text: text, indices: indices };
+		return { text: txt, indices: indices };
 	},
 
 	// find entry in indices array (using binary search)
