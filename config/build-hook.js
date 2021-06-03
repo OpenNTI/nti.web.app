@@ -13,7 +13,10 @@ const spriteInfo = require('../.spritesmith');
 const CSS = path.resolve(paths.assetsRoot, 'resources/css');
 const SCSS = path.resolve(paths.assetsRoot, 'resources/scss');
 
-const SPRITE_VARS = path.resolve(paths.assetsRoot, 'resources/scss/utils/_icons.scss');
+const SPRITE_VARS = path.resolve(
+	paths.assetsRoot,
+	'resources/scss/utils/_icons.scss'
+);
 const SPRITE_SRC_MOD = getLatest(glob.sync(spriteInfo.src));
 const SPRITE_MOD = getLatest(spriteInfo.destImage);
 const CSSMOD = getLatest(CSS);
@@ -26,17 +29,24 @@ if (CSSMOD >= SCSSMOD && !(isCI || process.env.NODE_ENV === 'production')) {
 
 const f = x => [`${SCSS}/${x}.scss`, `${CSS}/${x}.css`];
 
-ensurePath('spritesmith', 'sass', 'postcss-cli');
+ensurePath('sass', 'postcss-cli');
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([SCSS])) {
 	process.exit(1);
 }
 
-if (SPRITE_SRC_MOD > SPRITE_MOD || (isCI || process.env.NODE_ENV === 'production')) {
+if (
+	SPRITE_SRC_MOD > SPRITE_MOD ||
+	isCI ||
+	process.env.NODE_ENV === 'production'
+) {
 	fs.removeSync(SPRITE_VARS);
-	fs.removeSync(path.resolve(paths.assetsRoot, 'resources/images/sprite.png'));
-	call('spritesmith');
+
+	fs.removeSync(
+		path.resolve(paths.assetsRoot, 'resources/images/sprite.png')
+	);
+	call('npx', ['-y', '@pandell/spritesmith-cli@2.0.0']);
 	// mark(spriteInfo.destImage, SPRITE_SRC_MOD).catch(e => {console.log(e);});
 }
 
@@ -44,19 +54,29 @@ fs.removeSync(CSS);
 call('sass', f`accessibility`);
 call('sass', f`legacy`);
 call('sass', f`nti-override`);
-call('postcss', ['--verbose', '--use', 'autoprefixer', '-r', CSS + '/**/*.css']);
+call('postcss', [
+	'--verbose',
+	'--use',
+	'autoprefixer',
+	'-r',
+	CSS + '/**/*.css',
+]);
 
-mark(CSS, SCSSMOD).catch(e => {console.log(e);});
+mark(CSS, SCSSMOD).catch(e => {
+	console.log(e);
+});
 
-function getLatest (input) {
-	const max = (x, y) => x > y ? x : y;
+function getLatest(input) {
+	const max = (x, y) => (x > y ? x : y);
 	try {
 		let latest = 0;
 		if (Array.isArray(input)) {
 			return input.reduce((x, y) => max(x, getLatest(y)), latest);
 		}
 
-		if (input === SPRITE_VARS) {return latest;}
+		if (input === SPRITE_VARS) {
+			return latest;
+		}
 		const s = fs.statSync(input);
 
 		if (!s.isDirectory()) {
@@ -73,8 +93,7 @@ function getLatest (input) {
 	}
 }
 
-
-async function mark (dir, time) {
+async function mark(dir, time) {
 	const pending = [];
 
 	for (let file of await fs.readdir(dir)) {
@@ -92,18 +111,24 @@ async function mark (dir, time) {
 	await Promise.all(pending);
 }
 
-function ensurePath (...deps) {
+function ensurePath(...deps) {
 	try {
 		const bins = new Set();
 		const MODULE_DIR = 'node_modules';
-		for(const dep of deps) {
-			const location = require.resolve(dep).split(MODULE_DIR).slice(0, -1).join(MODULE_DIR);
+		for (const dep of deps) {
+			const location = require
+				.resolve(dep)
+				.split(MODULE_DIR)
+				.slice(0, -1)
+				.join(MODULE_DIR);
 			bins.add(path.join(location, MODULE_DIR, '.bin'));
 		}
 
 		process.env.PATH = `${[...bins].join(':')}:${process.env.PATH}`;
 	} catch {
-		console.error('Could not resolve dependencies, make sure they are installed');
+		console.error(
+			'Could not resolve dependencies, make sure they are installed'
+		);
 		process.exit(1);
 	}
 }

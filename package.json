@@ -65,7 +65,6 @@
     "@nti/web-session": "NextThought/nti.web.session",
     "@nti/web-video": "NextThought/nti.web.video",
     "@nti/web-whiteboard": "NextThought/nti.web.whiteboard",
-    "@pandell/spritesmith-cli": "^2.0.0",
     "@testing-library/react": "^11.2.2",
     "clamp-js": "^0.7.0",
     "create-react-class": "^15.5.2",

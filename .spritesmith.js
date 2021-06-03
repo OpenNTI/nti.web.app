@@ -1,5 +1,6 @@
 'use strict';
-const timestamp = new Date().toISOString()
+const timestamp = new Date()
+	.toISOString()
 	.replace(/[T:\ -]/g, '')
 	.replace(/\..+$/, '');
 
@@ -10,5 +11,5 @@ module.exports = {
 	imgPath: `../images/sprite.png?t=${timestamp}`,
 	padding: 2,
 	algorithm: 'binary-tree',
-	engine: 'pixelsmith'
+	engine: 'pixelsmith',
 };
