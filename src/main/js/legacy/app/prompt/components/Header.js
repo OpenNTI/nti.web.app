@@ -118,32 +118,23 @@ module.exports = exports = Ext.define(
 		},
 
 		onBack: function () {
-			if (this.doBack) {
-				this.doBack();
-			}
+			this.doBack?.();
 		},
 
 		onClose: function () {
-			if (this.doCancel) {
-				this.doCancel();
-			}
+			this.doCancel?.();
 		},
 
 		__getMessageForKey: function (key) {
-			var msg =
-				this.msgEl &&
-				this.msgEl.dom &&
-				this.msgEl.dom.querySelector('.msg[data-id="' + key + '"]');
+			var msg = this.msgEl?.dom?.querySelector(
+				'.msg[data-id="' + key + '"]'
+			);
 
 			return msg;
 		},
 
 		__removeMessage: function (key) {
-			var msg = this.__getMessageForKey(key);
-
-			if (msg) {
-				msg.remove();
-			}
+			this.__getMessageForKey(key)?.remove();
 		},
 
 		__addMessage: function (msg, cls) {
@@ -154,9 +145,11 @@ module.exports = exports = Ext.define(
 					key: this.messages.length + 1,
 				};
 
-			this.onceRendered.then(() =>
-				this.msgTpl.append(this.msgEl, config)
-			);
+			this.onceRendered.then(() => {
+				if (this.msgEl?.dom) {
+					this.msgTpl.append(this.msgEl, config);
+				}
+			});
 
 			config.remove = this.__removeMessage.bind(this, key);
 
