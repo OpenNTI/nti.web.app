@@ -592,7 +592,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	},
 
 	showNote: function (note) {
-		this.reader.goToNote(note);
+		this.reader?.goToNote(note);
 	},
 
 	getVideoRouteForObject: function (obj) {

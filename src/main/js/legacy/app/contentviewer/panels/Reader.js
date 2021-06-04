@@ -347,9 +347,7 @@ module.exports = exports = Ext.define(
 			var reader = this.getReaderContent();
 
 			this.note = note;
-			if (reader) {
-				reader.goToNote(note);
-			}
+			reader?.goToNote(note);
 		},
 
 		showContainerNoteEditor() {

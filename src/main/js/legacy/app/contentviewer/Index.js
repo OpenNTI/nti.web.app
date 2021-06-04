@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 
 	layout: 'none',
 
-	constructor: function (config) {
+	constructor(config) {
 		var readerConfig = {
 			xtype: 'reader',
 			height: '100%',
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		this.callParent(arguments);
 	},
 
-	initComponent: function () {
+	initComponent() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-	__fixConfigForPageInfo: function (config, pageInfo) {
+	__fixConfigForPageInfo(config, pageInfo) {
 		var assignment = pageInfo.getAssignment();
 
 		if (config.xtype === 'reader' && assignment) {
@@ -170,63 +170,52 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return config;
 	},
 
-	onActivate: function () {
+	onActivate() {
 		this.initSearch();
 
-		if (this.reader) {
-			this.reader.fireEvent('activate');
-		}
+		this.reader?.fireEvent('activate');
 	},
 
-	onDeactivate: function () {
-		if (this.reader) {
-			this.reader.fireEvent('deactivate');
-		}
+	onDeactivate() {
+		this.reader?.fireEvent('deactivate');
 	},
 
 	alignNavigation() {
-		if (this.reader) {
-			this.reader.alignNavigation();
-		}
+		this.reader?.alignNavigation();
 	},
 
-	getContainerIdForSearch: function () {
-		return this.resolvedPageInfo && this.resolvedPageInfo.getId();
+	getContainerIdForSearch() {
+		return this.resolvedPageInfo?.getId();
 	},
 
-	onceReadyForSearch: function () {
-		var me = this;
+	async onceReadyForSearch() {
+		if (!this.reader)
+			await new Promise(fulfill => this.on('reader-set', fulfill));
 
-		if (me.reader) {
-			return me.reader.onceReadyForSearch();
-		}
-
-		return new Promise(function (fulfill) {
-			me.on('reader-set', fulfill);
-		}).then(function () {
-			return me.reader.onceReadyForSearch();
-		});
+		return this.reader.onceReadyForSearch();
 	},
 
-	showSearchHit: function (hit, fragment) {
+	async showSearchHit(hit, fragment) {
 		this.clearSearchHit();
 
-		wait().then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
+		await wait();
+
+		this.reader?.showSearchHit(hit, fragment);
 	},
 
-	goToFragment: function (fragment) {
-		this.reader.goToFragment(fragment);
+	goToFragment(fragment) {
+		this.reader?.goToFragment(fragment);
 	},
 
-	goToNote: function (note) {
-		this.reader.goToNote(note);
+	goToNote(note) {
+		this.reader?.goToNote(note);
 	},
 
 	showContainerNoteEditor() {
-		this.reader.showContainerNoteEditor();
+		this.reader?.showContainerNoteEditor();
 	},
 
-	resolvePageInfo: function () {
+	resolvePageInfo() {
 		var p;
 
 		if (this.pageInfo) {
@@ -287,19 +276,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-	allowNavigation: function () {
+	allowNavigation() {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
 
-	beforeRouteChange: function () {
+	beforeRouteChange() {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
-	getLocation: function () {
+	getLocation() {
 		return this.reader.getLocation();
 	},
 
-	updateHistory: function (h, container) {
+	updateHistory(h, container) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {
