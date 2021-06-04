@@ -1,31 +1,25 @@
-import './ActiveSessions.scss';
-import React from 'react';
-
-import { NumericValue, UpdateWithFrequency } from '@nti/web-charts';
+import { NumericValue } from '@nti/web-charts';
 import { getService } from '@nti/web-client';
 import { getLink } from '@nti/lib-interfaces';
 import { scoped } from '@nti/lib-locale';
+import { useResolver } from '@nti/web-commons';
 
 const SESSIONS = 'Sessions';
 const ANALYTICS = 'Analytics';
 const ACTIVE_SESSION_COUNT = 'active_session_count';
 
-const LABELS = {
-	notAvailable: 'Unable to get active session data',
-};
-
 const t = scoped(
 	'nti-web-site-admin.components.dashboard.widgets.ActiveSessions',
-	LABELS
+	{
+		sessionsUnavailable: 'Unable to get active session data',
+		activeSessionsLabel: 'Users Online Now',
+	}
 );
 
-export default class ActiveSessions extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+const { isResolved } = useResolver;
 
-	async getActiveSessions() {
+export function ActiveUsers() {
+	const resolver = useResolver(async () => {
 		const service = await getService();
 
 		try {
@@ -43,18 +37,11 @@ export default class ActiveSessions extends React.Component {
 				error: <div className="not-available">{t('notAvailable')}</div>,
 			};
 		}
-	}
+	});
 
-	render() {
-		return (
-			<div className="active-sessions-widget">
-				<UpdateWithFrequency
-					frequency={30000}
-					selectData={this.getActiveSessions}
-				>
-					<NumericValue label="Learners Online Now" />
-				</UpdateWithFrequency>
-			</div>
-		);
-	}
+	return isResolved(resolver) ? (
+		<NumericValue label={t('activeSessionsLabel')} value={resolver.value} />
+	) : (
+		<div />
+	);
 }
