@@ -19,7 +19,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
             exact={true}
             to="./"
           >
-            Learners
+            Users
           </div>
         </li>
         <li>
@@ -97,7 +97,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
             exact={true}
             to="./"
           >
-            Learners
+            Users
           </div>
         </li>
         <li>
