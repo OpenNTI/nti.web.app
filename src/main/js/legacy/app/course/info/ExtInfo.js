@@ -60,15 +60,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 	onRouteActivate: function () {
 		this.unmask();
 
-		if (this.body && this.body.onRouteActivate) {
-			this.body.onRouteActivate();
-		}
+		this.body?.onRouteActivate?.();
 	},
 
 	onRouteDeactivate: function () {
-		this.body &&
-			this.body.onRouteDeactivate &&
-			this.body.onRouteDeactivate();
+		this.body?.onRouteDeactivate?.();
 
 		this.mask();
 
@@ -140,14 +136,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		return Promise.resolve();
 	},
 
-	showInfo: function (route, subRoute) {
-		var me = this;
-
-		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function () {
-			me.body.scrollInfoSectionIntoView(route);
-			me.alignNavigation();
-		});
+	async showInfo(route, subRoute) {
+		this.navigation.setActiveItem(route);
+		await this.body.setActiveItem('info');
+		this.body.scrollInfoSectionIntoView(route);
+		this.alignNavigation();
 	},
 
 	showInstructors: function (route, subRoute) {
