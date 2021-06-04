@@ -15,7 +15,7 @@ import Store from '../table/InvitationsStore';
 import SeatLimit from './SeatLimit';
 
 const DEFAULT_TEXT = {
-	learners: 'Learners',
+	learners: 'Users',
 	admins: 'Admins',
 	deactivated: 'Deactivated',
 	invitations: 'Invitations',

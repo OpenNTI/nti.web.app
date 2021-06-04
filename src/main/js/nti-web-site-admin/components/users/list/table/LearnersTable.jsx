@@ -8,8 +8,8 @@ import UsersTable from './UsersTable';
 import Store from './Store';
 
 const t = scoped('nti-web-site-admin.users.list.table.LearnersTable', {
-	learners: 'Learners',
-	emptyMessage: 'There are no current learners',
+	learners: 'Users',
+	emptyMessage: 'There are no current users',
 });
 
 class LearnersTable extends React.Component {
