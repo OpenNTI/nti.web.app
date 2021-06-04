@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
 
-import ActiveSessions from '../ActiveSessions';
+import { ActiveUsers } from '../ActiveUsers';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
@@ -39,7 +39,7 @@ describe('Site admin dashboard widget active sessions (with 5 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveSessions />);
+		const cmp = renderer.create(<ActiveUsers />);
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -56,7 +56,7 @@ describe('Site admin dashboard widget active sessions (with 0 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveSessions />);
+		const cmp = renderer.create(<ActiveUsers />);
 
 		jest.runAllTimers();
 		await flushPromises();
