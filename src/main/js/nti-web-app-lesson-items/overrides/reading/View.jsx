@@ -100,11 +100,20 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 	state = {};
 
+	componentWillUnmount() {
+		this.contentViewer?.destroy();
+	}
+
 	componentDidUpdate(prevProps) {
 		const { activeObject } = this.props;
 		const { activeObject: prevObject } = prevProps;
 
-		if (activeObject !== prevObject && activeObject && this.contentViewer) {
+		if (
+			activeObject !== prevObject &&
+			activeObject &&
+			this.contentViewer &&
+			!this.contentViewer.isDestroyed
+		) {
 			this.contentViewer.goToNote(activeObject);
 		}
 	}
