@@ -34,13 +34,21 @@ export function ActiveUsers() {
 		} catch (e) {
 			return {
 				value: 0,
-				error: <div className="not-available">{t('notAvailable')}</div>,
+				error: (
+					<div className="not-available">
+						{t('sessionsUnavailable')}
+					</div>
+				),
 			};
 		}
 	});
 
 	return isResolved(resolver) ? (
-		<NumericValue label={t('activeSessionsLabel')} value={resolver.value} />
+		<NumericValue
+			label={t('activeSessionsLabel')}
+			error={resolver.error}
+			value={resolver.value}
+		/>
 	) : (
 		<div />
 	);
