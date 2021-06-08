@@ -1,3 +1,5 @@
+@use "sass:list";
+
 .library-view {
 	margin: 2em 0 2.5em;
 	max-width: 100%;
@@ -57,7 +59,7 @@
 	}
 
 	.label {
-		font: normal 300 1.5em /#{$header-height} var(--body-font-family);
+		font: normal 300 list.slash(1.5em, $header-height) var(--body-font-family);
 		padding: 0 0.875em 0 0;
 		cursor: pointer;
 		color: var(--secondary-grey);
