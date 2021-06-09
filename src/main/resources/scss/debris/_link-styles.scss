@@ -217,7 +217,7 @@ a[href] {
 
 			.message {
 				color: var(--tertiary-grey);
-				font: normal 300 2em/4em var(--header-font-family);
+				font: normal 300 2em/4em var(--legacy-header-font-family);
 			}
 		}
 
@@ -256,7 +256,7 @@ a[href] {
 				font-size: 12px;
 
 				.message {
-					font: normal 300 1.8em/2.7em var(--header-font-family);
+					font: normal 300 1.8em/2.7em var(--legacy-header-font-family);
 				}
 			}
 		}

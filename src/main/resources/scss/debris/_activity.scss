@@ -477,7 +477,7 @@
 
 				@include ellipse;
 
-				font: normal 300 28px/30px var(--header-font-family);
+				font: normal 300 28px/30px var(--legacy-header-font-family);
 				cursor: pointer;
 
 				&::after {
@@ -724,7 +724,7 @@
 		padding: 20px 10px 10px 0;
 
 		.name {
-			font: normal 700 1em/1.4em var(--header-font-family);
+			font: normal 700 1em/1.4em var(--legacy-header-font-family);
 		}
 
 		.description {

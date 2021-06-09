@@ -13,6 +13,7 @@ const DEFAULT_TEXT = {
 	integrations: 'Integrations',
 	branding: 'Site Branding',
 	login: 'Sign In Branding',
+	catalog: 'Catalog',
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
@@ -31,6 +32,9 @@ export default function SiteAdminAdvancedTabs() {
 			</LinkTo.Path>
 			<LinkTo.Path to="./integrations" activeClassName="active">
 				<Text.Base localized>{t('integrations')}</Text.Base>
+			</LinkTo.Path>
+			<LinkTo.Path to="./catalog" activeClassName="active">
+				<Text.Base localized>{t('catalog')}</Text.Base>
 			</LinkTo.Path>
 		</Tabs>
 	);

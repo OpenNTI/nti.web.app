@@ -274,7 +274,7 @@
 
 			.title {
 				color: var(--primary-grey);
-				font: normal 300 1.6em/1.2em var(--header-font-family);
+				font: normal 300 1.6em/1.2em var(--legacy-header-font-family);
 				overflow: hidden;
 				//@include ellipse();
 				height: 64px;
@@ -716,7 +716,7 @@
 						cursor: pointer;
 						color: #ebebeb;
 						padding: 8px 10px;
-						font: normal 400 1.1em var(--header-font-family);
+						font: normal 400 1.1em var(--legacy-header-font-family);
 						min-height: 53px;
 						border: {
 							color: #0f2d35;

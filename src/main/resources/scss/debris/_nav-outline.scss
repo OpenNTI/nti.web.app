@@ -254,13 +254,13 @@
 
 			&.heading {
 				color: var(--secondary-grey);
-				font: normal 100 1.5em/2.1 var(--header-font-family);
+				font: normal 100 1.5em/2.1 var(--legacy-header-font-family);
 				text-transform: none;
 				padding: 1.25em 0.42em 0 0.84em;
 
 				&.unit {
 					padding: 1.75em 0.42em 0.5em 0.84em;
-					font: normal 100 1.5em var(--header-font-family);
+					font: normal 100 1.5em var(--legacy-header-font-family);
 					min-height: 2.1em;
 
 					&:first-of-type {

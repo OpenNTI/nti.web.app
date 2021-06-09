@@ -39,7 +39,7 @@
 				}
 
 				.title {
-					font: normal 600 1.2em/1.2em var(--header-font-family);
+					font: normal 600 1.2em/1.2em var(--legacy-header-font-family);
 					overflow: hidden;
 
 					@include ellipsis();

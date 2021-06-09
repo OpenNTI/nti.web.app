@@ -39,7 +39,7 @@
 		margin-top: 40px;
 		margin-bottom: 10px;
 		font-size: 1.875em;
-		font-family: var(--header-font-family);
+		font-family: var(--legacy-header-font-family);
 		font-weight: 700;
 		-webkit-font-smoothing: antialiased;
 		max-width: 600px;
@@ -626,7 +626,7 @@
 				@include ellipse();
 
 				margin: 0;
-				font: normal 600 1.6em/35px var(--header-font-family);
+				font: normal 600 1.6em/35px var(--legacy-header-font-family);
 
 				@include presence-style-sudo(
 					$x: 0,
@@ -1879,7 +1879,7 @@
 	.input-wrap,
 	.textbox-base {
 		input {
-			font: normal 600 1.6em/35px var(--header-font-family);
+			font: normal 600 1.6em/35px var(--legacy-header-font-family);
 			height: 40px;
 			padding-left: 20px;
 			padding-right: 30px;

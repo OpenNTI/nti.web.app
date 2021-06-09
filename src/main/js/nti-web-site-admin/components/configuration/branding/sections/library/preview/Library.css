@@ -1,6 +1,6 @@
 .library-root {
-	--header-font-family: var(
-		--header-font-family
+	--legacy-header-font-family: var(
+		--legacy-header-font-family
 	); /* a container above us is changing this to --body-font-family */
 
 	padding: 36px 70px;

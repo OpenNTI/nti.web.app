@@ -5,6 +5,7 @@ import Transcripts from './transcripts';
 import Integrations from './integrations';
 import Branding from './branding';
 import Login from './login';
+import { Catalog } from './catalog/View.jsx';
 import Frame from './Frame';
 
 export default Router.for(
@@ -23,6 +24,11 @@ export default Router.for(
 			path: '/login',
 			component: Login,
 			name: 'site-admin.advanced.login',
+		}),
+		Route({
+			path: '/catalog',
+			component: Catalog,
+			name: 'site-admin.advanced.catalog',
 		}),
 		Route({
 			path: '/',

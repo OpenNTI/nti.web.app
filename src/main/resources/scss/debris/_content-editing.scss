@@ -371,7 +371,7 @@ input[type='number'] {
 
 			textarea {
 				padding: 2px;
-				font: normal 300 1.6em/1.2em var(--header-font-family);
+				font: normal 300 1.6em/1.2em var(--legacy-header-font-family);
 				width: 100%;
 				height: 64px;
 				resize: none;
@@ -1578,7 +1578,7 @@ input[type='number'] {
 	}
 
 	.overview-group-title {
-		font: normal 400 1.5rem/2.8rem var(--header-font-family);
+		font: normal 400 1.5rem/2.8rem var(--legacy-header-font-family);
 		color: white;
 	}
 
