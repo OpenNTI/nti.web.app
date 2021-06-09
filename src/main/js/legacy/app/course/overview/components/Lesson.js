@@ -307,12 +307,19 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		}
 	},
 
+	cleanupItemFlyout() {
+		this.itemFlyout?.destroy();
+		delete this.itemFlyout();
+	},
+
 	maybeAddMediaViewer(viewerRoute, lesson, returnPath) {
 		if (!viewerRoute) {
 			return;
 		}
 
 		const lessonCmp = this;
+
+		this.cleanupItemFlyout();
 
 		if (!this.mediaViewer) {
 			this.mediaViewer = this.add({
@@ -351,8 +358,6 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		const wasMounted = !!this.itemFlyout;
 
 		if (this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
-			this.itemFlyout?.destroy();
-			delete this.itemFlyout;
 			return;
 		}
 
