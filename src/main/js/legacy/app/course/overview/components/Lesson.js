@@ -309,7 +309,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 	cleanupItemFlyout() {
 		this.itemFlyout?.destroy();
-		delete this.itemFlyout();
+		delete this.itemFlyout;
 	},
 
 	maybeAddMediaViewer(viewerRoute, lesson, returnPath) {
