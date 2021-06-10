@@ -1814,6 +1814,9 @@ input[type='number'] {
 			width: 180px;
 			height: 100px;
 			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color: black;
 		}
 
 		.meta {
