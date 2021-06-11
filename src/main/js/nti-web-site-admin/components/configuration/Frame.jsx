@@ -1,5 +1,5 @@
 import './Frame.scss';
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { LinkTo } from '@nti/web-routing'; // eslint-disable-line
@@ -31,9 +31,11 @@ export default class SiteAdminAdvancedView extends React.Component {
 					</FixedElement>
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
-					{React.Children.map(children, item => {
-						return React.cloneElement(item, {});
-					})}
+					<Suspense fallback={<div />}>
+						{React.Children.map(children, item => {
+							return React.cloneElement(item, {});
+						})}
+					</Suspense>
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>
 		);

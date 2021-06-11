@@ -1,19 +1,22 @@
 import React from 'react';
 
-import { Text } from '@nti/web-commons';
+import { Text, StandardUI } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 
-import Card from '../../common/Card';
+import { AnonymousCatalog } from './AnonymousCatalog';
+
+const { Box } = StandardUI;
 
 const t = scoped('nti-web-app.admin.config.Catalog', {
 	title: 'Catalog',
-	anonymousAccess: 'Make catalog viewable by unauthenticated users',
+	anonymousAccess: 'Visible to unauthenticated users',
 });
 
 export function Catalog(props) {
 	return (
-		<Card>
+		<Box p="lg" sh="sm">
 			<Text.Base as="h1">{t('title')}</Text.Base>
-		</Card>
+			<AnonymousCatalog label={t('anonymousAccess')} />
+		</Box>
 	);
 }
