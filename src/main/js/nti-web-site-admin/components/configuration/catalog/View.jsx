@@ -9,7 +9,7 @@ const { Box } = StandardUI;
 
 const t = scoped('nti-web-app.admin.config.Catalog', {
 	title: 'Catalog',
-	anonymousAccess: 'Viewable by unauthenticated users',
+	anonymousAccess: 'Visible to unauthenticated users',
 });
 
 export function Catalog(props) {
