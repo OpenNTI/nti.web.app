@@ -10,6 +10,7 @@ const { tearDownTestClient, setupTestClient } = TestUtils;
 
 const getMockService = numberOfUsers => {
 	return {
+		Items: [],
 		getCollection: () => {
 			return {
 				hasLink: () => true,
