@@ -11,13 +11,13 @@ const PAGE_SIZE = 20;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
 const canDeactivateUsers = service =>
-	Boolean(service.Items.filter(w => w.hasLink('BatchDeactivate'))[0]);
+	Boolean(service.Items.find(w => w.hasLink('BatchDeactivate')));
 const canActivateUsers = service =>
-	Boolean(service.Items.filter(w => w.hasLink('BatchReactivate'))[0]);
+	Boolean(service.Items.find(w => w.hasLink('BatchReactivate')));
 
 async function bulkActivation(users, rel) {
 	const service = await getService();
-	const workspace = service.Items.filter(x => x.hasLink(rel))[0];
+	const workspace = service.Items.find(x => x.hasLink(rel));
 
 	//utilizing the fact that usermodels are instance tracked
 	//so by parsing the response the existing users should get updated
@@ -153,9 +153,9 @@ class UserListStore extends Stores.BoundStore {
 
 			return adminWorkspace.getLink('SiteAdmins');
 		} else {
-			const userWorkspace = service.Items.filter(x =>
+			const userWorkspace = service.Items.find(x =>
 				x.hasLink('SiteUsers')
-			)[0];
+			);
 
 			if (!userWorkspace) {
 				throw new Error(ACCESS_FORBIDDEN);
