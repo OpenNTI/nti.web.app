@@ -4,6 +4,8 @@ const Video = require('internal/legacy/app/video/Video');
 
 require('./Split');
 
+const ExtraHeight = 200;
+
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.mode.FullVideo',
 	{
@@ -24,7 +26,8 @@ module.exports = exports = Ext.define(
 					paddingRatio = 0.2,
 					ratio = Video.ASPECT_RATIO,
 					defaultWidth = screenWidth - screenWidth * paddingRatio,
-					defaultHeight = Math.round(defaultWidth * ratio),
+					defaultHeight =
+						Math.round(defaultWidth * ratio) + ExtraHeight,
 					y = 80,
 					diff = screenHeight - (y + defaultHeight),
 					newWidth;
@@ -34,7 +37,7 @@ module.exports = exports = Ext.define(
 				}
 
 				// Let the available height help determine the appropriate width.
-				newWidth = (screenHeight - y - 50) * (1 / ratio);
+				newWidth = (screenHeight - y - 50 - ExtraHeight) * (1 / ratio);
 				return Math.max(newWidth, 512);
 			},
 		},

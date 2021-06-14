@@ -96,6 +96,12 @@ module.exports = exports = Ext.define(
 			this.setNext(this.nextVideo);
 		},
 
+		getPlayerHeight() {
+			const base = this.callParent(arguments);
+
+			return base + 200;
+		},
+
 		getThumbnail: function (video) {
 			var source = video.get('sources')[0];
 			return source && source.thumbnail;
