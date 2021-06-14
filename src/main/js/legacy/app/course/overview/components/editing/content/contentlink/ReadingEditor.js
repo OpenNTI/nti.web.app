@@ -115,6 +115,13 @@ module.exports = exports = Ext.define(
 		},
 
 		getIconPlaceholder() {
+			if (this.record) {
+				return (
+					this.record.icon ||
+					RelatedWork.getIconForMimeType('unknown')
+				);
+			}
+
 			const icon = this.contentPackage && this.contentPackage.get('icon');
 
 			return icon || RelatedWork.getIconForMimeType('unknown');
