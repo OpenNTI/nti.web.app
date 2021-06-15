@@ -83,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				component: Catalog,
 				baseroute,
 				setTitle: title => this.setTitle(title),
+				suppressDetails: true,
 				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
 						let base = `${
