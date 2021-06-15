@@ -3,6 +3,8 @@ const Video = require('internal/legacy/app/video/Video');
 
 require('./SmallVideo');
 
+const ExtraHeight = 200;
+
 module.exports = exports = Ext.define(
 	'NextThought.app.mediaviewer.components.mode.Split',
 	{
@@ -23,7 +25,8 @@ module.exports = exports = Ext.define(
 					tWidth = Math.floor(screenWidth * transcriptRatio),
 					ratio = Video.ASPECT_RATIO,
 					defaultWidth = Ext.Element.getViewportWidth() - tWidth,
-					defaultHeight = Math.round(defaultWidth * ratio),
+					defaultHeight =
+						Math.round(defaultWidth * ratio) + ExtraHeight,
 					y = 80,
 					diff = screenHeight - (y + defaultHeight),
 					newWidth;
