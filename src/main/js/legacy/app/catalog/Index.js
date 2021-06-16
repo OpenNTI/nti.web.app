@@ -15,8 +15,22 @@ require('internal/legacy/overrides/ReactHarness');
 require('internal/legacy/login/StateStore');
 require('internal/legacy/app/library/courses/components/available/CourseWindow');
 
-const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
-const CATEGORY_NAME = /\/([^/]*)\/?/;
+const getCatalogRouteParts = route => {
+	const catalogParts = { tag: '', entry: '', rest: '' };
+	const routeParts = route.split('/');
+
+	for (let i = 0; i < routeParts.length; i++) {
+		if (routeParts[i] === 'tag') {
+			catalogParts.tag = routeParts[i + 1];
+		} else if (routeParts[i] === 'item') {
+			catalogParts.entry = routeParts[i + 1];
+			catalogParts.rest = routeParts.slice(i + 2).join('/');
+			break;
+		}
+	}
+
+	return catalogParts;
+};
 
 const URI_PART = /^uri/;
 
@@ -68,12 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 	showCatalog(route) {
 		const baseroute = this.getBaseRoute();
-		const categoryMatch = route.path.match(CATEGORY_NAME);
+		const catalogRouteParts = getCatalogRouteParts(route.path);
 
-		this.category =
-			categoryMatch[1] !== 'nti-course-catalog-entry'
-				? categoryMatch[1]
-				: '';
+		this.category = catalogRouteParts.tag;
 
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
@@ -86,13 +97,15 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				suppressDetails: true,
 				getRouteFor: obj => {
 					if (obj.isCourseCatalogEntry) {
-						let base = `${
-							this.category || '.'
-						}/nti-course-catalog-entry/${obj.getID()}`;
+						let base = '';
 
-						if (obj.redeemed) {
-							base = `${base}?redeem=1`;
+						if (this.category) {
+							base = `${base}tag/${this.category}`;
+						} else {
+							base = '.';
 						}
+
+						base = `${base}/item/${obj.getID()}`;
 
 						return base;
 					}
@@ -101,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		}
 
 		this.setUpNavigation(baseroute, route.path);
-		return this.maybeShowCatalogEntry(route, this.category);
+		return this.maybeShowCatalogEntry(catalogRouteParts, this.category);
 	},
 
 	setUpNavigation(baseroute, path) {
@@ -166,11 +179,10 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		throw new Error('Unable to resole catalog');
 	},
 
-	async maybeShowCatalogEntry(route, category) {
-		const { path } = route;
-		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
+	async maybeShowCatalogEntry(catalogRouteParts, category) {
+		const { entry, rest } = catalogRouteParts;
 
-		if (!matches) {
+		if (!catalogRouteParts.entry) {
 			if (this.availableWin) {
 				this.availableWin.destroy();
 				delete this.availableWin;
@@ -179,24 +191,21 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			return;
 		}
 
-		const [param, ...parts] = matches[2].split('/');
-		const rest = parts.join('/');
-
 		this.__loadTask = this.__loadTask || {};
 
-		if (this.__loadTask[param]) {
+		if (this.__loadTask[entry]) {
 			return;
 		}
 
-		this.__loadTask[param] = this.loadCatalogEntry(param, rest).catch(
+		this.__loadTask[entry] = this.loadCatalogEntry(entry, rest).catch(
 			() => {
 				alert('Unable to find course.');
 			}
 		);
 
-		const catalogEntry = await this.__loadTask[param];
+		const catalogEntry = await this.__loadTask[entry];
 
-		delete this.__loadTask[param];
+		delete this.__loadTask[entry];
 
 		if (!catalogEntry) {
 			return;
@@ -205,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.availableWin = Ext.widget('library-available-courses-window', {
 			isSingle: true,
 			doClose: () => {
-				this.pushRoute('', category || '/');
+				this.pushRoute('', category ? `/tag/${category}` : '/');
 			},
 		});
 
