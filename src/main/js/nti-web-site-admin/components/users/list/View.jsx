@@ -29,12 +29,12 @@ export default Router.for(
 			name: 'site-admin.users.user-list-users',
 			getRouteFor(obj, context) {
 				if (
-					obj.MimeType === 'application/vnd.nextthought.user' &&
+					obj?.MimeType === 'application/vnd.nextthought.user' &&
 					context === 'site-admin.users-list-item'
 				) {
 					return `/user/${obj.getID()}`;
 				} else if (
-					obj.MimeType === 'application/vnd.nextthought.user' &&
+					obj?.MimeType === 'application/vnd.nextthought.user' &&
 					context === 'site-admin.admins-list-item'
 				) {
 					return `/admins/user/${obj.getID()}`;

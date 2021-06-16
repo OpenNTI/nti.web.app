@@ -15,7 +15,7 @@ export default Router.for([
 		frameless: true,
 		getRouteFor(obj, context) {
 			if (
-				obj.MimeType ===
+				obj?.MimeType ===
 					'application/vnd.nextthought.userbundlerecord' &&
 				context === 'site-admin.courses.book-roster.list'
 			) {
