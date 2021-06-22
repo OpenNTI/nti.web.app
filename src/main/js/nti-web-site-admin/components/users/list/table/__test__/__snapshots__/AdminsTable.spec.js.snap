@@ -20,13 +20,14 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
       <thead>
         <tr>
           <th
-            className=""
+            className="selectColumn"
           >
             <label
               className="checkbox-component"
             >
               <input
                 checked={false}
+                className="headerCheckbox"
                 onChange={[Function]}
                 type="checkbox"
               />
@@ -36,7 +37,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </label>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="nameColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -48,7 +49,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="joinDateColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -60,7 +61,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="lastSeenColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -76,9 +77,11 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
       <tbody>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -93,28 +96,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -123,17 +138,23 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               1 Day ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -148,28 +169,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -178,17 +211,23 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               2 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -203,28 +242,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -233,17 +284,23 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               3 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -258,28 +315,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -288,17 +357,23 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               4 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -313,28 +388,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -343,8 +430,12 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               5 Days ago
             </div>
           </td>
@@ -375,13 +466,14 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
       <thead>
         <tr>
           <th
-            className=""
+            className="selectColumn"
           >
             <label
               className="checkbox-component"
             >
               <input
                 checked={false}
+                className="headerCheckbox"
                 onChange={[Function]}
                 type="checkbox"
               />
@@ -391,7 +483,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </label>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="nameColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -403,7 +495,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="joinDateColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -415,7 +507,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="lastSeenColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -431,9 +523,11 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
       <tbody>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -448,28 +542,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -478,17 +584,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               1 Day ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -503,28 +615,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -533,17 +657,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               2 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -558,28 +688,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -588,17 +730,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               3 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -613,28 +761,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -643,17 +803,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               4 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -668,28 +834,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -698,17 +876,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               5 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -723,28 +907,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -753,17 +949,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               6 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -778,28 +980,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -808,17 +1022,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               7 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -833,28 +1053,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -863,17 +1095,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               8 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -888,28 +1126,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -918,17 +1168,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               9 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -943,28 +1199,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -973,17 +1241,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               10 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -998,28 +1272,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1028,17 +1314,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               11 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1053,28 +1345,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1083,17 +1387,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               12 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1108,28 +1418,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1138,17 +1460,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               13 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1163,28 +1491,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1193,17 +1533,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               14 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1218,28 +1564,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1248,17 +1606,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               15 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1273,28 +1637,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1303,17 +1679,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               16 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1328,28 +1710,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1358,17 +1752,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               17 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1383,28 +1783,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1413,17 +1825,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               18 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1438,28 +1856,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1468,17 +1898,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               19 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1493,28 +1929,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1523,17 +1971,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               20 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1548,28 +2002,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1578,17 +2044,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               21 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1603,28 +2075,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1633,17 +2117,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               22 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1658,28 +2148,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1688,17 +2190,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               23 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1713,28 +2221,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1743,17 +2263,23 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               24 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1768,28 +2294,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="nameColumn"
+          >
             <div
               className="nti-link-to-path"
               to="#"
             >
-              <div>
+              <div
+                className="cell"
+              >
                 <img
-                  className="avatar avatar-color-6"
+                  className="avatar avatar avatar-color-6"
                   src="unresolved-user-avatar.png"
                 />
-                <div>
+                <div
+                  className="userInfo"
+                >
                   <span
-                    className="username"
+                    className="username username"
                     rel="author"
                   />
-                  <div />
+                  <div
+                    className="email"
+                  />
                 </div>
               </div>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="joinDateColumn"
+          >
+            <div
+              className="cell"
+            >
               <time
                 className="ntiText"
                 dateTime="2017-10-30T00:00:00Z"
@@ -1798,8 +2336,12 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </time>
             </div>
           </td>
-          <td>
-            <div>
+          <td
+            className="lastSeenColumn"
+          >
+            <div
+              className="cell"
+            >
               25 Days ago
             </div>
           </td>

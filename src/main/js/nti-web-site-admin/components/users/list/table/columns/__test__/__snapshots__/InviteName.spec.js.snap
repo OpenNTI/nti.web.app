@@ -2,17 +2,23 @@
 
 exports[`Site admin user table invite name column test Test admin invitation 1`] = `
 <div
-  className="cell"
+  className="cell cell"
 >
   <img
-    className="avatar avatar-color-6"
+    className="avatar avatar avatar-color-6"
     src="unresolved-user-avatar.png"
   />
-  <div>
-    <div>
+  <div
+    className="userInfo"
+  >
+    <div
+      className="inviteEmail"
+    >
       adminUser1
     </div>
-    <div>
+    <div
+      className="inviteType"
+    >
       Administrator
     </div>
   </div>
@@ -21,17 +27,23 @@ exports[`Site admin user table invite name column test Test admin invitation 1`]
 
 exports[`Site admin user table invite name column test Test learner invitation 1`] = `
 <div
-  className="cell"
+  className="cell cell"
 >
   <img
-    className="avatar avatar-color-6"
+    className="avatar avatar avatar-color-6"
     src="unresolved-user-avatar.png"
   />
-  <div>
-    <div>
+  <div
+    className="userInfo"
+  >
+    <div
+      className="inviteEmail"
+    >
       learnerUser1
     </div>
-    <div>
+    <div
+      className="inviteType"
+    >
       Learner
     </div>
   </div>

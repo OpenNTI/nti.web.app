@@ -2,10 +2,10 @@
 
 exports[`Site admin user table invite date column test Test date is many days ago 1`] = `
 <div
-  className="cell"
+  className="cell cell"
 >
   <time
-    className="ntiText"
+    className="value ntiText"
     dateTime="2017-10-31T00:00:00Z"
   >
     Oct 31, 2017
@@ -15,7 +15,7 @@ exports[`Site admin user table invite date column test Test date is many days ag
 
 exports[`Site admin user table invite date column test Test date is now 1`] = `
 <div
-  className="cell"
+  className="cell cell"
 >
   <span>
     Today
@@ -25,7 +25,7 @@ exports[`Site admin user table invite date column test Test date is now 1`] = `
 
 exports[`Site admin user table invite date column test Test date is yesterday 1`] = `
 <div
-  className="cell"
+  className="cell cell"
 >
   <span>
     Yesterday

@@ -45,13 +45,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
       <thead>
         <tr>
           <th
-            className=""
+            className="selectColumn"
           >
             <label
               className="checkbox-component"
             >
               <input
                 checked={false}
+                className="headerCheckbox"
                 onChange={[Function]}
                 type="checkbox"
               />
@@ -61,7 +62,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </label>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="inviteNameColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -95,7 +96,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </div>
           </th>
           <th
-            className=""
+            className="rescindColumn"
           >
             <div
               className=""
@@ -109,9 +110,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
       <tbody>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -126,12 +129,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-7"
+                className="avatar avatar avatar-color-7"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -148,11 +153,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test1@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -162,10 +173,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -174,7 +185,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -183,8 +194,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -193,9 +207,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -210,12 +226,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-0"
+                className="avatar avatar avatar-color-0"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -232,11 +250,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test2@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -246,10 +270,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -258,7 +282,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -267,8 +291,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -277,9 +304,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -294,12 +323,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-5"
+                className="avatar avatar avatar-color-5"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -316,11 +347,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test3@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -330,10 +367,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -342,7 +379,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -351,8 +388,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -361,9 +401,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -378,12 +420,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-10"
+                className="avatar avatar avatar-color-10"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -400,11 +444,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test4@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -414,10 +464,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -426,7 +476,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -435,8 +485,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -445,9 +498,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -462,12 +517,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-3"
+                className="avatar avatar avatar-color-3"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -484,11 +541,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test5@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -498,10 +561,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -510,7 +573,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -519,8 +582,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -566,13 +632,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
       <thead>
         <tr>
           <th
-            className=""
+            className="selectColumn"
           >
             <label
               className="checkbox-component"
             >
               <input
                 checked={false}
+                className="headerCheckbox"
                 onChange={[Function]}
                 type="checkbox"
               />
@@ -582,7 +649,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </label>
           </th>
           <th
-            className="nti-table-simple-header"
+            className="inviteNameColumn nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -616,7 +683,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </div>
           </th>
           <th
-            className=""
+            className="rescindColumn"
           >
             <div
               className=""
@@ -630,9 +697,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
       <tbody>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -647,12 +716,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-7"
+                className="avatar avatar avatar-color-7"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -669,11 +740,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test1@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -683,10 +760,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -695,7 +772,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -704,8 +781,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -714,9 +794,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -731,12 +813,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-0"
+                className="avatar avatar avatar-color-0"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -753,11 +837,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test2@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -767,10 +857,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -779,7 +869,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -788,8 +878,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -798,9 +891,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -815,12 +910,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-5"
+                className="avatar avatar avatar-color-5"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -837,11 +934,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test3@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -851,10 +954,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -863,7 +966,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -872,8 +975,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -882,9 +988,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -899,12 +1007,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-10"
+                className="avatar avatar avatar-color-10"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -921,11 +1031,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test4@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -935,10 +1051,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -947,7 +1063,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -956,8 +1072,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -966,9 +1085,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -983,12 +1104,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-3"
+                className="avatar avatar avatar-color-3"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1005,11 +1128,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test5@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1019,10 +1148,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1031,7 +1160,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1040,8 +1169,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1050,9 +1182,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1067,12 +1201,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-8"
+                className="avatar avatar avatar-color-8"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1089,11 +1225,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test6@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1103,10 +1245,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1115,7 +1257,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1124,8 +1266,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1134,9 +1279,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1151,12 +1298,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-1"
+                className="avatar avatar avatar-color-1"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1173,11 +1322,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test7@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1187,10 +1342,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1199,7 +1354,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1208,8 +1363,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1218,9 +1376,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1235,12 +1395,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-6"
+                className="avatar avatar avatar-color-6"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1257,11 +1419,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test8@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1271,10 +1439,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1283,7 +1451,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1292,8 +1460,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1302,9 +1473,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1319,12 +1492,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-11"
+                className="avatar avatar avatar-color-11"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1341,11 +1516,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test9@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1355,10 +1536,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1367,7 +1548,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1376,8 +1557,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1386,9 +1570,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1403,12 +1589,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-9"
+                className="avatar avatar avatar-color-9"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1425,11 +1613,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test10@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1439,10 +1633,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1451,7 +1645,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1460,8 +1654,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1470,9 +1667,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1487,12 +1686,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-2"
+                className="avatar avatar avatar-color-2"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1509,11 +1710,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test11@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1523,10 +1730,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1535,7 +1742,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1544,8 +1751,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1554,9 +1764,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1571,12 +1783,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-9"
+                className="avatar avatar avatar-color-9"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1593,11 +1807,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test12@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1607,10 +1827,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1619,7 +1839,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1628,8 +1848,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1638,9 +1861,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1655,12 +1880,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-4"
+                className="avatar avatar avatar-color-4"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1677,11 +1904,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test13@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1691,10 +1924,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1703,7 +1936,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1712,8 +1945,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1722,9 +1958,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1739,12 +1977,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-11"
+                className="avatar avatar avatar-color-11"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1761,11 +2001,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test14@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1775,10 +2021,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1787,7 +2033,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1796,8 +2042,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1806,9 +2055,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1823,12 +2074,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-6"
+                className="avatar avatar avatar-color-6"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1845,11 +2098,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test15@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -1859,10 +2118,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1871,7 +2130,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1880,8 +2139,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1890,9 +2152,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1907,12 +2171,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-1"
+                className="avatar avatar avatar-color-1"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -1929,11 +2195,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test16@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -1943,10 +2215,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -1955,7 +2227,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1964,8 +2236,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -1974,9 +2249,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -1991,12 +2268,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-8"
+                className="avatar avatar avatar-color-8"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2013,11 +2292,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test17@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -2027,10 +2312,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2039,7 +2324,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2048,8 +2333,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2058,9 +2346,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2075,12 +2365,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-3"
+                className="avatar avatar avatar-color-3"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2097,11 +2389,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test18@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -2111,10 +2409,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2123,7 +2421,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2132,8 +2430,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2142,9 +2443,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2159,12 +2462,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-10"
+                className="avatar avatar avatar-color-10"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2181,11 +2486,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test19@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -2195,10 +2506,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2207,7 +2518,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2216,8 +2527,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2226,9 +2540,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2243,12 +2559,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-0"
+                className="avatar avatar avatar-color-0"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2265,11 +2583,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test20@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -2279,10 +2603,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2291,7 +2615,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2300,8 +2624,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2310,9 +2637,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2327,12 +2656,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-7"
+                className="avatar avatar avatar-color-7"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2349,11 +2680,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test21@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -2363,10 +2700,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2375,7 +2712,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2384,8 +2721,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2394,9 +2734,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2411,12 +2753,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-2"
+                className="avatar avatar avatar-color-2"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2433,11 +2777,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test22@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -2447,10 +2797,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2459,7 +2809,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2468,8 +2818,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2478,9 +2831,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2495,12 +2850,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-9"
+                className="avatar avatar avatar-color-9"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2517,11 +2874,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test23@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -2531,10 +2894,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2543,7 +2906,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2552,8 +2915,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2562,9 +2928,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2579,12 +2947,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-8"
+                className="avatar avatar avatar-color-8"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2601,11 +2971,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test24@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Learner
                 </div>
               </div>
@@ -2615,10 +2991,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2627,7 +3003,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2636,8 +3012,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel
@@ -2646,9 +3025,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
         </tr>
         <tr>
           <td
-            className=""
+            className="selectColumn"
           >
-            <div>
+            <div
+              className="cell"
+            >
               <label
                 className="checkbox-component"
               >
@@ -2663,12 +3044,14 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </label>
             </div>
           </td>
-          <td>
+          <td
+            className="inviteNameColumn"
+          >
             <div
-              className="cell"
+              className="cell cell"
             >
               <svg
-                className="avatar avatar-color-1"
+                className="avatar avatar avatar-color-1"
                 letterbox="black"
                 viewBox="0 0 32 32"
               >
@@ -2685,11 +3068,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                   t
                 </text>
               </svg>
-              <div>
-                <div>
+              <div
+                className="userInfo"
+              >
+                <div
+                  className="inviteEmail"
+                >
                   test25@blah.com
                 </div>
-                <div>
+                <div
+                  className="inviteType"
+                >
                   Administrator
                 </div>
               </div>
@@ -2699,10 +3088,10 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             className="invite-date-column"
           >
             <div
-              className="cell"
+              className="cell cell"
             >
               <time
-                className="ntiText"
+                className="value ntiText"
                 dateTime="2017-10-30T00:00:00Z"
               >
                 Oct 30, 2017
@@ -2711,7 +3100,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
           </td>
           <td>
             <a
-              className="nti-button button resend plain"
+              className="nti-button button resend resendButton plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2720,8 +3109,11 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               Re-send
             </a>
           </td>
-          <td>
+          <td
+            className="rescindColumn"
+          >
             <div
+              className="cell"
               onClick={[Function]}
             >
               Cancel

@@ -2,9 +2,11 @@
 
 exports[`Site admin user table select column test Test not selected 1`] = `
 <td
-  className=""
+  className="selectColumn"
 >
-  <div>
+  <div
+    className="cell"
+  >
     <label
       className="checkbox-component"
     >
@@ -23,9 +25,11 @@ exports[`Site admin user table select column test Test not selected 1`] = `
 
 exports[`Site admin user table select column test Test selected 1`] = `
 <td
-  className="undefined"
+  className="selectColumn rowSelected"
 >
-  <div>
+  <div
+    className="cell"
+  >
     <label
       className="checkbox-component"
     >

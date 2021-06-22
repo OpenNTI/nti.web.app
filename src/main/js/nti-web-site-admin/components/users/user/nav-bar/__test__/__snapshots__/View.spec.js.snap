@@ -8,7 +8,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
     className="site-admin-user-identity"
   >
     <img
-      className="avatar avatar-color-6"
+      className="avatar avatar avatar-color-6"
       src="unresolved-user-avatar.png"
     />
     <span
@@ -80,7 +80,7 @@ Array [
       className="site-admin-user-identity"
     >
       <img
-        className="avatar avatar-color-6"
+        className="avatar avatar avatar-color-6"
         src="unresolved-user-avatar.png"
       />
       <span

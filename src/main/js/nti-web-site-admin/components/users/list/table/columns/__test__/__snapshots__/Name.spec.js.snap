@@ -5,17 +5,23 @@ exports[`Site admin user table name column test Test for admins 1`] = `
   className="nti-link-to-path"
   to="#"
 >
-  <div>
+  <div
+    className="cell"
+  >
     <img
-      className="avatar avatar-color-6"
+      className="avatar avatar avatar-color-6"
       src="unresolved-user-avatar.png"
     />
-    <div>
+    <div
+      className="userInfo"
+    >
       <span
-        className="username"
+        className="username username"
         rel="author"
       />
-      <div>
+      <div
+        className="email"
+      >
         user@blah.com
       </div>
     </div>
@@ -28,17 +34,23 @@ exports[`Site admin user table name column test Test for learners 1`] = `
   className="nti-link-to-path"
   to="#"
 >
-  <div>
+  <div
+    className="cell"
+  >
     <img
-      className="avatar avatar-color-6"
+      className="avatar avatar avatar-color-6"
       src="unresolved-user-avatar.png"
     />
-    <div>
+    <div
+      className="userInfo"
+    >
       <span
-        className="username"
+        className="username username"
         rel="author"
       />
-      <div>
+      <div
+        className="email"
+      >
         user@blah.com
       </div>
     </div>

@@ -19,7 +19,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test 1`] = 
         className="user-avatar"
       >
         <img
-          className="avatar avatar-color-6"
+          className="avatar avatar avatar-color-6"
           src="unresolved-user-avatar.png"
         />
       </div>
