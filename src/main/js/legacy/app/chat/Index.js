@@ -9,6 +9,7 @@ const ChatActions = require('./Actions');
 require('./Gutter');
 require('./transcript/Window');
 require('./components/Window');
+require('./components/gutter/List');
 require('./components/gutter/CalendarWindow');
 
 const REBUILD_TIMEOUT = 1000 * 60 * 5; // 5 minutes

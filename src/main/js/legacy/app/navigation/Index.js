@@ -6,6 +6,7 @@ const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
 const Identity = require('../account/identity/Index');
 const SearchBar = require('../search/SearchBar');
+const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
@@ -276,6 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
+		this.chatCmp.setTheme(theme.icon);
 		this.notificationCmp?.setThemeScope(themeScope);
 	},
 
@@ -329,10 +331,17 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			containerCmp: this.searchEl,
 		});
 
+		this.chatCmp = GutterTab.create({
+			setMenuOpen: this.setState.bind(this, { active: 'chatTabCmp' }),
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: this.pushRoute.bind(this),
+		});
+
 		this.brandingCmp.render(this.brandingContainerEl);
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
 		this.searchCmp.render(this.searchEl);
+		this.chatCmp.render(this.chatNotifyEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
 

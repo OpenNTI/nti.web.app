@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { NotificationsView } = require('@nti/web-notifications');
 const LibraryActions = require('internal/legacy/app/library/Actions');
+const GutterTab = require('internal/legacy/app/chat/components/gutter/Tab');
 const { TemporaryStorage } = require('internal/legacy/cache/AbstractStorage');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
 
@@ -194,6 +195,10 @@ module.exports = exports = Ext.define(
 			});
 
 			this.gridView = this.down('media-grid-view');
+
+			this.chatCmp = GutterTab.create({
+				renderTo: this.toolbar.getEl(),
+			});
 
 			this.notificationCmp = ReactHarness.create({
 				component: NotificationsView,
