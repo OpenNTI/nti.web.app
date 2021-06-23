@@ -6,7 +6,7 @@ import Ext from '@nti/extjs';
 WebappCalendarWindow.propTypes = {
 	onClose: PropTypes.func.isRequired,
 	target: PropTypes.object.isRequired,
-	visible: PropTypes.bool.isRequired,
+	visible: PropTypes.bool,
 };
 
 export default function WebappCalendarWindow({ onClose, target, visible }) {

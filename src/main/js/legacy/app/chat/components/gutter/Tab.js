@@ -38,8 +38,8 @@ module.exports = exports = Ext.define(
 		},
 
 		afterRender: function () {
-			this.callParent(arguments),
-				(this.ChatStore = ChatStateStore.getInstance());
+			this.callParent(arguments);
+			this.ChatStore = ChatStateStore.getInstance();
 			this.ChatActions = ChatActions.create();
 			this.NavigationStore = NavigationStateStore.getInstance();
 

@@ -9,7 +9,6 @@ const ChatActions = require('./Actions');
 require('./Gutter');
 require('./transcript/Window');
 require('./components/Window');
-require('./components/gutter/List');
 require('./components/gutter/CalendarWindow');
 
 const REBUILD_TIMEOUT = 1000 * 60 * 5; // 5 minutes
@@ -215,7 +214,7 @@ const ChatIndex =
 					this.removeCls('show-gutter');
 
 					// deselect user
-					SocialFeatures.Store.deselectUser();
+					SocialFeatures.Store.getStore().setSelectedEntity(null);
 				} else {
 					this.ChatStore.fireEvent('gutter-active');
 					this.addCls('show-gutter');
