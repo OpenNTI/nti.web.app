@@ -5,10 +5,7 @@ import { UserCount } from './UserCount';
 
 const Users = styled('div')`
 	color: white;
-	margin: 5px;
 	background-color: var(--primary-blue);
-	width: 230px;
-	height: 300px;
 	box-shadow: 0 1px 2px 1px #ccc;
 	display: flex;
 	flex-direction: column;

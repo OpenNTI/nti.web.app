@@ -1,10 +1,9 @@
 import './PopularCourses.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { scoped } from '@nti/lib-locale';
-import { Presentation, Loading } from '@nti/web-commons';
+import { Presentation, Loading, Text } from '@nti/web-commons';
 import { getService } from '@nti/web-client';
 import { getString } from 'internal/legacy/util/Localization';
 
@@ -23,57 +22,68 @@ const t = scoped(
 );
 const PAGE_SIZE = 4;
 
-class Item extends React.Component {
-	static propTypes = {
-		item: PropTypes.object.isRequired,
-	};
-
-	renderRank() {
-		const { item } = this.props;
-
-		return <div className="rank">{item.rank}.</div>;
+const styles = stylesheet`
+	.item {
+		display: flex;
+		position: relative;
+		margin-bottom: 10px;
 	}
 
-	renderImg() {
-		const { item } = this.props;
-
-		return (
-			<Presentation.AssetBackground
-				className="item-image"
-				contentPackage={item}
-				type="landing"
-			/>
-		);
+	.rank {
+		font-size: 12px;
+		color: var(--tertiary-grey);
+		padding-top: 10px;
+		margin-right: 10px;
+		min-width: 20px;
 	}
 
-	renderInfo() {
-		const { item } = this.props;
-
-		return (
-			<div className="info">
-				<div className="name">{item.name}</div>
-				<div className="description">{item.description}</div>
-			</div>
-		);
+	.image {
+		min-width: 40px;
+		width: 40px;
+		height: 40px;
+		margin-right: 15px;
+		background-size: cover;
 	}
 
-	renderValue() {
-		const { item } = this.props;
-
-		return <div className="value">{item.value}</div>;
+	.info {
+		padding-top: 3px;
+		font-weight: 400;
 	}
 
-	render() {
-		return (
-			<div className="item">
-				{this.renderRank()}
-				{this.renderImg()}
-				{this.renderInfo()}
-				{this.renderValue()}
-			</div>
-		);
+	.name {
+		font-size: 14px;
+		max-width: 220px;
 	}
-}
+
+	.description {
+		font-size: 12px;
+		color: var(--tertiary-grey);
+	}
+
+	.value {
+		position: absolute;
+		right: 0;
+		font-size: 20px;
+	}
+`;
+
+const Item = ({ item }) => (
+	<div className={styles.item}>
+		<div className={styles.rank}>{item.rank}.</div>
+		<Presentation.AssetBackground
+			className={styles.image}
+			contentPackage={item}
+			type="landing"
+		/>
+		<div className={styles.info}>
+			<Text limitLines={1} className={styles.name}>
+				{item.name}
+			</Text>
+			<div className={styles.description}>{item.description}</div>
+		</div>
+		<div className={styles.value}>{item.value}</div>
+	</div>
+);
 
 export default class PopularCourses extends React.Component {
 	constructor(props) {
@@ -206,10 +216,6 @@ export default class PopularCourses extends React.Component {
 		);
 	}
 
-	renderItem = (item, index) => {
-		return <Item key={item.name + index} item={item} />;
-	};
-
 	renderItems() {
 		const { items, loading } = this.state;
 
@@ -226,7 +232,9 @@ export default class PopularCourses extends React.Component {
 					<div className="column-header value">{t('value')}</div>
 				</div>
 				<div className="items">
-					{(items || []).map(this.renderItem)}
+					{(items || []).map((item, index) => (
+						<Item key={item.name + index} item={item} />
+					))}
 				</div>
 			</div>
 		);
