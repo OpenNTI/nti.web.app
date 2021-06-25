@@ -31,7 +31,7 @@
 
 				location.replace(
 					'/mobile/' +
-						('?p=' + location.pathname) +
+						('?p=' + encodeURIComponent(location.pathname)) +
 						(legacyHash ? '&q=' + legacyHash : '') +
 						(fragment ? '&f=' + fragment : '')
 				);
