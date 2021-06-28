@@ -6,6 +6,7 @@ import { Table, Loading, Prompt } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
+import { isFlag } from '@nti/web-client';
 
 import Pager from '../../../common/Pager';
 import SearchInfo from '../../../common/SearchInfo';
@@ -13,7 +14,7 @@ import SearchInfo from '../../../common/SearchInfo';
 import { Name, JoinDate, LastSeen, Select } from './columns';
 import ChangeRole from './ChangeRole';
 import EmptyState from './EmptyState';
-import Activation from './controls/Activation';
+import { Activation, ExportUsers } from './controls';
 
 const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 	learners: 'Active Learners',
@@ -66,20 +67,25 @@ class UsersTable extends React.Component {
 		this.setState({ showChangeRoles: false });
 	};
 
-	renderControls() {
+	renderControls(numSelected) {
 		const { noRoleChange } = this.props;
 
 		return (
 			<div className="controls">
-				<Activation />
-				{!noRoleChange && (
-					<div
-						className="button change-role"
-						onClick={this.showChangeRolesDialog}
-					>
-						{t('changeRole')}
-					</div>
+				{numSelected > 0 && (
+					<>
+						<Activation />
+						{!noRoleChange && (
+							<div
+								className="button change-role"
+								onClick={this.showChangeRolesDialog}
+							>
+								{t('changeRole')}
+							</div>
+						)}
+					</>
 				)}
+				{isFlag('export-users') && <ExportUsers /> }
 			</div>
 		);
 	}
@@ -94,7 +100,7 @@ class UsersTable extends React.Component {
 				<div className="title">
 					{numSelected ? t('selected', { numSelected }) : title}
 				</div>
-				{numSelected > 0 && this.renderControls()}
+				{this.renderControls(numSelected)}
 			</div>
 		);
 	}
