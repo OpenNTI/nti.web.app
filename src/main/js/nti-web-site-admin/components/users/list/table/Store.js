@@ -2,6 +2,7 @@ import { Stores, Mixins } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
 import { decorate, URL } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
+import { RedirectTo } from '@nti/web-routing';
 
 import SharedStore from '../SharedStore';
 
@@ -30,6 +31,14 @@ async function bulkActivation(users, rel) {
 		true
 	);
 	SharedStore.markDirty();
+}
+
+async function exportObjects(users, link, params) {
+	const service = await getService();
+
+	const result = await service.getBatch(link, params);
+
+	RedirectTo(result);
 }
 
 class UserListStore extends Stores.BoundStore {
@@ -129,6 +138,22 @@ class UserListStore extends Stores.BoundStore {
 			await bulkActivation(users, 'BatchReactivate');
 
 			this.load();
+		} catch (e) {
+			this.set({
+				error: e.Message || e,
+				loading: false,
+			});
+		}
+	}
+
+	async exportUsers(users) {
+		this.set('loading', true);
+
+		const service = await getService();
+
+		try {
+			const link = this.getLink(service);
+			await exportObjects(users, `${link}?accepts=csv`, this.get('params'));
 		} catch (e) {
 			this.set({
 				error: e.Message || e,
@@ -249,6 +274,7 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm,
 				loading: false,
 				items: siteUsers.Items,
+				params: params,
 			});
 		} catch (e) {
 			this.set({
