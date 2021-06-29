@@ -1,8 +1,7 @@
 import { Stores, Mixins } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
-import { decorate, URL } from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
-import { RedirectTo } from '@nti/web-routing';
 
 import SharedStore from '../SharedStore';
 
@@ -31,14 +30,6 @@ async function bulkActivation(users, rel) {
 		true
 	);
 	SharedStore.markDirty();
-}
-
-async function exportObjects(users, link, params) {
-	const service = await getService();
-
-	const result = await service.getBatch(link, params);
-
-	RedirectTo(result);
 }
 
 class UserListStore extends Stores.BoundStore {
@@ -146,20 +137,16 @@ class UserListStore extends Stores.BoundStore {
 		}
 	}
 
-	async exportUsers(users) {
-		this.set('loading', true);
+	async getUsersDownloadLink(service, link, params) {
+		// Get SiteUsers csv file download link
+		const searchParams = new URLSearchParams(link);
+		searchParams.append('accepts', 'csv');
+		// Use the below line once the server supports selective export.
+		// const users = this.get('selectedUsers')?.length || this.get('items');
 
-		const service = await getService();
+		const result = await service.getBatch(link, params);
 
-		try {
-			const link = this.getLink(service);
-			await exportObjects(users, `${link}?accepts=csv`, this.get('params'));
-		} catch (e) {
-			this.set({
-				error: e.Message || e,
-				loading: false,
-			});
-		}
+		return result.href;
 	}
 
 	loadPage(pageNumber) {
@@ -258,6 +245,8 @@ class UserListStore extends Stores.BoundStore {
 
 			const siteUsers = await service.getBatch(link, params);
 
+			const usersDownloadLink = await this.getUsersDownloadLink(service, link, params);
+
 			if (this.searchTerm !== searchTerm) {
 				// a new search term has been entered since we performed the load
 				return;
@@ -274,7 +263,7 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm,
 				loading: false,
 				items: siteUsers.Items,
-				params: params,
+				usersDownloadLink,
 			});
 		} catch (e) {
 			this.set({
