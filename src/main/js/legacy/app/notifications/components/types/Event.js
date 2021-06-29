@@ -26,15 +26,14 @@ module.exports = exports = Ext.define(
 
 		fillInWording() {
 			const title = this.titleTpl.apply({
-				name: this.record.get('title'),
+				name: Ext.util.Format.htmlEncode(this.record.get('title')),
 			});
 			const wording = this.isCreated()
 				? this.createdWording.replace('{name}', title)
 				: this.updatedWording.replace('{name}', title);
 
 			if (this.wordingEl && this.wordingEl.dom) {
-				this.wordingEl.dom.innerHTML =
-					Ext.util.Format.htmlEncode(wording);
+				this.wordingEl.dom.innerHTML = wording;
 			}
 		},
 	}
