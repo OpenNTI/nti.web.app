@@ -18,7 +18,7 @@ const t = scoped(
 
 const { isResolved } = useResolver;
 
-export function ActiveUsers() {
+export function ActiveUsers({ getStyles }) {
 	const resolver = useResolver(async () => {
 		const service = await getService();
 
@@ -48,6 +48,7 @@ export function ActiveUsers() {
 			label={t('activeSessionsLabel')}
 			error={resolver.error}
 			value={resolver.value}
+			classes={getStyles?.(resolver.value)}
 		/>
 	) : (
 		<div />

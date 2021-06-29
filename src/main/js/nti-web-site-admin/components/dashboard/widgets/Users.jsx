@@ -12,13 +12,22 @@ const Users = styled('div')`
 	box-shadow: 0 1px 2px 1px #ccc;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 
 	& > * {
-		flex: 1 1 auto;
+		flex: 0 0 auto;
 		max-height: calc(50% - 10px);
+		font-weight: 600;
 
-		:global(.value) {
+		:global(.label.label) {
 			padding-bottom: 0;
+			font-weight: inherit;
+		}
+
+		:global(.value.value) {
+			padding-bottom: 0;
+			font-weight: inherit;
+
 			:global(.not-available) {
 				font-size: 16px;
 				line-height: 20px;
@@ -27,11 +36,24 @@ const Users = styled('div')`
 	}
 `;
 
+export const smallStyles = stylesheet`
+	.value.value.value {
+		font-size: 28px;
+		line-height: 38px;
+		font-weight: 600;
+		padding-bottom: 0;
+	}
+`;
+
 export default function ActiveSessions() {
+	const getStyles = React.useCallback(
+		value => (value > 999 ? smallStyles : null),
+		[]
+	);
 	return (
 		<Users>
-			<ActiveUsers />
-			<UserCount />
+			<ActiveUsers getStyles={getStyles} />
+			<UserCount getStyles={getStyles} />
 		</Users>
 	);
 }
