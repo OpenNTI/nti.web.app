@@ -85,7 +85,7 @@ class UsersTable extends React.Component {
 						)}
 					</>
 				)}
-				{isFlag('export-users') && <ExportUsers /> }
+				{isFlag('export-users') && <ExportUsers />}
 			</div>
 		);
 	}
