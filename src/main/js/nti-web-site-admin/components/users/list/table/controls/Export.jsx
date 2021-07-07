@@ -1,8 +1,12 @@
+import React, { Suspense } from 'react';
+
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
-import { Icons, Tooltip } from '@nti/web-commons';
+import { Button, Form, Icons, Tooltip, useService } from '@nti/web-commons';
+import { URL as URLUtils } from '@nti/lib-commons';
 
-const DownloadButton = styled.a`
+
+const DownloadButton = styled(Button)`
 	cursor: pointer;
 	display: inline-flex;
 	flex-direction: column;
@@ -28,22 +32,43 @@ const t = scoped('nti-web-site-admin.components.users.list.table.controls.Export
 	tooltipLabelSingle: 'DOWNLOAD LIST (%(count)s USER)',
 });
 
-function Export ( { items, selectedUsers, usersDownloadLink } ) {
-	const length = selectedUsers?.length || items.length;
+const useSiteUsersExport = (params) => {
+	const service = useService();
+	const link = service.getUserWorkspace().getLink('SiteUsers');
+	return URLUtils.appendQueryParams(link, {...params, format: 'text/csv'});
+};
 
-	const tooltipLabel = length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
+function Export ( { items, selectedUsers, params } ) {
+	const users = selectedUsers.length === 0 ? items : selectedUsers;
+
+	const tooltipLabel = users.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
+
+	const hiddenInputs = users.map((user, index) => <input key={index} type="hidden" name="usernames" value={user.Username} />);
+
+	const link = useSiteUsersExport(params);
 
 	return (
-		<Tooltip label={t(tooltipLabel, { count: length })}>
-			<DownloadButton href={usersDownloadLink}>
-				<DownloadIcon />
-			</DownloadButton>
+		<Tooltip label={t(tooltipLabel, { count: users.length })}>
+			<form method="post" action={link} encrypt="multipart/form-data">
+				{hiddenInputs}
+				<DownloadButton as={Form.SubmitButton} type="submit">
+					<DownloadIcon />
+				</DownloadButton>
+			</form>
 		</Tooltip>
 	);
 }
 
-export default Connectors.Any.connect([
+const ConnectedExport = Connectors.Any.connect([
 	'items',
 	'selectedUsers',
-	'usersDownloadLink',
+	'params'
 ])(Export);
+
+export default function EnrollButtonWrapper(props) {
+	return (
+		<Suspense fallback={<div />}>
+			<ConnectedExport {...props} />
+		</Suspense>
+	);
+}
