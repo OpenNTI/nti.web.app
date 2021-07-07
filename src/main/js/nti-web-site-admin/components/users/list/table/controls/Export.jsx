@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
+import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { Connectors } from '@nti/lib-store';
 import { Button, Form, Icons, Tooltip, useService } from '@nti/web-commons';
 import { URL as URLUtils } from '@nti/lib-commons';
 
@@ -34,14 +34,25 @@ const t = scoped(
 	}
 );
 
-const useSiteUsersExport = params => {
+const useSiteUsersExport = (params, rel) => {
 	const service = useService();
-	const link = service.getUserWorkspace().getLink('SiteUsers');
-	return URLUtils.appendQueryParams(link, { ...params, format: 'text/csv' });
+	const link = service.getUserWorkspace().getLink(rel);
+	return URLUtils.appendQueryParams(link, {
+		...params,
+		format: 'text/csv',
+		batchSize: undefined,
+		batchStart: undefined,
+	});
 };
 
-function Export({ items, selectedUsers, params }) {
-	const users = selectedUsers.length === 0 ? items : selectedUsers;
+Export.propType = {
+	items: PropTypes.array,
+	selectedUsers: PropTypes.array,
+	params: PropTypes.object,
+};
+
+function Export({ items, selectedUsers, params, rel }) {
+	const users = (selectedUsers ?? []).length === 0 ? items : selectedUsers;
 
 	const tooltipLabel =
 		users.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
@@ -55,11 +66,11 @@ function Export({ items, selectedUsers, params }) {
 		/>
 	));
 
-	const link = useSiteUsersExport(params);
+	const link = useSiteUsersExport(params, rel);
 
 	return (
 		<Tooltip label={t(tooltipLabel, { count: users.length })}>
-			<form method="post" action={link} encrypt="multipart/form-data">
+			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
 				<DownloadButton as={Form.SubmitButton} type="submit">
 					<DownloadIcon />
@@ -69,16 +80,10 @@ function Export({ items, selectedUsers, params }) {
 	);
 }
 
-const ConnectedExport = Connectors.Any.connect([
-	'items',
-	'selectedUsers',
-	'params',
-])(Export);
-
 export default function EnrollButtonWrapper(props) {
 	return (
 		<Suspense fallback={<div />}>
-			<ConnectedExport {...props} />
+			<Export {...props} />
 		</Suspense>
 	);
 }

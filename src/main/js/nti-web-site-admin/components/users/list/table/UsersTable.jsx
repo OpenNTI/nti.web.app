@@ -14,7 +14,7 @@ import SearchInfo from '../../../common/SearchInfo';
 import { Name, JoinDate, LastSeen, Select } from './columns';
 import ChangeRole from './ChangeRole';
 import EmptyState from './EmptyState';
-import { Activation, ExportUsers } from './controls';
+import { Activation, Export } from './controls';
 
 const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 	learners: 'Active Learners',
@@ -40,6 +40,7 @@ class UsersTable extends React.Component {
 		setSort: PropTypes.func,
 		store: PropTypes.object,
 		noRoleChange: PropTypes.bool,
+		params: PropTypes.object,
 	};
 
 	items = [];
@@ -68,7 +69,7 @@ class UsersTable extends React.Component {
 	};
 
 	renderControls(numSelected) {
-		const { noRoleChange } = this.props;
+		const { noRoleChange, items, selectedUsers, params } = this.props;
 
 		return (
 			<div className="controls">
@@ -85,7 +86,14 @@ class UsersTable extends React.Component {
 						)}
 					</>
 				)}
-				{isFlag('export-users') && <ExportUsers />}
+				{isFlag('export-users') && (
+					<Export
+						items={items}
+						selectedUsers={selectedUsers}
+						params={params}
+						rel="SiteUsers"
+					/>
+				)}
 			</div>
 		);
 	}
@@ -170,5 +178,6 @@ export default decorate(UsersTable, [
 		numPages: 'numPages',
 		currentSearchTerm: 'currentSearchTerm',
 		setSort: 'setSort',
+		params: 'params',
 	}),
 ]);

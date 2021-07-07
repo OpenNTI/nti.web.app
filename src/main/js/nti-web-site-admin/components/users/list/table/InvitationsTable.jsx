@@ -5,6 +5,7 @@ import { Button, Table, Loading, Prompt } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { searchable, contextual } from '@nti/web-search';
+import { isFlag } from '@nti/web-client';
 
 import InvitePeople from '../InvitePeople';
 import Pager from '../../../common/Pager';
@@ -14,6 +15,7 @@ import { Select, InviteDate, InviteName, Rescind, Resend } from './columns';
 import Store from './InvitationsStore';
 import EmptyState from './EmptyState';
 import ResendButton from './ResendButton';
+import { Export } from './controls';
 
 const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 	learners: 'Invitations',
@@ -37,6 +39,7 @@ class InvitationsTable extends React.Component {
 		selectedUsers: PropTypes.array,
 		currentSearchTerm: PropTypes.string,
 		showInviteDialog: PropTypes.bool,
+		params: PropTypes.object,
 	};
 
 	items = [];
@@ -81,13 +84,12 @@ class InvitationsTable extends React.Component {
 
 	renderControls() {
 		const { canSendInvitations } = this.state;
-		const { store } = this.props;
 
 		if (!canSendInvitations) {
 			return null;
 		}
 
-		const { selectedUsers } = this.props;
+		const { selectedUsers, store, items, params } = this.props;
 		const numSelected = (selectedUsers && selectedUsers.length) || 0;
 
 		return (
@@ -112,6 +114,14 @@ class InvitationsTable extends React.Component {
 						<i className="icon-addfriend" />
 						{t('invitePeople')}
 					</div>
+				)}
+				{isFlag('export-users') && (
+					<Export
+						items={items}
+						selectedUsers={selectedUsers}
+						params={params}
+						rel="SiteInvitations"
+					/>
 				)}
 			</div>
 		);
@@ -201,5 +211,6 @@ export default decorate(InvitationsTable, [
 		numPages: 'numPages',
 		currentSearchTerm: 'currentSearchTerm',
 		showInviteDialog: 'showInviteDialog',
+		params: 'params',
 	}),
 ]);

@@ -268,6 +268,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 				items: result.Items,
 				total: result.Total,
 				currentSearchTerm: this.searchTerm,
+				params,
 			});
 		} catch (e) {
 			this.set({
