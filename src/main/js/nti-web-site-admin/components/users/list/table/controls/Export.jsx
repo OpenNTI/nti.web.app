@@ -5,7 +5,6 @@ import { Connectors } from '@nti/lib-store';
 import { Button, Form, Icons, Tooltip, useService } from '@nti/web-commons';
 import { URL as URLUtils } from '@nti/lib-commons';
 
-
 const DownloadButton = styled(Button)`
 	cursor: pointer;
 	display: inline-flex;
@@ -27,23 +26,34 @@ const DownloadIcon = styled(Icons.Download)`
 	height: 11px;
 `;
 
-const t = scoped('nti-web-site-admin.components.users.list.table.controls.Export', {
-	tooltipLabel: 'DOWNLOAD LIST (%(count)s USERS)',
-	tooltipLabelSingle: 'DOWNLOAD LIST (%(count)s USER)',
-});
+const t = scoped(
+	'nti-web-site-admin.components.users.list.table.controls.Export',
+	{
+		tooltipLabel: 'DOWNLOAD LIST (%(count)s USERS)',
+		tooltipLabelSingle: 'DOWNLOAD LIST (%(count)s USER)',
+	}
+);
 
-const useSiteUsersExport = (params) => {
+const useSiteUsersExport = params => {
 	const service = useService();
 	const link = service.getUserWorkspace().getLink('SiteUsers');
-	return URLUtils.appendQueryParams(link, {...params, format: 'text/csv'});
+	return URLUtils.appendQueryParams(link, { ...params, format: 'text/csv' });
 };
 
-function Export ( { items, selectedUsers, params } ) {
+function Export({ items, selectedUsers, params }) {
 	const users = selectedUsers.length === 0 ? items : selectedUsers;
 
-	const tooltipLabel = users.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
+	const tooltipLabel =
+		users.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
 
-	const hiddenInputs = users.map((user, index) => <input key={index} type="hidden" name="usernames" value={user.Username} />);
+	const hiddenInputs = users.map((user, index) => (
+		<input
+			key={index}
+			type="hidden"
+			name="usernames"
+			value={user.Username}
+		/>
+	));
 
 	const link = useSiteUsersExport(params);
 
@@ -62,7 +72,7 @@ function Export ( { items, selectedUsers, params } ) {
 const ConnectedExport = Connectors.Any.connect([
 	'items',
 	'selectedUsers',
-	'params'
+	'params',
 ])(Export);
 
 export default function EnrollButtonWrapper(props) {
