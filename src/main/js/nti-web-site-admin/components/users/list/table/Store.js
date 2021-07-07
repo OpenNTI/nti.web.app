@@ -137,18 +137,6 @@ class UserListStore extends Stores.BoundStore {
 		}
 	}
 
-	async getUsersDownloadLink(service, link, params) {
-		// Get SiteUsers csv file download link
-		const searchParams = new URLSearchParams(link);
-		searchParams.append('accepts', 'csv');
-		// Use the below line once the server supports selective export.
-		// const users = this.get('selectedUsers')?.length || this.get('items');
-
-		const result = await service.getBatch(link, params);
-
-		return result.href;
-	}
-
 	loadPage(pageNumber) {
 		this.set('pageNumber', pageNumber);
 
@@ -245,8 +233,6 @@ class UserListStore extends Stores.BoundStore {
 
 			const siteUsers = await service.getBatch(link, params);
 
-			const usersDownloadLink = await this.getUsersDownloadLink(service, link, params);
-
 			if (this.searchTerm !== searchTerm) {
 				// a new search term has been entered since we performed the load
 				return;
@@ -263,7 +249,7 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm,
 				loading: false,
 				items: siteUsers.Items,
-				usersDownloadLink,
+				params,
 			});
 		} catch (e) {
 			this.set({
