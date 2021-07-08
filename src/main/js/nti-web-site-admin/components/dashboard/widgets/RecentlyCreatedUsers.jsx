@@ -1,10 +1,11 @@
 import './RecentlyCreatedUsers.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { DateTime, Loading, Avatar } from '@nti/web-commons';
+import { DateTime, Loading } from '@nti/web-commons';
 import { getService } from '@nti/web-client';
+
+import { EntityList } from './ItemList';
 
 const LABELS = {
 	title: 'Recently Created Users',
@@ -18,45 +19,6 @@ const t = scoped(
 	LABELS
 );
 const PAGE_SIZE = 4;
-
-class Item extends React.Component {
-	static propTypes = {
-		item: PropTypes.object.isRequired,
-	};
-
-	renderImg() {
-		const { item } = this.props;
-
-		return <Avatar className="item-image" entity={item.entity} />;
-	}
-
-	renderInfo() {
-		const { item } = this.props;
-
-		return (
-			<div className="info">
-				<div className="name">{item.name}</div>
-				<div className="description">{item.description}</div>
-			</div>
-		);
-	}
-
-	renderValue() {
-		const { item } = this.props;
-
-		return <div className="value">{item.value}</div>;
-	}
-
-	render() {
-		return (
-			<div className="item">
-				{this.renderImg()}
-				{this.renderInfo()}
-				{this.renderValue()}
-			</div>
-		);
-	}
-}
 
 export default class RecentlyCreatedUsers extends React.Component {
 	constructor(props) {
@@ -130,10 +92,6 @@ export default class RecentlyCreatedUsers extends React.Component {
 		);
 	}
 
-	renderItem = (item, index) => {
-		return <Item key={item.name + index} item={item} />;
-	};
-
 	renderItems() {
 		const { items, loading } = this.state;
 
@@ -143,13 +101,7 @@ export default class RecentlyCreatedUsers extends React.Component {
 			return <div className="no-items">{t('noItems')}</div>;
 		}
 
-		return (
-			<div className="items-container">
-				<div className="items">
-					{(items || []).map(this.renderItem)}
-				</div>
-			</div>
-		);
+		return <EntityList items={items} />;
 	}
 
 	render() {

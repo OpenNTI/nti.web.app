@@ -7,6 +7,8 @@ import { Presentation, Loading, Text } from '@nti/web-commons';
 import { getService } from '@nti/web-client';
 import { getString } from 'internal/legacy/util/Localization';
 
+import { styles as listStyles } from './ItemList';
+
 const LABELS = {
 	title: getString(
 		'NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses'
@@ -23,41 +25,12 @@ const t = scoped(
 const PAGE_SIZE = 4;
 
 const styles = stylesheet`
-	.item {
-		display: flex;
-		position: relative;
-		margin-bottom: 10px;
-	}
-
 	.rank {
 		font-size: 12px;
 		color: var(--tertiary-grey);
 		padding-top: 10px;
 		margin-right: 10px;
 		min-width: 20px;
-	}
-
-	.image {
-		min-width: 40px;
-		width: 40px;
-		height: 40px;
-		margin-right: 15px;
-		background-size: cover;
-	}
-
-	.info {
-		padding-top: 3px;
-		font-weight: 400;
-	}
-
-	.name {
-		font-size: 14px;
-		max-width: 220px;
-	}
-
-	.description {
-		font-size: 12px;
-		color: var(--tertiary-grey);
 	}
 
 	.value {
@@ -68,18 +41,18 @@ const styles = stylesheet`
 `;
 
 const Item = ({ item }) => (
-	<div className={styles.item}>
+	<div className={listStyles.item}>
 		<div className={styles.rank}>{item.rank}.</div>
 		<Presentation.AssetBackground
-			className={styles.image}
+			className={listStyles.image}
 			contentPackage={item}
 			type="landing"
 		/>
-		<div className={styles.info}>
-			<Text limitLines={1} className={styles.name}>
+		<div className={listStyles.info}>
+			<Text limitLines={1} className={listStyles.name}>
 				{item.name}
 			</Text>
-			<div className={styles.description}>{item.description}</div>
+			<div className={listStyles.description}>{item.description}</div>
 		</div>
 		<div className={styles.value}>{item.value}</div>
 	</div>

@@ -23,7 +23,9 @@ const WidgetsContainer = styled(Layouts.grid(28, 15.30434783))`
 		'g g g g g g g g g g g g g g g g g g g g g g g g';
 
 	> * {
+		width: 100%;
 		max-width: 100%;
+		overflow: hidden;
 	}
 
 	> :nth-child(1) {
