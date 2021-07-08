@@ -45,7 +45,7 @@ const useSiteUsersExport = (params, rel) => {
 	});
 };
 
-Export.propType = {
+Export.propTypes = {
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
