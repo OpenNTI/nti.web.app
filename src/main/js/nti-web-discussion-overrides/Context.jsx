@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -15,6 +15,7 @@ WebappDiscussion.propTypes = {
 	item: PropTypes.object,
 };
 export default function WebappDiscussion({ item }) {
+	const [hasContent, setHasContent] = useState(); // used to hide the container element unless/until there's something to show
 	const contextRef = React.useRef(null);
 
 	const onMount = async renderTo => {
@@ -32,6 +33,7 @@ export default function WebappDiscussion({ item }) {
 		if (cmp) {
 			cmp.render(renderTo);
 			contextRef.current = cmp;
+			setHasContent(true);
 		}
 	};
 
@@ -40,7 +42,11 @@ export default function WebappDiscussion({ item }) {
 	};
 
 	return (
-		<div className={cx('note-window', 'discussion-context-override')}>
+		<div
+			className={cx('note-window', 'discussion-context-override', {
+				'no-content': !hasContent,
+			})}
+		>
 			<div className="note main-view">
 				<div className="context">
 					<Layouts.Uncontrolled
