@@ -13,6 +13,9 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
       >
         Administrators
       </div>
+      <div
+        className="controls"
+      />
     </div>
     <table
       className="nti-generic-table"
@@ -459,6 +462,9 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
       >
         Administrators
       </div>
+      <div
+        className="controls"
+      />
     </div>
     <table
       className="nti-generic-table"
