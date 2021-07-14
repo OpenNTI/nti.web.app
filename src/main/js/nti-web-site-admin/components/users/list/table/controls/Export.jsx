@@ -5,6 +5,10 @@ import { scoped } from '@nti/lib-locale';
 import { Button, Form, Icons, Tooltip, useService } from '@nti/web-commons';
 import { URL as URLUtils } from '@nti/lib-commons';
 
+const UppercaseTooltip = styled(Tooltip)`
+	text-transform: uppercase;
+`;
+
 const DownloadButton = styled(Button)`
 	cursor: pointer;
 	display: inline-flex;
@@ -29,17 +33,20 @@ const DownloadIcon = styled(Icons.Download)`
 const t = scoped(
 	'nti-web-site-admin.components.users.list.table.controls.Export',
 	{
-		tooltipLabel: 'DOWNLOAD LIST (%(count)s USERS)',
-		tooltipLabelSingle: 'DOWNLOAD LIST (%(count)s USER)',
+		tooltipLabel: {
+			zero: 'Download list',
+			one: 'Download list (%(count)s user)',
+			other: 'Download list (%(count)s users)',
+		},
 	}
 );
 
 const useSiteUsersExport = (params, rel) => {
 	const service = useService();
 	const link =
-		rel === 'SiteUsers'
-			? service.getUserWorkspace().getLink(rel)
-			: service.getCollection(rel, rel).getLink(rel);
+		rel === 'Invitations'
+			? service.getCollection(rel, rel).getLink(rel)
+			: service.getUserWorkspace().getLink(rel);
 
 	return URLUtils.appendQueryParams(link, {
 		...params,
@@ -57,11 +64,7 @@ Export.propTypes = {
 };
 
 function Export({ items: itemsProp, selectedUsers, params, rel }) {
-	const items =
-		(selectedUsers ?? []).length === 0 ? itemsProp : selectedUsers;
-
-	const tooltipLabel =
-		items.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
+	const items = !selectedUsers?.length ? itemsProp : selectedUsers;
 
 	const isSiteUsers = rel === 'SiteUsers';
 
@@ -77,14 +80,14 @@ function Export({ items: itemsProp, selectedUsers, params, rel }) {
 	const link = useSiteUsersExport(params, rel);
 
 	return (
-		<Tooltip label={t(tooltipLabel, { count: items.length })}>
+		<UppercaseTooltip label={t('tooltipLabel', { count: items.length })}>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
 				<DownloadButton as={Form.SubmitButton} type="submit">
 					<DownloadIcon />
 				</DownloadButton>
 			</form>
-		</Tooltip>
+		</UppercaseTooltip>
 	);
 }
 
