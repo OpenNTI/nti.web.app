@@ -1,6 +1,6 @@
 import { Stores, Mixins } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
-import { decorate, URL } from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 
 import SharedStore from '../SharedStore';
@@ -249,6 +249,7 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm,
 				loading: false,
 				items: siteUsers.Items,
+				params,
 			});
 		} catch (e) {
 			this.set({
