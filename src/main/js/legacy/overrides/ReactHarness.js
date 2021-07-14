@@ -4,13 +4,16 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 
 const Ext = require('@nti/extjs');
-const { getService, reportError } = require('@nti/web-client');
+const { getService, reportError, isFlag } = require('@nti/web-client');
 const { Error: ErrorCmp, Theme, Utils } = require('@nti/web-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { getHistory, LinkTo } = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
 const AccountActions = require('internal/legacy/app/account/Actions');
-const SettingsWindow = require('internal/legacy/app/account/settings/Window');
+const {
+	User: { AccountManagement: SettingsWindow },
+} = require('@nti/web-profiles');
+const ExtSettingsWindow = require('internal/legacy/app/account/settings/Window');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
 const ParsingUtils = require('internal/legacy/util/Parsing');
 const User = require('internal/legacy/model/User');
@@ -47,10 +50,17 @@ function lazyReject(reason) {
 }
 
 function showAccountSettings() {
-	var win = SettingsWindow.create();
+	if (isFlag('export-users')) {
+		return Ext.widget('react', {
+			renderTo: document.body,
+			component: SettingsWindow,
+		});
+	} else {
+		var win = ExtSettingsWindow.create();
 
-	win.show();
-	win.center();
+		win.show();
+		win.center();
+	}
 }
 
 function getRouteFor(obj, context) {
