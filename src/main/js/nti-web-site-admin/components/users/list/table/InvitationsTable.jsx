@@ -120,7 +120,7 @@ class InvitationsTable extends React.Component {
 						items={items}
 						selectedUsers={selectedUsers}
 						params={params}
-						rel="SiteInvitations"
+						rel="Invitations"
 					/>
 				)}
 			</div>

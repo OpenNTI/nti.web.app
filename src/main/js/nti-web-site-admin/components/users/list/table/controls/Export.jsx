@@ -36,7 +36,11 @@ const t = scoped(
 
 const useSiteUsersExport = (params, rel) => {
 	const service = useService();
-	const link = service.getUserWorkspace().getLink(rel);
+	const link =
+		rel === 'SiteUsers'
+			? service.getUserWorkspace().getLink(rel)
+			: service.getCollection(rel, rel).getLink(rel);
+
 	return URLUtils.appendQueryParams(link, {
 		...params,
 		format: 'text/csv',
@@ -49,27 +53,31 @@ Export.propTypes = {
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
+	rel: PropTypes.string,
 };
 
-function Export({ items, selectedUsers, params, rel }) {
-	const users = (selectedUsers ?? []).length === 0 ? items : selectedUsers;
+function Export({ items: itemsProp, selectedUsers, params, rel }) {
+	const items =
+		(selectedUsers ?? []).length === 0 ? itemsProp : selectedUsers;
 
 	const tooltipLabel =
-		users.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
+		items.length === 1 ? 'tooltipLabelSingle' : 'tooltipLabel';
 
-	const hiddenInputs = users.map((user, index) => (
+	const isSiteUsers = rel === 'SiteUsers';
+
+	const hiddenInputs = items.map((item, index) => (
 		<input
 			key={index}
 			type="hidden"
-			name="usernames"
-			value={user.Username}
+			name={isSiteUsers ? 'usernames' : 'codes'}
+			value={isSiteUsers ? item.Username : item.code}
 		/>
 	));
 
 	const link = useSiteUsersExport(params, rel);
 
 	return (
-		<Tooltip label={t(tooltipLabel, { count: users.length })}>
+		<Tooltip label={t(tooltipLabel, { count: items.length })}>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
 				<DownloadButton as={Form.SubmitButton} type="submit">
