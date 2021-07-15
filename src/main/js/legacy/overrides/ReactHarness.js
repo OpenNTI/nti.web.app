@@ -10,9 +10,7 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 const { getHistory, LinkTo } = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
 const AccountActions = require('internal/legacy/app/account/Actions');
-const {
-	User: { AccountManagement: SettingsWindow },
-} = require('@nti/web-profiles');
+const { User: UserProfiles } = require('@nti/web-profiles');
 const ExtSettingsWindow = require('internal/legacy/app/account/settings/Window');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
 const ParsingUtils = require('internal/legacy/util/Parsing');
@@ -53,7 +51,7 @@ function showAccountSettings() {
 	if (isFlag('export-users')) {
 		return Ext.widget('react', {
 			renderTo: document.body,
-			component: SettingsWindow,
+			component: UserProfiles.AccountManagement,
 		});
 	} else {
 		var win = ExtSettingsWindow.create();
