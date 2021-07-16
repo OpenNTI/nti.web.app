@@ -47,6 +47,7 @@ module.exports = exports = Ext.define(
 					onCancel: () => {
 						this.WindowActions.closeWindow();
 					},
+					dialog: false,
 					editable: obj.hasLink('edit'),
 				});
 			}
