@@ -43,7 +43,6 @@ module.exports = exports = Ext.define(
 					xtype: 'react',
 					component: EventComponent.View,
 					event: obj,
-					getAvailableCalendars: () => [],
 					onCancel: () => {
 						this.WindowActions.closeWindow();
 					},
