@@ -7,6 +7,12 @@ const WindowsActions = require('internal/legacy/app/windows/Actions');
 
 require('internal/legacy/overrides/ReactHarness');
 
+const styles = stylesheet`
+	.legacy-window {
+		max-height: calc(90vh - var(--navigation-top, 0));
+	}
+`;
+
 module.exports = exports = Ext.define(
 	'NextThought.app.chat.event.Window',
 	{
@@ -48,6 +54,7 @@ module.exports = exports = Ext.define(
 					},
 					dialog: false,
 					editable: obj.hasLink('edit'),
+					className: styles.legacyWindow,
 				});
 			}
 		},
