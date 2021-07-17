@@ -9,6 +9,7 @@ exports[`Site admin user table change role test Test admin list 1`] = `
   >
     <div
       className="panel-title-bar"
+      panel-title-bar="true"
     >
       <h1>
         Change Roles (2 People)
@@ -134,6 +135,7 @@ exports[`Site admin user table change role test Test learner list 1`] = `
   >
     <div
       className="panel-title-bar"
+      panel-title-bar="true"
     >
       <h1>
         Change Roles (2 People)
