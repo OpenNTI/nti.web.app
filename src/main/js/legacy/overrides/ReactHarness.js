@@ -95,7 +95,10 @@ function getRouteFor(obj, context) {
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
 	}
 
-	if (obj instanceof Models.courses.Grade) {
+	if (
+		obj instanceof Models.courses.Grade ||
+		obj instanceof Models.calendar.BaseEvent
+	) {
 		return `/app/id/${encodeForURI(obj.NTIID)}`;
 	}
 

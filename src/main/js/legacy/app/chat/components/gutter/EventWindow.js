@@ -47,6 +47,8 @@ module.exports = exports = Ext.define(
 			} else {
 				this.add({
 					xtype: 'react',
+					addRouteTo: true,
+					addHistory: true,
 					component: EventComponent.View,
 					event: obj,
 					onCancel: () => {
