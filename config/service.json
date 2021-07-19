@@ -9,7 +9,6 @@
 		],
 
 		"flags": {
-			"new-chat": true,
 			"analytic-reports": true,
 			"badges": true,
 			"bulk-resolve-users": true,
