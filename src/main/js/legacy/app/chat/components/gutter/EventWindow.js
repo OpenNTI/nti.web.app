@@ -8,7 +8,8 @@ const WindowsActions = require('internal/legacy/app/windows/Actions');
 require('internal/legacy/overrides/ReactHarness');
 
 const styles = stylesheet`
-	.legacy-window {
+	/* dialogs put the given class name on the mask and the content, we want to target the content*/
+	.legacy-window .legacy-window {
 		max-height: calc(90vh - var(--navigation-top, 0));
 	}
 `;
@@ -54,7 +55,8 @@ module.exports = exports = Ext.define(
 					onCancel: () => {
 						this.WindowActions.closeWindow();
 					},
-					dialog: false,
+					// This is letting the Event view launch as a dialog, even though this is a window already, because the React code can manage stacking better
+					dialog: true,
 					editable: obj.hasLink('edit'),
 					className: styles.legacyWindow,
 				});
