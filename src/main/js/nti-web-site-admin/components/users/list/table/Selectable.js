@@ -14,7 +14,15 @@ export default {
 	},
 
 	deselectAll() {
-		this.set('selectedUsers', []);
+		const items = this.get('items');
+		const currentSet = new Set(items.map(s => s.getID()));
+
+		const selected = this.get('selectedUsers') ?? [];
+
+		this.set(
+			'selectedUsers',
+			selected.filter(s => !currentSet.has(s.getID()))
+		);
 
 		this.emitChange('selectedUsers');
 	},
