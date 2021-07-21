@@ -84,7 +84,11 @@ function Export({ items: itemsProp, selectedUsers, params, totalCount, rel }) {
 	const link = useSiteUsersExport(params, rel);
 
 	return (
-		<UppercaseTooltip label={t('tooltipLabel', { count: totalCount ?? 0 })}>
+		<UppercaseTooltip
+			label={t('tooltipLabel', {
+				count: selectedUsers?.length || totalCount || 0,
+			})}
+		>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
 				<DownloadButton as={Form.SubmitButton} type="submit">
