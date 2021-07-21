@@ -1,5 +1,3 @@
-const queryString = require('querystring');
-
 const Ext = require('@nti/extjs');
 const { Scorm } = require('@nti/web-course');
 const { getService } = require('@nti/web-client');
@@ -73,22 +71,12 @@ module.exports = exports = Ext.define(
 		},
 
 		showScormContent(route) {
-			const queryParams = queryString.decode(
-				(global.location.search || '').replace(/^\?/, '')
-			);
-			const error = queryParams && queryParams.error;
-
-			if (queryParams) {
-				delete queryParams.error;
-				delete queryParams.regid;
-			}
-
 			const { history, location } = global;
 			const updatedRoute = new URL(location.href);
-			updatedRoute.search =
-				Object.keys(queryParams).length === 0
-					? ''
-					: queryString.stringify(queryParams);
+			const error = updatedRoute.searchParams.get('error');
+			updatedRoute.searchParams.delete('error');
+			updatedRoute.searchParams.delete('regid');
+
 			history.replaceState(history.state, '', updatedRoute.toString());
 
 			if (this.scormContent) {
