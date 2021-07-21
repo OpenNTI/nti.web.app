@@ -70,9 +70,12 @@ module.exports = exports = Ext.define(
 			//Tof using the "Magic" ExtJS class namespace object...
 			//eslint-disable-next-line no-undef
 			const typesPath = NextThought.app.context.types;
-			let handler = Object.keys(typesPath).find(k =>
-				typesPath[k]?.canHandle?.(obj)
-			);
+			let handler =
+				typesPath[
+					Object.keys(typesPath).find(k =>
+						typesPath[k]?.canHandle?.(obj)
+					)
+				];
 
 			if (this.contextCmp && this.contextCmp.destroy) {
 				this.contextCmp.destroy();
