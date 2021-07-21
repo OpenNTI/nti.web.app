@@ -41,6 +41,7 @@ class UsersTable extends React.Component {
 		store: PropTypes.object,
 		noRoleChange: PropTypes.bool,
 		params: PropTypes.object,
+		totalCount: PropTypes.number,
 	};
 
 	items = [];
@@ -69,7 +70,8 @@ class UsersTable extends React.Component {
 	};
 
 	renderControls(numSelected) {
-		const { noRoleChange, items, selectedUsers, params } = this.props;
+		const { noRoleChange, items, selectedUsers, params, totalCount } =
+			this.props;
 
 		return (
 			<div className="controls">
@@ -86,14 +88,15 @@ class UsersTable extends React.Component {
 						)}
 					</>
 				)}
-				{isFlag('export-users') && (
+				{
 					<Export
 						items={items}
 						selectedUsers={selectedUsers}
 						params={params}
+						totalCount={totalCount}
 						rel="SiteUsers"
 					/>
-				)}
+				}
 			</div>
 		);
 	}
@@ -179,5 +182,6 @@ export default decorate(UsersTable, [
 		currentSearchTerm: 'currentSearchTerm',
 		setSort: 'setSort',
 		params: 'params',
+		totalCount: 'totalCount',
 	}),
 ]);

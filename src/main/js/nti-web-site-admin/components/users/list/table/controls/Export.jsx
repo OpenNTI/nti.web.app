@@ -48,11 +48,14 @@ const useSiteUsersExport = (params, rel) => {
 			? service.getCollection(rel, rel).getLink(rel)
 			: service.getUserWorkspace().getLink(rel);
 
+	const clone = { ...params };
+
+	delete clone.batchStart;
+	delete clone.batchSize;
+
 	return URLUtils.appendQueryParams(link, {
-		...params,
+		...clone,
 		format: 'text/csv',
-		batchSize: undefined,
-		batchStart: undefined,
 	});
 };
 
@@ -60,10 +63,11 @@ Export.propTypes = {
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
+	totalCount: PropTypes.number,
 	rel: PropTypes.string,
 };
 
-function Export({ items: itemsProp, selectedUsers, params, rel }) {
+function Export({ items: itemsProp, selectedUsers, params, totalCount, rel }) {
 	const items = !selectedUsers?.length ? itemsProp : selectedUsers;
 
 	const isSiteUsers = rel === 'SiteUsers';
@@ -80,7 +84,7 @@ function Export({ items: itemsProp, selectedUsers, params, rel }) {
 	const link = useSiteUsersExport(params, rel);
 
 	return (
-		<UppercaseTooltip label={t('tooltipLabel', { count: items.length })}>
+		<UppercaseTooltip label={t('tooltipLabel', { count: totalCount ?? 0 })}>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
 				<DownloadButton as={Form.SubmitButton} type="submit">

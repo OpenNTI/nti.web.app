@@ -249,6 +249,7 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm,
 				loading: false,
 				items: siteUsers.Items,
+				totalCount: siteUsers.Total,
 				params,
 			});
 		} catch (e) {
