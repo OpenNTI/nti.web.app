@@ -7,7 +7,7 @@ import SharedStore from '../SharedStore';
 
 import Selectable from './Selectable';
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 20;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
 const canDeactivateUsers = service =>
