@@ -1,6 +1,14 @@
 export default {
 	selectAll() {
-		this.set('selectedUsers', this.get('items'));
+		const selected = this.get('selectedUsers') ?? [];
+		const selectedSet = new Set(selected.map(s => s.getID()));
+
+		this.set('selectedUsers', [
+			...selected,
+			...(this.get('items') ?? []).filter(
+				i => !selectedSet.has(i.getID())
+			),
+		]);
 
 		this.emitChange('selectedUsers');
 	},
@@ -12,10 +20,16 @@ export default {
 	},
 
 	isAllSelected() {
-		const selected = this.get('selectedUsers');
+		const selected = this.get('selectedUsers') ?? [];
 		const items = this.get('items');
 
-		return !!(selected && selected.length === items.length);
+		const selectedSet = new Set(selected.map(s => s.getID()));
+
+		return (
+			selected.length > 0 &&
+			items.length > 0 &&
+			items.every(i => selectedSet.has(i.getID()))
+		);
 	},
 
 	onSelect(user) {

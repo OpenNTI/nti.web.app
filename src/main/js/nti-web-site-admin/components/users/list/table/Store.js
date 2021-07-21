@@ -7,7 +7,7 @@ import SharedStore from '../SharedStore';
 
 import Selectable from './Selectable';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 2;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
 const canDeactivateUsers = service =>
@@ -241,7 +241,7 @@ class UserListStore extends Stores.BoundStore {
 			this.set({
 				canDeactivateUsers: canDeactivateUsers(service),
 				canActivateUsers: canActivateUsers(service),
-				selectedUsers: [],
+				// selectedUsers: [],
 				sortOn,
 				sortDirection,
 				numPages: Math.ceil(siteUsers.Total / PAGE_SIZE),
