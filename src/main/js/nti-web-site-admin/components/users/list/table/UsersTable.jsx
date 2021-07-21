@@ -88,7 +88,7 @@ class UsersTable extends React.Component {
 						)}
 					</>
 				)}
-				{
+				{isFlag('export-users') && (
 					<Export
 						items={items}
 						selectedUsers={selectedUsers}
@@ -96,7 +96,7 @@ class UsersTable extends React.Component {
 						totalCount={totalCount}
 						rel="SiteUsers"
 					/>
-				}
+				)}
 			</div>
 		);
 	}
