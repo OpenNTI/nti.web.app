@@ -859,7 +859,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					  )}`;
 		}
 
-		return path && { path, isFull: true };
+		return path && { path, isFull: true, noWindow: true };
 	},
 
 	getRouteForPageInfoPath: function (pageInfo /*, path*/) {
