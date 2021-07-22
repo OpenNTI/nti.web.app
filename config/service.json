@@ -5,6 +5,10 @@
 				"public": true,
 				"package": "@nti/web-login",
 				"basepath": "/login/"
+			},
+			{
+				"package": "@nti/web-mobile",
+				"basepath": "/mobile/"
 			}
 		],
 
