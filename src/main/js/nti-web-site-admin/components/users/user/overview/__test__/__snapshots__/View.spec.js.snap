@@ -45,7 +45,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           className="date ntiText"
           dateTime="2017-10-30T00:00:00Z"
         >
-          Oct. 30, 2017 12:00 AM
+          Oct 30, 2017 12:00 AM
         </time>
       </div>
     </div>
@@ -942,7 +942,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           <div
             className="time"
           >
-            Oct. 30, 2017 12:00 AM
+            Oct 30, 2017 12:00 AM
           </div>
           <div
             className="day"
@@ -956,7 +956,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           <div
             className="time"
           >
-            Oct. 30, 2017 12:01 AM
+            Oct 30, 2017 12:01 AM
           </div>
           <div
             className="day"
@@ -970,7 +970,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           <div
             className="time"
           >
-            Oct. 30, 2017 12:02 AM
+            Oct 30, 2017 12:02 AM
           </div>
           <div
             className="day"
@@ -984,7 +984,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           <div
             className="time"
           >
-            Oct. 30, 2017 12:03 AM
+            Oct 30, 2017 12:03 AM
           </div>
           <div
             className="day"
@@ -998,7 +998,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
           <div
             className="time"
           >
-            Oct. 30, 2017 12:04 AM
+            Oct 30, 2017 12:04 AM
           </div>
           <div
             className="day"

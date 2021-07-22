@@ -148,16 +148,20 @@ exports[`Site admin user table invite dialog test General Snapshot 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="button save disabled primary"
-      onClick={null}
+      className="nti-button button save disabled primary plain"
+      onClick={[Function]}
+      onKeyDown={[Function]}
       role="button"
+      tabIndex="0"
     >
       Send
     </button>
     <button
-      className="button cancel secondary"
+      className="nti-button button cancel secondary plain"
       onClick={[Function]}
+      onKeyDown={[Function]}
       role="button"
+      tabIndex="0"
     >
       Cancel
     </button>
