@@ -34,9 +34,8 @@ const t = scoped(
 	'nti-web-site-admin.components.users.list.table.controls.Export',
 	{
 		tooltipLabel: {
-			zero: 'Download list',
-			one: 'Download list (%(count)s user)',
-			other: 'Download list (%(count)s users)',
+			selected: 'Download Selected Users',
+			noSelected: 'Download All Users',
 		},
 	}
 );
@@ -63,16 +62,13 @@ Export.propTypes = {
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
-	totalCount: PropTypes.number,
 	rel: PropTypes.string,
 };
 
-function Export({ items: itemsProp, selectedUsers, params, totalCount, rel }) {
-	const items = !selectedUsers?.length ? itemsProp : selectedUsers;
-
+function Export({ selectedUsers, params, rel }) {
 	const isSiteUsers = rel === 'SiteUsers';
 
-	const hiddenInputs = items.map((item, index) => (
+	const hiddenInputs = (selectedUsers ?? []).map((item, index) => (
 		<input
 			key={index}
 			type="hidden"
@@ -85,9 +81,11 @@ function Export({ items: itemsProp, selectedUsers, params, totalCount, rel }) {
 
 	return (
 		<UppercaseTooltip
-			label={t('tooltipLabel', {
-				count: selectedUsers?.length || totalCount || 0,
-			})}
+			label={
+				selectedUsers?.length
+					? t('tooltipLabel.selected')
+					: t('tooltipLabel.noSelected')
+			}
 		>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
