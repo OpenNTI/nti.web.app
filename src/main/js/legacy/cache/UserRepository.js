@@ -6,7 +6,7 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
 );
-const { isMe, isFeature } = require('internal/legacy/util/Globals');
+const { isMe } = require('internal/legacy/util/Globals');
 const { Deferred } = require('internal/legacy/util/Promise');
 const ChatStateStore = require('internal/legacy/app/chat/StateStore');
 
@@ -227,8 +227,7 @@ User.Repository =
 					l = username.length,
 					names = [],
 					toResolve = [],
-					canBulkResolve =
-						!forceFullResolve && isFeature('bulk-resolve-users');
+					canBulkResolve = !forceFullResolve;
 
 				return new Promise(function (fulfill, reject) {
 					function maybeFinish(k, v) {

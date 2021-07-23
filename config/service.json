@@ -15,7 +15,6 @@
 		"flags": {
 			"analytic-reports": true,
 			"badges": true,
-			"bulk-resolve-users": true,
 			"course-reports": false,
 			"course-content-modal": true,
 			"disable-context-in-activity": false,
