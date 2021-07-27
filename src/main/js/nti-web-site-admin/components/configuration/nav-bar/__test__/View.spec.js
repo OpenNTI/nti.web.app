@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import View from '../View';
 
@@ -7,10 +7,14 @@ import View from '../View';
 //TODO: make this more useful
 describe.skip('Site admin advanced nav bar test', () => {
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<View />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

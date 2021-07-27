@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import LastActivity from '../LastActivity';
 
@@ -10,10 +10,14 @@ describe('Site admin user course enrollment overview last activity widget', () =
 			getLastSeenTime: () => new Date('10/30/2017'),
 		};
 
-		const cmp = renderer.create(<LastActivity enrollment={enrollment} />);
+		let cmp;
+		act(() => {
+			cmp = create(<LastActivity enrollment={enrollment} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

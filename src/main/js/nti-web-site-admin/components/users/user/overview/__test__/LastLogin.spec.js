@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import LastLogin from '../LastLogin';
 
@@ -14,12 +14,19 @@ describe('Site admin user overview last login', () => {
 
 		const user = {};
 
-		const cmp = renderer.create(
-			<LastLogin user={user} historicalSessions={historicalSessions} />
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<LastLogin
+					user={user}
+					historicalSessions={historicalSessions}
+				/>
+			);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -53,15 +53,18 @@ describe('Site admin user book roster test (25 items)', () => {
 			getLink: () => 'testLink',
 		};
 
-		const cmp = renderer.create(<View course={course} />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = renderer.create(<View course={course} />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -74,15 +77,18 @@ describe('Site admin user book roster test (5 items)', () => {
 			getLink: () => 'testLink',
 		};
 
-		const cmp = renderer.create(<View course={course} />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = renderer.create(<View course={course} />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -95,14 +101,17 @@ describe('Site admin user book roster test (0 items)', () => {
 			getLink: () => 'testLink',
 		};
 
-		const cmp = renderer.create(<View course={course} />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = renderer.create(<View course={course} />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

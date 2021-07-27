@@ -1,45 +1,57 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import TotalEnrolled from '../TotalEnrolled';
 
 describe('Site admin content table total enrolled column test', () => {
 	test('Test no catalog entry', () => {
-		const colCmp = renderer.create(<TotalEnrolled item={{}} />);
+		let cmp;
+		act(() => {
+			cmp = create(<TotalEnrolled item={{}} />);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Test catalog entry, but no TotalEnrolled', () => {
-		const colCmp = renderer.create(
-			<TotalEnrolled
-				item={{
-					CatalogEntry: {},
-				}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<TotalEnrolled
+					item={{
+						CatalogEntry: {},
+					}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Test catalog entry with non-zero TotalEnrolled', () => {
-		const colCmp = renderer.create(
-			<TotalEnrolled
-				item={{
-					CatalogEntry: {
-						TotalEnrolledCount: 6,
-					},
-				}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<TotalEnrolled
+					item={{
+						CatalogEntry: {
+							TotalEnrolledCount: 6,
+						},
+					}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

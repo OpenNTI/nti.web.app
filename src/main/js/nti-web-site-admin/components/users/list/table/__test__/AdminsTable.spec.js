@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -61,7 +61,12 @@ describe('Site admin user admin list (with no items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<AdminsTable />, {
+				createNodeMock: element => element,
+			});
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -70,6 +75,7 @@ describe('Site admin user admin list (with no items)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -78,7 +84,12 @@ describe('Site admin user admin list (with 5 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<AdminsTable />, {
+				createNodeMock: element => element,
+			});
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -87,6 +98,7 @@ describe('Site admin user admin list (with 5 items)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -95,7 +107,12 @@ describe('Site admin user admin list (with 25 items)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<AdminsTable />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<AdminsTable />, {
+				createNodeMock: element => element,
+			});
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -104,5 +121,6 @@ describe('Site admin user admin list (with 25 items)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

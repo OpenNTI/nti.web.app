@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -36,7 +36,10 @@ describe.skip('Site admin user book frame test', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<Frame bookID="book1" />);
+		let cmp;
+		act(() => {
+			cmp = create(<Frame bookID="book1" />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -45,5 +48,6 @@ describe.skip('Site admin user book frame test', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

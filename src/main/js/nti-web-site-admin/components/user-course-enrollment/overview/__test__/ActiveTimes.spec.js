@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -53,15 +53,18 @@ describe('Site admin user course enrollment overview active times widget (has da
 			getLink: () => 'mockAnalytics',
 		};
 
-		const cmp = renderer.create(<ActiveTimes enrollment={enrollment} />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<ActiveTimes enrollment={enrollment} />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -74,14 +77,17 @@ describe('Site admin user course enrollment overview active times widget (has no
 			getLink: () => 'mockAnalytics',
 		};
 
-		const cmp = renderer.create(<ActiveTimes enrollment={enrollment} />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<ActiveTimes enrollment={enrollment} />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

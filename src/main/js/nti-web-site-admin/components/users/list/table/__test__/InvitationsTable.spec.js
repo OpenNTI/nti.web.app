@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -86,17 +86,25 @@ describe('Site admin user invitations list (with no items)', () => {
 				});
 
 				test('Basic render test', async () => {
-					const testRenderer = renderer.create(<InvitationsTable />);
+					let testRenderer;
+					act(() => {
+						testRenderer = renderer.create(<InvitationsTable />, {
+							createNodeMock: element => element,
+						});
+					});
 
-					await pollForState(
-						testRenderer,
-						InvitationsTable,
-						cmp => cmp.props.loading
+					await act(() =>
+						pollForState(
+							testRenderer,
+							InvitationsTable,
+							cmp => cmp.props.loading
+						)
 					);
 
 					const tree = testRenderer.toJSON();
 
 					expect(tree).toMatchSnapshot();
+					testRenderer.unmount();
 				});
 			}
 		);

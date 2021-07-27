@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -39,15 +39,18 @@ describe('Site admin dashboard widget active sessions (with 5 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveUsers />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<ActiveUsers />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -56,14 +59,17 @@ describe('Site admin dashboard widget active sessions (with 0 count)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveUsers />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<ActiveUsers />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

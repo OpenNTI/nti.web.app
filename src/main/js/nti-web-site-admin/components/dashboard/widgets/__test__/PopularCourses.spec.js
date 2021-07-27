@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -67,15 +67,18 @@ describe('Site admin dashboard widget popular courses (5 items, no previous)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<PopularCourses />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -84,15 +87,18 @@ describe('Site admin dashboard widget popular courses (3 items, has previous)', 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<PopularCourses />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -101,14 +107,17 @@ describe('Site admin dashboard widget popular courses (no items, no previous)', 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<PopularCourses />);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+		let cmp;
+		await act(async () => {
+			cmp = create(<PopularCourses />);
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

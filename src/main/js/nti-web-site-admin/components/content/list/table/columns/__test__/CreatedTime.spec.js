@@ -1,24 +1,28 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import CreatedTime from '../CreatedTime';
 
 describe('Site admin content table created time column test', () => {
 	const verifyColumn = date => {
-		const colCmp = renderer.create(
-			<CreatedTime
-				item={{
-					getCreatedTime: () => {
-						return date;
-					},
-				}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<CreatedTime
+					item={{
+						getCreatedTime: () => {
+							return date;
+						},
+					}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	};
 
 	test('Test date is many days ago', () => {

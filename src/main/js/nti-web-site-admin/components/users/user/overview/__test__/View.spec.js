@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -52,7 +52,10 @@ describe('Site admin user overview view', () => {
 			getCreatedTime: () => new Date('10/10/2017'),
 		};
 
-		const cmp = renderer.create(<View user={user} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View user={user} />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -61,5 +64,6 @@ describe('Site admin user overview view', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

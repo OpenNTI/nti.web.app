@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { act, create } from 'react-test-renderer';
 
 import RecentSessions from '../RecentSessions';
 
@@ -15,25 +15,33 @@ describe('Site admin user overview recent sessions', () => {
 			},
 		];
 
-		const cmp = renderer.create(
-			<RecentSessions historicalSessions={historicalSessions} />
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<RecentSessions historicalSessions={historicalSessions} />
+			);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (no sessions)', async () => {
 		const historicalSessions = [];
 
-		const cmp = renderer.create(
-			<RecentSessions historicalSessions={historicalSessions} />
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<RecentSessions historicalSessions={historicalSessions} />
+			);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (10 sessions)', async () => {
@@ -46,12 +54,16 @@ describe('Site admin user overview recent sessions', () => {
 			});
 		}
 
-		const cmp = renderer.create(
-			<RecentSessions historicalSessions={historicalSessions} />
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<RecentSessions historicalSessions={historicalSessions} />
+			);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

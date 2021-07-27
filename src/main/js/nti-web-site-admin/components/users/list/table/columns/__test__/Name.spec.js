@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 
@@ -25,38 +25,46 @@ describe('Site admin user table name column test', () => {
 	afterEach(onAfter);
 
 	test('Test for learners', () => {
-		const colCmp = renderer.create(
-			<Name
-				item={{
-					email: 'user@blah.com',
-					getID: () => 'user',
-				}}
-				store={{
-					filter: 'learners',
-				}}
-			/>
-		);
+		let colCmp;
+		act(() => {
+			colCmp = renderer.create(
+				<Name
+					item={{
+						email: 'user@blah.com',
+						getID: () => 'user',
+					}}
+					store={{
+						filter: 'learners',
+					}}
+				/>
+			);
+		});
 
 		const tree = colCmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		colCmp.unmount();
 	});
 
 	test('Test for admins', () => {
-		const colCmp = renderer.create(
-			<Name
-				item={{
-					email: 'user@blah.com',
-					getID: () => 'user',
-				}}
-				store={{
-					filter: 'admins',
-				}}
-			/>
-		);
+		let colCmp;
+		act(() => {
+			colCmp = renderer.create(
+				<Name
+					item={{
+						email: 'user@blah.com',
+						getID: () => 'user',
+					}}
+					store={{
+						filter: 'admins',
+					}}
+				/>
+			);
+		});
 
 		const tree = colCmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		colCmp.unmount();
 	});
 });

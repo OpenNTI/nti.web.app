@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -39,7 +39,10 @@ describe('Site admin user list nav bar (with invite link)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<View />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -48,6 +51,7 @@ describe('Site admin user list nav bar (with invite link)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -56,7 +60,10 @@ describe('Site admin user list nav bar (without invite link)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<View />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -65,5 +72,6 @@ describe('Site admin user list nav bar (without invite link)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

@@ -1,6 +1,7 @@
 /* globals NextThought */
 /* eslint-env jest */
 require('../Actions.js');
+require('internal/legacy/model/assessment/QuestionSet');
 require('internal/legacy/model/assessment/AssignmentSubmission');
 require('internal/legacy/model/assessment/QuestionSetSubmission');
 require('internal/legacy/model/assessment/Assignment');

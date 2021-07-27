@@ -1,23 +1,27 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { act, create } from 'react-test-renderer';
 
 import InvitePeople from '../InvitePeople';
 
 describe('Site admin user table invite dialog test', () => {
 	test('General Snapshot', () => {
-		const colCmp = renderer.create(
-			<InvitePeople
-				loading={false}
-				clearInviteError={() => {}}
-				hideInviteDialog={() => {}}
-				sendLearnerInvites={() => {}}
-				sendAdminInvites={() => {}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<InvitePeople
+					loading={false}
+					clearInviteError={() => {}}
+					hideInviteDialog={() => {}}
+					sendLearnerInvites={() => {}}
+					sendAdminInvites={() => {}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

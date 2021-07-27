@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -54,7 +54,10 @@ describe('Site admin user course list test (5 courses)', () => {
 			hasLink: () => true,
 		};
 
-		const cmp = renderer.create(<View user={user} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View user={user} />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -63,6 +66,7 @@ describe('Site admin user course list test (5 courses)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -76,7 +80,10 @@ describe('Site admin user course list test (no courses)', () => {
 			hasLink: () => true,
 		};
 
-		const cmp = renderer.create(<View user={user} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View user={user} />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -85,5 +92,6 @@ describe('Site admin user course list test (no courses)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

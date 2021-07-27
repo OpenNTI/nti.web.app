@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 
@@ -37,20 +37,28 @@ describe('Site admin user info nav bar test', () => {
 	test('Basic render test (has transcript link)', async () => {
 		const user = getUser(true);
 
-		const cmp = renderer.create(<View user={user} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View user={user} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (has no transcript link)', async () => {
 		const user = getUser(false);
 
-		const cmp = renderer.create(<View user={user} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View user={user} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

@@ -1,25 +1,29 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import BookName from '../BookName';
 
 describe('Site admin content table book name column test', () => {
 	test('Test name', () => {
-		const colCmp = renderer.create(
-			<BookName
-				item={{
-					title: 'book name',
-					getID: () => 'bookName',
-					getDefaultAssetRoot() {
-						return 'testRoot';
-					},
-				}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<BookName
+					item={{
+						title: 'book name',
+						getID: () => 'bookName',
+						getDefaultAssetRoot() {
+							return 'testRoot';
+						},
+					}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

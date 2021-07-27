@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -89,7 +89,10 @@ describe('Site admin user course enrollment overview view', () => {
 			},
 		};
 
-		const cmp = renderer.create(<View enrollment={enrollment} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View enrollment={enrollment} />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -98,5 +101,6 @@ describe('Site admin user course enrollment overview view', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

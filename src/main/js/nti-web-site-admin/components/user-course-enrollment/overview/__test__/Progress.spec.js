@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import Progress from '../Progress';
 
@@ -12,11 +12,15 @@ describe('Site admin user course enrollment overview progress widget', () => {
 			},
 		};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment} />);
+		let cmp;
+		act(() => {
+			cmp = create(<Progress enrollment={enrollment} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (no PercentageProgress)', async () => {
@@ -24,20 +28,28 @@ describe('Site admin user course enrollment overview progress widget', () => {
 			CourseProgress: {},
 		};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment} />);
+		let cmp;
+		act(() => {
+			cmp = create(<Progress enrollment={enrollment} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (no CourseProgress)', async () => {
 		const enrollment = {};
 
-		const cmp = renderer.create(<Progress enrollment={enrollment} />);
+		let cmp;
+		act(() => {
+			cmp = create(<Progress enrollment={enrollment} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

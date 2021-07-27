@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import View from '../View';
 
@@ -26,20 +26,28 @@ describe('Site admin user course enrollment nav bar test', () => {
 	test('Basic render test (has roster link)', async () => {
 		const course = getCourse(true);
 
-		const cmp = renderer.create(<View course={course} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View course={course} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 
 	test('Basic render test (has no roster link)', async () => {
 		const course = getCourse(false);
 
-		const cmp = renderer.create(<View course={course} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View course={course} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -51,7 +51,10 @@ describe('Site admin dashboard widget recently created users (5 users total)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentlyCreatedUsers />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -60,6 +63,7 @@ describe('Site admin dashboard widget recently created users (5 users total)', (
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -68,7 +72,10 @@ describe('Site admin dashboard widget recently created users (3 users total)', (
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentlyCreatedUsers />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -77,6 +84,7 @@ describe('Site admin dashboard widget recently created users (3 users total)', (
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -85,7 +93,10 @@ describe('Site admin dashboard widget recently created users (no users)', () => 
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentlyCreatedUsers />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentlyCreatedUsers />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -94,5 +105,6 @@ describe('Site admin dashboard widget recently created users (no users)', () => 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import View from '../View';
 
@@ -14,10 +14,14 @@ describe.skip('Site admin user book nav bar test', () => {
 			},
 		};
 
-		const cmp = renderer.create(<View book={book} />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<View book={book} />);
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

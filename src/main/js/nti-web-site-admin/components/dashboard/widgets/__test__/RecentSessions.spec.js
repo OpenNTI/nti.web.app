@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -62,7 +62,10 @@ describe('Site admin dashboard widget recent sessions (5 sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentSessions />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -71,6 +74,7 @@ describe('Site admin dashboard widget recent sessions (5 sessions)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -79,7 +83,10 @@ describe('Site admin dashboard widget recent sessions (10 sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentSessions />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -88,6 +95,7 @@ describe('Site admin dashboard widget recent sessions (10 sessions)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });
 
@@ -96,7 +104,10 @@ describe('Site admin dashboard widget recent sessions (no sessions)', () => {
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<RecentSessions />);
+		let cmp;
+		act(() => {
+			cmp = renderer.create(<RecentSessions />);
+		});
 
 		jest.runAllTimers();
 		await flushPromises();
@@ -105,5 +116,6 @@ describe('Site admin dashboard widget recent sessions (no sessions)', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

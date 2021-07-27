@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import * as TestUtils from '@nti/web-client/test-utils';
 import { flushPromises } from '@nti/lib-commons/test-utils';
@@ -51,14 +51,18 @@ describe('Site admin dashboard widget active times', () => {
 	});
 
 	test('Basic render test', async () => {
-		const cmp = renderer.create(<ActiveTimes />);
+		let cmp;
+		await act(async () => {
+			cmp = create(<ActiveTimes />);
 
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+			jest.runAllTimers();
+			await flushPromises();
+			jest.runAllTimers();
+		});
 
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	});
 });

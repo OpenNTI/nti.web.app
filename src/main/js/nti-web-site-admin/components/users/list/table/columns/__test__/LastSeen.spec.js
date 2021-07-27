@@ -1,24 +1,28 @@
 /* eslint-env jest */
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { create, act } from 'react-test-renderer';
 
 import LastSeen from '../LastSeen';
 
 describe('Site admin user table last seen column test', () => {
 	const verifyColumn = date => {
-		const colCmp = renderer.create(
-			<LastSeen
-				item={{
-					getLastSeenTime: () => {
-						return date;
-					},
-				}}
-			/>
-		);
+		let cmp;
+		act(() => {
+			cmp = create(
+				<LastSeen
+					item={{
+						getLastSeenTime: () => {
+							return date;
+						},
+					}}
+				/>
+			);
+		});
 
-		const tree = colCmp.toJSON();
+		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+		cmp.unmount();
 	};
 
 	test('Test date is null', () => {
