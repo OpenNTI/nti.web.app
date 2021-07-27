@@ -834,6 +834,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRootModal(root, subPath, lesson) {
 		let path = '';
+		let noWindow = false; // TODO: set true for Events
 
 		if (
 			root instanceof QuestionSetRef ||
@@ -859,7 +860,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					  )}`;
 		}
 
-		return path && { path, isFull: true, noWindow: true };
+		return path && { path, isFull: true, noWindow };
 	},
 
 	getRouteForPageInfoPath: function (pageInfo /*, path*/) {
