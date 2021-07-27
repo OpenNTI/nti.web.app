@@ -14,7 +14,6 @@ require('./chat/Index');
 require('./prompt/Index');
 require('../layout/container/None');
 
-ChatOverrides.setupOverrides();
 DiscussionOverrides.setupOverrides();
 
 Commons.Layouts.Responsive.setWebappContext();
@@ -56,6 +55,9 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 	initComponent: function () {
 		this.callParent();
+		ChatOverrides.setupOverrides({
+			navigateToObject: obj => this.body.attemptToNavigateToObject(obj),
+		});
 
 		this.body = this.add({ xtype: 'main-views', id: 'view' });
 		this.add({ xtype: 'main-navigation', id: 'nav' });

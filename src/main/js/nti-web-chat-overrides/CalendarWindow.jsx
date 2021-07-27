@@ -9,9 +9,11 @@ WebappCalendarWindow.propTypes = {
 	visible: PropTypes.bool,
 };
 
-export default function WebappCalendarWindow({ onClose, target, visible }) {
+export default function WebappCalendarWindow(
+	{ onClose, target, visible },
+	scope
+) {
 	const windowRef = React.useRef(null);
-
 	React.useEffect(() => windowRef.current?.destroy(), []);
 
 	React.useEffect(() => {
@@ -40,7 +42,7 @@ export default function WebappCalendarWindow({ onClose, target, visible }) {
 			const win = Ext.widget('gutter-list-calendar-window', {
 				renderTo: Ext.get(target),
 				onClose: onClose,
-				navigateToObject: obj => this.navigateToObject(obj),
+				navigateToObject: obj => scope.navigateToObject(obj),
 			});
 			if (!visible) {
 				win.hide();
