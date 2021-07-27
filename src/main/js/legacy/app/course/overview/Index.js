@@ -10,6 +10,7 @@ const Lesson = require('internal/legacy/model/courses/overview/Lesson');
 const PageInfo = require('internal/legacy/model/PageInfo');
 const PlaylistItem = require('internal/legacy/model/PlaylistItem');
 const QuestionSetRef = require('internal/legacy/model/QuestionSetRef');
+const CalendarEventRef = require('internal/legacy/model/calendar/CalendarEventRef');
 const RelatedWork = require('internal/legacy/model/RelatedWork');
 const SurveyRef = require('internal/legacy/model/SurveyRef');
 const Slidedeck = require('internal/legacy/model/Slidedeck');
@@ -835,6 +836,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	getRouteForRootModal(root, subPath, lesson) {
 		let path = '';
 		let noWindow = false; // TODO: set true for Events
+
+		if (root instanceof CalendarEventRef) {
+			noWindow = true;
+		}
 
 		if (
 			root instanceof QuestionSetRef ||
