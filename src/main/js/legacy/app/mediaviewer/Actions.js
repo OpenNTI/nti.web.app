@@ -439,23 +439,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	loadPageContent: function (pageInfo) {
-		var me = this,
-			link = pageInfo.getLink('content'),
-			contentPackage = pageInfo.get('ContentPackageNTIID');
+		const link = pageInfo.getLink('content');
 
-		return Promise.all([
-			Service.request(link),
-			me.LibraryActions.findContentPackage(contentPackage),
-		]).then(function (results) {
-			let xml = results[0];
-			// const content = results[1];
+		return Service.request(link).then(function (xml) {
+			const parsed = new DOMParser().parseFromString(xml, 'text/xml');
 
-			xml = new DOMParser().parseFromString(xml, 'text/xml');
-
-			if (xml.querySelector('parsererror')) {
+			if (parsed.querySelector('parsererror')) {
 				return Promise.resolve('');
 			}
-			return Promise.resolve(xml);
+			return Promise.resolve(parsed);
 		});
 	},
 
