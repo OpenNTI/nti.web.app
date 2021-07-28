@@ -27,6 +27,14 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@nti/app-scripts": "^2.31.8",
     "@nti/extjs": "4.2.0",
