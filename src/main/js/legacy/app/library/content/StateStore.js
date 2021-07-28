@@ -146,14 +146,17 @@ module.exports = exports = Ext.define(
 
 		findForNTIID: function (ntiid) {
 			return this.findContentBy(function (bundle) {
-				var contentPackages = bundle.get('ContentPackages'),
-					i;
+				const contentPackages = bundle.get('ContentPackages');
 
 				if (bundle.getId() === ntiid) {
 					return true;
 				}
 
-				for (i = 0; i < contentPackages.length; i++) {
+				if (!contentPackages) {
+					return;
+				}
+
+				for (let i = 0; i < contentPackages.length; i++) {
 					if (contentPackages[i].get('NTIID') === ntiid) {
 						return true;
 					}
