@@ -70,8 +70,14 @@ class UsersTable extends React.Component {
 	};
 
 	renderControls(numSelected) {
-		const { noRoleChange, items, selectedUsers, params, totalCount } =
-			this.props;
+		const {
+			noRoleChange,
+			items,
+			selectedUsers,
+			params,
+			filter,
+			totalCount,
+		} = this.props;
 
 		return (
 			<div className="controls">
@@ -94,6 +100,7 @@ class UsersTable extends React.Component {
 						selectedUsers={selectedUsers}
 						params={params}
 						totalCount={totalCount}
+						filter={filter}
 						rel="SiteUsers"
 					/>
 				)}

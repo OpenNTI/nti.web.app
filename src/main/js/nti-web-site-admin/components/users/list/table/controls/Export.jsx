@@ -40,6 +40,22 @@ const t = scoped(
 	}
 );
 
+const useSiteAdminExport = (params, rel) => {
+	const service = useService();
+	const link = service.getWorkspace('SiteAdmin')?.getLink('SiteAdmins');
+
+	if (!link) {
+		return null;
+	}
+
+	const clone = { ...params };
+
+	delete clone.batchStart;
+	delete clone.batchSize;
+
+	return URLUtils.appendQueryParams(link, { ...clone, format: 'text/csv' });
+};
+
 const useSiteUsersExport = (params, rel) => {
 	const service = useService();
 	const link =
@@ -62,10 +78,11 @@ Export.propTypes = {
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
+	filter: PropTypes.string,
 	rel: PropTypes.string,
 };
 
-function Export({ selectedUsers, params, rel }) {
+function Export({ selectedUsers, params, filter, rel }) {
 	const isSiteUsers = rel === 'SiteUsers';
 
 	const hiddenInputs = (selectedUsers ?? []).map((item, index) => (
@@ -77,7 +94,10 @@ function Export({ selectedUsers, params, rel }) {
 		/>
 	));
 
-	const link = useSiteUsersExport(params, rel);
+	const link =
+		filter === 'admin'
+			? useSiteAdminExport(params, rel)
+			: useSiteUsersExport(params, rel);
 
 	return (
 		<UppercaseTooltip
