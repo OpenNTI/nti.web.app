@@ -3,7 +3,7 @@ const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const PathActions = require('internal/legacy/app/navigation/path/Actions');
 const WindowsActions = require('internal/legacy/app/windows/Actions');
 const Globals = require('internal/legacy/util/Globals');
-const Post = require('internal/legacy/model/forums/Post');
+const Forum = require('internal/legacy/model/forums/Forum');
 
 require('./routing/Path');
 require('./routing/Object');
@@ -19,7 +19,7 @@ function setObjHash(route, obj) {
 
 function shouldAddObjectForCommunityCase(path, obj) {
 	return (
-		obj instanceof Post &&
+		!(obj instanceof Forum) &&
 		((path[0].isBundle && path[1]?.isBoard) || path[0].isCommunity)
 	);
 }
