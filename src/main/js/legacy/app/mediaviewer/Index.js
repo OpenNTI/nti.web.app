@@ -166,14 +166,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			delete me.video;
 			delete me.videoId;
 
-			me.MediaActions.buildSlidedeckPlaylist(deck).then(obj => {
-				me.activeMediaView.setSlidedeckContent(
-					deck,
-					obj.videos,
-					obj.items,
-					options
-				);
-			});
+			me.MediaActions.buildSlidedeckPlaylist(deck, me.currentBundle).then(
+				obj => {
+					me.activeMediaView.setSlidedeckContent(
+						deck,
+						obj.videos,
+						obj.items,
+						options
+					);
+				}
+			);
 		});
 	},
 

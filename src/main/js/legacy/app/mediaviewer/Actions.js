@@ -317,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-	buildSlidedeckPlaylist: function (slidedeck) {
+	buildSlidedeckPlaylist: function (slidedeck, bundle) {
 		var videos = {},
 			transcripts = {},
 			me = this,
@@ -342,9 +342,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 				var transcript;
 
 				return new Promise(function (fulfill) {
-					Service.getObject(slidevideo.video_ntiid).then(function (
-						video
-					) {
+					const videoId = slidevideo.video_ntiid;
+					const videoResolver = bundle
+						? bundle.getVideoForId(videoId)
+						: Service.getObject(videoId);
+
+					videoResolver.then(function (video) {
 						var obj = video.raw || video.getData();
 						video = PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
