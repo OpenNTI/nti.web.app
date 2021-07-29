@@ -36,8 +36,8 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	},
 
 	onRouteDeactivate(newRoute) {
-		if (!CONTACTS_ROUTE.test(newRoute)) {
-			this.contacts.destroy();
+		if (!CONTACTS_ROUTE.test(newRoute) && this.contacts) {
+			this.contacts.destroy?.();
 			delete this.contacts;
 		}
 	},
