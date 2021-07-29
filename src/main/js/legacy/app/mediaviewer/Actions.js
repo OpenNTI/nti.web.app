@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 						: Service.getObject(videoId);
 
 					videoResolver.then(function (video) {
-						var obj = video.raw || video.getData();
+						var obj = video.raw || video.getData?.() || video;
 						video = PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
 
