@@ -3,6 +3,7 @@ const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const PathActions = require('internal/legacy/app/navigation/path/Actions');
 const WindowsActions = require('internal/legacy/app/windows/Actions');
 const Globals = require('internal/legacy/util/Globals');
+const Post = require('internal/legacy/model/forums/Post');
 
 require('./routing/Path');
 require('./routing/Object');
@@ -17,7 +18,10 @@ function setObjHash(route, obj) {
 }
 
 function shouldAddObjectForCommunityCase(path, obj) {
-	return (path[0].isBundle && path[1]?.isBoard) || path[0].isCommunity;
+	return (
+		obj instanceof Post &&
+		((path[0].isBundle && path[1]?.isBoard) || path[0].isCommunity)
+	);
 }
 
 module.exports = exports = Ext.define('NextThought.mixins.Router', {
