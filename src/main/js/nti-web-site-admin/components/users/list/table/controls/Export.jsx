@@ -40,22 +40,6 @@ const t = scoped(
 	}
 );
 
-const useSiteAdminExport = (params, rel) => {
-	const service = useService();
-	const link = service.getWorkspace('SiteAdmin')?.getLink('SiteAdmins');
-
-	if (!link) {
-		return null;
-	}
-
-	const clone = { ...params };
-
-	delete clone.batchStart;
-	delete clone.batchSize;
-
-	return URLUtils.appendQueryParams(link, { ...clone, format: 'text/csv' });
-};
-
 const useSiteUsersExport = (params, rel) => {
 	const service = useService();
 	const link =
@@ -94,10 +78,11 @@ function Export({ selectedUsers, params, filter, rel }) {
 		/>
 	));
 
-	const link =
-		filter === 'admin'
-			? useSiteAdminExport(params, rel)
-			: useSiteUsersExport(params, rel);
+	const link = filter === 'admin' ? null : useSiteUsersExport(params, rel);
+
+	if (!link) {
+		return null;
+	}
 
 	return (
 		<UppercaseTooltip
