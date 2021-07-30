@@ -89,7 +89,7 @@ class InvitationsTable extends React.Component {
 			return null;
 		}
 
-		const { selectedUsers, store, items, params } = this.props;
+		const { selectedUsers, store } = this.props;
 		const numSelected = (selectedUsers && selectedUsers.length) || 0;
 
 		return (
@@ -114,14 +114,6 @@ class InvitationsTable extends React.Component {
 						<i className="icon-addfriend" />
 						{t('invitePeople')}
 					</div>
-				)}
-				{isFlag('export-users') && (
-					<Export
-						items={items}
-						selectedUsers={selectedUsers}
-						params={params}
-						rel="Invitations"
-					/>
 				)}
 			</div>
 		);
