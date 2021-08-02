@@ -1,6 +1,7 @@
 import './UsersTable.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import { Table, Loading, Prompt } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
@@ -136,11 +137,12 @@ class UsersTable extends React.Component {
 			emptyMessage,
 			currentSearchTerm,
 			filter,
+			className,
 		} = this.props;
 		const { showChangeRoles } = this.state;
 
 		return (
-			<div className="users-table-container">
+			<div className={cx('users-table-container', className)}>
 				{loading && <Loading.Mask />}
 				{!loading && error && <div className="error">{error}</div>}
 				{!error && !loading && (

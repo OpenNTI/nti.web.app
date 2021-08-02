@@ -19,6 +19,7 @@ class AdminsTable extends React.Component {
 	render() {
 		return (
 			<UsersTable
+				className={this.props.className}
 				filter="admin"
 				title={t('administrators')}
 				emptyMessage={t('emptyMessage')}

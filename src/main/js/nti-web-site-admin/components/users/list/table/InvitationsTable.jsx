@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import { Button, Table, Loading, Prompt } from '@nti/web-commons';
 import { decorate } from '@nti/lib-commons';
@@ -135,6 +136,7 @@ class InvitationsTable extends React.Component {
 
 	render() {
 		const {
+			className,
 			store,
 			showInviteDialog,
 			sortOn,
@@ -148,7 +150,13 @@ class InvitationsTable extends React.Component {
 		} = this.props;
 
 		return (
-			<div className="users-table-container invitations">
+			<div
+				className={cx(
+					'users-table-container',
+					'invitations',
+					className
+				)}
+			>
 				{loading && <Loading.Mask />}
 				{!loading && error && <div className="error">{error}</div>}
 				{!error && !loading && (

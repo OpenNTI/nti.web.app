@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
@@ -46,13 +47,14 @@ class UserListNavBar extends React.Component {
 	}
 
 	render() {
-		const { loading, total, showInviteDialog, store } = this.props;
+		const { className, loading, total, showInviteDialog, store } =
+			this.props;
 		const { canSendInvitations } = this.state;
 
 		const hasCount = !loading && (total || total === 0);
 
 		return (
-			<div className="site-admin-user-list-nav-bar">
+			<div className={cx('site-admin-user-list-nav-bar', className)}>
 				<Card>
 					<SeatLimit />
 					<Tabs>

@@ -19,6 +19,7 @@ class LearnersTable extends React.Component {
 	render() {
 		return (
 			<UsersTable
+				className={this.props.className}
 				filter="learners"
 				title={t('learners')}
 				emptyMessage={t('emptyMessage')}
