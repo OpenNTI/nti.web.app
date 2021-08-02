@@ -1,12 +1,27 @@
-import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
-import { LinkTo } from '@nti/web-routing'; // eslint-disable-line
 import { Layouts, FixedElement } from '@nti/web-commons';
 
 import NavBar from './nav-bar';
 import Store from './SharedStore';
+
+const { table } = stylesheet`
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.24);
+	background-color: white;
+	position: relative;
+`;
+
+const Frame = styled.div`
+	margin-top: 20px;
+`;
+
+const Nav = styled(NavBar)`
+	background-color: white;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.24);
+	padding-bottom: 20px;
+`;
 
 class SiteAdminUserListFrame extends React.Component {
 	static propTypes = {
@@ -17,21 +32,23 @@ class SiteAdminUserListFrame extends React.Component {
 		const { children } = this.props;
 
 		return (
-			<div className="site-admin-user-list-frame">
+			<Frame className="site-admin-user-list-frame">
 				<Layouts.NavContent.Container>
 					<Layouts.NavContent.Nav className="nav-bar">
 						{/* {this.renderHeader()} */}
 						<FixedElement>
-							<NavBar />
+							<Nav />
 						</FixedElement>
 					</Layouts.NavContent.Nav>
 					<Layouts.NavContent.Content className="content">
-						{React.Children.map(children, item => {
-							return React.cloneElement(item);
-						})}
+						{React.Children.map(children, item =>
+							React.cloneElement(item, {
+								className: cx(item.props.className, table),
+							})
+						)}
 					</Layouts.NavContent.Content>
 				</Layouts.NavContent.Container>
-			</div>
+			</Frame>
 		);
 	}
 }
