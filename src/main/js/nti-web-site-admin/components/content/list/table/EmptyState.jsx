@@ -1,19 +1,24 @@
-import './EmptyState.scss';
-import React from 'react';
-import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import { scoped } from '@nti/lib-locale';
 
-const DEFAULT_TEXT = {
+const t = scoped('nti-site-admin.content.list.table.EmptyState', {
 	emptyMessage: 'There is no content',
-};
+});
 
-const t = scoped('nti-site-admin.content.list.table.EmptyState', DEFAULT_TEXT);
-
-EmptyState.propTypes = {
-	message: PropTypes.string,
-};
-
-export default function EmptyState({ message }) {
-	return <div className="empty-state">{message || t('emptyMessage')}</div>;
+function EmptyStatePropMap({ className, message, ...props }) {
+	return {
+		...props,
+		className: cx('empty-state', className),
+		children: message || t('emptyMessage'),
+	};
 }
+
+export const EmptyState = styled('div').attrs(EmptyStatePropMap)`
+	font-size: 2rem;
+	color: var(--tertiary-grey);
+	text-align: center;
+	margin-top: 1.75rem;
+`;
+
+export default EmptyState;
