@@ -9,7 +9,6 @@ exports[`Site admin user book reports test Basic render test 1`] = `
   >
     <figure
       className="empty-state-component"
-      small={false}
     >
       <h1>
         No Reports
