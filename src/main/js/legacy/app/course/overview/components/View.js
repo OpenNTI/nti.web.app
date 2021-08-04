@@ -453,9 +453,12 @@ module.exports = exports = Ext.define(
 			const id = node && decodeFromURI(node);
 			const changedEditing = this.isEditing;
 
+			let showingContent = false;
+
 			delete this.isEditing;
 
-			if (id) {
+			if (id && this.body.isShowingContent(id)) {
+				showingContent = true;
 				this.body.maybeShowContent(id, route, subRoute);
 			}
 
@@ -474,6 +477,7 @@ module.exports = exports = Ext.define(
 				}
 
 				if (!id) {
+					showingContent = true;
 					this.body.maybeShowContent(record.getId(), route, subRoute);
 				}
 
@@ -488,6 +492,15 @@ module.exports = exports = Ext.define(
 				return this.body
 					.showOutlineNode(selectedRecord, changedEditing, subRoute)
 					.then(() => this.alignNavigation())
+					.then(() => {
+						if (!showingContent) {
+							this.body.maybeShowContent(
+								record.getId(),
+								route,
+								subRoute
+							);
+						}
+					})
 					.then(() => selectedRecord);
 			});
 		},

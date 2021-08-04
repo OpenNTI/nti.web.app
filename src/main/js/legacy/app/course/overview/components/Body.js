@@ -289,6 +289,10 @@ module.exports = exports = Ext.define(
 			return lesson && lesson.isShowingContent();
 		},
 
+		isShowingOutlineNode(id) {
+			return this.getLesson()?.isShowingLesson(id);
+		},
+
 		showOutlineNode: function (record, doNotCache, subRoute) {
 			var lesson = this.getLesson(true),
 				editor = this.getEditor(),

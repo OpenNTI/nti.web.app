@@ -229,6 +229,10 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		}
 	},
 
+	isShowingLesson(id) {
+		return this.activeRecord && this.activeRecord.getId() === id;
+	},
+
 	async renderLesson(record, doNotCache, subRoute) {
 		const nonce = {};
 		this.renderLessonTask = nonce;
