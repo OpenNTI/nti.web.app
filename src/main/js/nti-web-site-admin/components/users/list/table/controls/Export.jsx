@@ -40,22 +40,6 @@ const t = scoped(
 	}
 );
 
-const useSiteAdminExport = (params, rel) => {
-	const service = useService();
-	const link = service.getWorkspace('SiteAdmin')?.getLink('SiteAdmins');
-
-	if (!link) {
-		return null;
-	}
-
-	const clone = { ...params };
-
-	delete clone.batchStart;
-	delete clone.batchSize;
-
-	return URLUtils.appendQueryParams(link, { ...clone, format: 'text/csv' });
-};
-
 const useSiteUsersExport = (params, rel, filter) => {
 	const service = useService();
 	let link = null;
