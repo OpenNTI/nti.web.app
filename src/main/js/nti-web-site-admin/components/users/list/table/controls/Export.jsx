@@ -49,7 +49,11 @@ const useSiteUsersExport = (params, rel, filter) => {
 	} else if (rel === 'Invitations') {
 		link = service.getCollection(rel, rel).getLink(rel);
 	} else {
-		service.getUserWorkspace().getLink(rel);
+		link = service.getUserWorkspace().getLink(rel);
+	}
+
+	if (!link) {
+		return null;
 	}
 
 	const clone = { ...params };
