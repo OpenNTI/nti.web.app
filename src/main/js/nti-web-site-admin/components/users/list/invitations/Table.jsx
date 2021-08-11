@@ -4,8 +4,9 @@ import { Table } from '@nti/web-core';
 
 import { InvitationsStore } from './Store';
 import { Name } from './columns/Name';
+import { Date } from './columns/Date';
 
-const Columns = [Name];
+const Columns = [Name, Date];
 
 export function InvitationsTable() {
 	const { items, loading } = InvitationsStore.useProperties();
