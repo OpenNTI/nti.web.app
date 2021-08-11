@@ -4,15 +4,20 @@ import { SimpleTableHeader } from '@nti/web-core';
 
 import { InvitationsStore } from '../Store';
 
+export const VerticallyCentered = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+`;
+
 export const TableHeader = props => {
-	const { sortProperty, sortDirection, setSort } =
-		InvitationsStore.useProperties();
+	const { sortOn, sortOrder, setSort } = InvitationsStore.useProperties();
 
 	return (
 		<SimpleTableHeader
 			{...props}
-			sortOn={sortProperty}
-			sortDirection={sortDirection}
+			sortOn={sortOn}
+			sortDirection={sortOrder}
 			onChangeSort={setSort}
 		/>
 	);

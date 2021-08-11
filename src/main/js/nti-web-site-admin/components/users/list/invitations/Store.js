@@ -28,7 +28,13 @@ export class InvitationsStore extends Base {
 
 	filterOptions = ['all', 'pending', 'accepted', 'expired'];
 
-	async load({ params }) {
+	async load(e) {
+		if (!e) {
+			debugger;
+		}
+
+		const { params } = e;
+
 		const service = await getService();
 		const invitations = service.getCollection('Invitations', 'Invitations');
 

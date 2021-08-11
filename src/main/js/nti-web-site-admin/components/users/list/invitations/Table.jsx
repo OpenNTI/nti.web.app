@@ -15,5 +15,5 @@ export function InvitationsTable() {
 		return <div>Table Placeholder</div>;
 	}
 
-	return <Table columns={Columns} items={items} />;
+	return <Table columns={Columns} items={items} rowBorders />;
 }
