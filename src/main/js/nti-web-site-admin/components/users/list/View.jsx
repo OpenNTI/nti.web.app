@@ -3,7 +3,7 @@ import { Router, Route } from '@nti/web-routing';
 import LearnerTable from './table/LearnersTable';
 import AdminTable from './table/AdminsTable';
 import DeactivatedTable from './table/DeactivatedTable';
-import InvitationsTable from './table/InvitationsTable';
+import InvitationsTable from './invitations/View';
 import Frame from './Frame';
 
 export default Router.for(
