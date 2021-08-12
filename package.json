@@ -59,6 +59,7 @@
     "@nti/web-contacts": "NextThought/nti.web.contacts",
     "@nti/web-content": "NextThought/nti.web.content",
     "@nti/web-course": "NextThought/nti.web.course",
+    "@nti/web-core": "NextThought/nti.web.core",
     "@nti/web-discussions": "NextThought/nti.web.discussions",
     "@nti/web-integrations": "NextThought/nti.web.integrations",
     "@nti/web-library": "NextThought/nti.web.library",
