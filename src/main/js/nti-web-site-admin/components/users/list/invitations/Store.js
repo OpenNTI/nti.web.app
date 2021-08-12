@@ -1,10 +1,12 @@
 import { StateStore } from '@nti/web-core/data';
 import { getService } from '@nti/web-client';
 
-const Base = StateStore.Behaviors.Searchable(
-	StateStore.Behaviors.Filterable(
-		StateStore.Behaviors.Sortable(
-			StateStore.Behaviors.BatchPaging.Discrete(StateStore)
+const Base = StateStore.Behaviors.Selectable(
+	StateStore.Behaviors.Searchable(
+		StateStore.Behaviors.Filterable(
+			StateStore.Behaviors.Sortable(
+				StateStore.Behaviors.BatchPaging.Discrete(StateStore)
+			)
 		)
 	)
 );
