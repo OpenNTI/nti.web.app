@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Avatar, Text } from '@nti/web-core';
+import { Avatar, Text, Placeholder } from '@nti/web-core';
 
-import { TableHeader, VerticallyCentered } from './Common';
+import { VerticallyCentered } from './Common';
 
 const isAdminInvite = RegExp.prototype.test.bind(/siteadmininvitation/);
 
@@ -29,7 +29,20 @@ Name.CSSClassName = css`
 `;
 Name.Name = t('title');
 Name.SortOn = 'receiver';
-Name.HeaderComponent = TableHeader;
+Name.Placeholder = () => (
+	<VerticallyCentered>
+		<Avatar.Placeholder circular mr="lg" />
+		<Info>
+			<Placeholder.Text
+				as="div"
+				typography="body"
+				text="email@email.com"
+				mb="xs"
+			/>
+			<Placeholder.Text as="div" typography="body" text="Administrator" />
+		</Info>
+	</VerticallyCentered>
+);
 export function Name({ item }) {
 	const entity = {
 		Username: item.receiver,

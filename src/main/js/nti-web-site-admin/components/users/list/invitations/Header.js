@@ -32,6 +32,12 @@ const t = scoped(
 const getFilterLabel = f => t(`filters.${f}.label`);
 const getFilterTitle = f => t(`filters.${f}.title`);
 
+export const InvitationsHeaderPlaceholder = () => (
+	<div>
+		<SelectMenu value="all" title={getFilterTitle('all')} disabled />
+	</div>
+);
+
 export function InvitationsHeader({ disabled }) {
 	const { filter, setFilter, filterOptions } =
 		InvitationsStore.useProperties();

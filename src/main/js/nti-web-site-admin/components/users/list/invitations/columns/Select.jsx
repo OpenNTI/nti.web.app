@@ -15,6 +15,7 @@ const Cell = styled('td')`
 	}
 `;
 
+Select.HeaderPlaceholderComponent = () => <Input.Checkbox p="sm" disabled />;
 Select.HeaderComponent = () => {
 	const { isAllSelected, selectAll, deselectAll } =
 		InvitationsStore.useProperties();
@@ -39,6 +40,8 @@ Select.RendersContainer = true;
 Select.CSSClassName = css`
 	width: 70px;
 `;
+
+Select.Placeholder = () => null;
 export function Select({ item }) {
 	const { isSelected, select, deselect } = InvitationsStore.useProperties();
 
