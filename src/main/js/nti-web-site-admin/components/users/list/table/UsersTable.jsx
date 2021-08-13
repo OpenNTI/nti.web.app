@@ -8,6 +8,7 @@ import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
 import { isFlag } from '@nti/web-client';
+import { Button } from '@nti/web-core';
 
 import Pager from '../../../common/Pager';
 import SearchInfo from '../../../common/SearchInfo';
@@ -86,12 +87,14 @@ class UsersTable extends React.Component {
 					<>
 						<Activation />
 						{!noRoleChange && (
-							<div
-								className="button change-role"
+							<Button
+								primary
+								inverted
+								rounded
 								onClick={this.showChangeRolesDialog}
 							>
 								{t('changeRole')}
-							</div>
+							</Button>
 						)}
 					</>
 				)}

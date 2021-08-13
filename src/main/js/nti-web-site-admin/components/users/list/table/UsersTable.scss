@@ -32,6 +32,10 @@
 			top: 0;
 			display: flex;
 
+			& > * {
+				margin-left: 0.5rem;
+			}
+
 			.button {
 				cursor: pointer;
 				color: var(--primary-blue);

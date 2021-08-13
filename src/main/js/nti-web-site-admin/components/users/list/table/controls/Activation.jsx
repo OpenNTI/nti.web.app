@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
-import { Button, User, Text, StandardUI } from '@nti/web-commons';
+import { User, Text, StandardUI } from '@nti/web-commons';
+import { Button } from '@nti/web-core';
 
 const { Prompt } = StandardUI;
 
@@ -146,12 +146,11 @@ function UserActivationButton({
 	return (
 		<>
 			<Button
-				className={cx('button', 'activate-button', {
-					activating,
-					deactivating,
-				})}
-				plain
+				destructive={deactivating}
+				primary={activating}
+				inverted
 				onClick={() => setConfirming(true)}
+				rounded
 			>
 				{deactivating ? t('deactivate') : t('reactivate')}
 			</Button>

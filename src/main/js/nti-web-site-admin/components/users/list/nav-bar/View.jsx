@@ -3,15 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 import { Prompt } from '@nti/web-commons';
 
 import Card from '../../../common/Card';
 import Tabs from '../../../common/Tabs';
-import InvitePeople from '../InvitePeople';
-import Store from '../table/InvitationsStore';
+import { canSendInvitations } from '../invitations/Store';
+import { InvitePeopleForm } from '../invitations/InvitePeople';
+import { InviteCount } from '../invitations/InviteCount';
 
 import SeatLimit from './SeatLimit';
 
@@ -26,9 +26,8 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
 
-class UserListNavBar extends React.Component {
+export default class UserListNavBar extends React.Component {
 	static propTypes = {
-		store: PropTypes.object.isRequired,
 		total: PropTypes.number,
 		loading: PropTypes.bool,
 		showInviteDialog: PropTypes.bool,
@@ -37,21 +36,21 @@ class UserListNavBar extends React.Component {
 	state = {};
 
 	componentDidMount() {
-		this.props.store.canSendInvitations().then(canSendInvitations => {
+		canSendInvitations().then(canSendInvitations => {
 			this.setState({ canSendInvitations });
 		});
 	}
 
-	componentWillUnmount() {
-		this.props.store.setUnload();
+	showInviteDialog() {
+		this.setState({ showInvite: true });
+	}
+	hideInviteDialog() {
+		this.setState({ showInvite: false });
 	}
 
 	render() {
-		const { className, loading, total, showInviteDialog, store } =
-			this.props;
-		const { canSendInvitations } = this.state;
-
-		const hasCount = !loading && (total || total === 0);
+		const { className } = this.props;
+		const { canSendInvitations, showInvite } = this.state;
 
 		return (
 			<div className={cx('site-admin-user-list-nav-bar', className)}>
@@ -77,7 +76,7 @@ class UserListNavBar extends React.Component {
 						<div
 							className="invite"
 							onClick={() => {
-								store.showInviteDialog();
+								this.showInviteDialog();
 							}}
 						>
 							<i className="icon-addfriend" />
@@ -90,30 +89,20 @@ class UserListNavBar extends React.Component {
 							activeClassName="active"
 						>
 							{t('invitations')}
-							{hasCount && (
-								<div className="invitations-count">
-									{total || 0}
-								</div>
-							)}
+							<InviteCount className="invitations-count" />
 						</LinkTo.Path>
 					</Tabs>
 				</Card>
-				{showInviteDialog && (
+				{showInvite && (
 					<Prompt.Dialog
-						onBeforeDismiss={() => store.hideInviteDialog()}
+						onBeforeDismiss={() => this.hideInviteDialog()}
 					>
-						<InvitePeople store={store} loading={loading} />
+						<InvitePeopleForm
+							onDone={() => this.hideInviteDialog()}
+						/>
 					</Prompt.Dialog>
 				)}
 			</div>
 		);
 	}
 }
-
-export default decorate(UserListNavBar, [
-	Store.connect({
-		loading: 'loading',
-		total: 'total',
-		showInviteDialog: 'showInviteDialog',
-	}),
-]);

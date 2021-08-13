@@ -1,9 +1,10 @@
 import './InvitePeople.scss';
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { validate as isEmail } from 'email-validator';
 
 import { scoped } from '@nti/lib-locale';
 import {
+	Prompt,
 	DialogButtons,
 	TokenEditor,
 	Select,
@@ -12,25 +13,26 @@ import {
 	Loading,
 	List,
 } from '@nti/web-commons';
-import { Connectors } from '@nti/lib-store';
+import { Button, Icons } from '@nti/web-core';
 
-const DEFAULT_TEXT = {
+import {
+	sendLearnerInvites as sendLearnerStoreInvites,
+	sendAdminInvites as sendAdminStoreInvites,
+} from './Store';
+
+const t = scoped('nti-web-site-admin.components.users.list.InvitePeople', {
 	people: 'People',
 	title: 'Invite People',
 	importFile: 'Upload CSV File',
 	role: 'Role',
+	button: 'Invite People',
 	invalidEmails: {
 		message: {
 			one: 'There is an invalid email: ',
 			other: 'There are invalid emails: ',
 		},
 	},
-};
-
-const t = scoped(
-	'nti-web-site-admin.components.users.list.InvitePeople',
-	DEFAULT_TEXT
-);
+});
 
 const errorRenderers = [
 	{
@@ -250,10 +252,56 @@ class InvitePeople extends React.Component {
 	}
 }
 
-export default Connectors.Any.connect([
-	'inviteError',
-	'hideInviteDialog',
-	'sendLearnerInvites',
-	'sendAdminInvites',
-	'clearInviteError',
-])(InvitePeople);
+export function InvitePeopleForm({ onDone = () => {} }) {
+	const [error, setError] = useState(null);
+	const clearError = useCallback(() => setError(null));
+
+	const sendLearners = useCallback(async (...args) => {
+		try {
+			await sendLearnerStoreInvites(...args);
+			onDone?.();
+		} catch (e) {
+			setError(e);
+		}
+	}, []);
+
+	const sendAdmin = useCallback(async (...args) => {
+		try {
+			await sendAdminStoreInvites(...args);
+			onDone?.();
+		} catch (e) {
+			setError(e);
+		}
+	}, []);
+
+	return (
+		<InvitePeople
+			inviteError={error}
+			hideInviteDialog={onDone}
+			sendLearnerInvites={sendLearners}
+			sendAdminInvites={sendAdmin}
+			clearInviteError={clearError}
+		/>
+	);
+}
+
+export function InvitePeopleButton(props) {
+	const [open, setOpen] = useState(false);
+
+	const doOpen = useCallback(() => setOpen(true), [setOpen]);
+	const doClose = useCallback(() => setOpen(false), [setOpen]);
+
+	return (
+		<>
+			<Button {...props} onClick={doOpen}>
+				<Icons.AddFriend />
+				<span>{t('button')}</span>
+			</Button>
+			{open && (
+				<Prompt.Dialog onBeforeDismiss={doClose}>
+					<InvitePeopleForm onDone={doClose} />
+				</Prompt.Dialog>
+			)}
+		</>
+	);
+}
