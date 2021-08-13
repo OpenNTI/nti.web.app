@@ -332,11 +332,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				' to ',
 				newStatus
 			);
-			this.client.postStatus(
-				await room.getInterfaceInstance(),
-				{ state: newStatus },
-				Ext.emptyFn
-			);
+			this.client.postStatus(await room.getInterfaceInstance(), {
+				state: newStatus,
+			});
 		}
 	},
 
