@@ -6,6 +6,7 @@ import { SelectMenu } from '@nti/web-core';
 import Export from '../table/controls/Export';
 
 import { InvitationsStore } from './Store';
+import { InvitePeopleButton } from './InvitePeople';
 import { CancelButton } from './controls/Cancel';
 import { ResendButton } from './controls/Resend';
 
@@ -91,6 +92,7 @@ export function InvitationsHeader({ disabled }) {
 				getText={getFilterLabel}
 			/>
 			<Controls>
+				{!hasSelection && <InvitePeopleButton rounded primary />}
 				{hasSelection && (
 					<ResendButton
 						invites={selection}

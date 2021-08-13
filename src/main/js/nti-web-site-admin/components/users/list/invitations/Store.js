@@ -1,6 +1,11 @@
+import EventEmitter from 'events';
+
 import { StateStore } from '@nti/web-core/data';
 import { getService } from '@nti/web-client';
 import { Models } from '@nti/lib-interfaces';
+
+const Bus = new EventEmitter();
+const InvitesSentEvent = 'invites-sent';
 
 const Base = StateStore.Behaviors.Selectable(
 	StateStore.Behaviors.Searchable(
@@ -36,6 +41,13 @@ export class InvitationsStore extends Base {
 
 	filterOptions = ['all', 'pending', 'accepted', 'expired'];
 
+	onInitialized() {
+		const handler = () => this.reload();
+
+		Bus.addListener(InvitesSentEvent, handler);
+		return () => Bus.removeListener(InvitesSentEvent, handler);
+	}
+
 	async load(e) {
 		const { params } = e;
 
@@ -52,7 +64,44 @@ export class InvitationsStore extends Base {
 	}
 }
 
-export async function sendInvites({ emails, message, file, isAdmin }) {
+export class InvitationCountStore extends StateStore {
+	onInitialized() {
+		const handler = () => this.reload();
+
+		Bus.addListener(InvitesSentEvent, handler);
+		return () => Bus.removeListener(InvitesSentEvent, handler);
+	}
+
+	async load() {
+		const service = await getService();
+		const invitations = service.getCollection('Invitations', 'Invitations');
+
+		const batch = await service.getBatch(
+			invitations.getLink('invitations'),
+			{ batchSize: 1, batchStart: 0 }
+		);
+
+		return { count: batch.total };
+	}
+}
+
+export async function canSendInvitations() {
+	const service = await getService();
+
+	const invitationsCollection = service.getCollection(
+		'Invitations',
+		'Invitations'
+	);
+
+	return invitationsCollection?.hasLink('send-site-invitation');
+}
+
+export const sendLearnerInvites = (emails, message, file) =>
+	sendInvites({ emails, message, file });
+export const sendAdminInvites = (emails, message, file) =>
+	sendInvites({ emails, message, file, isAdmin: true });
+
+export async function sendInvites({ emails, message, file, isAdmin }, silent) {
 	const service = await getService();
 	const MimeType = isAdmin
 		? INVITATION_TYPES.ADMIN
@@ -86,6 +135,8 @@ export async function sendInvites({ emails, message, file, isAdmin }) {
 		invitationsCollection.getLink('send-site-invitation'),
 		payload
 	);
+
+	Bus.emit(InvitesSentEvent);
 }
 
 export async function resend(invitations) {
@@ -111,7 +162,7 @@ export async function resend(invitations) {
 		isAdmin: isAdmin(invites[0]),
 	}));
 
-	batches.forEach(batch => sendInvites(batch));
+	batches.forEach(batch => sendInvites(batch, true));
 }
 
 export async function rescind(invitations) {
