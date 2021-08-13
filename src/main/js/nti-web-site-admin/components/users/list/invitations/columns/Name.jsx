@@ -21,6 +21,7 @@ const Info = styled.div`
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: center;
+	flex: 1 1 auto;
 	min-height: 60px;
 `;
 
@@ -36,7 +37,7 @@ Name.Placeholder = () => (
 			<Placeholder.Text
 				as="div"
 				typography="body"
-				text="email@email.com"
+				text="thelongplaceholderlong@email.com"
 				mb="xs"
 			/>
 			<Placeholder.Text as="div" typography="body" text="Administrator" />

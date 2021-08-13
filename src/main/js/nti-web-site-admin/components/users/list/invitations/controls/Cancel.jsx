@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { AsyncAction } from '@nti/web-core';
+import { AsyncAction, Icons } from '@nti/web-core';
 import { Prompt } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 
@@ -9,7 +9,10 @@ import { rescind } from '../Store';
 const t = scoped(
 	'nti-web-site-admin.components.users.list.invitations.controls.Rescind',
 	{
-		rescind: 'Cancel',
+		rescind: {
+			short: 'Cancel',
+			long: 'Cancel Invitations',
+		},
 		prompt: {
 			title: 'Cancel Invitations',
 			message: {
@@ -38,7 +41,7 @@ const prompt = async invites => {
 	}
 };
 
-export function CancelButton({ invites, before, after, ...otherProps }) {
+export function CancelButton({ invites, long, before, after, ...otherProps }) {
 	const onClick = useCallback(
 		async (_, { reset }) => {
 			try {
@@ -59,7 +62,14 @@ export function CancelButton({ invites, before, after, ...otherProps }) {
 
 	return (
 		<AsyncAction onClick={onClick} destructive {...otherProps}>
-			{t('rescind')}
+			{long ? (
+				<>
+					<Icons.Reset />
+					<span>{t('rescind.long')}</span>
+				</>
+			) : (
+				t('rescind.short')
+			)}
 		</AsyncAction>
 	);
 }

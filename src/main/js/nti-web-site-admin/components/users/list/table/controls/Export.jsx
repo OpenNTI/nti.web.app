@@ -2,32 +2,12 @@ import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { Button, Form, Icons, Tooltip, useService } from '@nti/web-commons';
+import { Form, Tooltip, useService } from '@nti/web-commons';
+import { Button, Icons } from '@nti/web-core';
 import { URL as URLUtils } from '@nti/lib-commons';
 
 const UppercaseTooltip = styled(Tooltip)`
 	text-transform: uppercase;
-`;
-
-const DownloadButton = styled(Button)`
-	cursor: pointer;
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	box-sizing: border-box;
-	height: 42px;
-	width: 42px;
-	border: 1px solid var(--border-grey-light);
-	border-radius: 4px;
-	background-color: white !important;
-	margin-left: 0.5rem;
-`;
-
-const DownloadIcon = styled(Icons.Download)`
-	color: var(--primary-blue);
-	width: 11px;
-	height: 11px;
 `;
 
 const t = scoped(
@@ -99,9 +79,9 @@ function Export({ selectedUsers, params, filter, rel }) {
 		>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
-				<DownloadButton as={Form.SubmitButton} type="submit">
-					<DownloadIcon />
-				</DownloadButton>
+				<Button as={Form.SubmitButton} type="submit" rounded inverted>
+					<Icons.Download />
+				</Button>
 			</form>
 		</UppercaseTooltip>
 	);

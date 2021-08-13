@@ -58,6 +58,7 @@ const Cancelled = ({ item, busy, setBusy, setNotBusy }) => (
 
 const Accepted = State;
 
+Controls.Placeholder = () => null;
 export function Controls({ item }) {
 	const { selectionCount } = InvitationsStore.useProperties();
 

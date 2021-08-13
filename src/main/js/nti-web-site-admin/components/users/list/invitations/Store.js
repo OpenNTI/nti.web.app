@@ -41,13 +41,14 @@ export class InvitationsStore extends Base {
 
 		const service = await getService();
 		const invitations = service.getCollection('Invitations', 'Invitations');
+		const batchParams = fixParams(params);
 
 		const batch = await service.getBatch(
 			invitations.getLink('invitations'),
-			fixParams(params)
+			batchParams
 		);
 
-		return { batch };
+		return { batch, batchParams };
 	}
 }
 
