@@ -9,6 +9,7 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	() => require('internal/legacy/util/Parsing')
 );
 const { getService } = require('@nti/web-client');
+const { Array: ArrayUtils } = require('@nti/lib-commons');
 const LoginStateStore = require('internal/legacy/login/StateStore');
 
 const ChatStateStore = require('./StateStore');
@@ -304,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.clearErrorForRoom(room);
 		this.client.postMessage(
 			await room.getInterfaceInstance(),
-			val,
+			ArrayUtils.ensure(val),
 			mid,
 			channel,
 			recipients,
@@ -318,8 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
 	async publishChatStatus(room, newStatus, username) {
-		var channel = 'STATE',
-			oldStatus;
+		var oldStatus;
 		username =
 			username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
@@ -332,14 +332,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				' to ',
 				newStatus
 			);
-			this.client.postMessage(
-				await room.getInterfaceInstance(),
-				{ state: newStatus },
-				null,
-				channel,
-				null,
-				Ext.emptyFn
-			);
+			this.client.postStatus(await room.getInterfaceInstance(), {
+				state: newStatus,
+			});
 		}
 	},
 
