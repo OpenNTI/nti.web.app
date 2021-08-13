@@ -319,8 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
 	async publishChatStatus(room, newStatus, username) {
-		var channel = 'STATE',
-			oldStatus;
+		var oldStatus;
 		username =
 			username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
@@ -333,16 +332,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				' to ',
 				newStatus
 			);
-			/**
-			 * The server expects the recipients argument to be defined but it's okay for it to be an empty
-			 * array when sending a status message on the STATE channel.
-			 */
-			this.client.postMessage(
+			this.client.postStatus(
 				await room.getInterfaceInstance(),
 				{ state: newStatus },
-				null,
-				channel,
-				[],
 				Ext.emptyFn
 			);
 		}
