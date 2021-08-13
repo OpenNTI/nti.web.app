@@ -95,25 +95,25 @@ export function InvitationsHeader({ disabled }) {
 			<Controls>
 				{!hasSelection && <InvitePeopleButton rounded primary />}
 				{hasSelection && (
-					<ResendButton
-						invites={selection}
-						disabled={busy}
-						before={setBusy}
-						after={setNotBusy}
-						inverted
-						rounded
-					/>
-				)}
-				{hasSelection && (
-					<CancelButton
-						invites={selection}
-						disabled={busy}
-						before={setBusy}
-						after={setNotBusy}
-						inverted
-						rounded
-						long
-					/>
+					<>
+						<ResendButton
+							invites={selection}
+							disabled={busy}
+							before={setBusy}
+							after={setNotBusy}
+							inverted
+							rounded
+						/>
+						<CancelButton
+							invites={selection}
+							disabled={busy}
+							before={setBusy}
+							after={setNotBusy}
+							inverted
+							rounded
+							long
+						/>
+					</>
 				)}
 				{isFlag('export-users') && (
 					<Export
