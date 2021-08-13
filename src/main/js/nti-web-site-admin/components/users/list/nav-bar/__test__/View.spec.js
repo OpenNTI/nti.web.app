@@ -18,7 +18,7 @@ const getMockService = canSendInvitations => {
 		},
 		getBatch: () => {
 			return Promise.resolve({
-				Total: 5,
+				total: 5,
 			});
 		},
 	};
