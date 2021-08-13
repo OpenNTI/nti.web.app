@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { SelectMenu } from '@nti/web-core';
+import { isFlag } from '@nti/web-client';
 
 import Export from '../table/controls/Export';
 
@@ -114,11 +115,13 @@ export function InvitationsHeader({ disabled }) {
 						long
 					/>
 				)}
-				<Export
-					selectedUsers={selection}
-					params={batchParams}
-					rel="Invitations"
-				/>
+				{isFlag('export-users') && (
+					<Export
+						selectedUsers={selection}
+						params={batchParams}
+						rel="Invitations"
+					/>
+				)}
 			</Controls>
 		</Header>
 	);
