@@ -17,6 +17,14 @@ const t = scoped(
 	}
 );
 
+const Container = styled(Centered)`
+	padding: 0 18px;
+
+	& > * + * {
+		margin-left: 0.5rem;
+	}
+`;
+
 const State = ({ item }) => (
 	<Text typography="body" color="dark">
 		{item.accepted && t('accepted')}
@@ -87,13 +95,13 @@ export function Controls({ item }) {
 	}
 
 	return (
-		<Centered>
+		<Container>
 			<Cmp
 				item={item}
 				busy={busy}
 				setBusy={setBusy}
 				setNotBusy={setNotBusy}
 			/>
-		</Centered>
+		</Container>
 	);
 }

@@ -41,7 +41,7 @@ const Header = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding-left: 30px;
+	padding: 20px 30px 10px;
 `;
 
 const Controls = styled.div`

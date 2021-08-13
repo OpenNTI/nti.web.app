@@ -50,7 +50,7 @@ export default class UserListNavBar extends React.Component {
 	}
 
 	render() {
-		const { className, showInviteDialog } = this.props;
+		const { className } = this.props;
 		const { canSendInvitations, showInvite } = this.state;
 
 		return (

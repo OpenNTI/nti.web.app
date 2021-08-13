@@ -14,14 +14,16 @@ const Fallback = () => (
 	</>
 );
 
-export default function InvitationsView() {
+export default function InvitationsView({ className }) {
 	const store = InvitationsStore.useStore();
 
 	return (
-		<DataContext store={store} fallback={<Fallback />}>
-			<InvitationsHeader />
-			<InvitationsTable />
-			<InvitationsFooter />
-		</DataContext>
+		<div className={className}>
+			<DataContext store={store} fallback={<Fallback />}>
+				<InvitationsHeader />
+				<InvitationsTable />
+				<InvitationsFooter />
+			</DataContext>
+		</div>
 	);
 }

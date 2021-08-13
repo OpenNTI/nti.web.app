@@ -14,6 +14,9 @@ const t = scoped(
 
 Date.Name = t('title');
 Date.SortOn = 'created_time';
+Date.CSSClassName = css`
+	width: 130px;
+`;
 export function Date({ item }) {
 	const date = item.getCreatedTime();
 

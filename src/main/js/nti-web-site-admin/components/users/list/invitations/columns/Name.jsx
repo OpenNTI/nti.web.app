@@ -26,7 +26,7 @@ const Info = styled.div`
 `;
 
 Name.CSSClassName = css`
-	width: 400px;
+	width: 350px;
 `;
 Name.Name = t('title');
 Name.SortOn = 'receiver';
