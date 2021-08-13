@@ -28,7 +28,6 @@ const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
 
 export default class UserListNavBar extends React.Component {
 	static propTypes = {
-		store: PropTypes.object.isRequired,
 		total: PropTypes.number,
 		loading: PropTypes.bool,
 		showInviteDialog: PropTypes.bool,
