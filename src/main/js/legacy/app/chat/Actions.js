@@ -9,6 +9,7 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	() => require('internal/legacy/util/Parsing')
 );
 const { getService } = require('@nti/web-client');
+const { Array: ArrayUtils } = require('@nti/lib-commons');
 const LoginStateStore = require('internal/legacy/login/StateStore');
 
 const ChatStateStore = require('./StateStore');
@@ -304,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.clearErrorForRoom(room);
 		this.client.postMessage(
 			await room.getInterfaceInstance(),
-			val,
+			ArrayUtils.ensure(val),
 			mid,
 			channel,
 			recipients,
@@ -332,12 +333,16 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				' to ',
 				newStatus
 			);
+			/**
+			 * The server expects the recipients argument to be defined but it's okay for it to be an empty
+			 * array when sending a status message on the STATE channel.
+			 */
 			this.client.postMessage(
 				await room.getInterfaceInstance(),
 				{ state: newStatus },
 				null,
 				channel,
-				null,
+				[],
 				Ext.emptyFn
 			);
 		}
