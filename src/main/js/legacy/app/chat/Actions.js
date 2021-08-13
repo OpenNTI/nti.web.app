@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			.catch(function () {
 				// TODO: Check if this comment below is still valid
 				//because we are using this callback for both the button and window close callback.	 There are 2 signatures,
-				//we ignore one so we dont try to exit a room twice.
+				//we ignore one so we don't try to exit a room twice.
 				logger.info('Declined invitation..: ', arguments);
 				if (w && !w.isDestroyed) {
 					me.leaveRoom(roomInfo);
@@ -588,7 +588,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			}
 		}
 
-		return newRoomInfo; //for convinience chaining
+		return newRoomInfo; //for convenience chaining
 	},
 
 	sendChangeMessages: function (oldRoomInfo, newRoomInfo) {
@@ -742,7 +742,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			}
 		});
 
-		// Reverse the array, so we can add the transcript fron the oldest to most recent ones.
+		// Reverse the array, so we can add the transcript from the oldest to most recent ones.
 		return Ext.Array.map(summaries.reverse(), function (summary) {
 			return me.loadTranscript(summary.get('RoomInfo'));
 		});
