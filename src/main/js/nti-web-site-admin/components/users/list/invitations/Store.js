@@ -55,6 +55,10 @@ export class InvitationsStore extends Base {
 		const invitations = service.getCollection('Invitations', 'Invitations');
 		const batchParams = fixParams(params);
 
+		if (!invitations?.hasLink('invitations')) {
+			throw new Error('Access Forbidden');
+		}
+
 		const batch = await service.getBatch(
 			invitations.getLink('invitations'),
 			batchParams
