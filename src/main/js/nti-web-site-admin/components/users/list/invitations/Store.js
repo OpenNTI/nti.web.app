@@ -60,10 +60,6 @@ export class InvitationsStore extends Base {
 			batchParams
 		);
 
-		if (params.batchStart !== 0) {
-			throw new Error('Failed to load page');
-		}
-
 		return { batch, batchParams };
 	}
 }
