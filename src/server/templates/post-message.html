@@ -7,13 +7,14 @@
 		<script type="text/javascript">
 			var data = <[cfg:DATA]>;
 
-			if (window.opener) {
-				window.opener.postMessage({
-					data: data,
-					hash: location.hash
-				}, '*');
-				window.close();
-			}
+			const parent = window.opener || window.parent; // popup has opener; iframe has parent.
+
+			parent?.postMessage?.({
+				data: data,
+				hash: location.hash
+			}, '*');
+
+			window.close();
 		</script>
 	</body>
 </html>
