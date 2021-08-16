@@ -12,6 +12,8 @@ import {
 	initErrorReporter,
 } from '@nti/web-client';
 
+import { QueryErrorListener } from './QueryErrorListener';
+
 initLocale();
 
 if (typeof document !== 'undefined') {
@@ -33,6 +35,7 @@ if (typeof document !== 'undefined') {
 		document.createElement('div')
 	);
 	ReactDOM.render(<Offline.Toasts />, document.createElement('div'));
+	ReactDOM.render(<QueryErrorListener />, document.createElement('div'));
 }
 
 import 'internal/legacy'; //kick start the app (the core is still defined in extjs)
