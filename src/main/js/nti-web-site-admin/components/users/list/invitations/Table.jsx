@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, TablePlaceholder } from '@nti/web-core';
+import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
 import { InvitationsStore } from './Store';
@@ -35,7 +35,10 @@ export const InvitationsTablePlaceholder = () => {
 
 export function InvitationsTable() {
 	return (
-		<DataContext fallback={<InvitationsTablePlaceholder />}>
+		<DataContext
+			fallback={<InvitationsTablePlaceholder />}
+			error={<ErrorMessage as="div" type="body" center pv="md" />}
+		>
 			<ConnectedTable />
 		</DataContext>
 	);

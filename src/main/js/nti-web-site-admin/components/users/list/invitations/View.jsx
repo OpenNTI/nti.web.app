@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
 import { InvitationsStore } from './Store';
@@ -19,7 +20,13 @@ export default function InvitationsView({ className }) {
 
 	return (
 		<div className={className}>
-			<DataContext store={store} fallback={<Fallback />}>
+			<DataContext
+				store={store}
+				fallback={<Fallback />}
+				error={
+					<ErrorMessage as="div" type="subhead-one" center pv="lg" />
+				}
+			>
 				<InvitationsHeader />
 				<InvitationsTable />
 				<InvitationsFooter />

@@ -22,7 +22,7 @@ export function Date({ item }) {
 
 	return (
 		<VerticallyCentered>
-			<DateTime.RelativeAdverb date={date} typography="body" />
+			<DateTime.RelativeAdverb date={date} type="body" />
 		</VerticallyCentered>
 	);
 }

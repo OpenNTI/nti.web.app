@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Text } from '@nti/web-core';
+import { Typography } from '@nti/web-core';
 
 import { InvitationsStore } from '../Store';
 import { ResendButton } from '../controls/Resend';
@@ -26,10 +26,10 @@ const Container = styled(Centered)`
 `;
 
 const State = ({ item }) => (
-	<Text typography="body" color="dark">
+	<Typography type="body" color="dark">
 		{item.accepted && t('accepted')}
 		{!item.accepted && item.expired && t('canceled')}
-	</Text>
+	</Typography>
 );
 
 const Pending = ({ item, busy, setBusy, setNotBusy }) => (

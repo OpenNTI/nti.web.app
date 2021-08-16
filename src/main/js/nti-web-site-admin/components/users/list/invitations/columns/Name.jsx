@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Avatar, Text, Placeholder } from '@nti/web-core';
+import { Avatar, Typography, Placeholder } from '@nti/web-core';
 
 import { VerticallyCentered } from './Common';
 
@@ -54,14 +54,14 @@ export function Name({ item }) {
 		<VerticallyCentered>
 			<Avatar entity={entity} circular mr="lg" />
 			<Info>
-				<Text as="div" typography="body" color="dark" limitLines={1}>
+				<Typography as="div" type="body" color="dark" limitLines={1}>
 					{item.receiver}
-				</Text>
-				<Text as="div" typography="body" limitLines={1}>
+				</Typography>
+				<Typography as="div" type="body" limitLines={1}>
 					{isAdminInvite(item.MimeType)
 						? t('administrator')
 						: t('learner')}
-				</Text>
+				</Typography>
 			</Info>
 		</VerticallyCentered>
 	);
