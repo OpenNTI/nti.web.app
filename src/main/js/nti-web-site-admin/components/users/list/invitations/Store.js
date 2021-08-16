@@ -36,9 +36,6 @@ export class InvitationsStore extends Base {
 	static FilterParam = 'type_filter';
 	static DefaultFilter = 'all';
 
-	static PageSize = 2;
-	static PageResetParams = ['type_filter'];
-
 	static DefaultSortProperty = 'created_time';
 	static DefaultSortDirection = 'descending';
 
