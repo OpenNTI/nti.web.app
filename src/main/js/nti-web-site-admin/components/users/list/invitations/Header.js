@@ -115,6 +115,7 @@ export function InvitationsHeader({ disabled }) {
 								inverted
 								rounded
 								long
+								deletes={filter === 'expired'}
 							/>
 						</>
 					)}

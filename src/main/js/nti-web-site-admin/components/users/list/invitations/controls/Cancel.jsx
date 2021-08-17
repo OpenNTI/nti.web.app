@@ -13,6 +13,10 @@ const t = scoped(
 			short: 'Cancel',
 			long: 'Cancel Invitations',
 		},
+		delete: {
+			short: 'Delete',
+			long: 'Delete Invitations',
+		},
 		prompt: {
 			title: 'Cancel Invitations',
 			message: {
@@ -41,7 +45,14 @@ const prompt = async invites => {
 	}
 };
 
-export function CancelButton({ invites, long, before, after, ...otherProps }) {
+export function CancelButton({
+	invites,
+	long,
+	deletes,
+	before,
+	after,
+	...otherProps
+}) {
 	const onClick = useCallback(
 		async (_, { reset }) => {
 			try {
@@ -60,12 +71,17 @@ export function CancelButton({ invites, long, before, after, ...otherProps }) {
 		[invites, after]
 	);
 
+	const localeKeys = [
+		deletes ? 'delete' : 'rescind',
+		long ? 'long' : 'short',
+	];
+
 	return (
 		<AsyncAction onClick={onClick} destructive {...otherProps}>
 			{long ? (
 				<>
-					<Icons.Reset />
-					<span>{t('rescind.long')}</span>
+					{deletes ? <Icons.TrashCan /> : <Icons.Reset />}
+					<span>{t(localeKeys.join('.'))}</span>
 				</>
 			) : (
 				t('rescind.short')
