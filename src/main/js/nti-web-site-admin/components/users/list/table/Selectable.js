@@ -27,6 +27,10 @@ export default {
 		this.emitChange('selectedUsers');
 	},
 
+	clearSelection() {
+		this.set('selectedUsers', []);
+	},
+
 	isAllSelected() {
 		const selected = this.get('selectedUsers') ?? [];
 		const items = this.get('items');

@@ -53,6 +53,7 @@ class UserListStore extends Stores.BoundStore {
 				service,
 				false
 			);
+			this.clearSelection();
 		} catch (e) {
 			this.set({
 				error: e.Message || e,
@@ -74,6 +75,7 @@ class UserListStore extends Stores.BoundStore {
 				service,
 				true
 			);
+			this.clearSelection();
 		} catch (e) {
 			this.set({
 				error: e.Message || e,
@@ -112,7 +114,7 @@ class UserListStore extends Stores.BoundStore {
 
 		try {
 			await bulkActivation(users, 'BatchDeactivate');
-
+			this.clearSelection();
 			this.load();
 		} catch (e) {
 			this.set({
@@ -127,7 +129,7 @@ class UserListStore extends Stores.BoundStore {
 
 		try {
 			await bulkActivation(users, 'BatchReactivate');
-
+			this.clearSelection();
 			this.load();
 		} catch (e) {
 			this.set({
