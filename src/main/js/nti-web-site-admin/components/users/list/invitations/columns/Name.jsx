@@ -54,10 +54,21 @@ export function Name({ item }) {
 		<VerticallyCentered>
 			<Avatar entity={entity} circular mr="lg" />
 			<Info>
-				<Typography as="div" type="body" color="dark" limitLines={1}>
+				<Typography
+					as="div"
+					type="body"
+					color="dark"
+					limitLines={1}
+					data-test-id="receiver"
+				>
 					{item.receiver}
 				</Typography>
-				<Typography as="div" type="body" limitLines={1}>
+				<Typography
+					as="div"
+					type="body"
+					limitLines={1}
+					data-test-id="type"
+				>
 					{isAdminInvite(item.MimeType)
 						? t('administrator')
 						: t('learner')}
