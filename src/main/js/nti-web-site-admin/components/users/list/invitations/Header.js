@@ -3,7 +3,9 @@ import React, { useCallback, useState } from 'react';
 import { scoped } from '@nti/lib-locale';
 import { SelectMenu } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
+import { ContextIndicator } from '@nti/web-search';
 
+import SearchInfo from '../../../common/SearchInfo';
 import Export from '../table/controls/Export';
 
 import { InvitationsStore } from './Store';
@@ -72,6 +74,7 @@ export function InvitationsHeader({ disabled }) {
 		batchParams,
 		reload,
 		clearSelection,
+		searchTerm,
 	} = InvitationsStore.useProperties();
 
 	const hasSelection = !!selection?.length;
@@ -84,45 +87,48 @@ export function InvitationsHeader({ disabled }) {
 	);
 
 	return (
-		<Header>
-			<SelectMenu
-				options={filterOptions}
-				value={filter}
-				onChange={setFilter}
-				title={getFilterTitle(filter)}
-				getText={getFilterLabel}
-			/>
-			<Controls>
-				{!hasSelection && <InvitePeopleButton rounded primary />}
-				{hasSelection && (
-					<>
-						<ResendButton
-							invites={selection}
-							disabled={busy}
-							before={setBusy}
-							after={setNotBusy}
-							inverted
-							rounded
+		<>
+			<Header>
+				<SelectMenu
+					options={filterOptions}
+					value={filter}
+					onChange={setFilter}
+					title={getFilterTitle(filter)}
+					getText={getFilterLabel}
+				/>
+				<Controls>
+					{!hasSelection && <InvitePeopleButton rounded primary />}
+					{hasSelection && (
+						<>
+							<ResendButton
+								invites={selection}
+								disabled={busy}
+								before={setBusy}
+								after={setNotBusy}
+								inverted
+								rounded
+							/>
+							<CancelButton
+								invites={selection}
+								disabled={busy}
+								before={setBusy}
+								after={setNotBusy}
+								inverted
+								rounded
+								long
+							/>
+						</>
+					)}
+					{isFlag('export-users') && (
+						<Export
+							selectedUsers={selection}
+							params={batchParams}
+							rel="Invitations"
 						/>
-						<CancelButton
-							invites={selection}
-							disabled={busy}
-							before={setBusy}
-							after={setNotBusy}
-							inverted
-							rounded
-							long
-						/>
-					</>
-				)}
-				{isFlag('export-users') && (
-					<Export
-						selectedUsers={selection}
-						params={batchParams}
-						rel="Invitations"
-					/>
-				)}
-			</Controls>
-		</Header>
+					)}
+				</Controls>
+			</Header>
+			<SearchInfo searchTerm={searchTerm} />
+		</>
 	);
 }

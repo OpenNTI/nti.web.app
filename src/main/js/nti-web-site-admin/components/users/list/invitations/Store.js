@@ -31,17 +31,23 @@ function fixParams(params) {
 		delete clone['type_filter'];
 	}
 
+	if (clone.searchTerm) {
+		clone.filterOn = 'receiver';
+		clone.filter = clone.searchTerm;
+		delete clone.searchTerm;
+	}
+
 	return clone;
 }
 
 export class InvitationsStore extends Base {
-	static StateKey = 'site-invitations';
+	StateKey = 'site-invitations';
 
-	static FilterParam = 'type_filter';
-	static DefaultFilter = 'pending';
+	FilterParam = 'type_filter';
+	DefaultFilter = 'pending';
 
-	static DefaultSortOn = 'created_time';
-	static DefaultSortOrder = 'descending';
+	DefaultSortOn = 'created_time';
+	DefaultSortOrder = 'descending';
 
 	filterOptions = ['pending', 'all', 'accepted', 'expired'];
 
