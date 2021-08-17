@@ -7,7 +7,23 @@ import { Models } from '@nti/lib-interfaces';
 const Bus = new EventEmitter();
 const InvitesSentEvent = 'invites-sent';
 
-const Base = StateStore.Behaviors.Stateful(getAppUserScopedStorage())(
+const getStorage = () => {
+	let storage = null;
+
+	return {
+		getItem(...args) {
+			storage = storage || getAppUserScopedStorage();
+			return storage.getItem(...args);
+		},
+
+		setItem(...args) {
+			storage = storage || getAppUserScopedStorage();
+			return storage.setItem(...args);
+		},
+	};
+};
+
+const Base = StateStore.Behaviors.Stateful(getStorage())(
 	StateStore.Behaviors.Selectable(
 		StateStore.Behaviors.Searchable(
 			StateStore.Behaviors.Filterable(
