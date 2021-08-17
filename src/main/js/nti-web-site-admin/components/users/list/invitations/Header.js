@@ -60,7 +60,7 @@ const Controls = styled.div`
 
 export const InvitationsHeaderPlaceholder = () => (
 	<Header>
-		<SelectMenu value="all" title={getFilterTitle('all')} disabled />
+		<SelectMenu value="all" title={getFilterTitle('pending')} disabled />
 	</Header>
 );
 
@@ -97,7 +97,7 @@ export function InvitationsHeader({ disabled }) {
 				/>
 				<Controls>
 					{!hasSelection && <InvitePeopleButton rounded primary />}
-					{hasSelection && (
+					{hasSelection && filter !== 'accepted' && (
 						<>
 							<ResendButton
 								invites={selection}
