@@ -3,7 +3,6 @@ import React, { useCallback, useState } from 'react';
 import { scoped } from '@nti/lib-locale';
 import { SelectMenu } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
-import { ContextIndicator } from '@nti/web-search';
 
 import SearchInfo from '../../../common/SearchInfo';
 import Export from '../table/controls/Export';
