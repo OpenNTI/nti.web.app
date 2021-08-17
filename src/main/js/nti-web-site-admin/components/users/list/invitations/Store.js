@@ -1,17 +1,19 @@
 import EventEmitter from 'events';
 
 import { StateStore } from '@nti/web-core/data';
-import { getService } from '@nti/web-client';
+import { getService, getAppUserScopedStorage } from '@nti/web-client';
 import { Models } from '@nti/lib-interfaces';
 
 const Bus = new EventEmitter();
 const InvitesSentEvent = 'invites-sent';
 
-const Base = StateStore.Behaviors.Selectable(
-	StateStore.Behaviors.Searchable(
-		StateStore.Behaviors.Filterable(
-			StateStore.Behaviors.Sortable(
-				StateStore.Behaviors.BatchPaging.Discrete(StateStore)
+const Base = StateStore.Behaviors.Stateful(getAppUserScopedStorage())(
+	StateStore.Behaviors.Selectable(
+		StateStore.Behaviors.Searchable(
+			StateStore.Behaviors.Filterable(
+				StateStore.Behaviors.Sortable(
+					StateStore.Behaviors.BatchPaging.Discrete(StateStore)
+				)
 			)
 		)
 	)
@@ -33,13 +35,15 @@ function fixParams(params) {
 }
 
 export class InvitationsStore extends Base {
+	static StateKey = 'site-invitations';
+
 	static FilterParam = 'type_filter';
-	static DefaultFilter = 'all';
+	static DefaultFilter = 'pending';
 
-	static DefaultSortProperty = 'created_time';
-	static DefaultSortDirection = 'descending';
+	static DefaultSortOn = 'created_time';
+	static DefaultSortOrder = 'descending';
 
-	filterOptions = ['all', 'pending', 'accepted', 'expired'];
+	filterOptions = ['pending', 'all', 'accepted', 'expired'];
 
 	onInitialized() {
 		const handler = () => this.reload();

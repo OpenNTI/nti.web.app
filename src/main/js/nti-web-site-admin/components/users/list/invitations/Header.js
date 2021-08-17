@@ -16,7 +16,7 @@ const t = scoped(
 	{
 		filters: {
 			all: {
-				label: 'All Invitations (default)',
+				label: 'All Invitations',
 				title: 'All Invitations',
 			},
 			accepted: {
@@ -24,7 +24,7 @@ const t = scoped(
 				title: 'Accepted Invitations',
 			},
 			pending: {
-				label: 'Pending Invitations',
+				label: 'Pending Invitations (default)',
 				title: 'Pending Invitations',
 			},
 			expired: {
