@@ -67,6 +67,10 @@ export class InvitationsStore extends Base {
 
 	filterOptions = ['pending', 'all', 'accepted', 'expired'];
 
+	isSameSelectable(a, b) {
+		return a.getID() === b.getID();
+	}
+
 	onInitialized() {
 		const handler = () => this.reload();
 
