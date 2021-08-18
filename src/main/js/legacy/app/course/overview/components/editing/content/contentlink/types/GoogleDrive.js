@@ -113,7 +113,7 @@ module.exports = exports = Ext.define(
 			form.setValue('label', doc.name);
 			form.setValue('byline', '');
 			form.setValue('description', '');
-			form.setValue('href', doc.url);
+			form.setValue('href', doc.embedUrl ?? doc.url);
 			form.setValue('targetMimeType', doc.mimeType);
 			form.setPlaceholder(
 				'icon',
