@@ -7,8 +7,6 @@ import { InvitationsStore } from '../Store';
 import { ResendButton } from '../controls/Resend';
 import { CancelButton } from '../controls/Cancel';
 
-import { Centered } from './Common';
-
 const t = scoped(
 	'nti-web-site-admin.components.users.list.invitations.columns.Controls',
 	{
@@ -17,19 +15,27 @@ const t = scoped(
 	}
 );
 
-const Container = styled(Centered)`
+const Container = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 	padding: 0 18px;
 
-	& > * + * {
-		margin-left: 0.5rem;
+	& > * {
+		width: 50%;
 	}
 `;
 
+const StateCmp = styled(Typography).attrs({ type: 'body', color: 'dark' })`
+	display: block;
+	text-align: center;
+`;
+
 const State = ({ item }) => (
-	<Typography type="body" color="dark">
+	<StateCmp>
 		{item.accepted && t('accepted')}
 		{!item.accepted && item.expired && t('canceled')}
-	</Typography>
+	</StateCmp>
 );
 
 const Pending = ({ item, busy, setBusy, setNotBusy }) => (
@@ -83,7 +89,11 @@ export function Controls({ item }) {
 	}, [setBusyState, item]);
 
 	if (selectionCount) {
-		return <State item={item} />;
+		return (
+			<Container>
+				<State item={item} />
+			</Container>
+		);
 	}
 
 	let Cmp = Pending;
