@@ -36,6 +36,11 @@ const t = scoped(
 	}
 );
 
+const HideBulkFilters = {
+	accepted: true,
+	all: true,
+};
+
 const getFilterLabel = f => t(`filters.${f}.label`);
 const getFilterTitle = f => t(`filters.${f}.title`);
 
@@ -97,7 +102,7 @@ export function InvitationsHeader({ disabled }) {
 				/>
 				<Controls>
 					{!hasSelection && <InvitePeopleButton rounded primary />}
-					{hasSelection && filter !== 'accepted' && (
+					{hasSelection && !HideBulkFilters[filter] && (
 						<>
 							<ResendButton
 								invites={selection}
