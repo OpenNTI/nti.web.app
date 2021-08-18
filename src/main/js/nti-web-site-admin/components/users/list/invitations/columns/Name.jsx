@@ -23,6 +23,8 @@ const Info = styled.div`
 	justify-content: center;
 	flex: 1 1 auto;
 	min-height: 60px;
+	max-width: calc(100% - 75px);
+	overflow: hidden;
 `;
 
 Name.CSSClassName = css`
