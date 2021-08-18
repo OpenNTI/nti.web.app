@@ -24,14 +24,22 @@ const t = scoped(
 				other: 'Cancel the selected invitations?',
 			},
 		},
+		deletePrompt: {
+			title: 'Delete Invitations',
+			message:
+				'This will remove the invitations, they will not be able to be redeemed or resent.',
+		},
 	}
 );
 
-const prompt = async invites => {
+const prompt = async (invites, deletes) => {
+	const getLocale = (k, d) =>
+		t(`${deletes ? 'deletePrompt' : 'prompt'}.${k}`, d);
+
 	try {
 		await Prompt.areYouSure(
-			t('prompt.message', { invites, count: invites.length }),
-			t('prompt.title'),
+			getLocale('message', { invites, count: invites.length }),
+			getLocale('title'),
 			{
 				iconClass: 'alert',
 				confirmButtonClass: 'alert',
@@ -57,7 +65,7 @@ export function CancelButton({
 		async (_, { reset }) => {
 			try {
 				before?.();
-				const confirm = await prompt(invites);
+				const confirm = await prompt(invites, deletes);
 
 				if (!confirm) {
 					throw 'canceled'; //eslint-disable-line
