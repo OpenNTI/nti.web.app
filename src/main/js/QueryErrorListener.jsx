@@ -27,10 +27,10 @@ const Listen = ({ handler }) => {
 	) : null;
 };
 
-export function QueryErrorListener({ handler }) {
-	return !handler ? null : (
+export function QueryErrorListener() {
+	return (
 		<Router>
-			<Listen handler={handler} />
+			<Listen />
 		</Router>
 	);
 }
