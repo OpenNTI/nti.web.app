@@ -8,7 +8,7 @@ import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
 import { isFlag } from '@nti/web-client';
-import { Button } from '@nti/web-core';
+import { Button, Tooltip } from '@nti/web-core';
 
 import Pager from '../../../common/Pager';
 import SearchInfo from '../../../common/SearchInfo';
@@ -23,6 +23,10 @@ const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 	selected: '%(numSelected)s Selected',
 	changeRole: 'Change Role',
 	emptyMessage: 'There are no active learners',
+	changeRoleTooltip: {
+		one: 'Change Role (%(count)s User)',
+		other: 'Change Role (%(count)s Users)',
+	},
 });
 
 class UsersTable extends React.Component {
@@ -81,20 +85,26 @@ class UsersTable extends React.Component {
 			totalCount,
 		} = this.props;
 
+		const changeLabel = t('changeRoleTooltip', {
+			count: (selectedUsers ?? []).length,
+		});
+
 		return (
 			<div className="controls">
 				{numSelected > 0 && (
 					<>
 						<Activation />
 						{!noRoleChange && (
-							<Button
-								primary
-								inverted
-								rounded
-								onClick={this.showChangeRolesDialog}
-							>
-								{t('changeRole')}
-							</Button>
+							<Tooltip label={changeLabel}>
+								<Button
+									primary
+									inverted
+									rounded
+									onClick={this.showChangeRolesDialog}
+								>
+									{t('changeRole')}
+								</Button>
+							</Tooltip>
 						)}
 					</>
 				)}

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
 import { Connectors } from '@nti/lib-store';
 import { User, Text, StandardUI } from '@nti/web-commons';
-import { Button } from '@nti/web-core';
+import { Button, Tooltip } from '@nti/web-core';
 
 const { Prompt } = StandardUI;
 
@@ -23,6 +23,16 @@ const t = scoped(
 	{
 		deactivate: 'Deactivate',
 		reactivate: 'Reactivate',
+		tooltip: {
+			deactivate: {
+				one: 'Deactivate (%(count)s User)',
+				other: 'Deactivate (%(count)s Users)',
+			},
+			reactivate: {
+				one: 'Reactivate (%(count)s User)',
+				other: 'Reactivate (%(count)s Users)',
+			},
+		},
 		confirmDeactivate: {
 			title: {
 				one: 'Confirm Deactivation (%(count)s Person)',
@@ -143,17 +153,23 @@ function UserActivationButton({
 		return null;
 	}
 
+	const tooltip = deactivating
+		? t('tooltip.deactivate', { count: (selectedUsers ?? []).length })
+		: t('tooltip.reactivate', { count: (selectedUsers ?? []).length });
+
 	return (
 		<>
-			<Button
-				destructive={deactivating}
-				primary={activating}
-				inverted
-				onClick={() => setConfirming(true)}
-				rounded
-			>
-				{deactivating ? t('deactivate') : t('reactivate')}
-			</Button>
+			<Tooltip label={tooltip}>
+				<Button
+					destructive={deactivating}
+					primary={activating}
+					inverted
+					onClick={() => setConfirming(true)}
+					rounded
+				>
+					{deactivating ? t('deactivate') : t('reactivate')}
+				</Button>
+			</Tooltip>
 			{confirming && (
 				<UserActivationConfirmation
 					users={selectedUsers}
