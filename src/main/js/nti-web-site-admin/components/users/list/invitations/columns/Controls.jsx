@@ -17,7 +17,7 @@ const t = scoped(
 
 const Container = styled.div`
 	display: flex;
-	justify-content: flex-start;
+	justify-content: flex-end;
 	align-items: center;
 	padding: 0 18px;
 
@@ -59,7 +59,6 @@ const Pending = ({ item, busy, setBusy, setNotBusy }) => (
 
 const Cancelled = ({ item, busy, setBusy, setNotBusy }) => (
 	<>
-		<State item={item} />
 		<ResendButton
 			invites={[item]}
 			disabled={busy}
@@ -67,6 +66,7 @@ const Cancelled = ({ item, busy, setBusy, setNotBusy }) => (
 			before={setBusy}
 			after={setNotBusy}
 		/>
+		<State item={item} />
 	</>
 );
 
