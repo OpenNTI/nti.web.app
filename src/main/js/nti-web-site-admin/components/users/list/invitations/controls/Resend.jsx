@@ -39,7 +39,7 @@ const prompt = async invites => {
 	}
 };
 
-export function ResendButton({ invites, before, after, ...otherProps }) {
+function ResendButtonImpl({ invites, before, after, ...otherProps }, ref) {
 	const onClick = useCallback(
 		async (_, { reset }) => {
 			try {
@@ -65,3 +65,5 @@ export function ResendButton({ invites, before, after, ...otherProps }) {
 		</AsyncAction>
 	);
 }
+
+export const ResendButton = React.forwardRef(ResendButtonImpl);

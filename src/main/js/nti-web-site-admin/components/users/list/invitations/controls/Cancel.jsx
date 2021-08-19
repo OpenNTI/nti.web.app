@@ -53,14 +53,10 @@ const prompt = async (invites, deletes) => {
 	}
 };
 
-export function CancelButton({
-	invites,
-	long,
-	deletes,
-	before,
-	after,
-	...otherProps
-}) {
+function CancelButtonImpl(
+	{ invites, long, deletes, before, after, ...otherProps },
+	ref
+) {
 	const onClick = useCallback(
 		async (_, { reset }) => {
 			try {
@@ -85,7 +81,7 @@ export function CancelButton({
 	];
 
 	return (
-		<AsyncAction onClick={onClick} destructive {...otherProps}>
+		<AsyncAction ref={ref} onClick={onClick} destructive {...otherProps}>
 			{long ? (
 				<>
 					{deletes ? <Icons.TrashCan /> : <Icons.Reset />}
@@ -97,3 +93,5 @@ export function CancelButton({
 		</AsyncAction>
 	);
 }
+
+export const CancelButton = React.forwardRef(CancelButtonImpl);

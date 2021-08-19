@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { SelectMenu } from '@nti/web-core';
+import { SelectMenu, Tooltip } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
 
 import SearchInfo from '../../../common/SearchInfo';
@@ -32,6 +32,18 @@ const t = scoped(
 				label: 'Canceled Invitations',
 				title: 'Canceled Invitations',
 			},
+		},
+		resendTooltip: {
+			one: 'Re-send Invite (%(count)s User)',
+			other: 'Re-send Invites (%(count)s Users)',
+		},
+		cancelTooltip: {
+			one: 'Cancel Invite (%(count)s User)',
+			other: 'Cancel Invites (%(count)s Users)',
+		},
+		deleteTooltip: {
+			one: 'Delete Invite (%(count)s User)',
+			other: 'Delete Invites (%(count)s Users)',
 		},
 	}
 );
@@ -82,6 +94,7 @@ export function InvitationsHeader({ disabled }) {
 	} = InvitationsStore.useProperties();
 
 	const hasSelection = !!selection?.length;
+	const selectionCount = (selection ?? []).length;
 
 	const [busy, setBusyState] = useState();
 
@@ -89,6 +102,13 @@ export function InvitationsHeader({ disabled }) {
 	const setNotBusy = useCallback(
 		() => (clearSelection(), reload(), setBusy(false))
 	);
+
+	const resendLabel = t('resendTooltip', { count: selectionCount });
+
+	const deletes = filter === 'expired';
+	const cancelLabel = deletes
+		? t('deleteTooltip', { count: selectionCount })
+		: t('cancelTooltip', { count: selectionCount });
 
 	return (
 		<>
@@ -104,33 +124,41 @@ export function InvitationsHeader({ disabled }) {
 					{!hasSelection && <InvitePeopleButton rounded primary />}
 					{hasSelection && !HideBulkFilters[filter] && (
 						<>
-							<ResendButton
-								invites={selection}
-								disabled={busy}
-								before={setBusy}
-								after={setNotBusy}
-								inverted
-								rounded
-							/>
-							<CancelButton
-								invites={selection}
-								disabled={busy}
-								before={setBusy}
-								after={setNotBusy}
-								inverted
-								rounded
-								long
-								deletes={filter === 'expired'}
-							/>
+							<Tooltip label={resendLabel}>
+								<span>
+									<ResendButton
+										invites={selection}
+										disabled={busy}
+										before={setBusy}
+										after={setNotBusy}
+										inverted
+										rounded
+									/>
+								</span>
+							</Tooltip>
+							<Tooltip label={cancelLabel}>
+								<span>
+									<CancelButton
+										invites={selection}
+										disabled={busy}
+										before={setBusy}
+										after={setNotBusy}
+										inverted
+										rounded
+										long
+										deletes={filter === 'expired'}
+									/>
+								</span>
+							</Tooltip>
 						</>
 					)}
-					{isFlag('export-users') && (
+					{
 						<Export
 							selectedUsers={selection}
 							params={batchParams}
 							rel="Invitations"
 						/>
-					)}
+					}
 				</Controls>
 			</Header>
 			<SearchInfo searchTerm={searchTerm} />
