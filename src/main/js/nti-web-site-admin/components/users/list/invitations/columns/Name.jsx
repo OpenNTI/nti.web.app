@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Avatar, Typography, Placeholder } from '@nti/web-core';
+import { Avatar, Typography, Placeholder, InlineList } from '@nti/web-core';
 
 import { VerticallyCentered } from './Common';
 
@@ -61,19 +61,19 @@ export function Name({ item }) {
 					type="body"
 					color="dark"
 					limitLines={1}
-					data-testid="receiver"
+					data-testid="original-receiver"
 				>
-					{item.receiver}
+					{item.originalReceiver ?? item.receiver}
 				</Typography>
-				<Typography
-					as="div"
-					type="body"
-					limitLines={1}
-					data-testid="type"
-				>
-					{isAdminInvite(item.MimeType)
-						? t('administrator')
-						: t('learner')}
+				<Typography as={InlineList} type="body">
+					<span>
+						{isAdminInvite(item.MimeType)
+							? t('administrator')
+							: t('learner')}
+					</span>
+					{item.originalReceiver !== item.receiver && (
+						<span>{item.receiver}</span>
+					)}
 				</Typography>
 			</Info>
 		</VerticallyCentered>
