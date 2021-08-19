@@ -152,13 +152,13 @@ export function InvitationsHeader({ disabled }) {
 							</Tooltip>
 						</>
 					)}
-					{
+					{isFlag('export-users') && (
 						<Export
 							selectedUsers={selection}
 							params={batchParams}
 							rel="Invitations"
 						/>
-					}
+					)}
 				</Controls>
 			</Header>
 			<SearchInfo searchTerm={searchTerm} />
