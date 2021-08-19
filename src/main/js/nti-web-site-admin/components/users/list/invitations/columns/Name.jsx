@@ -61,7 +61,7 @@ export function Name({ item }) {
 					type="body"
 					color="dark"
 					limitLines={1}
-					data-test-id="receiver"
+					data-testid="receiver"
 				>
 					{item.receiver}
 				</Typography>
@@ -69,7 +69,7 @@ export function Name({ item }) {
 					as="div"
 					type="body"
 					limitLines={1}
-					data-test-id="type"
+					data-testid="type"
 				>
 					{isAdminInvite(item.MimeType)
 						? t('administrator')
