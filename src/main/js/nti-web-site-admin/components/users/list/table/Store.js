@@ -240,6 +240,11 @@ class UserListStore extends Stores.BoundStore {
 				return;
 			}
 
+			//if we get back an empty batch and aren't on the first page try loading the previous page
+			if (siteUsers.Items.length === 0 && pageNumber > 1) {
+				return this.loadPage(pageNumber - 1);
+			}
+
 			this.set({
 				canDeactivateUsers: canDeactivateUsers(service),
 				canActivateUsers: canActivateUsers(service),

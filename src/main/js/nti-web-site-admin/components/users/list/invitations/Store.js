@@ -78,6 +78,15 @@ export class InvitationsStore extends Base {
 		return () => Bus.removeListener(InvitesSentEvent, handler);
 	}
 
+	onStateUpdate() {
+		const { items, currentPage } = this;
+
+		//if we got back an empty batch and aren't on the first page, try loading the previous
+		if ((items ?? []).length === 0 && currentPage > 1) {
+			this.loadPage(currentPage - 1);
+		}
+	}
+
 	async load(e) {
 		const { params } = e;
 
