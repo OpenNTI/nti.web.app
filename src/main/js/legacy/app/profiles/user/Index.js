@@ -7,7 +7,6 @@ const UserModel = require('internal/legacy/model/User');
 const PersonalBlog = require('internal/legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
 const { User: UserProfiles } = require('@nti/web-profiles');
-// const SettingsWindow = require('internal/legacy/app/account/settings/Window');
 
 const Header = require('./Tabs');
 
