@@ -59,17 +59,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 	},
 
 	onAdded: function (assessmentParent) {
-		var id = '?unresolved title?';
+		var id = '';
 
 		try {
 			this.question = assessmentParent.question;
-
-			if (Globals.isFeature('mathcounts-question-number-hack')) {
-				//HACK: there should be a more correct way to get the problem name/number...
-				id = this.question.getId().split('.').last() + '.';
-			} else {
-				id = '';
-			}
 
 			this.videos = this.question.getVideos() || [];
 		} catch (e) {
