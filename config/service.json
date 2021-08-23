@@ -20,7 +20,6 @@
 			"disable-context-in-activity": false,
 			"do-not-save-progress": false,
 			"email-verification": true,
-			"file-upload": true,
 			"instructor-email": true,
 			"request-alias-change": true,
 			"suggest-contacts": false,

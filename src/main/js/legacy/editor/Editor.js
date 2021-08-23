@@ -13,7 +13,6 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 const RangeUtils = require('internal/legacy/util/Ranges');
 const SharingUtils = require('internal/legacy/util/Sharing');
 const { guidGenerator: guidFn } = require('internal/legacy/util/Globals');
-const { isFeature } = require('internal/legacy/util/Globals');
 const TabIndexTracker = require('internal/legacy/util/TabIndexTracker');
 const Globals = require('internal/legacy/util/Globals');
 const FilePicker = require('internal/legacy/common/form/fields/FilePicker');
@@ -432,8 +431,6 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		this.callParent(arguments);
 
 		this.enableVideo = this.enableVideo && Service.canEmbedVideo();
-		this.enableFileUpload =
-			isFeature('file-upload') && this.enableFileUpload;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			cancelLabel: this.cancelButtonLabel,
