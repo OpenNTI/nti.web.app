@@ -2,13 +2,13 @@ const Ext = require('@nti/extjs');
 const { ControlBar, NavigationBar } = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { scoped } = require('@nti/lib-locale');
+const { isFlag } = require('@nti/web-client');
 const ChatStateStore = require('internal/legacy/app/chat/StateStore');
 const AssignmentStatus = require('internal/legacy/app/course/assessment/AssignmentStatus');
 const WindowsActions = require('internal/legacy/app/windows/Actions');
 const Grade = require('internal/legacy/model/courseware/Grade');
 const Email = require('internal/legacy/model/Email');
 const ReactHarness = require('internal/legacy/overrides/ReactHarness');
-const { isFeature } = require('internal/legacy/util/Globals');
 const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define(
 						})
 					);
 
-			if (!isFeature('instructor-email') || !username) {
+			if (!isFlag('instructor-email') || !username) {
 				return Promise.reject();
 			}
 

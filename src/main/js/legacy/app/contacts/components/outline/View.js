@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-const { isFeature } = require('internal/legacy/util/Globals');
+const { isFlag } = require('@nti/web-client');
 
 const ContactsActions = require('../../Actions');
 
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define(
 				canjoin: this.subType === 'group',
 				isContact: this.subType === 'contact',
 				suggestedContactsLabel:
-					isFeature('suggest-contacts') &&
+					isFlag('suggest-contacts') &&
 					this.subType === 'contact' &&
 					'Suggested Contacts',
 			});

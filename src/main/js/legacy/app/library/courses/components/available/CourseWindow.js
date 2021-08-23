@@ -1,13 +1,12 @@
 /*eslint no-undef:1*/
 
-const { getService } = require('@nti/web-client');
+const { getService, isFlag } = require('@nti/web-client');
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
 const EnrollmentActions = require('internal/legacy/app/course/enrollment/Actions');
 const EnrollmentStateStore = require('internal/legacy/app/course/enrollment/StateStore');
 const StoreActions = require('internal/legacy/app/store/Actions');
-const { isFeature } = require('internal/legacy/util/Globals');
 const { getString } = require('internal/legacy/util/Localization');
 
 const CoursesActions = require('../../Actions');
@@ -347,7 +346,7 @@ module.exports = exports = Ext.define(
 				// For first time login, remove the login link to avoid presenting the user with OOBE again.
 				if (
 					$AppConfig.userObject.hasLink('first_time_logon') &&
-					isFeature('suggest-contacts')
+					isFlag('suggest-contacts')
 				) {
 					$AppConfig.userObject.removeFirstTimeLoginLink();
 				}

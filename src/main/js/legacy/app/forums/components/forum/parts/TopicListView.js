@@ -3,7 +3,7 @@ const { Viewer } = require('@nti/web-reports');
 const WindowsActions = require('internal/legacy/app/windows/Actions');
 const UserRepository = require('internal/legacy/cache/UserRepository');
 const CommunityHeadlineTopic = require('internal/legacy/model/forums/CommunityHeadlineTopic');
-const { isFeature, WAIT_TIMES } = require('internal/legacy/util/Globals');
+const { WAIT_TIMES } = require('internal/legacy/util/Globals');
 const { getString } = require('internal/legacy/util/Localization');
 const TimeUtils = require('internal/legacy/util/Time');
 
@@ -145,16 +145,14 @@ module.exports = exports = Ext.define(
 				showReport: function (value) {
 					var show = false;
 
-					if (isFeature('analytic-reports')) {
-						((value.Links && value.Links.asJSON()) || []).forEach(
-							function (link) {
-								if (link.rel.indexOf('report-') >= 0) {
-									show = true;
-									return false;
-								}
+					((value.Links && value.Links.asJSON()) || []).forEach(
+						function (link) {
+							if (link.rel.indexOf('report-') >= 0) {
+								show = true;
+								return false;
 							}
-						);
-					}
+						}
+					);
 
 					return show;
 				},

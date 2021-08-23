@@ -1,9 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
 const { scoped } = require('@nti/lib-locale');
+const { isFlag } = require('@nti/web-client');
 const { getString } = require('internal/legacy/util/Localization');
 const Email = require('internal/legacy/model/Email');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 const WindowsActions = require('../../../../windows/Actions');
 const WindowsStateStore = require('../../../../windows/StateStore');
@@ -366,7 +366,7 @@ module.exports = exports = Ext.define(
 		},
 
 		shouldAllowInstructorEmail: function () {
-			return isFeature('instructor-email');
+			return isFlag('instructor-email');
 		},
 
 		showEmailEditor: function (e) {

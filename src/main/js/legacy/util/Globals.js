@@ -940,12 +940,6 @@ global.Globals =
 				}
 			},
 
-			isFeature: function (name) {
-				var f = (global.$AppConfig || {}).features || {};
-
-				return name in f ? Boolean(f[name]) : isFlag(name);
-			},
-
 			//taken from the login app
 			EMAIL_REGEX:
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -995,7 +989,6 @@ global.Globals =
 
 // global.getURL = exports.getURL.bind(exports);
 global.isMe = exports.isMe.bind(exports); //Used in xtemplates >.<
-global.isFeature = exports.isFeature.bind(exports); //Used in xtemplates >.<
 
 if (typeof document !== 'undefined') {
 	exports.stopBackspace(document);

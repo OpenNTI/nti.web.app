@@ -2,8 +2,9 @@ const Ext = require('@nti/extjs');
 const {
 	URL: { join: urlJoin },
 } = require('@nti/lib-commons');
+const { isFlag } = require('@nti/web-client');
 const { getString } = require('internal/legacy/util/Localization');
-const { getURL, isFeature } = require('internal/legacy/util/Globals');
+const { getURL } = require('internal/legacy/util/Globals');
 const ContentUtils = require('internal/legacy/util/Content');
 const CoursewareStream = require('internal/legacy/store/courseware/Stream');
 const Navigation = require('internal/legacy/store/courseware/Navigation');
@@ -1670,7 +1671,7 @@ module.exports = exports = Ext.define(
 		},
 
 		getSuggestContacts() {
-			if (!isFeature('suggest-contacts') || !this.hasLink('Classmates')) {
+			if (!isFlag('suggest-contacts') || !this.hasLink('Classmates')) {
 				return Promise.reject();
 			}
 

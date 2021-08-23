@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { isFlag } = require('@nti/web-client');
 const UserRepository = require('internal/legacy/cache/UserRepository');
 const User = require('internal/legacy/model/User');
 const lazy = require('internal/legacy/util/lazy-require').get(
@@ -6,7 +7,6 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	() => require('internal/legacy/util/Parsing')
 );
 const PagedPageSource = require('internal/legacy/util/PagedPageSource');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('./Root');
 require('./Student');
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define(
 						})
 					);
 
-			if (!isFeature('instructor-email') || !username) {
+			if (!isFlag('instructor-email') || !username) {
 				return Promise.reject();
 			}
 

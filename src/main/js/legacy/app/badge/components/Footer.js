@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.badge.components.Footer',
@@ -12,36 +11,19 @@ module.exports = exports = Ext.define(
 		renderTpl: Ext.DomHelper.markup([
 			{
 				cls: 'left',
-				cn: [
-					{
-						cls: 'btn export',
-						'data-qtip': 'Download or Export Badge',
-					},
-				],
+				cn: [],
 			},
 			{ cls: 'right', cn: [{ cls: 'btn close', html: 'Close' }] },
 		]),
 
 		renderSelectors: {
-			exportEl: '.export',
 			closeEl: '.close',
 		},
 
 		afterRender: function () {
 			this.callParent(arguments);
 
-			this.mon(this.exportEl, 'click', this.onExportClick.bind(this));
 			this.mon(this.closeEl, 'click', this.onCloseClick.bind(this));
-
-			if (!isFeature('badges')) {
-				this.exportEl.hide();
-			}
-		},
-
-		onExportClick: function (e) {
-			if (this.onExport) {
-				this.onExport(e);
-			}
 		},
 
 		onCloseClick: function (e) {

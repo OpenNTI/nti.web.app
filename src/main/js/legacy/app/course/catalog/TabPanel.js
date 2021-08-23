@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
+const { isFlag } = require('@nti/web-client');
 const User = require('internal/legacy/model/User');
 const { getString } = require('internal/legacy/util/Localization');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.course.catalog.TabPanel',
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define(
 
 			if (
 				$AppConfig.userObject.hasLink('first_time_logon') &&
-				isFeature('suggest-contacts')
+				isFlag('suggest-contacts')
 			) {
 				wait().then(function () {
 					me.showWelcomeMessage();

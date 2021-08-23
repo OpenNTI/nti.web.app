@@ -13,15 +13,8 @@
 		],
 
 		"flags": {
-			"analytic-reports": true,
-			"badges": true,
-			"course-content-modal": true,
 			"instructor-email": true,
-			"request-alias-change": true,
-			"suggest-contacts": false,
-			"use-new-search": true,
-			"use-new-user-list": true,
-			"show-create-ltitool-button": true
+			"suggest-contacts": false
 		}
 	}
 }

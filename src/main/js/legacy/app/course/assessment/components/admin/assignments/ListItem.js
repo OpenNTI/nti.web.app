@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 const { Viewer } = require('@nti/web-reports');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('../../student/assignments/ListItem');
 
@@ -76,9 +75,7 @@ module.exports = exports = Ext.define(
 				submittedCount: totalSubmissions || 0,
 				totalPossibleSubmissions,
 				hasReports:
-					item.get('reportLinks') &&
-					item.get('reportLinks').length &&
-					isFeature('analytic-reports'),
+					item.get('reportLinks') && item.get('reportLinks').length,
 				canEdit: item.get('canEdit'),
 				name: assignment.get('title'),
 			});

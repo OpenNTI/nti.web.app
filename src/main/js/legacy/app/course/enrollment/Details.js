@@ -3,13 +3,14 @@ const { wait } = require('@nti/lib-commons');
 const { Presentation: PresentationAssets } = require('@nti/web-commons');
 const { Enrollment } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const { isFlag } = require('@nti/web-client');
 const User = require('internal/legacy/model/User');
 const {
 	getString,
 	getFormattedString,
 } = require('internal/legacy/util/Localization');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
-const { guidGenerator, isFeature } = require('internal/legacy/util/Globals');
+const { guidGenerator } = require('internal/legacy/util/Globals');
 const NavigationActions = require('internal/legacy/app/navigation/Actions');
 const AccountActions = require('internal/legacy/app/account/Actions');
 const CoursesStateStore = require('internal/legacy/app/library/courses/StateStore');
@@ -259,7 +260,7 @@ module.exports = exports = Ext.define(
 
 			this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
-			this.useReactEnrollment = true; //isFeature('use-new-enrollment-card');
+			this.useReactEnrollment = true;
 
 			AnalyticsUtil.startEvent(this.course.getId(), {
 				type: 'CourseCatalogView',
@@ -1270,7 +1271,7 @@ module.exports = exports = Ext.define(
 				action
 					.then(function (changed) {
 						// TODO: We're not ready to show this yet.
-						if (isFeature('suggest-contacts')) {
+						if (isFlag('suggest-contacts')) {
 							me.__buildCongratsCard();
 						}
 						return changed;
@@ -1299,7 +1300,7 @@ module.exports = exports = Ext.define(
 								});
 						};
 
-						if (!isFeature('suggest-contacts')) {
+						if (!isFlag('suggest-contacts')) {
 							me.showMessage(
 								getFormattedString(
 									'NextThought.view.courseware.enrollment.Details.enrollmentSuccess',

@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { isFlag } = require('@nti/web-client');
 const { getString } = require('internal/legacy/util/Localization');
 const B64 = require('internal/legacy/util/Base64');
 const Globals = require('internal/legacy/util/Globals');
@@ -544,7 +545,7 @@ const User =
 
 				getSuggestContacts: function () {
 					if (
-						!Globals.isFeature('suggest-contacts') ||
+						!isFlag('suggest-contacts') ||
 						!(
 							this.hasLink('SuggestContacts') ||
 							this.hasLink('Classmates')
