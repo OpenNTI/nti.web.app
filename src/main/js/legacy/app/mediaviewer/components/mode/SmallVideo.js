@@ -203,14 +203,12 @@ module.exports = exports = Ext.define(
 
 			this.on('destroy', 'destroy', this.videoplayer);
 
-			if (isFeature('transcript-follow-video')) {
-				this.mon(
-					this.videoplayer,
-					'media-heart-beat',
-					'actOnMediaHeartBeat',
-					this
-				);
-			}
+			this.mon(
+				this.videoplayer,
+				'media-heart-beat',
+				'actOnMediaHeartBeat',
+				this
+			);
 
 			this.mon(this.videoplayer, {
 				scope: this,
