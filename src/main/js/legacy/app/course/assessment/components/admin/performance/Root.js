@@ -4,7 +4,7 @@ const { scoped } = require('@nti/lib-locale');
 const { getString } = require('internal/legacy/util/Localization');
 const User = require('internal/legacy/model/User');
 const Grade = require('internal/legacy/model/courseware/Grade');
-const { swallow, isFeature } = require('internal/legacy/util/Globals');
+const { swallow } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/mixins/grid-feature/GradeInputs');
 require('internal/legacy/mixins/State');

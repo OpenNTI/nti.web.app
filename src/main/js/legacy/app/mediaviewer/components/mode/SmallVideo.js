@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { wait } = require('@nti/lib-commons');
 const ContentUtils = require('internal/legacy/util/Content');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/app/video/Video');
 require('internal/legacy/app/video/navigation/Video');
