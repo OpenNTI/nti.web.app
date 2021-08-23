@@ -11,7 +11,6 @@ const ContentHeadlineTopic = require('internal/legacy/model/forums/ContentHeadli
 const CommunityHeadlinePost = require('internal/legacy/model/forums/CommunityHeadlinePost');
 const DFLHeadlinePost = require('internal/legacy/model/forums/DFLHeadlinePost');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/overrides/ReactHarness');
 require('internal/legacy/app/windows/components/Header');
@@ -136,7 +135,6 @@ module.exports = exports = Ext.define(
 			Service.getObject(me.record.get('ContainerId'))
 				.then(function (t) {
 					topic = t;
-
 					return me.loadForum(topic);
 				})
 				.then(function (forum) {
