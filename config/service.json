@@ -21,7 +21,6 @@
 			"do-not-save-progress": false,
 			"email-verification": true,
 			"file-upload": true,
-			"forum-comment-expand-collapse": true,
 			"instructor-email": true,
 			"request-alias-change": true,
 			"suggest-contacts": false,

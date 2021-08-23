@@ -292,13 +292,9 @@ module.exports = exports = Ext.define(
 				forum,
 			});
 
-			if (isFeature('forum-comment-expand-collapse')) {
-				controlCmp = this.add({
-					xtype: 'forums-topic-comment-controls',
-				});
-			} else {
-				controlCmp = null;
-			}
+			controlCmp = this.add({
+				xtype: 'forums-topic-comment-controls',
+			});
 
 			commentCmp = this.add({
 				xtype: 'forums-topic-comment-thread',
