@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/model/Base');
 
@@ -78,60 +77,56 @@ module.exports = exports = Ext.define(
 				return;
 			}
 
-			if (!isFeature('do-not-save-progress')) {
-				if (this.beforeSaveProgress) {
-					this.beforeSaveProgress.call();
-				}
+			if (this.beforeSaveProgress) {
+				this.beforeSaveProgress.call();
+			}
 
-				if (this.inflightSavepoint) {
-					this.pendingProgress = this.pendingProgress || [];
-					this.pendingProgress.push({ question, input });
-				} else {
-					this.inflightSavepoint = this.saveProgressHandler()
-						.then(result => {
-							if (result.status === 403) {
-								const respJson = Ext.decode(
-									result.responseText
-								);
-								const pastDueCodes = {
-									SubmissionPastDueDateError: true,
-									CannotSubmitAssignmentError: true,
-								};
+			if (this.inflightSavepoint) {
+				this.pendingProgress = this.pendingProgress || [];
+				this.pendingProgress.push({ question, input });
+			} else {
+				this.inflightSavepoint = this.saveProgressHandler()
+					.then(result => {
+						if (result.status === 403) {
+							const respJson = Ext.decode(result.responseText);
+							const pastDueCodes = {
+								SubmissionPastDueDateError: true,
+								CannotSubmitAssignmentError: true,
+							};
 
-								if (pastDueCodes[respJson.code]) {
-									this.onSaveProgress();
+							if (pastDueCodes[respJson.code]) {
+								this.onSaveProgress();
 
-									this.set('isPastDue', true);
+								this.set('isPastDue', true);
 
-									this.fireEvent('past-due', {});
+								this.fireEvent('past-due', {});
 
-									delete this.inflightSavepoint;
-									delete this.pendingProgress;
+								delete this.inflightSavepoint;
+								delete this.pendingProgress;
 
-									return Promise.resolve();
-								}
+								return Promise.resolve();
 							}
+						}
 
-							const pending = this.pendingProgress;
-							const toUpdate = [
-								...(pending || []),
-								{ input, question },
-							];
-							const resolvePending = pending
-								? this.saveProgressHandler()
-								: Promise.resolve(result);
+						const pending = this.pendingProgress;
+						const toUpdate = [
+							...(pending || []),
+							{ input, question },
+						];
+						const resolvePending = pending
+							? this.saveProgressHandler()
+							: Promise.resolve(result);
 
-							delete this.inflightSavepoint;
-							delete this.pendingProgress;
+						delete this.inflightSavepoint;
+						delete this.pendingProgress;
 
-							return resolvePending.then(pendingResult => {
-								this.applyProgressTo(toUpdate, pendingResult);
+						return resolvePending.then(pendingResult => {
+							this.applyProgressTo(toUpdate, pendingResult);
 
-								return pendingResult;
-							});
-						})
-						.then(this.onSaveProgress.bind(this));
-				}
+							return pendingResult;
+						});
+					})
+					.then(this.onSaveProgress.bind(this));
 			}
 		},
 
