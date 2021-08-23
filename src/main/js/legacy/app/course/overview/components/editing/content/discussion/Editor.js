@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 const { Community } = require('@nti/web-profiles');
-const { isFlag } = require('@nti/web-client');
 const { Forums } = require('@nti/web-discussions');
 const DiscussionRef = require('internal/legacy/model/DiscussionRef');
 const Discussion = require('internal/legacy/model/Discussion');
@@ -104,7 +103,7 @@ module.exports = exports = Ext.define(
 
 				this.selectionCmp = this.add({
 					xtype: 'react',
-					...(!isFlag('channel-picker') || (await complex())
+					...((await complex())
 						? {
 								bundle,
 								component: Forums.DiscussionSelectionEditor,
