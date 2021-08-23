@@ -186,9 +186,6 @@ const KalturaPlayer =
 
 				this.handleMessage = Ext.bind(this.handleMessage, this);
 
-				this.USE_PROGRESSIVE = isFeature(
-					'kaltura.progressive'
-				).toString();
 				this.LEAD_HTML5 = Ext.isIE9 ? 'false' : 'true';
 
 				this.playerSetup();
@@ -1065,21 +1062,15 @@ const KalturaPlayer =
 
 					//mw.setConfig('debug', true);
 
-					if (!JSON.parse('%USE_PROGRESSIVE%')) {
-						console.debug(
-							'Kaltura being instructed to be streaming...'
-						);
-						vars.streamerType = 'hdnetworkmanifest';
-						vars.twoPhaseManifest = 'true';
-						vars.akamaiHD = {
-							loadingPolicy: 'preInitialize',
-							asyncInit: 'true',
-						};
-					} else {
-						console.debug(
-							'Kaltura being instructed to be progressive download...'
-						);
-					}
+					console.debug(
+						'Kaltura being instructed to be streaming...'
+					);
+					vars.streamerType = 'hdnetworkmanifest';
+					vars.twoPhaseManifest = 'true';
+					vars.akamaiHD = {
+						loadingPolicy: 'preInitialize',
+						asyncInit: 'true',
+					};
 
 					kWidget.embed({
 						targetId: window.playerId,
