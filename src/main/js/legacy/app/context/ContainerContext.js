@@ -3,7 +3,6 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
 	() => require('internal/legacy/util/Parsing')
 );
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('./types/Content');
 require('./types/Poll');
@@ -35,10 +34,6 @@ module.exports = exports = Ext.define(
 		 */
 		load: function (type) {
 			var url = Service.getObjectURL(this.container);
-
-			if (type === 'card' && isFeature('disable-context-in-activity')) {
-				return Promise.reject();
-			}
 
 			return Service.request({
 				url: url,

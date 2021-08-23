@@ -17,7 +17,6 @@
 			"badges": true,
 			"course-reports": false,
 			"course-content-modal": true,
-			"disable-context-in-activity": false,
 			"instructor-email": true,
 			"request-alias-change": true,
 			"suggest-contacts": false,
