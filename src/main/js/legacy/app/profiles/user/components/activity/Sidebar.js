@@ -1,7 +1,6 @@
 const { subDays } = require('date-fns');
 
 const Ext = require('@nti/extjs');
-const { isFeature } = require('internal/legacy/util/Globals');
 
 require('internal/legacy/app/stream/components/Filter');
 require('internal/legacy/mixins/State');
