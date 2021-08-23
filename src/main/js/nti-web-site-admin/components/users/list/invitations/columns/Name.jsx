@@ -66,13 +66,13 @@ export function Name({ item }) {
 					{item.originalReceiver ?? item.receiver}
 				</Typography>
 				<Typography as={InlineList} type="body">
-					<span>
+					<span data-testid="type">
 						{isAdminInvite(item.MimeType)
 							? t('administrator')
 							: t('learner')}
 					</span>
 					{item.originalReceiver !== item.receiver && (
-						<span>{item.receiver}</span>
+						<span data-testid="receiver">{item.receiver}</span>
 					)}
 				</Typography>
 			</Info>
