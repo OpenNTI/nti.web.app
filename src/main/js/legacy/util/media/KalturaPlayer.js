@@ -3,8 +3,6 @@ const SupportedVideoTypes = require('internal/legacy/app/video/SupportedVideoTyp
 
 const Globals = require('../Globals');
 
-const { isFeature } = Globals;
-
 const KalturaPlayer =
 	(module.exports =
 	exports =
