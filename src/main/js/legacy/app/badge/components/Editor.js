@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
 const { getString } = require('internal/legacy/util/Localization');
-require('internal/legacy/app/account/emailverify/verify/Index');
 
 module.exports = exports = Ext.define(
 	'NextThought.app.badge.components.Editor',

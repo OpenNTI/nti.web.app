@@ -8,8 +8,6 @@ const lazy = require('internal/legacy/util/lazy-require').get(
 );
 const UserPasswordSet = require('internal/legacy/model/UserPasswordSet');
 
-const EmailVerifyActions = require('./emailverify/Actions');
-
 require('internal/legacy/common/Actions');
 require('internal/legacy/common/ux/WelcomeGuide');
 require('internal/legacy/common/ux/IframeConfirmWindow');
@@ -28,8 +26,6 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 
 	constructor() {
 		this.callParent(arguments);
-
-		EmailVerifyActions.create();
 	},
 
 	maybeShowCoppaWindow() {

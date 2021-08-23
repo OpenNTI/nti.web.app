@@ -19,7 +19,6 @@
 			"course-content-modal": true,
 			"disable-context-in-activity": false,
 			"do-not-save-progress": false,
-			"email-verification": true,
 			"instructor-email": true,
 			"request-alias-change": true,
 			"suggest-contacts": false,
