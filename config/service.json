@@ -15,7 +15,6 @@
 		"flags": {
 			"analytic-reports": true,
 			"badges": true,
-			"course-reports": false,
 			"course-content-modal": true,
 			"instructor-email": true,
 			"request-alias-change": true,
