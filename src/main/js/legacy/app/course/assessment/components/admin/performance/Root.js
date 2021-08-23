@@ -346,9 +346,9 @@ module.exports = exports = Ext.define(
 
 			this.stateRestored = true;
 
+			//TODO: show the populated list first
 			this.studentFilter = state.studentFilter =
-				state.studentFilter ||
-				(isFeature('show-open-students-first') ? 'Open' : 'All');
+				state.studentFilter || 'Open'; //'All'
 			this.itemFilter = state.itemFilter = state.itemFilter || 'all';
 			this.searchKey = state.searchKey = state.searchKey || '';
 			state.currentPage = state.currentPage || 1;
@@ -498,9 +498,7 @@ module.exports = exports = Ext.define(
 		],
 
 		createStudentMenu: function () {
-			var type =
-					this.studentFilter ||
-					(isFeature('show-open-students-first') ? 'Open' : 'All'),
+			var type = this.studentFilter || 'Open', // 'All',
 				items = this.STUDENT_FILTERS.map(function (filter) {
 					filter.checked = type === filter.type;
 					return filter;
