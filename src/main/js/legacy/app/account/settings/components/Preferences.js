@@ -26,7 +26,6 @@ module.exports = exports = Ext.define(
 			},
 			{
 				tag: 'tpl',
-				if: "isFeature('notifications')",
 				cn: {
 					tag: 'fieldset',
 					cn: [
