@@ -50,7 +50,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 						}
 					};
 
-					const e = new Error(
+					// no "new" allows use to make the error, but not break on it in the debugger,
+					// nor will sentry report it (unless thrown) (theory based on the error built on line 38 not getting reported)
+					const e = Error(
 						`${r.status}: ${r.statusText}\n${asPlain(
 							r.responseText
 						)}`
