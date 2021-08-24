@@ -101,9 +101,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			component: Header,
 			entity: interfaceUser,
 			launchEditor: () => {
-				Ext.widget('react', {
+				var widget = Ext.widget('react', {
 					renderTo: document.body,
 					component: UserProfiles.AccountManagement,
+					onClose: () => Ext.destroy(widget),
 				});
 			},
 			getRouteFor: (obj, context) => {
