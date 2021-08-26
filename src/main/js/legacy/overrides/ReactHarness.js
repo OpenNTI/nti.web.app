@@ -1,11 +1,11 @@
 const PropTypes = require('prop-types');
 const React = require('react');
-const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 
 const Ext = require('@nti/extjs');
 const { getService, reportError, isFlag } = require('@nti/web-client');
 const { Error: ErrorCmp, Theme, Utils } = require('@nti/web-commons');
+const { renderToMountPoint } = require('@nti/web-core');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { getHistory, LinkTo } = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
@@ -350,7 +350,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	/**
 	 *
-	 * Executes ReactDOM.render with the current props. If the component is already mounted, it will reuse and update.
+	 * Executes a ReactDOM.render with the current props. If the component is already mounted, it will reuse and update.
 	 *
 	 * @private
 	 * @returns {void}
@@ -372,7 +372,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 		const props = this.getProps();
 
-		ReactDOM.render(
+		this.cleanup = renderToMountPoint(
 			React.createElement(
 				Bridge,
 				{
@@ -412,10 +412,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	unmount() {
 		// console.debug('Unmounting React Component');
-
-		if (this.el) {
-			ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));
-		}
+		this.cleanup?.unmount?.();
 	},
 
 	beforeDestroy() {
