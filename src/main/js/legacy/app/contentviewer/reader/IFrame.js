@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const { wait } = require('@nti/lib-commons');
-const { copyCustomPropertiesIntoIFrame } = require('@nti/lib-dom');
+const {
+	copyCustomPropertiesIntoIFrame,
+	addStyleSheet,
+} = require('@nti/lib-dom');
 const Globals = require('internal/legacy/util/Globals');
 
 const ContentAPIRegistry = require('./ContentAPIRegistry');
@@ -251,8 +254,7 @@ module.exports = exports = Ext.define(
 				doc = me.getDocumentElement(),
 				con = console,
 				tip,
-				meta,
-				g = Globals;
+				meta;
 
 			if (me.reader.isDestroyed) {
 				return;
@@ -322,7 +324,7 @@ module.exports = exports = Ext.define(
 			meta.setAttribute('content', 'IE=edge');
 			doc.getElementsByTagName('head')[0].appendChild(meta);
 
-			g.loadStyleSheet({
+			addStyleSheet({
 				url:
 					base +
 					document

@@ -1,8 +1,8 @@
 const Ext = require('@nti/extjs');
+const { addStyleSheet } = require('@nti/lib-dom');
 const ImageZoomView = require('internal/legacy/common/ux/ImageZoomView');
 const SlideDeck = require('internal/legacy/common/ux/SlideDeck');
 const ContentUtils = require('internal/legacy/util/Content');
-const Globals = require('internal/legacy/util/Globals');
 const ObjectUtils = require('internal/legacy/util/Object');
 const lazy = require('internal/legacy/util/lazy-require').get(
 	'ParseUtils',
@@ -345,7 +345,7 @@ module.exports = exports = Ext.define(
 						: m[i];
 					css[o] = {};
 					if (!rc[o]) {
-						rc[o] = css[o] = Globals.loadStyleSheet({
+						rc[o] = css[o] = addStyleSheet({
 							url: o,
 							document: me.getDocumentElement(),
 						});
