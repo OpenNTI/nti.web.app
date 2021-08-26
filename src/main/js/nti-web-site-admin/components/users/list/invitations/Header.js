@@ -121,7 +121,9 @@ export function InvitationsHeader({ disabled }) {
 					getText={getFilterLabel}
 				/>
 				<Controls>
-					{!hasSelection && <InvitePeopleButton rounded primary />}
+					{!hasSelection && (
+						<InvitePeopleButton large rounded primary />
+					)}
 					{hasSelection && !HideBulkFilters[filter] && (
 						<>
 							<Tooltip label={resendLabel}>
@@ -131,6 +133,7 @@ export function InvitationsHeader({ disabled }) {
 										disabled={busy}
 										before={setBusy}
 										after={setNotBusy}
+										large
 										inverted
 										rounded
 									/>
@@ -143,6 +146,7 @@ export function InvitationsHeader({ disabled }) {
 										disabled={busy}
 										before={setBusy}
 										after={setNotBusy}
+										large
 										inverted
 										rounded
 										long

@@ -163,8 +163,9 @@ function UserActivationButton({
 				<Button
 					destructive={deactivating}
 					primary={activating}
-					inverted
 					onClick={() => setConfirming(true)}
+					large
+					inverted
 					rounded
 				>
 					{deactivating ? t('deactivate') : t('reactivate')}

@@ -79,7 +79,13 @@ function Export({ selectedUsers, params, filter, rel }) {
 		>
 			<form method="post" action={link} target="_blank">
 				{hiddenInputs}
-				<Button as={Form.SubmitButton} type="submit" rounded inverted>
+				<Button
+					as={Form.SubmitButton}
+					type="submit"
+					large
+					rounded
+					inverted
+				>
 					<Icons.Download />
 				</Button>
 			</form>
