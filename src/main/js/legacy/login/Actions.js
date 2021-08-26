@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { getService, getServer } = require('@nti/web-client');
+const { addStyleSheet, awaitStyleReady } = require('@nti/lib-dom');
 const { wait } = require('@nti/lib-commons');
 const { init } = require('@nti/lib-locale');
 const { getString } = require('internal/legacy/util/Localization');
@@ -99,9 +100,12 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 			if (pref || c) {
 				try {
-					await Globals.loadStyleSheetPromise(
-						'/app/resources/css/accessibility.css',
-						'main-stylesheet'
+					await awaitStyleReady(
+						addStyleSheet(
+							'/app/resources/css/accessibility.css',
+							null,
+							true
+						)
 					);
 				} catch {
 					throw new Error(
