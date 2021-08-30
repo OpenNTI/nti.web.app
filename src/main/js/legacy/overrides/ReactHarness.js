@@ -49,9 +49,10 @@ function lazyReject(reason) {
 
 function showAccountSettings() {
 	if (isFlag('account-management')) {
-		return Ext.widget('react', {
+		var widget = Ext.widget('react', {
 			renderTo: document.body,
 			component: UserProfiles.AccountManagement,
+			onClose: () => Ext.destroy(widget),
 		});
 	} else {
 		var win = ExtSettingsWindow.create();
