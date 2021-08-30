@@ -1,22 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { Router, useLocation } from '@nti/web-routing';
-import { Toast } from '@nti/web-commons';
-
-const getError = location => {
-	return !location?.search
-		? null
-		: new URLSearchParams(location.search).get('error');
-};
+import { Toast, Errors } from '@nti/web-commons';
 
 const useQueryErrorListener = handler => {
-	const location = useLocation();
 	useEffect(() => {
-		const e = getError(location);
+		const e = Errors.getErrorFromLocation(global.location);
 		if (e) {
 			handler?.(e);
 		}
-	}, [location.search]);
+	}, [global.location]);
 };
 
 const Listen = ({ handler }) => {
@@ -29,8 +21,6 @@ const Listen = ({ handler }) => {
 
 export function QueryErrorListener() {
 	return (
-		<Router>
-			<Listen />
-		</Router>
+		<Listen />
 	);
 }
