@@ -171,7 +171,10 @@ const Bridge = createReactClass({
 		};
 
 		if (this.props.addHistory) {
-			router.history = getHistory();
+			const history = getHistory();
+
+			router.history = history;
+			router.location = history.location;
 		}
 
 		if (this.props.addRouteTo) {
