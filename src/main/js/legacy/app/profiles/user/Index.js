@@ -6,7 +6,6 @@ const UserRepository = require('internal/legacy/cache/UserRepository');
 const UserModel = require('internal/legacy/model/User');
 const PersonalBlog = require('internal/legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('internal/legacy/util/Analytics');
-const { User: UserProfiles } = require('@nti/web-profiles');
 
 const Header = require('./Tabs');
 
@@ -100,13 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			xtype: 'react',
 			component: Header,
 			entity: interfaceUser,
-			launchEditor: () => {
-				var widget = Ext.widget('react', {
-					renderTo: document.body,
-					component: UserProfiles.AccountManagement,
-					onClose: () => Ext.destroy(widget),
-				});
-			},
 			getRouteFor: (obj, context) => {
 				if (!obj.isUser) {
 					return;
