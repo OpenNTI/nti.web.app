@@ -15,4 +15,5 @@
 
 .change {
 	color: var(--primary-blue);
+	cursor: pointer;
 }
