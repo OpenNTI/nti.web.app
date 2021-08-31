@@ -57,14 +57,12 @@ function AssetInput({ name, setAsset, setThemeProp, hideFlag, notSet }) {
 			className={cx('asset-input')}
 			onChange={onChange}
 		>
-			<>
-				{href && (
-					<Filename className={cx('file-name')} file={asset.filename} />
-				)}
-				<Text.Base className={cx('change')}>
-					{href || !notSet ? t('change') : notSet}
-				</Text.Base>
-			</>
+			{href && (
+				<Filename className={cx('file-name')} file={asset.filename} />
+			)}
+			<Text.Base className={cx('change')}>
+				{href || !notSet ? t('change') : notSet}
+			</Text.Base>
 		</Input.FileInputWrapper>
 	);
 }
