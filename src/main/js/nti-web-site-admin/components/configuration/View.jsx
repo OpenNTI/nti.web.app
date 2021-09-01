@@ -6,6 +6,7 @@ import Integrations from './integrations';
 import Branding from './branding';
 import Login from './login';
 import { Catalog } from './catalog/View.jsx';
+import { Webhooks } from './webhooks/View.jsx';
 import Frame from './Frame';
 
 export default Router.for(
@@ -29,6 +30,11 @@ export default Router.for(
 			path: '/catalog',
 			component: Catalog,
 			name: 'site-admin.advanced.catalog',
+		}),
+		Route({
+			path: '/webhooks',
+			component: Webhooks,
+			name: 'site-admin.advanced.webhooks',
 		}),
 		Route({
 			path: '/',

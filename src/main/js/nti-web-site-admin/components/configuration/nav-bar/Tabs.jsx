@@ -13,6 +13,7 @@ const DEFAULT_TEXT = {
 	branding: 'Site Branding',
 	login: 'Sign In Branding',
 	catalog: 'Catalog',
+	webhooks: 'Webhooks',
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
@@ -34,6 +35,9 @@ export default function SiteAdminAdvancedTabs() {
 			</LinkTo.Path>
 			<LinkTo.Path to="./catalog" activeClassName="active">
 				<Text.Base localized>{t('catalog')}</Text.Base>
+			</LinkTo.Path>
+			<LinkTo.Path to="./webhooks" activeClassName="active">
+				<Text.Base localized>{t('webhooks')}</Text.Base>
 			</LinkTo.Path>
 		</Tabs>
 	);
