@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Input, useService, Hooks, Text } from '@nti/web-commons';
+import { Input, Hooks, Text } from '@nti/web-commons';
+import { useService } from '@nti/web-core';
 import { scoped } from '@nti/lib-locale';
 
 const t = scoped('nti-web-app.admin.config.AnonymousCatalog', {

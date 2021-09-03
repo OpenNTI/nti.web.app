@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { Form, Tooltip, useService } from '@nti/web-commons';
-import { Button, Icons } from '@nti/web-core';
+import { Form, Tooltip } from '@nti/web-commons';
+import { useService, Button, Icons } from '@nti/web-core';
 import { URL as URLUtils } from '@nti/lib-commons';
 
 const UppercaseTooltip = styled(Tooltip)`
