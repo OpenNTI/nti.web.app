@@ -22,7 +22,10 @@ const t = scoped(
 	'nti-web-site-admin.components.users.list.table.controls.Export',
 	{
 		tooltipLabel: {
-			selected: 'Download Selected Users',
+			selected: {
+				one: 'Download (%(count)s User)',
+				other: 'Download (%(count)s Users)',
+			},
 			noSelected: 'Download All Users',
 		},
 		toast: {
@@ -86,7 +89,9 @@ function Export({ selectedUsers, params, filter, rel }) {
 		<UppercaseTooltip
 			label={
 				selectedUsers?.length
-					? t('tooltipLabel.selected')
+					? t('tooltipLabel.selected', {
+							count: selectedUsers?.length,
+					  })
 					: t('tooltipLabel.noSelected')
 			}
 		>
