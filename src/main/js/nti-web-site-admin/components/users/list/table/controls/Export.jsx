@@ -1,9 +1,17 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
+import { isFlag } from '@nti/web-client';
 import { Form, Tooltip } from '@nti/web-commons';
-import { useService, Button, Icons } from '@nti/web-core';
+import {
+	useService,
+	Button,
+	Icons,
+	DownloadForm,
+	Toast,
+	SubmitButton,
+} from '@nti/web-core';
 import { URL as URLUtils } from '@nti/lib-commons';
 
 const UppercaseTooltip = styled(Tooltip)`
@@ -16,6 +24,11 @@ const t = scoped(
 		tooltipLabel: {
 			selected: 'Download Selected Users',
 			noSelected: 'Download All Users',
+		},
+		toast: {
+			title: 'Generating Users Report',
+			description:
+				'This may take a while. Once generated the report will begin downloading.',
 		},
 	}
 );
@@ -93,10 +106,62 @@ function Export({ selectedUsers, params, filter, rel }) {
 	);
 }
 
+function ExperimentalExport({ selectedUsers, params, filter, rel }) {
+	const link = useSiteUsersExport(params, rel, filter);
+	const downloadParams = {
+		usernames: (selectedUsers ?? []).map(s => s.Username),
+	};
+
+	const [generating, setGenerating] = useState(false);
+
+	const onSubmit = useCallback(() => setGenerating(true), [setGenerating]);
+	const onDownloadStarted = useCallback(
+		() => setGenerating(false),
+		[setGenerating]
+	);
+
+	return (
+		<>
+			<UppercaseTooltip
+				label={
+					selectedUsers?.length
+						? t('tooltipLabel.selected')
+						: t('tooltipLabel.noSelected')
+				}
+			>
+				<DownloadForm
+					action={link}
+					method="post"
+					params={downloadParams}
+					onSubmit={onSubmit}
+					onDownloadStarted={onDownloadStarted}
+				>
+					<SubmitButton large rounded inverted>
+						<Icons.Download />
+					</SubmitButton>
+				</DownloadForm>
+			</UppercaseTooltip>
+			{generating && (
+				<Toast title={t('toast.title')} icon={<Icons.Download />}>
+					{t('toast.description')}
+				</Toast>
+			)}
+		</>
+	);
+}
+
 export default function EnrollButtonWrapper(props) {
+	const { rel, filter } = props;
+
 	return (
 		<Suspense fallback={<div />}>
-			<Export {...props} />
+			{isFlag('download-progress') &&
+			rel === 'SiteUsers' &&
+			filter !== 'admin' ? (
+				<ExperimentalExport {...props} />
+			) : (
+				<Export {...props} />
+			)}
 		</Suspense>
 	);
 }
