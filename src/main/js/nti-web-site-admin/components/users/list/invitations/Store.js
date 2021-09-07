@@ -183,29 +183,39 @@ export async function sendInvites({ emails, message, file, isAdmin }, silent) {
 }
 
 export async function resend(invitations) {
-	const isAdmin = invite => invite?.MimeType === INVITATION_TYPES.ADMIN;
-	const arr = Array.isArray(invitations) ? invitations : [invitations];
+	const service = await getService();
+	const invitationsCollection = service.getCollection(
+		'Invitations',
+		'Invitations'
+	);
 
-	const groupBy = getKey => (acc, item) => {
-		const key = getKey(item);
-		return {
-			...acc,
-			[key]: [...(acc[key] || []), item],
-		};
-	};
+	return service.post(invitationsCollection.getLink('send-site-invitation'), {
+		emails: invitations.map(i => i.receiver),
+	});
 
-	// group invitations with the same mime type and message
-	const keyFactory = ({ MimeType, message }) => `${MimeType}${message}`;
-	const grouped = arr.reduce(groupBy(keyFactory), {});
+	// const isAdmin = invite => invite?.MimeType === INVITATION_TYPES.ADMIN;
+	// const arr = Array.isArray(invitations) ? invitations : [invitations];
 
-	// options for this.sendInvites for each mime/message group
-	const batches = Object.values(grouped).map(invites => ({
-		emails: invites.map(({ receiver }) => receiver),
-		message: invites[0].message,
-		isAdmin: isAdmin(invites[0]),
-	}));
+	// const groupBy = getKey => (acc, item) => {
+	// 	const key = getKey(item);
+	// 	return {
+	// 		...acc,
+	// 		[key]: [...(acc[key] || []), item],
+	// 	};
+	// };
 
-	batches.forEach(batch => sendInvites(batch, true));
+	// // group invitations with the same mime type and message
+	// const keyFactory = ({ MimeType, message }) => `${MimeType}${message}`;
+	// const grouped = arr.reduce(groupBy(keyFactory), {});
+
+	// // options for this.sendInvites for each mime/message group
+	// const batches = Object.values(grouped).map(invites => ({
+	// 	emails: invites.map(({ receiver }) => receiver),
+	// 	message: invites[0].message,
+	// 	isAdmin: isAdmin(invites[0]),
+	// }));
+
+	// batches.forEach(batch => sendInvites(batch, true));
 }
 
 export async function rescind(invitations) {
