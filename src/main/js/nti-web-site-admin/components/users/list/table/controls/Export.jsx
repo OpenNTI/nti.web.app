@@ -130,7 +130,9 @@ function ExperimentalExport({ selectedUsers, params, filter, rel }) {
 			<UppercaseTooltip
 				label={
 					selectedUsers?.length
-						? t('tooltipLabel.selected')
+						? t('tooltipLabel.selected', {
+								count: selectedUsers?.length,
+						  })
 						: t('tooltipLabel.noSelected')
 				}
 			>
