@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { Hooks } from '@nti/web-commons';
-
-const { useResolver } = Hooks;
-const { isResolved } = useResolver;
+import { DateTime, useLink } from '@nti/web-core';
 
 import { SubscriptionsStore as Store } from './SubscriptionsStore';
 
@@ -20,13 +17,23 @@ export function SubscriptionDetail ({id}) {
 }
 
 function History ({item}) {
-	const resolver = useResolver(async () => {
-		return item.fetchLinkParsed('delivery_history');
-	})
-	return !isResolved(resolver) ? null : (
-		<div>
-			<pre>{JSON.stringify(resolver, null, 2)}</pre>
-			<ul>{resolver.Items?.map(x => !x ? null : <li key={Math.random()}>{x.message}</li>)}</ul>
-		</div>
+	const {Items: items} = useLink(item, 'delivery_history');
+
+	return (
+		<ul>{items.map(x => !x ? null : <li key={x.getID()}><DeliveryAttempt item={x} /></li>)}</ul>
+	)
+}
+
+const Card = styled.div`
+	border: 1px solid red;
+`
+
+function DeliveryAttempt ({item}) {
+	return (
+		<Card>
+			<DateTime date={item.getCreatedTime?.()} />
+			<div>{item.status}</div>
+			<div>{item.message}</div>
+		</Card>
 	)
 }
