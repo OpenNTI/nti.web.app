@@ -190,32 +190,8 @@ export async function resend(invitations) {
 	);
 
 	return service.post(invitationsCollection.getLink('send-site-invitation'), {
-		invitations: invitations.map(({receiver}) => ({receiver})),
+		invitations: invitations.map(({ receiver }) => ({ receiver })),
 	});
-
-	// const isAdmin = invite => invite?.MimeType === INVITATION_TYPES.ADMIN;
-	// const arr = Array.isArray(invitations) ? invitations : [invitations];
-
-	// const groupBy = getKey => (acc, item) => {
-	// 	const key = getKey(item);
-	// 	return {
-	// 		...acc,
-	// 		[key]: [...(acc[key] || []), item],
-	// 	};
-	// };
-
-	// // group invitations with the same mime type and message
-	// const keyFactory = ({ MimeType, message }) => `${MimeType}${message}`;
-	// const grouped = arr.reduce(groupBy(keyFactory), {});
-
-	// // options for this.sendInvites for each mime/message group
-	// const batches = Object.values(grouped).map(invites => ({
-	// 	emails: invites.map(({ receiver }) => receiver),
-	// 	message: invites[0].message,
-	// 	isAdmin: isAdmin(invites[0]),
-	// }));
-
-	// batches.forEach(batch => sendInvites(batch, true));
 }
 
 export async function rescind(invitations) {
