@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Flyout } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
-import { encodeForURI } from '@nti/lib-ntiids';
 import { getService } from '@nti/web-client';
 import { Models } from '@nti/lib-interfaces';
 import { getString } from 'internal/legacy/util/Localization';
@@ -17,6 +16,10 @@ export default class CreateCourse extends Component {
 		canCreate: PropTypes.bool.isRequired,
 		onCourseModified: PropTypes.func,
 		handleNav: PropTypes.func,
+	};
+
+	static contextTypes = {
+		router: PropTypes.object,
 	};
 
 	state = {};
@@ -41,7 +44,7 @@ export default class CreateCourse extends Component {
 	}
 
 	launchCourseWizard = template => {
-		const { onCourseCreated, onCourseModified, handleNav } = this.props;
+		const { onCourseCreated, onCourseModified } = this.props;
 
 		if (this.flyout) {
 			this.flyout.dismiss();
@@ -50,14 +53,10 @@ export default class CreateCourse extends Component {
 		Editor.createCourse(onCourseModified, template).then(createdEntry => {
 			onCourseCreated(createdEntry); // course was created, do post processing
 
-			if (handleNav && createdEntry) {
-				handleNav(
-					createdEntry.Title,
-					'/course/' +
-						encodeForURI(createdEntry.CourseNTIID) +
-						'/info'
-				);
-			}
+			this.context?.router?.routeTo?.object(
+				{ NTIID: createdEntry.CourseNTIID, CatalogEntry: createdEntry },
+				'new-course'
+			);
 		});
 	};
 
