@@ -189,9 +189,11 @@ export async function resend(invitations) {
 		'Invitations'
 	);
 
-	return service.post(invitationsCollection.getLink('send-site-invitation'), {
+	await service.post(invitationsCollection.getLink('send-site-invitation'), {
 		invitations: invitations.map(({ receiver }) => ({ receiver })),
 	});
+
+	Bus.emit(InvitesSentEvent);
 }
 
 export async function rescind(invitations) {
@@ -206,4 +208,6 @@ export async function rescind(invitations) {
 		invitationsCollection.getLink('delete-site-invitations'),
 		{ codes: invitations.map(x => x.code) }
 	);
+
+	Bus.emit(InvitesSentEvent);
 }
