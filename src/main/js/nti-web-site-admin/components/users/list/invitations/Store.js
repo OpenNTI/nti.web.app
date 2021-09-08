@@ -190,7 +190,7 @@ export async function resend(invitations) {
 	);
 
 	return service.post(invitationsCollection.getLink('send-site-invitation'), {
-		emails: invitations.map(i => i.receiver),
+		invitations: invitations.map(({receiver}) => ({receiver})),
 	});
 
 	// const isAdmin = invite => invite?.MimeType === INVITATION_TYPES.ADMIN;
