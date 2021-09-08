@@ -61,6 +61,11 @@ const Header = styled.div`
 	flex-direction: row;
 	align-items: center;
 	padding: 20px 30px 10px;
+	gap: 0.5rem;
+
+	& > * {
+		white-space: nowrap;
+	}
 `;
 
 const Controls = styled.div`
@@ -69,10 +74,7 @@ const Controls = styled.div`
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
-
-	& > * {
-		margin-left: 0.5rem;
-	}
+	gap: 0.5rem;
 `;
 
 export const InvitationsHeaderPlaceholder = () => (
