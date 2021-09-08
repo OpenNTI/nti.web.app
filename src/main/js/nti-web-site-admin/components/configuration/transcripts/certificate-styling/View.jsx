@@ -30,21 +30,18 @@ const t = scoped(
 	}
 );
 
-const propMap = {
-	[Store.Error]: 'error',
-	[Store.Loading]: 'loading',
-	[Store.Modified]: 'modified',
-	[Store.Theme]: 'theme',
-	[Store.Save]: 'save',
-	[Store.Cancel]: 'cancel',
-	[Store.Reset]: 'reset',
-	[Store.CanReset]: 'canReset',
-	[Store.CanEditCertificate]: 'canEdit',
-};
-
 function CertificateStyling() {
-	const { error, loading, modified, theme, save, cancel, canEdit } =
-		Store.useMonitor(propMap);
+	const {
+		[Store.Error]: error,
+		[Store.Loading]: loading,
+		[Store.Modified]: modified,
+		[Store.Theme]: theme,
+		[Store.Save]: save,
+		[Store.Cancel]: cancel,
+		// [Store.Reset]: reset,
+		// [Store.CanReset]: canReset,
+		[Store.CanEditCertificate]: canEdit,
+	} = Store.useValue();
 
 	const [preview, setPreview] = React.useState(false);
 	const form = React.createRef();

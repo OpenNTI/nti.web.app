@@ -26,7 +26,7 @@ CertificatePreviewModal.propTypes = {
 	onCancel: PropTypes.func,
 };
 export default function CertificatePreviewModal({ onSave, onCancel }) {
-	const { getPreviewBlob } = Store.useMonitor(['getPreviewBlob']);
+	const { getPreviewBlob } = Store.useValue();
 
 	const resolver = useResolver(() => getPreviewBlob(), [getPreviewBlob]);
 

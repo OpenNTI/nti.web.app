@@ -63,11 +63,7 @@ const CustomAspectRatio = 26 / 85;
 const stop = e => (e.stopPropagation(), e.preventDefault());
 
 export default function CertificateStylingPill() {
-	const { setBrandProp, setAsset, clearAsset } = Store.useMonitor([
-		'setBrandProp',
-		'setAsset',
-		'clearAsset',
-	]);
+	const { setBrandProp, setAsset, clearAsset } = Store.useValue();
 
 	const [editCustom, setEditCustom] = React.useState(false);
 

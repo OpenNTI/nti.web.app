@@ -15,7 +15,7 @@ const t = scoped(
 
 export default function CertificateStylingLabel() {
 	const label = Theme.useThemeProperty('certificates.label');
-	const { setBrandProp } = Store.useMonitor(['setBrandProp']);
+	const { setBrandProp } = Store.useValue();
 
 	return (
 		<Property>

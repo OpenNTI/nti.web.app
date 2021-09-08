@@ -13,7 +13,7 @@ const { isPending, isErrored, isResolved } = useResolver;
 const cx = classnames.bind(Styles);
 
 export default function CertificatePreviewIframe() {
-	const { getPreviewBlob } = Store.useMonitor(['getPreviewBlob']);
+	const { getPreviewBlob } = Store.useValue();
 
 	const resolver = useResolver(() => getPreviewBlob(), [getPreviewBlob]);
 
