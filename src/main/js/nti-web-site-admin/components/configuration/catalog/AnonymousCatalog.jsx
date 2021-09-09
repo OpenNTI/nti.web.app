@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Input, Hooks, Text } from '@nti/web-commons';
-import { useService } from '@nti/web-core';
+import { Input, Text } from '@nti/web-commons';
+import { useChanges, useService } from '@nti/web-core';
 import { scoped } from '@nti/lib-locale';
 
 const t = scoped('nti-web-app.admin.config.AnonymousCatalog', {
@@ -45,7 +45,7 @@ const useCourseCatalog = () => {
 
 export function AnonymousCatalog({ label }) {
 	const courseCatalog = useCourseCatalog();
-	Hooks.useChanges(courseCatalog);
+	useChanges(courseCatalog);
 
 	const disabled = !courseCatalog?.canEdit?.();
 	const { anonymouslyAccessible } = courseCatalog || {};
