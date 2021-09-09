@@ -23,4 +23,56 @@
 	--border-grey: #dbdbdb;
 	--border-red: #f35252;
 	--text-red: #c64817;
+
+	--palette-high-contrast-grey-400: #dbdbdb; /* legacy border-grey-light */
+	--palette-high-contrast-grey-500: #747474; /* legacy tertiary-grey */
+	--palette-high-contrast-grey-600: #4c4c4c; /* legacy secondary-grey */
+	--palette-high-contrast-grey-700: #000; /* legacy primary-grey */
+
+	--palette-high-contrast-blue-100: #f5fbff; /* legacy light-blue */
+	--palette-high-contrast-blue-300: #2a76a3; /* legacy primary-blue */
+	--palette-high-contrast-blue-300-10: rgba(42, 118, 163, 0.1);
+	--palette-high-contrast-blue-300-25: rgba(42, 118, 163, 0.25);
+	--palette-high-contrast-blue-300-50: rgba(42, 118, 163, 0.5);
+	--palette-high-contrast-blue-300-75: rgba(42, 118, 163, 0.75);
+	--palette-high-contrast-blue-600: #168fe7; /* legacy secondary-blue */
+
+	--palette-high-contrast-red-100: #f35252; /* legacy primary-red */
+	--palette-high-contrast-red-500: #750000; /* legacy secondary-red */
+
+	--palette-high-contrast-green-100: #ebf7ed; /* legacy light-green */
+	--palette-high-contrast-green-300: #577f02; /* legacy primary-green */
+	--palette-high-contrast-green-500: #148524; /* legacy secondary-green */
+
+	--palette-high-contrast-orange-500: #fa8700; /* legacy primary-orange */
+
+	--color-brand-main: var(--palette-high-contrast-blue-300);
+
+	--color-destructive-action: var(--palette-high-contrast-red-100);
+	--color-constructive-action: var(--palette-high-contrast-green-500);
+	--color-primary-action: var(--color-brand-main);
+	--color-secondary-action: var(--palette-high-contrast-grey-400);
+
+	--color-link: var(--palette-high-contrast-blue-300);
+
+	--color-foreground-dark: var(--palette-high-contrast-grey-700);
+	--color-foreground: var(--palette-high-contrast-grey-600);
+	--color-foreground-light: var(--palette-high-contrast-grey-500);
+
+	--color-outline-light: var(--palette-high-contrast-grey-400);
+
+	--color-selected-background-dark: var(--palette-high-contrast-blue-300);
+	--color-selected-background: var(--palette-high-contrast-blue-300-25);
+	--color-selected-background-light: var(--palette-blue-300-10);
+
+	--color-focused-background-dark: var(--palette-high-contrast-blue-300);
+	--color-focused-background: var(--palette-high-contrast-blue-300-25);
+	--color-focused-background-light: var(--palette-high-contrast-blue-300-10);
+
+	--color-focused-outline-dark: var(--palette-high-contrast-blue-300-75);
+	--color-focused-outline: var(--palette-high-contrast-blue-300-50);
+
+	--color-error: var(--palette-high-contrast-red-100);
+	--color-information: var(--color-brand-main);
+	--color-warning: var(--palette-high-contrast-orange-500);
 }
