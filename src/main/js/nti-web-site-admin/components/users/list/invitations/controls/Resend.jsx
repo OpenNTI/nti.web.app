@@ -54,13 +54,15 @@ function ResendButtonImpl({ invites, before, after, ...otherProps }, ref) {
 				after?.();
 			}
 		},
-		[invites, after]
+		[...invites, after]
 	);
 
 	const isCanceled = invites.length === 0 && invites[0].expired;
+	// Since AsyncAction is stateful, we need to force it to unmount/remount if the key changes
+	const stateKey = invites.map(x => x?.getID?.()).join('|');
 
 	return (
-		<AsyncAction onClick={onClick} primary {...otherProps}>
+		<AsyncAction onClick={onClick} primary {...otherProps} key={stateKey}>
 			{isCanceled ? t('invite') : t('resend')}
 		</AsyncAction>
 	);
