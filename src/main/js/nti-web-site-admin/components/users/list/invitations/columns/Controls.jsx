@@ -81,8 +81,10 @@ export function Controls({ item }) {
 	const setBusy = useCallback(() => setBusyState(true), [setBusyState]);
 	const setNotBusy = useCallback(async () => {
 		try {
+			// do we need to refresh?
 			await item.refresh();
-			setBusyState(false);
+		} catch (e) {
+			// couldn't refresh
 		} finally {
 			setBusyState(false);
 		}
