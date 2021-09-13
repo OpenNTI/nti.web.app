@@ -348,8 +348,6 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 	async attemptLoginCallback(service) {
 		var href, workspace;
 
-		this.store.setupSocket();
-
 		workspace = this.findResolveSelfWorkspace(service);
 		href = service.getLinkFrom(
 			(workspace || {}).Links || [],

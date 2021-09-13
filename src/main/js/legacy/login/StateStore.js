@@ -40,10 +40,6 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-	setupSocket: function () {
-		getServer().getWebSocketClient().setup();
-	},
-
 	__validateSession: function () {
 		// console.debug('Validating Session');
 
