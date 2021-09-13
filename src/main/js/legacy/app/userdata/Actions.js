@@ -98,18 +98,16 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		incoming changes with this container id and we only apply those changes to that store
 		instead of iterating all of them
 	 */
-	onIncomingChange: function withMeta(change, meta, reCalled) {
+	onIncomingChange: function withMeta(change) {
+		if (/completion\.completeditem$/.test(change?.Item?.MimeType)) return;
+
 		//we require at least one change object
 		if (!change) {
 			console.error('Invalid Argument for change');
 			return;
 		}
 
-		//if this is the raw json from the event, parse it.
-		if (!change.isModel) {
-			change = lazy.ParseUtils.parseItems([change])[0];
-		}
-
+		[change] = lazy.ParseUtils.parseItems([change]);
 		if (change.isNotable()) {
 			if (
 				change.get('ChangeType') !== 'Modified' ||
@@ -124,17 +122,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			type = (change.get('ChangeType') || '').toLowerCase(), //ensure lowercase
 			fn;
 
-		//only call this on the first call
-		if (!reCalled) {
-			this.UserDataStore.fireEvent('incomingChange', change);
-		}
+		if (!item) return;
 
-		//I don't think we need this, doesn't look like any of the change handlers use it
-		// //callback with our self, only if we haven't already and there is a containerId to resolve
-		// if (!meta && !reCalled && cid) {
-		//	LocationMeta.getMeta(cid, reCall, me);
-		//	return;
-		// }
+		this.UserDataStore.fireEvent('incomingChange', change);
 
 		try {
 			//Now that all the data is in order, lets dole out the responsibility to changeType specific functions
