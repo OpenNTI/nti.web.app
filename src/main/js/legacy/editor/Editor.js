@@ -1672,6 +1672,8 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!data || e) {
 			EmbedInput.show((data || {}).embedURL).then(source => {
+				if (!source) return;
+
 				const part = this.createVideoPart(source.href, source.service);
 
 				this.insertObjectThumbnail(
