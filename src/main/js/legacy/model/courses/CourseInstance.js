@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
-const {
-	URL: { join: urlJoin },
-} = require('@nti/lib-commons');
+const { url } = require('@nti/lib-commons');
 const { isFlag } = require('@nti/web-client');
 const { getString } = require('internal/legacy/util/Localization');
 const { getURL } = require('internal/legacy/util/Globals');
@@ -939,13 +937,13 @@ module.exports = exports = Ext.define(
 		getAssessmentURL(ntiid) {
 			const baseLink = this.getLink('Assessments');
 
-			return baseLink && urlJoin(baseLink, encodeURIComponent(ntiid));
+			return baseLink && url.join(baseLink, encodeURIComponent(ntiid));
 		},
 
 		getInquiriesURL(ntiid) {
 			const baseLink = this.getLink('CourseInquiries');
 
-			return baseLink && urlJoin(baseLink, encodeURIComponent(ntiid));
+			return baseLink && url.join(baseLink, encodeURIComponent(ntiid));
 		},
 
 		getLTIConfiguredTools(force) {

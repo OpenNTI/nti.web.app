@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-// const {wait} = require('@nti/lib-commons');
 const { ControlBar } = require('@nti/web-content');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { StickyToolbar } = require('@nti/web-content');

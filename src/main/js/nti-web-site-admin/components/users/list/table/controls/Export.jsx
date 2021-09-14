@@ -12,7 +12,7 @@ import {
 	Toast,
 	SubmitButton,
 } from '@nti/web-core';
-import { URL as URLUtils } from '@nti/lib-commons';
+import { url } from '@nti/lib-commons';
 
 const UppercaseTooltip = styled(Tooltip)`
 	text-transform: uppercase;
@@ -57,7 +57,7 @@ const useSiteUsersExport = (params, rel, filter) => {
 	delete clone.batchStart;
 	delete clone.batchSize;
 
-	return URLUtils.appendQueryParams(link, {
+	return url.appendQueryParams(link, {
 		...clone,
 		format: 'text/csv',
 	});

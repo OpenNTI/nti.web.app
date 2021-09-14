@@ -1,6 +1,6 @@
 import { Stores, Mixins } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
-import { decorate, URL } from '@nti/lib-commons';
+import { decorate, url } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 
 import SharedStore from '../SharedStore';
@@ -100,9 +100,9 @@ class UserListStore extends Stores.BoundStore {
 				users: users.join(','),
 			};
 
-			URL.appendQueryParams(siteAdminsLink, params);
+			url.appendQueryParams(siteAdminsLink, params);
 			return service.delete(
-				URL.appendQueryParams(siteAdminsLink, params)
+				url.appendQueryParams(siteAdminsLink, params)
 			);
 		} else {
 			return service.post(siteAdminsLink, { users: users.join(',') });
