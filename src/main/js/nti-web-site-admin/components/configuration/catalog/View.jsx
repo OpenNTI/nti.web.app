@@ -11,10 +11,14 @@ const t = scoped('nti-web-app.admin.config.Catalog', {
 	title: 'Catalog',
 });
 
+const Title = styled(Text.Base, { allowAs: true }).attrs({ as: 'h1' })`
+	margin-top: 0;
+`;
+
 export function Catalog(props) {
 	return (
 		<Box p="lg" sh="sm">
-			<Text.Base as="h1">{t('title')}</Text.Base>
+			<Title>{t('title')}</Title>
 			<AnonymousCatalog />
 		</Box>
 	);
