@@ -19,10 +19,9 @@ try {
 
 exports = module.exports = {
 	async register(expressApp, config) {
-		const devmode =
-			config.webpack && dev
-				? await dev.setupDeveloperMode(config, expressApp)
-				: false;
+		const devmode = dev
+			? await dev.setupDeveloperMode(config, expressApp)
+			: false;
 
 		redirects.register(expressApp, config);
 		api.register(expressApp, config);
