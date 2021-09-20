@@ -64,6 +64,7 @@
     "@nti/web-integrations": "NextThought/nti.web.integrations",
     "@nti/web-library": "NextThought/nti.web.library",
     "@nti/web-login": "latest",
+    "@nti/web-mobile": "latest",
     "@nti/web-modeled-content": "NextThought/nti.web.modeled-content",
     "@nti/web-notifications": "NextThought/nti.web.notifications",
     "@nti/web-payments": "NextThought/nti.web.payments",
