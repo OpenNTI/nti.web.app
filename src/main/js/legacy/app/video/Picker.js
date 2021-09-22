@@ -142,7 +142,9 @@ module.exports = exports = Ext.define(
 		},
 
 		onVideoSave(video) {
-			this.Prompt.doImmediateSave(lazy.ParseUtils.parseItems(video)[0]);
+			this.Prompt.doImmediateSave(
+				lazy.ParseUtils.parseItems(video.toJSON())[0]
+			);
 		},
 
 		doClose(reason) {
