@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 			value = `${this.defaultProtocol}${value}`;
 		}
 
-		console.log('Validated: ', value);
+		// console.log('Validated: ', value);
 		validator.value = value;
 
 		return value;
