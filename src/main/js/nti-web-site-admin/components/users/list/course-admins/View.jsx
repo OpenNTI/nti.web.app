@@ -31,7 +31,7 @@ export function CourseAdmins({ className, searchTerm }) {
 			>
 				<CourseAdminsHeader />
 				<CourseAdminsTable />
-				<CourseAdminsFooter />?
+				<CourseAdminsFooter />
 			</DataContext>
 		</div>
 	);
