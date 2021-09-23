@@ -14,6 +14,10 @@ export default Router.for(
 			component: User,
 		}),
 		Route({
+			path: '/course-admins/user/:userID',
+			component: User,
+		}),
+		Route({
 			path: '/',
 			component: FiterableUserList,
 			name: 'site-admin.users',

@@ -17,10 +17,11 @@ import SeatLimit from './SeatLimit';
 
 const DEFAULT_TEXT = {
 	learners: 'Users',
-	admins: 'Admins',
+	admins: 'Site Admins',
 	deactivated: 'Deactivated',
 	invitations: 'Invitations',
 	invitePeople: 'Invite People',
+	courseAdmins: 'Course Admins',
 	people: 'People',
 };
 
@@ -62,6 +63,12 @@ export default class UserListNavBar extends React.Component {
 						</LinkTo.Path>
 						<LinkTo.Path to="./admins" activeClassName="active">
 							{t('admins')}
+						</LinkTo.Path>
+						<LinkTo.Path
+							to="./course-admins"
+							activeClassName="active"
+						>
+							{t('courseAdmins')}
 						</LinkTo.Path>
 						<LinkTo.Path
 							to="./deactivated"
