@@ -47,6 +47,6 @@ export class CourseAdminsStore extends Base {
 
 		const batch = await service.getBatch(link, params);
 
-		return { batch, batchParams: params };
+		return { batch, batchParams: params, link };
 	}
 }

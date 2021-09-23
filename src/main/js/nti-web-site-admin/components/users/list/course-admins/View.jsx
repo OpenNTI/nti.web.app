@@ -5,6 +5,7 @@ import { DataContext } from '@nti/web-core/data';
 
 import { CourseAdminsStore } from './Store';
 import { CourseAdminsHeader, CourseAdminsHeaderPlaceholder } from './Header';
+import { CourseAdminsFooter } from './Footer';
 import { CourseAdminsTable, CourseAdminsTablePlaceholder } from './Table';
 
 const Fallback = () => (
@@ -30,6 +31,7 @@ export function CourseAdmins({ className, searchTerm }) {
 			>
 				<CourseAdminsHeader />
 				<CourseAdminsTable />
+				<CourseAdminsFooter />?
 			</DataContext>
 		</div>
 	);

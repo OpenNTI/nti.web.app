@@ -2,6 +2,11 @@ import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Placeholder, Typography } from '@nti/web-core';
+import { isFlag } from '@nti/web-client';
+
+import Export from '../table/controls/Export';
+
+import { CourseAdminsStore } from './Store';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.list.course-admins.Header',
@@ -22,6 +27,15 @@ const Header = styled.div`
 	}
 `;
 
+const Controls = styled.div`
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 0.5rem;
+`;
+
 export const CourseAdminsHeaderPlaceholder = () => (
 	<Header>
 		<Placeholder.Text type="header-one-alt" text={t('header')} />
@@ -29,9 +43,20 @@ export const CourseAdminsHeaderPlaceholder = () => (
 );
 
 export const CourseAdminsHeader = () => {
+	const { selection, batchParams, link } = CourseAdminsStore.useProperties();
+
 	return (
 		<Header>
 			<Typography type="header-one-alt">{t('header')}</Typography>
+			<Controls>
+				{isFlag('export-users') && (
+					<Export
+						selectedUsers={selection}
+						params={batchParams}
+						link={link}
+					/>
+				)}
+			</Controls>
 		</Header>
 	);
 };

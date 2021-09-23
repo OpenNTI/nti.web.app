@@ -36,8 +36,13 @@ const t = scoped(
 	}
 );
 
-const useSiteUsersExport = (params, rel, filter) => {
+const useSiteUsersExport = (linkProp, params, rel, filter) => {
 	const service = useService();
+
+	if (linkProp) {
+		return linkProp;
+	}
+
 	let link = null;
 
 	if (filter === 'admin') {
@@ -64,6 +69,7 @@ const useSiteUsersExport = (params, rel, filter) => {
 };
 
 Export.propTypes = {
+	link: PropTypes.string,
 	items: PropTypes.array,
 	selectedUsers: PropTypes.array,
 	params: PropTypes.object,
@@ -71,7 +77,7 @@ Export.propTypes = {
 	rel: PropTypes.string,
 };
 
-function Export({ selectedUsers, params, filter, rel }) {
+function Export({ link: linkProp, selectedUsers, params, filter, rel }) {
 	const isSiteUsers = rel === 'SiteUsers';
 
 	const hiddenInputs = (selectedUsers ?? []).map((item, index) => (
@@ -83,7 +89,7 @@ function Export({ selectedUsers, params, filter, rel }) {
 		/>
 	));
 
-	const link = useSiteUsersExport(params, rel, filter);
+	const link = useSiteUsersExport(linkProp, params, rel, filter);
 
 	return (
 		<UppercaseTooltip
@@ -111,8 +117,14 @@ function Export({ selectedUsers, params, filter, rel }) {
 	);
 }
 
-function ExperimentalExport({ selectedUsers, params, filter, rel }) {
-	const link = useSiteUsersExport(params, rel, filter);
+function ExperimentalExport({
+	link: linkProp,
+	selectedUsers,
+	params,
+	filter,
+	rel,
+}) {
+	const link = useSiteUsersExport(linkProp, params, rel, filter);
 	const downloadParams = {
 		usernames: (selectedUsers ?? []).map(s => s.Username),
 	};
@@ -120,10 +132,9 @@ function ExperimentalExport({ selectedUsers, params, filter, rel }) {
 	const [generating, setGenerating] = useState(false);
 
 	const onSubmit = useCallback(() => setGenerating(true), [setGenerating]);
-	const onDownloadStarted = useCallback(
-		() => setGenerating(false),
-		[setGenerating]
-	);
+	const onDownloadStarted = useCallback(() => setGenerating(false), [
+		setGenerating,
+	]);
 
 	return (
 		<>

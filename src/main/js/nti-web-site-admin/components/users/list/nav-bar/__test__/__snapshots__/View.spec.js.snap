@@ -27,7 +27,15 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
             className="nti-link-to-path"
             to="./admins"
           >
-            Admins
+            Site Admins
+          </div>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./course-admins"
+          >
+            Course Admins
           </div>
         </li>
         <li>
@@ -105,7 +113,15 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
             className="nti-link-to-path"
             to="./admins"
           >
-            Admins
+            Site Admins
+          </div>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./course-admins"
+          >
+            Course Admins
           </div>
         </li>
         <li>
