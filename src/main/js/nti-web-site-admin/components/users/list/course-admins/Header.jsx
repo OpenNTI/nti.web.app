@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Placeholder, Typography } from '@nti/web-core';
+import { Typography } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
 
 import Export from '../table/controls/Export';
