@@ -12,7 +12,7 @@ JoinDateColumn.CssClassName = css`
 	width: 7rem;
 `;
 
-JoinDateColumn.SortOn = 'lastSeenTime';
+JoinDateColumn.SortOn = 'createdTime';
 
 JoinDateColumn.Create = props => Variant(JoinDateColumn, props);
 
