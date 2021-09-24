@@ -38,7 +38,7 @@ const Controls = styled.div`
 
 export const CourseAdminsHeaderPlaceholder = () => (
 	<Header>
-		<Placeholder.Text type="header-one-alt" text={t('header')} />
+		<Typography type="header-one-alt">{t('header')}</Typography>
 	</Header>
 );
 
