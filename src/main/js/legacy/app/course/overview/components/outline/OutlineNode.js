@@ -259,7 +259,7 @@ const OutlineNode =
 						header?.removeCls('selected');
 						header?.removeCls('out-of-view');
 						header?.el
-							.down('.label')
+							?.down('.label')
 							?.el?.dom.setAttribute(
 								'aria-label',
 								this.outlineNode.getTitle()
