@@ -9,42 +9,28 @@ const useDeliveryAttemptDetail = id => {
 	return { attempt, request, response };
 }
 
-export function DeliveryAttemptDetail ({id}) {
-	const { attempt, request, response } = useDeliveryAttemptDetail(id);
+const Pre = styled('pre')`
+	overflow: auto;
+	padding: var(--padding-lg, 1em);
+	background: var(--panel-background-alt);
+	font-size: 0.875rem;
+`
 
-	console.log(request, response, attempt);
+export function DeliveryAttemptDetail ({id}) {
+	const { request, response } = useDeliveryAttemptDetail(id);
 
 	return (
 		<div>
 			<div>AttemptDetail {id}</div>
-			<Request request={request} />
-			<Response response={response} />
+			<Jsonified title="Request" object={request} />
+			<Jsonified title="Response" object={response} />
 		</div>
 	);
 }
 
-const Request = ({request}) => {
-	if (!request) {
-		return null;
-	}
-
-	// const {headers, body, href} = request;
-
-	return (
-		<pre>
-			{JSON.stringify(request, null, 2)}
-		</pre>
-	);
-}
-
-const Response = ({response}) => {
-	if (!response) {
-		return null;
-	}
-	// const { headers } = response;
-
-	return (
-	<pre>
-		{JSON.stringify(response, null, 2)}
-	</pre>
-);}
+const Jsonified = ({object, title}) => !object ? null : (
+	<article>
+		{title && <h1>{title}</h1>}
+		<Pre>{JSON.stringify(object, null, 2)}</Pre>
+	</article>
+);
