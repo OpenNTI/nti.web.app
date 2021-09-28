@@ -26,24 +26,19 @@ const REL = 'bulk_awarded_credit';
 
 export default class TranscriptCreditBulkImport extends React.Component {
 	state = {};
-
-	constructor(props) {
-		super(props);
-		this.input = React.createRef();
-	}
+	input = React.createRef();
 
 	componentDidMount() {
 		this.setUp();
 	}
 
 	setUp = async () => {
-		const collection = await getService().then(service =>
-			service.getCollection('Credit', 'Global')
-		);
-		const canUpload = collection && collection.hasLink(REL);
+		const service = await getService();
 
 		this.setState({
-			model: canUpload ? collection : void 0,
+			model: service.capabilities.canBulkAwardCredits
+				? service.getCollection('Credit', 'Global')
+				: void 0,
 		});
 	};
 
@@ -71,9 +66,7 @@ export default class TranscriptCreditBulkImport extends React.Component {
 		}
 
 		// clear the file input; without this, dropping the same file again won't trigger a change event.
-		this.input.current &&
-			this.input.current.onFileRemove &&
-			this.input.current.onFileRemove();
+		this.input.current?.onFileRemove?.();
 
 		this.setState({
 			result,
