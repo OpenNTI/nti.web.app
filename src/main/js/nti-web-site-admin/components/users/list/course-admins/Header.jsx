@@ -4,6 +4,7 @@ import { scoped } from '@nti/lib-locale';
 import { Typography } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
 
+import SearchInfo from '../../../common/SearchInfo';
 import Export from '../table/controls/Export';
 
 import { CourseAdminsStore } from './Store';
@@ -43,20 +44,28 @@ export const CourseAdminsHeaderPlaceholder = () => (
 );
 
 export const CourseAdminsHeader = () => {
-	const { selection, batchParams, link } = CourseAdminsStore.useProperties();
+	const {
+		selection,
+		batchParams,
+		link,
+		searchTerm,
+	} = CourseAdminsStore.useProperties();
 
 	return (
-		<Header>
-			<Typography type="header-one-alt">{t('header')}</Typography>
-			<Controls>
-				{isFlag('export-users') && (
-					<Export
-						selectedUsers={selection}
-						params={batchParams}
-						link={link}
-					/>
-				)}
-			</Controls>
-		</Header>
+		<>
+			<Header>
+				<Typography type="header-one-alt">{t('header')}</Typography>
+				<Controls>
+					{isFlag('export-users') && (
+						<Export
+							selectedUsers={selection}
+							params={batchParams}
+							link={link}
+						/>
+					)}
+				</Controls>
+			</Header>
+			<SearchInfo searchTerm={searchTerm} />
+		</>
 	);
 };
