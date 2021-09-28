@@ -9,7 +9,7 @@ import { SubscriptionsStore as Store } from './SubscriptionsStore';
 const { Box } = StandardUI;
 
 const t = scoped('nti-web-app.admin.config.Webhooks', {
-	title: 'Webhooks',
+	title: 'Webhook Subscriptions',
 });
 
 export const Frame = ({children}) => (
