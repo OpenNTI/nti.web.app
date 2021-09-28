@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useObject, useLink } from '@nti/web-core';
+import { useObject, useLink, Typography } from '@nti/web-core';
 
 const useDeliveryAttemptDetail = id => {
 	const attempt = useObject(id);
@@ -30,7 +30,7 @@ export function DeliveryAttemptDetail ({id}) {
 
 const Jsonified = ({object, title}) => !object ? null : (
 	<article>
-		{title && <h1>{title}</h1>}
+		{title && <Typography type="header-one-alt">{title}</Typography>}
 		<Pre>{JSON.stringify(object, null, 2)}</Pre>
 	</article>
 );
