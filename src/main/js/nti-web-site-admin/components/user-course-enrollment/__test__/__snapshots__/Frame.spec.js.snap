@@ -74,7 +74,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
           </div>
         </div>
         <ul
-          className="unadorned-list site-admin-user-tabs"
+          className="site-admin-user-tabs unadorned-list"
         >
           <li>
             <div
@@ -105,7 +105,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
       </div>
     </div>
     <div
-      className="nav-content-content content"
+      className="content"
     />
   </div>
 </div>
