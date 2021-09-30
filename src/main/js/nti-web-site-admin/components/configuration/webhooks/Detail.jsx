@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Route } from '@nti/web-routing';
 
 import { SubscriptionsStore as Store } from './SubscriptionsStore';
-import { History } from './DeliveryAttemptHistory';
+import { DeliveryAttemptHistory } from './DeliveryAttemptHistory';
 import { DeliveryAttemptDetail } from './DeliveryAttemptDetail';
 
 const useSubscriptionItem = (id) => {
@@ -36,7 +36,7 @@ function Detail ({id}) {
 	return !item ? <div>Not Found</div> : (
 		<div>
 			<div>Delivery History</div>
-			<History item={item} />
+			<DeliveryAttemptHistory item={item} />
 		</div>
 	);
 }

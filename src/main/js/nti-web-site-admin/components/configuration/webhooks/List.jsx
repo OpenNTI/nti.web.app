@@ -1,17 +1,10 @@
 import React from 'react';
 
 import { Router } from '@nti/web-routing';
-import { Table, DateTime } from '@nti/web-core';
+import { Table } from '@nti/web-core';
 
-import {SubscriptionsStore as Store} from './SubscriptionsStore';
-
-const propertyColumn = (propName, title = propName) => Table.asBasicColumn(({item}) => item?.[propName] ?? null, title);
-
-const CreatedTime = ({item}) => {
-	const createdTime = item?.getCreatedTime?.();
-	return createdTime ? <DateTime date={item.getCreatedTime()} /> : null
-}
-
+import { propertyColumn, CreatedTime } from './columns/index';
+import { SubscriptionsStore as Store } from './SubscriptionsStore';
 
 const columns = [
 	propertyColumn('OwnerId', 'Owner'),
