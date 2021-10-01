@@ -1,5 +1,4 @@
 import { DateTime } from '@nti/web-core';
-import { LinkTo } from '@nti/web-routing';
 import { LabeledValue } from '@nti/web-commons';
 
 import { Status } from './Status';
@@ -13,7 +12,6 @@ const Container = styled.div`
 
 export function DeliveryAttemptListItem ({item}) {
 	return (
-		<LinkTo.Object object={item}>
 			<Container>
 				<LabeledValue label="Created">
 					<DateTime.ISO date={item.getCreatedTime?.()} />
@@ -25,6 +23,5 @@ export function DeliveryAttemptListItem ({item}) {
 					<div>{item.message}</div>
 				</LabeledValue>
 			</Container>
-		</LinkTo.Object>
 	)
 }

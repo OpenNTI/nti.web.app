@@ -1,8 +1,8 @@
 import { Router, Route } from '@nti/web-routing';
 
 import { Frame } from './Frame';
-import { List } from './List';
-import { SubscriptionDetail } from './Detail';
+import { SubscriptionList } from './SubscriptionList';
+import { SubscriptionDetail } from './SubscriptionDetail';
 
 export const Webhooks = Router.for(
 	[
@@ -17,7 +17,7 @@ export const Webhooks = Router.for(
 		}),
 		Route({
 			path: '/',
-			component: List,
+			component: SubscriptionList,
 		}),
 	],
 	{ frame: Frame }

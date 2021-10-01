@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { useObject, useLink, Typography } from '@nti/web-core';
+import { LinkTo } from '@nti/web-routing';
+import { useObject, useLink } from '@nti/web-core';
+
+
+import {DeliveryAttemptListItem} from './DeliveryAttemptListItem';
+import {Labeled} from './Labeled';
 
 const useDeliveryAttemptDetail = id => {
 	const attempt = useObject(id);
@@ -17,11 +22,15 @@ const Pre = styled('pre')`
 `
 
 export function DeliveryAttemptDetail ({id}) {
-	const { request, response } = useDeliveryAttemptDetail(id);
+	const { attempt, request, response } = useDeliveryAttemptDetail(id);
 
 	return (
 		<div>
-			<div>AttemptDetail {id}</div>
+			<LinkTo.Path to="./">
+				<Labeled label="Delivery Attempt">
+					<DeliveryAttemptListItem item={attempt} />
+				</Labeled>
+			</LinkTo.Path>
 			<Jsonified title="Request" object={request} />
 			<Jsonified title="Response" object={response} />
 		</div>
@@ -29,8 +38,7 @@ export function DeliveryAttemptDetail ({id}) {
 }
 
 const Jsonified = ({object, title}) => !object ? null : (
-	<article>
-		{title && <Typography type="header-one-alt">{title}</Typography>}
+	<Labeled label={title}>
 		<Pre>{JSON.stringify(object, null, 2)}</Pre>
-	</article>
+	</Labeled>
 );

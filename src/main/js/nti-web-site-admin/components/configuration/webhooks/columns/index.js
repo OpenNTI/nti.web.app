@@ -4,5 +4,5 @@ export const propertyColumn = (propName, title = propName) => Table.asBasicColum
 
 export const CreatedTime = ({item}) => {
 	const createdTime = item?.getCreatedTime?.();
-	return createdTime ? <DateTime date={createdTime} /> : null
+	return createdTime ? <DateTime.ISO date={createdTime} /> : null
 }

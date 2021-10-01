@@ -2,7 +2,7 @@ const Container = styled('div')`
 	flex: 1;
 	display: flex;
 	align-items: center;
-	gap: var(--padding-sm, 0.375em);
+	gap: var(--padding-xs, 0.375em);
 
 	&::before {
 		content: '';
@@ -11,7 +11,8 @@ const Container = styled('div')`
 		border-radius: 50%;
 	}
 
-	&.status-success::before {
+	&.status-success::before,
+	&.status-active::before {
 		background-color: var(--color-success);
 	}
 
@@ -20,4 +21,4 @@ const Container = styled('div')`
 	}
 `;
 
-export const Status = ({item}) => <Container status={item?.status}>{item?.status}</Container>;
+export const Status = ({item: { Status, status = Status} = {}}) => <Container status={status}>{status}</Container>;
