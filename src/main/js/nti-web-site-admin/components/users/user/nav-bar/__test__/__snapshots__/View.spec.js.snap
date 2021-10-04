@@ -151,15 +151,18 @@ Array [
   <div
     className="site-admin-card"
   >
-    <a
-      className="nti-button button primary"
+    <button
+      className="nti-button button primary medium pv-md ph-xl"
       onClick={[Function]}
       onKeyDown={[Function]}
-      role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
-      Update Email
-    </a>
+      <div
+        data-button-label={true}
+      >
+        Update Email
+      </div>
+    </button>
   </div>,
 ]
 `;

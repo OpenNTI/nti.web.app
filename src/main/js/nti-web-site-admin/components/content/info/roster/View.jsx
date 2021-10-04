@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Roster, Enrollment } from '@nti/web-course';
-import { List, Loading, Button } from '@nti/web-commons';
+import { List, Loading } from '@nti/web-commons';
+import { Button } from '@nti/web-core';
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 

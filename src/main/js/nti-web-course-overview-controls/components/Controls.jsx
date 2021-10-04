@@ -4,7 +4,8 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { ControlBar, Button } from '@nti/web-commons';
+import { ControlBar } from '@nti/web-commons';
+import { Button } from '@nti/web-core';
 
 const PREVIEW = 'preview';
 const EDITING = 'editing';

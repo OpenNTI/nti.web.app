@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
 import { scoped } from '@nti/lib-locale';
-import { DateTime, Button, Timer } from '@nti/web-commons';
+import { DateTime, Timer } from '@nti/web-commons';
+import { Button } from '@nti/web-core';
 
 import Styles from './Timed.css';
 import CountDownTimer from './CountDownTimer';

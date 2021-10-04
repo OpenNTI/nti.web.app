@@ -11,15 +11,18 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       className="nti-course-enrollment-admin-prompt-trigger"
       onClick={[Function]}
     >
-      <a
-        className="nti-button button primary rounded"
+      <button
+        className="nti-button button primary medium pv-md ph-xl roundedSmall"
         onClick={[Function]}
         onKeyDown={[Function]}
-        role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
-        Manage Courses
-      </a>
+        <div
+          data-button-label={true}
+        >
+          Manage Courses
+        </div>
+      </button>
     </div>
   </div>
   <div
@@ -259,15 +262,18 @@ exports[`Site admin user course list test (no courses) Basic render test 1`] = `
       className="nti-course-enrollment-admin-prompt-trigger"
       onClick={[Function]}
     >
-      <a
-        className="nti-button button primary rounded"
+      <button
+        className="nti-button button primary medium pv-md ph-xl roundedSmall"
         onClick={[Function]}
         onKeyDown={[Function]}
-        role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
-        Manage Courses
-      </a>
+        <div
+          data-button-label={true}
+        >
+          Manage Courses
+        </div>
+      </button>
     </div>
   </div>
   <div

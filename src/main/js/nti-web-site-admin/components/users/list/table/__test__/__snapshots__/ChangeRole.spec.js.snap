@@ -110,22 +110,28 @@ exports[`Site admin user table change role test Test admin list 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="nti-button button save primary plain"
+      className="button save primary nti-button plain"
       onClick={[Function]}
       onKeyDown={[Function]}
-      role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
-      Save
+      <div
+        data-button-label={true}
+      >
+        Save
+      </div>
     </button>
     <button
-      className="nti-button button cancel secondary plain"
+      className="button cancel secondary nti-button plain"
       onClick={[Function]}
       onKeyDown={[Function]}
-      role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
-      Cancel
+      <div
+        data-button-label={true}
+      >
+        Cancel
+      </div>
     </button>
   </div>
 </div>
@@ -241,22 +247,28 @@ exports[`Site admin user table change role test Test learner list 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="nti-button button save primary plain"
+      className="button save primary nti-button plain"
       onClick={[Function]}
       onKeyDown={[Function]}
-      role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
-      Save
+      <div
+        data-button-label={true}
+      >
+        Save
+      </div>
     </button>
     <button
-      className="nti-button button cancel secondary plain"
+      className="button cancel secondary nti-button plain"
       onClick={[Function]}
       onKeyDown={[Function]}
-      role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
-      Cancel
+      <div
+        data-button-label={true}
+      >
+        Cancel
+      </div>
     </button>
   </div>
 </div>
