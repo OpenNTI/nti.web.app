@@ -80,7 +80,7 @@ Export.propTypes = {
 };
 
 function Export({ link: linkProp, selectedUsers, params, filter, rel }) {
-	const isSiteUsers = rel === 'SiteUsers';
+	const isSiteUsers = rel === 'SiteUsers' || rel === 'CourseAdmins';
 
 	const hiddenInputs = (selectedUsers ?? []).map((item, index) => (
 		<input

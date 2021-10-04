@@ -58,9 +58,10 @@ export const CourseAdminsHeader = () => {
 				<Controls>
 					{isFlag('export-users') && (
 						<Export
-							selectedUsers={selection}
+							selectedUsers={selection?.map(s => s.user)}
 							params={batchParams}
 							link={link}
+							rel="CourseAdmins"
 						/>
 					)}
 				</Controls>
