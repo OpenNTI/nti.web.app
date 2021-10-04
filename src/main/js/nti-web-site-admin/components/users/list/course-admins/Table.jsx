@@ -40,7 +40,7 @@ export const CourseAdminsTablePlaceholder = () => (
 
 export const CourseAdminsTable = () => (
 	<DataContext
-		fallback={CourseAdminsTablePlaceholder}
+		fallback={<CourseAdminsTablePlaceholder />}
 		error={<ErrorMessage as="div" type="body" center pv="md" />}
 	>
 		<ConnectedTable />
