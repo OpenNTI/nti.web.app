@@ -46,7 +46,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
     className="site-admin-tabs-container"
   >
     <ul
-      className="site-admin-tabs unadorned-list"
+      className="unadorned-list site-admin-tabs"
     >
       <li>
         <div
@@ -117,7 +117,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
     className="site-admin-tabs-container"
   >
     <ul
-      className="site-admin-tabs unadorned-list"
+      className="unadorned-list site-admin-tabs"
     >
       <li>
         <div

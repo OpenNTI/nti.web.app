@@ -44,7 +44,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
     className="site-admin-tabs-container"
   >
     <ul
-      className="site-admin-tabs unadorned-list"
+      className="unadorned-list site-admin-tabs"
     >
       <li>
         <div
@@ -116,7 +116,7 @@ Array [
       className="site-admin-tabs-container"
     >
       <ul
-        className="site-admin-tabs unadorned-list"
+        className="unadorned-list site-admin-tabs"
       >
         <li>
           <div

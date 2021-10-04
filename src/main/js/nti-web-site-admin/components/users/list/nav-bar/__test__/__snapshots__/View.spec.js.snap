@@ -11,7 +11,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
       className="site-admin-tabs-container"
     >
       <ul
-        className="site-admin-tabs unadorned-list"
+        className="unadorned-list site-admin-tabs"
       >
         <li>
           <div
@@ -65,7 +65,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
       className="site-admin-tabs-container"
     >
       <ul
-        className="site-admin-tabs unadorned-list"
+        className="unadorned-list site-admin-tabs"
       >
         <li>
           <div
@@ -97,7 +97,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
       className="site-admin-tabs-container"
     >
       <ul
-        className="site-admin-tabs unadorned-list"
+        className="unadorned-list site-admin-tabs"
       >
         <li>
           <div
@@ -142,7 +142,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
       className="site-admin-tabs-container"
     >
       <ul
-        className="site-admin-tabs unadorned-list"
+        className="unadorned-list site-admin-tabs"
       >
         <li>
           <div

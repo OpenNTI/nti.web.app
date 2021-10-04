@@ -49,7 +49,7 @@ exports[`Site admin user book enrollment nav bar test Basic render test 1`] = `
     </div>
   </div>
   <ul
-    className="site-admin-user-tabs unadorned-list"
+    className="unadorned-list site-admin-user-tabs"
   >
     <li>
       <div
