@@ -38,9 +38,16 @@ const t = scoped(
 
 const useSiteUsersExport = (linkProp, params, rel, filter) => {
 	const service = useService();
+	const clone = { ...params };
+
+	delete clone.batchStart;
+	delete clone.batchSize;
 
 	if (linkProp) {
-		return linkProp;
+		return url.appendQueryParams(linkProp, {
+			...clone,
+			format: 'text/csv',
+		});
 	}
 
 	let link = null;
@@ -56,11 +63,6 @@ const useSiteUsersExport = (linkProp, params, rel, filter) => {
 	if (!link) {
 		return null;
 	}
-
-	const clone = { ...params };
-
-	delete clone.batchStart;
-	delete clone.batchSize;
 
 	return url.appendQueryParams(link, {
 		...clone,
