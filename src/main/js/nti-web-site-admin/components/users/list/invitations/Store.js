@@ -121,7 +121,7 @@ export class InvitationCountStore extends StateStore {
 
 		const batch = await service.getBatch(
 			invitations.getLink('invitations'),
-			{ batchSize: 1, batchStart: 0 }
+			{ batchSize: 1, batchStart: 0, type_filter: 'pending' }
 		);
 
 		return { count: batch.total };
