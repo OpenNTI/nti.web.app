@@ -1,3 +1,3 @@
 import { LastSeenColumn } from '../../shared-columns/LastSeen';
 
-export const LastSeen = LastSeenColumn;
+export const LastSeen = LastSeenColumn.Create({ getUser: i => i.user });
