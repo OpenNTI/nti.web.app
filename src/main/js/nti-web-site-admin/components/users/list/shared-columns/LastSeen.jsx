@@ -6,6 +6,7 @@ import { DateTime, Typography, Variant } from '@nti/web-core';
 const t = scoped('nti-web-site-admin.users.list.shared-columns.LastSeen', {
 	title: 'Last Active',
 	never: 'Never',
+	now: 'Now',
 });
 
 const Type = {
@@ -23,11 +24,17 @@ LastSeenColumn.Create = props => Variant(LastSeenColumn, props);
 
 export function LastSeenColumn({ item, getUser = x => x }) {
 	const user = getUser(item);
-	const lastSeenTime = user.getListSeenTime?.();
+	const lastSeenTime = user.getLastSeenTime?.();
 
-	return lastSeenTime && lastSeenTime > 0 ? (
-		<Typography {...Type}>{t('never')}</Typography>
-	) : (
-		<DateTime.RelativeAdverb date={lastSeenTime} {...Type} />
-	);
+	if (!lastSeenTime || lastSeenTime === 0) {
+		return <Typography {...Type}>{t('never')}</Typography>;
+	}
+
+	const diff = Date.now() - lastSeenTime;
+
+	if (diff >= 60 * 1000) {
+		return <Typography {...Type}>{t('now')}</Typography>;
+	}
+
+	return <DateTime.RelativeAdverb date={lastSeenTime} {...Type} />;
 }
