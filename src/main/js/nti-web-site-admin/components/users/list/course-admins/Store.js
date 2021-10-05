@@ -35,6 +35,10 @@ export class CourseAdminsStore extends Base {
 	DefaultSortOn = 'username';
 	DefaultSortOrder = 'descending';
 
+	isSameSelectable(a, b) {
+		return a.user.getID() === b.user.getID();
+	}
+
 	async load(e) {
 		const { params } = e;
 
