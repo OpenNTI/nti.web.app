@@ -32,7 +32,7 @@ export function LastSeenColumn({ item, getUser = x => x }) {
 
 	const diff = Date.now() - lastSeenTime;
 
-	if (diff >= 60 * 1000) {
+	if (diff <= 60 * 1000) {
 		return <Typography {...Type}>{t('now')}</Typography>;
 	}
 
