@@ -75,6 +75,19 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
             Invitations
             <div
               className="invitations-count"
+              data-reach-tooltip-trigger=""
+              data-state="tooltip-hidden"
+              onBlur={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onMouseDown={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              onMouseMove={[Function]}
+              onPointerDown={[Function]}
+              onPointerEnter={[Function]}
+              onPointerLeave={[Function]}
+              onPointerMove={[Function]}
             >
               5
             </div>
@@ -152,6 +165,19 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
             Invitations
             <div
               className="invitations-count"
+              data-reach-tooltip-trigger=""
+              data-state="tooltip-hidden"
+              onBlur={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onMouseDown={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              onMouseMove={[Function]}
+              onPointerDown={[Function]}
+              onPointerEnter={[Function]}
+              onPointerLeave={[Function]}
+              onPointerMove={[Function]}
             >
               5
             </div>
