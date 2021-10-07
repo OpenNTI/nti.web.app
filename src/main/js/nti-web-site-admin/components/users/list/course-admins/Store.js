@@ -49,8 +49,9 @@ export class CourseAdminsStore extends Base {
 			throw new Error('Access Forbidden');
 		}
 
-		const batch = await service.getBatch(link, params);
+		const batchParams = { ...params, deactivated: false };
+		const batch = await service.getBatch(link, batchParams);
 
-		return { batch, batchParams: params, link };
+		return { batch, batchParams, link };
 	}
 }
