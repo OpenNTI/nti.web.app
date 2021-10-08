@@ -17,7 +17,7 @@ export default scoped('nti-web-site-admin.components.users.list.InvitePeople', {
 	details: 'Details',
 	fieldsHeading: 'Columns',
 	fieldDescriptions: {
-		email: 'an email address of person you wish to invite.',
+		email: 'an email address of people you wish to invite.',
 		'…': '…all other columns are ignored',
 	},
 	required: '',
