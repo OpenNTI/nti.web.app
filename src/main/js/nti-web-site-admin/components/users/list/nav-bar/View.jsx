@@ -10,7 +10,7 @@ import { Prompt } from '@nti/web-commons';
 import Card from '../../../common/Card';
 import Tabs from '../../../common/Tabs';
 import { canSendInvitations } from '../invitations/Store';
-import { InvitePeopleForm } from '../invitations/InvitePeople';
+import { InvitePeopleForm } from '../invitations/InvitePeopleForm';
 import { InviteCount } from '../invitations/InviteCount';
 
 import SeatLimit from './SeatLimit';

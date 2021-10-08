@@ -8,7 +8,7 @@ import SearchInfo from '../../../common/SearchInfo';
 import Export from '../table/controls/Export';
 
 import { InvitationsStore } from './Store';
-import { InvitePeopleButton } from './InvitePeople';
+import { InvitePeopleButton } from './InvitePeopleButton';
 import { CancelButton } from './controls/Cancel';
 import { ResendButton } from './controls/Resend';
 
