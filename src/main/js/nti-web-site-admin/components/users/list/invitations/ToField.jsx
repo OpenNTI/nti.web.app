@@ -1,8 +1,10 @@
 import { validate as isEmail } from 'email-validator';
 
-import { TokenEditor, Input } from '@nti/web-commons';
+import { TokenEditor, Input, useToggle } from '@nti/web-commons';
+import { Button, Icons } from '@nti/web-core';
 
-import { Label } from './common-parts';
+import { Label, Row } from './common-parts';
+import { BulkInviteInstructions } from './BulkInviteInstructions';
 import t from './strings';
 
 export const emailValidator = value => {
@@ -17,13 +19,12 @@ export const emailValidator = value => {
 
 export function ToField({ to, file, onToChange, onFileChange }) {
 	return (
-		<div
+		<Row
 			className="invite-people-to-field"
 			css={css`
-				display: flex;
-				align-items: baseline;
-				border-bottom: solid 1px #ddd;
-				border-top: solid 1px #ddd;
+				display: grid;
+				grid-template: auto / auto 1fr auto;
+				padding-right: 10px;
 			`}
 		>
 			<Label>To</Label>
@@ -40,7 +41,6 @@ export function ToField({ to, file, onToChange, onFileChange }) {
 						validator={emailValidator}
 						maxTokenLength={64}
 						css={css`
-							flex-grow: 1;
 							border: none;
 							min-height: 1.5rem;
 
@@ -57,22 +57,50 @@ export function ToField({ to, file, onToChange, onFileChange }) {
 					clear={() => void onFileChange(null)}
 				/>
 			)}
-		</div>
+		</Row>
 	);
 }
 
 function FileUpload({ onFileChange }) {
+	const [show, toggle] = useToggle(false);
 	return (
-		<Input.File
-			label={t('importFile')}
-			accept=".csv"
-			onFileChange={onFileChange}
-			css={css`
-				span:global(.button.file-picker) {
-					line-height: 30px;
-				}
-			`}
-		/>
+		<>
+			<span
+				css={css`
+					display: flex;
+				`}
+			>
+				<Input.File
+					label={t('importFile')}
+					accept=".csv"
+					onFileChange={onFileChange}
+					css={css`
+						:global(span.button.file-picker) {
+							line-height: 30px;
+						}
+					`}
+				/>
+				<Button
+					plain
+					onClick={toggle}
+					css={css`
+						color: var(--tertiary-grey);
+						&:hover {
+							color: var(--primary-blue);
+						}
+					`}
+				>
+					<Icons.Hint />
+				</Button>
+			</span>
+			{show && (
+				<BulkInviteInstructions
+					css={css`
+						grid-column: 1 / -1;
+					`}
+				/>
+			)}
+		</>
 	);
 }
 

@@ -12,9 +12,18 @@ export const Body = styled('div').attrs({ className: 'contents' })`
 `;
 
 export const Label = styled.div`
-	margin-left: 1.25rem;
 	font-size: 14px;
 	color: var(--tertiary-grey);
 
 	/* width: 2rem; */
+`;
+
+export const Row = styled.div`
+	padding: 0 1.25rem;
+	display: flex;
+	align-items: baseline;
+	border-bottom: solid 1px #ddd;
+	&:first-child {
+		border-top: solid 1px #ddd;
+	}
 `;

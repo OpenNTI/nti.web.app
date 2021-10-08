@@ -1,18 +1,11 @@
 import { Select } from '@nti/web-commons';
 
 import t from './strings';
-import { Label } from './common-parts';
+import { Label, Row } from './common-parts';
 
 export function RoleField({ value, onChange }) {
 	return (
-		<div
-			className="invite-people-role-field"
-			css={css`
-				display: flex;
-				align-items: baseline;
-				border-bottom: solid 1px #ddd;
-			`}
-		>
+		<Row className="invite-people-role-field">
 			<Label>{t('role')}</Label>
 			<Select
 				onChange={onChange}
@@ -31,6 +24,6 @@ export function RoleField({ value, onChange }) {
 				<option value="learner">Learner</option>
 				<option value="admin">Administrator</option>
 			</Select>
-		</div>
+		</Row>
 	);
 }

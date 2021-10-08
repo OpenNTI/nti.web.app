@@ -11,4 +11,14 @@ export default scoped('nti-web-site-admin.components.users.list.InvitePeople', {
 			other: 'There are invalid emails: ',
 		},
 	},
+
+	instructions: 'Bulk invite people with a comma or tab separated csv file.',
+	downloadSample: 'Download Sample CSV',
+	details: 'Details',
+	fieldsHeading: 'Columns',
+	fieldDescriptions: {
+		email: 'an email address of person you wish to invite.',
+		'…': '…all other columns are ignored',
+	},
+	required: '',
 });
