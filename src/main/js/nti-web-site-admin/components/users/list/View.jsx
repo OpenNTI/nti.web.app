@@ -5,6 +5,7 @@ import AdminTable from './table/AdminsTable';
 import DeactivatedTable from './table/DeactivatedTable';
 import InvitationsTable from './invitations/View';
 import { CourseAdmins } from './course-admins/View';
+import { Segments } from './segments/View';
 import Frame from './Frame';
 
 export default Router.for(
@@ -28,6 +29,11 @@ export default Router.for(
 			path: '/course-admins',
 			component: CourseAdmins,
 			name: 'site-admins.users.user-list-course-admins',
+		}),
+		Route({
+			path: '/segments',
+			component: Segments,
+			name: 'site-admins.user.user-segments',
 		}),
 		Route({
 			path: '/',

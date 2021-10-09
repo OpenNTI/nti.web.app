@@ -12,6 +12,7 @@ import Tabs from '../../../common/Tabs';
 import { canSendInvitations } from '../invitations/Store';
 import { InvitePeopleForm } from '../invitations/InvitePeopleForm';
 import { InviteCount } from '../invitations/InviteCount';
+import { hasUserSegments } from '../segments/Store';
 
 import SeatLimit from './SeatLimit';
 
@@ -22,6 +23,7 @@ const DEFAULT_TEXT = {
 	invitations: 'Invitations',
 	invitePeople: 'Invite People',
 	courseAdmins: 'Course Admins',
+	segments: 'Segments',
 	people: 'People',
 };
 
@@ -37,6 +39,11 @@ export default class UserListNavBar extends React.Component {
 	state = {};
 
 	componentDidMount() {
+		Promise.all([canSendInvitations(), hasUserSegments()]).then(
+			([showSendInvite, showUserSegments]) =>
+				this.setState({ showSendInvite, showUserSegments })
+		);
+
 		canSendInvitations().then(canSendInvitations => {
 			this.setState({ canSendInvitations });
 		});
@@ -51,7 +58,7 @@ export default class UserListNavBar extends React.Component {
 
 	render() {
 		const { className } = this.props;
-		const { canSendInvitations, showInvite } = this.state;
+		const { showSendInvite, showInvite, showUserSegments } = this.state;
 
 		return (
 			<div className={cx('site-admin-user-list-nav-bar', className)}>
@@ -76,10 +83,18 @@ export default class UserListNavBar extends React.Component {
 						>
 							{t('deactivated')}
 						</LinkTo.Path>
+						{showUserSegments && (
+							<LinkTo.Path
+								to="./segments"
+								activeClassName="active"
+							>
+								{t('segments')}
+							</LinkTo.Path>
+						)}
 					</Tabs>
 				</Card>
 				<Card>
-					{canSendInvitations && (
+					{showSendInvite && (
 						<div
 							className="invite"
 							onClick={() => {
