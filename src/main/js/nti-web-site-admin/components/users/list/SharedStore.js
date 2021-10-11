@@ -19,7 +19,10 @@ export default class SharedUserStore extends Stores.SimpleStore {
 				throw new Error('No Seat Limit');
 			}
 
-			const resp = await workspace.fetchLink(REL);
+			const resp = await workspace.fetchLink({
+				mode: 'raw',
+				rel: REL,
+			});
 
 			this.#SeatLimits = {
 				maxSeats: resp['max_seats'],

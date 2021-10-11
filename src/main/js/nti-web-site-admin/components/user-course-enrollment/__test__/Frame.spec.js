@@ -12,7 +12,7 @@ const getMockService = () => {
 	return {
 		getObject: async () => {
 			return {
-				fetchLinkParsed: () => {
+				fetchLink: () => {
 					return {
 						course: {
 							CatalogEntry: {

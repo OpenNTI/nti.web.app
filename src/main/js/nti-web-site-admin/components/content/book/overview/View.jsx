@@ -17,7 +17,7 @@ export default class SiteAdminBookOverview extends React.Component {
 		const { course } = this.props;
 
 		if (!this.state.resp && course && course.hasLink('users')) {
-			course.fetchLink('users').then(resp => {
+			course.fetchLink({ mode: 'raw', rel: 'users' }).then(resp => {
 				this.setState({ resp });
 			});
 		}

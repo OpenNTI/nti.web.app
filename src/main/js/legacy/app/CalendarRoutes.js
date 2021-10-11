@@ -28,7 +28,7 @@ module.exports = exports = function calendarRoutes(scope) {
 				};
 			} else if (obj.hasLink('WebinarRegister')) {
 				return async () => {
-					const webinar = await obj.fetchLinkParsed('Webinar');
+					const webinar = await obj.fetchLink('Webinar');
 
 					if (scope.onItemClick) {
 						scope.onItemClick(obj);
@@ -55,7 +55,7 @@ module.exports = exports = function calendarRoutes(scope) {
 				let libraryPathObject = null;
 
 				if (obj.MimeType.match(/assignment/)) {
-					libraryPathObject = await obj.fetchLinkParsed('Assignment');
+					libraryPathObject = await obj.fetchLink('Assignment');
 				}
 
 				if (scope.onItemClick) {

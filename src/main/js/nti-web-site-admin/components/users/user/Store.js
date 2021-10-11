@@ -30,9 +30,10 @@ export default class UserStore extends Stores.SimpleStore {
 			let hasCourses = true; // inexpensive way to know this?  for now, always true
 
 			if (resolved.hasLink('UserBundleRecords')) {
-				const bookRecords = await resolved.fetchLink(
-					'UserBundleRecords'
-				);
+				const bookRecords = await resolved.fetchLink({
+					mode: 'raw',
+					rel: 'UserBundleRecords',
+				});
 
 				if (
 					bookRecords &&

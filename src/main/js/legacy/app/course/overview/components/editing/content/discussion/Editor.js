@@ -95,7 +95,10 @@ module.exports = exports = Ext.define(
 				const complex = async () =>
 					(
 						await bundle
-							.fetchLink('CourseDiscussions')
+							.fetchLink({
+								mode: 'raw',
+								rel: 'CourseDiscussions',
+							})
 							.catch(() => {})
 					).Total > 0;
 				const onSelect = selectedTopics =>

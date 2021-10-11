@@ -32,7 +32,7 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 			const decodedID = decodeFromURI(bookID);
 			const service = await getService();
 			const user = await service.resolveEntity(userID);
-			const bookRecords = await user.fetchLinkParsed('UserBundleRecords');
+			const bookRecords = await user.fetchLink('UserBundleRecords');
 
 			const matches = (bookRecords || []).filter(
 				rec => rec.Bundle.NTIID === decodedID

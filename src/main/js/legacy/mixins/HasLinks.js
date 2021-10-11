@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { getService } = require('@nti/web-client');
 const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
@@ -29,11 +28,6 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 			link = links && links.getRelLink(rel);
 
 		return link && link.method;
-	},
-
-	async fetchLink(rel) {
-		const service = await getService();
-		return service.get(this.getLink(rel));
 	},
 
 	hasLink: function (rel) {

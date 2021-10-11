@@ -12,7 +12,11 @@ const ACTIVE_USER_PARAMS = {
 async function getActiveUsers(topic) {
 	try {
 		const appUsername = getAppUsername();
-		const batch = await topic.fetchLink('contents', ACTIVE_USER_PARAMS);
+		const batch = await topic.fetchLink({
+			mode: 'raw',
+			rel: 'contents',
+			params: ACTIVE_USER_PARAMS,
+		});
 		const { Items: comments } = batch;
 		const activeSet = new Set();
 

@@ -110,7 +110,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			});
 			const brand = await (this[Loading] = getService()
 				.then(s => s.getWorkspace('SiteAdmin'))
-				.then(w => w.fetchLinkParsed('SiteBrand')));
+				.then(w => w.fetchLink('SiteBrand')));
 
 			delete this[Loading];
 			this.set(SITE_BRAND, brand);
@@ -136,7 +136,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	reset = async () => {
 		const brand = this.get(SITE_BRAND);
 		try {
-			await brand.requestLink('delete', 'delete').then(this[Load]);
+			await brand.deleteLink('delete').then(this[Load]);
 
 			const newBrand = this.get(SITE_BRAND);
 

@@ -41,7 +41,7 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 		try {
 			const service = await getService();
 			const enrollment = await this.getEnrollment(service, enrollmentID);
-			const course = await enrollment.fetchLinkParsed('CourseInstance');
+			const course = await enrollment.fetchLink('CourseInstance');
 
 			this.set('enrollment', enrollment);
 			this.set('course', course);
