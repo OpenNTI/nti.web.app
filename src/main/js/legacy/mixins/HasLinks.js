@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { getService } = require('@nti/web-client');
 const { getURL } = require('internal/legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
@@ -64,5 +65,26 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 		});
 
 		return reports;
+	},
+
+	async fetchLink(relOrInit) {
+		const {
+			method = 'get',
+			mode = 'parse', //parse is the default in lib-interfaces
+			rel,
+		} = typeof relOrInit === 'string'
+			? {
+					rel: relOrInit,
+			  }
+			: relOrInit;
+
+		if (method !== 'get' || mode !== 'raw') {
+			throw new Error(
+				'[Legacy ExtJS Model] For more complicated requests, get the lib-interfaces version of this model'
+			);
+		}
+
+		const service = await getService();
+		return service.get(this.getLink(rel));
 	},
 });
