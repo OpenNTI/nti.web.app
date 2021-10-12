@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Typography, Button } from '@nti/web-core';
+import { Router, LinkTo } from '@nti/web-routing';
 
 import SearchInfo from '../../../common/SearchInfo';
 
@@ -32,8 +33,16 @@ export const UserSegmentHeaderPlaceholder = () => (
 );
 
 export const UserSegmentsHeader = () => {
+	const router = Router.useRouter();
+
 	const { createSegment, canCreateSegment, searchParam } =
 		UserSegmentsStore.useProperties();
+
+	const doCreate = useCallback(async () => {
+		const newSegment = await createSegment();
+
+		router.routeTo.object(newSegment);
+	}, [createSegment]);
 
 	return (
 		<>
@@ -43,7 +52,7 @@ export const UserSegmentsHeader = () => {
 					rounded
 					disabled={!canCreateSegment}
 					busy={createSegment.running}
-					onClick={createSegment}
+					onClick={doCreate}
 				>
 					{t('createSegment')}
 				</Button>

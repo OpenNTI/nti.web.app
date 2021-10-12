@@ -53,7 +53,6 @@ export class UserSegmentsStore extends Base {
 			params,
 		});
 
-		debugger;
 		action.store.update({
 			collection,
 			batch,

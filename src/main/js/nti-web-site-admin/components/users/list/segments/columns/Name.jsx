@@ -2,6 +2,7 @@ import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Typography, Placeholder } from '@nti/web-core';
+import { LinkTo } from '@nti/web-routing';
 
 import { VerticallyCentered } from '../../shared-columns/Common';
 
@@ -31,7 +32,7 @@ Name.Placeholder = () => (
 
 export function Name({ item }) {
 	return (
-		<Container>
+		<Container as={LinkTo.Object} object={item}>
 			<Typography
 				type="body"
 				color="dark"
