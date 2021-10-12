@@ -57,7 +57,7 @@ export function InvitePeopleForm({ loading, onDone }) {
 						/>
 
 						<RoleField
-							onChange={e => setRole({ role: e.target.value })}
+							onChange={e => setRole(e.target.value)}
 							value={role}
 						/>
 
