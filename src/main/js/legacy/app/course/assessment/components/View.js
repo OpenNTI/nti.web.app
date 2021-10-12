@@ -237,23 +237,20 @@ module.exports = exports = Ext.define(
 			}).then(() => this.getAssignmentsFromAssignmentView());
 		},
 
-		getAssignmentsFromAssignmentView: function () {
-			return Promise.resolve(
-				this.assignmentCollection
-					? this.assignmentCollection
-					: this.currentBundle.getAssignments()
-			)
-				.then(collection =>
-					this.assignmentsView.setAssignmentsData(
-						collection,
-						this.currentBundle,
-						true
-					)
-				)
-				.then(() => {
-					const items = this.assignmentsView.store.getRange() || [];
-					return items.map(item => item.get('item'));
-				});
+		async getAssignmentsFromAssignmentView() {
+			await (this.bundleLoaded || Promise.reject());
+			const collection = (await this.assignmentCollection)
+				? this.assignmentCollection
+				: this.currentBundle.getAssignments();
+
+			await this.assignmentsView?.setAssignmentsData(
+				collection,
+				this.currentBundle,
+				true
+			);
+
+			const items = this.assignmentsView?.store.getRange() || [];
+			return items.map(item => item.get('item'));
 		},
 
 		getStudentListForAssignment: function (assignment, student) {
@@ -261,7 +258,7 @@ module.exports = exports = Ext.define(
 
 			//apply the assignments data and let it restore state so we can get that order
 			return me.assignmentsView
-				.setAssignmentsData(
+				?.setAssignmentsData(
 					me.assignmentCollection,
 					me.currentBundle,
 					true
@@ -564,17 +561,10 @@ module.exports = exports = Ext.define(
 					}
 				})
 				.then(() => {
-					if (this.assignmentsView && this.assignmentsView.showRoot) {
-						this.assignmentsView.showRoot();
-					}
+					this.assignmentsView?.showRoot?.();
 				})
 				.then(this.maybeUnmask.bind(this))
-				.then(
-					this.setTitle.bind(
-						this,
-						this.assignmentsView && this.assignmentsView.title
-					)
-				)
+				.then(this.setTitle.bind(this, this.assignmentsView?.title))
 				.then(this.alignNavigation.bind(this));
 		},
 
@@ -704,11 +694,7 @@ module.exports = exports = Ext.define(
 		},
 
 		appendAssignment(assignment) {
-			const { assignmentCollection } = this;
-
-			if (assignmentCollection) {
-				assignmentCollection.appendAssignment(assignment);
-			}
+			this.assignmentCollection?.appendAssignment?.(assignment);
 		},
 	}
 );
