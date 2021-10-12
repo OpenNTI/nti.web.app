@@ -88,7 +88,7 @@ export class InvitationsStore extends Base {
 	}
 
 	async load(e) {
-		const { params } = e;
+		const { params } = e.store;
 
 		const service = await getService();
 		const invitations = service.getCollection('Invitations', 'Invitations');

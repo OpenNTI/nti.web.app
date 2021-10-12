@@ -40,7 +40,7 @@ export class CourseAdminsStore extends Base {
 	}
 
 	async load(e) {
-		const { params } = e;
+		const { params } = e.store;
 
 		const service = await getService();
 		const link = service.getWorkspace('Courses').getLink('CourseAdmins');
