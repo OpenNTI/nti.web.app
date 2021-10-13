@@ -1,4 +1,3 @@
-
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 import { Text } from '@nti/web-commons';
