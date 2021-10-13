@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Typography, Button } from '@nti/web-core';
-import { Router, LinkTo } from '@nti/web-routing';
+import { Router } from '@nti/web-routing';
 
 import SearchInfo from '../../../common/SearchInfo';
 
