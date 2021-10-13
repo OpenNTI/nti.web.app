@@ -18,7 +18,10 @@ export function SubscriptionList(props) {
 	return (
 		<List.Unadorned>
 			{empty ? (
-				<EmptyState header="No data yet" />
+				<EmptyState
+					header="No subscriptions yet"
+					subHeader="Connect Zapier, and items will populate here."
+				/>
 			) : (
 				subscriptions?.map(item => (
 					<Item key={item.getID()}>
