@@ -1,7 +1,5 @@
-import React from 'react';
-
 import { LinkTo } from '@nti/web-routing';
-import { List } from '@nti/web-commons';
+import { EmptyState, List } from '@nti/web-commons';
 
 import { SubscriptionsStore as Store } from './SubscriptionsStore';
 import { SubscriptionListItem } from './SubscriptionListItem';
@@ -15,15 +13,21 @@ const Item = styled('li')`
 export function SubscriptionList(props) {
 	const { subscriptions } = Store.useProperties();
 
+	const empty = !subscriptions?.length;
+
 	return (
 		<List.Unadorned>
-			{subscriptions?.map(item => (
-				<Item key={item.getID()}>
-					<LinkTo.Object object={item}>
-						<SubscriptionListItem item={item} />
-					</LinkTo.Object>
-				</Item>
-			))}
+			{empty ? (
+				<EmptyState header="No data yet" />
+			) : (
+				subscriptions?.map(item => (
+					<Item key={item.getID()}>
+						<LinkTo.Object object={item}>
+							<SubscriptionListItem item={item} />
+						</LinkTo.Object>
+					</Item>
+				))
+			)}
 		</List.Unadorned>
 	);
 }

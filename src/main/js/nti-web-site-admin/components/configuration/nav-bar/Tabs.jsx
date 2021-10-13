@@ -2,10 +2,12 @@
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 import { Text } from '@nti/web-commons';
+import { useService } from '@nti/web-core';
 
 import Tabs from '../../common/Tabs';
+import { SubscriptionsStore } from '../webhooks/SubscriptionsStore';
 
-const DEFAULT_TEXT = {
+const t = scoped('site-admin.advanced.nav-bar.Tabs', {
 	header: 'Configuration',
 	sync: 'Sync',
 	transcripts: 'Certificates, Transcripts, <br />and Course Credit',
@@ -14,31 +16,28 @@ const DEFAULT_TEXT = {
 	login: 'Sign In Branding',
 	catalog: 'Catalog',
 	webhooks: 'Webhooks',
-};
+});
+const T = Text.Translator(t);
 
-const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
+const Tab = ({ localeKey, ...props }) => (
+	<LinkTo.Path {...props} activeClassName="active">
+		<T {...{ localeKey }} />
+	</LinkTo.Path>
+);
 
 export default function SiteAdminAdvancedTabs() {
+	const service = useService();
+
 	return (
 		<Tabs header={t('header')}>
-			<LinkTo.Path to="./" exact activeClassName="active">
-				<Text.Base localized>{t('branding')}</Text.Base>
-			</LinkTo.Path>
-			<LinkTo.Path to="./login" exact activeClassName="active">
-				<Text.Base localized>{t('login')}</Text.Base>
-			</LinkTo.Path>
-			<LinkTo.Path to="./transcripts" exact activeClassName="active">
-				<Text.Base localized>{t('transcripts')}</Text.Base>
-			</LinkTo.Path>
-			<LinkTo.Path to="./integrations" activeClassName="active">
-				<Text.Base localized>{t('integrations')}</Text.Base>
-			</LinkTo.Path>
-			<LinkTo.Path to="./catalog" activeClassName="active">
-				<Text.Base localized>{t('catalog')}</Text.Base>
-			</LinkTo.Path>
-			<LinkTo.Path to="./webhooks" activeClassName="active">
-				<Text.Base localized>{t('webhooks')}</Text.Base>
-			</LinkTo.Path>
+			<Tab to="./" localeKey="branding" exact />
+			<Tab to="./login" localeKey="login" exact />
+			<Tab to="./transcripts" localeKey="transcripts" exact />
+			<Tab to="./integrations" localeKey="integrations" />
+			<Tab to="./catalog" localeKey="catalog" />
+			{SubscriptionsStore.hasWebhooks(service) && (
+				<Tab to="./webhooks" localeKey="webhooks" />
+			)}
 		</Tabs>
 	);
 }

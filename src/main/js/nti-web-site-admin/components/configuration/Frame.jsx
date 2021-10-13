@@ -1,43 +1,25 @@
 import './Frame.scss';
-import React, { Suspense } from 'react';
-import PropTypes from 'prop-types';
+import { Suspense } from 'react';
 
-import { LinkTo } from '@nti/web-routing'; // eslint-disable-line
 import { Layouts, FixedElement } from '@nti/web-commons';
 
 import NavBar from './nav-bar';
 
-export default class SiteAdminAdvancedView extends React.Component {
-	static propTypes = {
-		children: PropTypes.node,
-	};
-
-	render() {
-		return (
+export default function SiteAdminAdvancedView({ children }) {
+	return (
+		<Suspense fallback={<div />}>
 			<div className="advanced-admin-tools-view">
-				{this.renderLayout()}
+				<Layouts.NavContent.Container>
+					<Layouts.NavContent.Nav className="nav-bar">
+						<FixedElement>
+							<NavBar />
+						</FixedElement>
+					</Layouts.NavContent.Nav>
+					<Layouts.NavContent.Content className="content">
+						{children}
+					</Layouts.NavContent.Content>
+				</Layouts.NavContent.Container>
 			</div>
-		);
-	}
-
-	renderLayout() {
-		const { children } = this.props;
-
-		return (
-			<Layouts.NavContent.Container>
-				<Layouts.NavContent.Nav className="nav-bar">
-					<FixedElement>
-						<NavBar />
-					</FixedElement>
-				</Layouts.NavContent.Nav>
-				<Layouts.NavContent.Content className="content">
-					<Suspense fallback={<div />}>
-						{React.Children.map(children, item => {
-							return React.cloneElement(item, {});
-						})}
-					</Suspense>
-				</Layouts.NavContent.Content>
-			</Layouts.NavContent.Container>
-		);
-	}
+		</Suspense>
+	);
 }
