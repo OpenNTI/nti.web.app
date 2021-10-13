@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -16,7 +16,7 @@ WebappDiscussion.propTypes = {
 };
 export default function WebappDiscussion({ item }) {
 	const [hasContent, setHasContent] = useState(); // used to hide the container element unless/until there's something to show
-	const contextRef = React.useRef(null);
+	const contextRef = useRef(null);
 
 	const onMount = async renderTo => {
 		const record = BaseModel.interfaceToModel(item);

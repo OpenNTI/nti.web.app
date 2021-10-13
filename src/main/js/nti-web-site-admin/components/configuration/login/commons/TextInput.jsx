@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -31,9 +31,9 @@ function TextInput({ value, name, type, setBrandProp, maxLength = Infinity }) {
 		the store is causing the inputs to re-render and move focus to the end. To counteract
 		this we are tracking the value in local state so it updates with a higher priority
 	 */
-	const [text, setText] = React.useState(value);
+	const [text, setText] = useState(value);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (text !== value) {
 			setText(value);
 		}

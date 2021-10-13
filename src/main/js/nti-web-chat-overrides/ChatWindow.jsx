@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import ChatActions from '../legacy/app/chat/Actions';
 
@@ -17,9 +17,9 @@ WebappChatWindow.propTypes = {
 };
 
 export default function WebappChatWindow({ onClose, entity, expanded }) {
-	const [window, setState] = React.useState(null);
+	const [window, setState] = useState(null);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const listen = {
 			single: true,
 			close: onClose,
@@ -31,7 +31,7 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 		};
 	}, [window, onClose]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const openChat = async _entity => {
 			const actions = ChatActions.create();
 			const roomInfo = await actions.createChatRoom(_entity);
@@ -50,7 +50,7 @@ export default function WebappChatWindow({ onClose, entity, expanded }) {
 		};
 	}, [entity]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (expanded) {
 			window?.addCls(styles.expanded);
 		} else {

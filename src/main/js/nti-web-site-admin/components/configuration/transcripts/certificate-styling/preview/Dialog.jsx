@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -35,9 +35,9 @@ export default function CertificatePreviewModal({ onSave, onCancel }) {
 	// const error = isErrored(resolver) ? resolver : null;
 	const blob = isResolved(resolver) ? resolver : null;
 
-	const [, /*objectURL*/ setObjectURL] = React.useState(null);
+	const [, /*objectURL*/ setObjectURL] = useState(null);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!blob) {
 			return;
 		}

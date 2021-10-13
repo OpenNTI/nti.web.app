@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useEffect, useRef } from 'react';
 
 import Ext from '@nti/extjs';
 
@@ -13,10 +13,10 @@ export default function WebappCalendarWindow(
 	{ onClose, target, visible },
 	scope
 ) {
-	const windowRef = React.useRef(null);
-	React.useEffect(() => windowRef.current?.destroy(), []);
+	const windowRef = useRef(null);
+	useEffect(() => windowRef.current?.destroy(), []);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		// capture the instance value of 'current' into this closure so it won't change when 'current' will.
 		// This way the calls to 'un' and 'destroy' apply to the correct reference.
 		const ref = windowRef.current;
@@ -33,7 +33,7 @@ export default function WebappCalendarWindow(
 		};
 	}, [windowRef.current]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!visible) {
 			windowRef.current?.hide();
 		} else if (windowRef.current) {

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 
@@ -96,7 +96,7 @@ export default function ImageInput({
 	title,
 }) {
 	const [{ editorState, filename, inputKey, error, saving }, dispatch] =
-		React.useReducer(reducer, initialState);
+		useReducer(reducer, initialState);
 
 	const onCancel = () => dispatch({ type: 'clear' });
 	const updateImage = async () => {

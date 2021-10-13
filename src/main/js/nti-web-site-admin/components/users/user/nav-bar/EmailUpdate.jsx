@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
@@ -42,11 +42,11 @@ UserEmailUpdate.propTypes = {
 	}),
 };
 export default function UserEmailUpdate({ user }) {
-	const [open, setOpen] = React.useState(false);
-	const doOpen = React.useCallback(() => setOpen(true), [setOpen]);
-	const doClose = React.useCallback(() => setOpen(false), [setOpen]);
+	const [open, setOpen] = useState(false);
+	const doOpen = useCallback(() => setOpen(true), [setOpen]);
+	const doClose = useCallback(() => setOpen(false), [setOpen]);
 
-	const onSubmit = React.useCallback(
+	const onSubmit = useCallback(
 		({ json }) => user.putToLink(Link, { email: json.email }),
 		[user]
 	);
