@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import React from 'react';
 import renderer, { act } from 'react-test-renderer';
 
 import InviteName from '../InviteName';

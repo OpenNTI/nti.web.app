@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import React from 'react';
 import { create, act } from 'react-test-renderer';
 
 import TotalEnrolled from '../TotalEnrolled';

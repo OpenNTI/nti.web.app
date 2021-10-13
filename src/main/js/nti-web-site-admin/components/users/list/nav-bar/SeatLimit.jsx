@@ -1,5 +1,4 @@
 import './SeatLimit.scss';
-import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Loading } from '@nti/web-commons';

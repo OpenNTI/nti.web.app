@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useCallback } from 'react';
+import { Suspense, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { DateTime, Typography, Variant } from '@nti/web-core';

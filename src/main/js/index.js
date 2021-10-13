@@ -1,6 +1,5 @@
 import './index.scss';
 import '@nti/style-common/base.css';
-import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { addFeatureCheckClasses } from '@nti/lib-dom';

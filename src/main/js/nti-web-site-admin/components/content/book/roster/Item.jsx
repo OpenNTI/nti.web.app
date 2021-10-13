@@ -1,5 +1,4 @@
 import './Item.scss';
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Avatar, DisplayName } from '@nti/web-commons';

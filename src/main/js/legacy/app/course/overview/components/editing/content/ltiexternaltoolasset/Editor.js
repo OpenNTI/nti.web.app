@@ -1,5 +1,3 @@
-const React = require('react');
-
 const Ext = require('@nti/extjs');
 const { Prompt } = require('@nti/web-commons');
 const { ContentSelection, LTIAddTool, LTIStore } = require('@nti/web-course');

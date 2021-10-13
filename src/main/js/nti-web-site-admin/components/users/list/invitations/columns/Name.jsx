@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Avatar, Typography, Placeholder, InlineList } from '@nti/web-core';

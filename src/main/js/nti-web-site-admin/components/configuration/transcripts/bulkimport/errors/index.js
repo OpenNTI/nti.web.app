@@ -1,4 +1,3 @@
-import React from 'react';
 
 import InvalidRows from './InvalidRows';
 import String from './String';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { SimpleTableHeader } from '@nti/web-core';
 

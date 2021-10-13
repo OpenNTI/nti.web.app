@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { SelectMenu, Tooltip } from '@nti/web-core';

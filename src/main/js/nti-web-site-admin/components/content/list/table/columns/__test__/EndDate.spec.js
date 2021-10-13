@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import React from 'react';
 import { act, create } from 'react-test-renderer';
 
 import EndDate from '../EndDate';

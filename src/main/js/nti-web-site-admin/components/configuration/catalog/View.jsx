@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Text, StandardUI } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';

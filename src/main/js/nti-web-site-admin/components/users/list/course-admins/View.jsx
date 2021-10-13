@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { ErrorMessage } from '@nti/web-core';

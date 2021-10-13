@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { Input, Variant } from '@nti/web-core';
 import { useProperties, StateStore } from '@nti/web-core/data';

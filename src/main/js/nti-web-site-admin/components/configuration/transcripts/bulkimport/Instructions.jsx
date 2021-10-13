@@ -1,5 +1,4 @@
 import './Instructions.scss';
-import React from 'react';
 import cx from 'classnames';
 
 import { scoped } from '@nti/lib-locale';

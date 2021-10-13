@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
