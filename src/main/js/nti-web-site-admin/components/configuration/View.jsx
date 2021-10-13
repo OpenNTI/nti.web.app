@@ -1,4 +1,3 @@
-import './View.scss';
 import { Router, Route } from '@nti/web-routing';
 
 import Transcripts from './transcripts';

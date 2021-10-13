@@ -1,7 +1,7 @@
 import { DateTime, /*Avatar,*/ DisplayName } from '@nti/web-core';
 import { LabeledValue } from '@nti/web-commons';
 
-import { Status } from './Status';
+import { Status } from '../parts/Status';
 
 /** @typedef {import('@nti/lib-interfaces').Models.subscriptions.PersistentSubscription} PersistentSubscription */
 

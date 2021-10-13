@@ -2,20 +2,21 @@ import React from 'react';
 
 import { Router, Route } from '@nti/web-routing';
 
-import { SubscriptionsStore as Store } from './SubscriptionsStore';
-import { DeliveryAttemptHistory } from './DeliveryAttemptHistory';
-import { DeliveryAttemptDetail } from './DeliveryAttemptDetail';
-import { SubscriptionListItem } from './SubscriptionListItem';
-import { Labeled } from './Labeled';
+import { Store as Store } from '../Store';
+import { DeliveryAttemptHistory } from '../delivery-attempt/DeliveryAttemptHistory';
+import { DeliveryAttemptDetail } from '../delivery-attempt/DeliveryAttemptDetail';
+import { Labeled } from '../parts/Labeled';
 
-const useSubscriptionItem = (id) => {
+import { SubscriptionListItem } from './SubscriptionListItem';
+
+const useSubscriptionItem = id => {
 	const { subscriptions } = Store.useProperties();
 	return subscriptions?.find(x => x?.getID?.() === id);
-}
+};
 
 const FrameContainer = styled.div`
 	padding: var(--padding-lg, 1em);
-`
+`;
 
 const Frame = ({ id, children }) => {
 	const subscription = useSubscriptionItem(id);
@@ -25,10 +26,12 @@ const Frame = ({ id, children }) => {
 			<Labeled label="Subscription">
 				<SubscriptionListItem item={subscription} />
 			</Labeled>
-			{React.cloneElement(React.Children.only(children), { subscription } )}
+			{React.cloneElement(React.Children.only(children), {
+				subscription,
+			})}
 		</FrameContainer>
 	);
-}
+};
 
 export const SubscriptionDetail = Router.for(
 	[
@@ -39,19 +42,20 @@ export const SubscriptionDetail = Router.for(
 				if (obj?.isWebhookDeliveryAttempt) {
 					return obj.getID();
 				}
-			}
+			},
 		}),
 		Route({
 			path: '/',
-			component: Detail,
+			component: Root,
 		}),
 	],
 	{ frame: Frame }
 );
 
-
-function Detail ({subscription}) {
-	return !subscription ? <div>Not Found</div> : (
+function Root({ subscription }) {
+	return !subscription ? (
+		<div>Not Found</div>
+	) : (
 		<Labeled label="Delivery Attempts">
 			<DeliveryAttemptHistory item={subscription} />
 		</Labeled>

@@ -1,7 +1,8 @@
 import { LinkTo } from '@nti/web-routing';
 import { EmptyState, List } from '@nti/web-commons';
 
-import { SubscriptionsStore as Store } from './SubscriptionsStore';
+import { Store as Store } from '../Store';
+
 import { SubscriptionListItem } from './SubscriptionListItem';
 
 const Item = styled('li')`

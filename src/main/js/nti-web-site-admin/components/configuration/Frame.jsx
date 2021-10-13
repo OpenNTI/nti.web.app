@@ -1,4 +1,3 @@
-import './Frame.scss';
 import { Suspense } from 'react';
 
 import { Layouts, FixedElement } from '@nti/web-commons';
@@ -8,7 +7,12 @@ import NavBar from './nav-bar';
 export default function SiteAdminAdvancedView({ children }) {
 	return (
 		<Suspense fallback={<div />}>
-			<div className="advanced-admin-tools-view">
+			<div
+				className="advanced-admin-tools-view"
+				css={css`
+					margin-top: 20px;
+				`}
+			>
 				<Layouts.NavContent.Container>
 					<Layouts.NavContent.Nav className="nav-bar">
 						<FixedElement>

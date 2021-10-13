@@ -1,7 +1,7 @@
 import { StateStore } from '@nti/web-core/data';
 import { getService } from '@nti/web-client';
 
-export class SubscriptionsStore extends StateStore {
+export class Store extends StateStore {
 	static hasWebhooks(service) {
 		const workspace = service.getWorkspace('zapier');
 		return workspace?.hasLink?.('subscriptions');

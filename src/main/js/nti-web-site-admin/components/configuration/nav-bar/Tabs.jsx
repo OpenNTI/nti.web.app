@@ -4,7 +4,7 @@ import { Text } from '@nti/web-commons';
 import { useService } from '@nti/web-core';
 
 import Tabs from '../../common/Tabs';
-import { SubscriptionsStore } from '../webhooks/SubscriptionsStore';
+import { Store } from '../webhooks/Store';
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', {
 	header: 'Configuration',
@@ -34,7 +34,7 @@ export default function SiteAdminAdvancedTabs() {
 			<Tab to="./transcripts" localeKey="transcripts" exact />
 			<Tab to="./integrations" localeKey="integrations" />
 			<Tab to="./catalog" localeKey="catalog" />
-			{SubscriptionsStore.hasWebhooks(service) && (
+			{Store.hasWebhooks(service) && (
 				<Tab to="./webhooks" localeKey="webhooks" />
 			)}
 		</Tabs>

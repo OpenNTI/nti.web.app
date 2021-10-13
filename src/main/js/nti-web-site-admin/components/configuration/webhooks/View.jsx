@@ -1,8 +1,8 @@
 import { Router, Route } from '@nti/web-routing';
 
 import { Frame } from './Frame';
-import { SubscriptionList } from './SubscriptionList';
-import { SubscriptionDetail } from './SubscriptionDetail';
+import { SubscriptionList } from './subscriptions/SubscriptionList';
+import { SubscriptionDetail } from './subscriptions/SubscriptionDetail';
 
 export const Webhooks = Router.for(
 	[
@@ -13,7 +13,7 @@ export const Webhooks = Router.for(
 				if (obj?.isPersistentSubscription) {
 					return obj.getID();
 				}
-			}
+			},
 		}),
 		Route({
 			path: '/',
