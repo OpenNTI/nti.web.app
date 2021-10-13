@@ -336,6 +336,7 @@
 	.x-mask {
 		background: rgba(0, 0, 0, 0);
 	}
+
 	.x-mask-msg.loading {
 		background: #fff;
 		border-radius: 5px;
@@ -560,6 +561,7 @@
 
 		&.video-roll {
 			margin: 10px 0;
+
 			.body {
 				position: relative;
 				overflow: hidden;

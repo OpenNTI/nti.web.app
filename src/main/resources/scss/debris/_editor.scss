@@ -456,6 +456,7 @@ span.tab {
 			.left .action {
 				float: left;
 			}
+
 			.right .action {
 				float: right;
 			}
@@ -557,6 +558,7 @@ span.tab {
 								&::after {
 									@include sprite($bold);
 								}
+
 								&.selected::after {
 									@include sprite($bold_active);
 								}
@@ -566,6 +568,7 @@ span.tab {
 								&::after {
 									@include sprite($italic);
 								}
+
 								&.selected::after {
 									@include sprite($italic_active);
 								}
@@ -575,6 +578,7 @@ span.tab {
 								&::after {
 									@include sprite($underline);
 								}
+
 								&.selected::after {
 									@include sprite($underline_active);
 								}

@@ -805,6 +805,7 @@
 			&::after {
 				@include sprite($rhp-close-chat_hover);
 			}
+
 			&::before {
 				display: none;
 			}
@@ -815,9 +816,11 @@
 
 			& ~ .wrap {
 				background: #feeeee;
+
 				.names {
 					color: #df9b9b;
 				}
+
 				.status {
 					color: #f4c3c3;
 				}

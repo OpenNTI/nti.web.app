@@ -25,6 +25,7 @@
 		display: inline-block;
 		float: left;
 		margin: 5px 2px;
+
 		& + .wrapper {
 			margin-left: 50px;
 		}

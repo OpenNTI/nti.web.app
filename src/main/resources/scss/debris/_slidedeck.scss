@@ -133,6 +133,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 								&::after {
 									@include sprite($bold-dark);
 								}
+
 								&.selected::after {
 									@include sprite($bold-dark_active);
 								}
@@ -142,6 +143,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 								&::after {
 									@include sprite($italic-dark);
 								}
+
 								&.selected::after {
 									@include sprite($italic-dark_active);
 								}
@@ -151,6 +153,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 								&::after {
 									@include sprite($underline-dark);
 								}
+
 								&.selected::after {
 									@include sprite($underline-dark_active);
 								}
@@ -1212,9 +1215,11 @@ $active-text-color: rgba(255, 255, 255, 1);
 						&:hover::after {
 							@include sprite($mv-grid-view_active);
 						}
+
 						&:not(.active):hover {
 							opacity: 0.8;
 						}
+
 						&.active:hover {
 							opacity: 1;
 						}
@@ -1753,6 +1758,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					$position: absolute,
 					$top: -4px
 				);
+
 				&:hover::after {
 					@include sprite($comment-small-dark_hover);
 				}
@@ -1809,6 +1815,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 						$position: absolute,
 						$top: -4px
 					);
+
 					&:hover::after {
 						@include sprite($comment-small-dark_hover);
 					}
@@ -1850,6 +1857,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					$position: absolute,
 					$top: -4px
 				);
+
 				&:hover::after {
 					@include sprite($comment-small-dark_hover);
 				}

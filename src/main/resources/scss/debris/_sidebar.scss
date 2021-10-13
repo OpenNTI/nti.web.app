@@ -193,6 +193,7 @@
 
 	.x-tab-top-active {
 		background: none;
+
 		button span.x-tab-inner {
 			color: #b1b1b1;
 		}
@@ -201,9 +202,11 @@
 			&.contacts {
 				@include sprite($rhp-contacts_active);
 			}
+
 			&.activity {
 				@include sprite($rhp-activity_active);
 			}
+
 			&.inbox {
 				@include sprite($rhp-notification_active);
 			}

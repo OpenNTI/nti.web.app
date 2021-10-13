@@ -40,6 +40,7 @@
 	.note-here-control-box {
 		@include animate(fadeIn, 0.1s);
 		@include icon($add-note, $position: absolute, $top: -4px);
+
 		&:hover::after {
 			@include sprite($add-note_active);
 		}
@@ -157,9 +158,11 @@
 				&.edit::after {
 					@include sprite($edit-dark);
 				}
+
 				&.flag::after {
 					@include sprite($flag-dark);
 				}
+
 				&.delete::after {
 					@include sprite($trash-can-dark);
 				}
@@ -171,9 +174,11 @@
 					&.edit::after {
 						@include sprite($edit-dark_hover);
 					}
+
 					&.flag::after {
 						@include sprite($flag-dark_hover);
 					}
+
 					&.delete::after {
 						@include sprite($trash-can-dark_hover);
 					}
@@ -202,24 +207,31 @@
 			&.edit::after {
 				@include sprite($edit-15);
 			}
+
 			&.flag::after {
 				@include sprite($flag-13x15);
 			}
+
 			&.add-contact::after {
 				@include sprite($add-contact-14x14);
 			}
+
 			&.chat::after {
 				@include sprite($chat-18x12);
 			}
+
 			&.follow::after {
 				@include sprite($follow);
 			}
+
 			&.block::after {
 				@include sprite($block);
 			}
+
 			&.mute::after {
 				@include sprite($mute-14x13);
 			}
+
 			&.delete::after {
 				@include sprite($trash-can-11x14);
 			}
@@ -228,24 +240,31 @@
 				&.edit::after {
 					@include sprite($edit-15_hover);
 				}
+
 				&.flag::after {
 					@include sprite($flag-13x15_hover);
 				}
+
 				&.add-contact::after {
 					@include sprite($add-contact-14x14_hover);
 				}
+
 				&.chat::after {
 					@include sprite($chat-18x12_hover);
 				}
+
 				&.follow::after {
 					@include sprite($follow_hover);
 				}
+
 				&.block::after {
 					@include sprite($block_hover);
 				}
+
 				&.mute::after {
 					@include sprite($mute-14x13_hover);
 				}
+
 				&.delete::after {
 					@include sprite($trash-can-11x14_hover);
 				}
@@ -281,9 +300,11 @@
 						margin-top: 0;
 					}
 				}
+
 				.shared-to {
 					display: none;
 				}
+
 				.title {
 					display: none;
 				}
@@ -322,16 +343,20 @@
 
 			.meta {
 				display: none;
+
 				.controls {
 					display: none !important;
 				}
 			}
+
 			.body {
 				display: none;
 			}
+
 			.avatar {
 				display: none;
 			}
+
 			.name {
 				display: none;
 			}
@@ -356,9 +381,11 @@
 		&.hover {
 			border-color: #e6e6e6;
 			box-shadow: none;
+
 			.meta .controls {
 				display: block;
 			}
+
 			.respond .reply-options {
 				opacity: 1;
 			}
@@ -420,15 +447,18 @@
 
 		&.editor-active .respond {
 			display: block;
+
 			.reply-options {
 				display: none;
 			}
+
 			.time {
 				display: none;
 			}
 
 			.editor {
 				display: block;
+
 				.action.share {
 					display: none !important;
 				}
@@ -440,6 +470,7 @@
 			overflow: hidden;
 
 			@include reply-options;
+
 			.reply-options .more ol {
 				position: fixed;
 			}
@@ -482,6 +513,7 @@
 
 				.footer {
 					background-color: transparent;
+
 					&::after {
 						display: none;
 					}

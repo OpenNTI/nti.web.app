@@ -54,6 +54,7 @@
 				&.notepad::after {
 					@include sprite($notepad_active);
 				}
+
 				&.discuss::after {
 					@include sprite($discussions_active);
 				}

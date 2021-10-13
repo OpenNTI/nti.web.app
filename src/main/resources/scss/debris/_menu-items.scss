@@ -183,6 +183,7 @@ label.x-menu-item-cmp {
 		opacity: 0.5;
 
 		@include icon($menu-arrow-down-active, $top: 0, $left: 50%);
+
 		&::after {
 			margin-left: -4px;
 		}
@@ -202,6 +203,7 @@ label.x-menu-item-cmp {
 	opacity: 0.5;
 
 	@include icon($menu-arrow-up-active, $top: 3px, $left: 50%);
+
 	&::after {
 		margin-left: -4px;
 	}

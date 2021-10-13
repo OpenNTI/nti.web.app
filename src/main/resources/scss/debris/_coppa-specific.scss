@@ -333,6 +333,7 @@
 		.input-box,
 		.combo-box {
 			margin: 5px 0;
+
 			&,
 			input,
 			.x-form-item {
@@ -408,6 +409,7 @@
 			.x-opera &,
 			.x-safari5 & {
 				width: 291px;
+
 				&[placeholder$='Name'] {
 					width: 145px;
 				}

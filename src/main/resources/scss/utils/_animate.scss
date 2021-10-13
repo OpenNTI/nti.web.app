@@ -10,7 +10,9 @@
 ) {
 	@if $iteration==null {
 		//
-	} @else {
+	}
+
+ @else {
 		@include experimental(animation-iteration-count, $iteration);
 		@include experimental(animation-direction, normal);
 	}
@@ -59,6 +61,7 @@
 	0% {
 		opacity: 0;
 	}
+
 	100% {
 		opacity: 0.5;
 	}
@@ -68,12 +71,15 @@
 	25% {
 		width: 0;
 	}
+
 	50% {
 		width: 0.466667em;
 	}
+
 	75% {
 		width: 0.933333em;
 	}
+
 	100% {
 		width: 1.4em;
 	}
@@ -83,6 +89,7 @@
 	from {
 		@include experimental(transform, rotate(0deg));
 	}
+
 	to {
 		@include experimental(transform, rotate(360deg));
 	}
@@ -92,12 +99,15 @@
 	0% {
 		opacity: 0.5;
 	}
+
 	33% {
 		opacity: 1;
 	}
+
 	66% {
 		opacity: 0.5;
 	}
+
 	100% {
 		opacity: 1;
 	}
@@ -107,9 +117,11 @@
 	0% {
 		@include experimental(transform, scale(1));
 	}
+
 	50% {
 		@include experimental(transform, scale(1.1));
 	}
+
 	100% {
 		@include experimental(transform, scale(1));
 	}
@@ -173,6 +185,7 @@
 	0% {
 		opacity: 0;
 	}
+
 	100% {
 		opacity: 1;
 	}
@@ -182,6 +195,7 @@
 	0% {
 		opacity: 1;
 	}
+
 	100% {
 		opacity: 0;
 	}
@@ -199,13 +213,16 @@
 
 		@include experimental(transform, translateY(0));
 	}
+
 	80%,
 	100% {
 		@include experimental(transform, translateY(0));
 	}
+
 	40% {
 		@include experimental(transform, translateY(6px));
 	}
+
 	60% {
 		@include experimental(transform, translateY(3px));
 	}
@@ -223,9 +240,11 @@
 
 		@include experimental(transform, translateX(-30px));
 	}
+
 	80% {
 		@include experimental(transform, translateX(10px));
 	}
+
 	100% {
 		@include experimental(transform, translateX(0));
 	}
@@ -334,6 +353,7 @@
 	100% {
 		@include experimental(transform, translateX(0));
 	}
+
 	10%,
 	30%,
 	50%,
@@ -341,6 +361,7 @@
 	90% {
 		@include experimental(transform, translateX(-10px));
 	}
+
 	20%,
 	40%,
 	60%,
@@ -367,6 +388,7 @@
 	0% {
 		@include experimental(transform, translate3d(100%, 0, 0));
 	}
+
 	100% {
 		@include experimental(transform, translateX(0));
 	}
@@ -376,6 +398,7 @@
 	0% {
 		@include experimental(transform, translateX(0));
 	}
+
 	100% {
 		@include experimental(transform, translateX(100%));
 	}
@@ -385,6 +408,7 @@
 	0% {
 		@include experimental(transform, translateX(-100%));
 	}
+
 	100% {
 		@include experimental(transform, translateX(0));
 	}
@@ -394,6 +418,7 @@
 	0% {
 		@include experimental(transform, translateX(0));
 	}
+
 	100% {
 		@include experimental(transform, translateX(-100%));
 	}

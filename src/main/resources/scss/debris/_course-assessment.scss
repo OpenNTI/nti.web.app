@@ -652,6 +652,7 @@ canvas.x-component-course-assessment {
 			.status time.completed {
 				display: block;
 			}
+
 			.status time.due {
 				display: none;
 			}
@@ -707,6 +708,7 @@ canvas.x-component-course-assessment {
 			.completed {
 				display: none;
 			}
+
 			.due {
 				display: block;
 			}
@@ -984,6 +986,7 @@ canvas.x-component-course-assessment {
 
 				span {
 					display: inline-block;
+
 					&.link {
 						color: var(--primary-blue);
 						cursor: pointer;
@@ -1364,6 +1367,7 @@ canvas.x-component-course-assessment {
 
 		&:empty {
 			color: var(--tertiary-grey);
+
 			&::after {
 				content: 'No Action Items';
 			}
@@ -1372,6 +1376,7 @@ canvas.x-component-course-assessment {
 		& > div {
 			color: var(--primary-blue);
 			display: inline-block;
+
 			&.overdue {
 				color: var(--primary-red);
 			}
@@ -1380,6 +1385,7 @@ canvas.x-component-course-assessment {
 				content: '\00B7';
 				margin: 0.5em;
 			}
+
 			&:first-of-type::before {
 				content: none;
 			}

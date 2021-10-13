@@ -22,10 +22,12 @@
 		&.x-item-disabled {
 			opacity: 0.5;
 			cursor: default;
+
 			&:hover {
 				color: var(--secondary-grey);
 			}
 		}
+
 		.x-mask {
 			display: none;
 		}
@@ -37,6 +39,7 @@
 		&:hover {
 			color: var(--tertiary-grey);
 		}
+
 		&:active {
 			color: #424242;
 		}

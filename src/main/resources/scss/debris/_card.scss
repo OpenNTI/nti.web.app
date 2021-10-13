@@ -34,6 +34,7 @@
 
 			&.www {
 				@extend %icon-fallback-link;
+
 				label {
 					display: none;
 				}
@@ -41,6 +42,7 @@
 
 			&.unknown {
 				@extend %icon-fallback-unknow;
+
 				label {
 					display: none;
 				}

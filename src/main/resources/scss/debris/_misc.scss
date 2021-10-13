@@ -36,21 +36,27 @@ input::-ms-clear {
 .placeholder {
 	@include placeholder-style();
 }
+
 ::input-placeholder {
 	@include placeholder-style();
 }
+
 ::-webkit-input-placeholder {
 	@include placeholder-style();
 }
+
 ::-moz-placeholder {
 	@include placeholder-style();
 }
+
 input:-moz-placeholder {
 	@include placeholder-style();
 }
+
 :-ms-input-placeholder {
 	@include placeholder-style();
 }
+
 input:-ms-input-placeholder {
 	@include placeholder-style();
 }

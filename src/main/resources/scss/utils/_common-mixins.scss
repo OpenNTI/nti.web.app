@@ -158,7 +158,9 @@
 @mixin accessibility-option($style, $non-accessible, $accessible) {
 	@if $accessibility_mode {
 		#{$style}: $accessible;
-	} @else {
+	}
+
+ @else {
 		#{$style}: $non-accessible;
 	}
 }
@@ -186,7 +188,9 @@
 
 		@if $position != none {
 			position: absolute;
-		} @else {
+		}
+
+ @else {
 			display: inline-block;
 			position: relative;
 			margin-right: 0.5em;
@@ -807,6 +811,7 @@
 	white-space: nowrap;
 	position: relative;
 	cursor: pointer;
+
 	&.disabled {
 		cursor: default;
 	}

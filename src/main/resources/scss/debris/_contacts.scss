@@ -44,6 +44,7 @@ $over-color: #f4f3f3;
 			top: 17px;
 			width: 18px;
 			height: 17px;
+
 			&:hover::after {
 				@include sprite($add-contact_active);
 			}
@@ -377,6 +378,7 @@ $over-color: #f4f3f3;
 
 				&.add-group-action {
 					background: none;
+
 					&::after {
 						content: none;
 					}
@@ -476,9 +478,11 @@ $over-color: #f4f3f3;
 				right: 10px;
 				width: 20px;
 				height: 20px;
+
 				&::after {
 					@include sprite($checkbox-light-unchecked);
 				}
+
 				&:hover::after {
 					@include sprite($checkbox-light-unchecked_hover);
 				}
@@ -489,6 +493,7 @@ $over-color: #f4f3f3;
 					&::after {
 						@include sprite($checkbox-light-checked);
 					}
+
 					&:hover::after {
 						@include sprite($checkbox-light-checked_hover);
 					}
@@ -672,6 +677,7 @@ $over-color: #f4f3f3;
 				padding-left: 35px;
 
 				@include icon($rhp-search, $top: 11px, $left: 9px);
+
 				&::after {
 					opacity: 0.6;
 				}
@@ -723,6 +729,7 @@ $over-color: #f4f3f3;
 			.search {
 				width: 260px !important;
 			}
+
 			.group-chat {
 				display: none;
 			}
@@ -1257,6 +1264,7 @@ div.contact-buttons {
 	.contact-card-container {
 		border: 0 solid #f2f2f2;
 		border-top-width: 1px;
+
 		&:first-of-type {
 			border-top-width: 0;
 		}
@@ -1327,6 +1335,7 @@ div.contact-buttons {
 			}
 
 			@include add-to-contacts;
+
 			.add-to-contacts {
 				display: none;
 			}
@@ -1384,6 +1393,7 @@ div.contact-buttons {
 				.name {
 					max-width: 340px;
 				}
+
 				.add-to-contacts {
 					display: inline-block;
 				}
@@ -1615,6 +1625,7 @@ div.contact-buttons {
 						.name {
 							max-width: 90px;
 						}
+
 						.add-to-contacts {
 							display: inline-block;
 						}
@@ -1702,6 +1713,7 @@ div.contact-buttons {
 							padding-left: 35px;
 
 							@include icon($rhp-search, $top: 11px, $left: 9px);
+
 							&::after {
 								opacity: 0.6;
 							}

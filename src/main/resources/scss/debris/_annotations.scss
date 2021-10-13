@@ -62,6 +62,7 @@
 
 		.bar-cell {
 			display: block;
+
 			& > span:first-child {
 				margin-top: 14px;
 			}
@@ -253,6 +254,7 @@
 				.footer {
 					color: #c5eaff;
 				}
+
 				.snippet {
 					color: #fff;
 				}
@@ -292,6 +294,7 @@
 				.whiteboard-wrapper .overlay {
 					bottom: 0;
 				}
+
 				.toolbar {
 					display: none;
 				}
@@ -696,6 +699,7 @@
 			.controls {
 				display: none;
 			}
+
 			span.editableSpan {
 				border-right-width: 1px;
 			}
@@ -749,6 +753,7 @@
 			.controls {
 				display: none;
 			}
+
 			span.editableSpan {
 				border-right-width: 1px;
 			}
@@ -802,12 +807,15 @@
 					height: 16px;
 					position: absolute;
 				}
+
 				&.edit {
 					@include icon($redactions-edit, $top: 6px, $left: 6px);
 				}
+
 				&.share {
 					@include icon($redactions-share, $top: 6px, $left: 6px);
 				}
+
 				&.delete {
 					@include icon($redactions-trashcan, $top: 5px, $left: 7px);
 				}
@@ -841,13 +849,16 @@
 					&.delete {
 						background-color: var(--primary-red);
 						box-shadow: inset 0 0 0 1px #d14646 !important;
+
 						&::after {
 							@include sprite($redactions-trashcan_hover);
 						}
 					}
+
 					&.edit::after {
 						@include sprite($redactions-edit_hover);
 					}
+
 					&.share::after {
 						@include sprite($redactions-share_hover);
 					}

@@ -104,6 +104,7 @@
 			.with {
 				color: var(--primary-blue);
 			}
+
 			.verb {
 				color: var(--tertiary-grey);
 			}
@@ -266,14 +267,17 @@
 
 			& + .item {
 				padding-top: 30px;
+
 				.controls {
 					margin: {
 						top: -31px;
 					}
 				}
+
 				.avatar {
 					display: none;
 				}
+
 				.meta {
 					margin: {
 						left: 0;
@@ -321,6 +325,7 @@
 			.reply-options {
 				display: none;
 			}
+
 			.editor .action.share {
 				display: none !important;
 			}
@@ -356,6 +361,7 @@
 					color: var(--primary-grey);
 					display: block;
 					height: 40px;
+
 					img {
 						max-width: 50% !important;
 					}
@@ -427,6 +433,7 @@
 			& > * {
 				margin-top: 20px;
 			}
+
 			.controls {
 				margin: 0 -20px 0 0;
 			}
@@ -484,6 +491,7 @@
 					content: '';
 					display: none;
 				}
+
 				.whiteboard-container {
 					display: none !important;
 				}

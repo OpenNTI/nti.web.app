@@ -479,6 +479,7 @@ body.dragging * {
 				font-style: italic;
 				color: var(--primary-green);
 			}
+
 			&.incorrect {
 				font-style: italic;
 				color: var(--primary-red);
@@ -667,6 +668,7 @@ body.dragging * {
 				style: italic;
 				weight: normal;
 			}
+
 			&.ready {
 				color: var(--primary-green);
 			}
@@ -715,6 +717,7 @@ body.dragging * {
 		& > .x-panel-body-assessment {
 			padding: 0 15px 0 10px;
 		}
+
 		.x-btn-secondary-large .x-btn-inner {
 			font-weight: bold;
 		}
@@ -816,6 +819,7 @@ body.dragging * {
 		&.assignment {
 			.tally .stat {
 				padding-left: 0;
+
 				&::after {
 					content: none;
 					display: none;
@@ -839,6 +843,7 @@ body.dragging * {
 		&.multipart > .x-panel-body-assessment,
 		&.part-of-set > .x-panel-body-assessment {
 			padding-bottom: 0;
+
 			.footer .action.check {
 				display: none;
 			}
@@ -966,6 +971,7 @@ body.dragging * {
 				input.answer-field {
 					color: var(--primary-red);
 				}
+
 				&::after {
 					@include sprite($circle-x-red-18);
 				}
@@ -1044,6 +1050,7 @@ body.dragging * {
 			background: #fff;
 			border: 0 solid var(--tertiary-grey);
 			border-bottom-width: 1px;
+
 			&:last-of-type {
 				border-bottom-width: 0;
 			}
@@ -1128,6 +1135,7 @@ body.dragging * {
 					$left: 20px,
 					$position: absolute
 				);
+
 				&.checked::after {
 					@include sprite($checkbox-14_active);
 				}
@@ -1152,6 +1160,7 @@ body.dragging * {
 					$left: 10px,
 					$position: absolute
 				);
+
 				&.checked::after {
 					@include sprite($radio-button-16_active);
 				}
@@ -1185,9 +1194,11 @@ body.dragging * {
 
 				&:last-of-type {
 					border-bottom-width: 0;
+
 					.draggable-area {
 						border-bottom-width: 0;
 					}
+
 					.label {
 						border-bottom-width: 0;
 					}
@@ -1390,6 +1401,7 @@ body.dragging * {
 
 			.left {
 				float: left;
+
 				.action {
 					float: left;
 				}
@@ -1397,6 +1409,7 @@ body.dragging * {
 
 			.right {
 				float: right;
+
 				.action {
 					float: right;
 				}
@@ -1404,6 +1417,7 @@ body.dragging * {
 
 			.mathsymbol {
 				opacity: 0.6;
+
 				&:hover {
 					opacity: 1;
 				}
@@ -1419,15 +1433,19 @@ body.dragging * {
 				&.sqrt {
 					background-position: -2px -2px;
 				}
+
 				&.square {
 					background-position: -42px -2px;
 				}
+
 				&.parens {
 					background-position: -82px -2px;
 				}
+
 				&.approx {
 					background-position: -122px -2px;
 				}
+
 				&.pi {
 					background-position: -162px -2px;
 				}
@@ -2044,6 +2062,7 @@ body.dragging * {
 
 		.blank {
 			margin-right: 0;
+
 			&::after {
 				display: none;
 			}
