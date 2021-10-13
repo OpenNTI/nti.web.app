@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { LinkTo } from '@nti/web-routing';
 import { useObject, useLink } from '@nti/web-core';
