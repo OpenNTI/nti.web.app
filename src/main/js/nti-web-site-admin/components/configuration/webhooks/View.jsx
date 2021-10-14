@@ -17,6 +17,7 @@ export const Webhooks = Router.for(
 		}),
 		Route({
 			path: '/',
+			name: 'site-admins.config.webhooks',
 			component: SubscriptionList,
 		}),
 	],

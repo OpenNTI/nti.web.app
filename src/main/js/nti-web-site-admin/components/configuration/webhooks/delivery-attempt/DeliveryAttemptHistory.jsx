@@ -1,6 +1,6 @@
 import { LinkTo } from '@nti/web-routing';
 import { useLink } from '@nti/web-core';
-import { List } from '@nti/web-commons';
+import { EmptyState, List } from '@nti/web-commons';
 
 import { DeliveryAttemptListItem } from './DeliveryAttemptListItem';
 
@@ -10,16 +10,21 @@ const Item = styled('li')`
 
 export function DeliveryAttemptHistory({ item }) {
 	const { Items: attempts } = useLink(item, 'delivery_history');
+	const empty = !attempts?.length;
 
 	return (
 		<List.Unadorned>
-			{attempts.map(attempt => (
-				<Item key={attempt.getID()}>
-					<LinkTo.Object object={attempt}>
-						<DeliveryAttemptListItem item={attempt} />
-					</LinkTo.Object>
-				</Item>
-			))}
+			{empty ? (
+				<EmptyState header="No Activity Yet." />
+			) : (
+				attempts?.map(attempt => (
+					<Item key={attempt.getID()}>
+						<LinkTo.Object object={attempt}>
+							<DeliveryAttemptListItem item={attempt} />
+						</LinkTo.Object>
+					</Item>
+				))
+			)}
 		</List.Unadorned>
 	);
 }

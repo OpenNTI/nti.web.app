@@ -6,6 +6,7 @@ import { Store as Store } from '../Store';
 import { DeliveryAttemptHistory } from '../delivery-attempt/DeliveryAttemptHistory';
 import { DeliveryAttemptDetail } from '../delivery-attempt/DeliveryAttemptDetail';
 import { Labeled } from '../parts/Labeled';
+import { ErrorBoundary } from '../ErrorBoundary';
 
 import { SubscriptionListItem } from './SubscriptionListItem';
 
@@ -20,15 +21,16 @@ const FrameContainer = styled.div`
 
 const Frame = ({ id, children }) => {
 	const subscription = useSubscriptionItem(id);
-
 	return (
 		<FrameContainer>
 			<Labeled label="Subscription">
 				<SubscriptionListItem item={subscription} />
 			</Labeled>
-			{React.cloneElement(React.Children.only(children), {
-				subscription,
-			})}
+			<ErrorBoundary>
+				{React.cloneElement(React.Children.only(children), {
+					subscription,
+				})}
+			</ErrorBoundary>
 		</FrameContainer>
 	);
 };
