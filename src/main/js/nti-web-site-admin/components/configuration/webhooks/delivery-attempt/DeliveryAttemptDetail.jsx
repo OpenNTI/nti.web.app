@@ -20,7 +20,6 @@ export function DeliveryAttemptDetail({ id }) {
 			</LinkTo.Path>
 			<Data item={attempt} link="delivery_request" title="Request" />
 			<Data item={attempt} link="delivery_response" title="Response" />
-			<Data item={attempt} link="test_no_link_in_alpha" title="Ignore" />
 		</div>
 	);
 }
