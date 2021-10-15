@@ -7,6 +7,7 @@ export class SegmentStore extends StateStore {
 		super();
 
 		this.addDependentProperty('title', ['segment', 'editedTitle']);
+		this.addDependentProperty('filterSet', ['segment', 'editedFilterSet']);
 	}
 
 	async load(action) {
@@ -28,5 +29,16 @@ export class SegmentStore extends StateStore {
 
 	setTitle(title) {
 		this.updateState({ editedTitle: title });
+	}
+
+	get filterSet() {
+		return (
+			this.getProperty('editedFilterSet') ??
+			this.getProperty('segment')?.filterSet
+		);
+	}
+
+	setFilterSet(filterSet) {
+		this.updateState({ editedFilterSet: filterSet });
 	}
 }
