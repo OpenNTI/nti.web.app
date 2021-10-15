@@ -6,6 +6,7 @@ import { MembersPreview } from '../members/Preview';
 import { SegmentStore } from '../Store';
 
 import { Header } from './Header';
+import { SegmentFilters } from './filters/View';
 
 const Container = styled.div`
 	display: grid;
@@ -30,6 +31,7 @@ export function SegmentEditor() {
 			<Contents>
 				<Card>
 					<Header />
+					<SegmentFilters />
 				</Card>
 			</Contents>
 			<Sidebar>

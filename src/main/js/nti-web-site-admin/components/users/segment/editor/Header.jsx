@@ -5,7 +5,7 @@ import { Input } from '@nti/web-commons';
 import { SegmentStore } from '../Store';
 
 const Container = styled.div`
-	padding: 20px 30px 10px;
+	padding: 20px 30px 30px;
 `;
 
 const Title = styled(Input.Text)`
