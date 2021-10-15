@@ -6,6 +6,7 @@ import { Status } from '../parts/Status';
 const Container = styled.div`
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: wrap;
 	gap: var(--padding-lg, 1em);
 	padding: var(--padding-sm, 0.5em);
 `;
@@ -19,7 +20,12 @@ export function DeliveryAttemptListItem({ item }) {
 			<LabeledValue label="Status">
 				<Status item={item} />
 			</LabeledValue>
-			<LabeledValue label="Message">
+			<LabeledValue
+				label="Message"
+				css={css`
+					flex: 0 0 100%;
+				`}
+			>
 				<div>{item.message}</div>
 			</LabeledValue>
 		</Container>

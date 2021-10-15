@@ -1,30 +1,30 @@
-import { LinkTo } from '@nti/web-routing';
-import { useLink } from '@nti/web-core';
-import { EmptyState, List } from '@nti/web-commons';
+import { useLink, Table, Text } from '@nti/web-core';
+import { EmptyState } from '@nti/web-commons';
+import { encodeForURI } from '@nti/lib-ntiids';
 
-import { DeliveryAttemptListItem } from './DeliveryAttemptListItem';
-
-const Item = styled('li')`
-	box-shadow: 0 1px 0 var(--color-outline-light);
-`;
+import { HISTORY_COLUMNS } from '../parts/columns';
+import { useHistoryPush } from '../hooks';
+import t from '../strings';
 
 export function DeliveryAttemptHistory({ item }) {
 	const { Items: attempts } = useLink(item, 'delivery_history');
 	const empty = !attempts?.length;
+	const push = useHistoryPush();
 
 	return (
-		<List.Unadorned>
+		<>
+			<Text as="h3">{t('history')}</Text>
+
 			{empty ? (
 				<EmptyState header="No Activity Yet." />
 			) : (
-				attempts?.map(attempt => (
-					<Item key={attempt.getID()}>
-						<LinkTo.Object object={attempt}>
-							<DeliveryAttemptListItem item={attempt} />
-						</LinkTo.Object>
-					</Item>
-				))
+				<Table
+					ruled
+					items={attempts}
+					columns={HISTORY_COLUMNS}
+					onRowClick={item => push(encodeForURI(item.getID()))}
+				/>
 			)}
-		</List.Unadorned>
+		</>
 	);
 }

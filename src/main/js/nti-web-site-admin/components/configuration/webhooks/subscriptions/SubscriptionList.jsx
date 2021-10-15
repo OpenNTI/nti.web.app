@@ -1,37 +1,34 @@
-import { LinkTo } from '@nti/web-routing';
-import { EmptyState, List } from '@nti/web-commons';
+import { Table, Text } from '@nti/web-core';
+import { EmptyState } from '@nti/web-commons';
+import { encodeForURI } from '@nti/lib-ntiids';
 
+import t from '../strings';
 import { Store as Store } from '../Store';
-
-import { SubscriptionListItem } from './SubscriptionListItem';
-
-const Item = styled('li')`
-	&:not(:last-child) {
-		box-shadow: 0 1px 0 var(--color-outline-light);
-	}
-`;
+import { SUBSCRIPTION_COLUMNS } from '../parts/columns';
+import { useHistoryPush } from '../hooks';
 
 export function SubscriptionList(props) {
 	const { subscriptions } = Store.useProperties();
+	const push = useHistoryPush();
 
 	const empty = !subscriptions?.length;
 
 	return (
-		<List.Unadorned>
+		<>
+			<Text as="h1">{t('title')}</Text>
 			{empty ? (
 				<EmptyState
 					header="No subscriptions yet"
 					subHeader="Connect Zapier, and items will populate here."
 				/>
 			) : (
-				subscriptions?.map(item => (
-					<Item key={item.getID()}>
-						<LinkTo.Object object={item}>
-							<SubscriptionListItem item={item} />
-						</LinkTo.Object>
-					</Item>
-				))
+				<Table
+					ruled
+					items={subscriptions}
+					columns={SUBSCRIPTION_COLUMNS}
+					onRowClick={item => push(encodeForURI(item.getID()))}
+				/>
 			)}
-		</List.Unadorned>
+		</>
 	);
 }

@@ -1,13 +1,16 @@
+import { Box } from '@nti/web-core';
+import { DataContext } from '@nti/web-core/data';
 import { Router, Route } from '@nti/web-routing';
 
-import { Frame } from './Frame';
+import { Store } from './Store';
 import { SubscriptionList } from './subscriptions/SubscriptionList';
 import { SubscriptionDetail } from './subscriptions/SubscriptionDetail';
+import { Breadcrumb } from './parts/Breadcrumb';
 
 export const Webhooks = Router.for(
 	[
 		Route({
-			path: '/:id',
+			path: '/:subscriptionId',
 			component: SubscriptionDetail,
 			getRouteFor: (obj, context) => {
 				if (obj?.isPersistentSubscription) {
@@ -21,5 +24,16 @@ export const Webhooks = Router.for(
 			component: SubscriptionList,
 		}),
 	],
-	{ frame: Frame }
+	{
+		frame: ({ children }) => {
+			return (
+				<Box p="lg" sh="sm">
+					<Breadcrumb />
+					<DataContext store={Store.useStore()} fallback={<div />}>
+						{children}
+					</DataContext>
+				</Box>
+			);
+		},
+	}
 );

@@ -1,26 +1,24 @@
 import { Suspense } from 'react';
 
-import { LinkTo } from '@nti/web-routing';
-import { useObject, useLink } from '@nti/web-core';
+import { useObject, useLink, Text } from '@nti/web-core';
+import { decodeFromURI } from '@nti/lib-ntiids';
 
 import { Labeled } from '../parts/Labeled';
 import { ErrorBoundary } from '../ErrorBoundary';
+import t from '../strings';
 
 import { DeliveryAttemptListItem } from './DeliveryAttemptListItem';
 
 export function DeliveryAttemptDetail({ id }) {
-	const attempt = useObject(id);
+	const attempt = useObject(decodeFromURI(id));
 
 	return (
-		<div>
-			<LinkTo.Path to="./">
-				<Labeled label="Delivery Attempt">
-					<DeliveryAttemptListItem item={attempt} />
-				</Labeled>
-			</LinkTo.Path>
+		<>
+			<Text as="h1">{t('attempt')}</Text>
+			<DeliveryAttemptListItem item={attempt} />
 			<Data item={attempt} link="delivery_request" title="Request" />
 			<Data item={attempt} link="delivery_response" title="Response" />
-		</div>
+		</>
 	);
 }
 
@@ -45,7 +43,7 @@ function Load({ item, link, title }) {
 	const d = useLink(item, link);
 	return (
 		<Labeled label={title}>
-			<Pre>{JSON.stringify(d, null, 2)}</Pre>
+			<Pre>{d && JSON.stringify(d, null, 2)}</Pre>
 		</Labeled>
 	);
 }

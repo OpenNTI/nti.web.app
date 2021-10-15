@@ -21,4 +21,6 @@ const Container = styled('div')`
 	}
 `;
 
-export const Status = ({item: { Status, status = Status} = {}}) => <Container status={status}>{status}</Container>;
+export const Status = ({ item: { Status, status = Status } = {} }) => (
+	<Container status={status?.toLowerCase()}>{status}</Container>
+);
