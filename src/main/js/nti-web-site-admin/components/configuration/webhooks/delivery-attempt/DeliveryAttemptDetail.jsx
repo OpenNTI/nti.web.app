@@ -1,26 +1,15 @@
+import { Suspense } from 'react';
+
 import { LinkTo } from '@nti/web-routing';
 import { useObject, useLink } from '@nti/web-core';
 
 import { Labeled } from '../parts/Labeled';
+import { ErrorBoundary } from '../ErrorBoundary';
 
 import { DeliveryAttemptListItem } from './DeliveryAttemptListItem';
 
-const useDeliveryAttemptDetail = id => {
-	const attempt = useObject(id);
-	const request = useLink(attempt, 'delivery_request');
-	const response = useLink(attempt, 'delivery_response');
-	return { attempt, request, response };
-};
-
-const Pre = styled('pre')`
-	overflow: auto;
-	padding: var(--padding-lg, 1em);
-	background: var(--panel-background-alt);
-	font-size: 0.875rem;
-`;
-
 export function DeliveryAttemptDetail({ id }) {
-	const { attempt, request, response } = useDeliveryAttemptDetail(id);
+	const attempt = useObject(id);
 
 	return (
 		<div>
@@ -29,15 +18,39 @@ export function DeliveryAttemptDetail({ id }) {
 					<DeliveryAttemptListItem item={attempt} />
 				</Labeled>
 			</LinkTo.Path>
-			<Jsonified title="Request" object={request} />
-			<Jsonified title="Response" object={response} />
+			<Data item={attempt} link="delivery_request" title="Request" />
+			<Data item={attempt} link="delivery_response" title="Response" />
+			<Data item={attempt} link="test_no_link_in_alpha" title="Ignore" />
 		</div>
 	);
 }
 
-const Jsonified = ({ object, title }) =>
-	!object ? null : (
+const Pre = styled('pre')`
+	overflow: auto;
+	padding: var(--padding-lg, 1em);
+	background: var(--panel-background-alt);
+	font-size: 0.875rem;
+`;
+
+function Data(props) {
+	return (
+		<ErrorBoundary fallback={<Oops />}>
+			<Suspense fallback={<div />}>
+				<Load {...props} />
+			</Suspense>
+		</ErrorBoundary>
+	);
+}
+
+function Load({ item, link, title }) {
+	const d = useLink(item, link);
+	return (
 		<Labeled label={title}>
-			<Pre>{JSON.stringify(object, null, 2)}</Pre>
+			<Pre>{JSON.stringify(d, null, 2)}</Pre>
 		</Labeled>
 	);
+}
+
+function Oops({ error }) {
+	return !error ? null : <div>{error.message}</div>;
+}
