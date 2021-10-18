@@ -45,7 +45,7 @@ export function FilterRule({ filter, parent }) {
 			if (filter instanceof FilterSet) {
 				filter.setActiveRule(newRule);
 			} else {
-				const newFilter = new FilterSet(parent, {});
+				const newFilter = new FilterSet();
 
 				newFilter.setActiveRule(newRule);
 

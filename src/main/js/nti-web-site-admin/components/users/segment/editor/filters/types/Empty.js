@@ -5,7 +5,7 @@ import { UnionFilterSet } from './Union';
 export class EmptyFilterSet extends FilterSetGroup {
 	getDefault() {
 		return new IntersectionFilterSet(null, {
-			sets: [new UnionFilterSet(this)],
+			filter_sets: [new UnionFilterSet(this)],
 		});
 	}
 

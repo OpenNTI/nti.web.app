@@ -14,16 +14,19 @@ const t = scoped(
 	}
 );
 
-export const UnionType = 'filterset.union';
+const Type = 'application/vnd.nextthought.segments.UnionUserFilterSet';
 
 export class UnionFilterSet extends FilterSetGroup {
-	type = UnionType;
+	type = Type;
 
 	constructor(...args) {
 		super(...args);
 
-		if (!this.data.sets || this.data.sets.length === 0) {
-			this.data.sets = [new EmptyFilterSetRule(this)];
+		if (
+			!this.data['filter_sets'] ||
+			this.data['filter_sets'].length === 0
+		) {
+			this.data['filter_sets'] = [new EmptyFilterSetRule(this)];
 		}
 	}
 
@@ -37,4 +40,4 @@ export class UnionFilterSet extends FilterSetGroup {
 	canRemove = true;
 }
 
-FilterSetRegistry.register(UnionType, UnionFilterSet);
+FilterSetRegistry.register(Type, UnionFilterSet);
