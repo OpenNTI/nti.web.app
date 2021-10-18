@@ -3,12 +3,14 @@ import { EmptyState } from '@nti/web-commons';
 import { encodeForURI } from '@nti/lib-ntiids';
 
 import t from '../strings';
-import { Store as Store } from '../Store';
+import { Store } from '../Store';
 import { SUBSCRIPTION_COLUMNS } from '../parts/columns';
 import { useHistoryPush } from '../hooks';
 
+import { Pager } from './Pager';
+
 export function SubscriptionList(props) {
-	const { subscriptions } = Store.useProperties();
+	const { items: subscriptions } = Store.useProperties();
 	const push = useHistoryPush();
 
 	const empty = !subscriptions?.length;
@@ -22,12 +24,15 @@ export function SubscriptionList(props) {
 					subHeader="Connect Zapier, and items will populate here."
 				/>
 			) : (
-				<Table
-					ruled
-					items={subscriptions}
-					columns={SUBSCRIPTION_COLUMNS}
-					onRowClick={item => push(encodeForURI(item.getID()))}
-				/>
+				<>
+					<Table
+						ruled
+						items={subscriptions}
+						columns={SUBSCRIPTION_COLUMNS}
+						onRowClick={item => push(encodeForURI(item.getID()))}
+					/>
+					<Pager />
+				</>
 			)}
 		</>
 	);

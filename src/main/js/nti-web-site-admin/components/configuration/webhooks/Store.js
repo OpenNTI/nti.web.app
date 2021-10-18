@@ -1,13 +1,15 @@
 import { StateStore } from '@nti/web-core/data';
 import { getService } from '@nti/web-client';
 
-export class Store extends StateStore {
+export class Store extends StateStore.Behaviors.BatchPaging.Discrete(
+	StateStore
+) {
 	static hasWebhooks(service) {
 		const workspace = service.getWorkspace('zapier');
 		return workspace?.hasLink?.('subscriptions');
 	}
 
-	async load() {
+	async load({ store } = {}) {
 		const service = await getService();
 		const workspace = service.getWorkspace('zapier');
 		if (!workspace?.hasLink?.('subscriptions')) {
@@ -16,10 +18,14 @@ export class Store extends StateStore {
 			};
 		}
 
-		const subscriptions = await workspace.fetchLink('subscriptions');
+		const batch = await workspace.fetchLink({
+			mode: 'batch',
+			rel: 'subscriptions',
+			params: store?.params,
+		});
 
 		return {
-			subscriptions,
+			batch,
 		};
 	}
 }
