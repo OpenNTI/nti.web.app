@@ -1,6 +1,6 @@
 import { scoped } from '@nti/lib-locale';
 
-import { FilterSet, FilterSetRegistry } from './common';
+import { FilterSetRule, FilterSetRegistry } from './common';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.editor.filters.types.IsDeactivated',
@@ -12,22 +12,32 @@ const t = scoped(
 
 const Type = 'application/vnd.nextthought.segments.isdeactivatedfilterset';
 
-export class IsDeactivatedFilterSet extends FilterSet {
+export class IsDeactivatedFilterSet extends FilterSetRule {
+	static Rules = {
+		isdeactivated: {
+			input: null,
+			label: t('isDeactivated'),
+			FilterSet: IsDeactivatedFilterSet,
+		},
+		isactive: {
+			input: null,
+			label: t('isActive'),
+			FilterSet: IsDeactivatedFilterSet,
+		},
+	};
+
 	type = Type;
 
-	getTypes() {
-		return [
-			{
-				input: null,
-				label: t('isDeactivated'),
-				payload: () => {},
-			},
-			{
-				input: null,
-				label: t('isActive'),
-				payload: () => {},
-			},
-		];
+	getActiveRule() {
+		const { Deactivated } = this.data;
+
+		return Deactivated ? 'isdeactivated' : 'isactive';
+	}
+
+	setActiveRule(rule) {
+		this.setData({
+			Deactivated: rule !== IsDeactivatedFilterSet.Rules.isactive,
+		});
 	}
 }
 

@@ -39,6 +39,7 @@ export class SegmentStore extends StateStore {
 	}
 
 	setFilterSet(filterSet) {
+		console.log('New Filter Set: ', filterSet);
 		this.updateState({ editedFilterSet: filterSet });
 	}
 }
