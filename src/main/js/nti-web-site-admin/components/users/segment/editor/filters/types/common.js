@@ -153,7 +153,7 @@ export class FilterSetGroup extends FilterSet {
 	removeFilterSet(target) {
 		this.filterSets = this.filterSets.filter(s => s !== target);
 
-		if (this.filterSets.length === 0 && this.parent.removeFilterSet) {
+		if (this.filterSets.length === 0 && this.parent?.removeFilterSet) {
 			this.parent.removeFilterSet(this);
 		}
 	}

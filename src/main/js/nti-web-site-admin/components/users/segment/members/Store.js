@@ -12,9 +12,10 @@ const loadFilterSetPreview = segment => ({ total: 0, Items: [] });
 export class MembersPreviewStore extends StateStore {
 	async load(action) {
 		const { segment, filterSet } = action.store.params;
-		const preview = filterSet
-			? await loadFilterSetPreview(segment, filterSet)
-			: await loadMembersPreview(segment);
+		const preview =
+			filterSet !== segment.filterSet
+				? await loadFilterSetPreview(segment, filterSet)
+				: await loadMembersPreview(segment);
 
 		return {
 			total: preview.total,
