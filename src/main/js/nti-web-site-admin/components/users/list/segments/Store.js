@@ -53,11 +53,11 @@ export class UserSegmentsStore extends Base {
 			params,
 		});
 
-		action.store.update({
+		return {
 			collection,
 			batch,
 			canCreateSegment: true,
-		});
+		};
 	}
 
 	createSegment = Base.Action(async action => {

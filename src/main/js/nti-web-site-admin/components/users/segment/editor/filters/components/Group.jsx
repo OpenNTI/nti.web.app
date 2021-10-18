@@ -119,8 +119,8 @@ function FilterGroupItem({ filter, parent, onRemove }) {
 }
 
 export function FilterGroup({ filter }) {
-	const { depth, sets } = filter;
-	const length = sets.length;
+	const { depth, filterSets } = filter;
+	const length = filterSets.length;
 
 	const addNew = useCallback(() => filter.appendFilterSet(), [filter]);
 
@@ -132,7 +132,7 @@ export function FilterGroup({ filter }) {
 	return (
 		<>
 			<List depth={depth}>
-				{sets.map((s, index) => (
+				{filterSets.map((s, index) => (
 					<li key={index}>
 						<FilterGroupItem
 							filter={s}

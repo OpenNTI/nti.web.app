@@ -81,37 +81,45 @@ export class FilterSetGroup extends FilterSet {
 	constructor(...args) {
 		super(...args);
 
-		if (this.data.sets) {
-			this.data.sets = this.data.sets
-				.map(subSet => {
-					if (subSet instanceof FilterSet) {
-						subSet.parent = this;
-						return subSet;
-					}
+		this.data['filter_sets'] = (this.data['filter_sets'] ?? [])
+			.map(subSet => {
+				if (subSet instanceof FilterSet) {
+					subSet.parent = this;
+					return subSet;
+				}
 
-					const Type = FilterSetRegistry.getInstance().getItem(
-						subSet.MimeType
-					);
+				const Type = FilterSetRegistry.getInstance().getItem(
+					subSet.MimeType
+				);
 
-					if (!Type) {
-						return null;
-					}
+				if (!Type) {
+					return null;
+				}
 
-					return new Type(this, subSet);
-				})
-				.filter(Boolean);
-		}
+				return new Type(this, subSet);
+			})
+			.filter(Boolean);
 	}
 
 	allowedSubFilterSets = [];
 	joinLabel = '';
 
-	get sets() {
-		return this.data.sets;
+	get filterSets() {
+		return this.data['filter_sets'];
+	}
+
+	set filterSets(sets) {
+		this.setData({
+			filter_sets: sets,
+		});
 	}
 
 	isEmpty() {
-		return !this.data.sets || this.data.sets.length === 0;
+		return (
+			!this.filterSets ||
+			this.filterSets === 0 ||
+			this.filterSets.every(s => s.isEmpty())
+		);
 	}
 
 	canAdd() {
@@ -126,26 +134,26 @@ export class FilterSetGroup extends FilterSet {
 		filterSet = filterSet ?? this.getDefaultSubFilterSet();
 
 		if (filterSet) {
-			this.setData({
-				sets: [...this.sets, filterSet],
-			});
+			filterSet.parent = this;
+
+			this.filterSets = [...this.filterSets, filterSet];
 		}
 	}
 
 	replaceFilterSet(target, replacement) {
-		this.setData({
-			sets: this.sets.map(s => (s === target ? replacement : s)),
-		});
+		replacement.parent = this;
+
+		this.filterSets = this.filterSets.map(s =>
+			s === target ? replacement : s
+		);
 	}
 
 	canRemove = false;
 
 	removeFilterSet(target) {
-		this.setData({
-			sets: this.sets.filter(s => s !== target),
-		});
+		this.filterSets = this.filterSets.filter(s => s !== target);
 
-		if (this.sets.length === 0 && this.parent.removeFilterSet) {
+		if (this.filterSets.length === 0 && this.parent.removeFilterSet) {
 			this.parent.removeFilterSet(this);
 		}
 	}
@@ -153,11 +161,11 @@ export class FilterSetGroup extends FilterSet {
 	toJSON() {
 		const payload = super.toJSON();
 
-		payload.sets = (payload.sets ?? [])
+		payload['filter_sets'] = (payload['filter_sets'] ?? [])
 			.map(s => s?.toJSON())
 			.filter(Boolean);
 
-		if (payload.sets.length === 0) {
+		if (payload['filter_sets'].length === 0) {
 			return null;
 		}
 
