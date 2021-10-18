@@ -56,8 +56,12 @@ export class SegmentStore extends StateStore {
 				payload.title = this.title;
 			}
 
-			if (this.filterSet !== segment.editedFilterSet) {
+			if (this.filterSet !== segment.filterSet) {
 				payload.filter_set = this.filterSet;
+			}
+
+			if (Object.keys(payload).length === 0) {
+				return;
 			}
 
 			await segment.save(payload);

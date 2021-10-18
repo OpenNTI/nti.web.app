@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { Button } from '@nti/web-core';
