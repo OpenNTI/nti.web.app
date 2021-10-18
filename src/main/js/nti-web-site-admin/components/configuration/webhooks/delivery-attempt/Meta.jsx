@@ -11,7 +11,7 @@ const Container = styled.div`
 	padding: var(--padding-sm, 0.5em);
 `;
 
-export function DeliveryAttemptListItem({ item }) {
+export function DeliveryAttemptMeta({ item }) {
 	return (
 		<Container>
 			<LabeledValue label="Created">

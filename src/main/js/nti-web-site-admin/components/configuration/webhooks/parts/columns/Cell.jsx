@@ -1,4 +1,4 @@
-import { Text } from '@nti/web-core';
+import { Placeholder, Text } from '@nti/web-core';
 
 export function Cell(props) {
 	return (
@@ -22,3 +22,13 @@ export function Cell(props) {
 		/>
 	);
 }
+
+Cell.Placeholder = props => (
+	<Placeholder.Text
+		{...props}
+		css={css`
+			max-height: 12px;
+			margin: var(--padding-sm, 0.5em) 0;
+		`}
+	/>
+);

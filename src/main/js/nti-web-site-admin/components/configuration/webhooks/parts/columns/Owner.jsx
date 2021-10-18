@@ -11,3 +11,11 @@ export function OwnerColumn({ item }) {
 		</Cell>
 	);
 }
+
+OwnerColumn.Placeholder = () => (
+	<Cell.Placeholder
+		css={css`
+			max-width: 7em;
+		`}
+	/>
+);

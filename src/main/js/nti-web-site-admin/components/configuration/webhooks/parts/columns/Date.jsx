@@ -10,3 +10,11 @@ export function DateColumn({ item }) {
 		</Cell>
 	);
 }
+
+DateColumn.Placeholder = () => (
+	<Cell.Placeholder
+		css={css`
+			max-width: 10em;
+		`}
+	/>
+);

@@ -26,7 +26,7 @@ const Container = styled.div`
  * @param {PersistentSubscription} props.item
  * @returns {JSX.Element}
  */
-export function Item({ item }) {
+export function Meta({ item }) {
 	return (
 		<>
 			<Text as="h1">{t('detail')}</Text>

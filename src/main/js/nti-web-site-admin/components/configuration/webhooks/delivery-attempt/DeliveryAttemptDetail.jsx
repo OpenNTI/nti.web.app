@@ -7,7 +7,7 @@ import { Labeled } from '../parts/Labeled';
 import { ErrorBoundary } from '../ErrorBoundary';
 import t from '../strings';
 
-import { DeliveryAttemptListItem } from './DeliveryAttemptListItem';
+import { DeliveryAttemptMeta } from './Meta';
 
 export function DeliveryAttemptDetail({ id }) {
 	const attempt = useObject(decodeFromURI(id));
@@ -15,7 +15,7 @@ export function DeliveryAttemptDetail({ id }) {
 	return (
 		<>
 			<Text as="h1">{t('attempt')}</Text>
-			<DeliveryAttemptListItem item={attempt} />
+			<DeliveryAttemptMeta item={attempt} />
 			<Data item={attempt} link="delivery_request" title="Request" />
 			<Data item={attempt} link="delivery_response" title="Response" />
 		</>
