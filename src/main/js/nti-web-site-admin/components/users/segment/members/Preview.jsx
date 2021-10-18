@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ErrorMessage, Box } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 

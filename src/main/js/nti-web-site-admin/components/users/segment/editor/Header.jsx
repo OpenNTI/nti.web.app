@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { scoped } from '@nti/lib-locale';
 import { Input } from '@nti/web-commons';
 import { Button } from '@nti/web-core';

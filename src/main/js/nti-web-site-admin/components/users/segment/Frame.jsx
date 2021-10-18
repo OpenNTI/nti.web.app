@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { scoped } from '@nti/lib-locale';
 import { DataContext } from '@nti/web-core/data';
 import { Icons, ErrorMessage } from '@nti/web-core';

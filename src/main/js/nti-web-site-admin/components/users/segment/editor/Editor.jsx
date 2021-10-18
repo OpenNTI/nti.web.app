@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Card } from '@nti/web-core';
 
 import { MembersPreview } from '../members/Preview';
