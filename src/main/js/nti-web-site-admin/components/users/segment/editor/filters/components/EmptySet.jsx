@@ -21,8 +21,8 @@ const Container = styled.div`
 	justify-content: center;
 `;
 
-export function EmptyFilter({ filter }) {
-	const onClick = useCallback(() => filter.addDefault(), [filter]);
+export function EmptyFilter({ filter, setFilter }) {
+	const onClick = useCallback(() => setFilter(filter.getDefault()), [filter]);
 
 	return (
 		<Container>

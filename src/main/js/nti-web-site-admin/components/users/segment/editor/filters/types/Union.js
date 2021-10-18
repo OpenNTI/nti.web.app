@@ -1,12 +1,16 @@
 import { scoped } from '@nti/lib-locale';
 
-import { FilterSetGroup, FilterSetRegistry } from './common';
+import {
+	EmptyFilterSetRule,
+	FilterSetGroup,
+	FilterSetRegistry,
+} from './common';
 import { IsDeactivatedFilterSet } from './IsDeactivated';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.editor.filters.types.Union',
 	{
-		or: 'Or',
+		or: 'OR',
 	}
 );
 
@@ -15,8 +19,20 @@ export const UnionType = 'filterset.union';
 export class UnionFilterSet extends FilterSetGroup {
 	type = UnionType;
 
-	allowedSubSets = [IsDeactivatedFilterSet];
+	constructor(...args) {
+		super(...args);
+
+		if (!this.data.sets || this.data.sets.length === 0) {
+			this.data.sets = [new EmptyFilterSetRule(this)];
+		}
+	}
+
+	allowedSubFilterSets = [IsDeactivatedFilterSet];
 	joinLabel = t('or');
+
+	getDefaultSubFilterSet() {
+		return new EmptyFilterSetRule(this);
+	}
 
 	canRemove = true;
 }

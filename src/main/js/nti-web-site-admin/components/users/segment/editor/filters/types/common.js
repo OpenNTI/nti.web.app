@@ -22,6 +22,10 @@ export class FilterSet extends EventEmitter {
 		return 0;
 	}
 
+	isEmpty() {
+		return false;
+	}
+
 	setData(data) {
 		this.data = { ...(this.data ?? {}), ...data };
 		this.onChange();
@@ -38,7 +42,7 @@ export class FilterSet extends EventEmitter {
 		return () => this.removeListener('change', fn);
 	}
 
-	getFilterSet() {
+	toJSON() {
 		if (!this.type) {
 			throw new Error('Cannot get payload for filterset without a type.');
 		}
@@ -48,7 +52,30 @@ export class FilterSet extends EventEmitter {
 			MimeType: this.type,
 		};
 	}
+
+	getErrors() {
+		return [];
+	}
 }
+
+export class FilterSetRule extends FilterSet {
+	static getRules() {
+		return this.Rules;
+	}
+
+	getActiveRule() {}
+}
+
+const EmptyType = 'filterset.emptyrule';
+export class EmptyFilterSetRule extends FilterSetRule {
+	type = EmptyType;
+
+	toJSON() {
+		return null;
+	}
+}
+
+FilterSetRegistry.register(EmptyType, EmptyFilterSetRule);
 
 export class FilterSetGroup extends FilterSet {
 	constructor(...args) {
@@ -76,18 +103,63 @@ export class FilterSetGroup extends FilterSet {
 		}
 	}
 
+	allowedSubFilterSets = [];
+	joinLabel = '';
+
 	get sets() {
 		return this.data.sets;
 	}
 
-	getFilterSet(allowEmpty) {
-		if (this.sets.length === 0 && !allowEmpty) {
+	isEmpty() {
+		return !this.data.sets || this.data.sets.length === 0;
+	}
+
+	canAdd() {
+		return true;
+	}
+
+	getDefaultSubFilterSet() {
+		return null;
+	}
+
+	appendFilterSet(filterSet) {
+		filterSet = filterSet ?? this.getDefaultSubFilterSet();
+
+		if (filterSet) {
+			this.setData({
+				sets: [...this.sets, filterSet],
+			});
+		}
+	}
+
+	replaceFilterSet(target, replacement) {
+		this.setData({
+			sets: this.sets.map(s => (s === target ? replacement : s)),
+		});
+	}
+
+	canRemove = false;
+
+	removeFilterSet(target) {
+		this.setData({
+			sets: this.sets.filter(s => s !== target),
+		});
+
+		if (this.sets.length === 0 && this.parent.removeFilterSet) {
+			this.parent.removeFilterSet(this);
+		}
+	}
+
+	toJSON() {
+		const payload = super.toJSON();
+
+		payload.sets = (payload.sets ?? [])
+			.map(s => s?.toJSON())
+			.filter(Boolean);
+
+		if (payload.sets.length === 0) {
 			return null;
 		}
-
-		const payload = super.getFilterSet();
-
-		payload.sets = payload.sets.map(s => s.getFilterSet(allowEmpty));
 
 		return payload;
 	}
