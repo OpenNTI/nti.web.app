@@ -7,10 +7,26 @@ import { FilterSetGroup } from '../types/common';
 import { ComponentRegistry } from './Registry';
 
 const Join = styled(Typography).attrs({ type: 'body' })`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
 	font-weight: 600;
+
+	& > *:last-child {
+		display: none;
+		height: 1px;
+		background-color: var(--border-grey-light);
+		flex: 1 1 auto;
+		margin-left: 0.5rem;
+	}
 
 	&.depth-1 {
 		padding: 0 0 0 1.125rem;
+
+		& > *:last-child {
+			display: block;
+		}
 	}
 `;
 
@@ -33,7 +49,7 @@ const SubItem = styled.div`
 	grid-column: 1 / 2;
 
 	&.depth-1 {
-		padding: 0.625rem 0.25rem;
+		padding: 0.625rem 0 0.625rem 0.25rem;
 	}
 
 	&.depth-2 {
@@ -142,6 +158,7 @@ export function FilterGroup({ filter }) {
 						{index < length - 1 && (
 							<Join depth={depth}>
 								<span>{filter.joinLabel}</span>
+								<div />
 							</Join>
 						)}
 					</li>
