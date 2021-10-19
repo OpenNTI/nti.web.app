@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Router, Route } from '@nti/web-routing';
 import { decodeFromURI } from '@nti/lib-ntiids';
+import { ErrorBoundary } from '@nti/web-core';
 import { EmptyState } from '@nti/web-commons';
 
 import { Store } from '../Store';
 import { DeliveryAttemptHistory } from '../delivery-attempt/DeliveryAttemptHistory';
 import { DeliveryAttemptDetail } from '../delivery-attempt/DeliveryAttemptDetail';
-import { ErrorBoundary } from '../ErrorBoundary';
 
 import { Meta } from './Meta';
 

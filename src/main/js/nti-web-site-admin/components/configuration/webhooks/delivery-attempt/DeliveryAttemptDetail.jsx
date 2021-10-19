@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
 
-import { useObject, useLink, Text } from '@nti/web-core';
+import { useObject, useLink, Text, ErrorBoundary } from '@nti/web-core';
 import { decodeFromURI } from '@nti/lib-ntiids';
 
 import { Labeled } from '../parts/Labeled';
-import { ErrorBoundary } from '../ErrorBoundary';
 import t from '../strings';
 
 import { DeliveryAttemptMeta } from './Meta';
