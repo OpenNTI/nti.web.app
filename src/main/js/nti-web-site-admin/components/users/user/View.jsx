@@ -6,8 +6,8 @@ import UserBookEnrollment from '../../user-book-enrollment';
 
 import Overview from './overview';
 import Reports from './reports';
-import Courses from './courses';
-import CoursesAdministered from './courses-administered';
+import Courses from './courses/View';
+import CoursesAdministered from './courses-administered/View';
 import Books from './books';
 import Transcript from './transcript';
 import Frame from './Frame';
