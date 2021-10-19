@@ -1,6 +1,7 @@
 import { FilterSetRegistry } from './common';
 import { EmptyFilterSet } from './Empty';
 
+import './CourceMembership';
 import './Intersection';
 import './IsDeactivated';
 import './Union';
