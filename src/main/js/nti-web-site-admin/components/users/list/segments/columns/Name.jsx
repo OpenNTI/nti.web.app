@@ -14,11 +14,12 @@ const t = scoped(
 );
 
 const Container = styled(VerticallyCentered)`
-	padding: 21px 0.25rem;
+	padding: 21px 0.25rem 21px 30px;
 `;
 
 Name.CSSClassName = css`
 	width: 350px;
+	padding-left: 30px;
 `;
 
 Name.Name = t('title');
