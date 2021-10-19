@@ -7,6 +7,7 @@ import UserBookEnrollment from '../../user-book-enrollment';
 import Overview from './overview';
 import Reports from './reports';
 import Courses from './courses';
+import CoursesAdministered from './courses-administered';
 import Books from './books';
 import Transcript from './transcript';
 import Frame from './Frame';
@@ -56,6 +57,11 @@ export default Router.for([
 				Route({
 					path: '/courses',
 					component: Courses,
+					name: 'site-admin.users.user-courses',
+				}),
+				Route({
+					path: '/administered-courses',
+					component: CoursesAdministered,
 					name: 'site-admin.users.user-courses',
 				}),
 				Route({

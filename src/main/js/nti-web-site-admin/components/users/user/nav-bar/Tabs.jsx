@@ -35,6 +35,9 @@ export default function SiteAdminUserTabs({ user }) {
 			<Tab to="./" exact localeKey="overview" />
 			{hasBooks && <Tab to="./books" localeKey="books" />}
 			{hasCourses && <Tab to="./courses" localeKey="courses" />}
+			{user.hasLink('CoursesExplicitlyAdministered') && (
+				<Tab to="./administered-courses" localeKey="administered" />
+			)}
 			{user.hasLink('transcript') && (
 				<Tab to="./transcript" localeKey="transcript" />
 			)}
