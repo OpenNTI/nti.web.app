@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { scoped } from '@nti/lib-locale';
 import { getService } from '@nti/web-client';
@@ -55,7 +55,8 @@ function CourseInfo({ value }) {
 	return <span>{catalog.title}</span>;
 }
 
-export function CourseInput({ value, onChange }) {
+export function CourseInput({ value, onChange, autoFocus }) {
+	const buttonRef = useRef();
 	const [open, setOpen] = useState();
 
 	const doOpen = useCallback(() => setOpen(true), [setOpen]);
@@ -68,9 +69,14 @@ export function CourseInput({ value, onChange }) {
 		[onChange, doClose]
 	);
 
+	useEffect(() => {
+		buttonRef.current?.focus?.();
+	}, []);
+
 	return (
 		<>
 			<Button
+				ref={buttonRef}
 				variant="plain"
 				{...Input.getInputStyleProps()}
 				onClick={doOpen}

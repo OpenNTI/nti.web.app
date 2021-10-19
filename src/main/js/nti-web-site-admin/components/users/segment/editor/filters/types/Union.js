@@ -5,8 +5,9 @@ import {
 	FilterSetGroup,
 	FilterSetRegistry,
 } from './common';
+import { CourseMembershipFilterSet } from './CourseMembership';
 import { IsDeactivatedFilterSet } from './IsDeactivated';
-import { CourseMembershipFilterSet } from './CourceMembership';
+import { ProfilePropertyFilterSet } from './ProfileProperty';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.editor.filters.types.Union',
@@ -31,7 +32,11 @@ export class UnionFilterSet extends FilterSetGroup {
 		}
 	}
 
-	allowedSubFilterSets = [IsDeactivatedFilterSet, CourseMembershipFilterSet];
+	allowedSubFilterSets = [
+		IsDeactivatedFilterSet,
+		CourseMembershipFilterSet,
+		ProfilePropertyFilterSet,
+	];
 	joinLabel = t('or');
 
 	getDefaultSubFilterSet() {

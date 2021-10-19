@@ -33,6 +33,8 @@ const OptionOrder = [
 	'isdeactivated',
 	'isenrolled',
 	'isnotenrolled',
+	'role',
+	'location',
 ];
 
 export function FilterRule({ filter, parent }) {
@@ -89,9 +91,14 @@ export function FilterRule({ filter, parent }) {
 				value={selected}
 				placeholder={t('placeholder')}
 				onChange={onRuleChange}
+				autoFocus={!selected}
 			/>
 			{InputCmp && (
-				<InputCmp value={inputValue} onChange={onInputChange} />
+				<InputCmp
+					autoFocus
+					value={inputValue}
+					onChange={onInputChange}
+				/>
 			)}
 		</Container>
 	);
