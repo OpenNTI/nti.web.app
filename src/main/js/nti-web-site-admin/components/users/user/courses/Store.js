@@ -1,33 +1,33 @@
-import { Stores } from '@nti/lib-store';
+import { StateStore } from '@nti/web-core/data';
 
-export default class UserCourseStore extends Stores.SimpleStore {
-	constructor() {
-		super();
-		this.set({ items: [], loading: false, error: null });
-	}
-
-	async load(user) {
-		this.setImmediate({ items: [], loading: true });
-
+export class Store extends StateStore.Behaviors.BatchPaging.Discrete(
+	StateStore
+) {
+	async load({ store }) {
+		const { user, ...params } = store?.params || {};
 		try {
 			const batch = await user.fetchLink({
 				rel: 'UserEnrollments',
 				mode: 'batch',
 				throwMissing: false,
+				params: params,
 			});
 
-			this.set('items', batch?.Items ?? []);
+			return {
+				batch,
+			};
 		} catch (e) {
+			const results = { batch: void 0, error: void 0 };
+			// we shouldn't show error info for this, just means no enrolled courses and the view will reflect that
 			if (e.code !== 'UserEnrollmentsNotFound') {
-				// we shouldn't show error info for this, just means no enrolled courses and the view will reflect that
-				this.set('error', e);
+				results.error = e;
 			}
-		} finally {
-			this.set('loading', false);
+
+			return results;
 		}
 	}
 
-	unload() {
-		this.set('items', []);
+	onEnrollmentChange() {
+		this.reload();
 	}
 }

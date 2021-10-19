@@ -213,6 +213,13 @@ exports[`Site admin user (administered) course list test (5 courses) Basic rende
           </div>
         </li>
       </ul>
+      <div
+        class="mv-xl pager buttons"
+      >
+        <ul
+          role="menubar"
+        />
+      </div>
     </div>
   </div>
 </DocumentFragment>
