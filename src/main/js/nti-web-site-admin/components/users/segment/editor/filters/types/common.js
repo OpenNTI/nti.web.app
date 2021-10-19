@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-import { Registry } from '@nti/lib-commons';
+import { Registry, Array as ArrayUtils } from '@nti/lib-commons';
 
 export class FilterSetRegistry extends Registry.Map {}
 
@@ -40,6 +40,12 @@ export class FilterSet extends EventEmitter {
 		this.addListener('change', fn);
 
 		return () => this.removeListener('change', fn);
+	}
+
+	clone() {
+		const Type = this.constructor;
+
+		return new Type(this.parent, this.data);
 	}
 
 	toJSON() {
@@ -149,13 +155,35 @@ export class FilterSetGroup extends FilterSet {
 	}
 
 	canRemove = false;
-
 	removeFilterSet(target) {
 		this.filterSets = this.filterSets.filter(s => s !== target);
 
 		if (this.filterSets.length === 0 && this.parent?.removeFilterSet) {
 			this.parent.removeFilterSet(this);
 		}
+	}
+
+	canDuplicate = false;
+	duplicateFilterSet(target) {
+		const { filterSets } = this;
+		const index = filterSets.indexOf(target) + 1;
+
+		this.filterSets = ArrayUtils.insert(filterSets, target.clone(), index);
+	}
+
+	canReorder = false;
+	moveUpFilterSet(target) {
+		const { filterSets } = this;
+		const index = filterSets.indexOf(target);
+
+		this.filterSets = ArrayUtils.move(filterSets, index, index - 1);
+	}
+
+	moveDownFilterSet(target) {
+		const { filterSets } = this;
+		const index = filterSets.indexOf(target);
+
+		this.filterSets = ArrayUtils.move(filterSets, index, index + 1);
 	}
 
 	toJSON() {

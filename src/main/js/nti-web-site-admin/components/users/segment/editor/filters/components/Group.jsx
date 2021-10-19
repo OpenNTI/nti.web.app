@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Typography, Card, Button, Icons } from '@nti/web-core';
 
@@ -47,6 +47,10 @@ const SubItemContainer = styled.div`
 
 const SubItem = styled.div`
 	grid-column: 1 / 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
 
 	&.depth-1 {
 		padding: 0.625rem 0 0.625rem 0.25rem;
@@ -80,6 +84,8 @@ const ControlList = styled.div`
 `;
 
 const List = styled('ul')`
+	display: block;
+	width: 100%;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -90,10 +96,39 @@ const DepthToItemProps = {
 };
 
 const DepthToControls = {
-	1: ({ onRemove }) => {
+	1: ({ onRemove, onDuplicate, onMoveUp, onMoveDown }) => {
 		return (
 			<ControlList as={Card} rounded>
-				<Button transparent secondary onClick={onRemove}>
+				<Button
+					transparent
+					secondary
+					onClick={onMoveUp}
+					disabled={!onMoveUp}
+				>
+					<Icons.Arrow.Up fill />
+				</Button>
+				<Button
+					transparent
+					secondary
+					onClick={onMoveDown}
+					disabled={!onMoveDown}
+				>
+					<Icons.Arrow.Down fill />
+				</Button>
+				<Button
+					transparent
+					secondary
+					onClick={onDuplicate}
+					disabled={!onDuplicate}
+				>
+					<Icons.Duplicate />
+				</Button>
+				<Button
+					transparent
+					secondary
+					onClick={onRemove}
+					disabled={!onRemove}
+				>
 					<Icons.TrashCan fill />
 				</Button>
 			</ControlList>
@@ -110,13 +145,36 @@ const DepthToControls = {
 	},
 };
 
-function FilterGroupItem({ filter, parent, onRemove }) {
+function FilterGroupItem({
+	filter,
+	parent,
+	onRemove,
+	onDuplicate,
+	onMoveUp,
+	onMoveDown,
+}) {
 	const { depth } = filter;
 
 	const controls = {
-		onRemove: useCallback(() => {
-			onRemove(filter);
-		}, [onRemove, filter]),
+		onRemove: useMemo(
+			() => onRemove && (() => onRemove(filter)),
+			[onRemove, filter]
+		),
+
+		onDuplicate: useMemo(
+			() => onDuplicate && (() => onDuplicate(filter)),
+			[onDuplicate, filter]
+		),
+
+		onMoveUp: useMemo(
+			() => onMoveUp && (() => onMoveUp(filter)),
+			[onMoveUp, filter]
+		),
+
+		onMoveDown: useMemo(
+			() => onMoveDown && (() => onMoveDown(filter)),
+			[onMoveDown, filter]
+		),
 	};
 
 	const depthProps = DepthToItemProps[depth] ?? {};
@@ -145,24 +203,49 @@ export function FilterGroup({ filter }) {
 		[filter]
 	);
 
+	const duplicate = useCallback(
+		subFilter => filter.duplicateFilterSet(subFilter),
+		[filter]
+	);
+
+	const moveUp = useCallback(
+		subFilter => filter.moveUpFilterSet(subFilter),
+		[filter]
+	);
+
+	const moveDown = useCallback(
+		subFilter => filter.moveDownFilterSet(subFilter),
+		[filter]
+	);
+
 	return (
 		<>
 			<List depth={depth}>
-				{filterSets.map((s, index) => (
-					<li key={index}>
-						<FilterGroupItem
-							filter={s}
-							parent={filter}
-							onRemove={filter.canRemove && remove}
-						/>
-						{index < length - 1 && (
-							<Join depth={depth}>
-								<span>{filter.joinLabel}</span>
-								<div />
-							</Join>
-						)}
-					</li>
-				))}
+				{filterSets.map((s, index) => {
+					const first = index === 0;
+					const last = index === length - 1;
+
+					return (
+						<li key={index}>
+							<FilterGroupItem
+								filter={s}
+								parent={filter}
+								onRemove={filter.canRemove && remove}
+								onDuplicate={filter.canDuplicate && duplicate}
+								onMoveUp={filter.canReorder && !first && moveUp}
+								onMoveDown={
+									filter.canReorder && !last && moveDown
+								}
+							/>
+							{index < length - 1 && (
+								<Join depth={depth}>
+									<span>{filter.joinLabel}</span>
+									<div />
+								</Join>
+							)}
+						</li>
+					);
+				})}
 			</List>
 			{filter.canAdd && (
 				<Button onClick={addNew} transparent rounded>

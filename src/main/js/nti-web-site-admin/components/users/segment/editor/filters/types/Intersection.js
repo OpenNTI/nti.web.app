@@ -24,6 +24,8 @@ export class IntersectionFilterSet extends FilterSetGroup {
 	}
 
 	canRemove = true;
+	canDuplicate = true;
+	canReorder = true;
 }
 
 FilterSetRegistry.register(IntersectionType, IntersectionFilterSet);
