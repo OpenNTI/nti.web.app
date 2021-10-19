@@ -1,13 +1,17 @@
+import { useCallback } from 'react';
+
 import { scoped } from '@nti/lib-locale';
 import { DataContext } from '@nti/web-core/data';
 import { Icons, ErrorMessage } from '@nti/web-core';
-import { LinkTo } from '@nti/web-routing';
+import { Router, LinkTo } from '@nti/web-routing';
 
 import { SegmentStore } from './Store';
 
 const t = scoped('nti-site-admin.components.users.segment.Frame', {
 	back: 'Back to Segments',
 });
+
+const BackRouteName = 'site-admins.user.user-segments';
 
 const Header = styled.div`
 	padding: 1rem 0;
@@ -27,12 +31,19 @@ const Header = styled.div`
 `;
 
 export function SegmentFrame({ children, segmentID }) {
-	const store = SegmentStore.useStore({ segmentID });
+	const router = Router.useRouter();
+
+	const afterDestroy = useCallback(
+		() => router.routeTo.name(BackRouteName),
+		[router]
+	);
+
+	const store = SegmentStore.useStore({ segmentID, afterDestroy });
 
 	return (
 		<DataContext store={store} fallback={<div />} error={<ErrorMessage />}>
 			<Header>
-				<LinkTo.Name name="site-admins.user.user-segments">
+				<LinkTo.Name name={BackRouteName}>
 					<Icons.Chevron.Left />
 					<span>{t('back')}</span>
 				</LinkTo.Name>
