@@ -15,7 +15,7 @@ export default class UserStore extends Stores.SimpleStore {
 	}
 
 	async loadUser(user) {
-		if (this.user && user === this.user.getID()) {
+		if (user === this.user?.getID?.()) {
 			return;
 		}
 
@@ -25,24 +25,14 @@ export default class UserStore extends Stores.SimpleStore {
 
 		try {
 			const resolved = await User.resolve({ entity: user });
+			const bookRecords = await resolved.fetchLink({
+				throwMissing: false,
+				mode: 'raw',
+				rel: 'UserBundleRecords',
+			});
 
-			let hasBooks = false;
+			const hasBooks = bookRecords?.Items?.length > 0;
 			let hasCourses = true; // inexpensive way to know this?  for now, always true
-
-			if (resolved.hasLink('UserBundleRecords')) {
-				const bookRecords = await resolved.fetchLink({
-					mode: 'raw',
-					rel: 'UserBundleRecords',
-				});
-
-				if (
-					bookRecords &&
-					bookRecords.Items &&
-					bookRecords.Items.length > 0
-				) {
-					hasBooks = true;
-				}
-			}
 
 			this.set('user', resolved);
 			this.set('hasBooks', hasBooks);

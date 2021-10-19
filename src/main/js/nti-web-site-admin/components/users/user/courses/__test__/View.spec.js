@@ -1,13 +1,8 @@
-import renderer, { act } from 'react-test-renderer';
-
-import * as TestUtils from '@nti/web-client/test-utils';
-import { flushPromises } from '@nti/lib-commons/test-utils';
+import { render, waitFor } from '@testing-library/react';
 
 import View from '../View';
 
-const { tearDownTestClient, setupTestClient } = TestUtils;
-
-const getMockService = numberOfCourses => {
+const getMockUser = numberOfCourses => {
 	let Items = [];
 
 	for (let i = 0; i < numberOfCourses; i++) {
@@ -25,7 +20,8 @@ const getMockService = numberOfCourses => {
 	}
 
 	return {
-		getBatch: () => {
+		hasLink: () => true,
+		fetchLink: async () => {
 			return {
 				Items,
 			};
@@ -33,64 +29,36 @@ const getMockService = numberOfCourses => {
 	};
 };
 
-const onBefore = numberOfCourses => {
-	jest.useFakeTimers();
-	setupTestClient(getMockService(numberOfCourses));
-};
-
-const onAfter = () => {
-	tearDownTestClient();
-};
-
 /* eslint-env jest */
 describe('Site admin user course list test (5 courses)', () => {
-	beforeEach(() => onBefore(5));
-	afterEach(onAfter);
-
 	test('Basic render test', async () => {
-		const user = {
-			getLink: () => 'mockLink',
-			hasLink: () => true,
-		};
+		const user = getMockUser(5);
+		const cmp = render(<View user={user} />);
 
-		let cmp;
-		act(() => {
-			cmp = renderer.create(<View user={user} />);
+		await waitFor(() => {
+			expect(
+				cmp.container.querySelectorAll(
+					'.nti-course-enrollment-list-item'
+				).length
+			).toBe(5);
 		});
 
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
-
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-		cmp.unmount();
+		expect(cmp.asFragment()).toMatchSnapshot();
 	});
 });
 
 describe('Site admin user course list test (no courses)', () => {
-	beforeEach(() => onBefore(0));
-	afterEach(onAfter);
-
 	test('Basic render test', async () => {
-		const user = {
-			getLink: () => 'mockLink',
-			hasLink: () => true,
-		};
+		const user = getMockUser(0);
 
-		let cmp;
-		act(() => {
-			cmp = renderer.create(<View user={user} />);
+		const cmp = render(<View user={user} />);
+
+		await waitFor(() => {
+			expect(
+				cmp.container.querySelectorAll('.empty-state-component').length
+			).toBe(1);
 		});
 
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
-
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-		cmp.unmount();
+		expect(cmp.asFragment()).toMatchSnapshot();
 	});
 });

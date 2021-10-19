@@ -1,59 +1,33 @@
-import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 
-export default class UserTranscriptStore extends Stores.SimpleStore {
+export default class UserCourseStore extends Stores.SimpleStore {
 	constructor() {
 		super();
-
-		this.set('items', []);
-		this.set('loading', false);
-		this.set('error', null);
+		this.set({ items: [], loading: false, error: null });
 	}
 
-	get error() {
-		return this._error;
-	}
-
-	get items() {
-		return this._items;
-	}
-
-	get loading() {
-		return this._loading;
-	}
-
-	async loadTranscript(user) {
-		this.set('items', []);
-		this.set('loading', true);
-		this.emitChange('loading', 'items');
+	async load(user) {
+		this.setImmediate({ items: [], loading: true });
 
 		try {
-			const link = user.getLink('UserEnrollments');
+			const batch = await user.fetchLink({
+				rel: 'UserEnrollments',
+				mode: 'batch',
+				throwMissing: false,
+			});
 
-			if (link) {
-				const service = await getService();
-				const batch = await service.getBatch(link);
-
-				this.set('items', batch.Items);
-			} else {
-				this.set('items', []);
-			}
-
-			this.emitChange('items');
+			this.set('items', batch?.Items ?? []);
 		} catch (e) {
 			if (e.code !== 'UserEnrollmentsNotFound') {
 				// we shouldn't show error info for this, just means no enrolled courses and the view will reflect that
 				this.set('error', e);
-				this.emitChange('error');
 			}
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
-	unloadTranscript() {
+	unload() {
 		this.set('items', []);
-		this.emitChange('items');
 	}
 }

@@ -21,8 +21,6 @@ class SiteAdminUserView extends React.Component {
 		userID: PropTypes.string,
 
 		user: PropTypes.object,
-		hasBooks: PropTypes.bool,
-		hasCourses: PropTypes.bool,
 		loading: PropTypes.bool,
 		store: PropTypes.object,
 
@@ -67,7 +65,7 @@ class SiteAdminUserView extends React.Component {
 	}
 
 	renderUser() {
-		const { user, hasBooks, hasCourses, children } = this.props;
+		const { user, children } = this.props;
 
 		if (!user) {
 			return null;
@@ -77,11 +75,7 @@ class SiteAdminUserView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar
-						user={user}
-						hasBooks={hasBooks}
-						hasCourses={hasCourses}
-					/>
+					<NavBar user={user} />
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, item => {
@@ -108,7 +102,5 @@ export default decorate(SiteAdminUserView, [
 	Store.connect({
 		user: 'user',
 		loading: 'loading',
-		hasBooks: 'hasBooks',
-		hasCourses: 'hasCourses',
 	}),
 ]);
