@@ -92,6 +92,7 @@ export class SegmentStore extends StateStore {
 	});
 
 	discard = StateStore.Action(async action => {
+		this.save.clear();
 		action.store.update({
 			editedFilterSet: null,
 			editedTitle: null,
