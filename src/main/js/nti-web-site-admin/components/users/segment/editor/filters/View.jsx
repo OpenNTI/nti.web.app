@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
-import { useForceUpdate } from '@nti/web-core';
+import { useForceUpdate, ErrorMessage } from '@nti/web-core';
 
 import { SegmentStore } from '../../Store';
 
@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 export function SegmentFilters() {
-	const { filterSet, setFilterSet } = SegmentStore.useProperties();
+	const { filterSet, setFilterSet, save } = SegmentStore.useProperties();
 
 	const seen = useRef();
 
@@ -58,6 +58,7 @@ export function SegmentFilters() {
 
 	return (
 		<Container>
+			<ErrorMessage error={save.error} />
 			<Cmp filter={filter} setFilter={setFilter} />
 		</Container>
 	);
