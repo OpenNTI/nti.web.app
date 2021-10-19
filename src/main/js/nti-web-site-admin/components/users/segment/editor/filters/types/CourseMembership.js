@@ -24,14 +24,15 @@ export class CourseMembershipFilterSet extends FilterSetRule {
 			input: 'course',
 			getValue: filterSet => filterSet.course,
 			setValue: (filterSet, value) => filterSet.setCourse(value),
+
 			label: t('enrolled'),
 			FilterSet: CourseMembershipFilterSet,
 		},
 		isnotenrolled: {
 			input: 'course',
-			getValue: filterSet => ({ course: filterSet.course }),
+			getValue: filterSet => filterSet.course,
 			setValue: (filterSet, value) => filterSet.setCourse(value),
-			getInput: filterSet => ({ course: filterSet.course }),
+
 			label: t('notEnrolled'),
 			FilterSet: CourseMembershipFilterSet,
 		},
