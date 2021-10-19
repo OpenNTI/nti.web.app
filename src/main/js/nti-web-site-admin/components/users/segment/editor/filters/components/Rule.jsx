@@ -6,6 +6,7 @@ import { scoped } from '@nti/lib-locale';
 import { FilterSetRule } from '../types/common';
 
 import { ComponentRegistry } from './Registry';
+import { getInput } from './inputs/Inputs';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.editor.filters.components.Rule',
@@ -14,7 +15,25 @@ const t = scoped(
 	}
 );
 
-const OptionOrder = ['isactive', 'isdeactivated'];
+const Container = styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.625rem;
+
+	& > * {
+		flex: 0 0 auto;
+		min-width: 120px;
+	}
+`;
+
+const OptionOrder = [
+	'isactive',
+	'isdeactivated',
+	'isenrolled',
+	'isnotenrolled',
+];
 
 export function FilterRule({ filter, parent }) {
 	const active = filter?.getActiveRule();
@@ -55,15 +74,26 @@ export function FilterRule({ filter, parent }) {
 		[filter, parent]
 	);
 
+	const InputCmp = getInput(selected?.input);
+
+	const inputValue = selected?.getValue?.(filter);
+	const onInputChange = useCallback(
+		value => selected.setValue(filter, value),
+		[filter, selected]
+	);
+
 	return (
-		<div>
+		<Container>
 			<Input.Select
 				options={options}
 				value={selected}
 				placeholder={t('placeholder')}
 				onChange={onRuleChange}
 			/>
-		</div>
+			{InputCmp && (
+				<InputCmp value={inputValue} onChange={onInputChange} />
+			)}
+		</Container>
 	);
 }
 
