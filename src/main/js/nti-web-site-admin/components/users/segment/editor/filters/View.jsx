@@ -8,7 +8,7 @@ import { getType } from './types/Types';
 import { getCmp } from './components/Components';
 
 const Container = styled.div`
-	padding: 30px;
+	padding: 14px 30px 30px;
 	border-top: 1px solid var(--border-grey-light);
 	min-height: 200px;
 `;

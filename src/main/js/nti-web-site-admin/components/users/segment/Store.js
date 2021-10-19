@@ -9,6 +9,7 @@ export class SegmentStore extends StateStore {
 
 		this.addDependentProperty('title', ['segment', 'editedTitle']);
 		this.addDependentProperty('filterSet', ['segment', 'editedFilterSet']);
+		this.addDependentProperty('hasChange', ['title', 'filterSet']);
 	}
 
 	async load(action) {
@@ -18,6 +19,14 @@ export class SegmentStore extends StateStore {
 		);
 
 		return { segment };
+	}
+
+	get hasChanges() {
+		const segment = this.getProperty('segment');
+
+		return (
+			segment.title !== this.title || segment.filterSet !== this.filterSet
+		);
 	}
 
 	get title() {
@@ -30,6 +39,7 @@ export class SegmentStore extends StateStore {
 
 	setTitle(title) {
 		this.updateState({ editedTitle: title });
+		this.save.clearError();
 	}
 
 	get filterSet() {
@@ -44,6 +54,7 @@ export class SegmentStore extends StateStore {
 
 	setFilterSet(filterSet) {
 		this.updateState({ editedFilterSet: filterSet ?? EmptyFilterSet });
+		this.save.clearError();
 	}
 
 	save = StateStore.Action(async action => {
@@ -68,6 +79,22 @@ export class SegmentStore extends StateStore {
 		action.store.update({
 			editedTitle: null,
 			editedFilterSet: null,
+		});
+	});
+
+	destroy = StateStore.Action(async action => {
+		const { segment } = action.store.state;
+		const { afterDestroy } = action.store.params;
+
+		await segment.delete();
+
+		afterDestroy?.();
+	});
+
+	discard = StateStore.Action(async action => {
+		action.store.update({
+			editedFilterSet: null,
+			editedTitle: null,
 		});
 	});
 }

@@ -1,11 +1,19 @@
+import { useCallback } from 'react';
+
 import { scoped } from '@nti/lib-locale';
-import { Input } from '@nti/web-commons';
-import { Button } from '@nti/web-core';
+import { Input, Prompt } from '@nti/web-commons';
+import { Button, Icons } from '@nti/web-core';
 
 import { SegmentStore } from '../Store';
 
 const t = scoped('nti-web-site-admin.components.users.segment.editor.Header', {
 	save: 'Save',
+	discard: 'Cancel',
+	delete: 'Delete',
+	confirmDelete: {
+		title: 'Are you sure?',
+		message: 'Segment will not be recoverable.',
+	},
 });
 
 const Container = styled.div`
@@ -20,6 +28,7 @@ const Controls = styled.div`
 	display: inline-flex;
 	flex-direction: row;
 	align-items: center;
+	gap: 0.5rem;
 `;
 
 const Title = styled(Input.Text)`
@@ -34,12 +43,36 @@ const Title = styled(Input.Text)`
 `;
 
 export function Header() {
-	const { title, setTitle, save } = SegmentStore.useProperties();
+	const { title, setTitle, save, discard, destroy, hasChanges } =
+		SegmentStore.useProperties();
+
+	const doDestroy = useCallback(async () => {
+		try {
+			await Prompt.areYouSure(
+				t('confirmDelete.message'),
+				t('confirmDelete.title')
+			);
+
+			destroy();
+		} catch (e) {
+			//swallow
+		}
+	}, [destroy]);
 
 	return (
 		<Container>
 			<Title value={title} onChange={setTitle} />
 			<Controls>
+				{hasChanges ? (
+					<Button rounded transparent secondary onClick={discard}>
+						{t('discard')}
+					</Button>
+				) : (
+					<Button rounded destructive inverted onClick={doDestroy}>
+						<Icons.TrashCan fill />
+						<span>{t('delete')}</span>
+					</Button>
+				)}
 				<Button rounded onClick={save} busy={save.running}>
 					{t('save')}
 				</Button>
