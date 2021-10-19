@@ -3,18 +3,21 @@
 exports[`Site admin user course enrollment progress view Basic render test (no course) 1`] = `
 <div
   className="site-admin-card"
+  css="__inline_css_extracted_to_hashed_class_name"
 />
 `;
 
 exports[`Site admin user course enrollment progress view Basic render test (no enrollment) 1`] = `
 <div
   className="site-admin-card"
+  css="__inline_css_extracted_to_hashed_class_name"
 />
 `;
 
 exports[`Site admin user course enrollment progress view Basic render test 1`] = `
 <div
   className="site-admin-card"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="progress-overview"

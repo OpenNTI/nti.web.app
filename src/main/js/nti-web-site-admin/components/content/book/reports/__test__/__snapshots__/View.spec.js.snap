@@ -3,6 +3,7 @@
 exports[`Site admin user book reports test Basic render test 1`] = `
 <div
   className="site-admin-card"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="reports-list-view"

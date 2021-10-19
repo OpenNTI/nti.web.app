@@ -6,6 +6,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
 >
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
       className="site-admin-tabs-container"
@@ -51,6 +52,7 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
   </div>
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
       className="invite"
@@ -105,6 +107,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
 >
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
       className="site-admin-tabs-container"
@@ -150,6 +153,7 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
   </div>
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
       className="site-admin-tabs-container"

@@ -18,6 +18,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
 >
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <ul
       className="unadorned-list"
@@ -148,6 +149,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
 >
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <ul
       className="unadorned-list"

@@ -3,6 +3,7 @@
 exports[`Site admin user info nav bar test Basic render test (has no transcript link) 1`] = `
 <div
   className="site-admin-card site-admin-user-nav-bar"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="site-admin-user-identity"
@@ -88,6 +89,7 @@ exports[`Site admin user info nav bar test Basic render test (has transcript lin
 Array [
   <div
     className="site-admin-card site-admin-user-nav-bar"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
       className="site-admin-user-identity"
@@ -195,6 +197,7 @@ Array [
   </div>,
   <div
     className="site-admin-card"
+    css="__inline_css_extracted_to_hashed_class_name"
   >
     <button
       className="nti-button button primary medium pv-md ph-xl"

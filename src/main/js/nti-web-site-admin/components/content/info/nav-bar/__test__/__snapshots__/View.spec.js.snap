@@ -3,6 +3,7 @@
 exports[`Site admin user course enrollment nav bar test Basic render test (has no roster link) 1`] = `
 <div
   className="site-admin-card site-admin-course-nav-bar"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="site-admin-course-identity"
@@ -74,6 +75,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
 exports[`Site admin user course enrollment nav bar test Basic render test (has roster link) 1`] = `
 <div
   className="site-admin-card site-admin-course-nav-bar"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="site-admin-course-identity"

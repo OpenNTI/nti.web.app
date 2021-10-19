@@ -9,6 +9,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
   >
     <div
       className="site-admin-card site-admin-labeled-value site-admin-date-value"
+      css="__inline_css_extracted_to_hashed_class_name"
     >
       <div
         className="label"
@@ -32,6 +33,7 @@ exports[`Site admin user overview view Basic render test 1`] = `
   >
     <div
       className="site-admin-card site-admin-labeled-value site-admin-date-value"
+      css="__inline_css_extracted_to_hashed_class_name"
     >
       <div
         className="label"

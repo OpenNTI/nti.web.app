@@ -7,6 +7,7 @@ exports[`Site admin user (administered) course list test (5 courses) Basic rende
   >
     <div
       class="site-admin-card"
+      css="__inline_css_extracted_to_hashed_class_name"
     >
       <ul
         class="unadorned-list"

@@ -5,6 +5,7 @@ exports[`Site admin user course enrollment overview progress widget Basic render
 exports[`Site admin user course enrollment overview progress widget Basic render test (no PercentageProgress) 1`] = `
 <div
   className="site-admin-card site-admin-labeled-value user-course-enrollment-progress"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="label"
@@ -71,6 +72,7 @@ exports[`Site admin user course enrollment overview progress widget Basic render
 exports[`Site admin user course enrollment overview progress widget Basic render test (percent = 55) 1`] = `
 <div
   className="site-admin-card site-admin-labeled-value user-course-enrollment-progress"
+  css="__inline_css_extracted_to_hashed_class_name"
 >
   <div
     className="label"

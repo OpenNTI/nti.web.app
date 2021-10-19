@@ -27,6 +27,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
       </div>
       <div
         className="site-admin-card site-admin-user-enrollment-nav-bar"
+        css="__inline_css_extracted_to_hashed_class_name"
       >
         <div
           className="site-admin-user-enrollment-identity"
