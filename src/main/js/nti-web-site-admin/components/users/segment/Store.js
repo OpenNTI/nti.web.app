@@ -49,29 +49,25 @@ export class SegmentStore extends StateStore {
 	save = StateStore.Action(async action => {
 		const { segment } = action.store.state;
 
-		try {
-			const payload = {};
+		const payload = {};
 
-			if (this.title !== segment.title) {
-				payload.title = this.title;
-			}
-
-			if (this.filterSet !== segment.filterSet) {
-				payload.filter_set = this.filterSet;
-			}
-
-			if (Object.keys(payload).length === 0) {
-				return;
-			}
-
-			await segment.save(payload);
-
-			action.store.update({
-				editedTitle: null,
-				editedFilterSet: null,
-			});
-		} catch (e) {
-			debugger;
+		if (this.title !== segment.title) {
+			payload.title = this.title;
 		}
+
+		if (this.filterSet !== segment.filterSet) {
+			payload.filter_set = this.filterSet;
+		}
+
+		if (Object.keys(payload).length === 0) {
+			return;
+		}
+
+		await segment.save(payload);
+
+		action.store.update({
+			editedTitle: null,
+			editedFilterSet: null,
+		});
 	});
 }
