@@ -11,7 +11,6 @@ const Container = styled.div`
 	padding: 30px;
 	border-top: 1px solid var(--border-grey-light);
 	min-height: 200px;
-	background: var(--panel-background);
 `;
 
 export function SegmentFilters() {
