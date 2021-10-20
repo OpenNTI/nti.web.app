@@ -1,4 +1,3 @@
-
 import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
@@ -11,15 +10,8 @@ import { CourseAdminsStore } from './Store';
 const Columns = [Select, Name, JoinDate, LastSeen];
 
 const ConnectedTable = () => {
-	const {
-		load,
-		items,
-		sortOn,
-		sortOrder,
-		setSort,
-	} = CourseAdminsStore.useProperties();
-
-	load.read();
+	const { items, sortOn, sortOrder, setSort } =
+		CourseAdminsStore.useProperties();
 
 	return (
 		<Table

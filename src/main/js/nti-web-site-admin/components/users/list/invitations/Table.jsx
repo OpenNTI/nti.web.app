@@ -1,4 +1,3 @@
-
 import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
@@ -11,10 +10,8 @@ import { Controls } from './columns/Controls';
 const Columns = [Select, Name, Date, Controls];
 
 const ConnectedTable = () => {
-	const { load, items, sortOn, sortOrder, setSort } =
+	const { items, sortOn, sortOrder, setSort } =
 		InvitationsStore.useProperties();
-
-	load.read();
 
 	return (
 		<Table
