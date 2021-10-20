@@ -79,10 +79,12 @@ export class InvitationsStore extends Base {
 	}
 
 	onStateUpdate() {
-		const { items, currentPage } = this;
+		// 'items' & 'currentPage' are special suspense properties,
+		// we have to access these by their "private" names
+		const { __items: items, __currentPage: currentPage } = this;
 
 		//if we got back an empty batch and aren't on the first page, try loading the previous
-		if ((items ?? []).length === 0 && currentPage > 1) {
+		if (!items?.length && currentPage > 1) {
 			this.loadPage(currentPage - 1);
 		}
 	}
