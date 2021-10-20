@@ -4,6 +4,7 @@ import { ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
 import { UserSegmentsStore } from './Store';
+import { UserSegmentsFooter } from './Footer';
 import { UserSegmentsHeader, UserSegmentHeaderPlaceholder } from './Header';
 import { UserSegmentsTable, UserSegmentsTablePlaceholder } from './Table';
 
@@ -30,6 +31,7 @@ export function Segments({ className, searchTerm }) {
 			>
 				<UserSegmentsHeader />
 				<UserSegmentsTable />
+				<UserSegmentsFooter />
 			</DataContext>
 		</div>
 	);
