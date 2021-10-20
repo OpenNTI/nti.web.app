@@ -231,13 +231,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           </div>
         </li>
       </ul>
-      <div
-        class="mv-xl pager buttons"
-      >
-        <ul
-          role="menubar"
-        />
-      </div>
     </div>
   </div>
 </DocumentFragment>

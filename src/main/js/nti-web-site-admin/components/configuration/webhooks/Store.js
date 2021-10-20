@@ -1,9 +1,7 @@
-import { StateStore } from '@nti/web-core/data';
+import { StateStore as Base } from '@nti/web-core/data';
 import { getService } from '@nti/web-client';
 
-export class Store extends StateStore.Behaviors.BatchPaging.Discrete(
-	StateStore
-) {
+export class Store extends Base.Behaviors.BatchPaging.Discrete(Base) {
 	static hasWebhooks(service) {
 		const workspace = service.getWorkspace('zapier');
 		return workspace?.hasLink?.('subscriptions');

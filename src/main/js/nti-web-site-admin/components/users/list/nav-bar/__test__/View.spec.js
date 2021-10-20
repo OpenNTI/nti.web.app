@@ -13,12 +13,11 @@ const getMockService = canSendInvitations => {
 			return {
 				hasLink: () => canSendInvitations,
 				getLink: () => 'mockLink',
+				fetchLink: () =>
+					Promise.resolve({
+						total: 5,
+					}),
 			};
-		},
-		getBatch: () => {
-			return Promise.resolve({
-				total: 5,
-			});
 		},
 	};
 };
