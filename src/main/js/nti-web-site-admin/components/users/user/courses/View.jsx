@@ -20,6 +20,7 @@ const t = scoped('nti-site-admin.users.user.courses.View', {
 });
 
 export default function SiteAdminUserCourses({ user }) {
+	const store = Store.useStore({ user });
 	return (
 		<div
 			css={css`
@@ -28,12 +29,16 @@ export default function SiteAdminUserCourses({ user }) {
 			`}
 		>
 			<DataContext
-				store={Store.useStore({ user })}
-				fallback={<Loading user={user} />}
+				store={store}
+				fallback={<Loading user={user} pageSize={store.pageSize} />}
 			>
 				<>
 					<Controls user={user} />
-					<Suspense fallback={<PlaceholderCourses />}>
+					<Suspense
+						fallback={
+							<PlaceholderCourses pageSize={store.pageSize} />
+						}
+					>
 						<Items />
 					</Suspense>
 				</>
@@ -42,12 +47,12 @@ export default function SiteAdminUserCourses({ user }) {
 	);
 }
 
-function Loading({ user }) {
+function Loading({ user, pageSize }) {
 	// This is a workaround ... I would prefer to only fallback on the Suspense boundary, but... the DataContext makes assumptions...
 	return (
 		<>
 			<Controls user={user} />
-			<PlaceholderCourses />
+			<PlaceholderCourses pageSize={pageSize} />
 		</>
 	);
 }

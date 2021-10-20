@@ -68,18 +68,14 @@ export const PlaceholderCourse = () => (
 	</div>
 );
 
-export const PlaceholderCourses = () => (
+export const PlaceholderCourses = ({ pageSize: length = 3 } = {}) => (
 	<Card>
 		<List.Unadorned>
-			<ListItem>
-				<PlaceholderCourse />
-			</ListItem>
-			<ListItem>
-				<PlaceholderCourse />
-			</ListItem>
-			<ListItem>
-				<PlaceholderCourse />
-			</ListItem>
+			{Array.from({ length }, (_, index) => (
+				<ListItem key={index}>
+					<PlaceholderCourse />
+				</ListItem>
+			))}
 		</List.Unadorned>
 	</Card>
 );

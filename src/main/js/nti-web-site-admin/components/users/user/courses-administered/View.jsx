@@ -17,6 +17,8 @@ const t = scoped('nti-site-admin.users.user.courses-administered.View', {
 });
 
 export default function SiteAdminUserAdministeredCourses({ user }) {
+	const store = Store.useStore({ user });
+
 	return (
 		<div
 			css={css`
@@ -26,8 +28,8 @@ export default function SiteAdminUserAdministeredCourses({ user }) {
 			`}
 		>
 			<DataContext
-				store={Store.useStore({ user })}
-				fallback={<PlaceholderCourses />}
+				store={store}
+				fallback={<PlaceholderCourses pageSize={store.pageSize} />}
 			>
 				<Items />
 			</DataContext>
