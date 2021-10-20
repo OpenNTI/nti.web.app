@@ -100,10 +100,11 @@ export class InvitationsStore extends Base {
 			throw new Error('Access Forbidden');
 		}
 
-		const batch = await service.getBatch(
-			invitations.getLink('invitations'),
-			batchParams
-		);
+		const batch = await invitations.fetchLink({
+			rel: 'invitations',
+			mode: 'batch',
+			params: batchParams,
+		});
 
 		return { batch, batchParams };
 	}
@@ -120,11 +121,15 @@ export class InvitationCountStore extends StateStore {
 	async load() {
 		const service = await getService();
 		const invitations = service.getCollection('Invitations', 'Invitations');
-
-		const batch = await service.getBatch(
-			invitations.getLink('invitations'),
-			{ batchSize: 1, batchStart: 0, type_filter: 'pending' }
-		);
+		const batch = await invitations.fetchLink({
+			rel: 'invitations',
+			mode: 'batch',
+			params: {
+				batchSize: 1,
+				batchStart: 0,
+				type_filter: 'pending',
+			},
+		});
 
 		return { count: batch.total };
 	}
@@ -176,10 +181,11 @@ export async function sendInvites({ emails, message, file, isAdmin }, silent) {
 		'Invitations'
 	);
 
-	await service.post(
-		invitationsCollection.getLink('send-site-invitation'),
-		payload
-	);
+	await invitationsCollection.fetchLink({
+		rel: 'send-site-invitation',
+		method: 'post',
+		data: payload,
+	});
 
 	Bus.emit(InvitesSentEvent);
 }
@@ -191,8 +197,12 @@ export async function resend(invitations) {
 		'Invitations'
 	);
 
-	await service.post(invitationsCollection.getLink('send-site-invitation'), {
-		invitations: invitations.map(({ receiver }) => ({ receiver })),
+	await invitationsCollection.fetchLink({
+		rel: 'send-site-invitation',
+		method: 'post',
+		data: {
+			invitations: invitations.map(({ receiver }) => ({ receiver })),
+		},
 	});
 
 	Bus.emit(InvitesSentEvent);
@@ -206,10 +216,11 @@ export async function rescind(invitations) {
 		'Invitations'
 	);
 
-	await service.post(
-		invitationsCollection.getLink('delete-site-invitations'),
-		{ codes: invitations.map(x => x.code) }
-	);
+	await invitationsCollection.fetchLink({
+		rel: 'delete-site-invitations',
+		method: 'post',
+		data: { codes: invitations.map(x => x.code) },
+	});
 
 	Bus.emit(InvitesSentEvent);
 }

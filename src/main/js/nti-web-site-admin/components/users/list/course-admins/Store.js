@@ -43,15 +43,19 @@ export class CourseAdminsStore extends Base {
 		const { params } = e.store;
 
 		const service = await getService();
-		const link = service.getWorkspace('Courses').getLink('CourseAdmins');
+		const workspace = service.getWorkspace('Courses');
 
-		if (!link) {
+		if (!workspace?.hasLink('CourseAdmins')) {
 			throw new Error('Access Forbidden');
 		}
 
 		const batchParams = { ...params, deactivated: false };
-		const batch = await service.getBatch(link, batchParams);
+		const batch = await workspace.fetchLink({
+			rel: 'CourseAdmins',
+			mode: 'batch',
+			params: batchParams,
+		});
 
-		return { batch, batchParams, link };
+		return { batch, batchParams };
 	}
 }
