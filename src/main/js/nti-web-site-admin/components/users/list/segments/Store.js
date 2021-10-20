@@ -44,7 +44,7 @@ export class UserSegmentsStore extends Base {
 	StateKey = 'user-segments';
 
 	async load(action) {
-		const { params } = action;
+		const { params } = action.store;
 
 		const collection = await getSegmentsCollection();
 		const batch = await collection.fetchLink({
