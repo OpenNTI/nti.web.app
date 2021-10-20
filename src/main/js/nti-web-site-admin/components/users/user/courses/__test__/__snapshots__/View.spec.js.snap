@@ -12,7 +12,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         class="nti-course-enrollment-admin-prompt-trigger"
       >
         <button
-          class="nti-button button primary medium pv-md ph-xl roundedSmall"
+          class="nti-button button primary small pv-sm ph-md roundedSmall"
           tabindex="0"
         >
           <div
@@ -255,7 +255,7 @@ exports[`Site admin user course list test (no courses) Basic render test 1`] = `
         class="nti-course-enrollment-admin-prompt-trigger"
       >
         <button
-          class="nti-button button primary medium pv-md ph-xl roundedSmall"
+          class="nti-button button primary small pv-sm ph-md roundedSmall"
           tabindex="0"
         >
           <div
