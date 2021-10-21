@@ -1,6 +1,5 @@
-
 import { scoped } from '@nti/lib-locale';
-import { DateTime, Variant } from '@nti/web-core';
+import { DateTime, Placeholder, Variant } from '@nti/web-core';
 
 const t = scoped('nti-web-site-admin.users.list.shared-columns.JoinDate', {
 	title: 'Join Date',
@@ -14,6 +13,17 @@ JoinDateColumn.CssClassName = css`
 JoinDateColumn.SortOn = 'createdTime';
 
 JoinDateColumn.Create = props => Variant(JoinDateColumn, props);
+
+JoinDateColumn.Placeholder = props => (
+	<Placeholder.Text
+		{...props}
+		css={css`
+			max-height: 20px;
+			margin: var(--padding-sm, 0.5em) 0;
+			max-width: 10em;
+		`}
+	/>
+);
 
 export function JoinDateColumn({ item, getUser = x => x }) {
 	const user = getUser(item);
