@@ -56,6 +56,8 @@ const useSiteUsersExport = (linkProp, params, rel, filter) => {
 		link = service.getWorkspace('SiteAdmin')?.getLink('SiteAdmins');
 	} else if (rel === 'Invitations') {
 		link = service.getCollection(rel, rel).getLink(rel);
+	} else if (rel === 'CourseAdmins') {
+		link = service.getWorkspace('Courses').getLink(rel);
 	} else {
 		link = service.getUserWorkspace().getLink(rel);
 	}
