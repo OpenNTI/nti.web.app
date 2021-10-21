@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { scoped } from '@nti/lib-locale';
 import { ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
@@ -25,9 +23,7 @@ const Fallback = () => (
 );
 
 function CourseAdminsImpl({ className, searchTerm }) {
-	const store = CourseAdminsStore.useStore();
-
-	useEffect(() => store.setSearchTerm(searchTerm), [searchTerm]);
+	const store = CourseAdminsStore.useStore({ searchTerm });
 
 	return (
 		<div className={className}>
