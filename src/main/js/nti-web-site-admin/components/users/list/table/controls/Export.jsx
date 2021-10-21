@@ -93,7 +93,7 @@ function Export({ link: linkProp, selectedUsers, params, filter, rel }) {
 
 	const link = useSiteUsersExport(linkProp, params, rel, filter);
 
-	return (
+	return !link ? null : (
 		<UppercaseTooltip
 			label={
 				selectedUsers?.length
@@ -134,9 +134,10 @@ function ExperimentalExport({
 	const [generating, setGenerating] = useState(false);
 
 	const onSubmit = useCallback(() => setGenerating(true), [setGenerating]);
-	const onDownloadStarted = useCallback(() => setGenerating(false), [
-		setGenerating,
-	]);
+	const onDownloadStarted = useCallback(
+		() => setGenerating(false),
+		[setGenerating]
+	);
 
 	return (
 		<>
