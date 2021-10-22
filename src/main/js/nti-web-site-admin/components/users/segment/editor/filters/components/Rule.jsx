@@ -39,7 +39,7 @@ const OptionOrder = [
 
 export function FilterRule({ filter, parent }) {
 	const active = filter?.getActiveRule();
-	const { options, selected } = useMemo(() => {
+	const { options, rules } = useMemo(() => {
 		const rules = parent.allowedSubFilterSets.reduce(
 			(acc, subFilter) => ({ ...acc, ...subFilter.getRules() }),
 			{}
@@ -53,14 +53,15 @@ export function FilterRule({ filter, parent }) {
 					return null;
 				}
 
-				return { value: rule, label: rule.label, key: o };
-			}).filter(Boolean),
-			selected: active ? rules[active] : null,
+				return { value: o, label: rule.label };
+			}),
+			rules,
 		};
 	}, [filter, parent, active]);
 
 	const onRuleChange = useCallback(
-		newRule => {
+		name => {
+			const newRule = rules[name];
 			const { FilterSet } = newRule;
 
 			if (filter instanceof FilterSet) {
@@ -73,9 +74,10 @@ export function FilterRule({ filter, parent }) {
 				parent.replaceFilterSet(filter, newFilter);
 			}
 		},
-		[filter, parent]
+		[filter, parent, rules]
 	);
 
+	const selected = active ? rules[active] : null;
 	const InputCmp = getInput(selected?.input);
 
 	const inputValue = selected?.getValue?.(filter);
@@ -86,13 +88,18 @@ export function FilterRule({ filter, parent }) {
 
 	return (
 		<Container>
-			<Input.Select
-				options={options}
-				value={selected}
+			<Input.ListBox
+				value={active}
 				placeholder={t('placeholder')}
 				onChange={onRuleChange}
-				autoFocus={!selected}
-			/>
+				autoFocus={!active}
+			>
+				{options.map(o => (
+					<Input.Option value={o.value} key={o.value}>
+						{o.label}
+					</Input.Option>
+				))}
+			</Input.ListBox>
 			{InputCmp && (
 				<InputCmp
 					autoFocus
