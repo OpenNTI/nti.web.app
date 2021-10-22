@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
