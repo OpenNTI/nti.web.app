@@ -47,6 +47,14 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
             Deactivated
           </div>
         </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./segments"
+          >
+            Segments
+          </div>
+        </li>
       </ul>
     </div>
   </div>
@@ -146,6 +154,14 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
             to="./deactivated"
           >
             Deactivated
+          </div>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./segments"
+          >
+            Segments
           </div>
         </li>
       </ul>
