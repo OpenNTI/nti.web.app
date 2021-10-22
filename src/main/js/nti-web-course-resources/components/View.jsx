@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { Flyout, Icons } from '@nti/web-commons';
-import { Button } from '@nti/web-core';
+import { Flyout } from '@nti/web-commons';
+import { Button, Icons } from '@nti/web-core';
 
 import Controls from './Controls';
 import Readings, { KEY as READINGS } from './readings';
