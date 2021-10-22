@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 
 import { Creator } from './columns/Creator';
