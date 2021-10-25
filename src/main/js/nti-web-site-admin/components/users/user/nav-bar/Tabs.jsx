@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { useStoreValue } from '@nti/lib-store';
-import { LinkTo } from '@nti/web-routing';
 import { Text } from '@nti/web-commons';
+import { useProperties } from '@nti/web-core/data';
+import { LinkTo } from '@nti/web-routing';
 import { getString } from 'internal/legacy/util/Localization';
 
 import Tabs from '../../../common/Tabs';
@@ -29,7 +29,7 @@ SiteAdminUserTabs.propTypes = {
 };
 
 export default function SiteAdminUserTabs({ user }) {
-	const { hasBooks, hasCourses } = useStoreValue();
+	const { hasBooks, hasCourses } = useProperties();
 	return (
 		<Tabs>
 			<Tab to="./" exact localeKey="overview" />

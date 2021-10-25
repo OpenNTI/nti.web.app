@@ -1,31 +1,14 @@
 import { User } from '@nti/web-client';
-import { Stores } from '@nti/lib-store';
+import { StateStore } from '@nti/web-core/data';
 
-export default class UserStore extends Stores.SimpleStore {
-	constructor() {
-		super();
-
-		this.set('loading', false);
-		this.set('user', null);
-		this.set('error', null);
-	}
-
-	get user() {
-		return this.get('user');
-	}
-
-	async loadUser(user) {
-		if (user === this.user?.getID?.()) {
-			return;
-		}
-
-		this.set('user', null);
-		this.set('loading', true);
-		this.emitChange('loading');
-
+export class Store extends StateStore.Behaviors.BatchPaging.Discrete(
+	StateStore
+) {
+	async load({ store }) {
+		const { userID } = store?.params || {};
 		try {
-			const resolved = await User.resolve({ entity: user });
-			const bookRecords = await resolved.fetchLink({
+			const user = await User.resolve({ entity: userID });
+			const bookRecords = await user.fetchLink({
 				throwMissing: false,
 				mode: 'raw',
 				rel: 'UserBundleRecords',
@@ -34,25 +17,13 @@ export default class UserStore extends Stores.SimpleStore {
 			const hasBooks = bookRecords?.Items?.length > 0;
 			let hasCourses = true; // inexpensive way to know this?  for now, always true
 
-			this.set('user', resolved);
-			this.set('hasBooks', hasBooks);
-			this.set('hasCourses', hasCourses);
-			this.emitChange('user', 'hasBooks', 'hasCourses');
+			return {
+				user,
+				hasBooks,
+				hasCourses,
+			};
 		} catch (e) {
-			this.set('error', e);
-			this.emitChange('error');
-		} finally {
-			this.set('loading', false);
-			this.emitChange('loading');
+			return { error: e, user: null };
 		}
-	}
-
-	unloadUser(user) {
-		if (this.user && user !== this.user.getID()) {
-			return;
-		}
-
-		this.set('user', null);
-		this.emitChange('user');
 	}
 }
