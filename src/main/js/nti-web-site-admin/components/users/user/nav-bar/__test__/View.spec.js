@@ -1,6 +1,7 @@
-import renderer, { act } from 'react-test-renderer';
+import { render } from '@testing-library/react';
 
 import * as TestUtils from '@nti/web-client/test-utils';
+import { DataContext } from '@nti/web-core/data';
 
 import View from '../View';
 
@@ -28,6 +29,10 @@ const getUser = hasTranscriptLink => {
 	};
 };
 
+const Wrapper = ({ user, ...props }) => {
+	return <DataContext store={{ user }} {...props} />;
+};
+
 /* eslint-env jest */
 describe('Site admin user info nav bar test', () => {
 	beforeEach(() => onBefore());
@@ -36,28 +41,24 @@ describe('Site admin user info nav bar test', () => {
 	test('Basic render test (has transcript link)', async () => {
 		const user = getUser(true);
 
-		let cmp;
-		act(() => {
-			cmp = renderer.create(<View user={user} />);
-		});
+		const cmp = render(
+			<Wrapper user={user}>
+				<View user={user} />
+			</Wrapper>
+		);
 
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-		cmp.unmount();
+		expect(cmp.asFragment()).toMatchSnapshot();
 	});
 
 	test('Basic render test (has no transcript link)', async () => {
 		const user = getUser(false);
 
-		let cmp;
-		act(() => {
-			cmp = renderer.create(<View user={user} />);
-		});
+		const cmp = render(
+			<Wrapper user={user}>
+				<View user={user} />
+			</Wrapper>
+		);
 
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-		cmp.unmount();
+		expect(cmp.asFragment()).toMatchSnapshot();
 	});
 });

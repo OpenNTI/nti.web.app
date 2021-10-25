@@ -1,112 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Site admin user info nav bar test Basic render test (has no transcript link) 1`] = `
-<div
-  className="site-admin-card site-admin-user-nav-bar"
-  css="__inline_css_extracted_to_hashed_class_name"
->
+<DocumentFragment>
   <div
-    className="site-admin-user-identity"
-  >
-    <img
-      className="avatar avatar avatar-color-6"
-      src="unresolved-user-avatar.png"
-    />
-    <span
-      className="username"
-      rel="author"
-    />
-    <div
-      className="actions"
-    >
-      <span
-        className="email"
-      >
-        <a
-          href="mailto:testUser@test.com"
-        >
-          Email
-        </a>
-      </span>
-      <div
-        className="nti-link-to-path profile"
-        to="#"
-      >
-        <i
-          className="icon-goto"
-        />
-        <span>
-          Profile
-        </span>
-      </div>
-    </div>
-  </div>
-  <div
-    className="site-admin-tabs-container"
-  >
-    <ul
-      className="unadorned-list site-admin-tabs"
-    >
-      <li>
-        <div
-          className="nti-link-to-path"
-          exact={true}
-          to="./"
-        >
-          <span
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "Overview",
-              }
-            }
-          />
-        </div>
-      </li>
-      <li />
-      <li />
-      <li />
-      <li />
-      <li>
-        <div
-          className="nti-link-to-path"
-          to="./reports"
-        >
-          <span
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "Reports",
-              }
-            }
-          />
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-`;
-
-exports[`Site admin user info nav bar test Basic render test (has transcript link) 1`] = `
-Array [
-  <div
-    className="site-admin-card site-admin-user-nav-bar"
+    class="site-admin-card site-admin-user-nav-bar"
     css="__inline_css_extracted_to_hashed_class_name"
   >
     <div
-      className="site-admin-user-identity"
+      class="site-admin-user-identity"
     >
       <img
-        className="avatar avatar avatar-color-6"
+        class="avatar avatar avatar-color-6"
         src="unresolved-user-avatar.png"
       />
       <span
-        className="username"
+        class="username"
         rel="author"
       />
       <div
-        className="actions"
+        class="actions"
       >
         <span
-          className="email"
+          class="email"
         >
           <a
             href="mailto:testUser@test.com"
@@ -115,11 +30,11 @@ Array [
           </a>
         </span>
         <div
-          className="nti-link-to-path profile"
+          class="nti-link-to-path profile"
           to="#"
         >
           <i
-            className="icon-goto"
+            class="icon-goto"
           />
           <span>
             Profile
@@ -128,89 +43,148 @@ Array [
       </div>
     </div>
     <div
-      className="site-admin-tabs-container"
+      class="site-admin-tabs-container"
     >
       <ul
-        className="unadorned-list site-admin-tabs"
+        class="unadorned-list site-admin-tabs"
       >
         <li>
           <div
-            className="nti-link-to-path"
-            exact={true}
+            class="nti-link-to-path"
             to="./"
           >
-            <span
-              dangerouslySetInnerHTML={
-                Object {
-                  "__html": "Overview",
-                }
-              }
-            />
+            <span>
+              Overview
+            </span>
           </div>
         </li>
         <li />
         <li />
+        <li />
+        <li />
         <li>
           <div
-            className="nti-link-to-path"
-            to="./administered-courses"
-          >
-            <span
-              dangerouslySetInnerHTML={
-                Object {
-                  "__html": "Administered Courses",
-                }
-              }
-            />
-          </div>
-        </li>
-        <li>
-          <div
-            className="nti-link-to-path"
-            to="./transcript"
-          >
-            <span
-              dangerouslySetInnerHTML={
-                Object {
-                  "__html": "Transcript",
-                }
-              }
-            />
-          </div>
-        </li>
-        <li>
-          <div
-            className="nti-link-to-path"
+            class="nti-link-to-path"
             to="./reports"
           >
-            <span
-              dangerouslySetInnerHTML={
-                Object {
-                  "__html": "Reports",
-                }
-              }
-            />
+            <span>
+              Reports
+            </span>
           </div>
         </li>
       </ul>
     </div>
-  </div>,
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Site admin user info nav bar test Basic render test (has transcript link) 1`] = `
+<DocumentFragment>
   <div
-    className="site-admin-card"
+    class="site-admin-card site-admin-user-nav-bar"
+    css="__inline_css_extracted_to_hashed_class_name"
+  >
+    <div
+      class="site-admin-user-identity"
+    >
+      <img
+        class="avatar avatar avatar-color-6"
+        src="unresolved-user-avatar.png"
+      />
+      <span
+        class="username"
+        rel="author"
+      />
+      <div
+        class="actions"
+      >
+        <span
+          class="email"
+        >
+          <a
+            href="mailto:testUser@test.com"
+          >
+            Email
+          </a>
+        </span>
+        <div
+          class="nti-link-to-path profile"
+          to="#"
+        >
+          <i
+            class="icon-goto"
+          />
+          <span>
+            Profile
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="site-admin-tabs-container"
+    >
+      <ul
+        class="unadorned-list site-admin-tabs"
+      >
+        <li>
+          <div
+            class="nti-link-to-path"
+            to="./"
+          >
+            <span>
+              Overview
+            </span>
+          </div>
+        </li>
+        <li />
+        <li />
+        <li>
+          <div
+            class="nti-link-to-path"
+            to="./administered-courses"
+          >
+            <span>
+              Administered Courses
+            </span>
+          </div>
+        </li>
+        <li>
+          <div
+            class="nti-link-to-path"
+            to="./transcript"
+          >
+            <span>
+              Transcript
+            </span>
+          </div>
+        </li>
+        <li>
+          <div
+            class="nti-link-to-path"
+            to="./reports"
+          >
+            <span>
+              Reports
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    class="site-admin-card"
     css="__inline_css_extracted_to_hashed_class_name"
   >
     <button
-      className="nti-button button primary medium pv-md ph-xl"
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      tabIndex={0}
+      class="nti-button button primary medium pv-md ph-xl"
+      tabindex="0"
     >
       <div
-        data-button-label={true}
+        data-button-label="true"
       >
         Update Email
       </div>
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
