@@ -7,8 +7,8 @@ const t = scoped(
 	'nti-web-site-admin.components.users.segment.members.parts.Count',
 	{
 		members: {
-			one: '%(count)s Member',
-			other: '%(count)s Members',
+			one: '%(count)s User',
+			other: '%(count)s Users',
 		},
 	}
 );
