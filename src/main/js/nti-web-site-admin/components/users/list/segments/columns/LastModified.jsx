@@ -15,7 +15,7 @@ LastModified.CSSClassName = css`
 `;
 
 LastModified.Name = t('title');
-LastModified.SortOn = 'title';
+LastModified.SortOn = 'lastmodified';
 
 LastModified.Placeholder = () => (
 	<VerticallyCentered>

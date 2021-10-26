@@ -15,7 +15,7 @@ Creator.CSSClassName = css`
 `;
 
 Creator.Name = t('title');
-Creator.SortOn = 'title';
+Creator.SortOn = 'creator';
 
 Creator.Placeholder = () => (
 	<VerticallyCentered>

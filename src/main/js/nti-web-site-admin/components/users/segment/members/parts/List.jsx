@@ -22,7 +22,10 @@ const List = styled('ul')`
 const ItemAvatar = styled(Avatar)`
 	margin-right: 0.5rem;
 `;
-const ItemDisplayName = styled(DisplayName)``;
+
+const ItemDisplayName = styled(DisplayName)`
+	/* We need a style-wrapped component to reference in the component below */
+`;
 
 const Item = styled(Box).attrs({ p: 'sm' })`
 	display: flex;
