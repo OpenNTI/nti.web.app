@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { scoped } from '@nti/lib-locale';
-import { Card, ErrorMessage } from '@nti/web-core';
+import { Card, ErrorMessage, DiscretePages } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 import { Prompt } from '@nti/web-commons';
 import { Router } from '@nti/web-routing';
@@ -38,7 +38,8 @@ const ModalError = props => (
 );
 
 const Modal = props => {
-	const { total, href } = MembersStore.useProperties();
+	const { total, href, totalPages, currentPage, loadPage } =
+		MembersStore.useProperties();
 
 	return (
 		<Prompt.PagingWindow
@@ -47,6 +48,12 @@ const Modal = props => {
 			controls={<MembersExport href={href} />}
 		>
 			<SegmentMembersTable />
+			<DiscretePages
+				pv="xl"
+				total={totalPages}
+				selected={currentPage}
+				load={loadPage}
+			/>
 		</Prompt.PagingWindow>
 	);
 };
