@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { url as UrlUtils } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
@@ -41,11 +41,19 @@ function getExportLink(href) {
 	return url.toString();
 }
 
-function Export({ action, ...props }) {
-	return <form method="post" action={action} target="_blank" {...props} />;
-}
+const Export = React.forwardRef(({ action, ...props }, ref) => {
+	return (
+		<form
+			method="post"
+			action={action}
+			target="_blank"
+			{...props}
+			ref={ref}
+		/>
+	);
+});
 
-function ProgressExport({ action, ...props }) {
+const ProgressExport = React.forwardRef(({ action, ...props }, ref) => {
 	const [generating, setGenerating] = useState(false);
 
 	const onSubmit = useCallback(() => setGenerating(true), [setGenerating]);
@@ -61,6 +69,7 @@ function ProgressExport({ action, ...props }) {
 				method="post"
 				onSubmit={onSubmit}
 				onDownloadStarted={onDownloadStarted}
+				ref={ref}
 				{...props}
 			/>
 			{generating && (
@@ -70,7 +79,7 @@ function ProgressExport({ action, ...props }) {
 			)}
 		</>
 	);
-}
+});
 
 export function MembersExport({ href }) {
 	const exportLink = getExportLink(href);

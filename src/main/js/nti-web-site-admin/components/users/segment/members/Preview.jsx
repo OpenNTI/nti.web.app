@@ -39,7 +39,7 @@ export function MembersPreview({ segment, filterSet }) {
 	return (
 		<DataContext
 			store={store}
-			fallback={Placeholder}
+			fallback={<Placeholder />}
 			error={<ErrorMessage />}
 		>
 			<PreviewHeader />
