@@ -1,19 +1,28 @@
 import { getAppUserScopedStorage } from '@nti/web-client';
 import { StateStore } from '@nti/web-core/data';
 
-const loadMembers = (segment, params) => {
-	return segment.fetchLink({
+const loadMembers = (segment, params) =>
+	segment.fetchLink({
 		rel: 'members',
 		mode: 'batch',
 		params,
 	});
-};
 
-const loadFilterSetPreview = segment => ({ total: 0, Items: [] });
+const loadFilterSetPreview = (segment, filterSet, params) =>
+	segment.fetchLink({
+		rel: 'members_preview',
+		mode: 'batch',
+		method: 'PUT',
+		params,
+		data: {
+			filter_set: filterSet,
+		},
+	});
 
 export class MembersPreviewStore extends StateStore {
 	async load(action) {
 		const { segment, filterSet } = action.store.params;
+
 		const preview =
 			filterSet !== segment.filterSet
 				? await loadFilterSetPreview(segment, filterSet, {
