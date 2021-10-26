@@ -22,7 +22,6 @@ export default function SiteAdminUserAdministeredCourses({ user }) {
 	return (
 		<div
 			css={css`
-				margin-top: 54px;
 				min-height: 200px;
 				position: relative;
 			`}
