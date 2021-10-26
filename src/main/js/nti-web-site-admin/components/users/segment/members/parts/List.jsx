@@ -1,12 +1,15 @@
 import { scoped } from '@nti/lib-locale';
-import { Typography, Box, Avatar, DisplayName } from '@nti/web-core';
+import { Typography, Button, Box, Avatar, DisplayName } from '@nti/web-core';
+import { Route, LinkTo } from '@nti/web-routing';
 
 import { MembersPreviewStore } from '../Store';
+import { MembersModal } from '../Modal';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.members.parts.List',
 	{
 		empty: 'No people are currently in this segment.',
+		seeAll: 'See All',
 	}
 );
 
@@ -35,6 +38,15 @@ const Item = styled(Box).attrs({ p: 'sm' })`
 	}
 `;
 
+const Controls = styled(Box).attrs({ p: 'sm' })`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+`;
+
+const renderModal = () => <MembersModal />;
+
 export function MembersList() {
 	const { Items } = MembersPreviewStore.useProperties();
 
@@ -49,15 +61,25 @@ export function MembersList() {
 	}
 
 	return (
-		<List>
-			{(Items ?? []).map((item, index) => (
-				<li key={index}>
-					<Item>
-						<ItemAvatar entity={item} circular />
-						<ItemDisplayName entity={item} />
-					</Item>
-				</li>
-			))}
-		</List>
+		<>
+			<List>
+				{(Items ?? []).map((item, index) => (
+					<li key={index}>
+						<Item>
+							<ItemAvatar entity={item} circular />
+							<ItemDisplayName entity={item} />
+						</Item>
+					</li>
+				))}
+			</List>
+			<Controls>
+				<LinkTo.Path to="#users">
+					<Button transparent rounded>
+						{t('seeAll')}
+					</Button>
+				</LinkTo.Path>
+			</Controls>
+			<Route.Hash matches="#users" render={renderModal} />
+		</>
 	);
 }
