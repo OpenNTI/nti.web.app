@@ -1,11 +1,10 @@
-import { Table, TablePlaceholder } from '@nti/web-core';
+import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { DataContext } from '@nti/web-core/data';
 
 import { NameColumn } from '../../../list/shared-columns/Name';
 import { JoinDateColumn } from '../../../list/shared-columns/JoinDate';
 import { LastSeenColumn } from '../../../list/shared-columns/LastSeen';
 import { MembersStore } from '../Store';
-import ErrorMessage from '../../../../../../../../../../../web/commons/src/errors/components/Message';
 
 const Columns = [NameColumn, JoinDateColumn, LastSeenColumn];
 
