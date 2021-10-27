@@ -23,7 +23,10 @@ const ItemAvatar = styled(Avatar)`
 	margin-right: 0.5rem;
 `;
 
-const ItemDisplayName = styled(DisplayName)`
+const ItemDisplayName = styled(DisplayName).attrs({
+	as: Typography,
+	limitLines: 1,
+})`
 	/* We need a style-wrapped component to reference in the component below */
 `;
 
