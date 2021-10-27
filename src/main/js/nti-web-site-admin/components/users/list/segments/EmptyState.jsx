@@ -3,12 +3,12 @@ import { scoped } from '@nti/lib-locale';
 
 import { CreateSegmentButton } from './CreateButton';
 
-const t = scoped('nti-site-admin.users.list.segments.EmptyState', {
-	message: 'There are no segments yet',
-	callToAction: 'Go %(create)s some...',
-});
-
-const T = Text.Translator(t);
+const T = Text.Translator(
+	scoped('nti-site-admin.users.list.segments.EmptyState', {
+		message: 'There are no segments yet',
+		callToAction: 'Go %(create)s some...',
+	})
+);
 
 export function EmptyState() {
 	return (
