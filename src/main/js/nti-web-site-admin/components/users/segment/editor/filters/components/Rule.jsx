@@ -17,8 +17,7 @@ const t = scoped(
 
 const Container = styled.div`
 	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	flex-flow: row wrap;
 	align-items: center;
 	gap: 0.625rem;
 

@@ -8,7 +8,7 @@ import NavBar from './nav-bar';
 import Store from './SharedStore';
 
 const table = css`
-	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.24);
+	box-shadow: 0 1px 3px 0 rgba(0 0 0 24%);
 	background-color: white;
 	position: relative;
 	padding-bottom: 20px;
