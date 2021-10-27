@@ -3,6 +3,7 @@ import { Table, TablePlaceholder, ErrorMessage } from '@nti/web-core';
 import { Creator } from './columns/Creator';
 import { LastModified } from './columns/LastModified';
 import { Name } from './columns/Name';
+import { EmptyState } from './EmptyState';
 import { UserSegmentsStore } from './Store';
 
 const Columns = [Name, LastModified, Creator];
@@ -31,6 +32,7 @@ export function UserSegmentsTable() {
 			sortOn={sortOn}
 			sortDirection={sortOrder}
 			onChangeSort={setSort}
+			emptyFallback={<EmptyState />}
 		/>
 	);
 }

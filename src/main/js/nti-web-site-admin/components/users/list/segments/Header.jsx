@@ -1,17 +1,10 @@
-import { useCallback } from 'react';
-
-import { scoped } from '@nti/lib-locale';
-import { Typography, Button } from '@nti/web-core';
-import { Router } from '@nti/web-routing';
+import { Typography } from '@nti/web-core';
 
 import SearchInfo from '../../../common/SearchInfo';
 
+import { CreateSegmentButton } from './CreateButton';
 import { UserSegmentsStore } from './Store';
-
-const t = scoped('nti-web-site-admin.components.users.list.segments', {
-	header: 'Segments',
-	createSegment: 'Create Segment',
-});
+import t from './strings';
 
 const Header = styled.div`
 	display: flex;
@@ -33,29 +26,13 @@ export const UserSegmentHeaderPlaceholder = () => (
 );
 
 export const UserSegmentsHeader = () => {
-	const router = Router.useRouter();
-
-	const { createSegment, canCreateSegment, searchParam } =
-		UserSegmentsStore.useProperties();
-
-	const doCreate = useCallback(async () => {
-		const newSegment = await createSegment();
-
-		router.routeTo.object(newSegment);
-	}, [createSegment]);
+	const { searchParam } = UserSegmentsStore.useProperties();
 
 	return (
 		<>
 			<Header>
 				<Typography type="header-one-alt">{t('header')}</Typography>
-				<Button
-					rounded
-					disabled={!canCreateSegment}
-					busy={createSegment.running}
-					onClick={doCreate}
-				>
-					{t('createSegment')}
-				</Button>
+				<CreateSegmentButton />
 			</Header>
 			<SearchInfo searchTerm={searchParam} />
 		</>
