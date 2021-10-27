@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { Layouts, FixedElement } from '@nti/web-commons';
@@ -17,34 +16,25 @@ const Frame = styled.div`
 	margin-top: 20px;
 `;
 
-class SiteAdminUserListFrame extends React.Component {
-	static propTypes = {
-		children: PropTypes.node,
-	};
-
-	render() {
-		const { children } = this.props;
-
-		return (
-			<Frame className="site-admin-user-list-frame">
-				<Layouts.NavContent.Container>
-					<Layouts.NavContent.Nav className="nav-bar">
-						{/* {this.renderHeader()} */}
-						<FixedElement>
-							<NavBar />
-						</FixedElement>
-					</Layouts.NavContent.Nav>
-					<Layouts.NavContent.Content className="content">
-						{React.Children.map(children, item =>
-							React.cloneElement(item, {
-								className: cx(item.props.className, table),
-							})
-						)}
-					</Layouts.NavContent.Content>
-				</Layouts.NavContent.Container>
-			</Frame>
-		);
-	}
+function SiteAdminUserListFrame({ children }) {
+	return (
+		<Frame className="site-admin-user-list-frame">
+			<Layouts.NavContent.Container>
+				<Layouts.NavContent.Nav className="nav-bar">
+					<FixedElement>
+						<NavBar />
+					</FixedElement>
+				</Layouts.NavContent.Nav>
+				<Layouts.NavContent.Content className="content">
+					{React.Children.map(children, item =>
+						React.cloneElement(item, {
+							className: cx(item.props.className, table),
+						})
+					)}
+				</Layouts.NavContent.Content>
+			</Layouts.NavContent.Container>
+		</Frame>
+	);
 }
 
 export default Store.compose(SiteAdminUserListFrame);
