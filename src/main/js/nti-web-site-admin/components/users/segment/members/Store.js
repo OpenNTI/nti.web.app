@@ -12,7 +12,7 @@ const loadFilterSetPreview = (segment, filterSet, params) =>
 	segment.fetchLink({
 		rel: 'members_preview',
 		mode: 'batch',
-		method: 'PUT',
+		method: 'put',
 		params,
 		data: {
 			filter_set: filterSet,
