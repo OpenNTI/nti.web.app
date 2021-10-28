@@ -72,7 +72,7 @@ export default Router.for([
 				Route({
 					path: '/reports',
 					component: Reports,
-					name: 'site-admin.users.user-overview',
+					name: 'site-admin.users.user-reports',
 				}),
 				Route({
 					path: '/',
