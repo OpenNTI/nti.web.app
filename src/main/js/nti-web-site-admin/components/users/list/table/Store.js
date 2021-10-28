@@ -181,17 +181,6 @@ class UserListStore extends Stores.BoundStore {
 
 		this.set('loading', true);
 
-		if (this.searchTerm && this.searchTerm.length < 3) {
-			this.set({
-				items: [],
-				numPages: 1,
-				currentSearchTerm: '',
-				loading: false,
-			});
-
-			return;
-		}
-
 		const searchTerm = this.searchTerm;
 
 		const service = await getService();
