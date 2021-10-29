@@ -1,9 +1,11 @@
 import { User } from '@nti/web-client';
 import { StateStore } from '@nti/web-core/data';
 
-export class Store extends StateStore.Behaviors.BatchPaging.Discrete(
-	StateStore
-) {
+const {
+	BatchPaging: { Discrete },
+} = StateStore.Behaviors;
+
+export class Store extends Discrete(StateStore) {
 	async load({ store }) {
 		const { userID } = store?.params || {};
 		try {

@@ -1,6 +1,15 @@
 import { getService, getAppUserScopedStorage } from '@nti/web-client';
 import { StateStore } from '@nti/web-core/data';
 
+const {
+	BatchPaging: { Discrete },
+	Stateful,
+	Selectable,
+	Searchable,
+	Filterable,
+	Sortable,
+} = StateStore.Behaviors;
+
 const getSegmentsCollection = async () => {
 	const service = await getService();
 
@@ -23,22 +32,14 @@ const getStorage = () => {
 	};
 };
 
-const Base = StateStore.Behaviors.Stateful(getStorage())(
-	StateStore.Behaviors.Selectable(
-		StateStore.Behaviors.Searchable(
-			StateStore.Behaviors.Filterable(
-				StateStore.Behaviors.Sortable(
-					StateStore.Behaviors.BatchPaging.Discrete(StateStore)
-				)
-			)
-		)
-	)
-);
-
 const SegmentTemplate = () => ({
 	MimeType: 'application/vnd.nextthought.segments.usersegment',
 	title: 'Untitled Segment',
 });
+
+const Base = Stateful(getStorage())(
+	Selectable(Searchable(Filterable(Sortable(Discrete(StateStore)))))
+);
 
 export class UserSegmentsStore extends Base {
 	StateKey = 'user-segments';
