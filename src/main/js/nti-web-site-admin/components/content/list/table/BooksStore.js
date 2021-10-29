@@ -81,8 +81,12 @@ class BookStore extends Stores.BoundStore {
 				'VisibleContentBundles',
 				'ContentBundles'
 			);
-			const batch = await service.getBatch(collection.href, params);
-			const promises = (batch.titles || []).map(x =>
+			const batch = await collection?.fetchLink({
+				rel: 'self',
+				mode: 'batch',
+				params,
+			});
+			const promises = (batch?.titles || []).map(x =>
 				service.getObject(x)
 			);
 			const parsed = await Promise.all(promises);
