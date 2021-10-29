@@ -90,7 +90,7 @@ class SiteAdminUserBookEnrollmentView extends React.Component {
 		const { courseContext } = this.props;
 		const linkName = courseContext
 			? 'site-admin.courses.book-roster'
-			: 'site-admin.users.user-overview';
+			: 'site-admin.users.user-books';
 		const label = courseContext ? t('backToCourse') : t('backToUser');
 
 		return (
