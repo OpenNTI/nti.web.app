@@ -14,6 +14,7 @@ import SearchInfo from '../../../common/SearchInfo';
 import { CourseName, StartDate, EndDate, TotalEnrolled } from './columns';
 import Store from './CoursesStore';
 import EmptyState from './EmptyState';
+import { Container } from './Container';
 
 const t = scoped('nti-web-site-admin.content.list.table.CoursesTable', {
 	title: 'Courses',
@@ -79,7 +80,7 @@ class CoursesTable extends React.Component {
 		} = this.props;
 
 		return (
-			<div className="content-table-container">
+			<Container className="content-table-container">
 				{loading && <Loading.Mask />}
 				{!loading && error && <div className="error">{error}</div>}
 				{!error && !loading && (
@@ -106,7 +107,7 @@ class CoursesTable extends React.Component {
 						/>
 					</div>
 				)}
-			</div>
+			</Container>
 		);
 	}
 }
