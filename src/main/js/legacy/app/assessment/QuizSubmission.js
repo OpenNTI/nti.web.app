@@ -563,9 +563,9 @@ module.exports = exports = Ext.define(
 			]();
 		},
 
-		saveProgress: function (progress) {
+		saveProgress: async function (progress) {
 			if (this.isInstructor || !this.questionSet.associatedAssignment) {
-				return Promise.reject();
+				return;
 			}
 
 			const submission = progress || {};
