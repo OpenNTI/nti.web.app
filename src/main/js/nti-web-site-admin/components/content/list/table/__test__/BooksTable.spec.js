@@ -12,23 +12,22 @@ const getMockService = numberOfBooks => {
 		getCollection: () => {
 			return {
 				hasLink: () => true,
-				getLink: () => 'mockLink',
+				fetchLink: async () => {
+					let titles = [];
+
+					for (let i = 0; i < numberOfBooks; i++) {
+						const index = i + 1;
+
+						titles.push('id' + index);
+					}
+
+					return {
+						Total: numberOfBooks,
+						BatchPage: 1,
+						titles,
+					};
+				},
 			};
-		},
-		getBatch: () => {
-			let titles = [];
-
-			for (let i = 0; i < numberOfBooks; i++) {
-				const index = i + 1;
-
-				titles.push('id' + index);
-			}
-
-			return Promise.resolve({
-				Total: numberOfBooks,
-				BatchPage: 1,
-				titles,
-			});
 		},
 		getWorkspace: () => {
 			return {
