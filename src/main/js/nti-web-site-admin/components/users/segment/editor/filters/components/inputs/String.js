@@ -40,12 +40,12 @@ export function StringInput({ value: valueProp, onChange, autoFocus }) {
 		<>
 			<Input.Select
 				autoFocus={autoFocus}
-				value={comparator}
+				value={comparator ?? ''}
 				options={CompareOptions}
 				onChange={onComparatorChange}
 			/>
 			<Input.Text
-				value={value}
+				value={value ?? ''}
 				onChange={onValueChange}
 				placeholder={t('placeholder')}
 			/>
