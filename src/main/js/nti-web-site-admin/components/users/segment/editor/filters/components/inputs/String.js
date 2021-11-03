@@ -41,9 +41,14 @@ export function StringInput({ value: valueProp, onChange, autoFocus }) {
 			<Input.Select
 				autoFocus={autoFocus}
 				value={comparator ?? ''}
-				options={CompareOptions}
 				onChange={onComparatorChange}
-			/>
+			>
+				{CompareOptions.map(o => (
+					<option value={o.value} key={o.value}>
+						{o.label}
+					</option>
+				))}
+			</Input.Select>
 			<Input.Text
 				value={value ?? ''}
 				onChange={onValueChange}
