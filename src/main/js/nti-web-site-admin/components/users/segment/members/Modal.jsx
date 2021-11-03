@@ -38,14 +38,14 @@ const ModalError = props => (
 );
 
 const Modal = props => {
-	const { total, href, totalPages, currentPage, loadPage } =
+	const { total, totalPages, currentPage, loadPage } =
 		MembersStore.useProperties();
 
 	return (
 		<Prompt.PagingWindow
 			{...props}
 			subTitle={t('users', { count: total })}
-			controls={<MembersExport href={href} />}
+			controls={<MembersExport />}
 		>
 			<SegmentMembersTable />
 			<DiscretePages

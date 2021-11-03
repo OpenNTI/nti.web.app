@@ -10,6 +10,7 @@ import {
 	Toast,
 } from '@nti/web-core';
 import { isFlag } from '@nti/web-client';
+import { useProperties } from '@nti/web-core/data';
 
 const t = scoped(
 	'nti-web-site-admin.components.users.segment.members.parts.Export',
@@ -81,11 +82,12 @@ const ProgressExport = React.forwardRef(({ action, ...props }, ref) => {
 	);
 });
 
-export function MembersExport({ href }) {
+export function MembersExport() {
+	const { exportHref: href } = useProperties();
 	const exportLink = getExportLink(href);
 	const Form = isFlag('download-progress') ? ProgressExport : Export;
 
-	return (
+	return !href ? null : (
 		<UppercaseTooltip label={t('tooltip')}>
 			<Form action={exportLink}>
 				<SubmitButton large rounded inverted>

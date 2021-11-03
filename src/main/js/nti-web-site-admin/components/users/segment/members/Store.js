@@ -1,6 +1,14 @@
 import { getAppUserScopedStorage } from '@nti/web-client';
 import { StateStore } from '@nti/web-core/data';
 
+/** @typedef {import('@nti/lib-interfaces').Batch} Batch */
+/** @typedef {import('@nti/lib-interfaces').Models.segments.Segment} Segment */
+
+/**
+ * @param {Segment} segment
+ * @param {*} params
+ * @returns {Promise<Batch>}
+ */
 const loadMembers = (segment, params) =>
 	segment.fetchLink({
 		rel: 'members',
@@ -8,6 +16,12 @@ const loadMembers = (segment, params) =>
 		params,
 	});
 
+/**
+ * @param {Segment} segment
+ * @param {*} filterSet
+ * @param {*} params
+ * @returns {Promise<Batch>}
+ */
 const loadFilterSetPreview = (segment, filterSet, params) =>
 	segment.fetchLink({
 		rel: 'members_preview',
@@ -32,6 +46,7 @@ export class MembersPreviewStore extends StateStore {
 				: await loadMembers(segment, { batchStart: 0, batchSize: 10 });
 
 		return {
+			exportHref: segment.getLink('export-members'),
 			total: preview.total,
 			Items: preview.Items,
 			href: preview.href,
@@ -76,6 +91,6 @@ export class MembersStore extends Base {
 				? await loadFilterSetPreview(segment, filterSet, params)
 				: await loadMembers(segment, params);
 
-		return { batch, href: batch.href };
+		return { batch, exportHref: segment.getLink('export-members') };
 	}
 }

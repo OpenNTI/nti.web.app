@@ -23,12 +23,10 @@ const Placeholder = () => (
 );
 
 function PreviewHeader() {
-	const { href } = MembersPreviewStore.useProperties();
-
 	return (
 		<HeaderContainer>
 			<MembersCount />
-			<MembersExport href={href} />
+			<MembersExport />
 		</HeaderContainer>
 	);
 }
