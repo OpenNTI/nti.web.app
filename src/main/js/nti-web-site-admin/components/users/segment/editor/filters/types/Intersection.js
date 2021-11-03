@@ -11,7 +11,7 @@ const t = scoped(
 );
 
 export const IntersectionType =
-	'application/vnd.nextthought.segments.IntersectionUserFilterSet';
+	'application/vnd.nextthought.segments.intersectionuserfilterset';
 
 export class IntersectionFilterSet extends FilterSetGroup {
 	type = IntersectionType;

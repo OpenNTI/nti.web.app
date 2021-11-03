@@ -4,6 +4,8 @@ import { Registry, Array as ArrayUtils } from '@nti/lib-commons';
 
 export class FilterSetRegistry extends Registry.Map {}
 
+// FIXME: These files in this directory need to go into lib-interfaces and into the canonical models.
+
 export class FilterSet extends EventEmitter {
 	type = '';
 

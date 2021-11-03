@@ -16,7 +16,7 @@ const t = scoped(
 	}
 );
 
-const Type = 'application/vnd.nextthought.segments.UnionUserFilterSet';
+const Type = 'application/vnd.nextthought.segments.unionuserfilterset';
 
 export class UnionFilterSet extends FilterSetGroup {
 	type = Type;
