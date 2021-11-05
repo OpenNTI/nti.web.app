@@ -47,7 +47,7 @@ function Content() {
 			<Tabs header={t('content')}>
 				<Tab to="./" exact localeKey="courses" />
 
-				{hasBooks && <Tabs to="./books" localeKey="books" />}
+				{hasBooks && <Tab to="./books" localeKey="books" />}
 			</Tabs>
 		</Card>
 	);
