@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { Survey } = require('@nti/web-assessment');
+const { ensureAuthorized } = require('@nti/web-integrations');
 const PromptActions = require('internal/legacy/app/prompt/Actions');
 const PageInfo = require('internal/legacy/model/PageInfo');
 const ContentUtils = require('internal/legacy/util/Content');
@@ -84,6 +85,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		}
 
 		const postfix = data.noTarget ? '' : '-target';
+
+		const target = new URL(href, global.location.href);
+		if (target.origin !== global.location.origin) {
+			await ensureAuthorized(target);
+		}
 
 		const pageInfo = PageInfo.create({
 			ID: ntiid,
