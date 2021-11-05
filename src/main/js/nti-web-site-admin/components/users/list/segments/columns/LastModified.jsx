@@ -27,7 +27,7 @@ export function LastModified({ item }) {
 	return (
 		<VerticallyCentered>
 			<DateTime
-				time={item.getLastModified()}
+				date={item.getLastModified()}
 				format={DateTime.MONTH_NAME_DAY_YEAR}
 				type="body"
 				color="dark"
