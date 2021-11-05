@@ -413,6 +413,7 @@ module.exports = exports = Ext.define(
 		//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
 		Ext.MessageBox = Ext.Msg = this;
 
+		const native = window.alert;
 		window.alert = function (cfg, fn) {
 			Globals.removeLoaderSplash();
 
@@ -425,5 +426,6 @@ module.exports = exports = Ext.define(
 			});
 			Ext.MessageBox.alert(cfg);
 		};
+		window.alert.native = native.bind(window);
 	}
 );
