@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { Text, useAsyncValue, useService } from '@nti/web-core';
+import { Text } from '@nti/web-core';
 import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 
@@ -28,13 +28,6 @@ export default function ContentListNavBar() {
 	);
 }
 function Content() {
-	const service = useService();
-	const books = useAsyncValue('admin-library-books-list', () =>
-		service.getContentBundles({ batchSize: 1 })
-	);
-
-	const hasBooks = books?.total > 0;
-
 	return (
 		<Card
 			className="site-admin-content-list-nav-bar"
@@ -46,8 +39,7 @@ function Content() {
 		>
 			<Tabs header={t('content')}>
 				<Tab to="./" exact localeKey="courses" />
-
-				{hasBooks && <Tab to="./books" localeKey="books" />}
+				<Tab to="./books" localeKey="books" />
 			</Tabs>
 		</Card>
 	);
