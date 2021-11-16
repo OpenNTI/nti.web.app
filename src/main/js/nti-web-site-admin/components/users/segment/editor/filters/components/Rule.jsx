@@ -80,6 +80,7 @@ export function FilterRule({ filter, parent }) {
 	const InputCmp = getInput(selected?.input);
 
 	const inputValue = selected?.getValue?.(filter);
+	const inputProps = selected?.getInputProps?.(filter);
 	const onInputChange = useCallback(
 		value => selected.setValue(filter, value),
 		[filter, selected]
@@ -104,6 +105,7 @@ export function FilterRule({ filter, parent }) {
 					autoFocus
 					value={inputValue}
 					onChange={onInputChange}
+					{...inputProps}
 				/>
 			)}
 		</Container>
