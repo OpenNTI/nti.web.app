@@ -77,7 +77,7 @@
     "@nti/web-whiteboard": "NextThought/nti.web.whiteboard",
     "clamp-js": "^0.7.0",
     "create-react-class": "^15.5.2",
-    "date-fns": "^2.16.1",
+    "date-fns": "^3.4.0",
     "detect-zoom": "^1.0.2",
     "durationjs": "1.1.1",
     "email-validator": "~2.0.4",
